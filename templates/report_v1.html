@@ -1,0 +1,51 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Django PDF</title>
+    <style>
+        @font-face {
+            font-family: 'sans-serif';
+            src: url("/static/fonts/static/NotoSansDisplay/NotoSansDisplay-Light.ttf");
+        }
+        body{
+            font-family: 'sans-serif';
+        }
+
+        th, td{
+            padding: 5px 15px;
+        }
+        th{
+            font-size: 20px;
+            font-weight: bold;
+        }
+        td{
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;" >ывавыаывList of States by reывавыавspective Countries</h1>
+    <h1 style="text-align: center;" >sfdsfdsdsfsd</h1>
+
+    <table border="1" style="border-collapse: collapse;" >
+        <thead>
+            <tr>
+                <td>State Name</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for value in states %}
+                <tr>
+                    <td>{{value.state_name}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>            
+</body>
+</html>

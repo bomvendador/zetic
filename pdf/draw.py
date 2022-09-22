@@ -1,0 +1,34 @@
+from pdf.extract_data import extract_categories
+
+
+def draw_scale(pdf, x, y, w, h, points, img_link):
+    # pdf.set_draw_color(color)
+    pdf.set_line_width(0.3)
+    pdf.set_fill_color(230, 230, 230)
+
+    pdf.rect(x, y, w, h, 'F')
+
+    for i in range(points):
+        # pdf.rect(x+1, y+1, 5.9, h-2, 'F', round_corners=True, corner_radius=0.5)
+        pdf.image(img_link, x=x+1, y=y+1, w=5.9)
+
+        x += 5.9 + 1
+
+
+def draw_full_scale(pdf, scale_name, x, y, scale_name_y, json_section, section_name, scale_element_file):
+    points_with_description = extract_categories(json_section, section_name)
+    pdf.set_xy(x, scale_name_y-2)
+    pdf.set_font("RalewayLight", "", 9)
+    pdf.multi_cell(0, 4, scale_name)
+    pdf.set_xy(x+110, y-6)
+    pdf.cell(10, h=12, txt=str(points_with_description['points']), ln=0, align='C')
+    pdf.set_font("RalewayLight", "", 8)
+    pdf.multi_cell(0, h=4, txt=points_with_description['point_description'], align='L')
+
+    draw_scale(pdf, x+40, y-5, 70, 10, points_with_description['points'], scale_element_file)
+
+
+def insert_page_number(pdf):
+    pdf.set_font("RalewayLight", "", 10)
+    pdf.set_xy(200, 290)
+    pdf.cell(0, 0, txt=str(pdf.page_no()))
