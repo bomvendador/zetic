@@ -18,14 +18,15 @@ from pdf.page6_file import page6
 
 from pdf.save_data import save_data_to_db
 import cyrtranslit
+from reports import settings
 
 
 def pdf_generator(request_json):
     pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
-    pdf.add_font("RalewayMedium", style="", fname="D:/projects/reports/static/fonts/Raleway-Medium.ttf", uni=True)
-    pdf.add_font("RalewayRegular", style="", fname="D:/projects/reports/static/fonts/Raleway-Regular.ttf", uni=True)
-    pdf.add_font("RalewayLight", style="", fname="D:/projects/reports/static/fonts/Raleway-Light.ttf", uni=True)
-    pdf.add_font("RalewayBold", style="", fname="D:/projects/reports/static/fonts/Raleway-Bold.ttf", uni=True)
+    pdf.add_font("RalewayMedium", style="", fname=settings.STATIC_ROOT + "/fonts/Raleway-Medium.ttf", uni=True)
+    pdf.add_font("RalewayRegular", style="", fname=settings.STATIC_ROOT + "/fonts/Raleway-Regular.ttf", uni=True)
+    pdf.add_font("RalewayLight", style="", fname=settings.STATIC_ROOT + "/fonts/Raleway-Light.ttf", uni=True)
+    pdf.add_font("RalewayBold", style="", fname=settings.STATIC_ROOT + "/fonts/Raleway-Bold.ttf", uni=True)
     pdf.add_page()
 
     participant_name = request_json['participant_info']['name']
