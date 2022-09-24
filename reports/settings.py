@@ -91,7 +91,7 @@ DATABASES = {
         'USER': 'admin',
         'PASSWORD': '123',
         'HOST': 'localhost',
-        'PORT': '', # Set to empty string for default.
+        'PORT': '5432', # Set to empty string for default.
     }
 }
 
