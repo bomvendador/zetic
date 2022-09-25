@@ -1,8 +1,10 @@
 from pdf.extract_data import extract_categories
 from pdf.draw import draw_scale, insert_page_number
+import time
 
 
 def page3(pdf, json_section):
+    t1 = time.perf_counter()
     pdf.set_margins(top=15, left=0, right=5)
     pdf.set_auto_page_break(False)
     pdf.image('media/images/page3.png', x=0, y=0, w=210)
@@ -259,7 +261,8 @@ def page3(pdf, json_section):
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     insert_page_number(pdf)
-
+    t2 = time.perf_counter()
+    print(f'стр 3 - {round(t2-t1,2)}')
 
 def draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points, points_description):
     pdf.set_xy(x, y)

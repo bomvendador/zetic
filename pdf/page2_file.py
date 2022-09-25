@@ -1,7 +1,9 @@
 from pdf.draw import insert_page_number
+import time
 
 
 def page2(pdf, lie_points):
+    t1 = time.perf_counter()
     pdf.set_auto_page_break(False)
 
     x = 12
@@ -77,7 +79,8 @@ def page2(pdf, lie_points):
     draw_lie_scale(pdf, 50, 266, 70, 10, lie_points, 'media/images/lie_scale_rec.png')
 
     insert_page_number(pdf)
-
+    t2 = time.perf_counter()
+    print(f'стр 2 - {round(t2-t1,2)}')
 
 def draw_lie_scale(pdf, x, y, w, h, lie_points, img_link):
     # pdf.set_draw_color(color)

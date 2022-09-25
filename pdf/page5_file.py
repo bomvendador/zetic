@@ -1,7 +1,8 @@
 from pdf.draw import draw_full_scale, insert_page_number
-
+import time
 
 def page5(pdf, json_section):
+    t1 = time.perf_counter()
     scale_element_file = 'media/images/boyko_page5.png'
     pdf.set_auto_page_break(False)
 
@@ -94,3 +95,5 @@ def page5(pdf, json_section):
     draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Истощение_Психосоматика', scale_element_file)
 
     insert_page_number(pdf)
+    t2 = time.perf_counter()
+    print(f'стр 5 - {round(t2 - t1, 2)}')

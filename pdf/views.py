@@ -19,9 +19,11 @@ from pdf.page6_file import page6
 from pdf.save_data import save_data_to_db
 import cyrtranslit
 from reports import settings
+import time
 
 
 def pdf_generator(request_json):
+    time_start = time.perf_counter()
     pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
     pdf.add_font("RalewayMedium", style="", fname=settings.STATIC_ROOT + "/fonts/Raleway-Medium.ttf", uni=True)
     pdf.add_font("RalewayRegular", style="", fname=settings.STATIC_ROOT + "/fonts/Raleway-Regular.ttf", uni=True)
@@ -65,7 +67,8 @@ def pdf_generator(request_json):
 
     except IOError:
         response = HttpResponseNotFound('<h1>File not exist</h1>')
-
+    time_finish = time.perf_counter()
+    print(round(time_finish-time_start, 2))
     return response
 
 
