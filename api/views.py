@@ -19,7 +19,8 @@ def json_request(request):
         try:
             print('POST', request.POST)
             print('BODY', request.body)
-            print('JSON', json.loads(request.body.decode('utf-8')))
+            rp = json.loads(request.body.decode('utf-8'))
+            print('JSON', rp['frames'])
 
             # print(request.POST)
             # pr = ast.literal_eval(request.body)
