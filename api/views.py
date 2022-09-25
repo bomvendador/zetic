@@ -2,7 +2,6 @@ from django.http import HttpResponseServerError, HttpResponse
 import json
 from pdf.views import pdf_generator
 from django.shortcuts import render
-import ast
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
