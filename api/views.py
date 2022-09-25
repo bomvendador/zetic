@@ -18,7 +18,6 @@ def json_request(request):
     if request.method == 'POST':
         try:
             request_json = json.loads(request.body.decode('utf-8'))
-            print(request_json)
         except KeyError:
             HttpResponseServerError('JSON request error')
     else:
