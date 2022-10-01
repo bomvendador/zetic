@@ -20,7 +20,7 @@ from pdf.save_data import save_data_to_db
 import cyrtranslit
 from reports import settings
 import time
-
+import fitz
 
 def pdf_generator(request_json):
     time_start = time.perf_counter()
@@ -56,15 +56,26 @@ def pdf_generator(request_json):
 
     pdf.output("media/reportsPDF/" + file_name)
 
+    # fitz_doc = fitz.open("media/reportsPDF/" + file_name)
+    # page = fitz_doc[2]
+    # p = fitz.Point(50, 72)
+    #
+    # page.insert_text(p,  # bottom-left of 1st char
+    #                  'АПНГОплдошываышщ',  # the text (honors '\n')
+    #                  fontname="helv",  # the default font
+    #                  fontsize=11,  # the default font size
+    #                  rotate=90,  # also available: 90, 180, 270
+    #                  encoding=fitz.TEXT_ENCODING_CYRILLIC
+    #                  )
+    # fitz_doc.save("text.pdf")
     try:
         with open('media/reportsPDF/' + file_name, 'rb') as f:
+
             file_data = f.read()
-        response = HttpResponse(file_data, content_type='application/pdf')
-
-        print(file_name)
-        response['Content-Disposition'] = f"attachment; filename={file_name}"
+            response = HttpResponse(file_data, content_type='application/pdf')
+            response['Content-Disposition'] = f"attachment; filename={file_name}"
+            print(file_name)
         save_data_to_db(request_json, file_name)
-
     except IOError:
         response = HttpResponseNotFound('<h1>File not exist</h1>')
     time_finish = time.perf_counter()

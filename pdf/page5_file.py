@@ -1,12 +1,11 @@
 from pdf.draw import draw_full_scale, insert_page_number
 import time
 
+
 def page5(pdf, json_section):
-    t1 = time.perf_counter()
+    # t1 = time.perf_counter()
     scale_element_file = 'media/images/boyko_page5.png'
     pdf.set_auto_page_break(False)
-
-    pdf.image('media/images/page5.png', x=0, y=0, w=210)
 
     x = 10
     y = 10
@@ -22,6 +21,12 @@ def page5(pdf, json_section):
            u'эмоционального ответа на ситуацию. Вы можете увидеть, какие факторы формируют каждую фазу выгорания и ' \
            u'в какой точке Вы находитесь прямо сейчас.'
     pdf.multi_cell(0, 4, text, align='J')
+
+    vert_text_y = 73
+    with pdf.rotation(90, 10, vert_text_y+1):
+        pdf.text(0, vert_text_y+1, "Фаза 1. Напряжение")
+    pdf.set_draw_color(0, 0, 0)
+    pdf.line(13, vert_text_y - 35, 13, vert_text_y + 31)
 
     y += 13
     x += 6
@@ -56,6 +61,12 @@ def page5(pdf, json_section):
     scale_name = u'''Тревога'''
     draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Напряжение_Тревога', scale_element_file)
 
+    vert_text_y = 152
+    with pdf.rotation(90, 10, vert_text_y+1):
+        pdf.text(0, vert_text_y+1, "Фаза 2. Сопротивление")
+    pdf.set_draw_color(0, 0, 0)
+    pdf.line(13, vert_text_y - 35, 13, vert_text_y + 31)
+
     y += 20
     scale_name = u'''Избирательное
 реагирование'''
@@ -75,6 +86,12 @@ def page5(pdf, json_section):
 усталость'''
     draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Сопротивление_Эмпатическая усталость', scale_element_file)
 
+    vert_text_y = 232
+    with pdf.rotation(90, 10, vert_text_y+1):
+        pdf.text(0, vert_text_y+1, "Фаза 3. Истощение")
+    pdf.set_draw_color(0, 0, 0)
+    pdf.line(13, vert_text_y - 35, 13, vert_text_y + 31)
+
     y += 20
     scale_name = u'''Эмоциональная
 опустошенность'''
@@ -92,8 +109,8 @@ def page5(pdf, json_section):
 
     y += 20
     scale_name = u'''Психосоматика'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Истощение_Психосоматика', scale_element_file)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Истощение_Психосоматика', scale_element_file)
 
     insert_page_number(pdf)
-    t2 = time.perf_counter()
-    print(f'стр 5 - {round(t2 - t1, 2)}')
+    # t2 = time.perf_counter()
+    # print(f'стр 5 - {round(t2 - t1, 2)}')

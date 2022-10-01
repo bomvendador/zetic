@@ -3,7 +3,7 @@ import time
 
 
 def page4(pdf, json_section):
-    t1 = time.perf_counter()
+    # t1 = time.perf_counter()
     scale_element_file = 'media/images/kopingi_page4.png'
     pdf.set_auto_page_break(False)
     x = 10
@@ -126,5 +126,5 @@ def page4(pdf, json_section):
 
     insert_page_number(pdf)
 
-    t2 = time.perf_counter()
-    print(f'стр 4 - {round(t2 - t1, 2)}')
+    # t2 = time.perf_counter()
+    # print(f'стр 4 - {round(t2 - t1, 2)}')

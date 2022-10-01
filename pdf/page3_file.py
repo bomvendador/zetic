@@ -4,20 +4,27 @@ import time
 
 
 def page3(pdf, json_section):
-    t1 = time.perf_counter()
+    # t1 = time.perf_counter()
     pdf.set_margins(top=15, left=0, right=5)
     pdf.set_auto_page_break(False)
-    pdf.image('media/images/page3.png', x=0, y=0, w=210)
 
     x = 10
     y = 10
     pdf.set_xy(x, y)
     pdf.set_font("RalewayBold", "", 10)
+
     pdf.cell(0, 0, 'Базовые черты личности')
     y = y + 5
     # 17
     pdf.set_xy(x, y)
     pdf.set_font("RalewayLight", "", 9)
+
+    vert_text_y = 63
+    with pdf.rotation(90, 12, vert_text_y+1):
+        pdf.text(0, vert_text_y+1, "Эмоциональная устойчивость")
+    pdf.set_draw_color(0, 0, 0)
+    pdf.line(15, vert_text_y - 33, 15, vert_text_y + 14)
+
     text = u'Приведенные ниже результаты исследования отражают фундаментальные черты личности, определяющие стиль ' \
            u'деятельности и взаимоотношения с окружением. Обнаружив эти черты, Вы можете осознанно усиливать или ослаблять их'
     pdf.multi_cell(0, 4, text, align='J')
@@ -71,6 +78,13 @@ def page3(pdf, json_section):
     Раздражительность
     '''
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+
+    pdf.set_font("RalewayLight", "", 9)
+    vert_text_y = 117
+    with pdf.rotation(90, 12, vert_text_y):
+        pdf.text(0, vert_text_y, "Командная устойчивость")
+    pdf.set_draw_color(0, 0, 0)
+    pdf.line(15, vert_text_y - 36, 15, vert_text_y + 26)
 
     y += 17
     scale_name = u'''
@@ -135,6 +149,13 @@ def page3(pdf, json_section):
     '''
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
+    pdf.set_font("RalewayLight", "", 9)
+    vert_text_y = 185
+    with pdf.rotation(90, 12, vert_text_y):
+        pdf.text(0, vert_text_y, "Устойчивость результата")
+    pdf.set_draw_color(0, 0, 0)
+    pdf.line(15, vert_text_y - 36, 15, vert_text_y + 26)
+
     y += 17
     scale_name = u'''
     Шкала M
@@ -197,6 +218,13 @@ def page3(pdf, json_section):
     Сильная воля, Точность
     '''
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+
+    pdf.set_font("RalewayLight", "", 9)
+    vert_text_y = 252
+    with pdf.rotation(90, 12, vert_text_y+2):
+        pdf.text(0, vert_text_y+2, "Устойчивость в изменениях")
+    pdf.set_draw_color(0, 0, 0)
+    pdf.line(15, vert_text_y - 36, 15, vert_text_y + 26)
 
     y += 17
     scale_name = u'''
@@ -261,8 +289,9 @@ def page3(pdf, json_section):
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     insert_page_number(pdf)
-    t2 = time.perf_counter()
-    print(f'стр 3 - {round(t2-t1,2)}')
+    # t2 = time.perf_counter()
+    # print(f'стр 3 - {round(t2-t1,2)}')
+
 
 def draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points, points_description):
     pdf.set_xy(x, y)

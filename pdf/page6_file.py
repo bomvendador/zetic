@@ -3,12 +3,12 @@ import time
 
 
 def page6(pdf, json_section):
-    t1 = time.perf_counter()
+    # t1 = time.perf_counter()
     scale_element_file = 'media/images/values_page6.png'
 
     pdf.set_auto_page_break(False)
 
-    pdf.image('media/images/page6.png', x=0, y=0, w=210)
+    # pdf.image('media/images/page6.png', x=0, y=0, w=210)
 
     x = 10
     y = 10
@@ -40,6 +40,13 @@ def page6(pdf, json_section):
     pdf.set_font("RalewayLight", "", 6)
     pdf.multi_cell(50, 3, scale_legend_right, align='R')
 
+    pdf.set_font("RalewayLight", "", 9)
+    vert_text_y = 72
+    with pdf.rotation(90, 10, vert_text_y+13):
+        pdf.text(0, vert_text_y+13, "Создание гармонии")
+    pdf.set_draw_color(0, 0, 0)
+    pdf.line(13, vert_text_y - 35, 13, vert_text_y + 52)
+
     scale_name = u'''Причастность'''
     draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Причастность', scale_element_file)
 
@@ -59,6 +66,13 @@ def page6(pdf, json_section):
     y += 20
     scale_name = u'''Гедонизм'''
     draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Гедонизм', scale_element_file)
+
+    pdf.set_font("RalewayLight", "", 9)
+    vert_text_y = 172
+    with pdf.rotation(90, 10, vert_text_y+7):
+        pdf.text(0, vert_text_y+7, "Преодоление")
+    pdf.set_draw_color(0, 0, 0)
+    pdf.line(13, vert_text_y - 35, 13, vert_text_y + 52)
 
     y += 20
     scale_name = u'''Признание'''
@@ -82,5 +96,5 @@ def page6(pdf, json_section):
     draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Интеллект', scale_element_file)
 
     insert_page_number(pdf)
-    t2 = time.perf_counter()
-    print(f'стр 6 - {round(t2 - t1, 2)}')
+    # t2 = time.perf_counter()
+    # print(f'стр 6 - {round(t2 - t1, 2)}')

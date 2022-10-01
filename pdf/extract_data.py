@@ -10,6 +10,9 @@ def extract_section(request_json, section_name):
 def extract_categories(json_section, category_name):
     for category in json_section:
         if category['category'] == category_name:
-            # category_inst = Category.objects.filter(name=category_name)
-            point_description = PointDescription.objects.get(category__name=category_name, value=category['points']).text
-            return {'points': category['points'], 'point_description': point_description}
+            category_point = category['points']
+            if category_point == 0:
+                return {'points': category['points'], 'point_description': ''}
+            else:
+                point_description = PointDescription.objects.get(category__name=category_name, value=category['points']).text
+                return {'points': category['points'], 'point_description': point_description}

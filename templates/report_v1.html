@@ -103,7 +103,7 @@
               "section": "Кеттелл",
               "point": [
                 {"category":"Шкала C", "points": 10},
-                {"category":"Шкала O", "points":7},
+                {"category":"Шкала O", "points":0},
                 {"category":"Шкала Q4", "points": 6},
                 {"category":"Шкала F", "points": 9},
                 {"category":"Шкала N", "points": 9},
@@ -130,12 +130,14 @@
             dataType: "json",
             url: "{% url 'json' %}",
             data: request,
-            error: function(data){
-              console.log('Ошибка', data)
+            xhrFields: {
+                responseType: 'blob'
             },
-            {#headers: {'X-CSRFToken': '{{ csrf_token }}'},#}
-            success: function () {
+            success: function (response) {
                 console.log('Данные сохранены');
+            },
+            error: function(data){
+                console.log('Ошибка', data['responseText'])
             }
         })
     })
