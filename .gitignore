@@ -4,3 +4,5 @@ data
 
 *.pyc
 media/reportsPDF/*.pdf
+
+questionnaire-report.tar.gz

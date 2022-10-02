@@ -38,6 +38,7 @@ docker run -d --restart=always \
 
 ```bash
 HOST=http://localhost:8000
+HOST=https://demo-report.zetic.borsky.dev
 curl -X POST ${HOST}/api/single-report/v1 --data '{
           "code": "eiZoo7ie5vaighee7aiZei7d",
           "participant_info": {
