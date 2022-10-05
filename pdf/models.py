@@ -1,20 +1,6 @@
 from django.db import models
 
 
-class State(models.Model):
-
-    state_id = models.AutoField(primary_key=True)
-    state_name = models.CharField(max_length=30, blank=True, null=True)
-    is_deleted = models.IntegerField(default=0)
-
-    class Meta:
-        managed = True
-        db_table = 'states'
-
-    def __str__(self):
-        return self.state_name
-
-
 class Participant(models.Model):
     fio = models.CharField(max_length=100, blank=False, null=False)
     sex = models.CharField(max_length=20, blank=False, null=False)
@@ -29,10 +15,11 @@ class Report(models.Model):
     code = models.CharField(max_length=30, blank=False, null=False)
     lie_points = models.IntegerField(null=False, default=0)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Участник')
-    file = models.FileField(default=None, null=True, blank=True)
+    file = models.FileField(upload_to='media/reportsPDF/', default=None)
+    lang = models.CharField(max_length=2, blank=True, null=True, default=None)
 
     def __str__(self):
-        return self.participant.fio
+        return f'{self.participant.fio} - {self.file.url}'
 
 
 class Section(models.Model):
@@ -54,7 +41,11 @@ class Category(models.Model):
 class PointDescription(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Описание')
     value = models.IntegerField(null=False, default=0)
-    text = models.TextField(blank=True, null=True)
+    text = models.TextField(blank=True, null=True, verbose_name='Русский')
+    text_en = models.TextField(default=None, blank=True, null=True, verbose_name='Английский')
 
     def __str__(self):
-        return f'{self.category.name} - {self.value}'
+        if self.text_en == '':
+            return u'Англ отсутсвует'
+        else:
+            return f'{self.category.section.name} - {self.category.name} - {self.value}'

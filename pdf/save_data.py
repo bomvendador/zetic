@@ -17,4 +17,5 @@ def save_data_to_db(request_json, file_name):
     report.lie_points = request_json['lie_points']
     report.code = request_json['code']
     report.file = file_name
+    report.lang = request_json['lang']
     report.save()

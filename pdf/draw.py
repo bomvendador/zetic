@@ -15,8 +15,8 @@ def draw_scale(pdf, x, y, w, h, points, img_link):
         x += 5.9 + 1
 
 
-def draw_full_scale(pdf, scale_name, x, y, scale_name_y, json_section, section_name, scale_element_file):
-    points_with_description = extract_categories(json_section, section_name)
+def draw_full_scale(pdf, scale_name, x, y, scale_name_y, json_section, section_name, scale_element_file, lang):
+    points_with_description = extract_categories(json_section, section_name, lang)
     pdf.set_xy(x, scale_name_y-2)
     pdf.set_font("RalewayLight", "", 9)
     pdf.multi_cell(0, 4, scale_name)

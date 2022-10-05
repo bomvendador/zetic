@@ -22,6 +22,7 @@ from reports import settings
 import time
 import fitz
 
+
 def pdf_generator(request_json):
     time_start = time.perf_counter()
     pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
@@ -32,42 +33,31 @@ def pdf_generator(request_json):
     pdf.add_page()
 
     participant_name = request_json['participant_info']['name']
+    lang = request_json['lang']
 
-    title_page(pdf, participant_name)
-
-    pdf.add_page()
-    page2(pdf, request_json['lie_points'])
+    title_page(pdf, participant_name, lang)
 
     pdf.add_page()
-    page3(pdf, extract_section(request_json, 'Кеттелл'))
+    page2(pdf, request_json['lie_points'], lang)
 
     pdf.add_page()
-    page4(pdf, extract_section(request_json, 'Копинги'))
+    page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
 
     pdf.add_page()
-    page5(pdf, extract_section(request_json, 'Выгорание Бойко'))
+    page4(pdf, extract_section(request_json, 'Копинги'), lang)
 
     pdf.add_page()
-    page6(pdf, extract_section(request_json, 'Ценности'))
+    page5(pdf, extract_section(request_json, 'Выгорание Бойко'), lang)
+
+    pdf.add_page()
+    page6(pdf, extract_section(request_json, 'Ценности'), lang)
 
     now = datetime.datetime.now()
 
-    file_name = cyrtranslit.to_latin(participant_name, 'ru') + "_" + now.strftime("%d_%m_%Y__%H_%M_%S") + '.pdf'
+    file_name = cyrtranslit.to_latin(participant_name, 'ru') + "_" + now.strftime("%d_%m_%Y__%H_%M_%S") + "_" + lang.upper() + '.pdf'
 
     pdf.output("media/reportsPDF/" + file_name)
 
-    # fitz_doc = fitz.open("media/reportsPDF/" + file_name)
-    # page = fitz_doc[2]
-    # p = fitz.Point(50, 72)
-    #
-    # page.insert_text(p,  # bottom-left of 1st char
-    #                  'АПНГОплдошываышщ',  # the text (honors '\n')
-    #                  fontname="helv",  # the default font
-    #                  fontsize=11,  # the default font size
-    #                  rotate=90,  # also available: 90, 180, 270
-    #                  encoding=fitz.TEXT_ENCODING_CYRILLIC
-    #                  )
-    # fitz_doc.save("text.pdf")
     try:
         with open('media/reportsPDF/' + file_name, 'rb') as f:
 

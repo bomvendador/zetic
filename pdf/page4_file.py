@@ -1,39 +1,56 @@
 from pdf.draw import draw_full_scale, insert_page_number
-import time
 
 
-def page4(pdf, json_section):
-    # t1 = time.perf_counter()
+def page4(pdf, json_section, lang):
     scale_element_file = 'media/images/kopingi_page4.png'
     pdf.set_auto_page_break(False)
     x = 10
     y = 10
     pdf.set_xy(x, y)
     pdf.set_font("RalewayBold", "", 10)
-    pdf.cell(0, 0, 'Поведение в стрессе и неопределенности')
+    if lang == 'ru':
+        pdf.cell(0, 0, 'Поведение в стрессе и неопределенности')
+    else:
+        pdf.cell(0, 0, 'Section C')
 
     y += 5
     # 17
     pdf.set_xy(x, y)
     pdf.set_font("RalewayLight", "", 9)
-    text = u'Ниже приведены результаты исследования, отражающие наиболее типичные реакции и действия в ситуации стресса ' \
-           u'или высокой неопределенности. Изучив свои стратегии поведения, Вы можете изменить их, осознанно действовать ' \
-           u'иначе, повышая личную эффективность.'
+    if lang == 'ru':
+        text = u'Ниже приведены результаты исследования, отражающие наиболее типичные реакции и действия в ситуации стресса ' \
+               u'или высокой неопределенности. Изучив свои стратегии поведения, Вы можете изменить их, осознанно действовать ' \
+               u'иначе, повышая личную эффективность.'
+    else:
+        text = u'The following scores reflect the most typical reactions and actions under stressful situations or uncertainty. ' \
+               u'Having studied your behavioral strategies, you can change them, consciously act differently, increasing your ' \
+               u'personal effectiveness.'
+
     pdf.multi_cell(0, 4, text, align='J')
 
     y += 17
     pdf.set_xy(x, y)
     pdf.set_font("RalewayBold", "", 10)
-    pdf.cell(0, 0, 'Стратегии, направленные на активный поиск выхода и преодоление сложностей')
+    if lang == 'ru':
+        pdf.cell(0, 0, 'Стратегии, направленные на активный поиск выхода и преодоление сложностей')
+        scale_legend_left = u'''
+    Слабо выражено
+    '''
+        scale_legend_right = u'''
+    Ярко выражено
+    '''
+
+    else:
+        pdf.cell(0, 0, 'Strategies to actively find a way out and overcome difficulties')
+        scale_legend_left = u'''
+    Weakly expressed
+    '''
+        scale_legend_right = u'''
+    Strongly expressed
+    '''
 
     y += 2
 
-    scale_legend_left = u'''
-    Слабо выражено
-    '''
-    scale_legend_right = u'''
-    Ярко выражено
-    '''
     pdf.set_xy(x+37, y)
     pdf.set_font("RalewayLight", "", 6)
     pdf.multi_cell(0, 3, scale_legend_left)
@@ -41,90 +58,150 @@ def page4(pdf, json_section):
     pdf.set_xy(x+37+24, y)
     pdf.set_font("RalewayLight", "", 6)
     pdf.multi_cell(50, 3, scale_legend_right, align='R')
-
-    scale_name = u'''Самообладание'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Самообладание', scale_element_file)
-
-    y += 15
-    scale_name = u'''Контроль над ситуацией'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Контроль над ситуацией', scale_element_file)
+    if lang == 'ru':
+        scale_name = u'''Самообладание'''
+    else:
+        scale_name = u'''Response control'''
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Самообладание', scale_element_file, lang)
 
     y += 15
-    scale_name = u'''Позитивная
+    if lang == 'ru':
+        scale_name = u'''Контроль над ситуацией'''
+    else:
+        scale_name = u'''Situation control'''
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Контроль над ситуацией', scale_element_file, lang)
+
+    y += 15
+    if lang == 'ru':
+        scale_name = u'''Позитивная
 самомотивация'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Позитивная самомотивация', scale_element_file)
+    else:
+        scale_name = u'''Positive
+self-affirmation'''
+    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Позитивная самомотивация', scale_element_file, lang)
 
     y += 15
-    scale_name = u'''Снижение значения
+    if lang == 'ru':
+        scale_name = u'''Снижение значения
 стрессовой ситуации'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Снижение значения стрессовой ситуации', scale_element_file)
+        draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Снижение значения стрессовой ситуации', scale_element_file, lang)
+
+    else:
+        scale_name = u'''Stress minimization'''
+        draw_full_scale(pdf, scale_name, x, y + 12, y + 12, json_section, 'Снижение значения стрессовой ситуации',
+                        scale_element_file, lang)
 
     y += 15
-    scale_name = u'''Самоутверждение'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Самоутверждение', scale_element_file)
+    if lang == 'ru':
+        scale_name = u'''Самоутверждение'''
+    else:
+        scale_name = u'''Self-assertion'''
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Самоутверждение', scale_element_file, lang)
 
     y += 23
     pdf.set_xy(x, y)
     pdf.set_font("RalewayBold", "", 10)
-    pdf.cell(0, 0, 'Стратегии, направленные на игнорирование проблемы и отказ искать выход из ситуации')
+    if lang == 'ru':
+        pdf.cell(0, 0, 'Стратегии, направленные на игнорирование проблемы и отказ искать выход из ситуации')
+    else:
+        pdf.cell(0, 0, 'Strategies for ignoring problems and avoiding solutions research')
 
     y -= 2
-
-    scale_name = u'''Отвлечение'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Отвлечение', scale_element_file)
+    if lang == 'ru':
+        scale_name = u'''Отвлечение'''
+    else:
+        scale_name = u'''Distraction'''
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Отвлечение', scale_element_file, lang)
 
     y += 15
-    scale_name = u'''Бегство от стрессовой
+    if lang == 'ru':
+        scale_name = u'''Бегство от стрессовой
 ситуации'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Бегство от стрессовой ситуации', scale_element_file)
+        draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Бегство от стрессовой ситуации', scale_element_file, lang)
+    else:
+        scale_name = u'''Escape'''
+        draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Бегство от стрессовой ситуации', scale_element_file, lang)
 
     y += 15
-    scale_name = u'''Антиципирующее
+    if lang == 'ru':
+        scale_name = u'''Антиципирующее
 избегание'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Антиципирующее избегание', scale_element_file)
+        draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Антиципирующее избегание', scale_element_file, lang)
+    else:
+        scale_name = u'''Avoidance'''
+        draw_full_scale(pdf, scale_name, x, y + 12, y + 12 - 2, json_section, 'Антиципирующее избегание',
+                        scale_element_file, lang)
 
     y += 15
-    scale_name = u'''Замещение'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Замещение', 'media/images/kopingi_page4.png')
+    if lang == 'ru':
+        scale_name = u'''Замещение'''
+    else:
+        scale_name = u'''Substitution'''
+
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Замещение', 'media/images/kopingi_page4.png', lang)
 
     y += 15
-    scale_name = u'''Поиск социальной
+    if lang == 'ru':
+        scale_name = u'''Поиск социальной
 поддержки'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Поиск социальной поддержки', scale_element_file)
+    else:
+        scale_name = u'''Need for
+Social Support'''
+    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Поиск социальной поддержки', scale_element_file, lang)
 
     y += 23
     pdf.set_xy(x, y)
     pdf.set_font("RalewayBold", "", 10)
-    pdf.cell(0, 0, 'Стратегии, провоцирующие дальнейшее нахождение в стрессе и усиление переживаний', scale_element_file)
+    if lang == 'ru':
+        pdf.cell(0, 0, 'Стратегии, провоцирующие дальнейшее нахождение в стрессе и усиление переживаний', scale_element_file)
+    else:
+        pdf.cell(0, 0, 'Strategies leading to further stress and strengthening worries', scale_element_file)
 
     y -= 2
-
-    scale_name = u'''Жалость к себе'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Жалость к себе', scale_element_file)
+    if lang == 'ru':
+        scale_name = u'''Жалость к себе'''
+    else:
+        scale_name = u'''Self-pity'''
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Жалость к себе', scale_element_file, lang)
 
     y += 15
-    scale_name = u'''Социальная
+    if lang == 'ru':
+        scale_name = u'''Социальная
 замкнутость'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Социальная замкнутость', scale_element_file)
+    else:
+        scale_name = u'''Social
+withdrawal'''
+    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Социальная замкнутость', scale_element_file, lang)
 
     y += 15
-    scale_name = u'''Самообвинение'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Самообвинение', scale_element_file)
+    if lang == 'ru':
+        scale_name = u'''Самообвинение'''
+    else:
+        scale_name = u'''Self-blame'''
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Самообвинение', scale_element_file, lang)
 
     y += 15
-    scale_name = u'''«Заезженная
+    if lang == 'ru':
+        scale_name = u'''«Заезженная
 пластинка»'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Заезженная пластинка', scale_element_file)
+        draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Заезженная пластинка', scale_element_file, lang)
+    else:
+        scale_name = u'''Rumination'''
+        draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Заезженная пластинка', scale_element_file, lang)
 
     y += 15
-    scale_name = u'''Самооправдание'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Самооправдание', scale_element_file)
+    if lang == 'ru':
+        scale_name = u'''Самооправдание'''
+    else:
+        scale_name = u'''Denial of guilt'''
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Самооправдание', scale_element_file, lang)
 
     y += 15
-    scale_name = u'''Агрессия'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Агрессия', scale_element_file)
+    if lang == 'ru':
+        scale_name = u'''Агрессия'''
+    else:
+        scale_name = u'''Aggression'''
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Агрессия', scale_element_file, lang)
 
     insert_page_number(pdf)
 
-    # t2 = time.perf_counter()
-    # print(f'стр 4 - {round(t2 - t1, 2)}')
