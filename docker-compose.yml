@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+#  zetic-report-db:
+#    image: postgres:14-alpine
+#    volumes:
+#      - ./data/db:/var/lib/postgresql/data
+#    environment:
+#      - POSTGRES_DB=zetic-report-dev
+#      - POSTGRES_USER=zetic-report-dev
+#      - POSTGRES_PASSWORD=zetic-report-dev
+  zetic-report-web:
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+#      - POSTGRES_NAME=zetic-report-dev
+#      - POSTGRES_USER=zetic-report-dev
+#      - POSTGRES_PASSWORD=zetic-report-dev
+      - SERVER_PORT=8000
+#    depends_on:
+#      - zetic-report-db
