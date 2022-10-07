@@ -65,11 +65,11 @@ def pdf_generator(request_json):
             response = HttpResponse(file_data, content_type='application/pdf')
             response['Content-Disposition'] = f"attachment; filename={file_name}"
             print(file_name)
-        save_data_to_db(request_json, file_name)
+        # save_data_to_db(request_json, file_name)
     except IOError:
         response = HttpResponseNotFound('<h1>File not exist</h1>')
     time_finish = time.perf_counter()
-    print(round(time_finish-time_start, 2))
+    # print(round(time_finish-time_start, 2))
     return response
 
 
