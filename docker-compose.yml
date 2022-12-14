@@ -1,25 +1,34 @@
 version: "3.9"
 
 services:
-#  zetic-report-db:
+  zetic-report-db:
 #    image: postgres:14-alpine
 #    volumes:
-#      - ./data/db:/var/lib/postgresql/data
-#    environment:
-#      - POSTGRES_DB=zetic-report-dev
-#      - POSTGRES_USER=zetic-report-dev
-#      - POSTGRES_PASSWORD=zetic-report-dev
-  zetic-report-web:
-    build:
-      dockerfile: Dockerfile
+#      - db_reports:/var/lib/postgresql/data
+    image: mysql:5.7
+#    command: [--ignore-db-dir=lost+found]
+    ports:
+      - "3306:3306"
+    environment:
+#      MYSQL_DATABASE: 'db_reports'
+#      MYSQL_USER: 'root'
+#      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    restart: always
     volumes:
-      - .:/code
+      - db_reports_mysql:/var/lib/my_sql
+  zetic-report-web:
+    build: .
+#      dockerfile: Dockerfile
+    command: python /reports/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/reports
     ports:
       - "8000:8000"
-    environment:
-#      - POSTGRES_NAME=zetic-report-dev
-#      - POSTGRES_USER=zetic-report-dev
-#      - POSTGRES_PASSWORD=zetic-report-dev
-      - SERVER_PORT=8000
-#    depends_on:
-#      - zetic-report-db
+#    env_file:
+#      - ./.env.dev
+    depends_on:
+      - zetic-report-db
+
+volumes:
+  db_reports_mysql:

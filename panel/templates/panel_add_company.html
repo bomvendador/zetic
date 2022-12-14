@@ -1,0 +1,82 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+    {% block content %}
+
+                <div class="side-app">
+
+                    <!-- CONTAINER -->
+                    <div class="main-container container-fluid">
+
+                        <!-- PAGE-HEADER -->
+                        <div class="page-header">
+                            <h1 class="page-title">Добавление компании</h1>
+                            <div>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Добавление Компании</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <!-- PAGE-HEADER END -->
+
+                        <!-- ROW-1 OPEN -->
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Данные компании</h3>
+                                    </div>
+                                    <div class="card-body">
+{#                                        <div class="text-center chat-image mb-5">#}
+{#                                            <div class="avatar avatar-xxl chat-profile mb-3 brround">#}
+{#                                                <img alt="avatar" src="{% static 'images/company_avatar.png' %}" class="brround">#}
+{#                                            </div>#}
+{#                                        </div>#}
+
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12">
+                                                <div class="form-group">
+                                                    <label for="input_fio">Название</label>
+                                                    <input type="text" class="form-control" id="input_company_name">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12">
+                                                <div class="form-switch">
+                                                  <input class="form-check-input" type="checkbox" role="switch" id="company_active" checked="checked">
+                                                  <label class="form-check-label" for="company_active">Компания активна</label>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                   </div>
+                                    <div class="card-footer text-end">
+                                        <button class="btn btn-primary my-1 nav-buttons" type="button" id="save_company">Сохранить</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ROW-1 CLOSED -->
+
+                    </div>
+                    <!--CONTAINER CLOSED -->
+
+                </div>
+
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+
+    let url_save_new_company = "{% url 'save_new_company' %}"
+
+
+</script>
+<script src="{% static 'panel/js/panel_add_company.js' %}"></script>
+{% endblock %}

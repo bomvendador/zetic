@@ -22,17 +22,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure--lfbjn3qgosinvh0ls*wb*#72ckmd4-9ozyt*^=6=_w+ah1&qg'
+# SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(os.environ.get("DEBUG", default=1)))
+# DEBUG = True
 # DEBUG = int(os.getenv('DEBUG'))
 
 ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'django_extensions',
+    'django_dia',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +46,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api',
     'pdf',
+    'pdf_group',
+    'login',
+    'panel',
+
 ]
 
 MIDDLEWARE = [
@@ -58,7 +67,11 @@ ROOT_URLCONF = 'reports.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [
+            BASE_DIR / 'templates',
+            BASE_DIR / 'login/templates',
+            BASE_DIR / 'panel/templates'
+        ]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -85,14 +98,31 @@ DATABASES = {
     }
 }
 
+
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'reports',
-#         'USER': 'admin',
-#         'PASSWORD': '123',
-#         'HOST': 'localhost',
-#         'PORT': '5432', # Set to empty string for default.
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'db_reports',
+#         'USER': 'root',
+#         'PASSWORD': 'password',
+#         'HOST': 'zetic-report-db',
+#         'PORT': '3306',
+#     }
+# }
+
+
+# print(os.environ.get('SQL_NAME', BASE_DIR / 'db.sqlite3'))
+# print(os.environ.get('SQL_PASSWORD', BASE_DIR / 'db.sqlite3'))
+# print(os.environ.get('SQL_ENGINE', 'django.db.backends.sqlite3'))
+#
+# DATABASES = {
+#     'default': {
+#         'ENGINE':  os.environ.get('SQL_ENGINE', 'django.db.backends.sqlite3'),
+#         'NAME': os.environ.get('SQL_NAME', BASE_DIR / 'db.sqlite3'),
+#         'USER': os.environ.get('SQL_USER', BASE_DIR / 'user'),
+#         'PASSWORD': os.environ.get('SQL_PASSWORD', 'password'),
+#         'HOST': os.environ.get('SQL_HOST', 'localhost'),
+#         'PORT': os.environ.get('SQL_PORT', '5432'),
 #     }
 # }
 
@@ -121,7 +151,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -131,8 +161,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = 'static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+    'login/static'
+]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -142,33 +177,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'console': {
-            'format': '%(name)-12s %(levelname)-8s %(message)s'
-        },
-        'file': {
-            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
-        }
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'console'
-        },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'formatter': 'file',
-            'filename': 'debug.log'
-        }
-    },
-    'loggers': {
-        'reports.pdf.views': {
-            'level': 'DEBUG',
-            'handlers': ['console', 'file']
-        }
-    }
-}

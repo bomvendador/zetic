@@ -1,0 +1,184 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+    {% block content %}
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid" id="main-container">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">Роли сотрудников</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+{#                        <li class="breadcrumb-item active" aria-current="page">Dashboard 01</li>#}
+                        <li class="breadcrumb-item active" aria-current="page">Роли сотрудников</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- ROW-1 -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
+
+                    <div class="row ">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div id="wizard1" role="application" class="wizard clearfix">
+                                            <div class="content clearfix">
+{#                                                <h3 id="wizard1-h-0" tabindex="-1" class="title current">Выбор проекта</h3>#}
+                                                <section id="wizard1-p-0" role="tabpanel" aria-labelledby="wizard1-h-0" class="body current" aria-hidden="false">
+
+                                                    <div class="table-responsive">
+                                                                <table class="table table-bordered text-nowrap border-bottom list-table dataTable no-footer" id="">
+                                                                    <thead>
+            {#                                                            <tr class="table-header">#}
+                                                                        <tr>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Название</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Name</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Дата создания</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Кем создана</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="wizard1-tbody-1">
+                                                                    {% for employee_role in employees_roles %}
+                                                                        <tr>
+                                                                            <td class="role-name-ru">
+                                                                                {{ employee_role.name_ru }}
+                                                                            </td>
+                                                                            <td class="role-name-en">
+                                                                                {{ employee_role.name_en }}
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ employee_role.created_at|date:"d.m.Y H:i" }}
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ employee_role.created_by.first_name }}
+                                                                            </td>
+
+                                                                            <td>
+                                                                                <div style="text-align: center;">
+                                                                                <i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>
+                                                                                <ul class="dropdown-menu" id="role_id_{{ employee_role.id }}">
+                                                                                    <li><a class="dropdown-item edit-role cursor-pointer" >Изменить</a></li>
+                                                                                    <li><a class="dropdown-item delete-role cursor-pointer">Удалить</a></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                    </div>
+
+                                                </section>
+
+
+                                            </div>
+
+{#                                        </div>#}
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-primary float-button" id="add_role"><i class="fe fe-plus"></i></button>
+
+        <!-- Модальное окно добавление индустрии -->
+        <div class="modal fade" id="input_modal_add_role">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content modal-content-demo">
+                    <div class="modal-header" style="background-color: #dbdbdb">
+                        <h6 class="modal-title">Добавление роли</h6>
+                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                          <div class="mb-3">
+                            <label for="input_role_ru_name" class="col-form-label">Название</label>
+                            <input type="text" class="form-control" id="input_role_ru_name">
+                          </div>
+                          <div class="mb-3">
+                            <label for="input_role_en_name" class="col-form-label">Name</label>
+                            <input type="text" class="form-control" id="input_role_en_name">
+                          </div>
+                        </form>
+                      </div>
+                    <div>
+                        <div class="row" style="padding: 0px 15px 15px">
+                            <div class="col-lg-12 col-sm-12 mt-3">
+                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="save_new_role">Сохранить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно изменения индустрии -->
+        <div class="modal fade" id="input_modal_edit_role">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content modal-content-demo">
+                    <div class="modal-header" style="background-color: #dbdbdb">
+                        <h6 class="modal-title">Редактирование роли</h6>
+                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                          <div class="mb-3">
+                            <label for="input_role_ru_edit_name" class="col-form-label">Название</label>
+                            <input type="text" class="form-control" id="input_role_ru_edit_name">
+                          </div>
+                          <div class="mb-3">
+                            <label for="input_role_en_edit_name" class="col-form-label">Name</label>
+                            <input type="text" class="form-control" id="input_role_en_edit_name">
+                          </div>
+                        </form>
+                      </div>
+                    <div>
+                        <div class="row" style="padding: 0px 15px 15px">
+                            <div class="col-lg-12 col-sm-12 mt-3">
+                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="edit_role">Сохранить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    {% endblock %}
+
+{% block script %}
+
+    <script src="{% static 'login/js/select2.js' %}"></script>
+{#    <script src="{% static 'login/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>#}
+<script>
+
+let url_save_new_employee_role = "{% url 'save_new_employee_role' %}"
+let url_edit_employee_role = "{% url 'edit_employee_role' %}"
+let url_delete_employee_role = "{% url 'delete_employee_role' %}"
+
+
+</script>
+
+<script src="{% static 'panel/js/panel_company_parameters_handler.js' %}"></script>
+<script src="{% static 'panel/js/panel_employees_roles_list.js' %}"></script>
+
+
+{% endblock %}

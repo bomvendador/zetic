@@ -2,9 +2,12 @@
 
 # Create your views here.
 
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, StreamingHttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 import datetime
 from pdf.title_page import title_page
+
+import os
 
 from pdf.extract_data import extract_section
 
@@ -23,13 +26,14 @@ import time
 import fitz
 
 
-def pdf_generator(request_json):
+def pdf_single_generator(request_json):
     time_start = time.perf_counter()
     pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
-    pdf.add_font("RalewayMedium", style="", fname=settings.STATIC_ROOT + "/fonts/Raleway-Medium.ttf", uni=True)
-    pdf.add_font("RalewayRegular", style="", fname=settings.STATIC_ROOT + "/fonts/Raleway-Regular.ttf", uni=True)
-    pdf.add_font("RalewayLight", style="", fname=settings.STATIC_ROOT + "/fonts/Raleway-Light.ttf", uni=True)
-    pdf.add_font("RalewayBold", style="", fname=settings.STATIC_ROOT + "/fonts/Raleway-Bold.ttf", uni=True)
+    pdf.add_font("RalewayMedium", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Medium.ttf", uni=True)
+    pdf.add_font("RalewayRegular", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Regular.ttf", uni=True)
+    pdf.add_font("RalewayLight", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Light.ttf", uni=True)
+    pdf.add_font("RalewayBold", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Bold.ttf", uni=True)
+    pdf.add_font("NotoSansDisplayMedium", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/NotoSansDisplay-Medium.ttf", uni=True)
     pdf.add_page()
 
     participant_name = request_json['participant_info']['name']
@@ -54,25 +58,53 @@ def pdf_generator(request_json):
 
     now = datetime.datetime.now()
 
-    file_name = cyrtranslit.to_latin(participant_name, 'ru') + "_" + now.strftime("%d_%m_%Y__%H_%M_%S") + "_" + lang.upper() + '.pdf'
+    file_name = cyrtranslit.to_latin(participant_name.strip(), 'ru') + "_" + now.strftime("%d_%m_%Y__%H_%M_%S") + "_" + lang.upper() + '_single.pdf'
 
-    pdf.output("media/reportsPDF/" + file_name)
+    path = "media/reportsPDF/single/"
 
-    try:
-        with open('media/reportsPDF/' + file_name, 'rb') as f:
+    save_data_to_db(request_json, file_name)
 
-            file_data = f.read()
-            response = HttpResponse(file_data, content_type='application/pdf')
-            response['Content-Disposition'] = f"attachment; filename={file_name}"
-            print(file_name)
-        # save_data_to_db(request_json, file_name)
-    except IOError:
-        response = HttpResponseNotFound('<h1>File not exist</h1>')
+    response = save_serve_file(pdf, path, file_name, request_json)
+
     time_finish = time.perf_counter()
     # print(round(time_finish-time_start, 2))
     return response
 
 
+def save_serve_file(pdf, path, file_name, request_json):
+    if not os.path.exists(path):
+        os.makedirs(path)
+    pdf.output(path + file_name)
+
+    response = {
+        'file_name': file_name
+    }
+    print(response)
+    return JsonResponse(response, safe=False)
 
 
+@csrf_exempt
+def download_single_report(request, filename):
+    reportsPDF_folder = os.path.join(settings.MEDIA_ROOT, 'reportsPDF')
+    group_reports_folder = os.path.join(reportsPDF_folder, 'single')
+    full_path = os.path.join(group_reports_folder, filename)
+    print(full_path)
+    with open(full_path, 'rb') as f:
+        file_data = f.read()
+        response = HttpResponse(file_data, content_type='application/pdf')
+        response['Content-Disposition'] = f"attachment; filename={filename}"
+    return response
+
+
+@csrf_exempt
+def download_group_report(request, filename):
+    reportsPDF_folder = os.path.join(settings.MEDIA_ROOT, 'reportsPDF')
+    group_reports_folder = os.path.join(reportsPDF_folder, 'group')
+    full_path = os.path.join(group_reports_folder, filename)
+    print(full_path)
+    with open(full_path, 'rb') as f:
+        file_data = f.read()
+        response = HttpResponse(file_data, content_type='application/pdf')
+        response['Content-Disposition'] = f"attachment; filename={filename}"
+    return response
 

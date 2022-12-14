@@ -3,6 +3,6 @@ from django.urls import path
 from pdf import views as pdf_views
 
 urlpatterns = [
-    path('fpdf', pdf_views.pdf_generator, name="pdf_generator"),
+    path('fpdf', pdf_views.pdf_single_generator, name="pdf_single_generator"),
 
 ]

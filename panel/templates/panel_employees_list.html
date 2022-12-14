@@ -1,0 +1,229 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+
+{% block links %}
+
+<link id="style" href="{% static 'panel/plugins/yearpicker/css/yearpicker.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+{% endblock %}
+    {% block content %}
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid" id="main-container">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">Сотрудники компаний</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+{#                        <li class="breadcrumb-item active" aria-current="page">Dashboard 01</li>#}
+                        <li class="breadcrumb-item active" aria-current="page">Сотрудники компаний</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- ROW-1 -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
+
+                    <div class="row ">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div id="wizard1" role="application" class="wizard clearfix">
+                                            <div class="steps clearfix">
+                                                <ul role="tablist">
+                                                    <li role="tab" class="current route-item" aria-disabled="false">
+                                                        <a id="wizard1-t-0" aria-controls="wizard1-p-0">
+                                                            <span class="current-info audible">current step: </span>
+                                                            <span class="number">1</span>
+                                                            <span class="title">Выбор компании</span>
+                                                        </a>
+                                                    </li>
+                                                    <li role="tab" class="disabled route-item" aria-disabled="true">
+                                                        <a id="wizard1-t-1" aria-controls="wizard1-p-1">
+                                                            <span class="number">2</span>
+                                                            <span class="title">Список сотрудников</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="content clearfix">
+{#                                                <h3 id="wizard1-h-0" tabindex="-1" class="title current">Выбор проекта</h3>#}
+                                                <section id="wizard1-p-0" role="tabpanel" aria-labelledby="wizard1-h-0" class="body current" aria-hidden="false">
+
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered text-nowrap border-bottom list-table" id="responsive-datatable">
+                                                            <thead>
+    {#                                                            <tr class="table-header">#}
+                                                                <tr>
+                                                                    <th class="wd-15p border-bottom-0 table-header">Компания</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for company in companies %}
+                                                                <tr class="table-row cursor-pointer" id="company_id_{{ company.id }}">
+                                                                    <td>{{ company }}</td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                </section>
+
+{#                                                <h3 id="wizard1-h-1" tabindex="-1" class="title">Выбор членов команды</h3>#}
+                                                <section id="wizard1-p-1" role="tabpanel" aria-labelledby="wizard1-h-1" class="body" aria-hidden="true" style="display: none;">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered text-nowrap border-bottom team-table" id="project_participants_table">
+                                                                    <thead>
+            {#                                                            <tr class="table-header">#}
+                                                                        <tr>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Имя/псевдоним</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Email</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Дата создания</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Кем создан</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="wizard1-tbody-1">
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                </section>
+
+                                            </div>
+
+                                            <div class="actions clearfix">
+                                                <ul role="menu" aria-label="Pagination" class="row">
+{#                                                    <li class="disabled cursor-pointer" aria-disabled="true" id="previous"><a class="nav-buttons" role="menuitem">Назад</a></li>#}
+                                                    <div class="col-sm-12 col-md-2" style="padding: 0">
+                                                        <button class="btn btn-primary my-1 nav-buttons disabled w-100" type="button" id="previous">
+                                                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                                                                <polyline points="15 18 9 12 15 6"></polyline>
+                                                            </svg>
+                                                        </button>
+
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-2" style="padding: 0">
+
+                                                        <button class="btn btn-primary my-1 nav-buttons float-end w-100 disabled" type="button" id="next">
+                                                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                                                                <polyline points="9 18 15 12 9 6"></polyline>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                        {#                                                    <li class="disabled cursor-pointer" aria-hidden="false" aria-disabled="false" id="next"><a class="nav-buttons" role="menuitem">Вперед</a></li>#}
+                                                    <li aria-hidden="true" style="display: none;"><a class="nav-buttons" href="#finish" role="menu  item">Finish</a></li>
+                                                </ul>
+                                            </div>
+{#                                        </div>#}
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно добавление индустрии -->
+        <div class="modal fade" id="modal_edit_imployee" style="z-index: 1060">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content modal-content-demo">
+                    <div class="modal-header" style="background-color: #dbdbdb">
+                        <h6 class="modal-title"><b>Редактирование данных сотрудника</b></h6>
+                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="padding: 20px">
+
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="input_fio">Имя/псевдоним</label>
+                                    <input type="text" class="form-control" id="employee_name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input_email">Email</label>
+                            <input type="email" class="form-control" id="employee_email">
+                        </div>
+                        <div class="form-group">
+                            <label for="user_role">Роль</label>
+                                <select name="employee_role" class="form-control form-select" id="employee_role">
+                                    {% for employee_role in employee_roles %}
+                                    <option value="role_id_{{ employee_role.id }}">{{ employee_role.name_ru }}</option>
+                                    {% endfor %}
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="employee_position">Должность</label>
+                                <select name="user_role" class="form-control form-select" id="employee_position">
+                                    {% for employee_position in employee_positions %}
+                                    <option value="position_id_{{ employee_position.id }}">{{ employee_position.name_ru }}</option>
+                                    {% endfor %}
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="employee_position">Индустрия</label>
+                                <select name="user_role" class="form-control form-select" id="employee_industry">
+                                    {% for industry in industries %}
+                                    <option value="industry_id_{{ industry.id }}">{{ industry.name_ru }}</option>
+                                    {% endfor %}
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="employee_gender">Пол</label>
+                                <select name="user_role" class="form-control form-select" id="employee_gender">
+                                    <option>мужской</option>
+                                    <option>женский</option>
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="datepicker-year">Год рождения</label>
+                            <input class="yearpicker form-control cursor-pointer" id="employee_birth_year" type="text" style="caret-color: transparent">
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 mt-3">
+                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="save_edited_employee">Сохранить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    {% endblock %}
+
+{% block script %}
+
+    <script src="{% static 'login/js/select2.js' %}"></script>
+    <script src="{% static 'panel/plugins/yearpicker/js/yearpicker.js' %}"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+{#    <script src="{% static 'login/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>#}
+<script>
+    let url_get_company_employees = "{% url 'get_company_employees' %}"
+    let url_get_employee_data = "{% url 'get_employee_data' %}"
+    let url_save_new_employee_html = "{% url 'save_new_employee_html' %}"
+
+</script>
+    <script src="{% static 'panel/js/panel_employees_list.js' %}"></script>
+
+{% endblock %}

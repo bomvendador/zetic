@@ -1,6 +1,7 @@
 from django.http import HttpResponseServerError, HttpResponse
 import json
-from pdf.views import pdf_generator
+from pdf.views import pdf_single_generator
+from pdf_group.views import pdf_group_generator
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -23,8 +24,11 @@ def json_request(request):
         file = 'media/json/single-report-example.json'
         with open(file, encoding="utf8") as f:
             request_json = json.load(f)
-
-    return pdf_generator(request_json)
+    # print(request_json['type'])
+    if 'type' in request_json:
+        return pdf_group_generator(request_json)
+    else:
+        return pdf_single_generator(request_json)
 
 
 def home(request):

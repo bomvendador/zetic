@@ -29,6 +29,7 @@ def draw_full_scale(pdf, scale_name, x, y, scale_name_y, json_section, section_n
 
 
 def insert_page_number(pdf):
+    pdf.set_text_color(0, 0, 0)
     pdf.set_font("RalewayLight", "", 10)
     pdf.set_xy(200, 290)
     pdf.cell(0, 0, txt=str(pdf.page_no()))

@@ -1,0 +1,44 @@
+
+.cursor-pointer{
+    cursor: pointer!important;
+}
+
+.table-row:hover{
+    background-color: #6c5ffc;
+    color: white;
+}
+
+.table-row-report:hover{
+    background-color: #6c5ffc;
+    color: white;
+}
+
+.table-header {
+    background-color: #e3e3e3 !important;
+}
+
+.background-color_1{
+    background-color: rgb(255, 240, 193);
+}
+
+.background-color_2{
+    background-color: rgb(253, 219, 246);
+}
+
+.background-color_3{
+    background-color: rgb(217, 245, 251);
+}
+
+.background-color_4{
+    background-color: rgb(226, 239, 218);
+}
+
+.no-shadow-important{
+    box-shadow: none!important;
+}
+
+.nav-buttons{
+    width: 150px;
+    height: 40px;
+    text-align: center;
+}

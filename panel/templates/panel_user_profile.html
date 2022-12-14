@@ -1,0 +1,306 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+    {% block content %}
+
+                <div class="side-app">
+
+                    <!-- CONTAINER -->
+                    <div class="main-container container-fluid">
+
+                        <!-- PAGE-HEADER -->
+                        <div class="page-header">
+                            <h1 class="page-title">Редактирование профиля</h1>
+                            <div>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{% url 'panel_home' %}">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="{% url 'users_list' %}">Пользователи</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Редактирование профиля</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <!-- PAGE-HEADER END -->
+
+                        <!-- ROW-1 OPEN -->
+                        <div class="row">
+                            <div class="col-xl-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title">Пароль</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="text-center chat-image mb-5">
+                                            <div class="avatar avatar-xxl chat-profile mb-3 brround">
+                                                <img alt="avatar" src="{% static 'images/7.png' %}" class="brround">
+                                            </div>
+                                            <div class="">
+                                                <h5 class="mb-1 text-dark fw-semibold" id="password_card_fio" data-id="{{ user_profile.user_id }}">{{ user_profile.fio }}</h5>
+                                                <p class="text-muted mt-0 mb-0 pt-0 fs-13" id="password_card_role">{{ user_profile.role.name }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Новый пароль</label>
+                                            <div class="wrap-input100 validate-input input-group" id="Password-toggle1">
+                                                <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                                                    <i class="zmdi zmdi-eye text-muted" aria-hidden="true" id="new_password_hide"></i>
+                                                </a>
+                                                <input class="input100 form-control" type="password" autocomplete="new-password" id="new_password">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Подтверждение пароля</label>
+                                            <div class="wrap-input100 validate-input input-group" id="Password-toggle2">
+                                                <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                                                    <i class="zmdi zmdi-eye text-muted" aria-hidden="true" id="new_password_confirm_hide"></i>
+                                                </a>
+                                                <input class="input100 form-control" type="password" autocomplete="new-password" id="new_password_confirm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer text-end">
+                                        <button class="btn btn-primary my-1 nav-buttons" type="button" id="save_password">Сохранить</button>
+                                    </div>
+                                </div>
+                                <div class="card panel-theme">
+                                    <div class="card-header">
+                                        <div class="float-start">
+                                            <h3 class="card-title">Контакты</h3>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="card-body no-padding">
+                                        <ul class="list-group no-margin">
+                                            <li class="list-group-item d-flex ps-3">
+                                                <div class="social social-profile-buttons me-2">
+                                                    <a class="social-icon text-primary"><i class="fe fe-mail"></i></a>
+                                                </div>
+                                                <a class="my-auto" id="contacts_email">{{ user_profile.user.email }}</a>
+                                            </li>
+                                            <li class="list-group-item d-flex ps-3">
+                                                <div class="social social-profile-buttons me-2">
+                                                    <a class="social-icon text-primary"><i class="fe fe-phone"></i></a>
+                                                </div>
+                                                <a class="my-auto" id="contacts_tel">{{ user_profile.tel }}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-8">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Данные пользователя</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12">
+                                                <div class="form-group">
+                                                    <label for="input_fio">ФИО</label>
+                                                    <input type="text" class="form-control" id="input_fio" {% if user_profile %}value="{{ user_profile.fio }}"{% endif %}>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="input_email">Email</label>
+                                            <input type="email" class="form-control" id="input_email"{% if user_profile %} value="{{ user_profile.user.email }}"{% endif %}>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="input_tel">Телефон</label>
+                                            <input class="form-control" id="input_tel" {% if user_profile %}value="{{ user_profile.tel }}"{% endif %}>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="input_tel">Роль</label>
+                                                <select name="user_role" class="form-control form-select" id="user_role">
+                                                    {% for role in roles %}
+                                                    <option value="role_id_{{ role.id }}" {% if role == user_profile.role %} selected{% endif %}>{{ role.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                        </div>
+
+
+                                   </div>
+                                    <div class="card-footer text-end">
+                                        <button class="btn btn-primary my-1 nav-buttons" type="button" id="save_info">Сохранить</button>
+                                    </div>
+                                </div>
+                            {% if user_profile.user_id != user.id %}
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title">Удалить пользователя</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Все данные пользователя будут удалены. Результаты его работы удалены НЕ будут</p>
+                                    </div>
+                                    <div class="card-footer text-end">
+                                        <button class="btn btn-primary my-1 nav-buttons" type="button" id="delete_user">Удалить</button>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            </div>
+                        </div>
+                        <!-- ROW-1 CLOSED -->
+
+                    </div>
+                    <!--CONTAINER CLOSED -->
+
+                </div>
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+
+    $('#menu_users_list').closest('.slide').addClass('is-expanded')
+    $('#menu_users_list').addClass('active')
+
+    $('#new_password_hide').on('click', function () {
+        let attr = $('#new_password').attr('type')
+        if(typeof attr !== 'undefined'){
+            $('#new_password').removeAttr('type')
+            $(this).removeClass('zmdi-eye').addClass('zmdi-eye-off')
+
+        }else {
+            $('#new_password').attr('type', 'password')
+            $(this).removeClass('zmdi-eye-off').addClass('zmdi-eye')
+        }
+    })
+
+    $('#new_password_confirm_hide').on('click', function () {
+        let attr = $('#new_password_confirm').attr('type')
+        if(typeof attr !== 'undefined'){
+            $('#new_password_confirm').removeAttr('type')
+            $(this).removeClass('zmdi-eye').addClass('zmdi-eye-off')
+        }else {
+            $('#new_password_confirm').attr('type', 'password')
+            $(this).removeClass('zmdi-eye-off').addClass('zmdi-eye')
+        }
+    })
+
+    $('#save_password').on('click', function () {
+        if($('#new_password').val() !== $('#new_password_confirm').val()){
+            toastr.error('Пароли не совпадают')
+        }else {
+            btn_spinner($('#save_password'))
+            $.ajax({
+                headers: { "X-CSRFToken": token },
+                url: "{% url 'save_user_pwd' %}",
+                type: 'POST',
+
+                data: JSON.stringify({
+                            'user_id': {{ user_profile.user.id }},
+                            'password': $('#new_password').val()
+                        }),
+                processData: false,
+                contentType: false,
+                error: function(data){
+                    toastr.error('Ошибка', data)
+                },
+                success:function (data) {
+                    btn_text($('#save_password'), 'Сохранить')
+                    toastr.success('Пароль обновлен')
+                }
+            });
+
+        }
+    })
+    $('#save_info').on('click', function () {
+        if($('#new_password').val() !== $('#new_password_confirm').val()){
+            toastr.error('Пароли не совпадают')
+        }else {
+            if($('#input_fio').val() === '' || $('#input_email').val() === '' || $('#input_tel').val() === '' || $('#user_role').find(':selected').text() === ''){
+                toastr.error('Все поля должны быть заполнены')
+            }else {
+                btn_spinner($('#save_info'))
+                $.ajax({
+                    headers: { "X-CSRFToken": token },
+                    url: "{% url 'save_user_profile' %}",
+                    type: 'POST',
+
+                    data: JSON.stringify({
+                                'user_id': {{ user_profile.user.id }},
+                                'user_fio': $('#input_fio').val(),
+                                'user_email': $('#input_email').val(),
+                                'user_tel': $('#input_tel').val(),
+                                'user_role': $('#user_role').find(':selected').text()
+                            }),
+                    processData: false,
+                    contentType: false,
+                    error: function(data){
+                        toastr.error('Ошибка', data)
+                    },
+                    success:function (data) {
+                        btn_text($('#save_info'), 'Сохранить')
+                        toastr.success('Данные обновлены')
+                        $('#contacts_email').text($('#input_email').val())
+                        $('#contacts_tel').text($('#input_tel').val())
+                        $('#password_card_fio').text($('#input_fio').val())
+                        $('#password_card_role').text($('#user_role').find(':selected').text())
+                    }
+                });
+
+            }
+
+        }
+    })
+
+    $('#delete_user').on('click', function (){
+        if({{ user_profile.user_id }} === {{ user.id }}){
+            Swal.fire({
+              title: 'Пользователь не может быть удален',
+              text: "Вы пытаетесь удалить свой собственный аккаунт, что невозможно из соображений безопасности",
+              icon: 'error',
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'ОК'
+            })
+
+        }else{
+            Swal.fire({
+              title: 'Удаление пользователя',
+              text: "Удалить пользователя?",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Да',
+              cancelButtonText: 'Нет'
+            }).then((result) => {
+              if (result.isConfirmed) {
+
+                $.ajax({
+                    headers: { "X-CSRFToken": token },
+                    url: "{% url 'delete_user' %}",
+                    type: 'POST',
+
+                    data: JSON.stringify({
+                                'user_id': {{ user_profile.user.id }},
+                            }),
+                    processData: false,
+                    contentType: false,
+                    error: function(data){
+                        toastr.error('Ошибка', data)
+                    },
+                    success:function (data) {
+                        Swal.fire({
+                          title: 'Пользователь удален',
+                          text: "Все данные пользователя удалены",
+                          icon: 'success',
+                          confirmButtonColor: '#3085d6',
+                          cancelButtonColor: '#d33',
+                          confirmButtonText: 'ОК'
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                              window.location.href = '{% url "users_list" %}'
+                          }
+                        })
+
+                    }
+                });
+              }
+            })
+        }
+    })
+
+
+</script>
+{% endblock %}

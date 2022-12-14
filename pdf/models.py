@@ -1,25 +1,6 @@
 from django.db import models
-
-
-class Participant(models.Model):
-    fio = models.CharField(max_length=100, blank=False, null=False)
-    sex = models.CharField(max_length=20, blank=False, null=False)
-    birth_year = models.IntegerField(blank=False, null=False)
-    email = models.CharField(max_length=100, blank=True, null=False, default=None)
-
-    def __str__(self):
-        return self.fio
-
-
-class Report(models.Model):
-    code = models.CharField(max_length=30, blank=False, null=False)
-    lie_points = models.IntegerField(null=False, default=0)
-    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Участник')
-    file = models.FileField(upload_to='media/reportsPDF/', default=None)
-    lang = models.CharField(max_length=2, blank=True, null=True, default=None)
-
-    def __str__(self):
-        return f'{self.participant.fio} - {self.file.url}'
+from django.contrib.auth.models import User
+import datetime
 
 
 class Section(models.Model):
@@ -27,6 +8,10 @@ class Section(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name_plural = 'Секции'
+        verbose_name = 'Секция'
 
 
 class Category(models.Model):
@@ -36,6 +21,10 @@ class Category(models.Model):
     def __str__(self):
         # return f'категория - {self.name}'
         return f'ID. {self.id} категория - {self.name} | секция - {self.section}'
+
+    class Meta:
+        verbose_name_plural = 'Категории'
+        verbose_name = 'Категория'
 
 
 class PointDescription(models.Model):
@@ -49,3 +38,207 @@ class PointDescription(models.Model):
             return u'Англ отсутсвует'
         else:
             return f'{self.category.section.name} - {self.category.name} - {self.value}'
+
+    class Meta:
+        verbose_name_plural = 'Оисания баллов'
+        verbose_name = 'Оисание баллов'
+
+
+class Company(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
+    name = models.CharField(max_length=150, blank=False, null=False)
+    version = models.IntegerField(null=True, default=0)
+    active = models.BooleanField(default=True, null=False)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'Компании'
+        verbose_name = 'Компания'
+
+
+class Industry(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT, related_name='Создано_пользователем')
+    edited_at = models.DateTimeField(auto_now=True, null=True)
+    edited_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT, related_name='Изменено_пользователем')
+    name_ru = models.CharField(max_length=100, blank=True, null=True)
+    name_en = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return self.name_ru
+
+    class Meta:
+        verbose_name_plural = 'Индустрии'
+        verbose_name = 'Индустрия'
+
+
+class EmployeeRole(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT, related_name='Создано_пользователем_роль_сотрудника')
+    edited_at = models.DateTimeField(auto_now=True, null=True)
+    edited_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT, related_name='Изменено_пользователем_роль_сотрудника')
+    name_ru = models.CharField(max_length=100, blank=True, null=True)
+    name_en = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return self.name_ru
+
+    class Meta:
+        verbose_name_plural = 'Роли участников'
+        verbose_name = 'Роль участника'
+
+
+class EmployeePosition(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
+    name_ru = models.CharField(max_length=100, blank=True, null=True)
+    name_en = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return self.name_ru
+
+    class Meta:
+        verbose_name_plural = 'Должности участников'
+        verbose_name = 'Должность участника'
+
+
+class Employee(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    sex = models.CharField(max_length=20, blank=False, null=False)
+    birth_year = models.IntegerField(blank=False, null=False)
+    email = models.CharField(max_length=100, blank=True, null=False, default=None)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Компания')
+    role = models.ForeignKey(EmployeeRole, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Роль участника')
+    position = models.ForeignKey(EmployeePosition, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Позиция участника')
+    industry = models.ForeignKey(Industry, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Индустрия')
+    company_admin = models.BooleanField(default=False, null=False)
+    company_admin_active = models.BooleanField(default=False, null=False)
+
+    def __str__(self):
+        if self.name:
+            return self.name
+        else:
+            return self.email
+
+    class Meta:
+        verbose_name_plural = 'Участники (employee)'
+        verbose_name = 'Участник (employee)'
+
+
+class Study(models.Model):
+    version = models.IntegerField(null=False, default=0)
+    company = models.ForeignKey(Company, on_delete=models.RESTRICT, default=None, null=True)
+    research_id = models.IntegerField(null=False, default=0)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    public_code = models.CharField(max_length=30, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'Опросники (studies)'
+        verbose_name = 'Опросники (study)'
+
+
+class StudyQuestionGroups(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+    question_group = models.ForeignKey(Section, on_delete=models.RESTRICT, null=True, blank=True)
+    study = models.ForeignKey(Study, on_delete=models.RESTRICT, default=None, null=True, blank=True)
+
+    def __str__(self):
+        return f'Секция - {self.question_group.name} | {self.study.name}'
+
+    class Meta:
+        verbose_name_plural = 'Секции вопросов для опросника'
+        verbose_name = 'Секция вопросов для опросника'
+
+
+class Participant(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+    fio = models.CharField(max_length=100, blank=True, null=True)
+    sex = models.CharField(max_length=20, blank=False, null=False)
+    birth_year = models.IntegerField(blank=False, null=False)
+    email = models.CharField(max_length=100, blank=True, null=False, default=None)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Employee')
+    started_at = models.DateTimeField(blank=True, null=True, default=None)
+    finished_at = models.DateTimeField(blank=True, null=True, default=None)
+    completed_at = models.DateTimeField(blank=True, null=True, default=None)
+    tos_accepted = models.BooleanField(default=False)
+    study = models.ForeignKey(Study, on_delete=models.RESTRICT, default=None, null=True, blank=True)
+
+    def __str__(self):
+        return self.fio
+
+    class Meta:
+        verbose_name_plural = 'Участники опроса'
+        verbose_name = 'Участник опроса'
+
+
+class Report(models.Model):
+    added = models.DateTimeField(auto_now_add=True, null=True)
+    code = models.CharField(max_length=30, blank=False, null=False)
+    lie_points = models.IntegerField(null=False, default=0)
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Участник')
+    file = models.FileField(upload_to='media/reportsPDF/', default=None)
+    lang = models.CharField(max_length=2, blank=True, null=True, default=None)
+    study = models.ForeignKey(Study, on_delete=models.RESTRICT, default=None, null=True, blank=True)
+
+    def __str__(self):
+        # return f'{self.participant.fio} - {self.file.name} - {self.participant.employee.company.name}'
+        return f'{self.participant.fio} - {self.file.name}'
+
+    class Meta:
+        verbose_name_plural = 'Индивидуальные отчеты'
+        verbose_name = 'Индивидуальный отчет'
+
+
+class ReportData(models.Model):
+    report = models.ForeignKey(Report, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Отчет')
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Секция')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Категория')
+    points = models.IntegerField(null=False, default=0)
+
+    def __str__(self):
+        return f'{self.report.participant.fio} - {self.report.participant.employee.company.name} - {self.section.name} - {self.category.name} - {self.points}'
+
+    class Meta:
+        verbose_name_plural = 'Данные индивидуальных отчетов'
+        verbose_name = 'Данные индивидуальных отчетов'
+
+
+class ReportGroup(models.Model):
+    added = models.DateTimeField(auto_now_add=True, null=True)
+    file = models.FileField(upload_to='media/reportsPDF/', default=None)
+    lang = models.CharField(max_length=2, blank=True, null=True, default='ru')
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Проект групповой отчет')
+    comments = models.TextField(default=None, blank=True, null=True, verbose_name='Комментарии групповой отчет')
+
+    def __str__(self):
+        return f'{self.company} - {self.file.name}'
+
+    class Meta:
+        verbose_name_plural = 'Групповые отчеты'
+        verbose_name = 'Групповые отчеты'
+
+
+class ReportGroupSquare(models.Model):
+    added = models.DateTimeField(auto_now_add=True, null=True)
+    report_group = models.ForeignKey(ReportGroup, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Отчет групповой')
+    square_name = models.CharField(max_length=30, blank=False, null=False, verbose_name='Квадрат')
+    report = models.ForeignKey(Report, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Отчет индивидуальный для группового')
+
+    def __str__(self):
+        return f'{self.report.participant.fio} - {self.square_name}'
+
+    class Meta:
+        verbose_name_plural = 'Данные по квадратам групповых отчетов'
+        verbose_name = 'Данные по квадратам групповых отчетов'
+
+

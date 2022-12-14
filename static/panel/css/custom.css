@@ -1,0 +1,11 @@
+.float-button {
+    font-size: 23px;
+    border-radius: 30px;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+}
+
+.form-control:focus{
+    border-color: #0c63e4;
+}

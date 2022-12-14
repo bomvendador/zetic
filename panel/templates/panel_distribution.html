@@ -1,0 +1,1656 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+
+    {% block links %}
+
+         <link href="{% static 'login/plugins/ion-rangeslider/css/ion.rangeSlider.css' %}" rel="stylesheet" />
+    {% endblock %}
+
+    {% block content %}
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid" id="main-container">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">Распределение членов команды</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+{#                        <li class="breadcrumb-item active" aria-current="page">Dashboard 01</li>#}
+                        <li class="breadcrumb-item active" aria-current="page">Распределение</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- ROW-1 -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
+
+                    <div class="row ">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header border-bottom-0">
+                                        <div class="card-title">
+                                            Определение параметров распределения
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="wizard1" role="application" class="wizard clearfix">
+                                            <div class="steps clearfix">
+                                                <ul role="tablist">
+                                                    <li role="tab" class="current route-item" aria-disabled="false">
+                                                        <a id="wizard1-t-0" aria-controls="wizard1-p-0">
+                                                            <span class="current-info audible">current step: </span>
+                                                            <span class="number">1</span>
+                                                            <span class="title">Выбор проекта</span>
+                                                        </a>
+                                                    </li>
+                                                    <li role="tab" class="disabled route-item" aria-disabled="true">
+                                                        <a id="wizard1-t-1" aria-controls="wizard1-p-1">
+                                                            <span class="number">2</span>
+                                                            <span class="title">Выбор членов команды</span>
+                                                        </a>
+                                                    </li>
+                                                    <li role="tab" class="disabled route-item" aria-disabled="true">
+                                                        <a id="wizard1-t-2" aria-controls="wizard1-p-2">
+                                                            <span class="number">3</span>
+                                                            <span class="title">Распределение
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="content clearfix">
+{#                                                <h3 id="wizard1-h-0" tabindex="-1" class="title current">Выбор проекта</h3>#}
+                                                <section id="wizard1-p-0" role="tabpanel" aria-labelledby="wizard1-h-0" class="body current" aria-hidden="false">
+
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered text-nowrap border-bottom list-table" id="responsive-datatable">
+                                                            <thead>
+    {#                                                            <tr class="table-header">#}
+                                                                <tr>
+                                                                    <th class="wd-15p border-bottom-0 table-header">Проект</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for company in companies %}
+                                                                <tr class="table-row cursor-pointer">
+                                                                    <td>{{ company.name }}</td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                </section>
+
+{#                                                <h3 id="wizard1-h-1" tabindex="-1" class="title">Выбор членов команды</h3>#}
+                                                <section id="wizard1-p-1" role="tabpanel" aria-labelledby="wizard1-h-1" class="body" aria-hidden="true" style="display: none;">
+                                                    <div class="row">
+
+                                                        <div class="col-xl-6 col-md-12 col-sm-12 mt-5">
+                                                            <div class="row" style="margin-bottom: 15px">
+                                                                <div class="col-xl-6 col-md-12 col-sm-12 mt-5 mb-5">
+                                                                    <h2 class="card-title">Участники проекта</h2>
+                                                                </div>
+                                                                <div class="col-xl-6 col-md-12 col-sm-12">
+                                                                    <div class="row">
+                                                                        <div class="col-xl-6 col-md-12 col-sm-12">
+{#                                                                            <a class="btn btn-blue col-12" style="color: white" id="add-chosen-participant">Добавить выбранных</a>#}
+                                                                            <button class="btn btn-secondary my-1 cursor-pointer w-100" type="button" id="add-chosen-participant" title="Добавить выбранных">
+                                                                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                                                                    <path fill="currentColor" d="M15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4M15,5.9C16.16,5.9 17.1,6.84 17.1,8C17.1,9.16 16.16,10.1 15,10.1A2.1,2.1 0 0,1 12.9,8A2.1,2.1 0 0,1 15,5.9M4,7V10H1V12H4V15H6V12H9V10H6V7H4M15,13C12.33,13 7,14.33 7,17V20H23V17C23,14.33 17.67,13 15,13M15,14.9C17.97,14.9 21.1,16.36 21.1,17V18.1H8.9V17C8.9,16.36 12,14.9 15,14.9Z" />
+                                                                                </svg>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="col-xl-6 col-md-12 col-sm-12">
+                                                                            <button class="btn btn-secondary my-1 cursor-pointer w-100" type="button" id="add-all-participant" title="Добавить всех">
+                                                                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                                                                    <path fill="currentColor" d="M13 11A3 3 0 1 0 10 8A3 3 0 0 0 13 11M13 7A1 1 0 1 1 12 8A1 1 0 0 1 13 7M17.11 10.86A5 5 0 0 0 17.11 5.14A2.91 2.91 0 0 1 18 5A3 3 0 0 1 18 11A2.91 2.91 0 0 1 17.11 10.86M13 13C7 13 7 17 7 17V19H19V17S19 13 13 13M9 17C9 16.71 9.32 15 13 15C16.5 15 16.94 16.56 17 17M24 17V19H21V17A5.6 5.6 0 0 0 19.2 13.06C24 13.55 24 17 24 17M8 12H5V15H3V12H0V10H3V7H5V10H8Z" />
+                                                                                </svg>
+                                                                            </button>
+{#                                                                            <a class="btn btn-blue col-12" style="color: white" id="add-all-participant">Добавить всех</a>#}
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered text-nowrap border-bottom team-table" id="project_participants_table">
+                                                                    <thead>
+            {#                                                            <tr class="table-header">#}
+                                                                        <tr>
+                                                                            <th class="wd-15p border-bottom-0 table-header">ФИО</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">email</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="wizard1-tbody-1">
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-6 col-md-12 col-sm-12 mt-5 mt-5">
+                                                            <div class="row" style="margin-bottom: 15px">
+                                                                <div class="col-xl-6 col-md-12 col-sm-12 mt-5 mb-5">
+                                                                    <h2 class="card-title">Участники для отчета</h2>
+                                                                </div>
+                                                                <div class="col-xl-6 col-md-12 col-sm-12">
+                                                                    <div class="row">
+
+                                                                        <div class="col-sm-12 col-md-12 col-xl-4">
+                                                                            <button class="btn btn-secondary my-1 cursor-pointer w-100" type="button" id="edit-individual-reports" title="Отредактировать личные отчеты">
+                                                                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                                                                    <path fill="currentColor" d="M10 21H5C3.89 21 3 20.11 3 19V5C3 3.89 3.89 3 5 3H19C20.11 3 21 3.89 21 5V10.33C20.7 10.21 20.37 10.14 20.04 10.14C19.67 10.14 19.32 10.22 19 10.37V5H5V19H10.11L10 19.11V21M7 9H17V7H7V9M7 17H12.11L14 15.12V15H7V17M7 13H16.12L17 12.12V11H7V13M21.7 13.58L20.42 12.3C20.21 12.09 19.86 12.09 19.65 12.3L18.65 13.3L20.7 15.35L21.7 14.35C21.91 14.14 21.91 13.79 21.7 13.58M12 22H14.06L20.11 15.93L18.06 13.88L12 19.94V22Z" />
+                                                                                </svg>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-12 col-xl-4">
+{#                                                                            <a class="btn btn-blue col-12" style="color: white" id="delete-chosen-participant">Удалить выбранных</a>#}
+                                                                            <button class="btn btn-secondary my-1 cursor-pointer w-100" type="button" id="delete-chosen-participant" title="Удалить выбранных">
+                                                                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                                                                    <path fill="currentColor" d="M15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4M15,5.9C16.16,5.9 17.1,6.84 17.1,8C17.1,9.16 16.16,10.1 15,10.1A2.1,2.1 0 0,1 12.9,8A2.1,2.1 0 0,1 15,5.9M1,10V12H9V10H1M15,13C12.33,13 7,14.33 7,17V20H23V17C23,14.33 17.67,13 15,13M15,14.9C17.97,14.9 21.1,16.36 21.1,17V18.1H8.9V17C8.9,16.36 12,14.9 15,14.9Z" />
+                                                                                </svg>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-12 col-xl-4">
+                                                                            <button class="btn btn-secondary my-1 cursor-pointer w-100" type="button" id="delete-all-participant" title="Удалить всех">
+                                                                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                                                                    <path fill="currentColor" d="M13 11A3 3 0 1 0 10 8A3 3 0 0 0 13 11M13 7A1 1 0 1 1 12 8A1 1 0 0 1 13 7M17.11 10.86A5 5 0 0 0 17.11 5.14A2.91 2.91 0 0 1 18 5A3 3 0 0 1 18 11A2.91 2.91 0 0 1 17.11 10.86M13 13C7 13 7 17 7 17V19H19V17S19 13 13 13M9 17C9 16.71 9.32 15 13 15C16.5 15 16.94 16.56 17 17M24 17V19H21V17A5.6 5.6 0 0 0 19.2 13.06C24 13.55 24 17 24 17M8 12H0V10H8Z" />
+                                                                                </svg>
+                                                                            </button>
+{#                                                                            <a class="btn btn-blue col-12" style="color: white" id="delete-all-participant">Удалить всех</a>#}
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered text-nowrap border-bottom team-table" id="table_chosen_participants">
+                                                                    <thead>
+            {#                                                            <tr class="table-header">#}
+                                                                        <tr>
+                                                                            <th class="wd-15p border-bottom-0 table-header">ФИО</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">email</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="wizard1-tbody-report-1">
+
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+
+
+                                                </section>
+                                                <h3 id="wizard1-h-2" tabindex="-1" class="title">Распределение участников</h3>
+                                                <section id="wizard1-p-2" role="tabpanel" aria-labelledby="wizard1-h-2" class="body" aria-hidden="true" style="display: none;">
+
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-lg-6 background-color_1">
+                                                            <div class="card no-shadow-important">
+                                                                <div class="card-header background-color_1">
+                                                                    <h3 class="card-title ">Интеграторы</h3>
+                                                                </div>
+                                                                <div class="card-body background-color_1">
+                                                                    <div class="row">
+                                                                        <div class="col-6">
+                                                                            <h3 class="card-title">ESFJ - Массовик-затейник</h3>
+                                                                            <ul class="list-group-square" id="list_1_1">
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <h3 class="card-title">ENFJ - Идеалист-харизматик</h3>
+                                                                            <ul class="list-group-square" id="list_1_2">
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row mt-5">
+                                                                        <div class="col-6">
+                                                                            <h3 class="card-title">ESFP - Спонтанный коммуникатор</h3>
+                                                                            <ul class="list-group-square" id="list_1_3">
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <h3 class="card-title">ENFP - Инициатор</h3>
+                                                                            <ul class="list-group-square" id="list_1_4">
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- COL END -->
+                                                        <div class="col-sm-12 col-lg-6  background-color_2">
+                                                            <div class="card no-shadow-important">
+                                                                <div class="card-header background-color_2">
+                                                                    <h3 class="card-title">Предприниматели</h3>
+                                                                </div>
+                                                                <div class="card-body background-color_2">
+                                                                    <div class="row">
+                                                                        <div class="col-6">
+                                                                            <h3 class="card-title">ESTJ - Контролер по жизни</h3>
+                                                                            <ul class="list-group-square" id="list_2_1">
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <h3 class="card-title">ENTJ - Предприниматель</h3>
+                                                                            <ul class="list-group-square" id="list_2_2">
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row mt-5">
+                                                                        <div class="col-6">
+                                                                            <h3 class="card-title">ESTP - Ультра-реалист</h3>
+                                                                            <ul class="list-group-square" id="list_2_3">
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <h3 class="card-title">ENTP - Изобретатель</h3>
+                                                                            <ul class="list-group-square" id="list_2_4">
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- COL END -->
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-lg-6 background-color_3">
+                                                            <div class="card no-shadow-important">
+                                                                <div class="card-header background-color_3">
+                                                                    <h3 class="card-title ">Администраторы</h3>
+                                                                </div>
+                                                                <div class="card-body background-color_3">
+                                                                    <div class="row">
+                                                                        <div class="col-6">
+                                                                            <h3 class="card-title">ISFJ - Хранитель</h3>
+                                                                            <ul class="list-group-square" id="list_3_1">
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <h3 class="card-title">INFJ - Вдохновитель</h3>
+                                                                            <ul class="list-group-square" id="list_3_2">
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row mt-5">
+                                                                        <div class="col-6">
+                                                                            <h3 class="card-title">ISFP - Посредник</h3>
+                                                                            <ul class="list-group-square" id="list_3_3">
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <h3 class="card-title">INFP - Благородный служитель</h3>
+                                                                            <ul class="list-group-square" id="list_3_4">
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- COL END -->
+                                                        <div class="col-sm-12 col-lg-6  background-color_4">
+                                                            <div class="card no-shadow-important">
+                                                                <div class="card-header background-color_4">
+                                                                    <h3 class="card-title">Достигаторы / Продюссеры</h3>
+                                                                </div>
+                                                                <div class="card-body background-color_4">
+                                                                    <div class="row">
+                                                                        <div class="col-6">
+                                                                            <h3 class="card-title">ISTJ - Организатор</h3>
+                                                                            <ul class="list-group-square" id="list_4_1">
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <h3 class="card-title">INTJ - Любитель улучшений</h3>
+                                                                            <ul class="list-group-square" id="list_4_2">
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row mt-5">
+                                                                        <div class="col-6">
+                                                                            <h3 class="card-title">ISTP - Экспериментатор</h3>
+                                                                            <ul class="list-group-square" id="list_4_3">
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <h3 class="card-title">INTP - Решатель проблем</h3>
+                                                                            <ul class="list-group-square" id="list_4_4">
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- COL END -->
+                                                    </div>
+
+                                                    <h4 class="mt-5">Распределено участников - <span class="badge bg-green text-white ms-2" id="bage_distributed_participants"></span></h4>
+                                                    <hr style="border-top: 1px solid;">
+                                                    <div class="row mt-7" id="undistributed-participants-table">
+                                                        <div class="col-12">
+                                                            <div class="row" style="margin-bottom: 15px">
+                                                                <div class="col-sm-12 col-md-6">
+                                                                    <h2 class="card-title">Нераспределенные участники</h2>
+                                                                </div>
+                                                                <div class="col-sm-12 col-md-6">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6 col-sm-12">
+
+                                                                        </div>
+                                                                        <div class="col-md-6 col-sm-12">
+{#                                                                            <a class="btn btn-blue col-md-12" style="color: white" id="distribute-undistributed-participants">Распределить</a>#}
+                                                                            <button class="btn btn-primary my-1 cursor-pointer col-md-12" type="button" id="distribute-undistributed-participants">Распределить</button>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered text-nowrap border-bottom undistributed-table" id="">
+                                                                    <thead>
+            {#                                                            <tr class="table-header">#}
+                                                                        <tr>
+                                                                            <th class="wd-15p border-bottom-0 table-header">ФИО</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">email</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Категории</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Шкала недобора</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Распределение</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="tbody_undistributed_participants">
+
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+
+
+                                                </div>
+
+
+
+
+
+                                                </section>
+
+
+
+
+
+
+                                            </div>
+
+                                            <div class="actions clearfix">
+                                                <ul role="menu" aria-label="Pagination" class="row">
+{#                                                    <li class="disabled cursor-pointer" aria-disabled="true" id="previous"><a class="nav-buttons" role="menuitem">Назад</a></li>#}
+                                                    <div class="col-sm-12 col-md-2">
+                                                        <button class="btn btn-primary my-1 nav-buttons disabled w-100" type="button" id="previous">
+                                                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                                                                <polyline points="15 18 9 12 15 6"></polyline>
+                                                            </svg>
+                                                        </button>
+
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-2">
+
+                                                        <button class="btn btn-primary my-1 nav-buttons float-end w-100 disabled" type="button" id="next">
+                                                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                                                                <polyline points="9 18 15 12 9 6"></polyline>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                        {#                                                    <li class="disabled cursor-pointer" aria-hidden="false" aria-disabled="false" id="next"><a class="nav-buttons" role="menuitem">Вперед</a></li>#}
+                                                    <li aria-hidden="true" style="display: none;"><a class="nav-buttons" href="#finish" role="menu  item">Finish</a></li>
+                                                </ul>
+                                            </div>
+{#                                        </div>#}
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="modal fade" id="scrollingmodal_participant_data" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Личные данные</h5>
+                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card">
+                            <div class="card-header border-bottom-0" style="padding-top: 0px">
+                                <div class="card-title">
+                                    Вася Пупкин
+                                </div>
+                            </div>
+                            <div class="card-body" style="padding-top: 0px">
+                                <div class="row row-sm slider1">
+                                    <div>
+                                        <h5>Кеттелл</h5>
+                                    </div>
+                                    <div class="col-lg-12 mt-2">
+                                        <input class="rangeslider3" name="example_name" type="text" value="" id="slider1_val">
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <input class="rangeslider3" name="example_name" type="text" value="" id="slider2_val">
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <input class="rangeslider3" name="example_name" type="text" value="" id="slider3_val">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <button class="btn btn-primary">Сохранить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Inout modal -->
+        <!-- Модальное окно комментарии к отчету -->
+        <div class="modal fade" id="input-modal-report-comments">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content modal-content-demo">
+                    <div class="modal-header">
+                        <h6 class="modal-title">Комментарии к отчету</h6>
+                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                          <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Комментарии:</label>
+                            <textarea class="form-control" id="report-comments-text"></textarea>
+                          </div>
+                        </form>
+                      </div>
+                    <div>
+                        <div class="row" style="padding: 0px 15px 15px">
+                            <div class="col-lg-6 col-sm-12 mt-3">
+                                <button class="btn ripple btn-success w-100" type="button" id="modal_comments_create_report">Создать отчет</button>
+                            </div>
+                            <div class="col-lg-6 col-sm-12 mt-3">
+                                <button class="btn ripple btn-danger w-100" data-bs-dismiss="modal" type="button">Закрыть</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    {% endblock %}
+
+{% block script %}
+
+    <script src="{% static 'login/js/select2.js' %}"></script>
+    <script src="{% static 'login/plugins/ion-rangeslider/js/ion.rangeSlider.min.js' %}"></script>
+<script>
+
+    let kernel1 = 0
+    let kernel2 = 0
+    $('#slider1_val').ionRangeSlider({
+        min: 0,
+        max: 10,
+        step:1,
+        from:4
+    });
+    $('#slider2_val').ionRangeSlider({
+        min: 0,
+        max: 10,
+        step:1,
+        from:6,
+        onFinish: function (data) {
+            kernel1 = data.from
+            console.log(kernel1)
+        }
+    });
+    $('#slider3_val').ionRangeSlider({
+        min: 0,
+        max: 10,
+        step:1,
+        from:8,
+        onFinish: function (data) {
+            kernel2 = data.from
+            console.log(kernel2)
+        }
+    });
+
+    $('.slider1').find('.irs-bar').attr('style', 'background: rgb(34, 170, 245)!important')
+    $('.slider1').find('.irs-slider.single').attr('style', 'background: rgb(34, 170, 245)!important')
+    $('.slider1').find('.irs-single').attr('style', 'background: rgb(34, 170, 245)!important')
+    $('.slider1').find('.irs-bar-edge').attr('style', 'background: rgb(0, 98, 153)!important')
+
+
+    $('#edit-individual-reports').on('click', function () {
+        $('#scrollingmodal_participant_data').modal('show')
+    })
+
+    function route_menu_handler(route_index, btn_type) {
+        let new_menu_number = 0
+        if(btn_type === 'next'){
+            new_menu_number = route_index + 1
+        }else {
+            new_menu_number = route_index - 1
+        }
+        {#console.log('new_menu_number - ' + new_menu_number)#}
+        if (new_menu_number <= 4){
+            $('.route-item').each(function (i, obj) {
+                if(parseInt($(this).find('.number').html()) !== new_menu_number){
+                    $(this).addClass('disabled')
+                    $(this).removeClass('current')
+
+                }else {
+                    $(this).removeClass('disabled')
+                    $(this).addClass('current')
+                }
+            })
+            if(new_menu_number === 3){
+                {#$('#next').addClass('disabled')#}
+                {#$('#next').removeClass('cursor-pointer')#}
+            }else {
+                $('#next').removeClass('disabled')
+                {#$('#next').addClass('cursor-pointer')#}
+
+            }
+
+        }else {
+            toastr.info('Конец')
+
+        }
+    }
+
+    //пороговое значение соответствия правилам для ручного распределения
+    let min_rules_for_exception = 2
+
+    let project_name = ''
+
+    let square_names_obj = {
+    '1_1': 'ESFJ - Массовик-затейник',
+    '1_2': 'ENFJ - Идеалист-харизматик',
+    '1_3': 'ESFP - Спонтанный коммуникатор',
+    '1_4': 'ENFP - Инициатор',
+    '2_1': 'ESTJ - Контролер по жизни',
+    '2_2': 'ENTJ - Предприниматель',
+    '2_3': 'ESTP - Ультра-реалист',
+    '2_4': 'ENTP - Изобретатель',
+    '3_1': 'ISFJ - Хранитель',
+    '3_2': 'INFJ - Вдохновитель',
+    '3_3': 'ISFP - Посредник',
+    '3_4': 'INFP - Благородный служитель',
+    '4_1': 'ISTJ - Организатор',
+    '4_2': 'INTJ - Любитель улучшений',
+    '4_3': 'ISTP - Экспериментатор',
+    '4_4': 'INTP - Решатель проблем',
+}
+
+
+
+    let rule_1_1 = [
+        ['Шкала A', 6, 10],
+        ['Шкала I', 6, 10],
+        ['Шкала N', 5, 10],
+        ['Шкала M', 1, 5],
+        ['Причастность', 5, 10],
+        ['Жажда впечатлений', 5, 10],
+        ['Эстетичность', 5, 10],
+    ]
+
+    let rule_1_2 = [
+        ['Шкала A', 6, 10],
+        ['Шкала I', 6, 10],
+        ['Шкала F', 5, 10],
+        ['Шкала M', 5, 10],
+        ['Шкала Q1', 5, 10],
+        ['Причастность', 5, 10],
+        ['Эстетичность', 5, 10],
+        ['Интеллект', 5, 10],
+    ]
+
+    let rule_1_3 = [
+        ['Шкала A', 6, 10],
+        ['Шкала I', 6, 10],
+        ['Шкала F', 5, 10],
+        ['Шкала G', 0, 5],
+        ['Шкала Q3', 0, 5],
+        ['Шкала H', 5, 10],
+        ['Шкала L', 0, 5],
+        ['Шкала Q1', 0, 5],
+        ['Причастность', 5, 10],
+        ['Жажда впечатлений', 5, 10],
+    ]
+
+    let rule_1_4 = [
+        ['Шкала A', 6, 10],
+        ['Шкала I', 6, 10],
+        ['Шкала F', 5, 10],
+        ['Шкала M', 0, 5],
+        ['Шкала Q3', 0, 5],
+        ['Шкала H', 5, 10],
+        ['Шкала L', 0, 5],
+        ['Шкала Q1', 5, 10],
+        ['Причастность', 5, 10],
+        ['Жажда впечатлений', 5, 10],
+        ['Интеллект', 5, 10],
+    ]
+
+    let rule_2_1 = [
+        ['Шкала A', 6, 10],
+        ['Шкала I', 0, 5],
+        ['Шкала M', 0, 5],
+        ['Шкала Q3', 6, 10],
+        ['Шкала G', 6, 10],
+        ['Шкала F', 0, 5],
+        ['Шкала L', 6, 10],
+        ['Безопасность', 5, 10],
+        ['Традицонализм', 5, 10],
+        ['Эстетичность', 5, 10],
+    ]
+
+    let rule_2_2 = [
+        ['Шкала A', 6, 10],
+        ['Шкала I', 0, 5],
+        ['Шкала M', 6, 10],
+        ['Шкала Q3', 5, 10],
+        ['Шкала G', 5, 10],
+        ['Шкала F', 0, 5],
+        ['Шкала E', 4, 10],
+        ['Шкала Q1', 5, 10],
+        ['Безопасность', 5, 10],
+        ['Традицонализм', 5, 10],
+        ['Эстетичность', 5, 10],
+        ['Интеллект', 5, 10],
+    ]
+
+    let rule_2_3 = [
+        ['Шкала A', 6, 10],
+        ['Шкала I', 0, 5],
+        ['Шкала Q3', 0, 5],
+        ['Шкала G', 0, 5],
+        ['Шкала F', 5, 10],
+        ['Жажда впечатлений', 5, 10],
+    ]
+
+    let rule_2_4 = [
+        ['Шкала A', 6, 10],
+        ['Шкала I', 0, 5],
+        ['Шкала M', 6, 10],
+        ['Шкала Q3', 0, 5],
+        ['Шкала G', 0, 5],
+        ['Шкала E', 5, 10],
+        ['Шкала Q1', 5, 10],
+        ['Шкала H', 5, 10],
+        ['Достижения', 5, 10],
+        ['Интеллект', 5, 10],
+    ]
+
+    let rule_3_1 = [
+        ['Шкала A', 1, 5],
+        ['Шкала I', 6, 10],
+        ['Шкала Q3', 5, 10],
+        ['Шкала G', 5, 10],
+        ['Шкала Q2', 0, 5],
+        ['Шкала L', 6, 10],
+        ['Шкала M', 0, 5],
+        ['Причастность', 5, 10],
+        ['Безопасность', 5, 10],
+        ['Традицонализм', 5, 10],
+        ['Эстетичность', 5, 10],
+        ['Интеллект', 5, 10],
+        ['Шкала C', 0, 6],
+    ]
+
+    let rule_3_2 = [
+        ['Шкала A', 1, 5],
+        ['Шкала I', 6, 10],
+        ['Шкала Q3', 5, 10],
+        ['Шкала G', 5, 10],
+        ['Шкала Q2', 0, 5],
+        ['Причастность', 5, 10],
+        ['Безопасность', 5, 10],
+        ['Традицонализм', 5, 10],
+        ['Гедонизм', 5, 10],
+        ['Эстетичность', 5, 10],
+        ['Интеллект', 5, 10],
+    ]
+
+    let rule_3_3 = [
+        ['Шкала C', 0, 6],
+        ['Шкала A', 1, 5],
+        ['Шкала I', 6, 10],
+        ['Шкала G', 0, 5],
+        ['Шкала N', 5, 10],
+        ['Шкала Q3', 0, 5],
+        ['Шкала Q2', 0, 5],
+        ['Шкала L', 6, 10],
+        ['Причастность', 5, 10],
+        ['Гедонизм', 5, 10],
+    ]
+
+    let rule_3_4 = [
+        ['Шкала A', 1, 5],
+        ['Шкала I', 6, 10],
+        ['Шкала Q3', 5, 10],
+        ['Шкала G', 5, 10],
+        ['Шкала Q2', 0, 5],
+        ['Причастность', 5, 10],
+        ['Безопасность', 5, 10],
+        ['Традицонализм', 5, 10],
+        ['Шкала E', 0, 5],
+        ['Жажда впечатлений', 0, 5],
+        ['Интеллект', 5, 10],
+    ]
+
+    let rule_4_1 = [
+        ['Шкала A', 0, 5],
+        ['Шкала I', 0, 5],
+        ['Шкала Q3', 5, 10],
+        ['Шкала G', 5, 10],
+        ['Шкала M', 0, 5],
+        ['Шкала L', 5, 10],
+        ['Безопасность', 5, 10],
+        ['Традицонализм', 5, 10],
+        ['Эстетичность', 5, 10],
+        ['Достижения', 5, 10],
+    ]
+
+    let rule_4_2 = [
+        ['Шкала A', 0, 5],
+        ['Шкала I', 0, 5],
+        ['Шкала Q3', 5, 10],
+        ['Шкала G', 5, 10],
+        ['Шкала M', 5, 10],
+        ['Шкала Q1', 5, 10],
+        ['Шкала L', 5, 10],
+        ['Безопасность', 5, 10],
+        ['Интеллект', 5, 10],
+        ['Эстетичность', 5, 10],
+    ]
+
+    let rule_4_3 = [
+        ['Шкала H', 6, 10],
+        ['Шкала A', 1, 5],
+        ['Шкала M', 6, 10],
+        ['Шкала I', 1, 5],
+        ['Шкала H', 6, 10],
+        ['Шкала Q3', 0, 5],
+        ['Шкала G', 0, 5],
+    ]
+
+    let rule_4_4 = [
+        ['Шкала A', 0, 5],
+        ['Шкала I', 0, 5],
+        ['Шкала Q3', 0, 5],
+        ['Шкала G', 0, 5],
+        ['Шкала M', 5, 10],
+        ['Шкала Q1', 5, 10],
+        ['Традицонализм', 0, 5],
+        ['Интеллект', 5, 10],
+    ]
+
+    let rules = [
+        rule_1_1,
+        rule_1_2,
+        rule_1_3,
+        rule_1_4,
+        rule_2_1,
+        rule_2_2,
+        rule_2_3,
+        rule_2_4,
+        rule_3_1,
+        rule_3_2,
+        rule_3_3,
+        rule_3_4,
+        rule_4_1,
+        rule_4_2,
+        rule_4_3,
+        rule_4_4
+    ]
+
+    function route_handler(route_index) {
+    {#console.log('project - ' + $('.company-chosen').text().trim())#}
+    {#console.log(route_index)#}
+    {#    console.log('route_index - ' + route_index)#}
+        switch (route_index) {
+            case 1:
+                project_name = $('.company-chosen').text().trim()
+                $.ajax({
+                    headers: { "X-CSRFToken": token },
+                    url: "{% url 'get_project_participants' %}",
+                    type: 'POST',
+
+                    data: JSON.stringify({
+                                'company': $('.company-chosen').text().trim(),
+                            }),
+                    processData: false,
+                    contentType: false,
+                    error: function(data){
+                        toastr.error('Ошибка', data)
+                    },
+                    success:function (data) {
+                        {#console.log(data)#}
+                        {#let data_json = $.parseJSON(data);#}
+                        let participants = data['participants'];
+                        let html = ''
+                        for(let i=0; i < participants.length; i++){
+                            html += '<tr class="table-row cursor-pointer project-participant-added">'
+                            html += '<td>' + participants[i]['fio'] + '</td>'
+                            html += '<td>' + participants[i]['email'] + '</td>'
+                            html += '</tr>'
+                            {#console.log(participants[i]['fio'])#}
+                        }
+                        {#console.log(html)#}
+                        $('#wizard1-tbody-1').html(html)
+                        console.log('wizard1-tbody-1 - ' + $('#wizard1-tbody-1').html())
+                        process_table('.team-table')
+                        btn_text($('#next'), '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
+
+                        route_menu_handler(route_index, 'next')
+
+                        $('#wizard1-h-1').css('display', 'block')
+                        $('#wizard1-p-1').css('display', 'block')
+                        $('#wizard1-h-0').css('display', 'none')
+                        $('#wizard1-p-0').css('display', 'none')
+
+                    }
+                });
+
+                break;
+            case 2:
+
+                if ($('.table-row-report')[0]){
+                    btn_spinner($('#next'))
+
+                    let report_participants = []
+                    $('.table-row-report').each(function () {
+                        {#console.log($(this).find(':nth-child(2)').text())#}
+                        report_participants.push($(this).find(':nth-child(2)').text())
+                    })
+                    let url = "{% url 'get_report_participants_data' %}"
+                    $.ajax({
+                        headers: { "X-CSRFToken": token },
+                        url: url,
+                        type: 'POST',
+
+                        data: JSON.stringify({
+                                    'report_participants': report_participants,
+                                }),
+                        processData: false,
+                        contentType: false,
+                        error: function(data){
+                            toastr.error('Ошибка', data)
+                        },
+                        success:function (data) {
+
+                            {#console.log(data)#}
+                            {#let data_json = $.parseJSON(data);#}
+                            let participants_data = data['data'];
+                            let lie_points = data['lie_points']
+                            let html = ''
+                            let possible_categories = []
+                            let possible_categories_participant = []
+                            let possible_scales = []
+                            let distributed_participants_cnt = 0
+
+
+                            for (let i=0; i < lie_points.length; i++){
+                                {#console.log('-------------------------')#}
+                                let html = ''
+                                let participant_distributed = false
+                                possible_categories_participant = []
+                                {#possible_scales = []#}
+                                for (let j=0; j < rules.length; j++){
+                                    {#console.log(rules[j])#}
+                                    let rule_cnt = 0
+                                    let rule_length = rules[j].length
+                                    let rule_category = ''
+                                    possible_categories = []
+                                    possible_scales = []
+                                    let rule_not_passed = false
+
+                                    for (let c=0; c < rules[j].length; c++){
+                                        rule_not_passed = false
+                                        rule_category = rules[j][c][0]
+                                        {#console.log('категория - ' + rules[j][c][0] + ' min - ' + rules[j][c][1] + ' max - ' + rules[j][c][2])#}
+                                        for(let k=0; k < participants_data.length; k++){
+                                            {#console.log('participants_data_category - ' + participants_data[k]['category'] + ' - lie_points_category - ' + lie_points[i]['fio'])#}
+                                            if (participants_data[k]['fio'] === lie_points[i]['fio'] && participants_data[k]['category'] === rules[j][c][0] && participants_data[k]['points'] >= rules[j][c][1] && participants_data[k]['points'] <= rules[j][c][2] ){
+                                                rule_cnt++
+                                            }else {
+                                                rule_not_passed = true
+                                            }
+
+                                            if (participants_data[k]['fio'] === lie_points[i]['fio'] && participants_data[k]['category'] === rules[j][c][0] && (participants_data[k]['points'] < rules[j][c][1] || participants_data[k]['points'] > rules[j][c][2]) ){
+                                                possible_scales.push(rule_category)
+                                            }
+
+                                        }
+                                        {#if (rule_not_passed){#}
+                                        {#    possible_scales.push(rule_category)#}
+                                            {#console.log('ФИО - ' + lie_points[i]['fio'] + '|  категория - ' + rules[j][c] + ' | не прошел по шкале - ' + rule_category)#}
+                                     //   {#}#}
+
+                                    }
+                                    if (rule_cnt === rule_length){
+                                        distributed_participants_cnt++
+                                        participant_distributed = true
+                                        switch (j) {
+                                            case 0:
+                                                $('#list_1_1').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                break;
+                                            case 1:
+                                                $('#list_1_2').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                break;
+                                            case 2:
+                                                $('#list_1_3').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                break;
+                                            case 3:
+                                                $('#list_1_4').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                break;
+                                            case 4:
+                                                $('#list_2_1').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                break;
+                                            case 5:
+                                                $('#list_2_2').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                break;
+                                            case 6:
+                                                $('#list_2_3').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                break;
+                                            case 7:
+                                                $('#list_2_4').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                break;
+                                            case 8:
+                                                $('#list_3_1').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                break;
+                                            case 9:
+                                                $('#list_3_2').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                break;
+                                            case 10:
+                                                $('#list_3_3').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                break;
+                                            case 11:
+                                                $('#list_3_4').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                break;
+                                            case 12:
+                                                $('#list_4_1').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                break;
+                                            case 13:
+                                                $('#list_4_2').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                break;
+                                            case 14:
+                                                $('#list_4_3').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                break;
+                                            case 15:
+                                                $('#list_4_4').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                break;
+                                            default:
+                                                break;
+
+                                        }
+                                    }else {
+
+                                        {#let square_names_arr = [#}
+                                        {#    ['1_1', 'ESFJ - Массовик-затейник']#}
+                                        {#]#}
+
+                                        //если кол-во удовлетворительных правил <= 2
+                                        {#console.log(' разница - ' + (rule_length - rule_cnt).toString())#}
+                                        {#console.log(' разница - ')#}
+                                        if ((rule_length - rule_cnt) <= min_rules_for_exception ){
+                                            let square_name = ''
+                                            switch (j) {
+                                                case 0:
+                                                    {#square_name = 'ESFJ - Массовик-затейник'#}
+                                                    square_name = square_names_obj["1_1"]
+                                                    break;
+                                                case 1:
+                                                    {#square_name = 'ENFJ - Идеалист-харизматик'#}
+                                                    square_name = square_names_obj["1_2"]
+                                                    break;
+                                                case 2:
+                                                    {#square_name = 'ESFP - Спонтанный коммуникатор'#}
+                                                    square_name = square_names_obj["1_3"]
+                                                    break;
+                                                case 3:
+                                                    {#square_name = 'ENFP - Инициатор'#}
+                                                    square_name = square_names_obj["1_4"]
+                                                    break;
+                                                case 4:
+                                                    {#square_name = 'ESTJ - Контролер по жизни'#}
+                                                    square_name = square_names_obj["2_1"]
+                                                    break;
+                                                case 5:
+                                                    {#square_name = 'ENTJ - Предприниматель'#}
+                                                    square_name = square_names_obj["2_2"]
+                                                    break;
+                                                case 6:
+                                                    {#square_name = 'ESTP - Ультра-реалист'#}
+                                                    square_name = square_names_obj["2_3"]
+                                                    break;
+                                                case 7:
+                                                    {#square_name = 'ENTP - Изобретатель'#}
+                                                    square_name = square_names_obj["2_4"]
+                                                    break;
+                                                case 8:
+                                                    {#square_name = 'ISFJ - Хранитель'#}
+                                                    square_name = square_names_obj["3_1"]
+                                                    break;
+                                                case 9:
+                                                    {#square_name = 'INFJ - Вдохновитель'#}
+                                                    square_name = square_names_obj["3_2"]
+                                                    break;
+                                                case 10:
+                                                    {#square_name = 'ISFP - Посредник'#}
+                                                    square_name = square_names_obj["3_3"]
+                                                    break;
+                                                case 11:
+                                                    {#square_name = 'INFP - Благородный служитель'#}
+                                                    square_name = square_names_obj["3_4"]
+                                                    break;
+                                                case 12:
+                                                    {#square_name = 'ISTJ - Организатор'#}
+                                                    square_name = square_names_obj["4_1"]
+                                                    break;
+                                                case 13:
+                                                    {#square_name = 'INTJ - Любитель улучшений'#}
+                                                    square_name = square_names_obj["4_2"]
+                                                    break;
+                                                case 14:
+                                                    {#square_name = 'ISTP - Экспериментатор'#}
+                                                    square_name = square_names_obj["4_3"]
+                                                    break;
+                                                case 15:
+                                                    {#square_name = 'INTP - Решатель проблем'#}
+                                                    square_name = square_names_obj["4_4"]
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                            possible_categories.push([square_name, (rule_length - rule_cnt).toString(), possible_scales])
+                                        }
+                                    }
+                                    if(possible_categories.length > 0){
+                                        possible_categories_participant.push(possible_categories)
+
+                                    }
+                                }
+                                if (possible_categories_participant.length > 0 && !participant_distributed){
+
+                                    html += '<tr class="table-row-undistributed-participant" style="">'
+                                    html += '<td class="fio">' + lie_points[i]['fio'] + '</td>'
+                                    html += '<td class="email">' + lie_points[i]['email'] + '</td>'
+                                    html += '<td>'
+                                    for(let h=0; h < possible_categories_participant.length; h++){
+                                        for(let y=0; y < possible_categories_participant[h][0][2].length; y++) {
+                                            if (y === 0){
+                                                html += possible_categories_participant[h][0][0] + '<br>'
+                                            }else {
+                                                html += '<br>'
+                                            }
+
+                                        }
+                                    }
+                                    html += '</td>'
+                                    html += '<td>'
+                                    for(let h=0; h < possible_categories_participant.length; h++){
+                                        for(let y=0; y < possible_categories_participant[h][0][2].length; y++) {
+                                            html += possible_categories_participant[h][0][2][y] + '<br>'
+                                        }
+                                    }
+                                    html += '</td>'
+                                    html += '<td>'
+                                    html += '<select name="category" class="form-control form-select select2 category-selected" data-bs-placeholder="Выберите категорию">'
+                                    html += '<option value=""></option>'
+                                    for(let h=0; h < possible_categories_participant.length; h++){
+                                        html += '<option value="' + possible_categories_participant[h][0][0] + '">' + possible_categories_participant[h][0][0] + '</option>'
+                                    }
+                                    {#for(let h=0; h < possible_categories_participant.length; h++){#}
+                                    {#    html += '<option value="">' + possible_categories_participant[h][0][0] + '</option>'#}
+                              //      {#}#}
+                                    html += '</select>'
+                                    html += '</td>'
+                                    html += '</tr>'
+                                    $('#tbody_undistributed_participants').append(html)
+                                }else{
+                                    //если участник не распределен и не попал ни в одну категорию
+                                    if (possible_categories_participant.length === 0 && !participant_distributed){
+                                        html += '<tr class="table-row-undistributed-participant" style="">'
+                                        html += '<td class="fio">' + lie_points[i]['fio'] + '</td>'
+                                        html += '<td class="email">' + lie_points[i]['email'] + '</td>'
+                                        html += '<td>Категория отсутствует</td>'
+                                        html += '<td></td>'
+                                        html += '<td>'
+                                        html += '<select name="category" class="form-control form-select select2 category-selected" data-bs-placeholder="Выберите категорию">'
+                                        html += '<option value=""></option>'
+
+                                        Object.values(square_names_obj).forEach(function (item) {
+                                            html += '<option value="' + item + '">' + item + '</option>'
+                                        })
+
+                                        html += '</select>'
+                                        html += '</td>'
+                                        html += '</tr>'
+                                        $('#tbody_undistributed_participants').append(html)
+
+                                    }
+                                }
+                                {#console.log(possible_categories_participant)#}
+                            }
+                            process_table('.undistributed-table')
+                            for(let i=0; i < participants_data.length; i++){
+
+                                {#html += '<tr class="table-row cursor-pointer project-participant-added">'#}
+                                {#html += '<td>' + participants[i]['fio'] + '</td>'#}
+                                {#html += '<td>' + participants[i]['email'] + '</td>'#}
+                                {#html += '</tr>'#}
+                                {#console.log(participants_data[i]['fio'])#}
+                            }
+                            {#$('#wizard1-tbody-1').html(html)#}
+                            {#process_table('.team-table')#}
+                            {##}
+                            {#route_menu_handler(route_index)#}
+                            {##}
+                            $('#bage_distributed_participants').html(distributed_participants_cnt)
+                            $('#wizard1-h-2').css('display', 'block')
+                            $('#wizard1-p-2').css('display', 'block')
+                            $('#wizard1-h-1').css('display', 'none')
+                            $('#wizard1-p-1').css('display', 'none')
+                            if($('.table-row-undistributed-participant').length > 0){
+                                $('#next').addClass('disabled')
+                                $('#undistributed-participants-table').removeClass('d-none')
+                            }else {
+                                $('#next').removeClass('disabled')
+                                $('#undistributed-participants-table').addClass('d-none')
+                            }
+                            $('#next').text('Создать отчет')
+
+
+                        }
+                    });
+
+                    {#console.log(report_participants)#}
+                    route_menu_handler(route_index, 'next')
+                }else {
+                    toastr.error('Участники не выбраны')
+                }
+                break;
+            case 3:
+                Swal.fire({
+                  title: 'Комментарии к отчету',
+                  text: "Добавить комментарии к отчету?",
+                  icon: 'question',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Да',
+                  cancelButtonText: 'Нет'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    $('#input-modal-report-comments').modal('show')
+                  }else {
+                      save_report()
+                  }
+                })
+
+                break;
+            case 4:
+
+                break;
+            default:
+                break;
+            }
+
+    }
+
+    $('#modal_comments_create_report').on('click', function () {
+        $('#input-modal-report-comments').modal('hide')
+        save_report()
+    })
+
+    function save_report() {
+        btn_spinner($('#next'))
+        let square_results = []
+        $('.list-group-square').each(function () {
+            let square_name = get_square_name_by_listgroup_id($(this).attr('id'))
+            {#console.log($(this).attr('id'))#}
+            $(this).find('li').each(function (){
+                square_results.push([square_name, $(this).attr('id'), $(this).text()])
+            })
+        })
+        console.log(square_results)
+
+        let url = "{% url 'save_group_report_data' %}"
+        $.ajax({
+            headers: { "X-CSRFToken": token },
+            url: url,
+            type: 'POST',
+
+            data: JSON.stringify({
+                        'square_results': square_results,
+                        'project': project_name,
+                        'comments': $('#report-comments-text').val()
+                    }),
+            processData: false,
+            contentType: false,
+            error: function(data){
+                toastr.error('Ошибка', data)
+                console.log(data)
+            },
+            success:function (data) {
+                console.log('succes - ' + data['file_name'])
+
+                Swal.fire({
+                      title: 'Отчет упешно создан',
+                      text: "Скачать файл отчета?",
+                      icon: 'success',
+                      showCancelButton: true,
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'Да',
+                      cancelButtonText: 'Нет'
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        let a = document.createElement("a");
+                        a.href = 'download_group_report/' + data['file_name'];
+                        a.click();
+                        setTimeout(function () {
+                            location.href = {% url 'panel_home' %}
+
+                        },1500)
+                      }else {
+                        location.href = {% url 'panel_home' %}
+                      }
+                    })
+
+
+                $('#next').removeClass('disabled').html('<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
+
+
+            }
+        });
+
+    }
+
+
+    let enabled_route_number = 0
+    // выбор проекта
+    $('#menu_distribution').closest('.slide').addClass('is-expanded')
+    $('#menu_distribution').addClass('active')
+    $(".table-row").on('click', function (e) {
+        $(".table-row").css('background-color', '').css('color', '').removeClass('company-chosen')
+        $(this).css('background-color', '#6c5ffc').css('color', 'white').addClass('company-chosen')
+        $('#next').removeClass('disabled')
+    })
+
+    $('#next').on('click', function () {
+        if ($(this).hasClass('disabled')){
+            if(enabled_route_number === 1){
+                toastr.error('Выберите проект')
+            }
+        }else {
+            {#$(this).find('a').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="width: 25px;height: 25px;"></span>')#}
+            $('.route-item').each(function (i, obj) {
+                if(!$(this).hasClass('disabled')){
+                    enabled_route_number = parseInt($(this).find('.number').html())
+
+                }
+                    {#route_menu_handler($(this).find('.number').html())#}
+
+            })
+            $('#previous').removeClass('disabled')
+            route_handler(enabled_route_number)
+
+        }
+
+    })
+    $('#previous').on('click', function () {
+        $('.route-item').each(function (i, obj) {
+            if(!$(this).hasClass('disabled')){
+                enabled_route_number = parseInt($(this).find('.number').html())
+
+            }
+                {#route_menu_handler($(this).find('.number').html())#}
+
+        })
+        switch (enabled_route_number){
+            case 2:
+                {#$('#wizard1-tbody-1').html('')#}
+                {#process_table('.team-table')#}
+                $('.team-table').DataTable().clear().destroy()
+                $('#wizard1-h-1').css('display', 'none')
+                $('#wizard1-p-1').css('display', 'none')
+                $('#wizard1-h-0').css('display', 'block')
+                $('#wizard1-p-0').css('display', 'block')
+                $(this).addClass('disabled')
+                break;
+            case 3:
+                {#$('#wizard1-tbody-1').html('')#}
+                {#process_table('.team-table')#}
+                $('.undistributed-table').DataTable().clear().destroy()
+                $('#wizard1-h-1').css('display', 'block')
+                $('#wizard1-p-1').css('display', 'block')
+                $('#wizard1-h-2').css('display', 'none')
+                $('#wizard1-p-2').css('display', 'none')
+                $('.list-group-item').each(function () {
+                    $(this).remove()
+                })
+                $('#next').removeClass('disabled').html('<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
+                break;
+            default:
+                break;
+        }
+        route_menu_handler(enabled_route_number, 'previous')
+
+    })
+
+    function btn_spinner(element){
+        $(element).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="width: 25px;height: 25px"></span>').addClass('disabled')
+        }
+    function btn_text(element, text) {
+        $(element).html(text).removeClass('disabled')
+    }
+    let table = ''
+    {#function process_table(element){#}
+    {#   $(element).DataTable().destroy()#}
+    {#   $(element).DataTable({#}
+    {#       "searching": false,#}
+    {#      "destroy": true,#}
+    {#      "paging": false,#}
+    {#      "language": {#}
+    {#        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"#}
+    {#      },#}
+    {#      "initComplete": function () {#}
+    {##}
+    {#      },#}
+    {#    })#}
+    {#}#}
+
+    $('#main-container').on('click', '.project-participant-added', function () {
+        $(this).removeClass('project-participant-added').addClass('project-participant-chosen').css('background-color', '#6c5ffc').css('color', 'white')
+
+        console.log($(this).find(':nth-child(1)').text())
+    })
+    $('#main-container').on('click', '.project-participant-chosen', function () {
+        $(this).addClass('project-participant-added').removeClass('project-participant-chosen').css('background-color', '').css('color', '')
+
+        console.log($(this).find(':nth-child(1)').text())
+    })
+    $('#main-container').on('click', '.report-participant-added', function () {
+        $(this).removeClass('report-participant-added').addClass('report-participant-chosen').css('background-color', '#6c5ffc').css('color', 'white')
+
+        console.log($(this).find(':nth-child(1)').text())
+    })
+    $('#main-container').on('click', '.report-participant-chosen', function () {
+        $(this).addClass('report-participant-added').removeClass('report-participant-chosen').css('background-color', '').css('color', '')
+
+        console.log($(this).find(':nth-child(1)').text())
+    })
+
+    $('#add-all-participant').on('click', function () {
+        add_participant_to_report('#wizard1-tbody-1 tr')
+
+    })
+
+    $('#add-chosen-participant').on('click', function () {
+
+        if($('.project-participant-chosen').length){
+            add_participant_to_report('.project-participant-chosen')
+        }else {
+            toastr.error('Участник не выбран')
+        }
+
+    })
+
+    $('#delete-chosen-participant').on('click', function () {
+        if($('.report-participant-chosen').length){
+            delete_participant_from_report('.report-participant-chosen')
+        }else {
+            toastr.error('Участник не выбран')
+        }
+
+    })
+    $('#delete-all-participant').on('click', function () {
+        if($('.report-participant-chosen').length || $('.report-participant-added').length){
+            delete_participant_from_report('#wizard1-tbody-report-1 tr')
+        }else {
+            toastr.error('Участники отсутствуют')
+        }
+    })
+
+    function add_participant_to_report(element){
+        let html_report = ''
+        let html_project = ''
+
+        $(element).each(function (i, obj) {
+            html_report += '<tr class="table-row-report cursor-pointer report-participant-added odd" style="">'
+            html_report += $(this).html()
+            html_report += '</tr>'
+            $(this).remove()
+        })
+            html_project = $('#wizard1-tbody-1').html()
+            html_report = $('#wizard1-tbody-report-1').html().trim() + html_report
+
+            $('.team-table').DataTable().clear().destroy()
+            $('#wizard1-tbody-1').append(html_project)
+            $('#wizard1-tbody-report-1').empty().append(html_report.trim())
+            $('#wizard1-tbody-report-1 tr').each(function (){
+                if($(this).find('td').hasClass('dataTables_empty')){
+                    $(this).remove()
+                }
+            })
+            process_table('.team-table')
+
+    }
+    function delete_participant_from_report(element){
+        let html_report = ''
+        let html_project = ''
+
+        $(element).each(function (i, obj) {
+            html_project += '<tr class="table-row cursor-pointer project-participant-added odd">'
+            html_project += $(this).html()
+            html_project += '</tr>'
+            $(this).remove()
+        })
+            html_project = $('#wizard1-tbody-1').html().trim() + html_project
+            html_report = $('#wizard1-tbody-report-1').html().trim()
+
+            $('.team-table').DataTable().clear().destroy()
+            {#$('#wizard1-tbody-1').append(html_project)#}
+            $('#wizard1-tbody-1').empty().append(html_project)
+
+            $('#wizard1-tbody-report-1').append(html_report.trim())
+            {#$('#wizard1-tbody-report-1').empty().append(html_report.trim())#}
+
+            $('#wizard1-tbody-1 tr').each(function (){
+                if($(this).find('td').hasClass('dataTables_empty')){
+                    $(this).remove()
+                }
+            })
+            process_table('.team-table')
+
+    }
+    // распределение участников
+    $('#distribute-undistributed-participants').on('click', function(){
+        let category_not_selected = false
+        $('.category-selected').each(function (){
+            if($(this).val() === ''){
+                category_not_selected = true
+            }
+
+        })
+        if(category_not_selected){
+            toastr.error('Выберите категорию для всех нераспределенных участников')
+        }else {
+            let distributed_cnt = 0
+            $('.table-row-undistributed-participant').each(function () {
+                let fio = $(this).find('.fio').text()
+                let email = $(this).find('.email').text()
+                let square_name = $(this).find('.category-selected').val()
+                {#console.log($(this).find('.fio').text() + ' - ' + $(this).find('.category-selected').val())#}
+
+                let list_id = get_listgroup_id_by_name(square_name)
+                $('#' + list_id).append('<li class="list-group-item" id="' + email + '">' + fio + '</li>')
+                $(this).remove()
+                distributed_cnt++
+            })
+            let cur_distributed_cnt = parseInt($('#bage_distributed_participants').text())
+            $('#bage_distributed_participants').html(cur_distributed_cnt + distributed_cnt)
+            $('.undistributed-table').DataTable().clear().destroy()
+            $('#undistributed-participants-table').addClass('d-none')
+            toastr.success('Участники распределены (' + distributed_cnt + ' чел.)')
+            $('#next').removeClass('disabled').addClass('cursor-pointer')
+
+        }
+    })
+    function get_listgroup_id_by_name(name){
+        let listgroup_id = ''
+        switch (name) {
+            case square_names_obj["1_1"]:
+                listgroup_id = 'list_1_1';
+                break;
+            case square_names_obj["1_2"]:
+                listgroup_id = 'list_1_2';
+                break;
+            case square_names_obj["1_3"]:
+                listgroup_id = 'list_1_3';
+                break;
+            case square_names_obj["1_4"]:
+                listgroup_id = 'list_1_4';
+                break;
+            case square_names_obj["2_1"]:
+                listgroup_id = 'list_2_1';
+                break;
+            case square_names_obj["2_2"]:
+                listgroup_id = 'list_2_2';
+                break;
+            case square_names_obj["2_3"]:
+                listgroup_id = 'list_2_3';
+                break;
+            case square_names_obj["2_4"]:
+                listgroup_id = 'list_2_4';
+                break;
+            case square_names_obj["3_1"]:
+                listgroup_id = 'list_3_1';
+                break;
+            case square_names_obj["3_2"]:
+                listgroup_id = 'list_3_2';
+                break;
+            case square_names_obj["3_3"]:
+                listgroup_id = 'list_3_3';
+                break;
+            case square_names_obj["3_4"]:
+                listgroup_id = 'list_3_4';
+                break;
+            case square_names_obj["4_1"]:
+                listgroup_id = 'list_4_1';
+                break;
+            case square_names_obj["4_2"]:
+                listgroup_id = 'list_4_2';
+                break;
+            case square_names_obj["4_3"]:
+                listgroup_id = 'list_4_3';
+                break;
+            case square_names_obj["4_4"]:
+                listgroup_id = 'list_4_4';
+                break;
+            default:
+                break;
+
+        }
+        return listgroup_id
+    }
+
+    function get_square_name_by_listgroup_id(id){
+        let square_name = ''
+        switch (id) {
+            case 'list_1_1':
+                square_name = square_names_obj["1_1"]
+                break;
+            case 'list_1_2':
+                square_name = square_names_obj["1_2"]
+                break;
+            case 'list_1_3':
+                square_name = square_names_obj["1_3"]
+                break;
+            case 'list_1_4':
+                square_name = square_names_obj["1_4"]
+                break;
+            case 'list_2_1':
+                square_name = square_names_obj["2_1"]
+                break;
+            case 'list_2_2':
+                square_name = square_names_obj["2_2"]
+                break;
+            case 'list_2_3':
+                square_name = square_names_obj["2_3"]
+                break;
+            case 'list_2_4':
+                square_name = square_names_obj["2_4"]
+                break;
+            case 'list_3_1':
+                square_name = square_names_obj["3_1"]
+                break;
+            case 'list_3_2':
+                square_name = square_names_obj["3_2"]
+                break;
+            case 'list_3_3':
+                square_name = square_names_obj["3_3"]
+                break;
+            case 'list_3_4':
+                square_name = square_names_obj["3_4"]
+                break;
+            case 'list_4_1':
+                square_name = square_names_obj["4_1"]
+                break;
+            case 'list_4_2':
+                square_name = square_names_obj["4_2"]
+                break;
+            case 'list_4_3':
+                square_name = square_names_obj["4_3"]
+                break;
+            case 'list_4_4':
+                square_name = square_names_obj["4_4"]
+                break;
+            default:
+                break;
+
+        }
+        return square_name
+    }
+
+
+
+</script>
+{% endblock %}

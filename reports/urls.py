@@ -23,4 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('pdf/', include('pdf.urls'), name='pdf'),
     path('api/', include('api.urls'), name='api'),
+    path('login/', include('login.urls'), name='login'),
+    path('panel/', include('panel.urls'), name='panel'),
 ]

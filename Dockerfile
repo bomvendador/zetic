@@ -1,16 +1,17 @@
-FROM python:3-slim
+FROM python:3.10
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /code
-COPY requirements.txt /code/
-RUN apt-get update &&  \
+RUN apt update \
+    && apt install -y postgresql gcc python3-dev musl-dev
+
+
+WORKDIR /reports
+COPY requirements.txt /reports/requirements.txt
+RUN apt-get update -y &&  \
     apt-get -y install libpq-dev gcc && \
-    pip install --no-cache-dir -r requirements.txt
+    pip install --no-cache-dir -r /reports/requirements.txt
 
-COPY . /code/
+COPY . /reports/
 
-ENV SERVER_PORT=8000
-
-ENTRYPOINT python manage.py runserver 0.0.0.0:${SERVER_PORT}
