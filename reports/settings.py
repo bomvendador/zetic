@@ -91,24 +91,27 @@ WSGI_APPLICATION = 'reports.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'db_reports',
-#         'USER': 'root',
-#         'PASSWORD': 'password',
-#         'HOST': 'zetic-report-db',
-#         'PORT': '3306',
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'reports',
+        'USER': 'root',
+        'PASSWORD': 'alexrodin',
+        'HOST': 'localhost',
+        'PORT': '',
+        'CHARSET': 'utf8',
+        'COLLATION': 'utf8_general_ci',
+
+    }
+}
 
 
 # print(os.environ.get('SQL_NAME', BASE_DIR / 'db.sqlite3'))
