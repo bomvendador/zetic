@@ -1,25 +1,38 @@
-from pdf.models import Report, Participant, Company, ReportData, Section, Category
+from pdf.models import Report, Participant, Company, ReportData, Section, Category, Employee, Study
 
 
 def save_data_to_db(request_json, file_name):
 
-    if Company.objects.filter(name=request_json['project']).exists():
-        company = Company.objects.get(name=request_json['project'])
+    if Company.objects.filter(name=request_json['company_name']).exists():
+        company = Company.objects.get(name=request_json['company_name'])
     else:
         company = Company()
-        company.name = request_json['project']
+        company.name = request_json['company_name']
         company.save()
 
-    if Participant.objects.filter(email=request_json['participant_info']['email']).exists():
-        participant = Participant.objects.get(email=request_json['participant_info']['email'])
+    if Study.objects.filter(name=request_json['study_name']).exists():
+        study = Study.objects.get(name=request_json['study_name'])
     else:
-        participant = Participant()
-        participant.fio = request_json['participant_info']['name']
-        participant.sex = request_json['participant_info']['sex']
-        participant.birth_year = request_json['participant_info']['birth_year']
-        participant.email = request_json['participant_info']['email']
-        participant.company = company
-        participant.save()
+        study = Study()
+        study.company = company
+        study.name = request_json['study_name']
+        study.save()
+
+    if Employee.objects.filter(email=request_json['participant_info']['email']).exists():
+        employee = Employee.objects.get(email=request_json['participant_info']['email'])
+    else:
+        employee = Employee()
+        employee.name = request_json['participant_info']['name']
+        employee.sex = request_json['participant_info']['sex']
+        employee.birth_year = request_json['participant_info']['birth_year']
+        employee.email = request_json['participant_info']['email']
+        employee.company = company
+        employee.save()
+
+    participant = Participant()
+    participant.employee = employee
+    participant.study = study
+    participant.save()
 
     if Report.objects.filter(code=request_json['code']).exists():
         report = Report.objects.get(code=request_json['code'])

@@ -80,7 +80,7 @@
                     <div class="d-flex">
                         <a aria-label="Hide Sidebar" class="app-sidebar__toggle" data-bs-toggle="sidebar" href="javascript:void(0)"></a>
                         <!-- sidebar-toggle-->
-                        <a class="logo-horizontal " href="index.html">
+                        <a class="logo-horizontal ">
 {#                            <img src="../assets/images/brand/logo.png" class="header-brand-img desktop-logo" alt="logo">#}
                             <img src="{% static 'login/images/brand/logo.png' %}" class="header-brand-img desktop-logo" alt="logo">
 {#                            <img src="../assets/images/brand/logo-3.png" class="header-brand-img light-logo1"#}
@@ -180,17 +180,17 @@
                 <div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
                 <div class="app-sidebar">
                     <div class="side-header">
-                        <a class="header-brand1" href="index.html">
+                        <a class="header-brand1">
 {#                            <img src="../assets/images/brand/logo.png" class="header-brand-img desktop-logo" alt="logo">#}
-                            <img src="{% static 'login/images/brand/logo.png' %}" class="header-brand-img desktop-logo" alt="logo">
+                            <img src="{% static 'images/zetic_logo.png' %}" class="header-brand-img desktop-logo" alt="logo">
 {#                            <img src="../assets/images/brand/logo-1.png" class="header-brand-img toggle-logo"#}
-                            <img src="{% static 'login/images/brand/logo-1.png' %}" class="header-brand-img toggle-logo"
+                            <img src="{% static 'images/zetic_logo.png' %}" class="header-brand-img toggle-logo"
                                 alt="logo">
 {#                            <img src="../assets/images/brand/logo-2.png" class="header-brand-img light-logo" alt="logo">#}
-                            <img src="{% static 'login/images/brand/logo-2.png' %}" class="header-brand-img light-logo" alt="logo">
+                            <img src="{% static 'images/zetic_logo.png' %}" class="header-brand-img light-logo" alt="logo">
 {#                            <img src="../assets/images/brand/logo-3.png" class="header-brand-img light-logo1"#}
-                            <img src="{% static 'login/images/brand/logo-3.png' %}" class="header-brand-img light-logo1"
-                                alt="logo">
+                            <img src="{% static 'images/zetic_logo.png' %}" class="header-brand-img light-logo1"
+                                alt="logo" style="height: 45px">
                         </a>
                         <!-- LOGO -->
                     </div>
@@ -280,7 +280,7 @@
                                 </a>
                                 <ul class="slide-menu">
                                     <li><div class="slide-item cursor-pointer menu_item" id="menu_study_list"> Список</div></li>
-                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_employee_add"> Добавить</div></li>
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_study_add"> Добавить</div></li>
                                 </ul>
                             </li>
 
@@ -304,6 +304,7 @@
                                 <ul class="slide-menu">
                                     <li class="side-menu-label1"><a href="javascript:void(0)">Apps</a></li>
                                     <li><div class="slide-item cursor-pointer menu_item" id="menu_individual_reports_list"> Список отчетов</div></li>
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_individual_reports_add"> Добавить</div></li>
                                 </ul>
                             </li>
                         </ul>
@@ -987,6 +988,8 @@
         let url_employees_positions_list = "{% url 'employees_positions_list' %}"
         let url_add_employee = "{% url 'add_employee' %}"
         let url_employees_list = "{% url 'employees_list' %}"
+        let url_studies_list = "{% url 'studies_list' %}"
+        let url_individual_report_file_index = "{% url 'individual_report_file_index' %}"
 
 
 

@@ -107,7 +107,9 @@ class EmployeePosition(models.Model):
 
 class Employee(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, related_name='created_by_user')
+    user = models.ForeignKey(User, on_delete=models.PROTECT, default=None, blank=True, null=True,
+                             verbose_name='Пользователь', related_name='employee_user')
     name = models.CharField(max_length=100, blank=True, null=True)
     sex = models.CharField(max_length=20, blank=False, null=False)
     birth_year = models.IntegerField(blank=False, null=False)
@@ -126,14 +128,15 @@ class Employee(models.Model):
             return self.email
 
     class Meta:
-        verbose_name_plural = 'Участники (employee)'
-        verbose_name = 'Участник (employee)'
+        verbose_name_plural = 'Сотрудники (employee)'
+        verbose_name = 'Сотрудник (employee)'
 
 
 class Study(models.Model):
     version = models.IntegerField(null=False, default=0)
     company = models.ForeignKey(Company, on_delete=models.RESTRICT, default=None, null=True)
     research_id = models.IntegerField(null=False, default=0)
+    research_name = models.CharField(max_length=100, blank=True, null=True, default=None)
     name = models.CharField(max_length=100, blank=True, null=True)
     public_code = models.CharField(max_length=30, blank=True, null=True)
 
@@ -152,7 +155,7 @@ class StudyQuestionGroups(models.Model):
     study = models.ForeignKey(Study, on_delete=models.RESTRICT, default=None, null=True, blank=True)
 
     def __str__(self):
-        return f'Секция - {self.question_group.name} | {self.study.name}'
+        return f'Секция - {self.question_group.name} Опросник - {self.study.name}'
 
     class Meta:
         verbose_name_plural = 'Секции вопросов для опросника'
@@ -162,28 +165,43 @@ class StudyQuestionGroups(models.Model):
 class Participant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
-    fio = models.CharField(max_length=100, blank=True, null=True)
-    sex = models.CharField(max_length=20, blank=False, null=False)
-    birth_year = models.IntegerField(blank=False, null=False)
-    email = models.CharField(max_length=100, blank=True, null=False, default=None)
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Employee')
     started_at = models.DateTimeField(blank=True, null=True, default=None)
     finished_at = models.DateTimeField(blank=True, null=True, default=None)
     completed_at = models.DateTimeField(blank=True, null=True, default=None)
     tos_accepted = models.BooleanField(default=False)
     study = models.ForeignKey(Study, on_delete=models.RESTRICT, default=None, null=True, blank=True)
+    invitation_sent = models.BooleanField(default=False)
+    invitation_sent_datetime = models.DateTimeField(blank=True, null=True, default=None)
 
     def __str__(self):
-        return self.fio
+        if self.employee:
+            return self.employee.name
+        else:
+            return f'ID - {self.id}'
 
     class Meta:
         verbose_name_plural = 'Участники опроса'
         verbose_name = 'Участник опроса'
 
 
+class EmailSentToParticipant(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+    participant = models.ForeignKey(Participant, on_delete=models.PROTECT, default=None, null=True)
+    type = models.CharField(max_length=30, blank=True, null=True, default=None)
+
+    def __str__(self):
+        return f'{self.participant.employee.name} - {self.type}'
+
+    class Meta:
+        verbose_name_plural = 'Письма отправленные'
+        verbose_name = 'Письмо отправлено'
+
+
 class Report(models.Model):
     added = models.DateTimeField(auto_now_add=True, null=True)
-    code = models.CharField(max_length=30, blank=False, null=False)
+    code = models.CharField(max_length=30, blank=True, null=True)
     lie_points = models.IntegerField(null=False, default=0)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Участник')
     file = models.FileField(upload_to='media/reportsPDF/', default=None)
@@ -192,7 +210,7 @@ class Report(models.Model):
 
     def __str__(self):
         # return f'{self.participant.fio} - {self.file.name} - {self.participant.employee.company.name}'
-        return f'{self.participant.fio} - {self.file.name}'
+        return f'{self.participant.employee.name} - {self.file.name}'
 
     class Meta:
         verbose_name_plural = 'Индивидуальные отчеты'
@@ -206,7 +224,7 @@ class ReportData(models.Model):
     points = models.IntegerField(null=False, default=0)
 
     def __str__(self):
-        return f'{self.report.participant.fio} - {self.report.participant.employee.company.name} - {self.section.name} - {self.category.name} - {self.points}'
+        return f'{self.report.participant.employee.name} - {self.report.participant.employee.company.name} - {self.section.name} - {self.category.name} - {self.points}'
 
     class Meta:
         verbose_name_plural = 'Данные индивидуальных отчетов'

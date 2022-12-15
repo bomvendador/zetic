@@ -34,11 +34,15 @@ def get_company_employees(request):
                 name = employee.name
             else:
                 name = ''
+            if employee.created_by:
+                created_by = employee.created_by.first_name
+            else:
+                created_by = ''
             employees_arr.append({
                 'name': name,
                 'id': employee.id,
                 'email': employee.email,
-                'created_by': employee.created_by.first_name,
+                'created_by': created_by,
                 'created_at': timezone.localtime(employee.created_at).strftime("%Y-%m-%d %H:%M:%S"),
             })
         response = {

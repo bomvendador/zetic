@@ -34,3 +34,5 @@ def json_request(request):
 def home(request):
     context = {}
     return render(request, 'report_v1.html', context)
+
+

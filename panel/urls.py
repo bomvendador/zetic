@@ -4,6 +4,8 @@ from panel import views as panel_views
 from pdf import views as pdf_views
 from panel import company_parameter as panel_company_parameter
 from panel import employee
+from panel import study
+from panel import individual_report_file
 
 urlpatterns = [
     path('', panel_views.home, name="panel_home"),
@@ -48,6 +50,14 @@ urlpatterns = [
     path('save_new_employee_html', employee.save_new_employee_html, name='save_new_employee_html'),
     path('employees_list', employee.employees_list, name='employees_list'),
     path('get_employee_data', employee.get_employee_data, name='get_employee_data'),
+    path('studies_list', study.studies_list, name='studies_list'),
+    path('get_company_studies', study.get_company_studies, name='get_company_studies'),
+    path('study/<int:study_id>', study.study_details, name='study_details'),
+    path('get_question_groups', study.get_question_groups, name='get_question_groups'),
+    path('save_study_questions_groups', study.save_study_questions_groups, name='save_study_questions_groups'),
+    path('get_employees_for_study', study.get_employees_for_study, name='get_employees_for_study'),
+    path('save_study_participants', study.save_study_participants, name='save_study_participants'),
+    path('individual_report_file_index', individual_report_file.individual_report_file_index, name='individual_report_file_index'),
 
     # path('get_company_employees', employee.get_company_employees, name='get_company_employees'),
 

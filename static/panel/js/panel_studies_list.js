@@ -1,5 +1,7 @@
-expand_menu_item('#menu_employees_list')
-    let employee_id
+expand_menu_item('#menu_study_list')
+
+    let study_id
+
     $('#save_edited_employee').on('click', function (){
 
         let name = $('#employee_name').val()
@@ -86,8 +88,6 @@ expand_menu_item('#menu_employees_list')
                             }
                         });
 
-
-
             }
 
 
@@ -95,68 +95,10 @@ expand_menu_item('#menu_employees_list')
     })
 
 
-    $('#main-container').on('click', '.edit-employee', function () {
-        employee_id = $(this).closest('tr').attr('id').split('_')[2]
-        show_progressbar_loader()
-
-        $.ajax({
-            headers: { "X-CSRFToken": token },
-            url: url_get_employee_data,
-            type: 'POST',
-
-            data: JSON.stringify({
-                        'employee_id': employee_id,
-                    }),
-            processData: false,
-            contentType: false,
-            error: function(data){
-                toastr.error('Ошибка', data)
-            },
-            success:function (data) {
-                hide_progressbar_loader()
-                console.log(data)
-                $('#employee_role option').each(function (e) {
-                    if(data['role'] === $(this).text()){
-                        $(this).prop('selected', true)
-                    }
-                })
-                $('#employee_position option').each(function (e) {
-                    if(data['position'] === $(this).text()){
-                        $(this).prop('selected', true)
-                    }
-                })
-                $('#employee_industry option').each(function (e) {
-                    if(data['industry'] === $(this).text()){
-                        $(this).prop('selected', true)
-                    }
-                })
-                $('#employee_gender option').each(function (e) {
-                    if(data['gender'] === $(this).text()){
-                        $(this).prop('selected', true)
-                    }
-                })
-                $("#employee_birth_year").val(data['birth_year']).yearpicker({
-                    // onChange: function (val) {
-                    //     console.log(val)
-                    // },
-                    year: data['birth_year'],
-                    startYear: 1940,
-                    endYear: 2010,
-                })
-                $("#employee_name").val(data['name'])
-                $("#employee_email").val(data['email'])
-
-
-
-                // {#let data_json = $.parseJSON(data);#}
-
-            }
-        });
-
-
-
-        $('#modal_edit_imployee').modal('show')
-    })
+    $('#main-container').on('click', '.study-details', function () {
+        let study_id = $(this).closest('tr').attr('id').split('_')[2]
+        window.location.href = 'study/' + study_id
+    });
 
     let company_id
 
@@ -190,15 +132,15 @@ expand_menu_item('#menu_employees_list')
 
 
     function route_handler(route_index) {
-    console.log('project - ' + $('.project-chosen').text().trim())
+    // console.log('project - ' + $('.project-chosen').text().trim())
         console.log('route_index - ' + route_index)
         btn_spinner($('#next'))
         switch (route_index) {
             case 1:
-                let company_id = $('.project-chosen').attr('id').split('_')[2]
+                let company_id = $('.company-chosen').attr('id').split('_')[2]
                 $.ajax({
                     headers: { "X-CSRFToken": token },
-                    url: url_get_company_employees,
+                    url: url_get_company_studies,
                     type: 'POST',
 
                     data: JSON.stringify({
@@ -221,17 +163,15 @@ expand_menu_item('#menu_employees_list')
                             }else {
                                 name = data_json[i]['name']
                             }
-                            html += '<tr class="" id=employee_id_' + data_json[i]['id'] + '>'
+                            html += '<tr class="" id=study_id_' + data_json[i]['id'] + '>'
                             html += '<td>' + data_json[i]['name'] + '</td>'
-                            html += '<td>' + data_json[i]['email'] + '</td>'
-                            html += '<td>' + data_json[i]['created_at'] + '</td>'
-                            html += '<td>' + data_json[i]['created_by'] + '</td>'
+                            html += '<td>' + data_json[i]['company_name'] + '</td>'
+                            html += '<td>' + data_json[i]['research_name'] + '</td>'
                             html += '<td>'
                             html += '<div style="text-align: center;">'
                             html += '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>'
                             html += '<ul class="dropdown-menu">'
-                            html += '<li><a class="dropdown-item edit-employee cursor-pointer">Изменить</a></li>'
-                            html += '<li><a class="dropdown-item cursor-pointer"">Удалить</a></li>'
+                            html += '<li><a class="dropdown-item study-details cursor-pointer">Подробно</a></li>'
                             html += '</ul>'
                             html += '</div>'
 
@@ -265,10 +205,10 @@ expand_menu_item('#menu_employees_list')
 
     }
     let enabled_route_number = 0
-    // выбор проекта
+    // выбор компании
     $(".table-row").on('click', function (e) {
-        $(".table-row").css('background-color', '').css('color', '').removeClass('project-chosen')
-        $(this).css('background-color', '#6c5ffc').css('color', 'white').addClass('project-chosen')
+        $(".table-row").css('background-color', '').css('color', '').removeClass('company-chosen')
+        $(this).css('background-color', '#6c5ffc').css('color', 'white').addClass('company-chosen')
         $('#next').removeClass('disabled')
     })
 

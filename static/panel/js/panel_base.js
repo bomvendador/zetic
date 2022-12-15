@@ -48,6 +48,12 @@
                 case'menu_employees_list':
                     window.location.href = url_employees_list;
                     break;
+                case'menu_study_list':
+                    window.location.href = url_studies_list;
+                    break;
+                case'menu_individual_reports_add':
+                    window.location.href = url_individual_report_file_index;
+                    break;
                 default:
                     break;
             }
