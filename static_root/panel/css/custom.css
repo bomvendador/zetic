@@ -1,0 +1,38 @@
+.float-button {
+    font-size: 23px;
+    border-radius: 30px;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+}
+
+.form-control:focus{
+    border-color: #0c63e4;
+}
+
+.question_group_selected{
+    background-color: #3c8dfd;
+    color: whitesmoke;
+
+}
+
+.question_group_item:hover {
+    background-color: #3c8dfd;
+    color: whitesmoke;
+}
+
+.participant_item_selected{
+    background-color: #3c8dfd;
+    color: whitesmoke;
+
+}
+
+.participant_item:hover{
+    background-color: #3c8dfd;
+    color: whitesmoke;
+}
+
+.no-data-text{
+    color: red;
+    text-align: center;
+}

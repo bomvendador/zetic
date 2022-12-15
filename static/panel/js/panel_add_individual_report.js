@@ -7,7 +7,6 @@ window.onerror = function myErrorHandler(errorMsg, url, lineNumber){
 
      $("#parse_file").on("click", function () {
         //Reference the FileUpload element.
-         console.log('dddddd')
          $('.error-message-close-btn').each(function (i, e) {
              e.click()
          })
