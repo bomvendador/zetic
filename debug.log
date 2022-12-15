@@ -1,0 +1,859 @@
+2022-09-24 17:29:55,619 django.security.DisallowedHost ERROR    Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\utils\deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "D:\projects\reports\venv\lib\site-packages\django\http\request.py", line 148, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+2022-09-24 17:29:58,007 django.request WARNING  Bad Request: /pdf/fpdf
+2022-09-24 17:31:00,517 django.security.DisallowedHost ERROR    Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\utils\deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "D:\projects\reports\venv\lib\site-packages\django\http\request.py", line 148, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+2022-09-24 17:31:00,544 django.request WARNING  Bad Request: /pdf/fpdf
+2022-09-24 17:31:21,937 django.security.DisallowedHost ERROR    Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\utils\deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "D:\projects\reports\venv\lib\site-packages\django\http\request.py", line 148, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+2022-09-24 17:31:21,962 django.request WARNING  Bad Request: /pdf/fpdf
+2022-09-24 17:32:19,817 django.security.DisallowedHost ERROR    Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\utils\deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "D:\projects\reports\venv\lib\site-packages\django\http\request.py", line 148, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+2022-09-24 17:32:19,842 django.request WARNING  Bad Request: /pdf/fpdf
+2022-09-24 17:33:53,870 root         INFO     <WSGIRequest: POST '/pdf/fpdf'>
+2022-09-24 17:33:53,899 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 17:33:53,899 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 17:33:53,900 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 17:33:53,900 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 17:33:53,901 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 17:33:53,901 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 17:33:53,902 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 17:33:53,905 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 17:33:53,905 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 17:33:53,905 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 17:33:53,908 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 17:33:53,927 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 17:33:53,927 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 17:33:53,928 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 17:33:53,934 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 17:33:53,935 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 17:33:53,949 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 17:33:53,949 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 17:33:53,949 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 17:33:53,949 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 17:33:53,949 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 17:33:53,949 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 17:33:53,950 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 17:33:53,950 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 17:33:53,950 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 17:33:53,950 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 17:33:53,953 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 17:33:53,953 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 17:33:53,953 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 17:33:53,953 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 17:33:53,958 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 17:33:53,958 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 17:33:53,963 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 17:33:53,964 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 17:33:53,964 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 17:33:53,964 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 17:33:53,965 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 17:33:53,967 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 17:33:53,968 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 17:33:53,968 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 17:33:53,968 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 17:33:53,969 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 17:33:53,972 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 17:33:53,972 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 17:33:53,972 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 17:33:53,972 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 17:33:53,979 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 17:33:53,979 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 17:33:53,983 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 17:33:53,983 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 17:33:53,983 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 17:33:53,983 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 17:33:53,983 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 17:33:53,983 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 17:33:53,984 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 17:33:53,984 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 17:33:53,984 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 17:33:53,984 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 17:33:53,986 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 17:33:53,986 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 17:33:53,987 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 17:33:53,987 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 17:33:53,993 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 17:33:53,993 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 17:33:54,021 django.request ERROR    Internal Server Error: /pdf/fpdf
+Traceback (most recent call last):
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\projects\reports\pdf\views.py", line 35, in pdf_generator
+    participant_name = request_json['participant_info']['name']
+TypeError: 'WSGIRequest' object is not subscriptable
+2022-09-24 17:47:42,486 root         INFO     <WSGIRequest: POST '/pdf/fpdf'>
+2022-09-24 17:47:42,497 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 17:47:42,498 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 17:47:42,498 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 17:47:42,498 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 17:47:42,498 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 17:47:42,498 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 17:47:42,499 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 17:47:42,499 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 17:47:42,499 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 17:47:42,499 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 17:47:42,501 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 17:47:42,502 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 17:47:42,502 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 17:47:42,502 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 17:47:42,510 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 17:47:42,510 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 17:47:42,514 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 17:47:42,515 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 17:47:42,515 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 17:47:42,515 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 17:47:42,515 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 17:47:42,515 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 17:47:42,516 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 17:47:42,516 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 17:47:42,516 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 17:47:42,516 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 17:47:42,518 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 17:47:42,518 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 17:47:42,518 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 17:47:42,519 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 17:47:42,524 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 17:47:42,524 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 17:47:42,526 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 17:47:42,526 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 17:47:42,526 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 17:47:42,527 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 17:47:42,527 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 17:47:42,527 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 17:47:42,527 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 17:47:42,527 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 17:47:42,527 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 17:47:42,527 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 17:47:42,529 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 17:47:42,531 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 17:47:42,532 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 17:47:42,533 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 17:47:42,538 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 17:47:42,539 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 17:47:42,540 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 17:47:42,540 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 17:47:42,541 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 17:47:42,541 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 17:47:42,541 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 17:47:42,541 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 17:47:42,541 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 17:47:42,541 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 17:47:42,541 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 17:47:42,542 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 17:47:42,544 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 17:47:42,544 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 17:47:42,544 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 17:47:42,544 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 17:47:42,551 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 17:47:42,551 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 17:47:42,631 django.request ERROR    Internal Server Error: /pdf/fpdf
+Traceback (most recent call last):
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\projects\reports\pdf\views.py", line 35, in pdf_generator
+    participant_name = request_json['participant_info']['name']
+TypeError: 'WSGIRequest' object is not subscriptable
+2022-09-24 17:58:38,626 root         INFO     <WSGIRequest: POST '/pdf/fpdf'>
+2022-09-24 17:58:38,638 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 17:58:38,638 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 17:58:38,639 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 17:58:38,639 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 17:58:38,639 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 17:58:38,639 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 17:58:38,640 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 17:58:38,640 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 17:58:38,640 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 17:58:38,640 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 17:58:38,641 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 17:58:38,642 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 17:58:38,642 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 17:58:38,642 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 17:58:38,649 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 17:58:38,649 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 17:58:38,651 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 17:58:38,651 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 17:58:38,651 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 17:58:38,652 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 17:58:38,652 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 17:58:38,652 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 17:58:38,652 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 17:58:38,652 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 17:58:38,652 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 17:58:38,652 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 17:58:38,654 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 17:58:38,654 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 17:58:38,655 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 17:58:38,655 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 17:58:38,660 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 17:58:38,661 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 17:58:38,670 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 17:58:38,670 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 17:58:38,671 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 17:58:38,671 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 17:58:38,671 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 17:58:38,671 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 17:58:38,671 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 17:58:38,672 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 17:58:38,672 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 17:58:38,672 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 17:58:38,675 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 17:58:38,675 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 17:58:38,676 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 17:58:38,676 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 17:58:38,682 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 17:58:38,682 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 17:58:38,684 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 17:58:38,685 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 17:58:38,685 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 17:58:38,685 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 17:58:38,685 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 17:58:38,685 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 17:58:38,686 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 17:58:38,686 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 17:58:38,686 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 17:58:38,686 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 17:58:38,689 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 17:58:38,689 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 17:58:38,689 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 17:58:38,690 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 17:58:38,697 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 17:58:38,697 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 17:58:38,739 django.request ERROR    Internal Server Error: /pdf/fpdf
+Traceback (most recent call last):
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\projects\reports\pdf\views.py", line 35, in pdf_generator
+TypeError: 'WSGIRequest' object is not subscriptable
+2022-09-24 18:00:17,362 root         INFO     <WSGIRequest: POST '/pdf/fpdf'>
+2022-09-24 18:00:17,363 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:00:17,363 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:00:17,363 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:00:17,364 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:00:17,364 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:00:17,364 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:00:17,364 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:00:17,364 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:00:17,364 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:00:17,365 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:00:17,367 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:00:17,367 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:00:17,367 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:00:17,368 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:00:17,373 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:00:17,374 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:00:17,375 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:00:17,375 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:00:17,375 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:00:17,376 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:00:17,376 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:00:17,376 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:00:17,376 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:00:17,376 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:00:17,376 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:00:17,376 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:00:17,379 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:00:17,379 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:00:17,379 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:00:17,380 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:00:17,386 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:00:17,386 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:00:17,387 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:00:17,387 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:00:17,387 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:00:17,387 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:00:17,387 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:00:17,387 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:00:17,387 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:00:17,387 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:00:17,388 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:00:17,388 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:00:17,390 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:00:17,390 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:00:17,390 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:00:17,390 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:00:17,396 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:00:17,397 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:00:17,399 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:00:17,399 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:00:17,399 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:00:17,399 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:00:17,400 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:00:17,400 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:00:17,400 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:00:17,400 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:00:17,402 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:00:17,402 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:00:17,404 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:00:17,404 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:00:17,405 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:00:17,405 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:00:17,411 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:00:17,411 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:00:17,437 django.request ERROR    Internal Server Error: /pdf/fpdf
+Traceback (most recent call last):
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\projects\reports\pdf\views.py", line 35, in pdf_generator
+    participant_name = request_json['participant_info']['name']
+TypeError: 'WSGIRequest' object is not subscriptable
+2022-09-24 18:00:51,091 root         INFO     <WSGIRequest: POST '/pdf/fpdf'>
+2022-09-24 18:00:51,092 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:00:51,092 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:00:51,092 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:00:51,092 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:00:51,092 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:00:51,093 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:00:51,093 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:00:51,093 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:00:51,093 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:00:51,093 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:00:51,095 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:00:51,101 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:00:51,101 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:00:51,101 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:00:51,107 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:00:51,108 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:00:51,109 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:00:51,109 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:00:51,109 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:00:51,109 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:00:51,109 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:00:51,109 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:00:51,109 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:00:51,109 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:00:51,110 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:00:51,110 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:00:51,112 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:00:51,112 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:00:51,112 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:00:51,112 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:00:51,118 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:00:51,118 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:00:51,119 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:00:51,119 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:00:51,119 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:00:51,119 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:00:51,119 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:00:51,119 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:00:51,119 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:00:51,120 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:00:51,120 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:00:51,120 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:00:51,122 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:00:51,122 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:00:51,123 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:00:51,123 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:00:51,129 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:00:51,129 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:00:51,130 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:00:51,130 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:00:51,130 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:00:51,130 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:00:51,131 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:00:51,131 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:00:51,131 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:00:51,131 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:00:51,131 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:00:51,131 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:00:51,133 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:00:51,133 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:00:51,134 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:00:51,134 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:00:51,139 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:00:51,140 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:00:51,161 django.request ERROR    Internal Server Error: /pdf/fpdf
+Traceback (most recent call last):
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\projects\reports\pdf\views.py", line 35, in pdf_generator
+    participant_name = request_json['participant_info']['name']
+TypeError: 'WSGIRequest' object is not subscriptable
+2022-09-24 18:02:02,450 root         INFO     <WSGIRequest: POST '/pdf/fpdf'>
+2022-09-24 18:02:02,451 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:02:02,451 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:02:02,451 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:02:02,451 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:02:02,451 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:02:02,451 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:02:02,451 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:02:02,452 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:02:02,452 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:02:02,452 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:02:02,454 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:02:02,454 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:02:02,454 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:02:02,454 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:02:02,460 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:02:02,461 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:02:02,462 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:02:02,462 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:02:02,462 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:02:02,463 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:02:02,463 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:02:02,463 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:02:02,463 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:02:02,463 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:02:02,463 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:02:02,464 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:02:02,467 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:02:02,467 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:02:02,467 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:02:02,467 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:02:02,473 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:02:02,473 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:02:02,474 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:02:02,474 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:02:02,474 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:02:02,475 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:02:02,475 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:02:02,475 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:02:02,475 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:02:02,475 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:02:02,475 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:02:02,475 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:02:02,477 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:02:02,478 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:02:02,478 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:02:02,478 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:02:02,484 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:02:02,484 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:02:02,485 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:02:02,485 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:02:02,485 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:02:02,485 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:02:02,485 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:02:02,485 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:02:02,485 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:02:02,486 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:02:02,486 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:02:02,486 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:02:02,488 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:02:02,488 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:02:02,489 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:02:02,489 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:02:02,494 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:02:02,494 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:02:02,518 django.request ERROR    Internal Server Error: /pdf/fpdf
+Traceback (most recent call last):
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\projects\reports\pdf\views.py", line 35, in pdf_generator
+    participant_name = request_json['participant_info']['name']
+TypeError: 'WSGIRequest' object is not subscriptable
+2022-09-24 18:02:49,026 root         INFO     <WSGIRequest: POST '/pdf/fpdf'>
+2022-09-24 18:02:49,027 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:02:49,028 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:02:49,028 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:02:49,028 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:02:49,028 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:02:49,028 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:02:49,028 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:02:49,028 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:02:49,029 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:02:49,029 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:02:49,030 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:02:49,030 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:02:49,030 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:02:49,031 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:02:49,036 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:02:49,037 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:02:49,038 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:02:49,038 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:02:49,038 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:02:49,038 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:02:49,038 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:02:49,039 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:02:49,039 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:02:49,039 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:02:49,039 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:02:49,039 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:02:49,042 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:02:49,042 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:02:49,042 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:02:49,042 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:02:49,048 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:02:49,048 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:02:49,049 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:02:49,050 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:02:49,050 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:02:49,050 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:02:49,050 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:02:49,050 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:02:49,050 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:02:49,050 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:02:49,050 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:02:49,051 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:02:49,052 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:02:49,053 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:02:49,053 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:02:49,053 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:02:49,059 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:02:49,060 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:02:49,061 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:02:49,061 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:02:49,061 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:02:49,061 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:02:49,061 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:02:49,061 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:02:49,061 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:02:49,061 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:02:49,062 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:02:49,062 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:02:49,064 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:02:49,064 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:02:49,064 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:02:49,064 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:02:49,071 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:02:49,071 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:02:49,093 django.request ERROR    Internal Server Error: /pdf/fpdf
+Traceback (most recent call last):
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\projects\reports\pdf\views.py", line 35, in pdf_generator
+    participant_name = request_json['participant_info']['name']
+TypeError: 'WSGIRequest' object is not subscriptable
+2022-09-24 18:03:25,969 root         INFO     <WSGIRequest: POST '/pdf/fpdf'>
+2022-09-24 18:03:25,970 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:03:25,970 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:03:25,970 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:03:25,971 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:03:25,971 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:03:25,971 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:03:25,971 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:03:25,971 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:03:25,971 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:03:25,971 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:03:25,973 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:03:25,973 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:03:25,973 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:03:25,973 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:03:25,979 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:03:25,980 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:03:25,981 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:03:25,981 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:03:25,981 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:03:25,981 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:03:25,981 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:03:25,981 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:03:25,981 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:03:25,981 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:03:25,982 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:03:25,982 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:03:25,984 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:03:25,984 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:03:25,985 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:03:25,985 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:03:25,990 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:03:25,991 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:03:25,991 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:03:25,992 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:03:25,992 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:03:25,992 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:03:25,992 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:03:25,992 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:03:25,992 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:03:25,992 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:03:25,993 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:03:25,993 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:03:25,994 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:03:25,995 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:03:25,995 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:03:25,995 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:03:26,000 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:03:26,001 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:03:26,001 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:03:26,002 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:03:26,002 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:03:26,002 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:03:26,002 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:03:26,002 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:03:26,002 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:03:26,002 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:03:26,003 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:03:26,003 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:03:26,005 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:03:26,005 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:03:26,005 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:03:26,005 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:03:26,011 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:03:26,011 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:03:26,033 django.request ERROR    Internal Server Error: /pdf/fpdf
+Traceback (most recent call last):
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\projects\reports\pdf\views.py", line 35, in pdf_generator
+    participant_name = request_json['participant_info']['name']
+TypeError: 'WSGIRequest' object is not subscriptable
+2022-09-24 18:10:16,033 root         INFO     <WSGIRequest: POST '/pdf/fpdf'>
+2022-09-24 18:10:16,034 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:10:16,034 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:10:16,035 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:10:16,035 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:10:16,035 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:10:16,036 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:10:16,036 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:10:16,036 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:10:16,037 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:10:16,037 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:10:16,039 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:10:16,039 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:10:16,039 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:10:16,040 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:10:16,045 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:10:16,046 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:10:16,047 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:10:16,047 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:10:16,047 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:10:16,048 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:10:16,048 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:10:16,048 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:10:16,048 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:10:16,048 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:10:16,048 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:10:16,049 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:10:16,051 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:10:16,051 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:10:16,051 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:10:16,051 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:10:16,058 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:10:16,058 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:10:16,059 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:10:16,059 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:10:16,059 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:10:16,059 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:10:16,060 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:10:16,060 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:10:16,060 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:10:16,060 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:10:16,060 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:10:16,060 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:10:16,063 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:10:16,063 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:10:16,063 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:10:16,063 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:10:16,069 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:10:16,069 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:10:16,070 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:10:16,070 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:10:16,070 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:10:16,070 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:10:16,070 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:10:16,070 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:10:16,070 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:10:16,070 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:10:16,070 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:10:16,070 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:10:16,074 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:10:16,074 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:10:16,074 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:10:16,074 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:10:16,081 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:10:16,082 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:10:16,110 django.request ERROR    Internal Server Error: /pdf/fpdf
+Traceback (most recent call last):
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\projects\reports\pdf\views.py", line 35, in pdf_generator
+    participant_name = request_json['participant_info']['name']
+TypeError: 'WSGIRequest' object is not subscriptable
+2022-09-24 18:11:46,386 root         INFO     <WSGIRequest: POST '/pdf/fpdf'>
+2022-09-24 18:11:46,387 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:11:46,388 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:11:46,388 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:11:46,388 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:11:46,388 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:11:46,388 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:11:46,389 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:11:46,389 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:11:46,389 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:11:46,389 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:11:46,391 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:11:46,392 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:11:46,392 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:11:46,392 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:11:46,398 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:11:46,398 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:11:46,399 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:11:46,399 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:11:46,400 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:11:46,400 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:11:46,400 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:11:46,401 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:11:46,401 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:11:46,401 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:11:46,401 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:11:46,401 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:11:46,403 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:11:46,403 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:11:46,404 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:11:46,404 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:11:46,410 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:11:46,410 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:11:46,411 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:11:46,411 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:11:46,411 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:11:46,411 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:11:46,411 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:11:46,411 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:11:46,411 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:11:46,411 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:11:46,411 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:11:46,411 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:11:46,415 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:11:46,415 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:11:46,415 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:11:46,416 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:11:46,422 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:11:46,422 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:11:46,423 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:11:46,423 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:11:46,423 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:11:46,424 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:11:46,424 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:11:46,424 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:11:46,424 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:11:46,424 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:11:46,424 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:11:46,424 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:11:46,426 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:11:46,426 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:11:46,426 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:11:46,426 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:11:46,433 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:11:46,433 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:11:46,455 django.request ERROR    Internal Server Error: /pdf/fpdf
+Traceback (most recent call last):
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\projects\reports\pdf\views.py", line 35, in pdf_generator
+TypeError: 'WSGIRequest' object is not subscriptable
+2022-09-24 18:13:15,836 root         INFO     <WSGIRequest: POST '/pdf/fpdf'>
+2022-09-24 18:13:15,837 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:13:15,837 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:13:15,837 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:13:15,838 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:13:15,838 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:13:15,838 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:13:15,838 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:13:15,838 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:13:15,839 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:13:15,839 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:13:15,841 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:13:15,841 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:13:15,841 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:13:15,842 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:13:15,847 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:13:15,847 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:13:15,848 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:13:15,849 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:13:15,849 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:13:15,849 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:13:15,849 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:13:15,849 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:13:15,850 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:13:15,850 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:13:15,850 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:13:15,850 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:13:15,852 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:13:15,853 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:13:15,853 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:13:15,853 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:13:15,859 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:13:15,859 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:13:15,860 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:13:15,860 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:13:15,860 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:13:15,861 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:13:15,861 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:13:15,861 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:13:15,861 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:13:15,861 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:13:15,861 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:13:15,861 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:13:15,863 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:13:15,863 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:13:15,864 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:13:15,864 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:13:15,870 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:13:15,870 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:13:15,871 fontTools.ttLib.ttFont DEBUG    Reading 'head' table from disk
+2022-09-24 18:13:15,871 fontTools.ttLib.ttFont DEBUG    Decompiling 'head' table
+2022-09-24 18:13:15,871 fontTools.ttLib.ttFont DEBUG    Reading 'hmtx' table from disk
+2022-09-24 18:13:15,871 fontTools.ttLib.ttFont DEBUG    Decompiling 'hmtx' table
+2022-09-24 18:13:15,871 fontTools.ttLib.ttFont DEBUG    Reading 'maxp' table from disk
+2022-09-24 18:13:15,871 fontTools.ttLib.ttFont DEBUG    Decompiling 'maxp' table
+2022-09-24 18:13:15,871 fontTools.ttLib.ttFont DEBUG    Reading 'hhea' table from disk
+2022-09-24 18:13:15,872 fontTools.ttLib.ttFont DEBUG    Decompiling 'hhea' table
+2022-09-24 18:13:15,872 fontTools.ttLib.ttFont DEBUG    Reading 'post' table from disk
+2022-09-24 18:13:15,872 fontTools.ttLib.ttFont DEBUG    Decompiling 'post' table
+2022-09-24 18:13:15,874 fontTools.ttLib.ttFont DEBUG    Reading 'OS/2' table from disk
+2022-09-24 18:13:15,874 fontTools.ttLib.ttFont DEBUG    Decompiling 'OS/2' table
+2022-09-24 18:13:15,874 fontTools.ttLib.ttFont DEBUG    Reading 'cmap' table from disk
+2022-09-24 18:13:15,874 fontTools.ttLib.ttFont DEBUG    Decompiling 'cmap' table
+2022-09-24 18:13:15,879 fontTools.ttLib.ttFont DEBUG    Reading 'name' table from disk
+2022-09-24 18:13:15,879 fontTools.ttLib.ttFont DEBUG    Decompiling 'name' table
+2022-09-24 18:13:15,903 django.request ERROR    Internal Server Error: /pdf/fpdf
+Traceback (most recent call last):
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\projects\reports\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\projects\reports\pdf\views.py", line 35, in pdf_generator
+TypeError: 'WSGIRequest' object is not subscriptable
