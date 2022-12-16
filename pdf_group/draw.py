@@ -364,7 +364,7 @@ def draw_single_circle_squares(square_data, pdf, square_x_cnt, cnt):
     square_name = square_data[0]
     email = square_data[1]
     participant_name = square_data[2]
-    report = Report.objects.filter(participant__email=email).latest('added')
+    report = Report.objects.filter(participant__employee__email=email).latest('added')
     report_data = ReportData.objects.filter(report=report, section__name='Выгорание Бойко')
     section_1 = 0
     section_2 = 0
@@ -413,7 +413,7 @@ def draw_table(square_data, pdf, width, x, y):
     new_column_added = False
     all_participants_qnt = len(square_data)
     for square_data_item in square_data:
-        report = Report.objects.filter(participant__email=square_data_item[1]).latest('added')
+        report = Report.objects.filter(participant__employee__email=square_data_item[1]).latest('added')
         if report.lie_points > 4:
             pdf.set_text_color(255, 0, 0)
         else:

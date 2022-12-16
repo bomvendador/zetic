@@ -863,10 +863,11 @@
                         {#console.log(data)#}
                         {#let data_json = $.parseJSON(data);#}
                         let participants = data['participants'];
+                        console.log(participants)
                         let html = ''
                         for(let i=0; i < participants.length; i++){
-                            html += '<tr class="table-row cursor-pointer project-participant-added">'
-                            html += '<td>' + participants[i]['fio'] + '</td>'
+                            html += '<tr class="table-row cursor-pointer project-participant-added" id="participant_id_' + participants[i]['id'] + '">'
+                            html += '<td>' + participants[i]['name'] + '</td>'
                             html += '<td>' + participants[i]['email'] + '</td>'
                             html += '</tr>'
                             {#console.log(participants[i]['fio'])#}

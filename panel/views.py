@@ -56,9 +56,17 @@ def get_company_participants(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
         company = json_data['company']
-        participants = Participant.objects.filter(employee__company__name=company).values()
+        participants_inst = Participant.objects.filter(employee__company__name=company)
+        participants = []
+        for participant in participants_inst:
+            data = {
+                'name': participant.employee.name,
+                'email': participant.employee.email,
+                'id': participant.id,
+            }
+            participants.append(data)
         response = {
-            'participants': list(participants)
+            'participants': participants
         }
         return JsonResponse(response)
 
@@ -73,17 +81,17 @@ def get_report_participants_data(request):
         lie_points = []
         # response = {}
         for participant in report_participants:
-            report = Report.objects.filter(participant__email=participant).latest('added')
+            report = Report.objects.filter(participant__employee__email=participant).latest('added')
             lie_points.append({
-                'fio': report.participant.fio,
-                'email': report.participant.email,
+                'fio': report.participant.employee.name,
+                'email': report.participant.employee.email,
                 'lie_points': report.lie_points
             })
             report_datas = ReportData.objects.filter(report=report)
             for report_data in report_datas:
                 # print(report_data)
                 participants_data.append({
-                    'fio': report_data.report.participant.fio,
+                    'fio': report_data.report.participant.employee.name,
                     'section': report_data.section.name,
                     'category': report_data.category.name,
                     'points': report_data.points,
@@ -135,7 +143,7 @@ def get_group_reports_list(request):
             report_group_square_arr = []
             reports_group_square = ReportGroupSquare.objects.filter(report_group=group_report)
             for report_group_square in reports_group_square:
-                report_group_square_arr.append(report_group_square.report.participant.fio)
+                report_group_square_arr.append(report_group_square.report.participant.employee.name)
             report.append({
                 'company': group_report.company.name,
                 'id': group_report.id,
@@ -304,62 +312,5 @@ def delete_group_report(request):
         group_report_inst.delete()
 
         return HttpResponse('ok')
-
-
-@login_required(redirect_field_name=None, login_url='/login/')
-def add_company_init(request):
-    context = info_common(request)
-    context.update({
-        'roles': UserRole.objects.all()
-    })
-
-    return render(request, 'panel_add_company.html', context)
-
-
-@login_required(redirect_field_name=None, login_url='/login/')
-def save_new_company(request):
-    if request.method == 'POST':
-        json_data = json.loads(request.body.decode('utf-8'))
-        name = json_data['name']
-        active = json_data['active']
-        print(json_data)
-        company_inst = Company()
-        company_inst.name = name
-        company_inst.created_by = request.user
-        if active == 1:
-            company_inst.active = True
-        else:
-            company_inst.active = False
-
-        company_inst.save()
-
-        return HttpResponse(status=200)
-
-
-@login_required(redirect_field_name=None, login_url='/login/')
-def companies_list(request):
-    context = info_common(request)
-    context.update(
-        {
-            'companies': Company.objects.all(),
-         }
-    )
-
-    return render(request, 'panel_companies_list.html', context)
-
-
-@login_required(redirect_field_name=None, login_url='/login/')
-def edit_company(request, company_id):
-    context = info_common(request)
-    company_inst = Company.objects.get(id=company_id)
-    context.update(
-        {
-            'company': company_inst,
-            'admins': Employee.objects.filter(company=company_inst, company_admin=True)
-        }
-    )
-
-    return render(request, 'panel_edit_company.html', context)
-
 
 

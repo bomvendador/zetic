@@ -3,7 +3,7 @@ expand_menu_item('#menu_employee_add')
 
 $(document).ready(function() {
    $(".yearpicker").yearpicker({
-      // year: 2021,
+      year: 2010,
       startYear: 1940,
       endYear: 2010,
    });

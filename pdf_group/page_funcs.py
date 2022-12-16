@@ -17,9 +17,9 @@ def proceed_scale(pdf, x, y, scale_name, square_results, scale_description, sect
     # print(square_results)
     for square_result in square_results:
         cnt = cnt + 1
-        report = Report.objects.filter(participant__email=square_result[1]).latest('added')
+        report = Report.objects.filter(participant__employee__email=square_result[1]).latest('added')
         report_data = ReportData.objects.get(report=report, section__name=section_name, category__name=category_name)
-        print(f'участик - {report.participant.fio} секция - {report_data.section.name} категория - {report_data.category.name} points - {report_data.points}')
+        print(f'участик - {report.participant.employee.name} секция - {report_data.section.name} категория - {report_data.category.name} points - {report_data.points}')
         scale_data.append([square_result[2], report_data.points, cnt])
     draw_arrow(pdf, startX=x + 45, startY=y + 4, r=arrow_color_r, g=arrow_color_g, b=arrow_color_b, scale_data=scale_data)
     pdf.set_font("RalewayRegular", "", 7)

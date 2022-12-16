@@ -43,6 +43,7 @@ def get_company_employees(request):
                 'id': employee.id,
                 'email': employee.email,
                 'created_by': created_by,
+                'active': employee.company_admin_active,
                 'created_at': timezone.localtime(employee.created_at).strftime("%Y-%m-%d %H:%M:%S"),
             })
         response = {
@@ -171,5 +172,62 @@ def employees_list(request):
 
     return render(request, 'panel_employees_list.html', context)
 
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def get_company_no_admins(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+
+        company_id = json_data['company_id']
+        employees = Employee.objects.filter(company_id=company_id, company_admin=False)
+        employees_arr = []
+        for employee in employees:
+            if employee.name:
+                name = employee.name
+            else:
+                name = ''
+            if employee.created_by:
+                created_by = employee.created_by.first_name
+            else:
+                created_by = ''
+            employees_arr.append({
+                'name': name,
+                'id': employee.id,
+                'email': employee.email,
+                'active': employee.company_admin_active,
+            })
+        response = {
+            'data': list(employees_arr)
+        }
+        return JsonResponse(response)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def deactivate_company_admin(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+
+        employee_id = json_data['employee_id']
+        operation_type = json_data['operation_type']
+        employee = Employee.objects.get(id=employee_id)
+        if operation_type == 'deactivate':
+            employee.company_admin_active = False
+        else:
+            employee.company_admin_active = True
+        employee.save()
+        return HttpResponse(status=200)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def delete_company_admin(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+
+        employee_id = json_data['employee_id']
+        employee = Employee.objects.get(id=employee_id)
+        employee.company_admin_active = False
+        employee.company_admin = False
+        employee.save()
+        return HttpResponse(status=200)
 
 
