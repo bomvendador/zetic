@@ -186,7 +186,15 @@
     let url_appoint_company_admin = "{% url 'appoint_company_admin' %}"
     let url_deactivate_company_admin = "{% url 'deactivate_company_admin' %}"
     let url_delete_company_admin = "{% url 'delete_company_admin' %}"
+    let url_update_company = "{% url 'update_company' %}"
+    let active;
     let company_id = {{ company.id }}
+
+    {% if company.active %}
+        active = 1
+    {% else %}
+        active = 0
+    {% endif %}
 
 
 </script>

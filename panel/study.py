@@ -8,6 +8,7 @@ from django.utils import timezone
 from .views import info_common
 
 
+
 @login_required(redirect_field_name=None, login_url='/login/')
 def studies_list(request):
     context = info_common(request)
@@ -169,23 +170,19 @@ def save_study_participants(request):
             else:
                 invitation_sent_datetime = ''
             result.append({
+                'id': participant.id,
                 'name': name,
                 'email': participant.employee.email,
                 'invitation': participant.invitation_sent,
                 'invitation_sent_datetime': invitation_sent_datetime
             })
-            # if participant.invitation_sent:
-            #     email_sent_inst = EmailSentToParticipant.objects.get(participant=participant, type='Первичная отправка')
-            #     sent_datetime = timezone.localtime(email_sent_inst.created_at).strftime("%Y-%m-%d %H:%M:%S")
-            #     result.append({
-            #         'invitation_datetime': sent_datetime
-            #     })
-            # else:
-            #     result.append({
-            #         'invitation_datetime': ''
-            #     })
 
         response = {
             'response': result,
         }
         return JsonResponse(response)
+
+
+
+
+

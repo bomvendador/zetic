@@ -86,3 +86,22 @@ def appoint_company_admin(request):
             'id': employee.id,
         }
         return JsonResponse(response)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def update_company(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        company_id = json_data['company_id']
+        company_name = json_data['company_name']
+        active = json_data['active']
+        company_inst = Company(id=company_id)
+        company_inst.name = company_name
+        if active == 1:
+            company_inst.active = True
+        else:
+            company_inst.active = False
+
+        company_inst.save()
+
+        return HttpResponse(status=200)

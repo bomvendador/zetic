@@ -7,6 +7,7 @@ from panel import employee
 from panel import study
 from panel import individual_report_file
 from panel import company
+from panel import mail_handler
 
 urlpatterns = [
     path('', panel_views.home, name="panel_home"),
@@ -32,6 +33,7 @@ urlpatterns = [
 
     path('add_company', company.add_company_init, name='add_company_init'),
     path('save_new_company', company.save_new_company, name='save_new_company'),
+    path('update_company', company.update_company, name='update_company'),
     path('companies_list', company.companies_list, name='companies_list'),
     path('company/<int:company_id>', company.edit_company, name='edit_company'),
     path('appoint_company_admin', company.appoint_company_admin, name='appoint_company_admin'),
@@ -68,6 +70,9 @@ urlpatterns = [
     path('save_study_participants', study.save_study_participants, name='save_study_participants'),
 
     path('individual_report_file_index', individual_report_file.individual_report_file_index, name='individual_report_file_index'),
+
+    path('send_invitation_email', mail_handler.send_invitation_email, name='send_invitation_email'),
+
 
     # path('get_company_employees', employee.get_company_employees, name='get_company_employees'),
 

@@ -159,9 +159,6 @@ $('#add_participant').on('click', function () {
                 $('#modal_participants').modal('show')
 
             }
-
-
-            console.log(data['response'])
         }
     });
 
@@ -235,8 +232,10 @@ let employees_selected = {}
                     let employee_invitation = val['invitation']
                     let employee_email = val['email']
                     let employee_name = val['name']
+                    let id = val['id']
+
                     let employee_invitation_sent_datetime = val['invitation_sent_datetime']
-                    html += '<tr class="">'
+                    html += '<tr class="" id="participant_id_' + id + '">'
                     if(employee_invitation){
                         html += '<td><span class="dot-label bg-warning" title="Приглашение отправлено"></span></td>'
                     }else {
@@ -245,6 +244,18 @@ let employees_selected = {}
                     html += '<td>' + employee_name + '</td>'
                     html += '<td>' + employee_email + '</td>'
                     html += '<td>' + employee_invitation_sent_datetime + '</td>'
+                    html += '<td>' +
+                        '<div style="text-align: center;" >' +
+                            '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>' +
+                            '<ul class="dropdown-menu">'
+                    if(employee_invitation){
+                        html += '<li><a class="dropdown-item details cursor-pointer">Подробно</a></li>'
+                    }else {
+                        html += '<li><a class="dropdown-item send-email-invitation cursor-pointer">Отправить приглашение</a></li>'
+                    }
+                    html += '</ul>' +
+                        '</div>' +
+                        '</td>'
                     html += '</tr>'
 
                 })
@@ -263,31 +274,51 @@ let employees_selected = {}
 
 })
 
+$('#tbody_participants_selected').on('click', '.send-email-invitation', function () {
 
-// $('#tbody_modal_questions_groups').on('click', '.question_group_item', function(){
-//     if($(this).hasClass('question_group_selected')){
-//         $(this).removeClass('question_group_selected')
-//     }else {
-//         $(this).addClass('question_group_selected')
-//     }
-// })
-//
-// $('#select_all_question_groups').on('click', function () {
-//     if ($(this).attr('checked') === 'checked'){
-//         $(this).attr('checked', false)
-//         $('#tbody_modal_questions_groups').find('.question_group_item').each(function () {
-//             $(this).removeClass('question_group_selected')
-//         })
-//         // active = 0
-//     }else {
-//         $(this).attr('checked', 'checked')
-//         $('#tbody_modal_questions_groups').find('.question_group_item').each(function () {
-//             $(this).addClass('question_group_selected')
-//         })
-//
-//         // active = 1
-//     }
-// })
-//
-//
-//
+    let participant_id = $(this).closest('tr').attr('id').split('_')[2]
+    let question_groups = []
+
+    let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                    '<div>Отправить приглашение участнику?</div>' +
+                    '<br>' +
+                    '<hr class="solid mt-0" style="background-color: black;">'
+    Swal.fire({
+      html: output_html,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Да',
+      cancelButtonText: 'Нет'
+    }).then((result) => {
+      if (result.isConfirmed) {
+          show_progressbar_loader()
+        $.ajax({
+            headers: { "X-CSRFToken": token },
+            url: url_send_invitation_email,
+            type: 'POST',
+
+            data: JSON.stringify({
+                                'study_id': study_id,
+                                'participant_id': participant_id,
+                                'question_groups': question_groups,
+
+                            }),
+            processData: false,
+            contentType: false,
+            error: function(data){
+                toastr.error('Ошибка', data)
+            },
+            success:function (data) {
+                hide_progressbar_loader()
+
+            }
+        });
+
+
+
+
+      }
+    })
+})

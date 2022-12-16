@@ -206,7 +206,51 @@ $('#tbody_company_admins').on('click', '.delete-company-admin', function () {
       }
     })
 
-    console.log(employee_id)
 
 })
 
+
+    $('#company_active').on('click', function () {
+        if ($(this).attr('checked') === 'checked'){
+            $(this).attr('checked', false)
+            active = 0
+        }else {
+            $(this).attr('checked', 'checked')
+            active = 1
+        }
+    })
+
+$('#save_company').on('click', function () {
+    let company_name = $('#input_company_name').val()
+
+
+
+    if(company_name === ''){
+            toastr.error('Название компании не заполнено')
+        }else {
+            btn_spinner($('#save_company'))
+            $.ajax({
+                headers: { "X-CSRFToken": token },
+                url: url_update_company,
+                type: 'POST',
+                data: JSON.stringify({
+                            'company_name': company_name,
+                            'company_id': company_id,
+                            'active': active
+                        }),
+                processData: false,
+                contentType: false,
+                error: function(data){
+                    toastr.error('Ошибка', data)
+                },
+                success:function (data) {
+                    toastr.success('Данные сохранены')
+                    btn_text($('#save_company'), 'Сохранить')
+                }
+            });
+        }
+
+
+
+
+})
