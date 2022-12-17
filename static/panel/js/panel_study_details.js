@@ -24,9 +24,6 @@ $('#add_question_group').on('click', function () {
                 html += '</tr>'
             }
             $('#tbody_modal_questions_groups').html(html)
-
-
-            console.log(data['response'])
         }
     });
 
@@ -227,7 +224,6 @@ let employees_selected = {}
             success:function (data) {
                 let data_json = data['response']
                 let html = 'data_json'
-                console.log(data_json)
                 $.each(data_json, function (key, val) {
                     let employee_invitation = val['invitation']
                     let employee_email = val['email']
@@ -311,6 +307,19 @@ $('#tbody_participants_selected').on('click', '.send-email-invitation', function
                 toastr.error('Ошибка', data)
             },
             success:function (data) {
+                let json_data = data['response']
+                if('error' in json_data){
+                    toastr.error(json_data['error'])
+                }else {
+                    let datetime_invitation_sent = json_data['datetime_invitation_sent'];
+                    let el = $('#participant_id_' + participant_id)
+                    el.find('.bg-danger').removeClass('bg-danger').addClass('bg-warning').prop('title', 'Приглашение отправлено')
+                    el.find('.send-email-invitation').text('Повторно отправить приглашение')
+                    el.find('td:nth-child(4)').text(datetime_invitation_sent)
+                    toastr.success('Приглашение участнику отправлено')
+
+                }
+
                 hide_progressbar_loader()
 
             }

@@ -44,7 +44,7 @@ def get_company_employees(request):
                 'email': employee.email,
                 'created_by': created_by,
                 'active': employee.company_admin_active,
-                'created_at': timezone.localtime(employee.created_at).strftime("%Y-%m-%d %H:%M:%S"),
+                'created_at': timezone.localtime(employee.created_at).strftime("%d.%m.%Y %H:%M:%S"),
             })
         response = {
             'data': list(employees_arr)

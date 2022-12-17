@@ -140,12 +140,16 @@
                                                             <div style="text-align: center;" >
                                                                 <i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>
                                                                 <ul class="dropdown-menu">
-                                                                    {% if participant.invitation_sent %}
-                                                                     <li><a class="dropdown-item details cursor-pointer">Подробно</a></li>
-                                                                    {% else %}
-                                                                     <li><a class="dropdown-item send-email-invitation cursor-pointer">Отправить приглашение</a></li>
+                                                                     <li><a class="dropdown-item send-email-invitation cursor-pointer">
+                                                                         {% if participant.invitation_sent %}
+                                                                         Повторно отправить приглашение
+                                                                         {% else %}
+                                                                         Отправить приглашение
+                                                                         {% endif %}
 
-                                                                    {% endif %}
+                                                                         </a>
+                                                                     </li>
+
                                                                 </ul>
                                                             </div>
 
