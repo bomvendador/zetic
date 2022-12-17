@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 import os
 from celery import Celery
+from celery.schedules import crontab
 
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'reports.settings')
@@ -24,29 +25,36 @@ def debug_task(self):
 
 
 app.conf.beat_schedule = {
-    # Scheduler Name
-    'print-message-ten-seconds': {
-        # Task Name (Name Specified in Decorator)
+    # Execute the Speed Test every 10 minutes
+    'network-speedtest-10min': {
         'task': 'print_msg_main',
-        # Schedule
-        'schedule': 10.0,
-        # Function Arguments
-        'args': ("Hello",)
-    },
-    # Scheduler Name
-    'print-time-twenty-seconds': {
-        # Task Name (Name Specified in Decorator)
-        'task': 'print_time',
-        # Schedule
-        'schedule': 20.0,
-    },
-    # Scheduler Name
-    'calculate-forty-seconds': {
-        # Task Name (Name Specified in Decorator)
-        'task': 'get_calculation',
-        # Schedule
-        'schedule': 40.0,
-        # Function Arguments
-        'args': (10, 20)
+        'schedule': crontab(minute='*/2'),
     },
 }
+# app.conf.beat_schedule = {
+#     # Scheduler Name
+#     'print-message-ten-seconds': {
+#         # Task Name (Name Specified in Decorator)
+#         'task': 'print_msg_main',
+#         # Schedule
+#         'schedule': 10.0,
+#         # Function Arguments
+#         'args': ("Hello",)
+#     },
+#     # Scheduler Name
+#     'print-time-twenty-seconds': {
+#         # Task Name (Name Specified in Decorator)
+#         'task': 'print_time',
+#         # Schedule
+#         'schedule': 20.0,
+#     },
+#     # Scheduler Name
+#     'calculate-forty-seconds': {
+#         # Task Name (Name Specified in Decorator)
+#         'task': 'get_calculation',
+#         # Schedule
+#         'schedule': 40.0,
+#         # Function Arguments
+#         'args': (10, 20)
+#     },
+# }
