@@ -27,6 +27,6 @@ def participant_reminder():
     participants = Participant.objects.filter(invitation_sent=True, started_at=None)
     for participant in participants:
         delta = datetime.now().date() - participant.invitation_sent_datetime
-        print(delta)
+        print(f'{participant.employee.name} delta - {delta}')
         # return total
 
