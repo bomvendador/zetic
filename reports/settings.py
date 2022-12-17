@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'pdf_group',
     'login',
     'panel',
+    'sendemail'
 
 ]
 
