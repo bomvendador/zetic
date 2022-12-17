@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'pdf_group',
     'login',
     'panel',
-    'sendemail'
+    'sendemail',
+    'django_celery_beat'
 
 ]
 
