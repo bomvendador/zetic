@@ -29,7 +29,7 @@ def participant_reminder():
     participants = Participant.objects.filter(invitation_sent=True, started_at=None)
     for participant in participants:
         now_aware = timezone.now()
-        delta = ExtractDay(now_aware - participant.invitation_sent_datetime)
+        delta = now_aware - participant.invitation_sent_datetime
 
         print(f'{participant.employee.name} delta - {delta.days}')
         # return total
