@@ -3,7 +3,7 @@ from celery import shared_task
 from datetime import datetime
 from django.utils import timezone
 from django.db.models.functions import ExtractDay
-from panel import mail_handler
+from panel.mail_handler import send_invitation_email, send_reminder
 from pdf.models import Participant
 
 @shared_task(name="print_msg_main")
@@ -30,7 +30,13 @@ def participant_reminder():
     for participant in participants:
         now_aware = timezone.now()
         delta = now_aware - participant.invitation_sent_datetime
+        if delta >= 7:
+            data = {
+                'participant_id': participant.id,
+                'type': 'reminder',
+            }
+            send_reminder(data)
 
-        print(f'{participant.employee.name} delta - {delta.days}')
+            print(f'{participant.employee.name} delta - {delta.days}')
         # return total
 
