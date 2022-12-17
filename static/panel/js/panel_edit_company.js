@@ -1,5 +1,6 @@
 expand_menu_item('#menu_companies_list')
 
+
 $('#add_admin').on('click', function () {
     btn_spinner($('#add_admin'))
     $.ajax({
