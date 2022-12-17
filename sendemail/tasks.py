@@ -31,7 +31,7 @@ def participant_reminder():
         now_aware = timezone.now()
         delta = now_aware - participant.invitation_sent_datetime
         print(f'{participant.employee.name} delta - {delta.days}')
-        if delta >= 7:
+        if delta.days >= 7:
             data = {
                 'participant_id': participant.id,
                 'type': 'reminder',
