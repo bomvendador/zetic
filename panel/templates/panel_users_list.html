@@ -132,6 +132,8 @@
                 </div>
             </div>
         </div>
+
+        <button type="button" class="btn btn-primary float-button" id="add_user"><i class="fe fe-plus"></i></button>
     {% endblock %}
 
 {% block script %}
@@ -139,6 +141,10 @@
     <script src="{% static 'login/js/select2.js' %}"></script>
 {#    <script src="{% static 'login/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>#}
 <script>
+
+    $('#add_user').on('click', function (){
+        window.location.href = url_add_user
+    })
 
     function route_menu_handler(route_index, btn_type) {
         let new_menu_number = 0
