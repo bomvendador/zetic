@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 from datetime import datetime
+from panel import mail_handler
 
 
 @shared_task(name="print_msg_main")
@@ -19,3 +20,10 @@ def print_time():
 def calculate(val1, val2):
     total = val1 + val2
     return total
+
+
+@shared_task(name='send_participant_reminder')
+def calculate():
+    total = val1 + val2
+    return total
+

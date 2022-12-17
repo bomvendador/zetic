@@ -173,6 +173,7 @@ class Participant(models.Model):
     study = models.ForeignKey(Study, on_delete=models.RESTRICT, default=None, null=True, blank=True)
     invitation_sent = models.BooleanField(default=False)
     invitation_sent_datetime = models.DateTimeField(blank=True, null=True, default=None)
+    invitation_code = models.TextField(default=None, null=True, blank=True)
 
     def __str__(self):
         if self.employee:
