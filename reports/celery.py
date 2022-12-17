@@ -29,6 +29,7 @@ app.conf.beat_schedule = {
     'network-speedtest-10min': {
         'task': 'print_msg_main',
         'schedule': crontab(minute='*/2'),
+        'args': ("Hello",)
     },
 }
 # app.conf.beat_schedule = {
