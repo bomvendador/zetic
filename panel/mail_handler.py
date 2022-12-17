@@ -81,7 +81,7 @@ def send_invitation_email(request):
 
 def send_reminder(data):
     participant_id = data['participant_id']
-    email_type = data['reminder']
+    email_type = data['type']
     participant_inst = Participant.objects.get(id=participant_id)
     participant_email = participant_inst.employee.email
 
