@@ -1,6 +1,8 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 from datetime import datetime
+from django.utils import timezone
+from django.db.models.functions import ExtractDay
 from panel import mail_handler
 from pdf.models import Participant
 
@@ -26,7 +28,9 @@ def calculate(val1, val2):
 def participant_reminder():
     participants = Participant.objects.filter(invitation_sent=True, started_at=None)
     for participant in participants:
-        delta = datetime.now().date() - participant.invitation_sent_datetime
+        now_aware = timezone.now()
+        delta = ExtractDay(now_aware - participant.invitation_sent_datetime)
+
         print(f'{participant.employee.name} delta - {delta.days}')
         # return total
 
