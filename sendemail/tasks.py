@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 from datetime import datetime
 from panel import mail_handler
-
+from pdf.models import Participant
 
 @shared_task(name="print_msg_main")
 def print_message(message, *args, **kwargs):
@@ -23,7 +23,10 @@ def calculate(val1, val2):
 
 
 @shared_task(name='send_participant_reminder')
-def calculate():
-    total = val1 + val2
-    return total
+def participant_reminder():
+    participants = Participant.objects.filter(invitation_sent=True, started_at=None)
+    for participant in participants:
+        delta = datetime.now().date() - participant.invitation_sent_datetime
+        print(delta)
+        # return total
 

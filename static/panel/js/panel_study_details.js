@@ -299,6 +299,7 @@ $('#tbody_participants_selected').on('click', '.send-email-invitation', function
                                 'study_id': study_id,
                                 'participant_id': participant_id,
                                 'question_groups': question_groups,
+                                'type': 'initial'
 
                             }),
             processData: false,

@@ -18,11 +18,15 @@ def send_invitation_email(request):
         study_id = json_request['study_id']
         participant_id = json_request['participant_id']
         question_groups = json_request['question_groups']
+        email_type = json_request['type']
 
         participant_inst = Participant.objects.get(id=participant_id)
         participant_email = participant_inst.employee.email
 
-        code_for_participant = get_code_for_invitation(request, json_request)
+        if type == 'initial':
+            code_for_participant = get_code_for_invitation(request, json_request)
+        else:
+            code_for_participant = participant_inst.invitation_code
 
         context = {
             'code_for_participant': code_for_participant,
@@ -30,7 +34,11 @@ def send_invitation_email(request):
         }
 
         subject = 'Опросник ZETIC'
-        html_message = render_to_string('invitation_message.html', context)
+        if type == 'initial':
+            html_message = render_to_string('invitation_message.html', context)
+        else:
+            html_message = render_to_string('invitation_message_reminder.html', context)
+
         plain_text = strip_tags(html_message)
         from_email = 'info@zetic.ru'
         to_email = participant_email
@@ -47,6 +55,7 @@ def send_invitation_email(request):
             )
             participant_inst.invitation_sent = True
             participant_inst.invitation_sent_datetime = timezone.now()
+            participant_inst.invitation_code = code_for_participant
             participant_inst.save()
 
             result.update({
