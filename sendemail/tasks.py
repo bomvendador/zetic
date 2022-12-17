@@ -26,7 +26,7 @@ def calculate(val1, val2):
 def participant_reminder():
     participants = Participant.objects.filter(invitation_sent=True, started_at=None)
     for participant in participants:
-        delta = datetime.now() - participant.invitation_sent_datetime
-        print(f'{participant.employee.name} delta - {delta}')
+        delta = datetime.now().date() - participant.invitation_sent_datetime
+        print(f'{participant.employee.name} delta - {delta.days}')
         # return total
 
