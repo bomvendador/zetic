@@ -30,13 +30,13 @@ def participant_reminder():
     for participant in participants:
         now_aware = timezone.now()
         delta = now_aware - participant.invitation_sent_datetime
-        print(f'{participant.employee.name} delta - {delta.days}')
         if delta.days >= 7:
             data = {
                 'participant_id': participant.id,
                 'type': 'reminder',
             }
             send_reminder(data)
+            print(f'{participant.employee.name} delta - {delta.days}')
 
 
         # return total
