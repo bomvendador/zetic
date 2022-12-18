@@ -123,9 +123,9 @@ class Employee(models.Model):
 
     def __str__(self):
         if self.name:
-            return self.name
+            return f'{self.id}. {self.name}'
         else:
-            return self.email
+            return f'{self.id}. {self.email}'
 
     class Meta:
         verbose_name_plural = 'Сотрудники (employee)'
@@ -170,14 +170,14 @@ class Participant(models.Model):
     finished_at = models.DateTimeField(blank=True, null=True, default=None)
     completed_at = models.DateTimeField(blank=True, null=True, default=None)
     tos_accepted = models.BooleanField(default=False)
-    study = models.ForeignKey(Study, on_delete=models.RESTRICT, default=None, null=True, blank=True)
+    study = models.ForeignKey(Study, on_delete=models.CASCADE, default=None, null=True, blank=True)
     invitation_sent = models.BooleanField(default=False)
     invitation_sent_datetime = models.DateTimeField(blank=True, null=True, default=None)
     invitation_code = models.TextField(default=None, null=True, blank=True)
 
     def __str__(self):
         if self.employee:
-            return self.employee.name
+            return f'{self.id}. {self.employee.name}'
         else:
             return f'ID - {self.id}'
 
@@ -188,7 +188,7 @@ class Participant(models.Model):
 
 class EmailSentToParticipant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
     participant = models.ForeignKey(Participant, on_delete=models.PROTECT, default=None, null=True)
     type = models.CharField(max_length=30, blank=True, null=True, default=None)
 

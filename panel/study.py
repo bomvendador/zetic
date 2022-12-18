@@ -31,7 +31,8 @@ def study_details(request, study_id):
         {
             'study': study,
             'question_groups': question_groups,
-            'participants': Participant.objects.filter(study=study)
+            'participants': Participant.objects.filter(study=study),
+            'emails_sent': EmailSentToParticipant.objects.filter(participant__study=study)
         }
     )
 
@@ -115,8 +116,10 @@ def get_employees_for_study(request):
 
         for employee in employees:
             can_be_sent = True
+            participant_id = 0
             if Participant.objects.filter(employee=employee, study=study_inst).exists():
                 participant = Participant.objects.get(employee=employee, study=study_inst)
+                participant_id = participant.id
                 if participant.invitation_sent:
                     can_be_sent = False
             if can_be_sent:
@@ -126,7 +129,8 @@ def get_employees_for_study(request):
                     name = ''
 
                 item = {
-                    'id': employee.id,
+                    'employee_id': employee.id,
+                    'participant_id': participant_id,
                     'name': name,
                     'email': employee.email
                 }

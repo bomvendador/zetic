@@ -18,7 +18,18 @@ $('#add_question_group').on('click', function () {
             let data_json = data['response']
             let html = ''
             for(let i=0; i < data_json.length; i++) {
-                html += '<tr class="question_group_item" id=section_id_' + data_json[i]['id'] + '>'
+                let item_is_present = false
+                $('#tbody_question_groups_selected tr').each(function () {
+                    let td_text = $(this).children('td').eq(0) .text()
+                    if(td_text === data_json[i]['name']){
+                        item_is_present = true
+                    }
+                })
+                if(item_is_present){
+                    html += '<tr class="question_group_item question_group_selected" id=section_id_' + data_json[i]['id'] + '>'
+                }else {
+                    html += '<tr class="question_group_item" id=section_id_' + data_json[i]['id'] + '>'
+                }
                 html += '<td>' + data_json[i]['name'] + '</td>'
                 html += '<td></td>'
                 html += '</tr>'
@@ -129,8 +140,10 @@ $('#add_participant').on('click', function () {
             toastr.error('Ошибка', data)
         },
         success:function (data) {
+
             hide_progressbar_loader()
             let data_json = data['response']
+            console.log(data_json)
             if(data_json === 'None'){
 
                 let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
@@ -147,7 +160,12 @@ $('#add_participant').on('click', function () {
             }else {
                 let html = ''
                 for(let i=0; i < data_json.length; i++) {
-                    html += '<tr class="participant_item" id="employee_id_' + data_json[i]['id'] + '">'
+                    console.log('id - ' + data_json[i]['participant_id'] + 'len - ' + $('#tbody_participants_selected').find('#participant_id_' + data_json[i]['participant_id']).length)
+                    if($('#tbody_participants_selected').find('#participant_id_' + data_json[i]['participant_id']).length > 0){
+                        html += '<tr class="participant_item participant_item_selected" id="employee_id_' + data_json[i]['employee_id'] + '">'
+                    }else {
+                        html += '<tr class="participant_item" id="employee_id_' + data_json[i]['employee_id'] + '">'
+                    }
                     html += '<td class=" employee-name">' + data_json[i]['name'] + '</td>'
                     html += '<td class="text-end employee-email">' + data_json[i]['email'] + '</td>'
                     html += '</tr>'
@@ -258,7 +276,7 @@ let employees_selected = {}
                 $('#tbody_participants_selected').html(html)
                 $('#modal_participants').modal('hide')
                 btn_text($('#save_participants'), 'Сохранить')
-                toastr.success('Участники добавлены')
+                toastr.success('Участники обновлены')
 
             }
         });
