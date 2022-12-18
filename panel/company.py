@@ -105,3 +105,8 @@ def update_company(request):
         company_inst.save()
 
         return HttpResponse(status=200)
+
+
+
+
+

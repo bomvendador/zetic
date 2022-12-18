@@ -5,6 +5,7 @@ import datetime
 
 class Section(models.Model):
     name = models.CharField(max_length=30, blank=False, null=False)
+    code = models.CharField(max_length=10, blank=True, null=True, default=None)
 
     def __str__(self):
         return self.name
@@ -17,6 +18,7 @@ class Section(models.Model):
 class Category(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Секция')
     name = models.CharField(max_length=100, blank=False, null=False)
+    code = models.CharField(max_length=10, blank=True, null=True, default=None)
 
     def __str__(self):
         # return f'категория - {self.name}'
