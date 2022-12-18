@@ -22,7 +22,7 @@ class Category(models.Model):
 
     def __str__(self):
         # return f'категория - {self.name}'
-        return f'ID. {self.id} категория - {self.name} | секция - {self.section}'
+        return f'ID. {self.id} категория - {self.name} | секция - {self.section} | code - {self.code}'
 
     class Meta:
         verbose_name_plural = 'Категории'
