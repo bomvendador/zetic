@@ -6,6 +6,7 @@ import json
 from django.utils import timezone
 
 from .views import info_common
+from api.outcoming import Attributes
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -13,9 +14,10 @@ def add_employee(request):
     context = info_common(request)
     context.update({
         'companies': Company.objects.all(),
-        'employee_positions': EmployeePosition.objects.all(),
-        'employee_roles': EmployeeRole.objects.all(),
-        'industries': Industry.objects.all()
+        'employee_positions': Attributes.get_positions(),
+        'employee_roles': Attributes.get_roles(),
+        'industries': Attributes.get_industries(),
+        'genders': Attributes.get_sex()
     })
 
     return render(request, 'panel_add_employee.html', context)
@@ -68,9 +70,9 @@ def get_employee_data(request):
             'email': employee.email,
             'gender': employee.sex,
             'birth_year': employee.birth_year,
-            'role': employee.role.name_ru,
-            'position': employee.position.name_ru,
-            'industry': employee.industry.name_ru,
+            'role': employee.role,
+            'position': employee.position,
+            'industry': employee.industry,
         }
         return JsonResponse(response)
 
@@ -91,9 +93,9 @@ def save_new_employee_xls(request):
                 employee_inst = Employee()
                 employee_inst.email = email
                 employee_inst.birth_year = employee['Год рождения']
-                employee_inst.role = EmployeeRole.objects.get(name_ru=employee['Роль'])
-                employee_inst.position = EmployeePosition.objects.get(name_ru=employee['Должность'])
-                employee_inst.industry = Industry.objects.get(name_ru=employee['Индустрия'])
+                employee_inst.role = employee['Роль']
+                employee_inst.position = employee['Должность']
+                employee_inst.industry = employee['Индустрия']
                 employee_inst.sex = employee['Пол']
                 try:
                     employee_inst.name = employee['Фамилия Имя (или псевдоним по выбору участника)']
@@ -146,9 +148,9 @@ def save_new_employee_html(request):
                 employee_inst.created_by = request.user
             employee_inst.name = employee_data['name']
             employee_inst.email = employee_data['email']
-            employee_inst.role = EmployeeRole.objects.get(id=employee_data['role_id'])
-            employee_inst.position = EmployeePosition.objects.get(id=employee_data['position_id'])
-            employee_inst.industry = Industry.objects.get(id=employee_data['industry_id'])
+            employee_inst.role = employee_data['role']
+            employee_inst.position = employee_data['position']
+            employee_inst.industry = employee_data['industry']
             employee_inst.sex = employee_data['gender']
             employee_inst.birth_year = employee_data['employee_birth_year']
             employee_inst.save()
@@ -164,9 +166,10 @@ def employees_list(request):
         {
             'companies': Company.objects.all(),
             'employees': Employee.objects.all(),
-            'employee_positions': EmployeePosition.objects.all(),
-            'employee_roles': EmployeeRole.objects.all(),
-            'industries': Industry.objects.all()
+            'employee_positions': Attributes.get_positions(),
+            'employee_roles': Attributes.get_roles(),
+            'industries': Attributes.get_industries(),
+            'genders': Attributes.get_sex()
         }
     )
 

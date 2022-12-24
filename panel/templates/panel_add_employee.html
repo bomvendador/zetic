@@ -134,8 +134,11 @@
                                                                                 <option></option>
 
                                                                                 {% for employee_role in employee_roles %}
-                                                                                <option value="role_id_{{ employee_role.id }}">{{ employee_role.name_ru }}</option>
+                                                                                <option value="role_id_{{ employee_role.id }}">{{ employee_role.nameRu }}</option>
                                                                                 {% endfor %}
+{#                                                                                {% for employee_role in employee_roles %}#}
+{#                                                                                <option value="role_id_{{ employee_role.id }}">{{ employee_role.name_ru }}</option>#}
+{#                                                                                {% endfor %}#}
                                                                             </select>
                                                                     </div>
                                                                     <div class="form-group">
@@ -144,7 +147,7 @@
                                                                                 <option></option>
 
                                                                                 {% for employee_position in employee_positions %}
-                                                                                <option value="position_id_{{ employee_position.id }}">{{ employee_position.name_ru }}</option>
+                                                                                <option value="position_id_{{ employee_position.id }}">{{ employee_position.nameRu }}</option>
                                                                                 {% endfor %}
                                                                             </select>
                                                                     </div>
@@ -154,7 +157,7 @@
                                                                                 <option></option>
 
                                                                                 {% for industry in industries %}
-                                                                                <option value="industry_id_{{ industry.id }}">{{ industry.name_ru }}</option>
+                                                                                <option value="industry_id_{{ industry.id }}">{{ industry.nameRu }}</option>
                                                                                 {% endfor %}
                                                                             </select>
                                                                     </div>
@@ -162,8 +165,9 @@
                                                                         <label for="employee_gender">Пол</label>
                                                                             <select name="user_role" class="form-control form-select" id="employee_gender">
                                                                                 <option></option>
-                                                                                <option>мужской</option>
-                                                                                <option>женский</option>
+                                                                                {% for gender in genders %}
+                                                                                <option>{{ gender.nameRu }}</option>
+                                                                                {% endfor %}
                                                                             </select>
                                                                     </div>
                                                                     <div class="form-group">
@@ -294,22 +298,31 @@
          'array':[]
      }
      {% for employee_role in employee_roles %}
-        employee_roles_obj['array'].push('{{ employee_role.name_ru }}')
+        employee_roles_obj['array'].push('{{ employee_role.nameRu }}')
      {% endfor %}
 
      let employee_positions_obj = {
          'array':[]
      }
      {% for employee_position in employee_positions %}
-        employee_positions_obj['array'].push('{{ employee_position.name_ru }}')
+        employee_positions_obj['array'].push('{{ employee_position.nameRu }}')
      {% endfor %}
 
      let industries_obj = {
          'array':[]
      }
      {% for industry in industries %}
-        industries_obj['array'].push('{{ industry.name_ru }}')
+        industries_obj['array'].push('{{ industry.nameRu }}')
      {% endfor %}
+
+     let genders_obj = {
+         'array':[]
+     }
+     {% for gender in genders %}
+        genders_obj['array'].push('{{ gender.nameRu }}')
+     {% endfor %}
+
+
 
 </script>
 

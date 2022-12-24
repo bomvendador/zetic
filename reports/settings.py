@@ -18,6 +18,8 @@ import environ
 env = environ.Env()
 environ.Env.read_env()
 
+API_BEARER = env('API_BEARER')
+API_LINK = 'https://demo-admin.zetic.borsky.dev/api/attributes'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -49,6 +51,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
     'celery',
     'api',
     'pdf',
@@ -59,6 +63,15 @@ INSTALLED_APPS = [
     'django_celery_beat'
 
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',  # <-- And here
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser'
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

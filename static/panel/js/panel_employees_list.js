@@ -16,16 +16,13 @@ expand_menu_item('#menu_employees_list')
                 toastr.error('Указан некорректный email')
             }else {
                 btn_spinner($('#save_edited_employee'))
-                let role_id = $('#employee_role option:selected').val().split('_')[2]
-                let position_id = $('#employee_position option:selected').val().split('_')[2]
-                let industry_id = $('#employee_industry option:selected').val().split('_')[2]
 
                 let data = {
                         'name': name,
-                        'role_id': role_id,
+                        'role': role,
                         'email': email,
-                        'position_id': position_id,
-                        'industry_id': industry_id,
+                        'position': position,
+                        'industry': industry,
                         'gender': gender,
                         'employee_birth_year': employee_birth_year,
                         'employee_id': employee_id

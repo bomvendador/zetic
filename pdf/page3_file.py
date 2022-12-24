@@ -2,7 +2,7 @@ from pdf.extract_data import extract_categories
 from pdf.draw import draw_scale, insert_page_number
 
 
-def page3(pdf, json_section, lang):
+def page3(pdf, json_section, lang, participant_info):
     pdf.set_margins(top=15, left=0, right=5)
     pdf.set_auto_page_break(False)
 
@@ -71,7 +71,8 @@ def page3(pdf, json_section, lang):
         Stability, Maturity,
         Workability
         '''
-    points_with_description = extract_categories(json_section, 'Шкала C', lang)
+    points_with_description = extract_categories(json_section, '1_1', lang, participant_info)
+    # points_with_description = extract_categories(json_section, 'Шкала C', lang)
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     y += 17
@@ -100,7 +101,8 @@ def page3(pdf, json_section, lang):
     Self-blaming, Anxiety,
     Impressionability
         '''
-    points_with_description = extract_categories(json_section, 'Шкала O', lang)
+    points_with_description = extract_categories(json_section, '1_2', lang, participant_info)
+    # points_with_description = extract_categories(json_section, 'Шкала O', lang)
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     y += 17
@@ -130,7 +132,8 @@ def page3(pdf, json_section, lang):
     Tension, Overthought,
     High drive, Irritability
         '''
-    points_with_description = extract_categories(json_section, 'Шкала Q4', lang)
+    points_with_description = extract_categories(json_section, '1_3', lang, participant_info)
+    # points_with_description = extract_categories(json_section, 'Шкала Q4', lang, participant_info)
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     pdf.set_font("RalewayLight", "", 9)
@@ -171,7 +174,7 @@ def page3(pdf, json_section, lang):
     Carelessness, Enthusiasm,
     Expressiveness
         '''
-    points_with_description = extract_categories(json_section, 'Шкала F', lang)
+    points_with_description = extract_categories(json_section, '1_4', lang, participant_info)
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     y += 17
@@ -200,7 +203,7 @@ def page3(pdf, json_section, lang):
     Social awareness,
     Influence, Cunning
         '''
-    points_with_description = extract_categories(json_section, 'Шкала N', lang)
+    points_with_description = extract_categories(json_section, '1_5', lang, participant_info)
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     y += 17
@@ -230,7 +233,7 @@ def page3(pdf, json_section, lang):
     Tender-mind, Empathy,
     Intuitiveness
         '''
-    points_with_description = extract_categories(json_section, 'Шкала I', lang)
+    points_with_description = extract_categories(json_section, '1_6', lang, participant_info)
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     y += 17
@@ -260,7 +263,7 @@ def page3(pdf, json_section, lang):
     Sociability, Warmth,
     Kindness, Openness
         '''
-    points_with_description = extract_categories(json_section, 'Шкала A', lang)
+    points_with_description = extract_categories(json_section, '1_7', lang, participant_info)
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     pdf.set_font("RalewayLight", "", 9)
@@ -301,7 +304,7 @@ def page3(pdf, json_section, lang):
     Abstracteness, Imagination,
     Idea-oriention
         '''
-    points_with_description = extract_categories(json_section, 'Шкала M', lang)
+    points_with_description = extract_categories(json_section, '1_8', lang, participant_info)
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     y += 17
@@ -331,7 +334,7 @@ def page3(pdf, json_section, lang):
     Independence,
     Resourcefulness
         '''
-    points_with_description = extract_categories(json_section, 'Шкала Q2', lang)
+    points_with_description = extract_categories(json_section, '1_9', lang, participant_info)
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     y += 17
@@ -360,7 +363,7 @@ def page3(pdf, json_section, lang):
     Perseverance, Conformity
     Discipline, Obligation
         '''
-    points_with_description = extract_categories(json_section, 'Шкала G', lang)
+    points_with_description = extract_categories(json_section, '1_10', lang, participant_info)
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     y += 17
@@ -390,7 +393,7 @@ def page3(pdf, json_section, lang):
     Self control
     Strong will, Accuracy
         '''
-    points_with_description = extract_categories(json_section, 'Шкала Q3', lang)
+    points_with_description = extract_categories(json_section, '1_11', lang, participant_info)
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     pdf.set_font("RalewayLight", "", 9)
@@ -431,7 +434,7 @@ def page3(pdf, json_section, lang):
     Information analysis, Criticality
     Work optimization
         '''
-    points_with_description = extract_categories(json_section, 'Шкала Q1', lang)
+    points_with_description = extract_categories(json_section, '1_12', lang, participant_info)
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     y += 17
@@ -461,7 +464,7 @@ def page3(pdf, json_section, lang):
     Suspicion
     Caution
         '''
-    points_with_description = extract_categories(json_section, 'Шкала L', lang)
+    points_with_description = extract_categories(json_section, '1_13', lang, participant_info)
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     y += 17
@@ -488,7 +491,7 @@ def page3(pdf, json_section, lang):
     Courage, Boldness
     Adventurism
         '''
-    points_with_description = extract_categories(json_section, 'Шкала H', lang)
+    points_with_description = extract_categories(json_section, '1_14', lang, participant_info)
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     y += 17
@@ -518,7 +521,7 @@ def page3(pdf, json_section, lang):
     Assertiveness, Dominance
     Self-confidence
         '''
-    points_with_description = extract_categories(json_section, 'Шкала E', lang)
+    points_with_description = extract_categories(json_section, '1_15', lang, participant_info)
     draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     insert_page_number(pdf)

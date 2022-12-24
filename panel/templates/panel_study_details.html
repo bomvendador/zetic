@@ -1,5 +1,8 @@
 {% extends 'panel_base.html' %}
 {% load static %}
+    {% block links %}
+     <link href="{% static 'panel/plugins/circle_progress_bar/css/circle.css' %}" rel="stylesheet" />
+    {% endblock %}
     {% block content %}
 
                 <div class="side-app">
@@ -57,27 +60,22 @@
                         <div class="row">
                             <div class="col-xl-12 col-sm-12">
                                 <div class="card">
-                                    <div class="card-header row pt-2 pb-2 justify-content-md-center">
-                                        <div class="col col-lg-6 col-sm-6">
-                                            <h3 class="card-title">Группа вопросов</h3>
-                                        </div>
-                                        <div class="col col-lg-6 col-sm-6 text-end">
-                                            <button class="btn btn-primary my-1 nav-buttons" type="button" id="add_question_group" style="padding: 9px"><i class="fe fe-edit" style="font-size: 20px"></i></button>
-                                        </div>
+                                    <div class="card-header">
+                                            <h3 class="card-title">Группы вопросов опросника</h3>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="table text-wrap mb-0">
-                                                <thead>
+                                                <thead class="thead-style">
                                                     <tr>
                                                         <th>Наименование</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="tbody_question_groups_selected">
-                                                {% if question_groups %}
-                                                {% for question_group in question_groups %}
-                                                    <tr id="section_id_{{ question_group.id }}">
-                                                        <td>{{ question_group.question_group.name }}</td>
+                                                <tbody id="tbody_question_groups_selected" data-participant-tr-id="">
+                                                {% if study_question_groups %}
+                                                {% for study_question_group in study_question_groups %}
+                                                    <tr id="section_code_{{ study_question_group.code }}">
+                                                        <td>{{ study_question_group.name }}</td>
                                                     </tr>
                                                 {% endfor %}
                                                 {% else %}
@@ -107,12 +105,13 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table text-wrap mb-0">
-                                                <thead>
+                                            <table class="table text-nowrap border-bottom team-table dataTable no-footer">
+                                                <thead class="thead-style">
                                                     <tr>
                                                         <th></th>
                                                         <th>Имя/псевдоним</th>
                                                         <th>Email</th>
+                                                        <th>Группы вопросов</th>
                                                         <th>Отправка приглашения</th>
                                                         <th>Напоминания</th>
                                                         <th></th>
@@ -124,22 +123,41 @@
                                                     <tr id="participant_id_{{ participant.id }}">
                                                         <td>
                                                             {% if participant.invitation_sent %}
-                                                                {% if completed_at %}
-                                                                    <span class="dot-label bg-success" title="Опросник заполнен"></span>
+                                                                {% if participant.completed_at %}
+                                                                    <i class="fa fa-circle font-color-success" aria-hidden="true" title="Опросник заполнен"><span style="color: transparent">3</span></i>
                                                                 {% else %}
-                                                                    <span class="dot-label bg-warning" title="Приглашение отправлено"></span>
+                                                                    <i class="fa fa-circle font-color-warning" aria-hidden="true" title="Приглашение отправлено"><span style="color: transparent">2</span></i>
+
                                                                 {% endif %}
+                                                                {% if participant.started_at %}
+                                                                <span title="{{ participant.current_percentage }}%">
+                                                                    <svg class="radial-progress" data-percentage="{{ participant.current_percentage }}" viewBox="0 0 80 80">
+                                                                        <circle class="incomplete" cx="40" cy="40" r="35"></circle>
+                                                                        <circle class="complete" cx="40" cy="40" r="35" style="stroke-dashoffset: 39.58406743523136;"></circle>
+                                                                    </svg>
+
+                                                                </span>
+                                                                {% endif %}
+
                                                             {% else %}
-                                                                    <span class="dot-label bg-danger" title="Приглашение не отправлено"></span>
+                                                                    <i class="fa fa-circle font-color-danger" aria-hidden="true" title="Приглашение не отправлено"><span style="color: transparent">1</span></i>
                                                             {% endif %}
+
                                                         </td>
                                                         <td>{% if participant.employee.name %}{{ participant.employee.name }}{% endif %}</td>
                                                         <td>{{ participant.employee.email }}</td>
+                                                        <td class="participant_selected_questions_groups_td">
+                                                            {% for participant_questions_group in participant_questions_groups %}
+                                                                {% if participant_questions_group.participant == participant %}
+                                                                <p class="mb-0 participant-selected-question-group" id="participant_selected_question_group_id_{{ participant_questions_group.question_group_code }}">{{ participant_questions_group.question_group_name }}</p>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </td>
                                                         <td>{{ participant.invitation_sent_datetime|date:"d.m.Y H:i" }}</td>
                                                     <td>
                                                         {% for email_sent in emails_sent %}
                                                             {% if email_sent.participant == participant %}
-                                                                {{ email_sent.created_at|date:"d.m.Y H:i" }}<br>
+                                                                <p class="mb-0">{{ email_sent.created_at|date:"d.m.Y H:i" }}</p>
 
                                                             {% endif %}
                                                         {% endfor %}
@@ -149,15 +167,32 @@
                                                             <div style="text-align: center;" >
                                                                 <i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>
                                                                 <ul class="dropdown-menu">
-                                                                     <li><a class="dropdown-item send-email-invitation cursor-pointer">
+                                                                     <li><a class="dropdown-item {% if not participant.completed_at %}send-email-invitation cursor-pointer{% endif %}"
+                                                                     {% for report in reports %}
+                                                                         {% if report.participant == participant  %}
+                                                                            href="{% url 'download_single_report' filename=report.filename %}"
+                                                                         {% endif %}
+                                                                     {% endfor %}
+                                                                     >
                                                                          {% if participant.invitation_sent %}
-                                                                         Повторно отправить приглашение
+                                                                             {% if participant.completed_at %}
+                                                                                Скачать
+                                                                             {% else %}
+                                                                                Повторно отправить приглашение
+                                                                             {% endif %}
+
                                                                          {% else %}
                                                                          Отправить приглашение
                                                                          {% endif %}
 
                                                                          </a>
                                                                      </li>
+                                                                    {% if not participant.invitation_sent %}
+                                                                     <li><a class="dropdown-item add-question-groups cursor-pointer">
+                                                                          Добавить группы вопросов
+                                                                        </a>
+                                                                     </li>
+                                                                    {% endif %}
 
                                                                 </ul>
                                                             </div>
@@ -269,6 +304,56 @@
                 </div>
             </div>
         </div>
+        <!-- Модальное окно отправки приглашения -->
+        <div class="modal fade" id="modal_before_send_invitation">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content modal-content-demo">
+                    <div class="modal-header" style="background-color: #dbdbdb">
+                        <h5 class="modal-title">Отправка приглашения участнику</h5>
+                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <b>Участник</b>
+                            </div>
+                            <div class="col-lg-9" id="modal_participant_name" data-tr-id="">
+
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <b>Email</b>
+                            </div>
+
+                            <div class="col-lg-9" id="modal_participant_email" data-email="">
+
+
+                            </div>
+                        </div>
+                        <div class="row mt-5">
+                            <div class="col-12">
+                                <div class="form-switch">
+                                  <input class="form-check-input" type="checkbox" role="switch" id="send_admin_notification_after_filling_up">
+                                  <label class="form-check-label" for="send_admin_notification_after_filling_up">Отправить уведомление админу после заполнения</label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="row" style="padding: 0px 15px 15px">
+                            <div class="col-lg-12 col-sm-12 mt-3">
+                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="modal_send_invitation_btn">Отправить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 {% endblock %}
 
@@ -278,13 +363,12 @@
 
     let url_save_new_company = "{% url 'save_new_company' %}"
     let url_get_company_employees = "{% url 'get_company_employees' %}"
-    let url_get_question_groups = "{% url 'get_question_groups' %}"
+    {#let url_get_question_groups = "{% url 'get_question_groups' %}"#}
     let study_id = {{ study.id }};
-    let url_save_study_questions_groups = "{% url 'save_study_questions_groups' %}"
+    let url_save_participant_questions_groups = "{% url 'save_participant_questions_groups' %}"
     let url_get_employees_for_study = "{% url 'get_employees_for_study' %}"
     let url_save_study_participants = "{% url 'save_study_participants' %}"
     let url_send_invitation_email = "{% url 'send_invitation_email' %}"
-
 
 </script>
 <script src="{% static 'panel/js/panel_study_details.js' %}"></script>

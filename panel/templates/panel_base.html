@@ -224,6 +224,16 @@
                                     <li><div class="slide-item cursor-pointer menu_item" id="menu_users_add"> Добавить</div></li>
                                 </ul>
                             </li>
+                            <li class="slide">
+                                <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
+                                    <i class="side-menu__icon fe fe-users"></i>
+                                    <span class="side-menu__label">Отчеты</span>
+                                    <i class="angle fe fe-chevron-right"></i>
+                                </a>
+                                <ul class="slide-menu">
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_monthly_report"> Ежемесячные отчеты</div></li>
+                                </ul>
+                            </li>
 
                             <li class="sub-category">
                                 <h3>Заказчики</h3>
@@ -990,6 +1000,7 @@
         let url_employees_list = "{% url 'employees_list' %}"
         let url_studies_list = "{% url 'studies_list' %}"
         let url_individual_report_file_index = "{% url 'individual_report_file_index' %}"
+        let url_monthly_report = "{% url 'monthly_report' %}"
 
 
 

@@ -8,6 +8,7 @@ from panel import study
 from panel import individual_report_file
 from panel import company
 from panel import mail_handler
+from sendemail import tasks
 
 urlpatterns = [
     path('', panel_views.home, name="panel_home"),
@@ -64,8 +65,8 @@ urlpatterns = [
     path('studies_list', study.studies_list, name='studies_list'),
     path('get_company_studies', study.get_company_studies, name='get_company_studies'),
     path('study/<int:study_id>', study.study_details, name='study_details'),
-    path('get_question_groups', study.get_question_groups, name='get_question_groups'),
-    path('save_study_questions_groups', study.save_study_questions_groups, name='save_study_questions_groups'),
+    # path('get_question_groups', study.get_question_groups, name='get_question_groups'),
+    path('save_participant_questions_groups', study.save_participant_questions_groups, name='save_participant_questions_groups'),
     path('get_employees_for_study', study.get_employees_for_study, name='get_employees_for_study'),
     path('save_study_participants', study.save_study_participants, name='save_study_participants'),
 
@@ -73,6 +74,7 @@ urlpatterns = [
 
     path('send_invitation_email', mail_handler.send_invitation_email, name='send_invitation_email'),
 
+    path('monthly_report', tasks.monthly_report, name='monthly_report'),
 
     # path('get_company_employees', employee.get_company_employees, name='get_company_employees'),
 

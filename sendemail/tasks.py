@@ -1,10 +1,12 @@
 from __future__ import absolute_import, unicode_literals
+from django.http import HttpResponse
 from celery import shared_task
 from datetime import datetime
 from django.utils import timezone
 from django.db.models.functions import ExtractDay
-from panel.mail_handler import send_invitation_email, send_reminder
-from pdf.models import Participant, EmailSentToParticipant
+from panel.mail_handler import send_invitation_email, send_reminder, send_month_report
+from pdf.models import Participant, EmailSentToParticipant, Company
+from calendar import monthrange, isleap
 
 
 @shared_task(name='send_participant_reminder')
@@ -23,5 +25,38 @@ def participant_reminder():
             print(f'{participant.employee.name} delta - {delta.days}')
 
 
-        # return total
+@shared_task(name='send_monthly_report')
+def monthly_report(request):
+    companies = Company.objects.all()
+    now_aware = timezone.now()
+    today = datetime.today()
+    print(f'y - {today.year} m - {today.month} d - {today.day}')
+    month_days_qnt = monthrange(today.year, today.month)[1]
+    year_days_qnt = isleap(today.year) + 365
+    print(year_days_qnt)
+    monthly_report_arr = []
+    for company in companies:
+        week_qnt = 0
+        month_qnt = 0
+        year_qnt = 0
 
+        participants = Participant.objects.filter(employee__company=company, completed_at__isnull=False)
+        if len(participants) > 0:
+            for participant in participants:
+                print(participant.employee.name)
+                delta = now_aware - participant.completed_at
+                if delta.days <= 7:
+                    week_qnt = week_qnt + 1
+                if delta.days <= month_days_qnt:
+                    month_qnt = month_qnt + 1
+                if delta.days <= year_days_qnt:
+                    year_qnt = year_qnt + 1
+            company_dict = {
+                'company': company.name,
+                'week_qnt': week_qnt,
+                'month_qnt': month_qnt,
+                'year_qnt': year_qnt,
+            }
+            monthly_report_arr.append(company_dict)
+    send_month_report(monthly_report_arr)
+    return HttpResponse(status=200)

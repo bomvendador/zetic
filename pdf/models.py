@@ -1,3 +1,5 @@
+import os.path
+
 from django.db import models
 from django.contrib.auth.models import User
 import datetime
@@ -117,15 +119,18 @@ class Employee(models.Model):
     birth_year = models.IntegerField(blank=False, null=False)
     email = models.CharField(max_length=100, blank=True, null=False, default=None)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Компания')
-    role = models.ForeignKey(EmployeeRole, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Роль участника')
-    position = models.ForeignKey(EmployeePosition, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Позиция участника')
-    industry = models.ForeignKey(Industry, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Индустрия')
+    # role = models.ForeignKey(EmployeeRole, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Роль участника')
+    role = models.CharField(max_length=100, blank=True, null=False, default=None)
+    position = models.CharField(max_length=100, blank=True, null=False, default=None)
+    # position = models.ForeignKey(EmployeePosition, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Позиция участника')
+    industry = models.CharField(max_length=100, blank=True, null=False, default=None)
+    # industry = models.ForeignKey(Industry, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Индустрия')
     company_admin = models.BooleanField(default=False, null=False)
     company_admin_active = models.BooleanField(default=False, null=False)
 
     def __str__(self):
         if self.name:
-            return f'{self.id}. {self.name}'
+            return f'{self.id}. {self.name} - {self.email}'
         else:
             return f'{self.id}. {self.email}'
 
@@ -150,32 +155,21 @@ class Study(models.Model):
         verbose_name = 'Опросники (study)'
 
 
-class StudyQuestionGroups(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
-    question_group = models.ForeignKey(Section, on_delete=models.RESTRICT, null=True, blank=True)
-    study = models.ForeignKey(Study, on_delete=models.RESTRICT, default=None, null=True, blank=True)
-
-    def __str__(self):
-        return f'Секция - {self.question_group.name} Опросник - {self.study.name}'
-
-    class Meta:
-        verbose_name_plural = 'Секции вопросов для опросника'
-        verbose_name = 'Секция вопросов для опросника'
-
-
 class Participant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Employee')
     started_at = models.DateTimeField(blank=True, null=True, default=None)
-    finished_at = models.DateTimeField(blank=True, null=True, default=None)
     completed_at = models.DateTimeField(blank=True, null=True, default=None)
     tos_accepted = models.BooleanField(default=False)
     study = models.ForeignKey(Study, on_delete=models.CASCADE, default=None, null=True, blank=True)
     invitation_sent = models.BooleanField(default=False)
     invitation_sent_datetime = models.DateTimeField(blank=True, null=True, default=None)
     invitation_code = models.TextField(default=None, null=True, blank=True)
+    total_questions_qnt = models.IntegerField(default=0, null=True, blank=True)
+    answered_questions_qnt = models.IntegerField(default=0, null=True, blank=True)
+    current_percentage = models.IntegerField(default=0, null=True, blank=True)
+    send_admin_notification_after_filling_up = models.BooleanField(default=False)
 
     def __str__(self):
         if self.employee:
@@ -186,6 +180,21 @@ class Participant(models.Model):
     class Meta:
         verbose_name_plural = 'Участники опроса'
         verbose_name = 'Участник опроса'
+
+
+class ParticipantQuestionGroups(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+    question_group_name = models.CharField(max_length=30, blank=True, null=True, default=None)
+    question_group_code = models.CharField(max_length=2, blank=True, null=True, default=None)
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, null=True, blank=True)
+
+    def __str__(self):
+        return f'Группа вопросов - {self.question_group_name} Опросник - {self.participant}'
+
+    class Meta:
+        verbose_name_plural = 'Группы вопросов для участника'
+        verbose_name = 'Группа вопросов для участника'
 
 
 class EmailSentToParticipant(models.Model):
@@ -202,6 +211,31 @@ class EmailSentToParticipant(models.Model):
         verbose_name = 'Письмо отправлено'
 
 
+class RawToTPointsType(models.Model):
+    name = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.name}'
+
+    class Meta:
+        verbose_name_plural = 'Типы поправок'
+        verbose_name = 'Тип поправки'
+
+
+class RawToTPoints(models.Model):
+    type = models.ForeignKey(RawToTPointsType, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    raw_points = models.IntegerField(null=False, default=0)
+    t_point = models.IntegerField(null=False, default=0)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.type.name} - {self.category.name}  {self.raw_points} - {self.t_point}'
+
+    class Meta:
+        verbose_name_plural = 'Сырые данные в Т баллы'
+        verbose_name = 'Сырые данные в Т баллы'
+
+
 class Report(models.Model):
     added = models.DateTimeField(auto_now_add=True, null=True)
     code = models.CharField(max_length=30, blank=True, null=True)
@@ -212,8 +246,10 @@ class Report(models.Model):
     study = models.ForeignKey(Study, on_delete=models.RESTRICT, default=None, null=True, blank=True)
 
     def __str__(self):
-        # return f'{self.participant.fio} - {self.file.name} - {self.participant.employee.company.name}'
-        return f'{self.participant.employee.name} - {self.file.name}'
+        return f'{self.participant} - {self.file.name}'
+
+    def filename(self):
+        return os.path.basename(self.file.name)
 
     class Meta:
         verbose_name_plural = 'Индивидуальные отчеты'

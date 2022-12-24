@@ -1,7 +1,7 @@
 from pdf.draw import draw_full_scale, insert_page_number
 
 
-def page6(pdf, json_section, lang):
+def page6(pdf, json_section, lang, participant_info):
     scale_element_file = 'media/images/values_page6.png'
 
     pdf.set_auto_page_break(False)
@@ -68,14 +68,14 @@ def page6(pdf, json_section, lang):
         scale_name = u'''Причастность'''
     else:
         scale_name = u'''Affiliation'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Причастность', scale_element_file, lang)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '4_1', scale_element_file, lang, participant_info)
 
     y += 20
     if lang == 'ru':
         scale_name = u'''Традиционализм'''
     else:
         scale_name = u'''Conventionality'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Традицонализм', scale_element_file, lang)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '4_2', scale_element_file, lang, participant_info)
 
     y += 20
     if lang == 'ru':
@@ -84,21 +84,21 @@ def page6(pdf, json_section, lang):
     else:
         scale_name = u'''Sensation
 seeking'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Жажда впечатлений', scale_element_file, lang)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '4_3', scale_element_file, lang, participant_info)
 
     y += 20
     if lang == 'ru':
         scale_name = u'''Эстетичность'''
     else:
         scale_name = u'''Aesthetic'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Эстетичность', scale_element_file, lang)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '4_4', scale_element_file, lang, participant_info)
 
     y += 20
     if lang == 'ru':
         scale_name = u'''Гедонизм'''
     else:
         scale_name = u'''Hedonism'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Гедонизм', scale_element_file, lang)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '4_5', scale_element_file, lang, participant_info)
 
     pdf.set_font("RalewayLight", "", 9)
     vert_text_y = 172
@@ -117,14 +117,14 @@ seeking'''
         scale_name = u'''Признание'''
     else:
         scale_name = u'''Recognition'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Признание', scale_element_file, lang)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '4_6', scale_element_file, lang, participant_info)
 
     y += 20
     if lang == 'ru':
         scale_name = u'''Достижения'''
     else:
         scale_name = u'''Achievement'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Достижения', scale_element_file, lang)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '4_7', scale_element_file, lang, participant_info)
 
     y += 20
     if lang == 'ru':
@@ -133,20 +133,20 @@ seeking'''
     else:
         scale_name = u'''Commercial
 attitude'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, 'Коммерческий подход', scale_element_file, lang)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '4_8', scale_element_file, lang, participant_info)
 
     y += 20
     if lang == 'ru':
         scale_name = u'''Безопасность'''
     else:
         scale_name = u'''Safety'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Безопасность', scale_element_file, lang)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '4_9', scale_element_file, lang, participant_info)
 
     y += 20
     if lang == 'ru':
         scale_name = u'''Интеллект'''
     else:
         scale_name = u'''Curiosity'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, 'Интеллект', scale_element_file, lang)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '4_10', scale_element_file, lang, participant_info)
 
     insert_page_number(pdf)

@@ -1,4 +1,5 @@
-from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, StudyQuestionGroups, Participant, EmailSentToParticipant
+from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, ParticipantQuestionGroups, Participant, \
+    EmailSentToParticipant, Report
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
@@ -6,7 +7,7 @@ import json
 from django.utils import timezone
 
 from .views import info_common
-
+from api import outcoming
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -26,13 +27,16 @@ def studies_list(request):
 def study_details(request, study_id):
     context = info_common(request)
     study = Study.objects.get(id=study_id)
-    question_groups = StudyQuestionGroups.objects.filter(study=study)
+    participant_questions_groups = ParticipantQuestionGroups.objects.filter(participant__study=study)
+    reports = Report.objects.filter(study=study)
     context.update(
         {
             'study': study,
-            'question_groups': question_groups,
+            'participant_questions_groups': participant_questions_groups,
+            'study_question_groups': outcoming.get_study_question_groups(request, 'sfsddfds'),
             'participants': Participant.objects.filter(study=study),
-            'emails_sent': EmailSentToParticipant.objects.filter(participant__study=study)
+            'emails_sent': EmailSentToParticipant.objects.filter(participant__study=study, type='reminder'),
+            'reports': reports
         }
     )
 
@@ -61,45 +65,46 @@ def get_company_studies(request):
         return JsonResponse(response)
 
 
+# @login_required(redirect_field_name=None, login_url='/login/')
+# def get_question_groups(request):
+#     if request.method == 'POST':
+#         question_groups_inst = Section.objects.all()
+#         question_groups = []
+#         for question_group in question_groups_inst:
+#             question = {
+#                 'id': question_group.id,
+#                 'name': question_group.name
+#             }
+#             question_groups.append(question)
+#
+#         if len(question_groups) > 0:
+#             result = list(question_groups)
+#         else:
+#             result = 'None'
+#         response = {
+#             'response': result,
+#         }
+#         return JsonResponse(response)
+
+
 @login_required(redirect_field_name=None, login_url='/login/')
-def get_question_groups(request):
-    if request.method == 'POST':
-        question_groups_inst = Section.objects.all()
-        question_groups = []
-        for question_group in question_groups_inst:
-            question = {
-                'id': question_group.id,
-                'name': question_group.name
-            }
-            question_groups.append(question)
-
-        if len(question_groups) > 0:
-            result = list(question_groups)
-        else:
-            result = 'None'
-        response = {
-            'response': result,
-        }
-        return JsonResponse(response)
-
-
-@login_required(redirect_field_name=None, login_url='/login/')
-def save_study_questions_groups(request):
+def save_participant_questions_groups(request):
     if request.method == 'POST':
         json_request = json.loads(request.body.decode('utf-8'))
         json_data = json_request['data']
-        questions_groups_id = json_data['questions_groups_ids']
-        study_id = json_data['study_id']
-        study_inst = Study.objects.get(id=study_id)
-        StudyQuestionGroups.objects.filter(study=study_inst).delete()
+        questions_groups_selected = json_data['questions_groups_selected']
+        print(questions_groups_selected)
+        participant_id = json_data['participant_id']
+        participant_inst = Participant.objects.get(id=participant_id)
+        ParticipantQuestionGroups.objects.filter(participant=participant_inst).delete()
 
-        for questions_group_id in questions_groups_id:
-            questions_group_inst = Section.objects.get(id=questions_group_id)
-            study_questions_group_inst = StudyQuestionGroups()
-            study_questions_group_inst.study = study_inst
-            study_questions_group_inst.question_group = questions_group_inst
-            study_questions_group_inst.created_by = request.user
-            study_questions_group_inst.save()
+        for questions_group_selected in questions_groups_selected:
+            participant_questions_group_inst = ParticipantQuestionGroups()
+            participant_questions_group_inst.question_group_name = questions_group_selected['name']
+            participant_questions_group_inst.question_group_code = questions_group_selected['code']
+            participant_questions_group_inst.created_by = request.user
+            participant_questions_group_inst.participant = participant_inst
+            participant_questions_group_inst.save()
         return HttpResponse(status=200)
 
 
@@ -154,14 +159,23 @@ def save_study_participants(request):
         employees_ids = json_data['employees_ids']
         study_id = json_data['study_id']
         study_inst = Study.objects.get(id=study_id)
-        Participant.objects.filter(study=study_inst, invitation_sent=False).delete()
+        participants = Participant.objects.filter(study=study_inst, invitation_sent=False)
+        for participant in participants:
+            check_employee_id = participant.employee.id
+            participant_exists = False
+            for employee_id in employees_ids:
+                if int(check_employee_id) == int(employee_id):
+                    participant_exists = True
+            if not participant_exists:
+                participant.delete()
         for employee_id in employees_ids:
             employee = Employee.objects.get(id=employee_id)
-            participant = Participant()
-            participant.study = study_inst
-            participant.employee = employee
-            participant.created_by = request.user
-            participant.save()
+            if not Participant.objects.filter(employee=employee, study=study_inst).exists():
+                participant = Participant()
+                participant.study = study_inst
+                participant.employee = employee
+                participant.created_by = request.user
+                participant.save()
         participants = Participant.objects.filter(study=study_inst)
         result = []
         for participant in participants:
@@ -173,12 +187,39 @@ def save_study_participants(request):
                 invitation_sent_datetime = timezone.localtime(participant.invitation_sent_datetime).strftime("%d.%m.%Y %H:%M:%S")
             else:
                 invitation_sent_datetime = ''
+            if participant.completed_at:
+                completed_at_datetime = timezone.localtime(participant.completed_at).strftime("%d.%m.%Y %H:%M:%S")
+            else:
+                completed_at_datetime = ''
+            reminders_sent = EmailSentToParticipant.objects.filter(participant=participant, type='reminder')
+            if len(reminders_sent) > 0:
+                reminders_arr = []
+                for reminder in reminders_sent:
+                    reminders_arr.append(timezone.localtime(reminder.created_at).strftime("%d.%m.%Y %H:%M:%S"))
+            else:
+                reminders_arr = ''
+            questions_groups_arr = []
+            questions_groups = ParticipantQuestionGroups.objects.filter(participant=participant)
+            for question_groups in questions_groups:
+                questions_groups_arr.append({
+                    'name': question_groups.question_group_name,
+                    'code': question_groups.question_group_code,
+                })
+            if Report.objects.filter(participant=participant).exists():
+                filename = Report.objects.filter(participant=participant).latest('added').filename()
+            else:
+                filename = ''
             result.append({
                 'id': participant.id,
                 'name': name,
                 'email': participant.employee.email,
                 'invitation': participant.invitation_sent,
-                'invitation_sent_datetime': invitation_sent_datetime
+                'invitation_sent_datetime': invitation_sent_datetime,
+                'reminder': reminders_arr,
+                'completed_at_datetime': completed_at_datetime,
+                'questions_groups_arr': questions_groups_arr,
+                'current_percentage': participant.current_percentage,
+                'filename': filename
             })
 
         response = {

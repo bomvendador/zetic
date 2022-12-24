@@ -250,8 +250,8 @@ let company_id
                 ]
             }
             let gender_vals = [
-                    'мужской',
-                    'женский',
+                    'Мужской',
+                    'Женский',
                     ]
             // let head_vals = [
             // ]
@@ -338,18 +338,21 @@ let company_id
                                     }
                                     break;
                                 case 'Пол':
-                                    console.log(val)
-                                    console.log(gender_vals.length)
-                                    console.log('-------')
-
-                                    for(let i=0; i < gender_vals.length; i++){
-                                        console.log(gender_vals[i])
-                                        if(val === gender_vals[i]){
+                                    $.each(genders_obj['array'], function (index, v) {
+                                        if(val === v){
                                             row_to_add[key] = val
                                             data_errors_exists = false
                                         }
+                                    })
 
-                                    }
+                                    // for(let i=0; i < gender_vals.length; i++){
+                                    //     console.log(gender_vals[i])
+                                    //     if(val === gender_vals[i]){
+                                    //         row_to_add[key] = val
+                                    //         data_errors_exists = false
+                                    //     }
+                                    //
+                                    // }
                                     if(data_errors_exists) {
                                         after_all_checks_ok = false
                                         show_error_message('Пол отсутствует в базе данных (строка - ' + (i + 2) + ')')

@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core.mail import send_mail
-from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, StudyQuestionGroups, Participant, EmailSentToParticipant
+from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, ParticipantQuestionGroups, Participant, EmailSentToParticipant
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -17,11 +17,13 @@ def send_invitation_email(request):
         json_request = json.loads(request.body.decode('utf-8'))
         study_id = json_request['study_id']
         participant_id = json_request['participant_id']
-        question_groups = json_request['question_groups']
         email_type = json_request['type']
+        send_admin_notification_after_filling_up = json_request['send_admin_notification_after_filling_up']
 
         participant_inst = Participant.objects.get(id=participant_id)
         participant_email = participant_inst.employee.email
+
+
 
         if type == 'initial':
             code_for_participant = get_code_for_invitation(request, json_request)
@@ -56,6 +58,8 @@ def send_invitation_email(request):
             participant_inst.invitation_sent = True
             participant_inst.invitation_sent_datetime = timezone.now()
             participant_inst.invitation_code = code_for_participant
+            if send_admin_notification_after_filling_up == 1:
+                participant_inst.send_admin_notification_after_filling_up = True
             participant_inst.save()
 
             email_sent_to_participant_inst = EmailSentToParticipant()
@@ -117,3 +121,60 @@ def send_reminder(data):
             'error': 'Указан некорректный Email участника'
         }
         return result
+
+
+def send_month_report(data):
+    context = {
+        'reports': data,
+    }
+    subject = 'Ежемесячный отчет'
+    html_message = render_to_string('month_report.html', context)
+
+    plain_text = strip_tags(html_message)
+    from_email = 'info@zetic.ru'
+    to_email = 'info@zetic.ru'
+
+    try:
+        send_mail(
+            subject,
+            plain_text,
+            from_email,
+            [to_email],
+            html_message=html_message
+        )
+
+    except SMTPRecipientsRefused as e:
+        result = {
+            'error': 'Указан некорректный Email'
+        }
+        return result
+
+
+def send_notification_report_made(data):
+    participant_name = data['participant_name']
+    context = {
+        'data': data,
+    }
+    subject = participant_name + ' окончил(а) заполнение опросника'
+    html_message = render_to_string('notification_report_made.html', context)
+
+    plain_text = strip_tags(html_message)
+    from_email = 'info@zetic.ru'
+    to_email = 'info@zetic.ru'
+
+    try:
+        send_mail(
+            subject,
+            plain_text,
+            from_email,
+            [to_email],
+            html_message=html_message
+        )
+
+    except SMTPRecipientsRefused as e:
+        result = {
+            'error': 'Указан некорректный Email'
+        }
+        return result
+
+

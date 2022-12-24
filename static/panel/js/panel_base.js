@@ -54,6 +54,9 @@
                 case'menu_individual_reports_add':
                     window.location.href = url_individual_report_file_index;
                     break;
+                case'menu_monthly_report':
+                    window.location.href = url_monthly_report;
+                    break;
                 default:
                     break;
             }
@@ -107,10 +110,9 @@
     function btn_text(element, text) {
         $(element).html(text).removeClass('disabled')
     }
-
     function process_table(element){
         $(element).DataTable().destroy()
-       $(element).DataTable({
+       let table = $(element).DataTable({
           "searching": true,
           "destroy": true,
           "paging": false,
@@ -122,6 +124,21 @@
           },
         })
         $(element).find('td').css('white-space', 'initial')
+        return table
+    }
+
+    function process_table_clear(element){
+       $(element).DataTable({
+          "searching": true,
+          "destroy": true,
+          "paging": false,
+          "language": {
+          "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"
+          },
+          "initComplete": function () {
+
+          },
+        })
     }
 
     function expand_menu_item(item_id) {

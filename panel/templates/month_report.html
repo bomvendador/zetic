@@ -1,0 +1,18 @@
+{% load static %}
+<html lang="ru" dir="ltr">
+    <head>
+            <link id="style" href="{% static 'login/plugins/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
+    </head>
+    <body>
+        <h4>Ежемесячный отчет о заполненных на 100% опросниках</h4>
+        <div class="row">
+        {% for report in reports %}
+            <div class="col"><b>Компания -</b> {{ report.company }}</div>
+            <div class="col"><b>За неделю - </b>{{ report.week_qnt }}</div>
+            <div class="col"><b>За месяц - </b>{{ report.month_qnt }}</div>
+            <div class="col"><b>За год - </b>{{ report.year_qnt }}</div>
+            <hr class="solid">
+        {% endfor %}
+        </div>
+    </body>
+</html>

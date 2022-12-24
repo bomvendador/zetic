@@ -273,18 +273,18 @@ expand_menu_item('#menu_study_list')
 
     })
 
-    let table = ''
-    function process_table(element){
-        $(element).DataTable().destroy()
-       $(element).DataTable({
-           "searching": true,
-          "destroy": true,
-          "paging": true,
-          "language": {
-            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"
-          },
-          "initComplete": function () {
-
-          },
-        })
-    }
+    // let table = ''
+    // function process_table(element){
+    //     $(element).DataTable().destroy()
+    //    $(element).DataTable({
+    //        "searching": true,
+    //       "destroy": true,
+    //       "paging": true,
+    //       "language": {
+    //         "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"
+    //       },
+    //       "initComplete": function () {
+    //
+    //       },
+    //     })
+    // }

@@ -1,7 +1,8 @@
-from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study
+# from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
-
+import requests
+from reports import settings
 import json
 
 
@@ -9,4 +10,65 @@ import json
 def get_code_for_invitation(request, json_request):
 
     return 'josipfjsdof'
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def get_study_question_groups(request, public_code):
+    response = [
+        {'code': 1,
+         'name': 'КЕТТЕЛ'
+         },
+        {'code': 2,
+         'name': 'КОПИНГИ'
+         },
+        {'code': 3,
+         'name': 'ВЫГОРАНИЕ БОЙКО'
+         },
+        # {'code': 4,
+        #  'name': 'ЦЕННОСТИ'
+        #  },
+
+    ]
+    return response
+
+
+class Attributes:
+
+    def get_sex():
+        response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+        return response['sex']
+
+    def get_roles():
+        response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+        return response['role']
+
+    def get_positions():
+        response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+        return response['position']
+
+    def get_industries():
+        response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+        return response['industry']
+
+
+def get_research():
+    headers = {'Authorization': 'Bearer sinoh8kien7eiv3mooyie4AeWoh5ohd6xo6u'}
+    result = requests.get('https://demo-admin.zetic.borsky.dev/api/research', headers=headers).json()
+    print(f'res = {result}')
+    return result
+
+ # [{'publicCode': 'QgJA6E', 'name': 'Zetic', 'sections':
+ #     [{'publicCode': '46Pygl', 'name': 'Секция 1. Черты характера'},
+ #      {'publicCode': 'z6w1LA', 'name': 'Секция 2. Работа в неопределенности'},
+ #      {'publicCode': 'o6jEX4', 'name': 'Секция 3. Выгорание '},
+ #      {'publicCode': '1gzM6B', 'name': 'Секция 4. Ценности'}
+ #      ]}
+ #  ]
+
+
+def get_company():
+    result = requests.get('https://demo-admin.zetic.borsky.dev/api/company', headers=headers).json()
+    print(f'res = {result}')
+    return result
+
 

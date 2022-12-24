@@ -36,7 +36,13 @@ def pdf_single_generator(request_json):
     pdf.add_font("NotoSansDisplayMedium", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/NotoSansDisplay-Medium.ttf", uni=True)
     pdf.add_page()
 
-    participant_name = request_json['participant_info']['name']
+    appraisal_data = request_json['appraisal_data']
+    appraisal_data_in_request = []
+    for item in appraisal_data:
+        appraisal_data_in_request.append(item['code'])
+
+    participant_info = request_json['participant_info']
+    participant_name = participant_info['name']
     lang = request_json['lang']
 
     title_page(pdf, participant_name, lang)
@@ -44,17 +50,25 @@ def pdf_single_generator(request_json):
     pdf.add_page()
     page2(pdf, request_json['lie_points'], lang)
 
-    pdf.add_page()
-    page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
+    if '1' in appraisal_data_in_request:
+        pdf.add_page()
+        # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
+        page3(pdf, extract_section(request_json, '1'), lang, participant_info)
 
-    pdf.add_page()
-    page4(pdf, extract_section(request_json, 'Копинги'), lang)
+    if '2' in appraisal_data_in_request:
+        pdf.add_page()
+        # page4(pdf, extract_section(request_json, 'Копинги'), lang)
+        page4(pdf, extract_section(request_json, '2'), lang, participant_info)
 
-    pdf.add_page()
-    page5(pdf, extract_section(request_json, 'Выгорание Бойко'), lang)
+    if '3' in appraisal_data_in_request:
+        pdf.add_page()
+        page5(pdf, extract_section(request_json, '3'), lang, participant_info)
+        # page5(pdf, extract_section(request_json, 'Выгорание Бойко'), lang)
 
-    pdf.add_page()
-    page6(pdf, extract_section(request_json, 'Ценности'), lang)
+    if '4' in appraisal_data_in_request:
+        pdf.add_page()
+        page6(pdf, extract_section(request_json, '4'), lang, participant_info)
+        # page6(pdf, extract_section(request_json, 'Ценности'), lang)
 
     now = datetime.datetime.now()
 

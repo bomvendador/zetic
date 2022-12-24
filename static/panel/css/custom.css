@@ -40,3 +40,20 @@
 .modal-header-style{
     background-color: #dbdbdb
 }
+
+.font-color-success{
+    color: #09ad95 !important
+}
+
+.font-color-warning{
+    color: #f7b731 !important
+}
+
+.font-color-danger{
+    color: #e82646 !important
+}
+
+.thead-style {
+    background-color: #e5e5e5
+}
+
