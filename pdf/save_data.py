@@ -51,6 +51,7 @@ def save_data_to_db(request_json, file_name):
     report.code = request_json['code']
     report.file = file_name
     report.lang = request_json['lang']
+    report.study = study
     report.save()
 
     for section in request_json['appraisal_data']:
