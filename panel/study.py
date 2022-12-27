@@ -40,21 +40,26 @@ def studies_list(request):
 @login_required(redirect_field_name=None, login_url='/login/')
 def study_details(request, study_id):
     context = info_common(request)
-    study = Study.objects.get(id=study_id)
-    participant_questions_groups = ParticipantQuestionGroups.objects.filter(participant__study=study)
-    reports = Report.objects.filter(study=study).order_by('-added')
-    context.update(
-        {
-            'study': study,
-            'participant_questions_groups': participant_questions_groups,
-            'study_question_groups': outcoming.get_study_question_groups(request, 'sfsddfds'),
-            'participants': Participant.objects.filter(study=study),
-            'emails_sent': EmailSentToParticipant.objects.filter(participant__study=study, type='reminder'),
-            'reports': reports
-        }
-    )
 
-    return render(request, 'panel_study_details.html', context)
+    if context == 'logout':
+        return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
+    else:
+
+        study = Study.objects.get(id=study_id)
+        participant_questions_groups = ParticipantQuestionGroups.objects.filter(participant__study=study)
+        reports = Report.objects.filter(study=study).order_by('-added')
+        context.update(
+            {
+                'study': study,
+                'participant_questions_groups': participant_questions_groups,
+                'study_question_groups': outcoming.get_study_question_groups(request, 'sfsddfds'),
+                'participants': Participant.objects.filter(study=study),
+                'emails_sent': EmailSentToParticipant.objects.filter(participant__study=study, type='reminder'),
+                'reports': reports
+            }
+        )
+
+        return render(request, 'panel_study_details.html', context)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
