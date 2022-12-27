@@ -52,7 +52,7 @@ def send_invitation_email(request):
                 html_message = render_to_string('invitation_message_reminder.html', context)
 
             plain_text = strip_tags(html_message)
-            from_email = 'info@zetic.ru'
+            from_email = 'ZETIC <info@zetic.ru>'
             to_email = participant_email
 
             result = {}
@@ -109,7 +109,7 @@ def send_reminder(data):
     html_message = render_to_string('invitation_message_reminder.html', context)
 
     plain_text = strip_tags(html_message)
-    from_email = 'info@zetic.ru'
+    from_email = 'ZETIC <info@zetic.ru>'
     to_email = participant_email
 
     try:
@@ -141,7 +141,7 @@ def send_month_report(data):
     html_message = render_to_string('month_report.html', context)
 
     plain_text = strip_tags(html_message)
-    from_email = 'info@zetic.ru'
+    from_email = 'ZETIC <info@zetic.ru>'
     to_email = 'info@zetic.ru'
 
     try:
@@ -170,7 +170,7 @@ def send_notification_report_made(data):
     html_message = render_to_string('notification_report_made.html', context)
 
     plain_text = strip_tags(html_message)
-    from_email = 'info@zetic.ru'
+    from_email = 'ZETIC <info@zetic.ru>'
     to_email = to_email
 
     try:
