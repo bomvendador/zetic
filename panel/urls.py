@@ -18,6 +18,7 @@ urlpatterns = [
     path('save_group_report_data', panel_views.save_group_report_data, name='save_group_report_data'),
     path('download_single_report/<str:filename>', pdf_views.download_single_report, name='download_single_report'),
     path('download_group_report/<str:filename>', pdf_views.download_group_report, name='download_group_report'),
+    path('download_file/<str:filename>', pdf_views.download_file, name='download_file'),
     path('logout', panel_views.panel_logout, name='logout'),
     path('get_group_reports_list', panel_views.get_group_reports_list, name='get_group_reports_list'),
     path('group_reports_list', panel_views.group_reports_list, name='group_reports_list'),

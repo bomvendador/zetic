@@ -17,7 +17,12 @@ def add_employee(request):
     if cur_user_role_name == 'Менеджер':
         companies = Company.objects.filter(created_by=request.user)
     else:
-        companies = Company.objects.all()
+        if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
+            companies = Company.objects.all()
+        else:
+            if cur_user_role_name == 'Админ заказчика':
+                employee = Employee.objects.get(user=request.user)
+                companies = Company.objects.filter(id=employee.company.id)
 
     context.update({
         'companies': companies,

@@ -260,6 +260,7 @@
                                     <li><div class="slide-item cursor-pointer menu_item" id="menu_company_add"> Добавить</div></li>
                                 </ul>
                             </li>
+                             {% endif %}
 
                             <li class="slide">
                                 <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
@@ -273,12 +274,12 @@
                                 </ul>
                             </li>
 
-                             {% endif %}
 
-
+                            {% if cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Суперадмин' or cur_userprofile.role.name == 'Менеджер' %}
                             <li class="sub-category">
                                 <h3>Опросники/Отчеты</h3>
                             </li>
+                            {% endif %}
 
                             <li class="slide">
                                 <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">

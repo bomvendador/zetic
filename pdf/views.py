@@ -2,7 +2,7 @@
 
 # Create your views here.
 
-from django.http import HttpResponse, HttpResponseNotFound, StreamingHttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseNotFound, StreamingHttpResponse, JsonResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
 import datetime
 from pdf.title_page import title_page
@@ -108,6 +108,21 @@ def download_single_report(request, filename):
         response = HttpResponse(file_data, content_type='application/pdf')
         response['Content-Disposition'] = f"attachment; filename={filename}"
     return response
+
+
+@csrf_exempt
+def download_file(request, filename):
+    files_folder = os.path.join(settings.MEDIA_ROOT, 'files')
+    # group_reports_folder = os.path.join(files_folder, 'single')
+    full_path = os.path.join(files_folder, filename)
+    print(full_path)
+    response = FileResponse(open(full_path, 'rb'))
+    return response
+    # with open(full_path, 'rb') as f:
+    #     file_data = f.read()
+    #     response = HttpResponse(file_data, content_type='application/pdf')
+    #     response['Content-Disposition'] = f"attachment; filename={filename}"
+    # return response
 
 
 @csrf_exempt
