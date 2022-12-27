@@ -17,25 +17,6 @@ from login import urls as login_urls
 from django.utils import timezone
 
 
-def preliminary_check(func):
-    @wraps(func)
-    def check_company_admin(request):
-        print(request.user.first_name)
-        userprofile = UserProfile.objects.get(user=request.user)
-        if userprofile.role.name == 'Админ заказчика':
-
-            employee = Employee.objects.get(user=request.user)
-
-            if not employee.company_admin_active:
-                logout(request)
-                return render(request, 'login.html', {})
-            else:
-                return func
-        else:
-            return func
-    return check_company_admin
-
-
 @login_required(redirect_field_name=None, login_url='/login/')
 def info_common(request):
     userprofile = UserProfile.objects.get(user=request.user)
@@ -55,7 +36,6 @@ def info_common(request):
         return context
 
 
-# @preliminary_check
 @login_required(redirect_field_name=None, login_url='/login/')
 def home(request):
 
@@ -134,7 +114,7 @@ def get_company_participants(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
         company = json_data['company']
-        participants_inst = Participant.objects.filter(employee__company__name=company)
+        participants_inst = Participant.objects.filter(employee__company__name=company, completed_at__isnull=False)
         participants = []
         for participant in participants_inst:
             data = {

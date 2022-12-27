@@ -14,6 +14,6 @@ def save_data_to_db(request_json, file_name):
         report_group_square_inst = ReportGroupSquare()
         report_group_square_inst.report_group = report_group_inst
         report_group_square_inst.square_name = participant_data[0]
-        report_group_square_inst.report = Report.objects.get(participant__employee__email=participant_data[1])
+        report_group_square_inst.report = Report.objects.filter(participant__employee__email=participant_data[1]).latest('added')
         report_group_square_inst.save()
 
