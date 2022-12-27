@@ -162,6 +162,7 @@ def send_month_report(data):
 
 def send_notification_report_made(data):
     participant_name = data['participant_name']
+    to_email = data['to_email']
     context = {
         'data': data,
     }
@@ -170,7 +171,7 @@ def send_notification_report_made(data):
 
     plain_text = strip_tags(html_message)
     from_email = 'info@zetic.ru'
-    to_email = 'info@zetic.ru'
+    to_email = to_email
 
     try:
         send_mail(

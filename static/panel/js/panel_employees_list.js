@@ -305,7 +305,7 @@ expand_menu_item('#menu_employees_list')
                             html += '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>'
                             html += '<ul class="dropdown-menu">'
                             html += '<li><a class="dropdown-item edit-employee cursor-pointer">Изменить</a></li>'
-                            if($('#cur_role_name').text() === 'Менеджер'){
+                            if($('#cur_role_name').text() === 'Менеджер' || $('#cur_role_name').text() === 'Админ заказчика'){
                                 console.log(data_json[i]['created_by_email'])
                                 if(cur_user_email === data_json[i]['created_by_email']){
                                     html += '<li><a class="dropdown-item cursor-pointer delete-employee">Удалить</a></li>'

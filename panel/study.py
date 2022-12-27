@@ -42,7 +42,7 @@ def study_details(request, study_id):
     context = info_common(request)
     study = Study.objects.get(id=study_id)
     participant_questions_groups = ParticipantQuestionGroups.objects.filter(participant__study=study)
-    reports = Report.objects.filter(study=study)
+    reports = Report.objects.filter(study=study).order_by('-added')
     context.update(
         {
             'study': study,

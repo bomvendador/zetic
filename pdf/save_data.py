@@ -1,4 +1,5 @@
 from pdf.models import Report, Participant, Company, ReportData, Section, Category, Employee, Study
+from login.models import UserProfile
 from . import raw_to_t_point
 from panel import mail_handler
 from django.utils import timezone
@@ -59,18 +60,26 @@ def save_data_to_db(request_json, file_name):
             report_data = ReportData()
             report_data.report = report
             report_data.section = Section.objects.get(code=section['code'])
-            # print(point['code'])
+            print(point['code'])
             report_data.category = Category.objects.get(code=point['code'])
             report_data.points = point['points']
             report_data.points = raw_to_t_point.get_t_point(point['points'], point['code'], request_json['participant_info']['sex'], int(request_json['participant_info']['year']))
             report_data.save()
 
     if participant.send_admin_notification_after_filling_up:
+        created_by_user = participant.created_by
+        user_profile = UserProfile.objects.get(user=created_by_user)
+        role_name = user_profile.role.name
+        if role_name == 'Админ заказчика':
+            to_email = created_by_user.email
+        else:
+            to_email = 'info@zetic.ru'
         data_for_mail = {
             'participant_name': participant.employee.name,
             'email': request_json['participant_info']['email'],
             'company_name': participant.employee.company.name,
             'study_name': participant.study.name,
+            'to_email': to_email
         }
         mail_handler.send_notification_report_made(data_for_mail)
 

@@ -115,7 +115,8 @@ def delete_employee(request):
                 'errors': errors
             })
         else:
-            employee.user.delete()
+            if employee.user:
+                employee.user.delete()
             employee.delete()
             response.update({
                 'result': 'ok',
@@ -211,7 +212,10 @@ def employees_list(request):
     cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
     if cur_user_role_name == 'Менеджер':
         companies = Company.objects.filter(created_by=request.user)
-    else:
+    if cur_user_role_name == 'Админ заказчика':
+        employee = Employee.objects.get(user=request.user)
+        companies = Company.objects.filter(id=employee.company.id)
+    if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
         companies = Company.objects.all()
 
     context.update(
