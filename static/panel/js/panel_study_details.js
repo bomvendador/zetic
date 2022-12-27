@@ -1,4 +1,4 @@
-expand_menu_item('#menu_study_add')
+expand_menu_item('#menu_study_list')
 
 let table = process_table('.team-table')
 
@@ -172,22 +172,36 @@ $('#add_participant').on('click', function () {
                   cancelButtonColor: '#d33',
                   confirmButtonText: 'ОК'
                 })
-            }else {
-                let html = ''
-                for(let i=0; i < data_json.length; i++) {
-                    console.log('id - ' + data_json[i]['participant_id'] + 'len - ' + $('#tbody_participants_selected').find('#participant_id_' + data_json[i]['participant_id']).length)
-                    if($('#tbody_participants_selected').find('#participant_id_' + data_json[i]['participant_id']).length > 0){
-                        html += '<tr class="participant_item participant_item_selected cursor-pointer" id="employee_id_' + data_json[i]['employee_id'] + '">'
-                    }else {
-                        html += '<tr class="participant_item  cursor-pointer" id="employee_id_' + data_json[i]['employee_id'] + '">'
+            }else{
+                if (data_json === 'company_disactivated'){
+                    let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                                    '<div>Компания деактивирована' + '</div>' +
+                                    '<div>Если Вы не знаете причин - обратитесь к менеджеру' + '</div>' +
+                                    '<br>' +
+                                    '<hr class="solid mt-0" style="background-color: black;">'
+                    Swal.fire({
+                      html: output_html,
+                      icon: 'warning',
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'ОК'
+                    })
+                }else {
+                    let html = ''
+                    for(let i=0; i < data_json.length; i++) {
+                        console.log('id - ' + data_json[i]['participant_id'] + 'len - ' + $('#tbody_participants_selected').find('#participant_id_' + data_json[i]['participant_id']).length)
+                        if($('#tbody_participants_selected').find('#participant_id_' + data_json[i]['participant_id']).length > 0){
+                            html += '<tr class="participant_item participant_item_selected cursor-pointer" id="employee_id_' + data_json[i]['employee_id'] + '">'
+                        }else {
+                            html += '<tr class="participant_item  cursor-pointer" id="employee_id_' + data_json[i]['employee_id'] + '">'
+                        }
+                        html += '<td class=" employee-name">' + data_json[i]['name'] + '</td>'
+                        html += '<td class="text-end employee-email">' + data_json[i]['email'] + '</td>'
+                        html += '</tr>'
                     }
-                    html += '<td class=" employee-name">' + data_json[i]['name'] + '</td>'
-                    html += '<td class="text-end employee-email">' + data_json[i]['email'] + '</td>'
-                    html += '</tr>'
+                    $('#tbody_modal_participants').html(html)
+                    $('#modal_participants').modal('show')
                 }
-                $('#tbody_modal_participants').html(html)
-                $('#modal_participants').modal('show')
-
 
             }
         }
@@ -381,13 +395,29 @@ $('#modal_send_invitation_btn').on('click', function () {
             if('error' in json_data){
                 toastr.error(json_data['error'])
             }else {
-                let datetime_invitation_sent = json_data['datetime_invitation_sent'];
-                let el = $('#participant_id_' + participant_id)
-                el.find('.bg-danger').removeClass('bg-danger').addClass('bg-warning').prop('title', 'Приглашение отправлено')
-                el.find('.send-email-invitation').text('Повторно отправить приглашение')
-                el.find('td:nth-child(4)').text(datetime_invitation_sent)
-                toastr.success('Приглашение участнику отправлено')
-
+                if('company_error' in json_data){
+                    if(json_data['company_error'] === 'company_disactivated'){
+                        let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                                        '<div>Компания деактивирована' + '</div>' +
+                                        '<div>Если Вы не знаете причин - обратитесь к менеджеру' + '</div>' +
+                                        '<br>' +
+                                        '<hr class="solid mt-0" style="background-color: black;">'
+                        Swal.fire({
+                          html: output_html,
+                          icon: 'warning',
+                          confirmButtonColor: '#3085d6',
+                          cancelButtonColor: '#d33',
+                          confirmButtonText: 'ОК'
+                        })
+                    }
+                }else {
+                    let datetime_invitation_sent = json_data['datetime_invitation_sent'];
+                    let el = $('#participant_id_' + participant_id)
+                    el.find('.bg-danger').removeClass('bg-danger').addClass('bg-warning').prop('title', 'Приглашение отправлено')
+                    el.find('.send-email-invitation').text('Повторно отправить приглашение')
+                    el.find('td:nth-child(4)').text(datetime_invitation_sent)
+                    toastr.success('Приглашение участнику отправлено')
+                }
             }
 
             btn_text('#modal_send_invitation_btn', 'Отправить')

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseServerError, JsonResponse
+from django.http import HttpResponse, HttpResponseServerError, JsonResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 
 import json
@@ -9,28 +9,100 @@ from pdf.models import Company, Participant, ReportData, Report, Category, Repor
 # from django.contrib.auth.models import User
 
 from login.models import UserRole, UserProfile, User
+from login.views import home as login_home
 
 from pdf_group.views import pdf_group_generator
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, wraps
 from login import urls as login_urls
 from django.utils import timezone
 
 
+def preliminary_check(func):
+    @wraps(func)
+    def check_company_admin(request):
+        print(request.user.first_name)
+        userprofile = UserProfile.objects.get(user=request.user)
+        if userprofile.role.name == 'Админ заказчика':
+
+            employee = Employee.objects.get(user=request.user)
+
+            if not employee.company_admin_active:
+                logout(request)
+                return render(request, 'login.html', {})
+            else:
+                return func
+        else:
+            return func
+    return check_company_admin
+
+
 @login_required(redirect_field_name=None, login_url='/login/')
 def info_common(request):
+    userprofile = UserProfile.objects.get(user=request.user)
     context = {
-        'cur_userprofile': UserProfile.objects.get(user=request.user)
+        'cur_userprofile': userprofile
     }
-    return context
+    if userprofile.role.name == 'Админ заказчика':
+
+        employee = Employee.objects.get(user=request.user)
+
+        if not employee.company_admin_active:
+            logout(request)
+            return 'logout'
+        else:
+            return context
+    else:
+        return context
 
 
+# @preliminary_check
 @login_required(redirect_field_name=None, login_url='/login/')
 def home(request):
-    user_profile = UserProfile.objects.get(user=request.user)
+
     context = info_common(request)
-    context.update({
-        'user_profile': user_profile
-    })
+    if context == 'logout':
+        return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
+    else:
+        userprofile = UserProfile.objects.get(user=request.user)
+        if userprofile.role.name == 'Админ заказчика':
+            company = Employee.objects.get(user=request.user).company
+            stats = {
+                'employees_qnt': Employee.objects.filter(company=company).count(),
+                'individual_reports_qnt': Report.objects.filter(study__company=company).count(),
+                'group_reports_qnt': ReportGroup.objects.filter(company=company).count()
+            }
+        if userprofile.role.name == 'Админ' or userprofile.role.name == 'Суперадмин':
+            stats = {
+                'companies_qnt': Company.objects.all().count(),
+                'employees_qnt': Employee.objects.all().count(),
+                'individual_reports_qnt': Report.objects.all().count(),
+                'group_reports_qnt': ReportGroup.objects.all().count()
+            }
+        if userprofile.role.name == 'Менеджер':
+            companies = Company.objects.filter(created_by=request.user)
+            individual_reports = Report.objects.all()
+            group_reports = ReportGroup.objects.all()
+            individual_reports_qnt = 0
+            group_reports_qnt = 0
+
+            for company in companies:
+                for individual_report in individual_reports:
+                    if individual_report.study:
+                        if individual_report.study.company == company:
+                            individual_reports_qnt = individual_reports_qnt + 1
+                for group_report in group_reports:
+                    if group_report.company == company:
+                        group_reports_qnt = group_reports_qnt + 1
+            stats = {
+                'companies_qnt': companies.count(),
+                'employees_qnt': Employee.objects.filter(created_by=request.user).count(),
+                'individual_reports_qnt': individual_reports_qnt,
+                'group_reports_qnt': group_reports_qnt
+            }
+
+        context.update({
+            'stats': stats
+        })
     return render(request, 'panel_home.html', context)
 
 
@@ -43,8 +115,14 @@ def panel_logout(request):
 @login_required(redirect_field_name=None, login_url='/login/')
 def team_distribution(request):
     context = info_common(request)
+    cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
+    if cur_user_role_name == 'Менеджер':
+        companies = Company.objects.filter(created_by=request.user)
+    else:
+        companies = Company.objects.all()
+
     context.update({
-        'companies': Company.objects.all()
+        'companies': companies
     })
 
     return render(request, 'panel_distribution.html', context)
@@ -118,17 +196,26 @@ def save_group_report_data(request):
 @login_required(redirect_field_name=None, login_url='/login/')
 def group_reports_list(request):
     context = info_common(request)
-    companies = Company.objects.all()
-    companies_arr = []
-    for company in companies:
-        report_group = ReportGroup.objects.filter(company=company)
-        if report_group.count() > 0:
-            companies_arr.append(company.name)
-    context.update(
-        {'companies_arr': companies_arr}
-    )
+    if context == 'logout':
+        return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
+    else:
+        cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
+        if cur_user_role_name == 'Менеджер':
+            companies = Company.objects.filter(created_by=request.user)
+        if cur_user_role_name == 'Админ заказчика':
+            companies = Company.objects.filter(id=Employee.objects.get(user=request.user).company.id)
+        if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
+            companies = Company.objects.all()
+        companies_arr = []
+        for company in companies:
+            report_group = ReportGroup.objects.filter(company=company)
+            if report_group.count() > 0:
+                companies_arr.append(company.name)
+        context.update(
+            {'companies_arr': companies_arr}
+        )
 
-    return render(request, 'panel_group_reports_list.html', context)
+        return render(request, 'panel_group_reports_list.html', context)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -160,21 +247,55 @@ def get_group_reports_list(request):
         return JsonResponse(response)
 
 
+@login_required(redirect_field_name=None, login_url='/login/')
+def save_individual_report_comments(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        report_tr_id = json_data['report_tr_id']
+        comments = json_data['comments']
+        report = Report.objects.get(id=report_tr_id)
+        report.comments = comments
+        report.save()
+        return HttpResponse(status=200)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def save_group_report_comments(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        report_tr_id = json_data['report_tr_id']
+        comments = json_data['comments']
+        report = ReportGroup.objects.get(id=report_tr_id)
+        report.comments = comments
+        report.save()
+        return HttpResponse(status=200)
+
+
 # список индивидуальных отчетов
 @login_required(redirect_field_name=None, login_url='/login/')
 def individual_reports_list(request):
     context = info_common(request)
-    companies = Company.objects.all()
-    companies_arr = []
-    for company in companies:
-        reports = Report.objects.filter(participant__employee__company=company)
-        if reports.count() > 0:
-            companies_arr.append(company.name)
-    context.update(
-        {'companies_arr': companies_arr}
-    )
+    if context == 'logout':
+        return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
+    else:
+        cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
+        if cur_user_role_name == 'Менеджер':
+            companies = Company.objects.filter(created_by=request.user)
+        if cur_user_role_name == 'Админ заказчика':
+            companies = Company.objects.filter(id=Employee.objects.get(user=request.user).company.id)
+        if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
+            companies = Company.objects.all()
 
-    return render(request, 'panel_individual_reports_list.html', context)
+        companies_arr = []
+        for company in companies:
+            reports = Report.objects.filter(participant__employee__company=company)
+            if reports.count() > 0:
+                companies_arr.append(company.name)
+        context.update(
+            {'companies_arr': companies_arr}
+        )
+
+        return render(request, 'panel_individual_reports_list.html', context)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -185,11 +306,17 @@ def get_individual_reports_list(request):
         reports = Report.objects.filter(participant__employee__company__name=company)
         report_arr = []
         for report in reports:
+            if report.comments:
+                comments = report.comments
+            else:
+                comments = ''
             report_arr.append({
+                'id': report.id,
                 'company': report.participant.employee.company.name,
                 'date': timezone.localtime(report.added).strftime("%d.%m.%Y %H:%M:%S"),
                 'name': report.participant.employee.name,
-                'file_name': report.file.name
+                'file_name': report.file.name,
+                'comments': comments
             })
         response = {
             'data': list(report_arr)

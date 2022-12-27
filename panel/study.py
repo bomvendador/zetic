@@ -1,5 +1,6 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, ParticipantQuestionGroups, Participant, \
     EmailSentToParticipant, Report
+from login.models import UserProfile
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
@@ -13,14 +14,27 @@ from api import outcoming
 @login_required(redirect_field_name=None, login_url='/login/')
 def studies_list(request):
     context = info_common(request)
-    context.update({
-        'companies': Company.objects.all(),
-        'employee_positions': EmployeePosition.objects.all(),
-        'employee_roles': EmployeeRole.objects.all(),
-        'industries': Industry.objects.all()
-    })
+    if context == 'logout':
+        return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
+    else:
 
-    return render(request, 'panel_studies_list.html', context)
+        cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
+        if cur_user_role_name == 'Менеджер':
+            companies = Company.objects.filter(created_by=request.user)
+        if cur_user_role_name == 'Админ заказчика':
+            company = Employee.objects.get(user=request.user).company
+            companies = Company.objects.filter(id=company.id)
+        if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
+            companies = Company.objects.all()
+
+        context.update({
+            'companies': companies,
+            'employee_positions': EmployeePosition.objects.all(),
+            'employee_roles': EmployeeRole.objects.all(),
+            'industries': Industry.objects.all()
+        })
+
+        return render(request, 'panel_studies_list.html', context)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -93,7 +107,6 @@ def save_participant_questions_groups(request):
         json_request = json.loads(request.body.decode('utf-8'))
         json_data = json_request['data']
         questions_groups_selected = json_data['questions_groups_selected']
-        print(questions_groups_selected)
         participant_id = json_data['participant_id']
         participant_inst = Participant.objects.get(id=participant_id)
         ParticipantQuestionGroups.objects.filter(participant=participant_inst).delete()
@@ -116,35 +129,42 @@ def get_employees_for_study(request):
         study_inst = Study.objects.get(id=study_id)
         company = study_inst.company
         employees = Employee.objects.filter(company=company)
+        user_profile = UserProfile.objects.get(user=request.user)
+        check_passed = True
 
         employees_arr = []
+        if user_profile.role.name == 'Админ заказчика':
+            company_admin = Employee.objects.get(user=request.user).company
+            if not company_admin.active:
+                result = 'company_disactivated'
+                check_passed = False
+        if check_passed:
+            for employee in employees:
+                can_be_sent = True
+                participant_id = 0
+                if Participant.objects.filter(employee=employee, study=study_inst).exists():
+                    participant = Participant.objects.get(employee=employee, study=study_inst)
+                    participant_id = participant.id
+                    if participant.invitation_sent:
+                        can_be_sent = False
+                if can_be_sent:
+                    if employee.name:
+                        name = employee.name
+                    else:
+                        name = ''
 
-        for employee in employees:
-            can_be_sent = True
-            participant_id = 0
-            if Participant.objects.filter(employee=employee, study=study_inst).exists():
-                participant = Participant.objects.get(employee=employee, study=study_inst)
-                participant_id = participant.id
-                if participant.invitation_sent:
-                    can_be_sent = False
-            if can_be_sent:
-                if employee.name:
-                    name = employee.name
-                else:
-                    name = ''
+                    item = {
+                        'employee_id': employee.id,
+                        'participant_id': participant_id,
+                        'name': name,
+                        'email': employee.email
+                    }
+                    employees_arr.append(item)
 
-                item = {
-                    'employee_id': employee.id,
-                    'participant_id': participant_id,
-                    'name': name,
-                    'email': employee.email
-                }
-                employees_arr.append(item)
-
-        if len(employees_arr) > 0:
-            result = list(employees_arr)
-        else:
-            result = 'None'
+            if len(employees_arr) > 0:
+                result = list(employees_arr)
+            else:
+                result = 'None'
         response = {
             'response': result,
         }

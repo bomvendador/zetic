@@ -70,7 +70,7 @@
 {#                                                <img alt="avatar" src="{% static 'images/company_avatar.png' %}" class="brround">#}
 {#                                            </div>#}
 {#                                        </div>#}
-
+                                        <div style="display: block; overflow-x: auto; white-space: nowrap;">
                                         <table class="table text-nowrap text-md-nowrap mb-0">
                                             <thead>
                                                 <tr>
@@ -127,7 +127,7 @@
 
 
                                         </table>
-
+                                        </div>
                                     </div>
                                     <div class="card-footer text-end">
                                         <button class="btn btn-primary my-1 nav-buttons" type="button" id="add_admin">Назначить</button>
@@ -161,6 +161,27 @@
 
                                 </select>
                           </div>
+
+
+                            <div class="form-group">
+                                <label class="form-label">Новый пароль</label>
+                                <div class="wrap-input100 validate-input input-group" id="Password-toggle1">
+                                    <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                                        <i class="zmdi zmdi-eye text-muted" aria-hidden="true" id="new_password_hide"></i>
+                                    </a>
+                                    <input class="input100 form-control" type="password" autocomplete="new-password" id="new_password">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Подтверждение пароля</label>
+                                <div class="wrap-input100 validate-input input-group" id="Password-toggle2">
+                                    <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                                        <i class="zmdi zmdi-eye text-muted" aria-hidden="true" id="new_password_confirm_hide"></i>
+                                    </a>
+                                    <input class="input100 form-control" type="password" autocomplete="new-password" id="new_password_confirm">
+                                </div>
+                            </div>
+
                         </form>
                       </div>
                     <div>

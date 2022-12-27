@@ -1,5 +1,29 @@
 expand_menu_item('#menu_companies_list')
 
+$('#new_password_hide').on('click', function () {
+    let attr = $('#new_password').attr('type')
+    if(typeof attr !== 'undefined'){
+        $('#new_password').removeAttr('type')
+        $(this).removeClass('zmdi-eye').addClass('zmdi-eye-off')
+
+    }else {
+        $('#new_password').attr('type', 'password')
+        $(this).removeClass('zmdi-eye-off').addClass('zmdi-eye')
+    }
+})
+
+$('#new_password_confirm_hide').on('click', function () {
+    let attr = $('#new_password_confirm').attr('type')
+    if(typeof attr !== 'undefined'){
+        $('#new_password_confirm').removeAttr('type')
+        $(this).removeClass('zmdi-eye').addClass('zmdi-eye-off')
+    }else {
+        $('#new_password_confirm').attr('type', 'password')
+        $(this).removeClass('zmdi-eye-off').addClass('zmdi-eye')
+    }
+})
+
+
 
 $('#add_admin').on('click', function () {
     btn_spinner($('#add_admin'))
@@ -39,49 +63,62 @@ $('#add_admin').on('click', function () {
 })
 
 $('#appoint_company_admin').on('click', function () {
+    let test_ok = true
+    let pwd = $('#new_password').val()
+    let pwd_confirm = $('#new_password_confirm').val()
     let employee_id = $('#company_admin_select option:selected').attr('id').split('_')[2]
-    btn_spinner($('#appoint_company_admin'))
-    console.log(employee_id)
-    $.ajax({
-        headers: { "X-CSRFToken": token },
-        url: url_appoint_company_admin,
-        type: 'POST',
-        data: JSON.stringify({
-                'employee_id': employee_id
-            }),
-        processData: false,
-        contentType: false,
-        error: function(data){
-            toastr.error('Ошибка', data)
-        },
-        success:function (data) {
-            let data_json = data['data']
-            let html = ''
-            html += '<tr id="employee_id_' + data["id"] + '">'
-            html += '<td>' + data['name'] + '</td>'
-            html += '<td>' + data['email'] + '</td>'
-            html += '<td><span class="dot-label bg-success" title="Админ активен"></span></td>'
-            html += '<td><div style="text-align: center;">' +
-                    '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>' +
-                    '<ul class="dropdown-menu">' +
-                    '<li><a class="dropdown-item deactivate-company-admin cursor-pointer">Деактивировать</a></li>' +
-                    '<li><a class="dropdown-item delete-company-admin cursor-pointer">Удалить</a></li>' +
-                    '</ul>' +
-                    '</div>' +
-                    '</td>'
-            html += '</tr>'
-            $('#tbody_company_admins').find('.no-data-text').each(function (index, el) {
-                $(el).closest('tr').remove()
-            })
-            $('#tbody_company_admins').append(html)
-            $('#input_modal_add_admin').modal('hide')
-            btn_text($('#appoint_company_admin'), 'Сохранить')
-
-            toastr.success('Админ назначен')
-
+    if(pwd === '' || pwd_confirm === ''){
+        toastr.error('Поля паролей должны быть заполнены')
+        test_ok = false
+    }else {
+        if(pwd !== pwd_confirm){
+            toastr.error('Пароли не совпадают')
+            test_ok = false
         }
-    });
+    }
+    if(test_ok){
+        btn_spinner($('#appoint_company_admin'))
+        $.ajax({
+            headers: { "X-CSRFToken": token },
+            url: url_appoint_company_admin,
+            type: 'POST',
+            data: JSON.stringify({
+                    'employee_id': employee_id,
+                    'password': pwd
+                }),
+            processData: false,
+            contentType: false,
+            error: function(data){
+                toastr.error('Ошибка', data)
+            },
+            success:function (data) {
+                let data_json = data['data']
+                let html = ''
+                html += '<tr id="employee_id_' + data["id"] + '">'
+                html += '<td>' + data['name'] + '</td>'
+                html += '<td>' + data['email'] + '</td>'
+                html += '<td><span class="dot-label bg-success" title="Админ активен"></span></td>'
+                html += '<td><div style="text-align: center;">' +
+                        '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>' +
+                        '<ul class="dropdown-menu">' +
+                        '<li><a class="dropdown-item deactivate-company-admin cursor-pointer">Деактивировать</a></li>' +
+                        '<li><a class="dropdown-item delete-company-admin cursor-pointer">Удалить</a></li>' +
+                        '</ul>' +
+                        '</div>' +
+                        '</td>'
+                html += '</tr>'
+                $('#tbody_company_admins').find('.no-data-text').each(function (index, el) {
+                    $(el).closest('tr').remove()
+                })
+                $('#tbody_company_admins').append(html)
+                $('#input_modal_add_admin').modal('hide')
+                btn_text($('#appoint_company_admin'), 'Сохранить')
 
+                toastr.success('Админ назначен')
+
+            }
+        });
+    }
 })
 
 $('#tbody_company_admins').on('click', '.deactivate-company-admin', function () {
@@ -93,6 +130,7 @@ $('#tbody_company_admins').on('click', '.deactivate-company-admin', function () 
     let icon_add_class = ''
     let icon_remove_class = ''
     if(operation_name === 'Деактивировать'){
+        console.log('Деактивировать')
         question_text = 'Деактивировать админа?'
         resul_text = 'Админ деактивирован'
         btn_text = 'Активировать'
@@ -100,6 +138,7 @@ $('#tbody_company_admins').on('click', '.deactivate-company-admin', function () 
         icon_remove_class = 'bg-success'
         operation_type = 'deactivate'
     }else {
+        console.log('Активировать')
         question_text = 'Активировать админа?'
         operation_type = 'activate'
         resul_text = 'Админ активирован'
@@ -140,8 +179,10 @@ $('#tbody_company_admins').on('click', '.deactivate-company-admin', function () 
                 toastr.error('Ошибка', data)
             },
             success:function (data) {
-                let el = $('#' + tr_id).find('.dot-label')
-                el.removeClass(icon_remove_class).addClass(icon_add_class)
+                // let el = $('#' + tr_id).find('.dot-label')
+                let el = $('#' + tr_id)
+                el.find('.dot-label').removeClass(icon_remove_class).addClass(icon_add_class)
+                console.log('btn_text = ' + btn_text)
                 el.find('.deactivate-company-admin').text(btn_text)
 
                 toastr.success(resul_text)

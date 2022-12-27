@@ -42,9 +42,14 @@ def save_new_company(request):
 @login_required(redirect_field_name=None, login_url='/login/')
 def companies_list(request):
     context = info_common(request)
+    cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
+    if cur_user_role_name == 'Менеджер':
+        companies = Company.objects.filter(created_by=request.user)
+    else:
+        companies = Company.objects.all()
     context.update(
         {
-            'companies': Company.objects.all(),
+            'companies': companies,
          }
     )
 
@@ -69,12 +74,29 @@ def edit_company(request, company_id):
 def appoint_company_admin(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
-        print(json_data)
         employee_id = json_data['employee_id']
+        password = json_data['password']
         employee = Employee.objects.get(id=employee_id)
         employee.company_admin = True
         employee.company_admin_active = True
+
+        new_user = User()
+        new_user.first_name = employee.name
+        new_user.email = employee.email
+        new_user.set_password(password)
+        new_user.username = employee.email
+        new_user.save()
+
+        employee.user = new_user
         employee.save()
+
+        new_user_profile = UserProfile()
+        new_user_profile.created_by = request.user
+        new_user_profile.user = new_user
+        new_user_profile.role = UserRole.objects.get(name='Админ заказчика')
+        new_user_profile.fio = employee.name
+        new_user_profile.save()
+
 
         if employee.name:
             name = employee.name

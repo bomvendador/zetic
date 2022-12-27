@@ -17,12 +17,16 @@ expand_menu_item('#menu_employees_list')
             }else {
                 btn_spinner($('#save_edited_employee'))
 
+                let role_id = $('#employee_role').val().split('_')[2]
+                let position_id = $('#employee_position').val().split('_')[2]
+                let industry_id = $('#employee_industry').val().split('_')[2]
+
                 let data = {
                         'name': name,
-                        'role': role,
+                        'role_id': role_id,
                         'email': email,
-                        'position': position,
-                        'industry': industry,
+                        'position_id': position_id,
+                        'industry_id': industry_id,
                         'gender': gender,
                         'employee_birth_year': employee_birth_year,
                         'employee_id': employee_id
@@ -113,17 +117,17 @@ expand_menu_item('#menu_employees_list')
                 hide_progressbar_loader()
                 console.log(data)
                 $('#employee_role option').each(function (e) {
-                    if(data['role'] === $(this).text()){
+                    if(data['role'] === $(this).val().split('_')[2]){
                         $(this).prop('selected', true)
                     }
                 })
                 $('#employee_position option').each(function (e) {
-                    if(data['position'] === $(this).text()){
+                    if(data['position'] === $(this).val().split('_')[2]){
                         $(this).prop('selected', true)
                     }
                 })
                 $('#employee_industry option').each(function (e) {
-                    if(data['industry'] === $(this).text()){
+                    if(data['industry'] === $(this).val().split('_')[2]){
                         $(this).prop('selected', true)
                     }
                 })
@@ -142,18 +146,91 @@ expand_menu_item('#menu_employees_list')
                 })
                 $("#employee_name").val(data['name'])
                 $("#employee_email").val(data['email'])
-
-
-
-                // {#let data_json = $.parseJSON(data);#}
-
             }
         });
-
-
-
         $('#modal_edit_imployee').modal('show')
     })
+    $('#main-container').on('click', '.delete-employee', function () {
+        let employee_tr_id = $(this).closest('tr').attr('id')
+        let employee_name = $(this).closest('tr').find('td').eq(0).text()
+
+        let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<div>Удалить сотудника?</div>' +
+                        '<div><b>' + employee_name + '</b></div>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
+        Swal.fire({
+          html: output_html,
+          icon: 'question',
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Да',
+          cancelButtonText: 'Нет',
+          showCancelButton: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            employee_id = $(this).closest('tr').attr('id').split('_')[2]
+
+            show_progressbar_loader()
+
+            $.ajax({
+                headers: { "X-CSRFToken": token },
+                url: url_delete_employee,
+                type: 'POST',
+
+                data: JSON.stringify({
+                            'employee_id': employee_id,
+                        }),
+                processData: false,
+                contentType: false,
+                error: function(data){
+                    toastr.error('Ошибка', data)
+                },
+                success:function (data) {
+                    hide_progressbar_loader()
+
+                    if('errors' in data){
+                        output_html = ''
+                        let list_html = '<ul><hr class="solid" style="background-color: black;">'
+                        for(let i=0; i < data['errors'].length; i++){
+                            console.log(data['errors'][i])
+
+                            list_html += '<li style="text-align: left; padding-left: 7px;"><b>'
+                            list_html += '- ' + data['errors'][i]
+                            list_html += '</b></li>'
+                        }
+                        list_html += '</ul>'
+                        output_html = '<div>Сотрудник не может быть удален по следующим причинам:' +
+                                         list_html +
+                                        '</div>'
+                        Swal.fire({
+                          html: output_html,
+                          icon: 'warning',
+                          confirmButtonColor: '#3085d6',
+                          cancelButtonColor: '#d33',
+                          confirmButtonText: 'ОК'
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                              // window.location.href = url_panel_home
+                          }
+                        })
+
+
+
+                    }else {
+                        $('#' + employee_tr_id).remove()
+                        toastr.success('Сотрудник удален')
+                    }
+
+
+                }
+            });
+          }
+        })
+
+
+    })
+
 
     let company_id
 
@@ -187,8 +264,8 @@ expand_menu_item('#menu_employees_list')
 
 
     function route_handler(route_index) {
-    console.log('project - ' + $('.project-chosen').text().trim())
-        console.log('route_index - ' + route_index)
+    // console.log('project - ' + $('.project-chosen').text().trim())
+    //     console.log('route_index - ' + route_index)
         btn_spinner($('#next'))
         switch (route_index) {
             case 1:
@@ -228,7 +305,14 @@ expand_menu_item('#menu_employees_list')
                             html += '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>'
                             html += '<ul class="dropdown-menu">'
                             html += '<li><a class="dropdown-item edit-employee cursor-pointer">Изменить</a></li>'
-                            html += '<li><a class="dropdown-item cursor-pointer"">Удалить</a></li>'
+                            if($('#cur_role_name').text() === 'Менеджер'){
+                                console.log(data_json[i]['created_by_email'])
+                                if(cur_user_email === data_json[i]['created_by_email']){
+                                    html += '<li><a class="dropdown-item cursor-pointer delete-employee">Удалить</a></li>'
+                                }
+                            }else {
+                                html += '<li><a class="dropdown-item cursor-pointer delete-employee">Удалить</a></li>'
+                            }
                             html += '</ul>'
                             html += '</div>'
 

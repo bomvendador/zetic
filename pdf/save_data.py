@@ -39,8 +39,6 @@ def save_data_to_db(request_json, file_name):
     participant.answered_questions_qnt = participant.total_questions_qnt
     participant.save()
 
-    # send or not email to admin
-
     if Report.objects.filter(code=request_json['code']).exists():
         report = Report.objects.get(code=request_json['code'])
         ReportData.objects.filter(report=report).delete()
@@ -61,7 +59,7 @@ def save_data_to_db(request_json, file_name):
             report_data = ReportData()
             report_data.report = report
             report_data.section = Section.objects.get(code=section['code'])
-            print(point['code'])
+            # print(point['code'])
             report_data.category = Category.objects.get(code=point['code'])
             report_data.points = point['points']
             report_data.points = raw_to_t_point.get_t_point(point['points'], point['code'], request_json['participant_info']['sex'], int(request_json['participant_info']['year']))

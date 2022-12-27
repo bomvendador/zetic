@@ -39,7 +39,7 @@ def pdf_group_generator(request_json):
     pdf.add_font("NotoSansDisplayMedium", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/NotoSansDisplay-Medium.ttf", uni=True)
 
     pdf.add_page()
-
+    print(request_json)
     # lang = request_json['lang']
     lang = 'ru'
     client_name = request_json['project']

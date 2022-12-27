@@ -16,17 +16,17 @@ def get_code_for_invitation(request, json_request):
 def get_study_question_groups(request, public_code):
     response = [
         {'code': 1,
-         'name': 'КЕТТЕЛ'
+         'name': 'ЧЕРТЫ ХАРАКТЕРА'
          },
         {'code': 2,
-         'name': 'КОПИНГИ'
+         'name': 'ПОВЕДЕНИЕ В СТРЕССЕ'
          },
         {'code': 3,
-         'name': 'ВЫГОРАНИЕ БОЙКО'
+         'name': 'ВЫГОРАНИЕ'
          },
-        # {'code': 4,
-        #  'name': 'ЦЕННОСТИ'
-        #  },
+        {'code': 4,
+         'name': 'ЦЕННОСТИ'
+         },
 
     ]
     return response

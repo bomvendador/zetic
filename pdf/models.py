@@ -112,7 +112,7 @@ class EmployeePosition(models.Model):
 class Employee(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, related_name='created_by_user')
-    user = models.ForeignKey(User, on_delete=models.PROTECT, default=None, blank=True, null=True,
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, blank=True, null=True,
                              verbose_name='Пользователь', related_name='employee_user')
     name = models.CharField(max_length=100, blank=True, null=True)
     sex = models.CharField(max_length=20, blank=False, null=False)
@@ -244,6 +244,7 @@ class Report(models.Model):
     file = models.FileField(upload_to='media/reportsPDF/', default=None)
     lang = models.CharField(max_length=2, blank=True, null=True, default=None)
     study = models.ForeignKey(Study, on_delete=models.RESTRICT, default=None, null=True, blank=True)
+    comments = models.TextField(default=None, blank=True, null=True, verbose_name='Комментарии индивидуальный отчет')
 
     def __str__(self):
         return f'{self.participant} - {self.file.name}'
@@ -292,7 +293,7 @@ class ReportGroupSquare(models.Model):
     report = models.ForeignKey(Report, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Отчет индивидуальный для группового')
 
     def __str__(self):
-        return f'{self.report.participant.fio} - {self.square_name}'
+        return f'{self.report.participant.employee.name} - {self.square_name}'
 
     class Meta:
         verbose_name_plural = 'Данные по квадратам групповых отчетов'

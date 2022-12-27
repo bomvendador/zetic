@@ -1,4 +1,5 @@
-from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry
+from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, User, Participant
+from login.models import UserProfile
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
@@ -12,8 +13,14 @@ from api.outcoming import Attributes
 @login_required(redirect_field_name=None, login_url='/login/')
 def add_employee(request):
     context = info_common(request)
+    cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
+    if cur_user_role_name == 'Менеджер':
+        companies = Company.objects.filter(created_by=request.user)
+    else:
+        companies = Company.objects.all()
+
     context.update({
-        'companies': Company.objects.all(),
+        'companies': companies,
         'employee_positions': Attributes.get_positions(),
         'employee_roles': Attributes.get_roles(),
         'industries': Attributes.get_industries(),
@@ -38,8 +45,10 @@ def get_company_employees(request):
                 name = ''
             if employee.created_by:
                 created_by = employee.created_by.first_name
+                created_by_email = employee.created_by.email
             else:
                 created_by = ''
+                created_by_email = ''
             employees_arr.append({
                 'name': name,
                 'id': employee.id,
@@ -47,6 +56,7 @@ def get_company_employees(request):
                 'created_by': created_by,
                 'active': employee.company_admin_active,
                 'created_at': timezone.localtime(employee.created_at).strftime("%d.%m.%Y %H:%M:%S"),
+                'created_by_email': created_by_email
             })
         response = {
             'data': list(employees_arr)
@@ -74,6 +84,37 @@ def get_employee_data(request):
             'position': employee.position,
             'industry': employee.industry,
         }
+        return JsonResponse(response)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def delete_employee(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        employee_id = json_data['employee_id']
+        employee = Employee.objects.get(id=employee_id)
+        print(json_data)
+        employee_created_participant = False
+        employee_is_participant = Participant.objects.filter(employee=employee).exists()
+        if employee.user is not None:
+            employee_created_participant = Participant.objects.filter(created_by=employee.user).exists()
+            print(Participant.objects.filter(created_by=employee.user).count())
+        response = {}
+        errors = []
+        if employee_is_participant:
+            errors.append('Сотрудник является участником опросника')
+        if employee_created_participant:
+            errors.append('Сотрудником были созданы участники опросника')
+        if len(errors) > 0:
+            response.update({
+                'errors': errors
+            })
+        else:
+            employee.user.delete()
+            employee.delete()
+            response.update({
+                'result': 'ok',
+            })
         return JsonResponse(response)
 
 
@@ -148,9 +189,9 @@ def save_new_employee_html(request):
                 employee_inst.created_by = request.user
             employee_inst.name = employee_data['name']
             employee_inst.email = employee_data['email']
-            employee_inst.role = employee_data['role']
-            employee_inst.position = employee_data['position']
-            employee_inst.industry = employee_data['industry']
+            employee_inst.role = employee_data['role_id']
+            employee_inst.position = employee_data['position_id']
+            employee_inst.industry = employee_data['industry_id']
             employee_inst.sex = employee_data['gender']
             employee_inst.birth_year = employee_data['employee_birth_year']
             employee_inst.save()
@@ -162,9 +203,15 @@ def save_new_employee_html(request):
 @login_required(redirect_field_name=None, login_url='/login/')
 def employees_list(request):
     context = info_common(request)
+    cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
+    if cur_user_role_name == 'Менеджер':
+        companies = Company.objects.filter(created_by=request.user)
+    else:
+        companies = Company.objects.all()
+
     context.update(
         {
-            'companies': Company.objects.all(),
+            'companies': companies,
             'employees': Employee.objects.all(),
             'employee_positions': Attributes.get_positions(),
             'employee_roles': Attributes.get_roles(),
@@ -230,7 +277,10 @@ def delete_company_admin(request):
         employee = Employee.objects.get(id=employee_id)
         employee.company_admin_active = False
         employee.company_admin = False
+        employee.user.delete()
+        employee.user = None
         employee.save()
+
         return HttpResponse(status=200)
 
 
