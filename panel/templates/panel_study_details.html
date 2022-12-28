@@ -42,7 +42,7 @@
                                         <div class="row">
                                             <div class="col-lg-12 col-md-12">
                                                 <div class="form-switch">
-                                                  <input class="form-check-input" type="checkbox" role="switch" id="company_active" checked="checked" disabled>
+                                                  <input class="form-check-input" type="checkbox" role="switch" id="company_active"{% if study.company.active %} checked="checked"{% endif %} disabled>
                                                   <label class="form-check-label" for="company_active">Компания активна</label>
                                                 </div>
 
