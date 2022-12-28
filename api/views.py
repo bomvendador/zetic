@@ -1,4 +1,4 @@
-from django.http import HttpResponseServerError, HttpResponse
+from django.http import HttpResponseServerError, HttpResponse, HttpResponseRedirect
 import json
 from pdf.views import pdf_single_generator
 from pdf_group.views import pdf_group_generator
@@ -33,6 +33,6 @@ def json_request(request):
 
 def home(request):
     context = {}
-    return render(request, 'report_v1.html', context)
+    return HttpResponseRedirect('/login/')
 
 
