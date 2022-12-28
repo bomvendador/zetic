@@ -1,6 +1,7 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, ParticipantQuestionGroups, Participant, \
     EmailSentToParticipant, Report
 from login.models import UserProfile
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
@@ -111,19 +112,46 @@ def save_participant_questions_groups(request):
     if request.method == 'POST':
         json_request = json.loads(request.body.decode('utf-8'))
         json_data = json_request['data']
-        questions_groups_selected = json_data['questions_groups_selected']
-        participant_id = json_data['participant_id']
-        participant_inst = Participant.objects.get(id=participant_id)
-        ParticipantQuestionGroups.objects.filter(participant=participant_inst).delete()
+        study_id = json_request['study_id']
+        user_profile = UserProfile.objects.get(user=request.user)
+        check_passed = True
+        response = {}
+        company = Study.objects.get(id=study_id).company
 
-        for questions_group_selected in questions_groups_selected:
-            participant_questions_group_inst = ParticipantQuestionGroups()
-            participant_questions_group_inst.question_group_name = questions_group_selected['name']
-            participant_questions_group_inst.question_group_code = questions_group_selected['code']
-            participant_questions_group_inst.created_by = request.user
-            participant_questions_group_inst.participant = participant_inst
-            participant_questions_group_inst.save()
-        return HttpResponse(status=200)
+        if user_profile.role.name == 'Админ заказчика':
+
+            company_admin = Employee.objects.get(user=request.user)
+            if not company_admin.company_admin_active:
+                logout(request)
+                result = 'logout'
+                check_passed = False
+
+        if not company.active:
+            response.update({
+                'warning': 'Обратите внимание - компания деактивирована!'
+            })
+            result = 'company_deactivated'
+            if not user_profile.role.name == 'Админ заказчика':
+                check_passed = True
+
+        if check_passed:
+            result = '200'
+            questions_groups_selected = json_data['questions_groups_selected']
+            participant_id = json_data['participant_id']
+            participant_inst = Participant.objects.get(id=participant_id)
+            ParticipantQuestionGroups.objects.filter(participant=participant_inst).delete()
+
+            for questions_group_selected in questions_groups_selected:
+                participant_questions_group_inst = ParticipantQuestionGroups()
+                participant_questions_group_inst.question_group_name = questions_group_selected['name']
+                participant_questions_group_inst.question_group_code = questions_group_selected['code']
+                participant_questions_group_inst.created_by = request.user
+                participant_questions_group_inst.participant = participant_inst
+                participant_questions_group_inst.save()
+        response.update({
+            'response': result,
+        })
+        return JsonResponse(response)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -138,11 +166,20 @@ def get_employees_for_study(request):
         check_passed = True
 
         employees_arr = []
-        if user_profile.role.name == 'Админ заказчика':
-            company_admin = Employee.objects.get(user=request.user).company
-            if not company_admin.active:
-                result = 'company_disactivated'
-                check_passed = False
+        response = {}
+        if not company.active:
+            response.update({
+                'warning': 'Обратите внимание - компания деактивирована!'
+            })
+            if user_profile.role.name == 'Админ заказчика':
+                company_admin = Employee.objects.get(user=request.user)
+                if company_admin.company_admin_active:
+                    result = 'company_deactivated'
+                    check_passed = False
+                else:
+                    logout(request)
+                    result = 'logout'
+                    check_passed = False
         if check_passed:
             for employee in employees:
                 can_be_sent = True
@@ -170,9 +207,9 @@ def get_employees_for_study(request):
                 result = list(employees_arr)
             else:
                 result = 'None'
-        response = {
+        response.update({
             'response': result,
-        }
+        })
         return JsonResponse(response)
 
 

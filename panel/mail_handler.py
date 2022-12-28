@@ -31,7 +31,7 @@ def send_invitation_email(request):
             company = participant_inst.employee.company
             if not company.active:
                 result = {
-                    'company_error': 'company_disactivated'
+                    'company_error': 'company_deactivated'
                 }
                 check_passed = False
         if check_passed:

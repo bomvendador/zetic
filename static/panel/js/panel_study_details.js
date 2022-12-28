@@ -109,7 +109,8 @@ $('#save_question_groups').on('click', function () {
             type: 'POST',
 
             data: JSON.stringify({
-                            'data': data
+                            'data': data,
+                            'study_id': study_id
                         }),
             processData: false,
             contentType: false,
@@ -117,17 +118,52 @@ $('#save_question_groups').on('click', function () {
                 toastr.error('Ошибка', data)
             },
             success:function (data) {
-                let html = ''
-                for(let i = 0; i < questions_groups_selected.length; i++){
-                    let questions_group_selected = questions_groups_selected[i]
-                    html += '<p class="mb-0 participant-selected-question-group" id="participant_selected_question_group_id_' + questions_group_selected['code'] + '">' + questions_group_selected['name'] + '</p>'
+                let role_name = $('#cur_role_name').text()
+                console.log(data)
+                let data_json = data['response']
+                if(data_json === 'logout'){
+                    window.location.href = url_login_home
+                }else {
+                    if (data_json === 'company_deactivated' && role_name === 'Админ заказчика') {
+                        $('#modal_question_groups').modal('hide')
+                        btn_text($('#save_question_groups'), 'Сохранить')
+
+                        let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                            '<div>Компания деактивирована' + '</div>' +
+                            '<div>Если Вы не знаете причин - обратитесь к менеджеру' + '</div>' +
+                            '<br>' +
+                            '<hr class="solid mt-0" style="background-color: black;">'
+                        Swal.fire({
+                            html: output_html,
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'ОК'
+                        })
+                    } else {
+                        if (data['warning']) {
+                            toastr.warning(data['warning'])
+                        }
+
+
+                        let html = ''
+                        for (let i = 0; i < questions_groups_selected.length; i++) {
+                            let questions_group_selected = questions_groups_selected[i]
+                            html += '<p class="mb-0 participant-selected-question-group" id="participant_selected_question_group_id_' + questions_group_selected['code'] + '">' + questions_group_selected['name'] + '</p>'
+                        }
+                        let el = $('#' + participant_tr_id).find('.participant_selected_questions_groups_td')
+                        el.html('')
+                        el.html(html)
+                        $('#modal_question_groups').modal('hide')
+                        btn_text($('#save_question_groups'), 'Сохранить')
+                        toastr.success('Группы вопросов сохранены')
+
+
+                    }
+
                 }
-                let el = $('#' + participant_tr_id).find('.participant_selected_questions_groups_td')
-                el.html('')
-                el.html(html)
-                $('#modal_question_groups').modal('hide')
-                btn_text($('#save_question_groups'), 'Сохранить')
-                toastr.success('Группы вопросов сохранены')
+
+
 
             }
         });
@@ -156,27 +192,17 @@ $('#add_participant').on('click', function () {
             toastr.error('Ошибка', data)
         },
         success:function (data) {
-
+            let role_name = $('#cur_role_name').text()
+            console.log(data)
             hide_progressbar_loader()
             let data_json = data['response']
-            if(data_json === 'None'){
+            if(data_json === 'logout'){
+                window.location.href = url_login_home
+            }else {
+                if(data_json === 'None'){
 
-                let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                                '<div>Cотрудники для распределения отсутстуют' + '</div>' +
-                                '<br>' +
-                                '<hr class="solid mt-0" style="background-color: black;">'
-                Swal.fire({
-                  html: output_html,
-                  icon: 'warning',
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'ОК'
-                })
-            }else{
-                if (data_json === 'company_disactivated'){
                     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                                    '<div>Компания деактивирована' + '</div>' +
-                                    '<div>Если Вы не знаете причин - обратитесь к менеджеру' + '</div>' +
+                                    '<div>Cотрудники для распределения отсутстуют' + '</div>' +
                                     '<br>' +
                                     '<hr class="solid mt-0" style="background-color: black;">'
                     Swal.fire({
@@ -186,23 +212,41 @@ $('#add_participant').on('click', function () {
                       cancelButtonColor: '#d33',
                       confirmButtonText: 'ОК'
                     })
-                }else {
-                    let html = ''
-                    for(let i=0; i < data_json.length; i++) {
-                        console.log('id - ' + data_json[i]['participant_id'] + 'len - ' + $('#tbody_participants_selected').find('#participant_id_' + data_json[i]['participant_id']).length)
-                        if($('#tbody_participants_selected').find('#participant_id_' + data_json[i]['participant_id']).length > 0){
-                            html += '<tr class="participant_item participant_item_selected cursor-pointer" id="employee_id_' + data_json[i]['employee_id'] + '">'
-                        }else {
-                            html += '<tr class="participant_item  cursor-pointer" id="employee_id_' + data_json[i]['employee_id'] + '">'
+                }else{
+                    if (data_json === 'company_deactivated' && role_name === 'Админ заказчика'){
+                        let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                                        '<div>Компания деактивирована' + '</div>' +
+                                        '<div>Если Вы не знаете причин - обратитесь к менеджеру' + '</div>' +
+                                        '<br>' +
+                                        '<hr class="solid mt-0" style="background-color: black;">'
+                        Swal.fire({
+                          html: output_html,
+                          icon: 'warning',
+                          confirmButtonColor: '#3085d6',
+                          cancelButtonColor: '#d33',
+                          confirmButtonText: 'ОК'
+                        })
+                    }else {
+                        if(data['warning']){
+                            toastr.warning(data['warning'])
                         }
-                        html += '<td class=" employee-name">' + data_json[i]['name'] + '</td>'
-                        html += '<td class="text-end employee-email">' + data_json[i]['email'] + '</td>'
-                        html += '</tr>'
+                        let html = ''
+                        for(let i=0; i < data_json.length; i++) {
+                            console.log('id - ' + data_json[i]['participant_id'] + 'len - ' + $('#tbody_participants_selected').find('#participant_id_' + data_json[i]['participant_id']).length)
+                            if($('#tbody_participants_selected').find('#participant_id_' + data_json[i]['participant_id']).length > 0){
+                                html += '<tr class="participant_item participant_item_selected cursor-pointer" id="employee_id_' + data_json[i]['employee_id'] + '">'
+                            }else {
+                                html += '<tr class="participant_item  cursor-pointer" id="employee_id_' + data_json[i]['employee_id'] + '">'
+                            }
+                            html += '<td class=" employee-name">' + data_json[i]['name'] + '</td>'
+                            html += '<td class="text-end employee-email">' + data_json[i]['email'] + '</td>'
+                            html += '</tr>'
+                        }
+                        $('#tbody_modal_participants').html(html)
+                        $('#modal_participants').modal('show')
                     }
-                    $('#tbody_modal_participants').html(html)
-                    $('#modal_participants').modal('show')
-                }
 
+                }
             }
         }
     });
@@ -396,7 +440,7 @@ $('#modal_send_invitation_btn').on('click', function () {
                 toastr.error(json_data['error'])
             }else {
                 if('company_error' in json_data){
-                    if(json_data['company_error'] === 'company_disactivated'){
+                    if(json_data['company_error'] === 'company_deactivated'){
                         let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
                                         '<div>Компания деактивирована' + '</div>' +
                                         '<div>Если Вы не знаете причин - обратитесь к менеджеру' + '</div>' +
@@ -431,6 +475,10 @@ $('#modal_send_invitation_btn').on('click', function () {
 
 
 $('#tbody_participants_selected').on('click', '.send-email-invitation', function () {
+    let role_name = $('#cur_role_name').text()
+    if ($('#company_active').attr('checked') !== 'checked' && role_name !== 'Админ заказчика') {
+        toastr.warning('Обратите внимание - компания деактивирована!')
+    }
 
     let question_groups_qnt = $(this).closest('tr').find('.participant_selected_questions_groups_td p').length
     if(question_groups_qnt === 0){
@@ -453,3 +501,5 @@ $('#send_admin_notification_after_filling_up').on('click', function () {
         // active = 1
     }
 })
+
+
