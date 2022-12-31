@@ -1,4 +1,5 @@
 from pdf.extract_data import extract_categories
+from pdf_group.page_funcs import BLOCK_R,BLOCK_G,BLOCK_B
 
 
 def draw_scale(pdf, x, y, w, h, points, img_link):
@@ -29,6 +30,14 @@ def draw_full_scale(pdf, scale_name, x, y, scale_name_y, json_section, section_n
 
 
 def insert_page_number(pdf):
+    pdf.set_fill_color(BLOCK_R, BLOCK_G, BLOCK_B)
+    pdf.set_draw_color(BLOCK_R, BLOCK_G, BLOCK_B)
+    rect_width = 20
+    rect_height = 6
+    pdf.set_xy(200, 290)
+
+    pdf.rect(197, 287, rect_width, rect_height, 'FD')
+
     pdf.set_text_color(0, 0, 0)
     pdf.set_font("RalewayLight", "", 10)
     pdf.set_xy(200, 290)

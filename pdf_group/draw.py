@@ -1,19 +1,8 @@
 from pdf.models import Report, ReportData
+import math
 
 
-def draw_arrow(pdf, startX, startY, r, g, b, scale_data):
-    data_by_points = {
-        1: [],
-        2: [],
-        3: [],
-        4: [],
-        5: [],
-        6: [],
-        7: [],
-        8: [],
-        9: [],
-        10: [],
-    }
+def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
     pdf.set_draw_color(r, g, b)
     pdf.set_fill_color(r, g, b)
     # отрисовка прямоугольника
@@ -67,50 +56,38 @@ def draw_arrow(pdf, startX, startY, r, g, b, scale_data):
         else:
             pdf.text(line_x_start + cur_section_width - 0.75, startY + 3, str(cur_section + 1))
         line_x_start = line_x_start + cur_section_width
-    for data in scale_data:
-        if data[1] != 0:
-            data_by_points[data[1]].append(data)
-    # print(data_by_points)
     total_points = 0
-    circles_placed_cnt = 0
     total_participants_qnt = 0
+
     for key, value in data_by_points.items():
+
         if len(value) > 0:
-            qnt = len(value)
             circles_placed_cnt = 0
+
+            col_qnt = len(value)
             first_item_x = 0
-            if qnt > 4:
-                qnt = 4
+            if col_qnt > 4:
+                col_qnt = 4
+
+            cur_col = 1
+            delta_y = 0
+
             for scale_number_data in value:
                 total_points = total_points + scale_number_data[1]
                 circles_placed_cnt = circles_placed_cnt + 1
-                scale_number_x = startX + scale_number_data[1] * section_width - section_width / 2 #x позиция черты на шкале
-                if circles_placed_cnt <= 4:
-                    draw_single_circle_arrow(pdf, scale_number_x - 1.75*qnt + first_item_x, startY + 5.5, scale_number_data[2])
-                if circles_placed_cnt == 5:
-                    first_item_x = 0
-                    draw_single_circle_arrow(pdf, scale_number_x - 1.75*qnt + first_item_x, startY + 5.5 + 3.5, scale_number_data[2])
-                if 5 < circles_placed_cnt <= 8:
-                    draw_single_circle_arrow(pdf, scale_number_x - 1.75*qnt + first_item_x, startY + 5.5 + 3.5, scale_number_data[2])
-                if circles_placed_cnt == 9:
-                    first_item_x = 0
-                    draw_single_circle_arrow(pdf, scale_number_x - 1.75*qnt + first_item_x, startY + 5.5 + 3.5 + 3.5, scale_number_data[2])
-                if 9 < circles_placed_cnt <= 12:
-                    draw_single_circle_arrow(pdf, scale_number_x - 1.75*qnt + first_item_x, startY + 5.5 + 3.5 + 3.5, scale_number_data[2])
-                if circles_placed_cnt == 13:
-                    first_item_x = 0
-                    draw_single_circle_arrow(pdf, scale_number_x - 1.75*qnt + first_item_x, startY + 5.5 + 3.5 + 3.5 + 3.5, scale_number_data[2])
-                if 13 < circles_placed_cnt <= 16:
-                    draw_single_circle_arrow(pdf, scale_number_x - 1.75*qnt + first_item_x, startY + 5.5 + 3.5 + 3.5 + 3.5, scale_number_data[2])
 
+                if cur_col > col_qnt:
+                    delta_y = delta_y + 3.5
+                    cur_col = 1
+                    first_item_x = 0
+
+                scale_number_x = startX + scale_number_data[1] * section_width - section_width / 2  # x позиция черты на шкале
+                draw_single_circle_arrow(pdf, scale_number_x - 1.75 * col_qnt + first_item_x, startY + 5.5 + delta_y, scale_number_data[2])
                 first_item_x = first_item_x + 3.5
+                cur_col = cur_col + 1
+
             total_participants_qnt = total_participants_qnt + circles_placed_cnt
 
-                # print(f'key - {key} val - {value}')
-    # print(f'total - {total_points} среднее - {total_points // len(scale_data)}')
-    # average_number_x = startX + (total_points // len(scale_data)) * section_width - section_width / 2
-    # pdf.regular_polygon(x=average_number_x - 5, y=startY - 2, polyWidth=10, rotateDegrees=90, numSides=3, style="FD")
-    # draw_single_circle_arrow(pdf, startX + 56, startY + 5.5, 20)
     #треугольник СРЕДНЕЕ
     if total_participants_qnt > 0:
         average_number_x = startX + (total_points // total_participants_qnt) * section_width - section_width / 2
@@ -126,6 +103,7 @@ def draw_arrow(pdf, startX, startY, r, g, b, scale_data):
 
 
 def draw_single_circle_arrow(pdf, x, y, number):
+    # print(f'start - {pdf.get_y()}')
     pdf.set_draw_color(0, 0, 0)
     pdf.set_text_color(0, 0, 0)
     pdf.set_font("NotoSansDisplayMedium", "", 6)
@@ -137,6 +115,7 @@ def draw_single_circle_arrow(pdf, x, y, number):
             pdf.text(x + 0.5, y + 2.5, str(number))
         else:
             pdf.text(x + 0.6, y + 2.5, str(number))
+    print(f'start - {pdf.get_y()}')
 
 
 def draw_squares(pdf, square_results):
@@ -365,18 +344,18 @@ def draw_single_circle_squares(square_data, pdf, square_x_cnt, cnt):
     email = square_data[1]
     participant_name = square_data[2]
     report = Report.objects.filter(participant__employee__email=email).latest('added')
-    report_data = ReportData.objects.filter(report=report, section__name='Выгорание Бойко')
+    report_data = ReportData.objects.filter(report=report, section_code='3')
     section_1 = 0
     section_2 = 0
     section_3 = 0
 
     for report_data_item in report_data:
         split = report_data_item.category.name.split('_')
-        if split[0] == 'Напряжение':
+        if int(split[0]) <= 4:
             section_1 = section_1 + report_data_item.points
-        elif split[0] == 'Сопротивление':
+        elif 5 <= int(split[0]) <= 8:
             section_2 = section_2 + report_data_item.points
-        elif split[0] == 'Истощение':
+        elif int(split[0]) >= 9:
             section_3 = section_3 + report_data_item.points
     if section_1 > 18 or section_2 > 18 or section_3 > 18 or section_2 >= 7:
         pdf.set_fill_color(241, 151, 15)
@@ -418,6 +397,7 @@ def draw_table(square_data, pdf, width, x, y):
             pdf.set_text_color(255, 0, 0)
         else:
             pdf.set_text_color(0, 0, 0)
+
         pdf.multi_cell(7, line_height, str(cnt), border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
         pdf.multi_cell(width - 7, line_height, square_data_item[2], border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
         pdf.ln(line_height)

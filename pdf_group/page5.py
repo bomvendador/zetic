@@ -1,12 +1,14 @@
 from pdf.draw import insert_page_number
 from pdf_group.draw import draw_table
-from pdf_group.page_funcs import proceed_scale, block_name
+from pdf_group.page_funcs import proceed_scale, block_name, data_by_points
 from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B
 
 
-def page5(pdf, square_results, lang):
+def page5(pdf, square_results, lang, table_y):
     pdf.set_margins(top=15, left=0, right=5)
     pdf.set_auto_page_break(False)
+
+    section_code = '2'
 
     x = 8
     y = 10
@@ -24,6 +26,9 @@ def page5(pdf, square_results, lang):
 
     y = y + 8
 
+    category_code = '2_1'
+    section_data = data_by_points(square_results, section_code, category_code)
+
     start_block_name_y = y + 3
 
     scale_name = u'''
@@ -35,10 +40,13 @@ def page5(pdf, square_results, lang):
 требовательность к себе
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Копинги', 'Самообладание', description_delta_y=5, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=5, line_delta_y=3.5,
                   arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
 
     y = y + 28
+
+    category_code = '2_2'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Контроль над ситуацией
@@ -48,10 +56,13 @@ def page5(pdf, square_results, lang):
 для преодоления проблемы
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Копинги', 'Контроль над ситуацией', description_delta_y=5, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=5, line_delta_y=3.5,
                   arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
 
     y = y + 28
+
+    category_code = '2_3'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Позитивная
@@ -63,10 +74,13 @@ def page5(pdf, square_results, lang):
 ситуацией
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Копинги', 'Позитивная самомотивация', description_delta_y=9, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=9, line_delta_y=3.5,
                   arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
 
     y = y + 28
+
+    category_code = '2_4'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Снижение значения
@@ -79,10 +93,13 @@ def page5(pdf, square_results, lang):
 обесценивание)
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Копинги', 'Снижение значения стрессовой ситуации', description_delta_y=9, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=9, line_delta_y=3.5,
                   arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
 
     y = y + 28
+
+    category_code = '2_5'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Самоутверждение
@@ -93,12 +110,15 @@ def page5(pdf, square_results, lang):
 в иной области
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Копинги', 'Самоутверждение', description_delta_y=5, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=5, line_delta_y=3.5,
                   arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
 
     block_name(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, start_block_name_y, "СТРАТЕГИИ ПРЕОДОЛЕНИЯ СТРЕССА", end_y_delta=21, end_y_text_delta=42)
 
     y = y + 28
+
+    category_code = '2_6'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     start_block_name_y = y + 3
 
@@ -110,11 +130,14 @@ def page5(pdf, square_results, lang):
 ситуаций
             '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Копинги', 'Отвлечение',
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code,
                   description_delta_y=5, line_delta_y=3.5,
                   arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
 
     y = y + 28
+
+    category_code = '2_7'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Бегство от стрессовой 
@@ -127,11 +150,11 @@ def page5(pdf, square_results, lang):
 ответственности, нетерпение
             '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Копинги', 'Бегство от стрессовой ситуации',
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code,
                   description_delta_y=9, line_delta_y=3.5,
                   arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
 
     block_name(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, start_block_name_y, "", end_y_delta=28, end_y_text_delta=35)
 
-    draw_table(square_results, pdf, width=90, x=14, y=230)
+    draw_table(square_results, pdf, width=90, x=14, y=table_y)
     insert_page_number(pdf)

@@ -118,11 +118,6 @@ def download_file(request, filename):
     print(full_path)
     response = FileResponse(open(full_path, 'rb'))
     return response
-    # with open(full_path, 'rb') as f:
-    #     file_data = f.read()
-    #     response = HttpResponse(file_data, content_type='application/pdf')
-    #     response['Content-Disposition'] = f"attachment; filename={filename}"
-    # return response
 
 
 @csrf_exempt

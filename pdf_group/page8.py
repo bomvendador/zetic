@@ -1,14 +1,16 @@
 from pdf.draw import insert_page_number
 from pdf_group.draw import draw_table
-from pdf_group.page_funcs import proceed_scale, block_name
+from pdf_group.page_funcs import proceed_scale, block_name, data_by_points
 from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B
 
 
-def page8(pdf, square_results, lang):
+def page8(pdf, square_results, lang, table_y):
     pdf.set_margins(top=15, left=0, right=5)
     pdf.set_auto_page_break(False)
 
     delta_x_between_scales = 28
+
+    section_code = '3'
 
     x = 8
     y = 10
@@ -26,6 +28,9 @@ def page8(pdf, square_results, lang):
 
     y = y + 8
 
+    category_code = '3_1'
+    section_data = data_by_points(square_results, section_code, category_code)
+
     start_block_name_y = y + 3
 
     scale_name = u'''
@@ -38,10 +43,13 @@ def page8(pdf, square_results, lang):
 рабочих задач
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Выгорание Бойко', 'Напряжение_Переживание', description_delta_y=5, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=5, line_delta_y=3.5,
                   arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
 
     y = y + delta_x_between_scales
+
+    category_code = '3_2'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Неудовлетворенность
@@ -54,10 +62,13 @@ def page8(pdf, square_results, lang):
 ощущение
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Выгорание Бойко', 'Напряжение_Неудовлетворенность собой', description_delta_y=9, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=9, line_delta_y=3.5,
                   arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
 
     y = y + delta_x_between_scales
+
+    category_code = '3_3'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 «Загнанность в клетку»
@@ -70,10 +81,13 @@ def page8(pdf, square_results, lang):
 пустоты внутри
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Выгорание Бойко', 'Напряжение_Загнанность в клетку', description_delta_y=5, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=5, line_delta_y=3.5,
                   arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
 
     y = y + delta_x_between_scales
+
+    category_code = '3_4'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Тревога
@@ -85,12 +99,15 @@ def page8(pdf, square_results, lang):
 желание «остановиться»
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Выгорание Бойко', 'Напряжение_Тревога', description_delta_y=5, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=5, line_delta_y=3.5,
                   arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
 
     block_name(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, start_block_name_y, "ФАЗА 1. НАПРЯЖЕНИЕ", end_y_delta=25, end_y_text_delta=45)
 
     y = y + delta_x_between_scales
+
+    category_code = '3_5'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     start_block_name_y = y + 3
 
@@ -105,10 +122,13 @@ def page8(pdf, square_results, lang):
 черствость, равнодушие
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Выгорание Бойко', 'Сопротивление_Избирательное реагирование', description_delta_y=9, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=9, line_delta_y=3.5,
                   arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
 
     y = y + delta_x_between_scales
+
+    category_code = '3_6'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Эмоциональная защита
@@ -121,10 +141,13 @@ def page8(pdf, square_results, lang):
 с ними
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Выгорание Бойко', 'Сопротивление_Эмоциональная защита', description_delta_y=5, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=5, line_delta_y=3.5,
                   arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
 
     y = y + delta_x_between_scales
+
+    category_code = '3_7'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Экономия эмоций
@@ -137,10 +160,10 @@ def page8(pdf, square_results, lang):
 от других людей
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Выгорание Бойко', 'Сопротивление_Экономия эмоций', description_delta_y=5, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=5, line_delta_y=3.5,
                   arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
 
     block_name(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, start_block_name_y, "ФАЗА 2. СОПРОТИВЛЕНИЕ", end_y_delta=30, end_y_text_delta=30)
 
-    draw_table(square_results, pdf, width=90, x=14, y=230)
+    draw_table(square_results, pdf, width=90, x=14, y=table_y)
     insert_page_number(pdf)

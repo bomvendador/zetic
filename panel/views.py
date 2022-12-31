@@ -139,6 +139,7 @@ def get_report_participants_data(request):
         lie_points = []
         # response = {}
         for participant in report_participants:
+            print(f'participant - {participant}')
             report = Report.objects.filter(participant__employee__email=participant).latest('added')
             lie_points.append({
                 'fio': report.participant.employee.name,
@@ -150,8 +151,8 @@ def get_report_participants_data(request):
                 # print(report_data)
                 participants_data.append({
                     'fio': report_data.report.participant.employee.name,
-                    'section': report_data.section.name,
-                    'category': report_data.category.name,
+                    'section_code': report_data.section_code,
+                    'category_code': report_data.category_code,
                     'points': report_data.points,
                 })
         response = {

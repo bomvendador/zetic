@@ -1,12 +1,14 @@
 from pdf.draw import insert_page_number
 from pdf_group.draw import draw_arrow, draw_table
-from pdf_group.page_funcs import proceed_scale, block_name
+from pdf_group.page_funcs import proceed_scale, block_name, data_by_points
 from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B
 
 
-def page4(pdf, square_results, lang):
+def page4(pdf, square_results, lang, table_y):
     pdf.set_margins(top=15, left=0, right=5)
     pdf.set_auto_page_break(False)
+
+    section_code = '1'
 
     x = 8
     y = 5
@@ -19,6 +21,9 @@ def page4(pdf, square_results, lang):
 
     start_block_name_y = y + 3
 
+    category_code = '1_8'
+    section_data = data_by_points(square_results, section_code, category_code)
+
     scale_name = u'''
 Шкала M
 Восторженность
@@ -29,9 +34,12 @@ def page4(pdf, square_results, lang):
 проявления            
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Кеттелл', 'Шкала M', description_delta_y=9, line_delta_y=3.5, arrow_color_r=34, arrow_color_g=170, arrow_color_b=245)
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=9, line_delta_y=3.5, arrow_color_r=34, arrow_color_g=170, arrow_color_b=245)
 
     y = y + 28
+
+    category_code = '1_9'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Шкала Q2
@@ -43,9 +51,12 @@ def page4(pdf, square_results, lang):
 и действиях
 '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Кеттелл', 'Шкала Q2', description_delta_y=9, line_delta_y=3.5, arrow_color_r=34, arrow_color_g=170, arrow_color_b=245)
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=9, line_delta_y=3.5, arrow_color_r=34, arrow_color_g=170, arrow_color_b=245)
 
     y = y + 28
+
+    category_code = '1_10'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Шкала G
@@ -56,9 +67,12 @@ def page4(pdf, square_results, lang):
 обязательность, ответственность,
 следование социальным нормам'''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Кеттелл', 'Шкала G', description_delta_y=9, line_delta_y=3.5, arrow_color_r=34, arrow_color_g=170, arrow_color_b=245)
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=9, line_delta_y=3.5, arrow_color_r=34, arrow_color_g=170, arrow_color_b=245)
 
     y = y + 28
+
+    category_code = '1_11'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Шкала Q3
@@ -70,11 +84,14 @@ def page4(pdf, square_results, lang):
 забота о репутации
 '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Кеттелл', 'Шкала Q3', description_delta_y=9, line_delta_y=3.5, arrow_color_r=34, arrow_color_g=170, arrow_color_b=245)
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=9, line_delta_y=3.5, arrow_color_r=34, arrow_color_g=170, arrow_color_b=245)
 
     block_name(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, start_block_name_y, "УСТОЙЧИВОСТЬ РЕЗУЛЬТАТА", end_y_delta=25, end_y_text_delta=35)
 
     y = y + 28
+
+    category_code = '1_12'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     start_block_name_y = y
 
@@ -89,10 +106,13 @@ def page4(pdf, square_results, lang):
 для оптимизации работы
     '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Кеттелл', 'Шкала Q1',
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code,
                   description_delta_y=9, line_delta_y=3.5, arrow_color_r=34, arrow_color_g=170, arrow_color_b=245)
 
     y = y + 28
+
+    category_code = '1_13'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Шкала L
@@ -104,10 +124,13 @@ def page4(pdf, square_results, lang):
 недоверие к информации
     '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Кеттелл', 'Шкала L',
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code,
                   description_delta_y=9, line_delta_y=3.5, arrow_color_r=34, arrow_color_g=170, arrow_color_b=245)
 
     y = y + 28
+
+    category_code = '1_14'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Шкала H
@@ -118,10 +141,13 @@ def page4(pdf, square_results, lang):
 предприимчивость
     '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Кеттелл', 'Шкала H',
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code,
                   description_delta_y=9, line_delta_y=3.5, arrow_color_r=34, arrow_color_g=170, arrow_color_b=245)
 
     y = y + 28
+
+    category_code = '1_15'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Шкала E
@@ -132,10 +158,10 @@ def page4(pdf, square_results, lang):
 доминирование, неуступчивость
     '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Кеттелл', 'Шкала E',
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code,
                   description_delta_y=9, line_delta_y=3.5, arrow_color_r=34, arrow_color_g=170, arrow_color_b=245)
 
     block_name(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, start_block_name_y + 3, "УСТОЙЧИВОСТЬ В ИЗМЕНЕНИЯХ", end_y_delta=21, end_y_text_delta=35)
 
-    draw_table(square_results, pdf, width=90, x=14, y=230)
+    draw_table(square_results, pdf, width=90, x=14, y=table_y)
     insert_page_number(pdf)

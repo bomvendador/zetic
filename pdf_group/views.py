@@ -17,7 +17,11 @@ import time
 
 from pdf_group.title import title_page
 from pdf_group.page2 import page2
-from pdf_group.page3 import page3
+from pdf_group.section_1 import page as section_1_page
+from pdf_group.section_2 import page as section_2_page
+from pdf_group.section_3 import page as section_3_page
+from pdf_group.section_4 import page as section_4_page
+from pdf_group.participants_list import page as participants_page
 from pdf_group.page4 import page4
 from pdf_group.page5 import page5
 from pdf_group.page6 import page6
@@ -38,8 +42,16 @@ def pdf_group_generator(request_json):
     pdf.add_font("RalewayBold", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Bold.ttf", uni=True)
     pdf.add_font("NotoSansDisplayMedium", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/NotoSansDisplay-Medium.ttf", uni=True)
 
+    max_y = 280
+    total_participant_qnt = len(request_json['square_results'])
+    # line_height = round(pdf.font_size * 2)
+    line_height = 5.5
+    table_height = round(total_participant_qnt / 2) * line_height
+    table_y = max_y - table_height
+    print(f'line_height = {line_height} total_participant_qnt = {total_participant_qnt} table_height = {table_height} table_y = {table_y}')
+
     pdf.add_page()
-    print(request_json)
+    # print(request_json)
     # lang = request_json['lang']
     lang = 'ru'
     client_name = request_json['project']
@@ -47,54 +59,69 @@ def pdf_group_generator(request_json):
     title_page(pdf, client_name, lang)
 
     pdf.add_page()
-
     pdf.set_text_color(0, 0, 0)
-    page2(pdf, request_json['square_results'])
+    participants_page(pdf, request_json['square_results'], lang)
 
     pdf.add_page()
-
     pdf.set_text_color(0, 0, 0)
-    page3(pdf, request_json['square_results'], lang)
+    page2(pdf, request_json['square_results'], table_y)
+
+    pdf.set_line_width(0.1)
+    pdf.add_page()
+    pdf.set_text_color(0, 0, 0)
+    section_1_page(pdf, request_json['square_results'], lang)
 
     pdf.add_page()
-
     pdf.set_text_color(0, 0, 0)
-    page4(pdf, request_json['square_results'], lang)
+    section_2_page(pdf, request_json['square_results'], lang)
 
     pdf.add_page()
-
     pdf.set_text_color(0, 0, 0)
-    page5(pdf, request_json['square_results'], lang)
+    section_3_page(pdf, request_json['square_results'], lang)
 
     pdf.add_page()
-
     pdf.set_text_color(0, 0, 0)
-    page6(pdf, request_json['square_results'], lang)
+    section_4_page(pdf, request_json['square_results'], lang)
 
-    pdf.add_page()
-
-    pdf.set_text_color(0, 0, 0)
-    page7(pdf, request_json['square_results'], lang)
-
-    pdf.add_page()
-
-    pdf.set_text_color(0, 0, 0)
-    page8(pdf, request_json['square_results'], lang)
-
-    pdf.add_page()
-
-    pdf.set_text_color(0, 0, 0)
-    page9(pdf, request_json['square_results'], lang)
-
-    pdf.add_page()
-
-    pdf.set_text_color(0, 0, 0)
-    page10(pdf, request_json['square_results'], lang)
-
-    pdf.add_page()
-
-    pdf.set_text_color(0, 0, 0)
-    page11(pdf, request_json['square_results'], lang)
+    # pdf.add_page()
+    #
+    # pdf.set_text_color(0, 0, 0)
+    # page4(pdf, request_json['square_results'], lang, table_y)
+    #
+    # pdf.add_page()
+    #
+    # pdf.set_text_color(0, 0, 0)
+    # page5(pdf, request_json['square_results'], lang, table_y)
+    #
+    # pdf.add_page()
+    #
+    # pdf.set_text_color(0, 0, 0)
+    # page6(pdf, request_json['square_results'], lang, table_y)
+    #
+    # pdf.add_page()
+    #
+    # pdf.set_text_color(0, 0, 0)
+    # page7(pdf, request_json['square_results'], lang, table_y)
+    #
+    # pdf.add_page()
+    #
+    # pdf.set_text_color(0, 0, 0)
+    # page8(pdf, request_json['square_results'], lang, table_y)
+    #
+    # pdf.add_page()
+    #
+    # pdf.set_text_color(0, 0, 0)
+    # page9(pdf, request_json['square_results'], lang, table_y)
+    #
+    # pdf.add_page()
+    #
+    # pdf.set_text_color(0, 0, 0)
+    # page10(pdf, request_json['square_results'], lang, table_y)
+    #
+    # pdf.add_page()
+    #
+    # pdf.set_text_color(0, 0, 0)
+    # page11(pdf, request_json['square_results'], lang, table_y)
 
     now = datetime.datetime.now()
 

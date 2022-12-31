@@ -37,7 +37,7 @@ def participant_started(request):
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 @parser_classes([JSONParser])
 def data_for_report(request):
     if request.method == 'POST':

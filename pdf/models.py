@@ -247,7 +247,7 @@ class Report(models.Model):
     comments = models.TextField(default=None, blank=True, null=True, verbose_name='Комментарии индивидуальный отчет')
 
     def __str__(self):
-        return f'{self.participant} - {self.file.name}'
+        return f'{self.participant} - {self.participant.employee.email} - {self.file.name}'
 
     def filename(self):
         return os.path.basename(self.file.name)
@@ -259,12 +259,14 @@ class Report(models.Model):
 
 class ReportData(models.Model):
     report = models.ForeignKey(Report, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Отчет')
-    section = models.ForeignKey(Section, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Секция')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Категория')
+    section_name = models.CharField(max_length=50, blank=True, null=True, default=None)
+    section_code = models.CharField(max_length=2, blank=True, null=True, default=None)
+    category_name = models.CharField(max_length=50, blank=True, null=True, default=None)
+    category_code = models.CharField(max_length=5, blank=True, null=True, default=None)
     points = models.IntegerField(null=False, default=0)
 
     def __str__(self):
-        return f'{self.report.participant.employee.name} - {self.report.participant.employee.company.name} - {self.section.name} - {self.category.name} - {self.points}'
+        return f'{self.report.participant.employee.name} - {self.report.participant.employee.company.name} - {self.section_name} - {self.category_name} - {self.points}'
 
     class Meta:
         verbose_name_plural = 'Данные индивидуальных отчетов'

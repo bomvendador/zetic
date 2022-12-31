@@ -1,12 +1,14 @@
 from pdf.draw import insert_page_number
 from pdf_group.draw import draw_table
-from pdf_group.page_funcs import proceed_scale, block_name
+from pdf_group.page_funcs import proceed_scale, block_name, data_by_points
 from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B
 
 
-def page10(pdf, square_results, lang):
+def page10(pdf, square_results, lang, table_y):
     pdf.set_margins(top=15, left=0, right=5)
     pdf.set_auto_page_break(False)
+
+    section_code = '4'
 
     delta_x_between_scales = 28
 
@@ -26,6 +28,9 @@ def page10(pdf, square_results, lang):
 
     y = y + 8
 
+    category_code = '4_1'
+    section_data = data_by_points(square_results, section_code, category_code)
+
     start_block_name_y = y + 3
 
     scale_name = u'''
@@ -38,10 +43,13 @@ def page10(pdf, square_results, lang):
 к группе
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Ценности', 'Причастность', description_delta_y=5, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=5, line_delta_y=3.5,
                   arrow_color_r=248, arrow_color_g=216, arrow_color_b=31)
 
     y = y + delta_x_between_scales
+
+    category_code = '4_2'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Традиционализм
@@ -53,10 +61,13 @@ def page10(pdf, square_results, lang):
 группе
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Ценности', 'Традицонализм', description_delta_y=5, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=5, line_delta_y=3.5,
                   arrow_color_r=248, arrow_color_g=216, arrow_color_b=31)
 
     y = y + delta_x_between_scales
+
+    category_code = '4_3'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Жажда впечатлений
@@ -69,10 +80,13 @@ def page10(pdf, square_results, lang):
 получать новый опыт
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Ценности', 'Жажда впечатлений', description_delta_y=5, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=5, line_delta_y=3.5,
                   arrow_color_r=248, arrow_color_g=216, arrow_color_b=31)
 
     y = y + delta_x_between_scales
+
+    category_code = '4_4'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Эстетичность
@@ -83,10 +97,13 @@ def page10(pdf, square_results, lang):
 визуальности и гармоничности
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Ценности', 'Эстетичность', description_delta_y=5, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=5, line_delta_y=3.5,
                   arrow_color_r=248, arrow_color_g=216, arrow_color_b=31)
 
     y = y + delta_x_between_scales
+
+    category_code = '4_5'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Гедонизм
@@ -98,12 +115,15 @@ def page10(pdf, square_results, lang):
 
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Ценности', 'Гедонизм', description_delta_y=5, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=5, line_delta_y=3.5,
                   arrow_color_r=248, arrow_color_g=216, arrow_color_b=31)
 
     block_name(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, start_block_name_y, "СОЗДАНИЕ ГАРМОНИИ", end_y_delta=27, end_y_text_delta=60)
 
     y = y + delta_x_between_scales
+
+    category_code = '4_6'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     start_block_name_y = y + 3
 
@@ -118,10 +138,13 @@ def page10(pdf, square_results, lang):
 ресурсами и людьми
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Ценности', 'Признание', description_delta_y=5, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=5, line_delta_y=3.5,
                   arrow_color_r=248, arrow_color_g=216, arrow_color_b=31)
 
     y = y + delta_x_between_scales
+
+    category_code = '4_7'
+    section_data = data_by_points(square_results, section_code, category_code)
 
     scale_name = u'''
 Достижения
@@ -133,12 +156,12 @@ def page10(pdf, square_results, lang):
 стремление быть лучшим
         '''
 
-    proceed_scale(pdf, x + 5, y, scale_name, square_results, scale_discription, 'Ценности', 'Достижения', description_delta_y=5, line_delta_y=3.5,
+    proceed_scale(pdf, x + 5, y, scale_name, section_data, scale_discription, section_code, category_code, description_delta_y=5, line_delta_y=3.5,
                   arrow_color_r=248, arrow_color_g=216, arrow_color_b=31)
 
 
     block_name(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, start_block_name_y, "", end_y_delta=30, end_y_text_delta=50)
 
-    draw_table(square_results, pdf, width=90, x=14, y=230)
+    draw_table(square_results, pdf, width=90, x=14, y=table_y)
     insert_page_number(pdf)
 
