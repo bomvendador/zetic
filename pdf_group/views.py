@@ -16,20 +16,12 @@ from reports import settings
 import time
 
 from pdf_group.title import title_page
-from pdf_group.page2 import page2
+from pdf_group.squares import page as squares_page
 from pdf_group.section_1 import page as section_1_page
 from pdf_group.section_2 import page as section_2_page
 from pdf_group.section_3 import page as section_3_page
 from pdf_group.section_4 import page as section_4_page
 from pdf_group.participants_list import page as participants_page
-from pdf_group.page4 import page4
-from pdf_group.page5 import page5
-from pdf_group.page6 import page6
-from pdf_group.page7 import page7
-from pdf_group.page8 import page8
-from pdf_group.page9 import page9
-from pdf_group.page10 import page10
-from pdf_group.page11 import page11
 from pdf.views import save_serve_file
 from pdf_group.save_data import save_data_to_db as save_data_group
 
@@ -64,7 +56,7 @@ def pdf_group_generator(request_json):
 
     pdf.add_page()
     pdf.set_text_color(0, 0, 0)
-    page2(pdf, request_json['square_results'], table_y)
+    squares_page(pdf, request_json['square_results'], table_y)
 
     pdf.set_line_width(0.1)
     pdf.add_page()

@@ -116,26 +116,38 @@ expand_menu_item('#menu_employees_list')
             success:function (data) {
                 hide_progressbar_loader()
                 console.log(data)
-                $('#employee_role option').each(function (e) {
-                    if(data['role'] === $(this).val().split('_')[2]){
-                        $(this).prop('selected', true)
-                    }
-                })
-                $('#employee_position option').each(function (e) {
-                    if(data['position'] === $(this).val().split('_')[2]){
-                        $(this).prop('selected', true)
-                    }
-                })
-                $('#employee_industry option').each(function (e) {
-                    if(data['industry'] === $(this).val().split('_')[2]){
-                        $(this).prop('selected', true)
-                    }
-                })
-                $('#employee_gender option').each(function (e) {
-                    if(data['gender'] === $(this).text()){
-                        $(this).prop('selected', true)
-                    }
-                })
+                if (!server_error){
+                    $('#employee_role option').each(function (e) {
+                        if(data['role'] === $(this).val().split('_')[2]){
+                            $(this).prop('selected', true)
+                        }
+                    })
+                    $('#employee_position option').each(function (e) {
+                        if(data['position'] === $(this).val().split('_')[2]){
+                            $(this).prop('selected', true)
+                        }
+                    })
+                    $('#employee_industry option').each(function (e) {
+                        if(data['industry'] === $(this).val().split('_')[2]){
+                            $(this).prop('selected', true)
+                        }
+                    })
+                    $('#employee_gender option').each(function (e) {
+                        if(data['gender'] === $(this).text()){
+                            $(this).prop('selected', true)
+                        }
+                    })
+                }else {
+                    let role = data['role']
+                    let position = data['position']
+                    let industry = data['industry']
+                    let gender = data['gender']
+
+                    $('#employee_role').html('<option>' + role + '</option>')
+                    $('#employee_position').html('<option>' + position + '</option>')
+                    $('#employee_industry').html('<option>' + industry + '</option>')
+                    $('#employee_gender').html('<option>' + gender + '</option>')
+                }
                 $("#employee_birth_year").val(data['birth_year']).yearpicker({
                     // onChange: function (val) {
                     //     console.log(val)

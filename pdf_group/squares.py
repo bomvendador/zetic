@@ -2,7 +2,7 @@ from pdf_group.draw import draw_arrow,draw_squares, draw_table
 from pdf.draw import insert_page_number
 
 
-def page2(pdf, square_results, table_y):
+def page(pdf, square_results, table_y):
     pdf.set_auto_page_break(False)
 
     x = 20

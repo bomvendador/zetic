@@ -217,6 +217,7 @@ def employees_list(request):
         companies = Company.objects.filter(id=employee.company.id)
     if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
         companies = Company.objects.all()
+    print(Attributes.get_positions())
 
     context.update(
         {

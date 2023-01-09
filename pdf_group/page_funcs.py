@@ -43,7 +43,7 @@ def block_name(pdf, block_r, block_g, block_b, y, start_block_name_y, block_name
 def block_name_(pdf, block_r, block_g, block_b, y, x, block_name_str):
     pdf.set_fill_color(block_r, block_g, block_b)
     pdf.set_draw_color(block_r, block_g, block_b)
-    rect_width = 220
+    rect_width = 210
     rect_height = 8
     pdf.rect(0, y, rect_width, rect_height, 'FD')
     pdf.set_font("RalewayRegular", "", 9)

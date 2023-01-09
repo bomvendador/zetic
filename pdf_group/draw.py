@@ -115,66 +115,149 @@ def draw_single_circle_arrow(pdf, x, y, number):
             pdf.text(x + 0.5, y + 2.5, str(number))
         else:
             pdf.text(x + 0.6, y + 2.5, str(number))
-    print(f'start - {pdf.get_y()}')
+    # print(f'start - {pdf.get_y()}')
 
 
 def draw_squares(pdf, square_results):
     startX = 15
     startY = 25
     width = 90
+
+    ESFJ_1_1 = 0
+    ENFJ_1_2 = 0
+    ESFP_1_3 = 0
+    ENFP_1_4 = 0
+    ESTJ_2_1 = 0
+    ENTJ_2_2 = 0
+    ESTP_2_3 = 0
+    ENTP_2_4 = 0
+    ISFJ_3_1 = 0
+    INFJ_3_2 = 0
+    ISFP_3_3 = 0
+    INFP_3_4 = 0
+    ISTJ_4_1 = 0
+    INTJ_4_2 = 0
+    ISTP_4_3 = 0
+    INTP_4_4 = 0
+    top_1_max_qnt = 0
+    top_2_max_qnt = 0
+    bottom_1_max_qnt = 0
+    bottom_2_max_qnt = 0
+    delta_y_1 = 0
+    delta_y_2 = 0
+    delta_y_3 = 0
+    delta_y_4 = 0
+
+    for square_result in square_results:
+        # print(f'square_result - {square_result}')
+        match square_result[0]:
+            case 'ESFJ - Массовик-затейник':
+                ESFJ_1_1 = ESFJ_1_1 + 1
+            case 'ENFJ - Идеалист-харизматик':
+                ENFJ_1_2 = ENFJ_1_2 + 1
+            case 'ESFP - Спонтанный коммуникатор':
+                ESFP_1_3 = ESFP_1_3 + 1
+            case 'ENFP - Инициатор':
+                ENFP_1_4 = ENFP_1_4 + 1
+            case 'ESTJ - Контролер по жизни':
+                ESTJ_2_1 = ESTJ_2_1 + 1
+            case 'ENTJ - Предприниматель':
+                ENTJ_2_2 = ENTJ_2_2 + 1
+            case 'ESTP - Ультра-реалист':
+                ESTP_2_3 = ESTP_2_3 + 1
+            case 'ENTP - Изобретатель':
+                ENTP_2_4 = ENTP_2_4 + 1
+            case 'ISFJ - Хранитель':
+                ISFJ_3_1 = ISFJ_3_1 + 1
+            case 'INFJ - Вдохновитель':
+                INFJ_3_2 = INFJ_3_2 + 1
+            case 'ISFP - Посредник':
+                ISFP_3_3 = ISFP_3_3 + 1
+            case 'INFP - Благородный служитель':
+                INFP_3_4 = INFP_3_4 + 1
+            case 'ISTJ - Организатор':
+                ISTJ_4_1 = ISTJ_4_1 + 1
+            case 'INTJ - Любитель улучшений':
+                INTJ_4_2 = INTJ_4_2 + 1
+            case 'ISTP - Экспериментатор':
+                ISTP_4_3 = ISTP_4_3 + 1
+            case 'INTP - Решатель проблем':
+                INTP_4_4 = INTP_4_4 + 1
+
+    top_1_max_qnt = max(ESFJ_1_1, ENFJ_1_2, ESTJ_2_1, ENTJ_2_2)
+    top_2_max_qnt = max(ESFP_1_3, ENFP_1_4, ESTP_2_3, ENTP_2_4)
+    bottom_1_max_qnt = max(ISFJ_3_1, INFJ_3_2, ISTJ_4_1, INTJ_4_2)
+    bottom_2_max_qnt = max(ISFP_3_3, INFP_3_4, ISTP_4_3, INTP_4_4)
+    rows_max_qnt_1 = math.ceil(top_1_max_qnt / 4)
+    rows_max_qnt_2 = math.ceil(top_2_max_qnt / 4)
+    rows_max_qnt_3 = math.ceil(bottom_1_max_qnt / 4)
+    rows_max_qnt_4 = math.ceil(bottom_2_max_qnt / 4)
+
+    if rows_max_qnt_1 >= 4:
+        delta_y_1 = (rows_max_qnt_1 - 3) * 9
+    if rows_max_qnt_2 >= 4:
+        delta_y_2 = (rows_max_qnt_2 - 3) * 9
+    if rows_max_qnt_3 >= 4:
+        delta_y_3 = (rows_max_qnt_3 - 3) * 9
+    if rows_max_qnt_4 >= 4:
+        delta_y_4 = (rows_max_qnt_4 - 3) * 9
+
+    # print(f'top_1_max_qnt - {top_1_max_qnt} top_2_max_qnt - {top_2_max_qnt} bottom_1_max_qnt - {bottom_1_max_qnt} bottom_2_max_qnt - {bottom_2_max_qnt}')
+    #1
     pdf.set_draw_color(255, 240, 193)
     pdf.set_fill_color(255, 240, 193)
-    pdf.rect(startX, startY, width, width, 'FD')
-
+    pdf.rect(startX, startY, width, width + delta_y_1 + delta_y_2, 'FD')
+    #2
     pdf.set_draw_color(253, 219, 246)
     pdf.set_fill_color(253, 219, 246)
-    pdf.rect(startX + width, startY, width, width, 'FD')
-
+    pdf.rect(startX + width, startY, width, width + delta_y_1 + delta_y_2, 'FD')
+    #3
     pdf.set_draw_color(217, 245, 251)
     pdf.set_fill_color(217, 245, 251)
-    pdf.rect(startX, startY + width, width, width, 'FD')
-
+    pdf.rect(startX, startY + width, width, width + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'FD')
+    #4
     pdf.set_draw_color(226, 239, 218)
     pdf.set_fill_color(226, 239, 218)
-    pdf.rect(startX + width, startY + width, width, width, 'FD')
+    pdf.rect(startX + width, startY + width, width, width + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'FD')
 
     pdf.set_draw_color(255, 255, 255)
     pdf.set_fill_color(255, 255, 255)
-    pdf.rect(startX + width / 2 - 0.3, startY, 0.6, startY + width * 2, 'FD')
-
-    pdf.rect(startX + width + width / 2 - 0.3, startY, 0.6, startY + width * 2, 'FD')
-
-    pdf.rect(startX, startY + width / 2 - 0.3, startY + width * 2, 0.6, 'FD')
-
-    pdf.rect(startX, startY + width + width / 2 - 0.3, startY + width * 2, 0.6, 'FD')
+    # белый вертикальный разделитель первый
+    pdf.rect(startX + width / 2 - 0.3, startY, 0.6, startY + width * 2 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4 , 'FD')
+    # белый вертикальный разделитель второй
+    pdf.rect(startX + width + width / 2 - 0.3, startY, 0.6, startY + width * 2 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'FD')
+    # белый горизонтальный разделитель первый
+    pdf.rect(startX, startY + width / 2 - 0.3 + delta_y_1, startY + width * 2, 0.6, 'FD')
+    # белый горизонтальный разделитель второй
+    pdf.rect(startX, startY + width + width / 2 - 0.3 + delta_y_1 + delta_y_2 + delta_y_3, startY + width * 2, 0.6, 'FD')
 
     pdf.set_font("RalewayLight", "", 10)
 
-    pdf.rect(startX + width / 2 - 17, startY + width / 2 - 5, 34, 10, 'FD')
-    pdf.text(startX + width / 2 - 15 + 4, startY + width / 2 + 1, 'Интеграторы')
+    pdf.rect(startX + width / 2 - 17, startY + width / 2 - 5 + delta_y_1, 34, 10, 'FD')
+    pdf.text(startX + width / 2 - 15 + 4, startY + width / 2 + 1 + delta_y_1, 'Интеграторы')
 
-    pdf.rect(startX + width + width / 2 - 17, startY + width / 2 - 5, 34, 10, 'FD')
-    pdf.text(startX + width + width / 2 - 15 + 4.5, startY + width / 2 + 1, 'Инноваторы')
+    pdf.rect(startX + width + width / 2 - 17, startY + width / 2 - 5 + delta_y_1, 34, 10, 'FD')
+    pdf.text(startX + width + width / 2 - 15 + 4.5, startY + width / 2 + 1 + delta_y_1, 'Инноваторы')
 
-    pdf.rect(startX + width / 2 - 17, startY + width + width / 2 - 5, 34, 10, 'FD')
-    pdf.text(startX + width / 2 - 15 + 0.5, startY + width + width / 2 + 1, 'Администраторы')
+    pdf.rect(startX + width / 2 - 17, startY + width + width / 2 - 5 + delta_y_1 + delta_y_2 + delta_y_3, 34, 10, 'FD')
+    pdf.text(startX + width / 2 - 15 + 0.5, startY + width + width / 2 + 1 + delta_y_1 + delta_y_2 + delta_y_3, 'Администраторы')
 
-    pdf.rect(startX + width + width / 2 - 17, startY + width + width / 2 - 5, 34, 10, 'FD')
-    pdf.text(startX + width + width / 2 - 15 + 5, startY + width + width / 2 + 1, 'Продюсеры')
+    pdf.rect(startX + width + width / 2 - 17, startY + width + width / 2 - 5 + delta_y_1 + delta_y_2 + delta_y_3, 34, 10, 'FD')
+    pdf.text(startX + width + width / 2 - 15 + 5, startY + width + width / 2 + 1 + delta_y_1 + delta_y_2 + delta_y_3, 'Продюсеры')
 
     # названия квадратов
     pdf.set_font("RalewayRegular", "", 8)
 
     pdf.text(startX + width / 2 - 13, startY - 2.5, 'Фокус на процесс')
     pdf.text(startX + width / 2 + width - 13.5, startY - 2.5, 'Фокус на результат')
-    with pdf.rotation(90, 12, startY + width / 2 + 10):
-        pdf.text(0, startY + width / 2 + 10, "Неструктурированный подход")
-    with pdf.rotation(270, startX + width * 2 + 3, startY + width / 2 - 18):
-        pdf.text(startX + width * 2 + 3, startY + width / 2 - 18, "Концептуальные решения")
-    with pdf.rotation(90, 12, startY + width / 2 + 7 + width):
-        pdf.text(0, startY + width / 2 + 7 + width, "Структурированный подход")
-    with pdf.rotation(270, startX + width * 2 + 3, startY + width / 2 - 15 + width):
-        pdf.text(startX + width * 2 + 3, startY + width / 2 - 15 + width, "Локальные решения")
+    with pdf.rotation(90, 12, startY + width / 2 + 10 + delta_y_1):
+        pdf.text(0, startY + width / 2 + 10 + delta_y_1, "Неструктурированный подход")
+    with pdf.rotation(270, startX + width * 2 + 3, startY + width / 2 - 18 + delta_y_1):
+        pdf.text(startX + width * 2 + 3, startY + width / 2 - 18 + delta_y_1, "Концептуальные решения")
+    with pdf.rotation(90, 12, startY + width / 2 + 7 + width + delta_y_1 + delta_y_2 + delta_y_3):
+        pdf.text(0, startY + width / 2 + 7 + width + delta_y_1 + delta_y_2 + delta_y_3, "Структурированный подход")
+    with pdf.rotation(270, startX + width * 2 + 3, startY + width / 2 - 15 + width + delta_y_1 + delta_y_2 + delta_y_3):
+        pdf.text(startX + width * 2 + 3, startY + width / 2 - 15 + width + delta_y_1 + delta_y_2 + delta_y_3, "Локальные решения")
 
     pdf.set_font("RalewayLight", "", 8)
 
@@ -190,41 +273,41 @@ def draw_squares(pdf, square_results):
     pdf.text(startX + width + width * (3/4) - 3, startY + 4, 'ENTJ')
     pdf.text(startX + width + width * (3/4) - 11, startY + 7, 'Предприниматель')
 
-    pdf.text(startX + width / 4 - 3, startY + width - 6, 'ESFP')
-    pdf.text(startX + width / 4 - 18.5, startY + width - 3, 'Спонтанный коммуникатор')
+    pdf.text(startX + width / 4 - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ESFP')
+    pdf.text(startX + width / 4 - 18.5, startY + width - 3 + delta_y_1 + delta_y_2, 'Спонтанный коммуникатор')
 
-    pdf.text(startX + width * (3/4) - 3, startY + width - 6, 'ENFP')
-    pdf.text(startX + width * (3/4) - 7, startY + width - 3, 'Инициатор')
+    pdf.text(startX + width * (3/4) - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ENFP')
+    pdf.text(startX + width * (3/4) - 7, startY + width - 3 + delta_y_1 + delta_y_2, 'Инициатор')
 
-    pdf.text(startX + width + width / 4 - 3, startY + width - 6, 'ESTP')
-    pdf.text(startX + width + width / 4 - 10, startY + width - 3, 'Ультра-реалист')
+    pdf.text(startX + width + width / 4 - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ESTP')
+    pdf.text(startX + width + width / 4 - 10, startY + width - 3 + delta_y_1 + delta_y_2, 'Ультра-реалист')
 
-    pdf.text(startX + width + width * (3/4) - 3, startY + width - 6, 'ENTP')
-    pdf.text(startX + width + width * (3/4) - 9, startY + width - 3, 'Изобретатель')
+    pdf.text(startX + width + width * (3/4) - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ENTP')
+    pdf.text(startX + width + width * (3/4) - 9, startY + width - 3 + delta_y_1 + delta_y_2, 'Изобретатель')
 
-    pdf.text(startX + width / 4 - 3, startY + width + 4, 'ISFJ')
-    pdf.text(startX + width / 4 - 7, startY + width + 7, 'Хранитель')
+    pdf.text(startX + width / 4 - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'ISFJ')
+    pdf.text(startX + width / 4 - 7, startY + width + 7 + delta_y_1 + delta_y_2, 'Хранитель')
 
-    pdf.text(startX + width * (3/4) - 3, startY + width + 4, 'INFJ')
-    pdf.text(startX + width * (3/4) - 9, startY + width + 7, 'Вдохновитель')
+    pdf.text(startX + width * (3/4) - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'INFJ')
+    pdf.text(startX + width * (3/4) - 9, startY + width + 7 + delta_y_1 + delta_y_2, 'Вдохновитель')
 
-    pdf.text(startX + width + width / 4 - 3, startY + width + 4, 'ISTJ')
-    pdf.text(startX + width + width / 4 - 8, startY + width + 7, 'Организатор')
+    pdf.text(startX + width + width / 4 - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'ISTJ')
+    pdf.text(startX + width + width / 4 - 8, startY + width + 7 + delta_y_1 + delta_y_2, 'Организатор')
 
-    pdf.text(startX + width + width * (3/4) - 3, startY + width + 4, 'INTJ')
-    pdf.text(startX + width + width * (3/4) - 14, startY + width + 7, 'Любитель улучшений')
+    pdf.text(startX + width + width * (3/4) - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'INTJ')
+    pdf.text(startX + width + width * (3/4) - 14, startY + width + 7 + delta_y_1 + delta_y_2, 'Любитель улучшений')
 
-    pdf.text(startX + width / 4 - 3, startY + width + width - 6, 'ISFP')
-    pdf.text(startX + width / 4 - 7, startY + width + width - 3, 'Посредник')
+    pdf.text(startX + width / 4 - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'ISFP')
+    pdf.text(startX + width / 4 - 7, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Посредник')
 
-    pdf.text(startX + width * (3/4) - 3, startY + width + width - 6, 'INFP')
-    pdf.text(startX + width * (3/4) - 16, startY + width + width - 3, 'Благородный служитель')
+    pdf.text(startX + width * (3/4) - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'INFP')
+    pdf.text(startX + width * (3/4) - 16, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Благородный служитель')
 
-    pdf.text(startX + width + width / 4 - 3, startY + width + width - 6, 'ISTP')
-    pdf.text(startX + width + width / 4 - 12, startY + width + width - 3, 'Экспериментатор')
+    pdf.text(startX + width + width / 4 - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'ISTP')
+    pdf.text(startX + width + width / 4 - 12, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Экспериментатор')
 
-    pdf.text(startX + width + width * (3/4) - 3, startY + width + width - 6, 'INTP')
-    pdf.text(startX + width + width * (3/4) - 12, startY + width + width - 3, 'Решатель проблем')
+    pdf.text(startX + width + width * (3/4) - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'INTP')
+    pdf.text(startX + width + width * (3/4) - 12, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Решатель проблем')
 
     pdf.set_line_width(0.5)
     pdf.set_draw_color(240)
@@ -247,14 +330,14 @@ def draw_squares(pdf, square_results):
             'cur_Y_pos': 0,
             'cnt': 0},
         'ESFP - Спонтанный коммуникатор': {
-            'circle_coords': [startX + 5, startY + 10 + width / 2 - 2],
-            'text_coords': [startX + 5 + text_x_delta, startY + 10 + text_y_delta + width / 2 - 2],
+            'circle_coords': [startX + 5, startY + 10 + width / 2 - 2 + delta_y_1],
+            'text_coords': [startX + 5 + text_x_delta, startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
         'ENFP - Инициатор': {
-            'circle_coords': [startX + 5 + width / 2, startY + 10 + width / 2 - 2],
-            'text_coords': [startX + 5 + text_x_delta + width / 2, startY + 10 + text_y_delta + width / 2 - 2],
+            'circle_coords': [startX + 5 + width / 2, startY + 10 + width / 2 - 2 + delta_y_1 + delta_y_2],
+            'text_coords': [startX + 5 + text_x_delta + width / 2, startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
@@ -271,63 +354,63 @@ def draw_squares(pdf, square_results):
             'cur_Y_pos': 0,
             'cnt': 0},
         'ESTP - Ультра-реалист': {
-            'circle_coords': [startX + 5 + width, startY + 10 + width / 2 - 2],
-            'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta + width / 2 - 2],
+            'circle_coords': [startX + 5 + width, startY + 10 + width / 2 - 2 + delta_y_1],
+            'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
         'ENTP - Изобретатель': {
-            'circle_coords': [startX + 5 + width + width / 2, startY + 10 + width / 2 - 2],
-            'text_coords': [startX + 5 + text_x_delta + width + width / 2, startY + 10 + text_y_delta + width / 2 - 2],
+            'circle_coords': [startX + 5 + width + width / 2, startY + 10 + width / 2 - 2 + delta_y_1],
+            'text_coords': [startX + 5 + text_x_delta + width + width / 2, startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
         'ISFJ - Хранитель': {
-            'circle_coords': [startX + 5, startY + 10 + width],
-            'text_coords': [startX + 5 + text_x_delta, startY + 10 + text_y_delta + width],
+            'circle_coords': [startX + 5, startY + 10 + width + delta_y_1 + delta_y_2],
+            'text_coords': [startX + 5 + text_x_delta, startY + 10 + text_y_delta + width + delta_y_1 + delta_y_2],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
         'INFJ - Вдохновитель': {
-            'circle_coords': [startX + 5 + width / 2, startY + 10 + width],
-            'text_coords': [startX + 5 + text_x_delta + width / 2, startY + 10 + text_y_delta + width],
+            'circle_coords': [startX + 5 + width / 2, startY + 10 + width + delta_y_1 + delta_y_2],
+            'text_coords': [startX + 5 + text_x_delta + width / 2, startY + 10 + text_y_delta + width + delta_y_1 + delta_y_2],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
         'ISFP - Посредник': {
-            'circle_coords': [startX + 5, startY + 10 + width / 2 + width - 2],
-            'text_coords': [startX + 5 + text_x_delta, startY + 10 + text_y_delta + width / 2 + width - 2],
+            'circle_coords': [startX + 5, startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
+            'text_coords': [startX + 5 + text_x_delta, startY + 10 + text_y_delta + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
         'INFP - Благородный служитель': {
-            'circle_coords': [startX + 5 + width / 2, startY + 10 + width / 2 + width - 2],
-            'text_coords': [startX + 5 + text_x_delta + width / 2, startY + 10 + text_y_delta + width / 2 + width - 2],
+            'circle_coords': [startX + 5 + width / 2, startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
+            'text_coords': [startX + 5 + text_x_delta + width / 2, startY + 10 + text_y_delta + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
 
         'ISTJ - Организатор': {
-            'circle_coords': [startX + 5 + width, startY + 10 + width],
-            'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta + width],
+            'circle_coords': [startX + 5 + width, startY + 10 + width + delta_y_1 + delta_y_2],
+            'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta + width + delta_y_1 + delta_y_2],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
         'INTJ - Любитель улучшений': {
-            'circle_coords': [startX + 5 + width + width / 2, startY + 10 + width],
-            'text_coords': [startX + 5 + text_x_delta + width + width / 2, startY + 10 + text_y_delta + width],
+            'circle_coords': [startX + 5 + width + width / 2, startY + 10 + width + delta_y_1 + delta_y_2],
+            'text_coords': [startX + 5 + text_x_delta + width + width / 2, startY + 10 + text_y_delta + width + delta_y_1 + delta_y_2],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
         'ISTP - Экспериментатор': {
-            'circle_coords': [startX + 5 + width, startY + 10 + width / 2 + width - 2],
-            'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta + width / 2 + width - 2],
+            'circle_coords': [startX + 5 + width, startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
+            'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
         'INTP - Решатель проблем': {
-            'circle_coords': [startX + 5 + width + width / 2, startY + 10 + width / 2 + width - 2],
-            'text_coords': [startX + 5 + text_x_delta + width + width / 2, startY + 10 + text_y_delta + width / 2 + width - 2],
+            'circle_coords': [startX + 5 + width + width / 2, startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
+            'text_coords': [startX + 5 + text_x_delta + width + width / 2, startY + 10 + text_y_delta + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},

@@ -139,7 +139,7 @@
             </div>
         </div>
 
-        <!-- Модальное окно добавление индустрии -->
+        <!-- Модальное окно редактирования сотрудника -->
         <div class="modal fade" id="modal_edit_imployee" style="z-index: 1060">
             <div class="modal-dialog" role="document">
                 <div class="modal-content modal-content-demo">
@@ -201,7 +201,11 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12 col-sm-12 mt-3">
+                                {% if employee_positions == 'Server error' or employee_roles == 'Server error' or industries == 'Server error' or genders == 'Server error' %}
+                                <div class="text-center text-danger">Ошибка сервера. Сохранение невозможно</div>
+                                {% else %}
                                 <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="save_edited_employee">Сохранить</button>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -224,6 +228,25 @@
     let url_get_employee_data = "{% url 'get_employee_data' %}"
     let url_save_new_employee_html = "{% url 'save_new_employee_html' %}"
     let url_delete_employee = "{% url 'delete_employee' %}"
+    let server_error = false
+
+    {% if employee_positions == 'Server error' or employee_roles == 'Server error' or industries == 'Server error' or genders == 'Server error' %}
+    let output_html = '<div>Возникла ошибка при получении с сервера атрибутов сотрудников</div>'
+    output_html += '<hr class="solid mt-3" style="background-color: black;">'
+    output_html += '<div><b>Изменение и добавление сотрудников невозможно</b></div>'
+    Swal.fire({
+      html: output_html,
+      icon: 'warning',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'ОК'
+    }).then((result) => {
+      if (result.isConfirmed) {
+          // window.location.href = url_panel_home
+      }
+    })
+    server_error = true
+    {% endif %}
 
 
 

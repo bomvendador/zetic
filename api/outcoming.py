@@ -34,21 +34,34 @@ def get_study_question_groups(request, public_code):
 
 class Attributes:
 
+
     def get_sex():
-        response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
-        return response['sex']
+        try:
+            response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+            return response['sex']
+        except ValueError:
+            return 'Server error'
 
     def get_roles():
-        response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
-        return response['role']
+        try:
+            response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+            return response['role']
+        except ValueError:
+            return 'Server error'
 
     def get_positions():
-        response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
-        return response['position']
+        try:
+            response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+            return response['position']
+        except ValueError:
+            return 'Server error'
 
     def get_industries():
-        response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
-        return response['industry']
+        try:
+            response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+            return response['industry']
+        except ValueError:
+            return 'Server error'
 
 
 def get_research():
