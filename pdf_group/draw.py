@@ -150,39 +150,73 @@ def draw_squares(pdf, square_results):
 
     for square_result in square_results:
         # print(f'square_result - {square_result}')
-        match square_result[0]:
-            case 'ESFJ - Массовик-затейник':
-                ESFJ_1_1 = ESFJ_1_1 + 1
-            case 'ENFJ - Идеалист-харизматик':
-                ENFJ_1_2 = ENFJ_1_2 + 1
-            case 'ESFP - Спонтанный коммуникатор':
-                ESFP_1_3 = ESFP_1_3 + 1
-            case 'ENFP - Инициатор':
-                ENFP_1_4 = ENFP_1_4 + 1
-            case 'ESTJ - Контролер по жизни':
-                ESTJ_2_1 = ESTJ_2_1 + 1
-            case 'ENTJ - Предприниматель':
-                ENTJ_2_2 = ENTJ_2_2 + 1
-            case 'ESTP - Ультра-реалист':
-                ESTP_2_3 = ESTP_2_3 + 1
-            case 'ENTP - Изобретатель':
-                ENTP_2_4 = ENTP_2_4 + 1
-            case 'ISFJ - Хранитель':
-                ISFJ_3_1 = ISFJ_3_1 + 1
-            case 'INFJ - Вдохновитель':
-                INFJ_3_2 = INFJ_3_2 + 1
-            case 'ISFP - Посредник':
-                ISFP_3_3 = ISFP_3_3 + 1
-            case 'INFP - Благородный служитель':
-                INFP_3_4 = INFP_3_4 + 1
-            case 'ISTJ - Организатор':
-                ISTJ_4_1 = ISTJ_4_1 + 1
-            case 'INTJ - Любитель улучшений':
-                INTJ_4_2 = INTJ_4_2 + 1
-            case 'ISTP - Экспериментатор':
-                ISTP_4_3 = ISTP_4_3 + 1
-            case 'INTP - Решатель проблем':
-                INTP_4_4 = INTP_4_4 + 1
+        if square_result[0] == 'ESFJ - Массовик-затейник':
+            ESFJ_1_1 = ESFJ_1_1 + 1
+        if square_result[0] == 'ENFJ - Идеалист-харизматик':
+            ENFJ_1_2 = ENFJ_1_2 + 1
+        if square_result[0] == 'ESFP - Спонтанный коммуникатор':
+            ESFP_1_3 = ESFP_1_3 + 1
+        if square_result[0] == 'ENFP - Инициатор':
+            ENFP_1_4 = ENFP_1_4 + 1
+        if square_result[0] == 'ESTJ - Контролер по жизни':
+            ESTJ_2_1 = ESTJ_2_1 + 1
+        if square_result[0] == 'ENTJ - Предприниматель':
+            ENTJ_2_2 = ENTJ_2_2 + 1
+        if square_result[0] == 'ESTP - Ультра-реалист':
+            ESTP_2_3 = ESTP_2_3 + 1
+        if square_result[0] == 'ENTP - Изобретатель':
+            ENTP_2_4 = ENTP_2_4 + 1
+        if square_result[0] == 'ISFJ - Хранитель':
+            ISFJ_3_1 = ISFJ_3_1 + 1
+        if square_result[0] == 'INFJ - Вдохновитель':
+            INFJ_3_2 = INFJ_3_2 + 1
+        if square_result[0] == 'ISFP - Посредник':
+            ISFP_3_3 = ISFP_3_3 + 1
+        if square_result[0] == 'INFP - Благородный служитель':
+            INFP_3_4 = INFP_3_4 + 1
+        if square_result[0] == 'ISTJ - Организатор':
+            ISTJ_4_1 = ISTJ_4_1 + 1
+        if square_result[0] == 'INTJ - Любитель улучшений':
+            INTJ_4_2 = INTJ_4_2 + 1
+        if square_result[0] == 'ISTP - Экспериментатор':
+            ISTP_4_3 = ISTP_4_3 + 1
+        if square_result[0] == 'INTP - Решатель проблем':
+            INTP_4_4 = INTP_4_4 + 1
+
+
+        # match square_result[0]:
+            # case 'ESFJ - Массовик-затейник':
+            #     ESFJ_1_1 = ESFJ_1_1 + 1
+            # case 'ENFJ - Идеалист-харизматик':
+            #     ENFJ_1_2 = ENFJ_1_2 + 1
+            # case 'ESFP - Спонтанный коммуникатор':
+            #     ESFP_1_3 = ESFP_1_3 + 1
+            # case 'ENFP - Инициатор':
+            #     ENFP_1_4 = ENFP_1_4 + 1
+            # case 'ESTJ - Контролер по жизни':
+            #     ESTJ_2_1 = ESTJ_2_1 + 1
+            # case 'ENTJ - Предприниматель':
+            #     ENTJ_2_2 = ENTJ_2_2 + 1
+            # case 'ESTP - Ультра-реалист':
+            #     ESTP_2_3 = ESTP_2_3 + 1
+            # case 'ENTP - Изобретатель':
+            #     ENTP_2_4 = ENTP_2_4 + 1
+            # case 'ISFJ - Хранитель':
+            #     ISFJ_3_1 = ISFJ_3_1 + 1
+            # case 'INFJ - Вдохновитель':
+            #     INFJ_3_2 = INFJ_3_2 + 1
+            # case 'ISFP - Посредник':
+            #     ISFP_3_3 = ISFP_3_3 + 1
+            # case 'INFP - Благородный служитель':
+            #     INFP_3_4 = INFP_3_4 + 1
+            # case 'ISTJ - Организатор':
+            #     ISTJ_4_1 = ISTJ_4_1 + 1
+            # case 'INTJ - Любитель улучшений':
+            #     INTJ_4_2 = INTJ_4_2 + 1
+            # case 'ISTP - Экспериментатор':
+            #     ISTP_4_3 = ISTP_4_3 + 1
+            # case 'INTP - Решатель проблем':
+            #     INTP_4_4 = INTP_4_4 + 1
 
     top_1_max_qnt = max(ESFJ_1_1, ENFJ_1_2, ESTJ_2_1, ENTJ_2_2)
     top_2_max_qnt = max(ESFP_1_3, ENFP_1_4, ESTP_2_3, ENTP_2_4)
