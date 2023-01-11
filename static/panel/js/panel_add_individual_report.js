@@ -258,7 +258,6 @@ window.onerror = function myErrorHandler(errorMsg, url, lineNumber){
                     })
 
             console.log(request)
-            return
                     btn_spinner($('#parse_file'))
                     $.ajax({
                         headers: { "X-CSRFToken": token },
