@@ -179,7 +179,7 @@ window.onerror = function myErrorHandler(errorMsg, url, lineNumber){
                       "appraisal_data": [
                         {
                           "section": "Копинги",
-                          "code": 2,
+                          "code": "2",
                           "point": [
                             {"category":"Самообладание", "points": kopingi['2_1'], "code": "2_1"},
                             {"category":"Контроль над ситуацией", "points":kopingi['2_2'], "code": "2_2"},
@@ -201,7 +201,7 @@ window.onerror = function myErrorHandler(errorMsg, url, lineNumber){
                         },
                         {
                           "section": "Выгорание Бойко",
-                          "code": 3,
+                          "code": "3",
                           "point": [
                             {"category":"Напряжение_Переживание", "points": boyko['3_1'], "code": "3_1"},
                             {"category":"Напряжение_Неудовлетворенность собой", "points":boyko['3_2'], "code": "3_2"},
@@ -219,7 +219,7 @@ window.onerror = function myErrorHandler(errorMsg, url, lineNumber){
                         },
                         {
                           "section": "Ценности",
-                          "code": 4,
+                          "code": "4",
                           "point": [
                             {"category":"Причастность", "points": Math.round(values['4_1']), "code": "4_1" },
                             {"category":"Традицонализм", "points":Math.round(values['4_2']), "code": "4_2"},
@@ -235,7 +235,7 @@ window.onerror = function myErrorHandler(errorMsg, url, lineNumber){
                         },
                         {
                           "section": "Кеттелл",
-                          "code": 1,
+                          "code": "1",
                           "point": [
                             {"category":"Шкала C", "points": kettel['1_1'], "code": "1_1"},
                             {"category":"Шкала O", "points":kettel['1_2'], "code": "1_2"},
