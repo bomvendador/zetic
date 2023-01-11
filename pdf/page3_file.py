@@ -109,7 +109,7 @@ def page3(pdf, json_section, lang, participant_info):
     if lang == 'ru':
         scale_name = u'''
     Шкала Q4
-    Внутренний комфорт
+    Внутреннее напряжение
         '''
         scale_legend_left = u'''
     Расслабленность,  
@@ -185,10 +185,11 @@ def page3(pdf, json_section, lang, participant_info):
         '''
         scale_legend_left = u'''
     Прямолинейность, 
-    Бестактность
+    Четкость
         '''
         scale_legend_right = u'''
-    Влияние, Хитрость
+    Рассудительность, 
+    Циничность
         '''
     else:
         scale_name = u'''
@@ -284,7 +285,7 @@ def page3(pdf, json_section, lang, participant_info):
     Восторженность
         '''
         scale_legend_left = u'''
-    Практичность, Принципиальность
+    Практичность,
     Реалистичность, Прозаичность
         '''
         scale_legend_right = u'''
@@ -415,11 +416,11 @@ def page3(pdf, json_section, lang, participant_info):
         '''
         scale_legend_left = u'''
     Консерватизм, 
-    Неприятие перемен
+    Принятие быстрых решений
         '''
         scale_legend_right = u'''
-    Критичность, Анализ информации,
-    Оптимизация работы 
+    Экспериментирование,
+    Анализ информации 
         '''
     else:
         scale_name = u'''
