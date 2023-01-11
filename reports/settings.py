@@ -19,7 +19,7 @@ env = environ.Env()
 environ.Env.read_env()
 
 API_BEARER = env('API_BEARER')
-API_LINK = 'https://demo-admin.zetic.borsky.dev/api/attributes'
+API_LINK = 'https://console.zetic.ru/api/attributes'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
