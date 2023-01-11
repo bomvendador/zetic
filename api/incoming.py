@@ -17,7 +17,7 @@ TOKEN = 'b55a461f947c6d315ad67f1d65d2ec592e400679'
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 @parser_classes([JSONParser])
 def participant_started(request):
 # {"study": {"public_code": "ertrtre"},"participant": {"email": "jhkjk@huihuihjhhiio.dfd"}}
@@ -75,7 +75,7 @@ def questions_answered_qnt(request):
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 @parser_classes([JSONParser])
 def companies_employees(request):
     data = []
@@ -91,6 +91,8 @@ def companies_employees(request):
 
         data.append({
                         'company_name': company.name,
+                        'company_id': company.id,
                         'employees': employees_arr
                     })
-    return JsonResponse(data, safe=False)
+    # return JsonResponse(data, safe=False)
+    return Response(data)
