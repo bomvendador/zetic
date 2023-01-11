@@ -44,6 +44,16 @@ window.onerror = function myErrorHandler(errorMsg, url, lineNumber){
         }
     });
 
+    function makeid(length) {
+        let result = '';
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let charactersLength = characters.length;
+        for ( let i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
+
     function ProcessExcel(data) {
         //Read the Excel File data.
         let workbook = XLSX.read(data, {
@@ -161,9 +171,10 @@ window.onerror = function myErrorHandler(errorMsg, url, lineNumber){
 
             let study_id = sheet['K6'].v
 
+
             let request = JSON.stringify(
                 {
-                      "code": "",
+                      "code": makeid(8),
                       "lang": "ru",
                       "participant_info": {
                         "name": participant_name,
