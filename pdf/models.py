@@ -247,7 +247,7 @@ class Report(models.Model):
     comments = models.TextField(default=None, blank=True, null=True, verbose_name='Комментарии индивидуальный отчет')
 
     def __str__(self):
-        return f'{self.participant} - {self.participant.employee.email} - {self.file.name}'
+        return f'{self.participant} - {self.file.name}'
 
     def filename(self):
         return os.path.basename(self.file.name)
