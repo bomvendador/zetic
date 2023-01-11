@@ -476,12 +476,12 @@ def draw_single_circle_squares(square_data, pdf, square_x_cnt, cnt):
     section_3 = 0
 
     for report_data_item in report_data:
-        split = report_data_item.category.name.split('_')
-        if int(split[0]) <= 4:
+        split = report_data_item.category_code.split('_')
+        if int(split[1]) <= 4:
             section_1 = section_1 + report_data_item.points
-        elif 5 <= int(split[0]) <= 8:
+        elif 5 <= int(split[1]) <= 8:
             section_2 = section_2 + report_data_item.points
-        elif int(split[0]) >= 9:
+        elif int(split[1]) >= 9:
             section_3 = section_3 + report_data_item.points
     if section_1 > 18 or section_2 > 18 or section_3 > 18 or section_2 >= 7:
         pdf.set_fill_color(241, 151, 15)
