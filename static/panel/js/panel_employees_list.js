@@ -118,17 +118,17 @@ expand_menu_item('#menu_employees_list')
                 console.log(data)
                 if (!server_error){
                     $('#employee_role option').each(function (e) {
-                        if(data['role'] === $(this).val().split('_')[2]){
+                        if(data['role'] === $(this).text()){
                             $(this).prop('selected', true)
                         }
                     })
                     $('#employee_position option').each(function (e) {
-                        if(data['position'] === $(this).val().split('_')[2]){
+                        if(data['position'] === $(this).text()){
                             $(this).prop('selected', true)
                         }
                     })
                     $('#employee_industry option').each(function (e) {
-                        if(data['industry'] === $(this).val().split('_')[2]){
+                        if(data['industry'] === $(this).text()){
                             $(this).prop('selected', true)
                         }
                     })
