@@ -173,7 +173,7 @@ class Participant(models.Model):
 
     def __str__(self):
         if self.employee:
-            return f'{self.id}. {self.employee.name}'
+            return f'{self.id}. {self.employee.name} - {self.employee.company.name}'
         else:
             return f'ID - {self.id}'
 
