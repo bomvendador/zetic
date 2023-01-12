@@ -17,17 +17,22 @@ TOKEN = 'b55a461f947c6d315ad67f1d65d2ec592e400679'
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 @parser_classes([JSONParser])
 def participant_started(request):
 # {"study": {"public_code": "ertrtre"},"participant": {"email": "jhkjk@huihuihjhhiio.dfd"}}
-    print(type(request.body.decode('utf-8')))
+#     print(type(request.body.decode('utf-8')))
     json_request = json.loads(request.body.decode('utf-8'))
-    print(json_request)
+    # print(json_request)
 
     study_public_code = json_request['study']['public_code']
     total_questions_qnt = json_request['study']['total_questions_qnt']
     participant_email = json_request['participant']['email']
+    participant_name = json_request['participant']['name']
+    employee = Employee.objects.get(email=participant_email)
+    if not employee.name == participant_name:
+        employee.name = participant_name
+        employee.save()
     participant = Participant.objects.get(employee__email=participant_email, study__public_code=study_public_code)
     participant.started_at = datetime.datetime.now()
     participant.total_questions_qnt = total_questions_qnt
@@ -37,7 +42,7 @@ def participant_started(request):
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 @parser_classes([JSONParser])
 def data_for_report(request):
     if request.method == 'POST':
@@ -75,7 +80,7 @@ def questions_answered_qnt(request):
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 @parser_classes([JSONParser])
 def companies_employees(request):
     data = []
