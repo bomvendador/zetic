@@ -313,13 +313,16 @@ def draw_squares(pdf, square_results):
     pdf.text(startX + width + width * (3/4) - 5, startY + 4, 'Аналитик')
 
     # pdf.text(startX + width / 4 - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ESFP')
-    pdf.text(startX + width / 4 - 18.5, startY + width - 3 + delta_y_1 + delta_y_2, 'Спонтанный коммуникатор')
+    # pdf.text(startX + width / 4 - 18.5, startY + width - 3 + delta_y_1 + delta_y_2, 'Спонтанный коммуникатор')
+    pdf.text(startX + width / 4 - 9, startY + width - 3 + delta_y_1 + delta_y_2, 'Развлекатель')
 
     # pdf.text(startX + width * (3/4) - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ENFP')
-    pdf.text(startX + width * (3/4) - 7, startY + width - 3 + delta_y_1 + delta_y_2, 'Инициатор')
+    # pdf.text(startX + width * (3/4) - 7, startY + width - 3 + delta_y_1 + delta_y_2, 'Инициатор')
+    pdf.text(startX + width * (3/4) - 7, startY + width - 3 + delta_y_1 + delta_y_2, 'Мотиватор')
 
     # pdf.text(startX + width + width / 4 - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ESTP')
-    pdf.text(startX + width + width / 4 - 10, startY + width - 3 + delta_y_1 + delta_y_2, 'Ультра-реалист')
+    # pdf.text(startX + width + width / 4 - 10, startY + width - 3 + delta_y_1 + delta_y_2, 'Ультра-реалист')
+    pdf.text(startX + width + width / 4 - 12, startY + width - 3 + delta_y_1 + delta_y_2, 'Искатель ресурсов')
 
     # pdf.text(startX + width + width * (3/4) - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ENTP')
     pdf.text(startX + width + width * (3/4) - 9, startY + width - 3 + delta_y_1 + delta_y_2, 'Изобретатель')
@@ -341,13 +344,15 @@ def draw_squares(pdf, square_results):
     pdf.text(startX + width + width * (3/4) - 14, startY + width + 4 + delta_y_1 + delta_y_2, 'Любитель улучшений')
 
     # pdf.text(startX + width / 4 - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'ISFP')
-    pdf.text(startX + width / 4 - 7, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Посредник')
+    # pdf.text(startX + width / 4 - 7, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Посредник')
+    pdf.text(startX + width / 4 - 5, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Опекун')
 
     # pdf.text(startX + width * (3/4) - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'INFP')
     pdf.text(startX + width * (3/4) - 16, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Благородный служитель')
 
     # pdf.text(startX + width + width / 4 - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'ISTP')
-    pdf.text(startX + width + width / 4 - 12, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Экспериментатор')
+    # pdf.text(startX + width + width / 4 - 12, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Экспериментатор')
+    pdf.text(startX + width + width / 4 - 9, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Исполнитель')
 
     # pdf.text(startX + width + width * (3/4) - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'INTP')
     pdf.text(startX + width + width * (3/4) - 12, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Решатель проблем')
