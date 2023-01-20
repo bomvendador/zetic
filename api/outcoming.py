@@ -4,6 +4,8 @@ from django.http import HttpResponse, HttpResponseServerError, JsonResponse
 import requests
 from reports import settings
 import json
+from celery import shared_task
+
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -37,28 +39,28 @@ class Attributes:
 
     def get_sex():
         try:
-            response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+            response = requests.get(settings.API_LINK + 'attributes', headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
             return response['sex']
         except ValueError:
             return 'Server error'
 
     def get_roles():
         try:
-            response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+            response = requests.get(settings.API_LINK + 'attributes', headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
             return response['role']
         except ValueError:
             return 'Server error'
 
     def get_positions():
         try:
-            response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+            response = requests.get(settings.API_LINK + 'attributes', headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
             return response['position']
         except ValueError:
             return 'Server error'
 
     def get_industries():
         try:
-            response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+            response = requests.get(settings.API_LINK + 'attributes', headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
             return response['industry']
         except ValueError:
             return 'Server error'
@@ -83,5 +85,17 @@ def get_company():
     result = requests.get('https://demo-admin.zetic.borsky.dev/api/company', headers=headers).json()
     print(f'res = {result}')
     return result
+
+
+@shared_task
+def sync_add_company(name, public_code):
+    data = {
+        "name": name,
+        "public_code": public_code
+    }
+    response = requests.post(settings.API_LINK + 'company',
+                            headers={'Authorization': 'Bearer ' + settings.API_BEARER}, json=data)
+    print(response)
+
 
 

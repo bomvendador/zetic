@@ -18,8 +18,6 @@ import environ
 env = environ.Env()
 environ.Env.read_env()
 
-API_BEARER = env('API_BEARER')
-API_LINK = 'https://console.zetic.ru/api/attributes'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,9 +30,16 @@ SECRET_KEY = 'django-insecure--lfbjn3qgosinvh0ls*wb*#72ckmd4-9ozyt*^=6=_w+ah1&qg
 # SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(os.environ.get("DEBUG", default=1)))
+DEBUG = 1
 # DEBUG = True
 # DEBUG = int(os.getenv('DEBUG'))
+
+API_BEARER = env('API_BEARER')
+if DEBUG == 0:
+    API_LINK = 'https://console.zetic.ru/api/'
+else:
+    API_LINK = 'https://demo-admin.zetic.borsky.dev/api/'
+
 
 ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")

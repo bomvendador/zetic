@@ -54,6 +54,7 @@ class Company(models.Model):
     name = models.CharField(max_length=150, blank=False, null=False)
     version = models.IntegerField(null=True, default=0)
     active = models.BooleanField(default=True, null=False)
+    public_code = models.CharField(max_length=10, blank=False, null=False, default='')
 
     def __str__(self):
         return self.name
