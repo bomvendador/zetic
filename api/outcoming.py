@@ -114,8 +114,8 @@ def sync_add_employee(employee_id):
     print(data)
     response = requests.post(settings.API_LINK + 'company/' + company_id + '/employee',
                             headers={'Authorization': 'Bearer ' + settings.API_BEARER}, data=data)
-    print(f'sync response - {response}')
-    return response
+    # print(f'sync response - {response}')
+    # return response
 
 
 
