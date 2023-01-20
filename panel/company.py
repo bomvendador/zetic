@@ -27,7 +27,7 @@ def save_new_company(request):
         json_data = json.loads(request.body.decode('utf-8'))
         name = json_data['name']
         active = json_data['active']
-        print(json_data)
+        # print(json_data)
         company_inst = Company()
         company_inst.name = name
         company_inst.created_by = request.user
