@@ -257,7 +257,7 @@ def save_new_employee_html(request):
             employee_inst.birth_year = employee_data['employee_birth_year']
             employee_inst.save()
 
-            sync_add_employee(employee_inst.id)
+            sync_add_employee.delay(employee_inst.id)
             return HttpResponse(status=200)
         else:
             return HttpResponse('email exists')
