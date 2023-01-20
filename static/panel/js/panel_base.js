@@ -8,6 +8,7 @@
 
         $('.menu_item').on('click', function (){
             var menuID =  $(this).attr('id');
+            show_progressbar_loader()
             switch (menuID) {
                 case'menu_distribution':
                     window.location.href = url_team_distribution;

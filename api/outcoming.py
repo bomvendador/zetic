@@ -1,4 +1,4 @@
-# from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study
+from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
 import requests
@@ -94,6 +94,25 @@ def sync_add_company(name, public_code):
         "public_code": public_code
     }
     response = requests.post(settings.API_LINK + 'company',
+                            headers={'Authorization': 'Bearer ' + settings.API_BEARER}, data=data)
+    print(f'sync response - {response}')
+    return response
+
+
+@shared_task
+def sync_add_employee(employee_id):
+    employee = Employee.objects.get(id=employee_id)
+    company_id = employee.company.public_code
+    data = {
+        "name": employee.name,
+        "email": employee.email,
+        "role_id": employee.role.public_code,
+        "position_id": employee.position.public_code,
+        "industry_id": employee.industry.public_code,
+        "sex_id": employee.sex.public_code
+    }
+    print(data)
+    response = requests.post(settings.API_LINK + 'company/' + company_id + '/employee',
                             headers={'Authorization': 'Bearer ' + settings.API_BEARER}, data=data)
     print(f'sync response - {response}')
     return response

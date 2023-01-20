@@ -71,6 +71,7 @@ class Industry(models.Model):
     edited_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT, related_name='Изменено_пользователем')
     name_ru = models.CharField(max_length=100, blank=True, null=True)
     name_en = models.CharField(max_length=100, blank=True, null=True)
+    public_code = models.CharField(max_length=10, blank=True, null=True, default='')
 
     def __str__(self):
         return self.name_ru
@@ -87,6 +88,7 @@ class EmployeeRole(models.Model):
     edited_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT, related_name='Изменено_пользователем_роль_сотрудника')
     name_ru = models.CharField(max_length=100, blank=True, null=True)
     name_en = models.CharField(max_length=100, blank=True, null=True)
+    public_code = models.CharField(max_length=10, blank=True, null=True, default='')
 
     def __str__(self):
         return self.name_ru
@@ -96,11 +98,29 @@ class EmployeeRole(models.Model):
         verbose_name = 'Роль участника'
 
 
+class EmployeeGender(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT, related_name='Создано_пользователем_пол_сотрудника')
+    edited_at = models.DateTimeField(auto_now=True, null=True)
+    edited_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT, related_name='Изменено_пользователем_пол_сотрудника')
+    name_ru = models.CharField(max_length=100, blank=True, null=True)
+    name_en = models.CharField(max_length=100, blank=True, null=True)
+    public_code = models.CharField(max_length=10, blank=True, null=True, default='')
+
+    def __str__(self):
+        return self.name_ru
+
+    class Meta:
+        verbose_name_plural = 'Пол участников'
+        verbose_name = 'Пол участника'
+
+
 class EmployeePosition(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
     name_ru = models.CharField(max_length=100, blank=True, null=True)
     name_en = models.CharField(max_length=100, blank=True, null=True)
+    public_code = models.CharField(max_length=10, blank=True, null=True, default='')
 
     def __str__(self):
         return self.name_ru
@@ -116,24 +136,26 @@ class Employee(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, blank=True, null=True,
                              verbose_name='Пользователь', related_name='employee_user')
     name = models.CharField(max_length=100, blank=True, null=True)
-    sex = models.CharField(max_length=20, blank=False, null=False)
+    sex = models.ForeignKey(EmployeeGender, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Пол')
     birth_year = models.IntegerField(blank=False, null=False)
     email = models.CharField(max_length=100, blank=True, null=False, default=None)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Компания')
-    # role = models.ForeignKey(EmployeeRole, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Роль участника')
-    role = models.CharField(max_length=100, blank=True, null=False, default=None)
-    position = models.CharField(max_length=100, blank=True, null=False, default=None)
-    # position = models.ForeignKey(EmployeePosition, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Позиция участника')
-    industry = models.CharField(max_length=100, blank=True, null=False, default=None)
-    # industry = models.ForeignKey(Industry, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Индустрия')
+    role = models.ForeignKey(EmployeeRole, on_delete=models.CASCADE, default=1, blank=True, null=True, verbose_name='Роль участника')
+    # role = models.CharField(max_length=100, blank=True, null=False, default=None)
+    # position = models.CharField(max_length=100, blank=True, null=False, default=None)
+    position = models.ForeignKey(EmployeePosition, on_delete=models.CASCADE, default=5, blank=True, null=True, verbose_name='Позиция участника')
+    # industry = models.CharField(max_length=100, blank=True, null=False, default=None)
+    industry = models.ForeignKey(Industry, on_delete=models.CASCADE, default=1, blank=True, null=True, verbose_name='Индустрия')
     company_admin = models.BooleanField(default=False, null=False)
     company_admin_active = models.BooleanField(default=False, null=False)
 
     def __str__(self):
         if self.name:
+            # return f'{self.id}. {self.name} - {self.email} - role_id - {self.role.id}'
             return f'{self.id}. {self.name} - {self.email}'
         else:
             return f'{self.id}. {self.email}'
+            # return f'{self.id}. {self.email} - role_id - {self.role.id}'
 
     class Meta:
         verbose_name_plural = 'Сотрудники (employee)'

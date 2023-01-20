@@ -167,7 +167,7 @@
                             <label for="user_role">Роль</label>
                                 <select name="employee_role" class="form-control form-select" id="employee_role">
                                     {% for employee_role in employee_roles %}
-                                    <option value="role_id_{{ employee_role.id }}">{{ employee_role.name_ru }}</option>
+                                    <option id="{{ employee_role.id }}">{{ employee_role.name_ru }}</option>
                                     {% endfor %}
                                 </select>
                         </div>
@@ -175,7 +175,7 @@
                             <label for="employee_position">Должность</label>
                                 <select name="user_role" class="form-control form-select" id="employee_position">
                                     {% for employee_position in employee_positions %}
-                                    <option value="position_id_{{ employee_position.id }}">{{ employee_position.name_ru }}</option>
+                                    <option id="{{ employee_position.id }}">{{ employee_position.name_ru }}</option>
                                     {% endfor %}
                                 </select>
                         </div>
@@ -183,7 +183,7 @@
                             <label for="employee_position">Индустрия</label>
                                 <select name="user_role" class="form-control form-select" id="employee_industry">
                                     {% for industry in industries %}
-                                    <option value="industry_id_{{ industry.id }}">{{ industry.name_ru }}</option>
+                                    <option id="{{ industry.id }}">{{ industry.name_ru }}</option>
                                     {% endfor %}
                                 </select>
                         </div>
@@ -191,7 +191,7 @@
                             <label for="employee_gender">Пол</label>
                                 <select name="user_role" class="form-control form-select" id="employee_gender">
                                     {% for gender in genders %}
-                                    <option>{{ gender.name_ru }}</option>
+                                    <option id="{{ gender.id }}">{{ gender.name_ru }}</option>
                                     {% endfor %}
                                 </select>
                         </div>
