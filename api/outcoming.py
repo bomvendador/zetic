@@ -103,13 +103,21 @@ def sync_add_company(name, public_code):
 def sync_add_employee(employee_id):
     employee = Employee.objects.get(id=employee_id)
     company_id = employee.company.public_code
+    # data = {
+    #     "name": employee.name.encode('utf-8'),
+    #     "email": employee.email.encode('utf-8'),
+    #     "role_id": employee.role.public_code.encode('utf-8'),
+    #     "position_id": employee.position.public_code.encode('utf-8'),
+    #     "industry_id": employee.industry.public_code.encode('utf-8'),
+    #     "sex_id": employee.sex.public_code.encode('utf-8')
+    # }
     data = {
-        "name": employee.name.encode('utf-8'),
-        "email": employee.email.encode('utf-8'),
-        "role_id": employee.role.public_code.encode('utf-8'),
-        "position_id": employee.position.public_code.encode('utf-8'),
-        "industry_id": employee.industry.public_code.encode('utf-8'),
-        "sex_id": employee.sex.public_code.encode('utf-8')
+        "name": employee.name,
+        "email": employee.email,
+        "role_id": employee.role.public_code,
+        "position_id": employee.position.public_code,
+        "industry_id": employee.industry.public_code,
+        "sex_id": employee.sex.public_code
     }
     # data = {
     #     "name": "ВВВВВ",
@@ -121,7 +129,7 @@ def sync_add_employee(employee_id):
     # }
     url = settings.API_LINK + 'company/' + company_id + '/employee'
     response = requests.post(url,
-                            headers={'Authorization': 'Bearer ' + settings.API_BEARER}, json=data)
+                            headers={'Authorization': 'Bearer ' + settings.API_BEARER}, data=json.dumps(data))
     print(f'sync response - {response}')
     # return response
 
