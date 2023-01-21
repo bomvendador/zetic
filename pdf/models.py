@@ -186,7 +186,7 @@ class ParticipantQuestionGroups(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
     question_group_name = models.CharField(max_length=30, blank=True, null=True, default=None)
-    question_group_code = models.CharField(max_length=2, blank=True, null=True, default=None)
+    question_group_code = models.CharField(max_length=3, blank=True, null=True, default=None)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, null=True, blank=True)
 
     def __str__(self):

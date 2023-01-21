@@ -19,7 +19,7 @@ env = environ.Env()
 environ.Env.read_env()
 
 API_BEARER = env('API_BEARER')
-API_LINK = 'https://demo-admin.zetic.borsky.dev/api/attributes'
+API_LINK = 'https://console.zetic.ru/api'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,13 +32,13 @@ SECRET_KEY = 'django-insecure--lfbjn3qgosinvh0ls*wb*#72ckmd4-9ozyt*^=6=_w+ah1&qg
 # SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(os.environ.get("DEBUG", default=1)))
+DEBUG = bool(int(os.environ.get("DEBUG", default=0)))
 # DEBUG = True
 # DEBUG = int(os.getenv('DEBUG'))
 
 ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
-
+CSRF_TRUSTED_ORIGINS = ['https://panel.zetic.ru', 'http://127.0.0.1']
 
 # Application definition
 
@@ -112,36 +112,35 @@ WSGI_APPLICATION = 'reports.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#    }
+#}
 
 
 # Celery Broker - Redis
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_BROKER_URL = env('CELERY_HOST', default='redis://localhost:6379')
+CELERY_RESULT_BACKEND = env('CELERY_HOST', default='redis://localhost:6379')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = "Europe/Moscow"
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'reports',
-#         'USER': 'root',
-#         'PASSWORD': 'alexrodin',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#         'CHARSET': 'utf8',
-#         'COLLATION': 'utf8_general_ci',
-#
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': env('DB_NAME', default='db_reports'),
+        'USER': env('DB_USER', default='root'),
+        'PASSWORD': env('DB_PASSWORD', default='alexrodin'),
+        'HOST': env('DB_HOST', default='localhost'),
+        'PORT': env('DB_PORT', default='33060'),
+        'CHARSET': 'utf8',
+        'COLLATION': 'utf8_general_ci',
+    }
+}
 
 
 # print(os.environ.get('SQL_NAME', BASE_DIR / 'db.sqlite3'))

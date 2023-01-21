@@ -30,10 +30,10 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('added', models.DateTimeField(auto_now_add=True, null=True)),
-                ('fio', models.CharField(default='ФИО', max_length=100)),
-                ('tel', models.CharField(default='Телефон', max_length=20)),
-                ('role', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='login.userrole', verbose_name='Роль')),
-                ('user', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Пользователь')),
+                ('fio', models.CharField(default='', max_length=100)),
+                ('tel', models.CharField(default='', max_length=20)),
+                ('role', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='login.userrole', verbose_name='Role')),
+                ('user', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='User')),
             ],
             options={
                 'verbose_name': 'Профиль пользователя',

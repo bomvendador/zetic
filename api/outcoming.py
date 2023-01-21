@@ -37,36 +37,36 @@ class Attributes:
 
     def get_sex():
         try:
-            response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+            response = requests.get(settings.API_LINK + '/attributes', headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
             return response['sex']
         except ValueError:
             return 'Server error'
 
     def get_roles():
         try:
-            response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+            response = requests.get(settings.API_LINK + '/attributes', headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
             return response['role']
         except ValueError:
             return 'Server error'
 
     def get_positions():
         try:
-            response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+            response = requests.get(settings.API_LINK + '/attributes', headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
             return response['position']
         except ValueError:
             return 'Server error'
 
     def get_industries():
         try:
-            response = requests.get(settings.API_LINK, headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+            response = requests.get(settings.API_LINK + '/attributes', headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
             return response['industry']
         except ValueError:
             return 'Server error'
 
 
 def get_research():
-    headers = {'Authorization': 'Bearer sinoh8kien7eiv3mooyie4AeWoh5ohd6xo6u'}
-    result = requests.get('https://demo-admin.zetic.borsky.dev/api/research', headers=headers).json()
+    headers = {'Authorization': 'Bearer ' + settings.API_BEARER}
+    result = requests.get(settings.API_LINK + '/research', headers=headers).json()
     print(f'res = {result}')
     return result
 
@@ -80,7 +80,8 @@ def get_research():
 
 
 def get_company():
-    result = requests.get('https://demo-admin.zetic.borsky.dev/api/company', headers=headers).json()
+    headers = {'Authorization': 'Bearer ' + settings.API_BEARER}
+    result = requests.get(settings.API_LINK + '/company', headers=headers).json()
     print(f'res = {result}')
     return result
 

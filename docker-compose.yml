@@ -5,18 +5,24 @@ services:
 #    image: postgres:14-alpine
 #    volumes:
 #      - db_reports:/var/lib/postgresql/data
-    image: mysql:5.7
+    image: mysql:8
 #    command: [--ignore-db-dir=lost+found]
     ports:
       - "3306:3306"
     environment:
-#      MYSQL_DATABASE: 'db_reports'
-#      MYSQL_USER: 'root'
-#      MYSQL_PASSWORD: 'password'
+      MYSQL_DATABASE: 'db_reports'
+      MYSQL_USER: 'panel'
+      MYSQL_PASSWORD: 'password'
       MYSQL_ROOT_PASSWORD: 'password'
     restart: always
     volumes:
-      - db_reports_mysql:/var/lib/my_sql
+      - db_reports_mysql_8:/var/lib/mysql
+
+  zetic-report-redis:
+    image: redis:6.2.5-alpine
+    ports:
+      - "6379:6379"
+    restart: always
   zetic-report-web:
     build: .
 #      dockerfile: Dockerfile
@@ -25,10 +31,17 @@ services:
       - .:/reports
     ports:
       - "8000:8000"
+    environment:
+      DB_USER: "panel"
+      DB_PASSWORD: "password"
+      DB_HOST: "zetic-report-db"
+      DB_NAME: "db_reports"
+      DB_PORT: "3306"
 #    env_file:
 #      - ./.env.dev
     depends_on:
       - zetic-report-db
+      - zetic-report-redis
 
 volumes:
-  db_reports_mysql:
+  db_reports_mysql_8:

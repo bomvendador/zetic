@@ -5,33 +5,33 @@ Microservice for PDF reports generation
 ## Build
 ```bash
 docker build \
-        --tag zetic/questionnaire-report:1.0.0 \
+        --tag zetic/zetic-panel:2.1.0 \
         --platform linux/amd64 \
         --file Dockerfile .
 ```
 
 ## Save docker image
 ```bash
-docker save zetic/questionnaire-report:1.0.0 | gzip > questionnaire-report.tar.gz
+docker save zetic/zetic-panel:2.1.0 | gzip > zetic-panel.tar.gz
 ```
 
 ## Load docker image
 ```bash
-docker load < questionnaire-report.tar.gz
+docker load < zetic-panel.tar.gz
 ```
 
 ## Stop docker container
 ```bash
-docker stop questionnaire-report && docker rm questionnaire-report
+docker stop zetic-panel && docker rm zetic-panel
 ```
 
 ## Run docker container
 ```bash
 docker run -d --restart=always \
-  --name questionnaire-report \
+  --name zetic-panel \
   -p 127.0.0.1:10005:10005 \
   -e SERVER_PORT=10005 \
-  zetic/questionnaire-report:1.0.0
+  zetic/zetic-panel:2.1.0
 ```
 
 ## Test
