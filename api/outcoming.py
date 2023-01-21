@@ -95,7 +95,7 @@ def sync_add_company(name, public_code):
     }
     response = requests.post(settings.API_LINK + 'company',
                             headers={'Authorization': 'Bearer ' + settings.API_BEARER}, data=data)
-    print(f'sync response - {response}')
+    # print(f'sync response - {response}')
     return response
 
 
