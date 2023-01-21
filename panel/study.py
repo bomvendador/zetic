@@ -73,14 +73,14 @@ def get_company_studies(request):
         company = Company.objects.get(id=company_id)
         studies = outcoming.get_company_studies(company.public_code)
         studies_arr = []
-        # for study in studies:
-        #     name = study.name
-        #     studies_arr.append({
-        #         'name': name,
-        #         'id': study.id,
-        #         'company_name': study.company.name,
-        #         'research_name': study.research_name,
-        #     })
+        for study in studies:
+            name = study['name']
+            studies_arr.append({
+                'name': name,
+                'id': study['public_code'],
+                'company_name': company.name,
+                'research_name': '',
+            })
         response = {
             'data': list(studies_arr)
         }
