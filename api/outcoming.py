@@ -103,13 +103,21 @@ def sync_add_company(name, public_code):
 def sync_add_employee(employee_id):
     employee = Employee.objects.get(id=employee_id)
     company_id = employee.company.public_code
+    # data = {
+    #     "name": employee.name,
+    #     "email": employee.email,
+    #     "role_id": employee.role.public_code,
+    #     "position_id": employee.position.public_code,
+    #     "industry_id": employee.industry.public_code,
+    #     "sex_id": employee.sex.public_code
+    # }
     data = {
-        "name": employee.name,
-        "email": employee.email,
-        "role_id": employee.role.public_code,
-        "position_id": employee.position.public_code,
-        "industry_id": employee.industry.public_code,
-        "sex_id": employee.sex.public_code
+        "name": "ВВВВВ",
+        "email": "sdfsdff",
+        "role_id": "HKuhu55",
+        "position_id": "HUigfyuf",
+        "industry_id": "sdfsffsd",
+        "sex_id": "sdfsfsf"
     }
     url = settings.API_LINK + 'company/' + company_id + '/employee'
     response = requests.post(url,
