@@ -103,30 +103,15 @@ def sync_add_company(name, public_code):
 def sync_add_employee(employee_id):
     employee = Employee.objects.get(id=employee_id)
     company_id = employee.company.public_code
-    # data = {
-    #     "name": employee.name.encode('utf-8'),
-    #     "email": employee.email.encode('utf-8'),
-    #     "role_id": employee.role.public_code.encode('utf-8'),
-    #     "position_id": employee.position.public_code.encode('utf-8'),
-    #     "industry_id": employee.industry.public_code.encode('utf-8'),
-    #     "sex_id": employee.sex.public_code.encode('utf-8')
-    # }
     data = {
         "name": employee.name,
         "email": employee.email,
         "role_id": employee.role.public_code,
         "position_id": employee.position.public_code,
         "industry_id": employee.industry.public_code,
-        "sex_id": employee.sex.public_code
+        "sex_id": employee.sex.public_code,
+        "birth_year": employee.birth_year
     }
-    # data = {
-    #     "name": "ВВВВВ",
-    #     "email": "sdfsdff",
-    #     "role_id": "HKuhu55",
-    #     "position_id": "HUigfyuf",
-    #     "industry_id": "sdfsffsd",
-    #     "sex_id": "sdfsfsf"
-    # }
     url = settings.API_LINK + 'company/' + company_id + '/employee'
     response = requests.post(url,
                             headers={'Authorization': 'Bearer ' + settings.API_BEARER, 'Content-type': 'application/json'}, json=data)
@@ -134,4 +119,9 @@ def sync_add_employee(employee_id):
     # return response
 
 
-
+@shared_task
+def get_company_studies(company_public_code):
+    url = settings.API_LINK + 'company/' + company_public_code + '/study'
+    response = requests.get(url, headers={'Authorization': 'Bearer ' + settings.API_BEARER})
+    print(response)
+    return response

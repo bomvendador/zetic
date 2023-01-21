@@ -69,16 +69,18 @@ def get_company_studies(request):
         json_data = json.loads(request.body.decode('utf-8'))
 
         company_id = json_data['company_id']
-        studies = Study.objects.filter(company_id=company_id)
+        # studies = Study.objects.filter(company_id=company_id)
+        company = Company.objects.get(id=company_id)
+        studies = outcoming.get_company_studies(company.public_code)
         studies_arr = []
-        for study in studies:
-            name = study.name
-            studies_arr.append({
-                'name': name,
-                'id': study.id,
-                'company_name': study.company.name,
-                'research_name': study.research_name,
-            })
+        # for study in studies:
+        #     name = study.name
+        #     studies_arr.append({
+        #         'name': name,
+        #         'id': study.id,
+        #         'company_name': study.company.name,
+        #         'research_name': study.research_name,
+        #     })
         response = {
             'data': list(studies_arr)
         }
