@@ -433,7 +433,7 @@ expand_menu_item('#menu_employees_list')
        $(element).DataTable({
            "searching": true,
           "destroy": true,
-          "paging": true,
+          "paging": false,
           "language": {
             "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"
           },
