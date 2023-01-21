@@ -94,9 +94,9 @@ def sync_add_company(name, public_code):
         "public_code": public_code
     }
     response = requests.post(settings.API_LINK + 'company',
-                            headers={'Authorization': 'Bearer ' + settings.API_BEARER}, data=data)
+                            headers={'Authorization': 'Bearer ' + settings.API_BEARER, 'Content-type': 'application/json'}, json=data)
     # print(f'sync response - {response}')
-    return response
+    # return response
 
 
 @shared_task
