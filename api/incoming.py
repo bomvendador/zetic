@@ -39,7 +39,7 @@ def participant_started(request):
         employee.name = participant_name
         employee.save()
     participant = Participant.objects.get(employee__email=participant_email, study__public_code=study_public_code)
-    participant.started_at = datetime.datetime.now()
+    participant.started_at = datetime.now()
     participant.total_questions_qnt = total_questions_qnt
     participant.save()
     return HttpResponse(status=200)
