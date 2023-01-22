@@ -180,7 +180,12 @@
                                                                              {% if participant.completed_at %}
                                                                                 Скачать
                                                                              {% else %}
-                                                                                Повторно отправить приглашение
+                                                                                 {% if participant.started_at %}
+                                                                                     Действия отсутствуют
+                                                                                 {% else %}
+                                                                                    Повторно отправить приглашение
+                                                                                 {% endif %}
+
                                                                              {% endif %}
 
                                                                          {% else %}
