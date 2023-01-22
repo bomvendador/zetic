@@ -1,7 +1,7 @@
 from django.contrib import admin
 from pdf.models import Participant, Report, Category, Section, PointDescription, Company, ReportData, ReportGroup, \
     ReportGroupSquare, Industry, EmployeeRole, EmployeePosition, Employee, Study, ParticipantQuestionGroups, EmailSentToParticipant, \
-    RawToTPointsType, RawToTPoints, EmployeeGender
+    RawToTPointsType, RawToTPoints, EmployeeGender, StudyQuestionGroup
 from login.models import UserRole, UserProfile
 
 
@@ -31,3 +31,4 @@ admin.site.register(EmailSentToParticipant, ReportAdmin)
 admin.site.register(RawToTPointsType)
 admin.site.register(RawToTPoints)
 admin.site.register(EmployeeGender)
+admin.site.register(StudyQuestionGroup)

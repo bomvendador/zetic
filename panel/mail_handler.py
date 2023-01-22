@@ -16,6 +16,7 @@ from api.outcoming import get_code_for_invitation
 def send_invitation_email(request):
     if request.method == 'POST':
         json_request = json.loads(request.body.decode('utf-8'))
+        print(json_request)
         study_id = json_request['study_id']
         participant_id = json_request['participant_id']
         email_type = json_request['type']
@@ -35,8 +36,15 @@ def send_invitation_email(request):
                 }
                 check_passed = False
         if check_passed:
-            if type == 'initial':
-                code_for_participant = get_code_for_invitation(request, json_request)
+            if email_type == 'initial':
+                if participant_inst.invitation_code == '':
+                    get_code_for_invitation_response = get_code_for_invitation(request, json_request)
+                    code_for_participant = get_code_for_invitation_response['public_code']
+                    participant_inst.invitation_code = code_for_participant
+                    participant_inst.total_questions_qnt = get_code_for_invitation_response['questions_count']
+                    participant_inst.save()
+                else:
+                    code_for_participant = participant_inst.invitation_code
             else:
                 code_for_participant = participant_inst.invitation_code
 

@@ -74,8 +74,8 @@
                                                 <tbody id="tbody_question_groups_selected" data-participant-tr-id="">
                                                 {% if study_question_groups %}
                                                 {% for study_question_group in study_question_groups %}
-                                                    <tr id="section_code_{{ study_question_group.code }}">
-                                                        <td>{{ study_question_group.name }}</td>
+                                                    <tr id="section_code_{{ study_question_group.section.code }}">
+                                                        <td>{{ study_question_group.section.name }}</td>
                                                     </tr>
                                                 {% endfor %}
                                                 {% else %}

@@ -178,6 +178,18 @@ class Study(models.Model):
         verbose_name = 'Опросники (study)'
 
 
+class StudyQuestionGroup(models.Model):
+    study = models.ForeignKey(Study, on_delete=models.CASCADE, default=None, null=True, blank=True)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, default=None, null=True, blank=True)
+
+    def __str__(self):
+        return f'study - {self.study.name} section - {self.section.name}'
+
+    class Meta:
+        verbose_name_plural = 'Группы вопросов опросника'
+        verbose_name = 'Группа вопросов опросника'
+
+
 class Participant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
