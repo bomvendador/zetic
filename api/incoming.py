@@ -19,7 +19,7 @@ TOKEN = 'b55a461f947c6d315ad67f1d65d2ec592e400679'
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 @parser_classes([JSONParser])
 def participant_started(request):
 # {"study": {"public_code": "ertrtre"},"participant": {"email": "jhkjk@huihuihjhhiio.dfd"}}
@@ -28,7 +28,7 @@ def participant_started(request):
 
     json_request = json.loads(request.body.decode('utf-8'))
     # print(json_request)
-    print(f'{timezone.localtime(timezone.now()).strftime("%d.%m.%Y %H:%M:%S")} - {json_request}')
+    print(f'{timezone.localtime(timezone.now()).strftime("%d.%m.%Y %H:%M:%S")} - participant_started - {json_request}')
 
     study_public_code = json_request['study']['public_code']
     total_questions_qnt = json_request['study']['total_questions_qnt']
@@ -73,7 +73,7 @@ def data_for_report(request):
 def questions_answered_qnt(request):
 # {"study": {"public_code": "ertrtre"},"participant": {"email": "jhkjk@huihuihjhhiio.dfd"}}
     json_request = json.loads(request.body.decode('utf-8'))
-    print(f'{timezone.localtime(timezone.now()).strftime("%d.%m.%Y %H:%M:%S")} - {json_request}')
+    print(f'{timezone.localtime(timezone.now()).strftime("%d.%m.%Y %H:%M:%S")} - questions_answered_qnt - {json_request}')
     study_public_code = json_request['study']['public_code']
     total_questions_qnt = json_request['questions_answered_qnt']
     participant_email = json_request['participant']['email']
