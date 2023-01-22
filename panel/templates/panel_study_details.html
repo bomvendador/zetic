@@ -169,7 +169,7 @@
                                                             <div style="text-align: center;" >
                                                                 <i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>
                                                                 <ul class="dropdown-menu">
-                                                                     <li><a class="dropdown-item {% if not participant.completed_at %}send-email-invitation {% if not participant.started_at %}cursor-pointer{% endif %}{% endif %}"
+                                                                     <li><a class="dropdown-item {% if not participant.completed_at %}{% if not participant.started_at %} send-email-invitation cursor-pointer{% endif %}{% endif %}"
                                                                      {% for report in reports %}
                                                                          {% if report.participant == participant  %}
                                                                             href="{% url 'download_single_report' filename=report.filename %}"
