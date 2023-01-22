@@ -329,10 +329,12 @@ let employees_selected = {}
                     let reminder = val['reminder']
                     let questions_groups_arr = val['questions_groups_arr']
                     let current_percentage = val['current_percentage']
+                    let total_questions_qnt = val['total_questions_qnt']
+                    let answered_questions_qnt = val['answered_questions_qnt']
                     let filename = val['filename']
                     html += '<tr class="" id="participant_id_' + id + '">'
                     html += '<td>'
-                    if(employee_invitation){
+                    if(answered_questions_qnt > 0){
 
                         if(completed_at_datetime){
                             html += '<i class="fa fa-circle font-color-success" aria-hidden="true" title="Опросник заполнен"><span style="color: transparent">3</span></i>'
@@ -350,6 +352,7 @@ let employees_selected = {}
                         html += '<i class="fa fa-circle font-color-danger" aria-hidden="true" title="Приглашение не отправлено"><span style="color: transparent">1</span></i>'
                     }
                     html += '</td>'
+                    html += '<td>' + answered_questions_qnt + '/' + total_questions_qnt + '</td>'
                     html += '<td>' + employee_name + '</td>'
                     html += '<td>' + employee_email + '</td>'
 
@@ -457,9 +460,9 @@ $('#modal_send_invitation_btn').on('click', function () {
                 }else {
                     let datetime_invitation_sent = json_data['datetime_invitation_sent'];
                     let el = $('#participant_id_' + participant_id)
-                    el.find('.bg-danger').removeClass('bg-danger').addClass('bg-warning').prop('title', 'Приглашение отправлено')
+                    el.find('.font-color-danger').removeClass('font-color-danger').addClass('font-color-warning').prop('title', 'Приглашение отправлено')
                     el.find('.send-email-invitation').text('Повторно отправить приглашение')
-                    el.find('td:nth-child(4)').text(datetime_invitation_sent)
+                    el.find('td:nth-child(6)').text(datetime_invitation_sent)
                     toastr.success('Приглашение участнику отправлено')
                 }
             }

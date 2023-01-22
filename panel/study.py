@@ -301,6 +301,8 @@ def save_study_participants(request):
                 'completed_at_datetime': completed_at_datetime,
                 'questions_groups_arr': questions_groups_arr,
                 'current_percentage': participant.current_percentage,
+                'total_questions_qnt': participant.total_questions_qnt,
+                'answered_questions_qnt': participant.answered_questions_qnt,
                 'filename': filename
             })
 
