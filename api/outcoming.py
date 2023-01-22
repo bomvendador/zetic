@@ -5,6 +5,8 @@ import requests
 from reports import settings
 import json
 from celery import shared_task
+from django.utils import timezone
+
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -35,7 +37,7 @@ def get_code_for_invitation(request, json_request):
     url = settings.API_LINK + 'participant/'
     response = requests.post(url,
                             headers={'Authorization': 'Bearer ' + settings.API_BEARER, 'Content-type': 'application/json'}, json=data)
-    print(f'sync response - {response}')
+    print(f'{timezone.localtime(timezone.now()).strftime("%d.%m.%Y %H:%M:%S")} - sync response - {response}')
     print(f'sync json - {response.json()}')
 
     return response.json()
@@ -142,7 +144,7 @@ def sync_add_employee(employee_id):
     url = settings.API_LINK + 'company/' + company_id + '/employee'
     response = requests.post(url,
                             headers={'Authorization': 'Bearer ' + settings.API_BEARER, 'Content-type': 'application/json'}, json=data)
-    print(f'sync response - {response}')
+    print(f'{timezone.localtime(timezone.now()).strftime("%d.%m.%Y %H:%M:%S")} - sync response - {response}')
     # return response
 
 

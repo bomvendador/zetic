@@ -6,7 +6,6 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
-from datetime import datetime
 
 
 # Create your views here.
