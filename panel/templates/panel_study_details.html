@@ -109,6 +109,7 @@
                                                 <thead class="thead-style">
                                                     <tr>
                                                         <th></th>
+                                                        <th>Ответы</th>
                                                         <th>Имя/псевдоним</th>
                                                         <th>Email</th>
                                                         <th>Группы вопросов</th>
@@ -144,6 +145,7 @@
                                                             {% endif %}
 
                                                         </td>
+                                                        <td>{{ participant.answered_questions_qnt }}/{{ participant.total_questions_qnt }}</td>
                                                         <td>{% if participant.employee.name %}{{ participant.employee.name }}{% endif %}</td>
                                                         <td>{{ participant.employee.email }}</td>
                                                         <td class="participant_selected_questions_groups_td">
