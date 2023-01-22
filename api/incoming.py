@@ -23,7 +23,7 @@ TOKEN = 'b55a461f947c6d315ad67f1d65d2ec592e400679'
 @parser_classes([JSONParser])
 def participant_started(request):
 # {"study": {"public_code": "ertrtre"},"participant": {"email": "jhkjk@huihuihjhhiio.dfd"}}
-#     print(type(request.body.decode('utf-8')))
+    print(type(request.body.decode('utf-8')))
 
     json_request = json.loads(request.body.decode('utf-8'))
     # print(json_request)
