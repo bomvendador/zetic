@@ -463,6 +463,7 @@ $('#modal_send_invitation_btn').on('click', function () {
                     el.find('.font-color-danger').removeClass('font-color-danger').addClass('font-color-warning').prop('title', 'Приглашение отправлено')
                     el.find('.send-email-invitation').text('Повторно отправить приглашение')
                     el.find('td:nth-child(6)').text(datetime_invitation_sent)
+                    el.find('td:nth-child(2)').text('0/' + json_data['questions_count'])
                     toastr.success('Приглашение участнику отправлено')
                 }
             }

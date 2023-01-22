@@ -28,6 +28,8 @@ def send_invitation_email(request):
         user_profile = UserProfile.objects.get(user=request.user)
         check_passed = True
 
+        result = {}
+
         if user_profile.role.name == 'Админ заказчика':
             company = participant_inst.employee.company
             if not company.active:
@@ -63,7 +65,6 @@ def send_invitation_email(request):
             from_email = 'ZETIC <info@zetic.ru>'
             to_email = participant_email
 
-            result = {}
 
             try:
                 send_mail(
@@ -87,6 +88,7 @@ def send_invitation_email(request):
 
                 result.update({
                     'datetime_invitation_sent': timezone.localtime(participant_inst.invitation_sent_datetime).strftime("%d.%m.%Y %H:%M"),
+                    'questions_count': participant_inst.total_questions_qnt
                 })
 
             except SMTPRecipientsRefused as e:
