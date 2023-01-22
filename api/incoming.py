@@ -19,7 +19,7 @@ TOKEN = 'b55a461f947c6d315ad67f1d65d2ec592e400679'
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 @parser_classes([JSONParser])
 def participant_started(request):
 # {"study": {"public_code": "ertrtre"},"participant": {"email": "jhkjk@huihuihjhhiio.dfd"}}
