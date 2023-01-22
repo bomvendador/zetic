@@ -37,7 +37,7 @@ def send_invitation_email(request):
                 check_passed = False
         if check_passed:
             if email_type == 'initial':
-                if participant_inst.invitation_code == '':
+                if participant_inst.invitation_code is None:
                     get_code_for_invitation_response = get_code_for_invitation(request, json_request)
                     code_for_participant = get_code_for_invitation_response['public_code']
                     participant_inst.invitation_code = code_for_participant
