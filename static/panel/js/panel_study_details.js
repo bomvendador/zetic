@@ -487,8 +487,8 @@ $('#tbody_participants_selected').on('click', '.send-email-invitation', function
     if(question_groups_qnt === 0){
         toastr.error('Выберите группы вопросов для участника')
     }else {
-        let participant_name = $(this).closest('tr').find('td').eq(1).text()
-        let participant_email = $(this).closest('tr').find('td').eq(2).text()
+        let participant_name = $(this).closest('tr').find('td').eq(2).text()
+        let participant_email = $(this).closest('tr').find('td').eq(3).text()
         $('#modal_participant_name').html('<b>' + participant_name + '</b>').attr('data-tr-id', $(this).closest('tr').attr('id'))
         $('#modal_participant_email').html('<b>' + participant_email + '</b>')
         $('#modal_before_send_invitation').modal('show')
