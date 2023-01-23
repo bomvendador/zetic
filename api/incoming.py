@@ -78,7 +78,6 @@ def questions_answered_qnt(request):
     questions_answered = json_request['questions_answered_qnt']
     participant_email = json_request['participant']['email']
     participant = Participant.objects.get(employee__email=participant_email, study__public_code=study_public_code)
-    participant.started_at = datetime.now()
     participant.answered_questions_qnt = questions_answered
     participant.save()
     return HttpResponse(status=200)
