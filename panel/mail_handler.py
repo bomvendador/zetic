@@ -197,5 +197,3 @@ def send_notification_report_made(data):
             'error': 'Указан некорректный Email'
         }
         return result
-
-
