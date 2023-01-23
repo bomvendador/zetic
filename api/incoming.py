@@ -75,11 +75,11 @@ def questions_answered_qnt(request):
     json_request = json.loads(request.body.decode('utf-8'))
     print(f'{timezone.localtime(timezone.now()).strftime("%d.%m.%Y %H:%M:%S")} - questions_answered_qnt - {json_request}')
     study_public_code = json_request['study']['public_code']
-    total_questions_qnt = json_request['questions_answered_qnt']
+    questions_answered = json_request['questions_answered_qnt']
     participant_email = json_request['participant']['email']
     participant = Participant.objects.get(employee__email=participant_email, study__public_code=study_public_code)
     participant.started_at = datetime.now()
-    participant.total_questions_qnt = total_questions_qnt
+    participant.answered_questions_qnt = questions_answered
     participant.save()
     return HttpResponse(status=200)
 
