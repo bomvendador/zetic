@@ -21,5 +21,5 @@ def extract_categories(json_section, category_code, lang, participant_info):
                 if lang == 'ru':
                     point_description = PointDescription.objects.get(category__code=category_code, value=category_point).text
                 else:
-                    point_description = PointDescription.objects.get(category__name=category_code, value=category_point).text_en
+                    point_description = PointDescription.objects.get(category__code=category_code, value=category_point).text_en
                 return {'points': category_point, 'point_description': point_description}

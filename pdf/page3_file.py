@@ -109,7 +109,8 @@ def page3(pdf, json_section, lang, participant_info):
     if lang == 'ru':
         scale_name = u'''
     Шкала Q4
-    Внутреннее напряжение
+    Внутреннее 
+    напряжение
         '''
         scale_legend_left = u'''
     Расслабленность,  

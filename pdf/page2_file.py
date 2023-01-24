@@ -128,7 +128,7 @@ def page2(pdf, lie_points, lang):
         text = u'Validity'
         pdf.set_xy(x, y)
         pdf.cell(108, 12, text, ln=0)
-        pdf.cell(10, 12, str(lie_points), ln=0)
+        pdf.cell(10, 12, str(round(lie_points/40*10)), ln=0)
 
     pdf.set_font("RalewayLight", "", 7)
     if lang == 'ru':
