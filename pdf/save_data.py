@@ -45,8 +45,9 @@ def save_data_to_db(request_json, file_name):
         ReportData.objects.filter(report=report).delete()
     else:
         report = Report()
+    lie_points = round(request_json['lie_points'] / 40 * 10)
     report.participant = participant
-    report.lie_points = request_json['lie_points']
+    report.lie_points = lie_points
     report.code = request_json['code']
     report.file = file_name
     report.lang = request_json['lang']
