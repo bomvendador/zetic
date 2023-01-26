@@ -5,6 +5,8 @@ from django.http import HttpResponse, HttpResponseServerError, JsonResponse
 import json
 from django.utils import timezone
 from login.models import UserRole, UserProfile, User
+from panel.custom_funcs import generate_code
+from api.outcoming import sync_add_company
 
 from .views import info_common
 
@@ -25,10 +27,12 @@ def save_new_company(request):
         json_data = json.loads(request.body.decode('utf-8'))
         name = json_data['name']
         active = json_data['active']
-        print(json_data)
+        # print(json_data)
         company_inst = Company()
         company_inst.name = name
         company_inst.created_by = request.user
+        public_code = generate_code(8)
+        company_inst.public_code = public_code
         if active == 1:
             company_inst.active = True
         else:
@@ -36,7 +40,10 @@ def save_new_company(request):
 
         company_inst.save()
 
-        return HttpResponse(status=200)
+        response = sync_add_company.delay(name, public_code)
+
+        # return HttpResponse(status=200)
+        return HttpResponse(response)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')

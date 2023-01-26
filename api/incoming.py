@@ -11,6 +11,8 @@ import json
 import ast
 from pdf.views import pdf_single_generator
 from pdf_group.views import pdf_group_generator
+from django.utils import timezone
+from datetime import datetime
 
 TOKEN = 'b55a461f947c6d315ad67f1d65d2ec592e400679'
 
@@ -21,15 +23,23 @@ TOKEN = 'b55a461f947c6d315ad67f1d65d2ec592e400679'
 @parser_classes([JSONParser])
 def participant_started(request):
 # {"study": {"public_code": "ertrtre"},"participant": {"email": "jhkjk@huihuihjhhiio.dfd"}}
-    print(type(request.body.decode('utf-8')))
+#     print(type(request.body.decode('utf-8')))
+#     print(request.body.decode('utf-8'))
+
     json_request = json.loads(request.body.decode('utf-8'))
-    print(json_request)
+    # print(json_request)
+    print(f'{timezone.localtime(timezone.now()).strftime("%d.%m.%Y %H:%M:%S")} - participant_started - {json_request}')
 
     study_public_code = json_request['study']['public_code']
     total_questions_qnt = json_request['study']['total_questions_qnt']
     participant_email = json_request['participant']['email']
+    participant_name = json_request['participant']['name']
+    employee = Employee.objects.get(email=participant_email)
+    if not employee.name == participant_name:
+        employee.name = participant_name
+        employee.save()
     participant = Participant.objects.get(employee__email=participant_email, study__public_code=study_public_code)
-    participant.started_at = datetime.datetime.now()
+    participant.started_at = datetime.now()
     participant.total_questions_qnt = total_questions_qnt
     participant.save()
     return HttpResponse(status=200)
@@ -37,7 +47,7 @@ def participant_started(request):
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 @parser_classes([JSONParser])
 def data_for_report(request):
     if request.method == 'POST':
@@ -63,12 +73,19 @@ def data_for_report(request):
 def questions_answered_qnt(request):
 # {"study": {"public_code": "ertrtre"},"participant": {"email": "jhkjk@huihuihjhhiio.dfd"}}
     json_request = json.loads(request.body.decode('utf-8'))
+    print(f'{timezone.localtime(timezone.now()).strftime("%d.%m.%Y %H:%M:%S")} - questions_answered_qnt - {json_request}')
     study_public_code = json_request['study']['public_code']
-    total_questions_qnt = json_request['questions_answered_qnt']
+    total_questions_qnt = json_request['study']['total_questions_qnt']
+    questions_answered = json_request['questions_answered_qnt']
     participant_email = json_request['participant']['email']
+    participant_name = json_request['participant']['name']
     participant = Participant.objects.get(employee__email=participant_email, study__public_code=study_public_code)
-    participant.started_at = datetime.datetime.now()
+    participant.answered_questions_qnt = questions_answered
     participant.total_questions_qnt = total_questions_qnt
+    participant.current_percentage = round(questions_answered/total_questions_qnt*100)
+    employee = Employee.objects.get(email=participant_email)
+    employee.name = participant_name
+    employee.save()
     participant.save()
     return HttpResponse(status=200)
 
@@ -91,6 +108,8 @@ def companies_employees(request):
 
         data.append({
                         'company_name': company.name,
+                        'company_id': company.id,
                         'employees': employees_arr
                     })
-    return JsonResponse(data, safe=False)
+    # return JsonResponse(data, safe=False)
+    return Response(data)

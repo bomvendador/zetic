@@ -68,7 +68,7 @@ urlpatterns = [
 
     path('studies_list', study.studies_list, name='studies_list'),
     path('get_company_studies', study.get_company_studies, name='get_company_studies'),
-    path('study/<int:study_id>', study.study_details, name='study_details'),
+    path('study/<str:study_public_code>', study.study_details, name='study_details'),
     # path('get_question_groups', study.get_question_groups, name='get_question_groups'),
     path('save_participant_questions_groups', study.save_participant_questions_groups, name='save_participant_questions_groups'),
     path('get_employees_for_study', study.get_employees_for_study, name='get_employees_for_study'),

@@ -21,6 +21,7 @@ from pdf_group.section_1 import page as section_1_page
 from pdf_group.section_2 import page as section_2_page
 from pdf_group.section_3 import page as section_3_page
 from pdf_group.section_4 import page as section_4_page
+from pdf_group.description import page as description_page
 from pdf_group.participants_list import page as participants_page
 from pdf.views import save_serve_file
 from pdf_group.save_data import save_data_to_db as save_data_group
@@ -49,6 +50,10 @@ def pdf_group_generator(request_json):
     client_name = request_json['project']
 
     title_page(pdf, client_name, lang)
+
+    pdf.add_page()
+    pdf.set_text_color(0, 0, 0)
+    description_page(pdf, lang)
 
     pdf.add_page()
     pdf.set_text_color(0, 0, 0)

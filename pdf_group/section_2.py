@@ -344,6 +344,28 @@ def page(pdf, square_results, lang):
     proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
                   description_delta_y=5, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
     # -------------------------
+    y = y + MIN_SCALE_DELTA_Y + additional_delta_y
+
+    category_code = '2_16'
+    section_data = data_by_points(square_results, section_code, category_code)
+
+    additional_delta_y = get_additional_delta_y(section_data)
+
+    if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
+        insert_page_number(pdf)
+        pdf.add_page()
+        y = START_Y
+    else:
+        y = y
+
+    scale_name = 'Агрессия'
+
+    scale_description = 'Пребывание в состоянии \n' \
+                        'сопротивления, ярость/агрессия'
+
+    proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
+                  description_delta_y=5, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
+    # -------------------------
 
     # draw_table(square_results, pdf, width=90, x=14, y=table_y)
     insert_page_number(pdf)

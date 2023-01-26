@@ -19,7 +19,9 @@ env = environ.Env()
 environ.Env.read_env()
 
 API_BEARER = env('API_BEARER')
-API_LINK = 'https://console.zetic.ru/api'
+# 'https://console.zetic.ru/api/'
+API_LINK = env('API_LINK', default='https://demo-admin.zetic.borsky.dev/api/')
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -108,18 +110,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'reports.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-#}
-
-
 # Celery Broker - Redis
 CELERY_BROKER_URL = env('CELERY_HOST', default='redis://localhost:6379')
 CELERY_RESULT_BACKEND = env('CELERY_HOST', default='redis://localhost:6379')
@@ -127,6 +117,16 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = "Europe/Moscow"
+
+# Database
+# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 DATABASES = {

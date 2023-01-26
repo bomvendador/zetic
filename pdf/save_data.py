@@ -45,8 +45,9 @@ def save_data_to_db(request_json, file_name):
         ReportData.objects.filter(report=report).delete()
     else:
         report = Report()
+    lie_points = round(request_json['lie_points'] / 40 * 10)
     report.participant = participant
-    report.lie_points = request_json['lie_points']
+    report.lie_points = lie_points
     report.code = request_json['code']
     report.file = file_name
     report.lang = request_json['lang']
@@ -65,7 +66,8 @@ def save_data_to_db(request_json, file_name):
             report_data.category_name = point['category']
             report_data.category_code = point['code']
             report_data.points = point['points']
-            report_data.points = raw_to_t_point.get_t_point(point['points'], point['code'], request_json['participant_info']['sex'], int(request_json['participant_info']['year']))
+            # report_data.points = raw_to_t_point.get_t_point(point['points'], point['code'], request_json['participant_info']['sex'], int(request_json['participant_info']['year']))
+            report_data.points = point['points']
             report_data.save()
 
     if participant.send_admin_notification_after_filling_up:

@@ -74,8 +74,8 @@
                                                 <tbody id="tbody_question_groups_selected" data-participant-tr-id="">
                                                 {% if study_question_groups %}
                                                 {% for study_question_group in study_question_groups %}
-                                                    <tr id="section_code_{{ study_question_group.code }}">
-                                                        <td>{{ study_question_group.name }}</td>
+                                                    <tr id="section_code_{{ study_question_group.section.code }}">
+                                                        <td>{{ study_question_group.section.name }}</td>
                                                     </tr>
                                                 {% endfor %}
                                                 {% else %}
@@ -109,6 +109,7 @@
                                                 <thead class="thead-style">
                                                     <tr>
                                                         <th></th>
+                                                        <th>Ответы</th>
                                                         <th>Имя/псевдоним</th>
                                                         <th>Email</th>
                                                         <th>Группы вопросов</th>
@@ -144,6 +145,7 @@
                                                             {% endif %}
 
                                                         </td>
+                                                        <td>{{ participant.answered_questions_qnt }}/{{ participant.total_questions_qnt }}</td>
                                                         <td>{% if participant.employee.name %}{{ participant.employee.name }}{% endif %}</td>
                                                         <td>{{ participant.employee.email }}</td>
                                                         <td class="participant_selected_questions_groups_td">
@@ -167,7 +169,7 @@
                                                             <div style="text-align: center;" >
                                                                 <i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>
                                                                 <ul class="dropdown-menu">
-                                                                     <li><a class="dropdown-item {% if not participant.completed_at %}send-email-invitation cursor-pointer{% endif %}"
+                                                                     <li><a class="dropdown-item {% if not participant.completed_at %}{% if not participant.started_at %} send-email-invitation cursor-pointer{% endif %}{% endif %}"
                                                                      {% for report in reports %}
                                                                          {% if report.participant == participant  %}
                                                                             href="{% url 'download_single_report' filename=report.filename %}"
@@ -178,7 +180,12 @@
                                                                              {% if participant.completed_at %}
                                                                                 Скачать
                                                                              {% else %}
-                                                                                Повторно отправить приглашение
+                                                                                 {% if participant.started_at %}
+                                                                                     Действия отсутствуют
+                                                                                 {% else %}
+                                                                                    Повторно отправить приглашение
+                                                                                 {% endif %}
+
                                                                              {% endif %}
 
                                                                          {% else %}

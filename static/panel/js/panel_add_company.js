@@ -33,6 +33,7 @@ $('#company_active').on('click', function () {
                     toastr.error('Ошибка', data)
                 },
                 success:function (data) {
+                    console.log(data)
                     Swal.fire({
                       title: 'Компания создана',
                       text: "Данные компании успешено сохранены",

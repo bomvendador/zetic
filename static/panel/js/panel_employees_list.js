@@ -17,9 +17,9 @@ expand_menu_item('#menu_employees_list')
             }else {
                 btn_spinner($('#save_edited_employee'))
 
-                let role_id = $('#employee_role').val().split('_')[2]
-                let position_id = $('#employee_position').val().split('_')[2]
-                let industry_id = $('#employee_industry').val().split('_')[2]
+                let role_id = $('#employee_role').children(':selected').prop('id')
+                let position_id = $('#employee_position').children(':selected').prop('id')
+                let industry_id = $('#employee_industry').children(':selected').prop('id')
 
                 let data = {
                         'name': name,
@@ -32,6 +32,7 @@ expand_menu_item('#menu_employees_list')
                         'employee_id': employee_id
 
                 }
+                console.log(data)
                         $.ajax({
                             headers: { "X-CSRFToken": token },
                             url: url_save_new_employee_html,
@@ -118,22 +119,22 @@ expand_menu_item('#menu_employees_list')
                 console.log(data)
                 if (!server_error){
                     $('#employee_role option').each(function (e) {
-                        if(data['role'] === $(this).val().split('_')[2]){
+                        if(data['role']['id'] === $(this).prop('id')){
                             $(this).prop('selected', true)
                         }
                     })
                     $('#employee_position option').each(function (e) {
-                        if(data['position'] === $(this).val().split('_')[2]){
+                        if(data['position']['id'] === $(this).prop('id')){
                             $(this).prop('selected', true)
                         }
                     })
                     $('#employee_industry option').each(function (e) {
-                        if(data['industry'] === $(this).val().split('_')[2]){
+                        if(data['industry']['id'] === $(this).prop('id')){
                             $(this).prop('selected', true)
                         }
                     })
                     $('#employee_gender option').each(function (e) {
-                        if(data['gender'] === $(this).text()){
+                        if(data['gender']['id'] === $(this).prop('id')){
                             $(this).prop('selected', true)
                         }
                     })
@@ -143,10 +144,10 @@ expand_menu_item('#menu_employees_list')
                     let industry = data['industry']
                     let gender = data['gender']
 
-                    $('#employee_role').html('<option>' + role + '</option>')
-                    $('#employee_position').html('<option>' + position + '</option>')
-                    $('#employee_industry').html('<option>' + industry + '</option>')
-                    $('#employee_gender').html('<option>' + gender + '</option>')
+                    $('#employee_role').html('<option id="' + role['id'] + '">' + role['name_ru'] + '</option>')
+                    $('#employee_position').html('<option id="' + position['id'] + '">' + position['name_ru'] + '</option>')
+                    $('#employee_industry').html('<option id="' + industry['id'] + '">' + industry['name_ru'] + '</option>')
+                    $('#employee_gender').html('<option id="' + gender['id'] + '">' + gender['name_ru'] + '</option>')
                 }
                 $("#employee_birth_year").val(data['birth_year']).yearpicker({
                     // onChange: function (val) {
@@ -432,7 +433,7 @@ expand_menu_item('#menu_employees_list')
        $(element).DataTable({
            "searching": true,
           "destroy": true,
-          "paging": true,
+          "paging": false,
           "language": {
             "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"
           },

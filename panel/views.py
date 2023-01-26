@@ -215,7 +215,7 @@ def get_group_reports_list(request):
             report.append({
                 'company': group_report.company.name,
                 'id': group_report.id,
-                'date': group_report.added.strftime('%d.%m.%Y %H:%M:%S'),
+                'date': timezone.localtime(group_report.added).strftime("%d.%m.%Y %H:%M:%S"),
                 'participants': report_group_square_arr,
                 'qnt': len(report_group_square_arr),
                 'file_name': group_report.file.name,

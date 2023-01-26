@@ -1,5 +1,5 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, ParticipantQuestionGroups, Participant, \
-    EmailSentToParticipant, Report
+    EmailSentToParticipant, Report, StudyQuestionGroup
 from login.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
@@ -39,21 +39,21 @@ def studies_list(request):
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
-def study_details(request, study_id):
+def study_details(request, study_public_code):
     context = info_common(request)
 
     if context == 'logout':
         return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
     else:
-
-        study = Study.objects.get(id=study_id)
+        study = Study.objects.get(public_code=study_public_code)
         participant_questions_groups = ParticipantQuestionGroups.objects.filter(participant__study=study)
+        study_question_groups = StudyQuestionGroup.objects.filter(study=study)
         reports = Report.objects.filter(study=study).order_by('-added')
         context.update(
             {
                 'study': study,
                 'participant_questions_groups': participant_questions_groups,
-                'study_question_groups': outcoming.get_study_question_groups(request, 'sfsddfds'),
+                'study_question_groups': study_question_groups,
                 'participants': Participant.objects.filter(study=study),
                 'emails_sent': EmailSentToParticipant.objects.filter(participant__study=study, type='reminder'),
                 'reports': reports
@@ -69,16 +69,36 @@ def get_company_studies(request):
         json_data = json.loads(request.body.decode('utf-8'))
 
         company_id = json_data['company_id']
-        studies = Study.objects.filter(company_id=company_id)
+        # studies = Study.objects.filter(company_id=company_id)
+        company = Company.objects.get(id=company_id)
+        studies = outcoming.get_company_studies(company.public_code)
         studies_arr = []
         for study in studies:
-            name = study.name
+            name = study['name']
             studies_arr.append({
                 'name': name,
-                'id': study.id,
-                'company_name': study.company.name,
-                'research_name': study.research_name,
+                'id': study['public_code'],
+                'company_name': company.name,
+                'research_name': '',
             })
+            studies_db_qnt = Study.objects.filter(public_code=study['public_code']).count()
+            if studies_db_qnt == 0:
+                study_inst = Study()
+                study_inst.company = company
+                study_inst.name = name
+                study_inst.public_code = study['public_code']
+                study_inst.save()
+            else:
+                study_inst = Study.objects.get(public_code=study['public_code'])
+
+            for section in study['sections']:
+                study_question_group_qnt = StudyQuestionGroup.objects.filter(study=study_inst, section__code=section['public_code']).count()
+                if study_question_group_qnt == 0:
+                    study_question_group_inst = StudyQuestionGroup()
+                    study_question_group_inst.study = study_inst
+                    study_question_group_inst.section = Section.objects.get(code=section['public_code'])
+                    study_question_group_inst.save()
+
         response = {
             'data': list(studies_arr)
         }
@@ -281,6 +301,8 @@ def save_study_participants(request):
                 'completed_at_datetime': completed_at_datetime,
                 'questions_groups_arr': questions_groups_arr,
                 'current_percentage': participant.current_percentage,
+                'total_questions_qnt': participant.total_questions_qnt,
+                'answered_questions_qnt': participant.answered_questions_qnt,
                 'filename': filename
             })
 

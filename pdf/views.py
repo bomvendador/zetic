@@ -44,11 +44,12 @@ def pdf_single_generator(request_json):
     participant_info = request_json['participant_info']
     participant_name = participant_info['name']
     lang = request_json['lang']
+    lie_points = round(request_json['lie_points']/40 * 10)
 
     title_page(pdf, participant_name, lang)
 
     pdf.add_page()
-    page2(pdf, request_json['lie_points'], lang)
+    page2(pdf, lie_points, lang)
 
     if '1' in appraisal_data_in_request:
         pdf.add_page()

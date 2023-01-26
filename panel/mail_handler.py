@@ -16,6 +16,7 @@ from api.outcoming import get_code_for_invitation
 def send_invitation_email(request):
     if request.method == 'POST':
         json_request = json.loads(request.body.decode('utf-8'))
+        print(json_request)
         study_id = json_request['study_id']
         participant_id = json_request['participant_id']
         email_type = json_request['type']
@@ -27,6 +28,8 @@ def send_invitation_email(request):
         user_profile = UserProfile.objects.get(user=request.user)
         check_passed = True
 
+        result = {}
+
         if user_profile.role.name == 'Админ заказчика':
             company = participant_inst.employee.company
             if not company.active:
@@ -35,8 +38,15 @@ def send_invitation_email(request):
                 }
                 check_passed = False
         if check_passed:
-            if type == 'initial':
-                code_for_participant = get_code_for_invitation(request, json_request)
+            if email_type == 'initial':
+                if participant_inst.invitation_code is None:
+                    get_code_for_invitation_response = get_code_for_invitation(request, json_request)
+                    code_for_participant = get_code_for_invitation_response['public_code']
+                    participant_inst.invitation_code = code_for_participant
+                    participant_inst.total_questions_qnt = get_code_for_invitation_response['questions_count']
+                    participant_inst.save()
+                else:
+                    code_for_participant = participant_inst.invitation_code
             else:
                 code_for_participant = participant_inst.invitation_code
 
@@ -55,7 +65,6 @@ def send_invitation_email(request):
             from_email = 'ZETIC <info@zetic.ru>'
             to_email = participant_email
 
-            result = {}
 
             try:
                 send_mail(
@@ -79,6 +88,7 @@ def send_invitation_email(request):
 
                 result.update({
                     'datetime_invitation_sent': timezone.localtime(participant_inst.invitation_sent_datetime).strftime("%d.%m.%Y %H:%M"),
+                    'questions_count': participant_inst.total_questions_qnt
                 })
 
             except SMTPRecipientsRefused as e:
@@ -187,5 +197,3 @@ def send_notification_report_made(data):
             'error': 'Указан некорректный Email'
         }
         return result
-
-

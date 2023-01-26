@@ -8,6 +8,7 @@
 
         $('.menu_item').on('click', function (){
             var menuID =  $(this).attr('id');
+            show_progressbar_loader()
             switch (menuID) {
                 case'menu_distribution':
                     window.location.href = url_team_distribution;
@@ -63,23 +64,25 @@
         })
 
        $(".list-table").DataTable({
-          "paging": true,
+          "searching": true,
+          "destroy": true,
+          "paging": false,
           "language": {
             "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"
           },
           "initComplete": function () {
 
           },
-          dom: 'Bfrtip',
-          buttons: [
-            {
-              extend: 'excelHtml5',
-              title: "Экспорт EXCEL - "
-            },
-            {
-              extend: 'pdfHtml5',
-              title: "Экспорт PDF - "
-            }]
+          // dom: 'Bfrtip',
+          // buttons: [
+          //   {
+          //     extend: 'excelHtml5',
+          //     title: "Экспорт EXCEL - "
+          //   },
+          //   {
+          //     extend: 'pdfHtml5',
+          //     title: "Экспорт PDF - "
+          //   }]
         })
 
         $('#logout').on('click', function () {

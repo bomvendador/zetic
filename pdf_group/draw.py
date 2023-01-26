@@ -120,7 +120,7 @@ def draw_single_circle_arrow(pdf, x, y, number):
 
 def draw_squares(pdf, square_results):
     startX = 15
-    startY = 25
+    startY = 25 + 8
     width = 90
 
     ESFJ_1_1 = 0
@@ -150,37 +150,38 @@ def draw_squares(pdf, square_results):
 
     for square_result in square_results:
         # print(f'square_result - {square_result}')
-        if square_result[0] == 'ESFJ - Массовик-затейник':
+        square_name = square_result[0]
+        if square_name == 'ESFJ - Массовик-затейник':
             ESFJ_1_1 = ESFJ_1_1 + 1
-        if square_result[0] == 'ENFJ - Идеалист-харизматик':
+        if square_name == 'ENFJ - Идеалист-харизматик':
             ENFJ_1_2 = ENFJ_1_2 + 1
-        if square_result[0] == 'ESFP - Спонтанный коммуникатор':
+        if square_name == 'ESFP - Спонтанный коммуникатор':
             ESFP_1_3 = ESFP_1_3 + 1
-        if square_result[0] == 'ENFP - Инициатор':
+        if square_name == 'ENFP - Инициатор':
             ENFP_1_4 = ENFP_1_4 + 1
-        if square_result[0] == 'ESTJ - Контролер по жизни':
+        if square_name == 'ESTJ - Контролер по жизни':
             ESTJ_2_1 = ESTJ_2_1 + 1
-        if square_result[0] == 'ENTJ - Предприниматель':
+        if square_name == 'ENTJ - Предприниматель':
             ENTJ_2_2 = ENTJ_2_2 + 1
-        if square_result[0] == 'ESTP - Ультра-реалист':
+        if square_name == 'ESTP - Ультра-реалист':
             ESTP_2_3 = ESTP_2_3 + 1
-        if square_result[0] == 'ENTP - Изобретатель':
+        if square_name == 'ENTP - Изобретатель':
             ENTP_2_4 = ENTP_2_4 + 1
-        if square_result[0] == 'ISFJ - Хранитель':
+        if square_name == 'ISFJ - Хранитель':
             ISFJ_3_1 = ISFJ_3_1 + 1
-        if square_result[0] == 'INFJ - Вдохновитель':
+        if square_name == 'INFJ - Вдохновитель':
             INFJ_3_2 = INFJ_3_2 + 1
-        if square_result[0] == 'ISFP - Посредник':
+        if square_name == 'ISFP - Посредник':
             ISFP_3_3 = ISFP_3_3 + 1
-        if square_result[0] == 'INFP - Благородный служитель':
+        if square_name == 'INFP - Благородный служитель':
             INFP_3_4 = INFP_3_4 + 1
-        if square_result[0] == 'ISTJ - Организатор':
+        if square_name == 'ISTJ - Организатор':
             ISTJ_4_1 = ISTJ_4_1 + 1
-        if square_result[0] == 'INTJ - Любитель улучшений':
+        if square_name == 'INTJ - Любитель улучшений':
             INTJ_4_2 = INTJ_4_2 + 1
-        if square_result[0] == 'ISTP - Экспериментатор':
+        if square_name == 'ISTP - Экспериментатор':
             ISTP_4_3 = ISTP_4_3 + 1
-        if square_result[0] == 'INTP - Решатель проблем':
+        if square_name == 'INTP - Решатель проблем':
             INTP_4_4 = INTP_4_4 + 1
 
 
@@ -271,13 +272,13 @@ def draw_squares(pdf, square_results):
     pdf.text(startX + width / 2 - 15 + 4, startY + width / 2 + 1 + delta_y_1, 'Интеграторы')
 
     pdf.rect(startX + width + width / 2 - 17, startY + width / 2 - 5 + delta_y_1, 34, 10, 'FD')
-    pdf.text(startX + width + width / 2 - 15 + 4.5, startY + width / 2 + 1 + delta_y_1, 'Инноваторы')
+    pdf.text(startX + width + width / 2 - 15.5, startY + width / 2 + 1 + delta_y_1, 'Предприниматели')
 
     pdf.rect(startX + width / 2 - 17, startY + width + width / 2 - 5 + delta_y_1 + delta_y_2 + delta_y_3, 34, 10, 'FD')
     pdf.text(startX + width / 2 - 15 + 0.5, startY + width + width / 2 + 1 + delta_y_1 + delta_y_2 + delta_y_3, 'Администраторы')
 
     pdf.rect(startX + width + width / 2 - 17, startY + width + width / 2 - 5 + delta_y_1 + delta_y_2 + delta_y_3, 34, 10, 'FD')
-    pdf.text(startX + width + width / 2 - 15 + 5, startY + width + width / 2 + 1 + delta_y_1 + delta_y_2 + delta_y_3, 'Продюсеры')
+    pdf.text(startX + width + width / 2 - 15 + 2, startY + width + width / 2 + 1 + delta_y_1 + delta_y_2 + delta_y_3, 'Производители')
 
     # названия квадратов
     pdf.set_font("RalewayRegular", "", 8)
@@ -295,52 +296,65 @@ def draw_squares(pdf, square_results):
 
     pdf.set_font("RalewayLight", "", 8)
 
-    pdf.text(startX + width / 4 - 3, startY + 4, 'ESFJ')
-    pdf.text(startX + width / 4 - 13, startY + 7, 'Массовик-затейник')
+    # pdf.text(startX + width / 4 - 3, startY + 4, 'ESFJ')
+    # pdf.text(startX + width / 4 - 13, startY + 7, 'Массовик-затейник')
+    pdf.text(startX + width / 4 - 13, startY + 4, 'Массовик-затейник')
 
-    pdf.text(startX + width * (3/4) - 3, startY + 4, 'ENFJ')
-    pdf.text(startX + width * (3/4) - 13, startY + 7, 'Идеалист-харизматик')
+    # pdf.text(startX + width * (3/4) - 3, startY + 4, 'ENFJ')
+    # pdf.text(startX + width * (3/4) - 13, startY + 7, 'Идеалист-харизматик')
+    pdf.text(startX + width * (3/4) - 12, startY + 4, 'Чуткий наставник')
 
-    pdf.text(startX + width + width / 4 - 3, startY + 4, 'ESTJ')
-    pdf.text(startX + width + width / 4 - 14, startY + 7, 'Контролер по жизни')
+    # pdf.text(startX + width + width / 4 - 3, startY + 4, 'ESTJ')
+    # pdf.text(startX + width + width / 4 - 14, startY + 7, 'Контролер по жизни')
+    pdf.text(startX + width + width / 4 - 8, startY + 4, 'Организатор')
 
-    pdf.text(startX + width + width * (3/4) - 3, startY + 4, 'ENTJ')
-    pdf.text(startX + width + width * (3/4) - 11, startY + 7, 'Предприниматель')
+    # pdf.text(startX + width + width * (3/4) - 3, startY + 4, 'ENTJ')
+    # pdf.text(startX + width + width * (3/4) - 11, startY + 7, 'Предприниматель')
+    pdf.text(startX + width + width * (3/4) - 5, startY + 4, 'Аналитик')
 
-    pdf.text(startX + width / 4 - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ESFP')
-    pdf.text(startX + width / 4 - 18.5, startY + width - 3 + delta_y_1 + delta_y_2, 'Спонтанный коммуникатор')
+    # pdf.text(startX + width / 4 - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ESFP')
+    # pdf.text(startX + width / 4 - 18.5, startY + width - 3 + delta_y_1 + delta_y_2, 'Спонтанный коммуникатор')
+    pdf.text(startX + width / 4 - 9, startY + width - 3 + delta_y_1 + delta_y_2, 'Развлекатель')
 
-    pdf.text(startX + width * (3/4) - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ENFP')
-    pdf.text(startX + width * (3/4) - 7, startY + width - 3 + delta_y_1 + delta_y_2, 'Инициатор')
+    # pdf.text(startX + width * (3/4) - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ENFP')
+    # pdf.text(startX + width * (3/4) - 7, startY + width - 3 + delta_y_1 + delta_y_2, 'Инициатор')
+    pdf.text(startX + width * (3/4) - 7, startY + width - 3 + delta_y_1 + delta_y_2, 'Мотиватор')
 
-    pdf.text(startX + width + width / 4 - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ESTP')
-    pdf.text(startX + width + width / 4 - 10, startY + width - 3 + delta_y_1 + delta_y_2, 'Ультра-реалист')
+    # pdf.text(startX + width + width / 4 - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ESTP')
+    # pdf.text(startX + width + width / 4 - 10, startY + width - 3 + delta_y_1 + delta_y_2, 'Ультра-реалист')
+    pdf.text(startX + width + width / 4 - 12, startY + width - 3 + delta_y_1 + delta_y_2, 'Искатель ресурсов')
 
-    pdf.text(startX + width + width * (3/4) - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ENTP')
+    # pdf.text(startX + width + width * (3/4) - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ENTP')
     pdf.text(startX + width + width * (3/4) - 9, startY + width - 3 + delta_y_1 + delta_y_2, 'Изобретатель')
 
-    pdf.text(startX + width / 4 - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'ISFJ')
-    pdf.text(startX + width / 4 - 7, startY + width + 7 + delta_y_1 + delta_y_2, 'Хранитель')
+    # pdf.text(startX + width / 4 - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'ISFJ')
+    # pdf.text(startX + width / 4 - 7, startY + width + 7 + delta_y_1 + delta_y_2, 'Хранитель')
+    pdf.text(startX + width / 4 - 7, startY + width + 4 + delta_y_1 + delta_y_2, 'Хранитель')
 
-    pdf.text(startX + width * (3/4) - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'INFJ')
-    pdf.text(startX + width * (3/4) - 9, startY + width + 7 + delta_y_1 + delta_y_2, 'Вдохновитель')
+    # pdf.text(startX + width * (3/4) - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'INFJ')
+    # pdf.text(startX + width * (3/4) - 9, startY + width + 7 + delta_y_1 + delta_y_2, 'Вдохновитель')
+    pdf.text(startX + width * (3/4) - 9, startY + width + 4 + delta_y_1 + delta_y_2, 'Вдохновитель')
 
-    pdf.text(startX + width + width / 4 - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'ISTJ')
-    pdf.text(startX + width + width / 4 - 8, startY + width + 7 + delta_y_1 + delta_y_2, 'Организатор')
+    # pdf.text(startX + width + width / 4 - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'ISTJ')
+    # pdf.text(startX + width + width / 4 - 8, startY + width + 7 + delta_y_1 + delta_y_2, 'Организатор')
+    pdf.text(startX + width + width / 4 - 6, startY + width + 4 + delta_y_1 + delta_y_2, 'Контролер')
 
-    pdf.text(startX + width + width * (3/4) - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'INTJ')
-    pdf.text(startX + width + width * (3/4) - 14, startY + width + 7 + delta_y_1 + delta_y_2, 'Любитель улучшений')
+    # pdf.text(startX + width + width * (3/4) - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'INTJ')
+    # pdf.text(startX + width + width * (3/4) - 14, startY + width + 7 + delta_y_1 + delta_y_2, 'Любитель улучшений')
+    pdf.text(startX + width + width * (3/4) - 14, startY + width + 4 + delta_y_1 + delta_y_2, 'Любитель улучшений')
 
-    pdf.text(startX + width / 4 - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'ISFP')
-    pdf.text(startX + width / 4 - 7, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Посредник')
+    # pdf.text(startX + width / 4 - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'ISFP')
+    # pdf.text(startX + width / 4 - 7, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Посредник')
+    pdf.text(startX + width / 4 - 5, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Опекун')
 
-    pdf.text(startX + width * (3/4) - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'INFP')
+    # pdf.text(startX + width * (3/4) - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'INFP')
     pdf.text(startX + width * (3/4) - 16, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Благородный служитель')
 
-    pdf.text(startX + width + width / 4 - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'ISTP')
-    pdf.text(startX + width + width / 4 - 12, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Экспериментатор')
+    # pdf.text(startX + width + width / 4 - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'ISTP')
+    # pdf.text(startX + width + width / 4 - 12, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Экспериментатор')
+    pdf.text(startX + width + width / 4 - 9, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Исполнитель')
 
-    pdf.text(startX + width + width * (3/4) - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'INTP')
+    # pdf.text(startX + width + width * (3/4) - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'INTP')
     pdf.text(startX + width + width * (3/4) - 12, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Решатель проблем')
 
     pdf.set_line_width(0.5)
@@ -467,12 +481,12 @@ def draw_single_circle_squares(square_data, pdf, square_x_cnt, cnt):
     section_3 = 0
 
     for report_data_item in report_data:
-        split = report_data_item.category.name.split('_')
-        if int(split[0]) <= 4:
+        split = report_data_item.category_code.split('_')
+        if int(split[1]) <= 4:
             section_1 = section_1 + report_data_item.points
-        elif 5 <= int(split[0]) <= 8:
+        elif 5 <= int(split[1]) <= 8:
             section_2 = section_2 + report_data_item.points
-        elif int(split[0]) >= 9:
+        elif int(split[1]) >= 9:
             section_3 = section_3 + report_data_item.points
     if section_1 > 18 or section_2 > 18 or section_3 > 18 or section_2 >= 7:
         pdf.set_fill_color(241, 151, 15)

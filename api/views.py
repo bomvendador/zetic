@@ -5,6 +5,8 @@ from pdf_group.views import pdf_group_generator
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
+
 
 # Create your views here.
 
@@ -18,6 +20,7 @@ def json_request(request):
     if request.method == 'POST':
         try:
             request_json = json.loads(request.body.decode('utf-8'))
+            print(f'{timezone.localtime(timezone.now()).strftime("%d.%m.%Y %H:%M:%S")} - {request_json}')
         except KeyError:
             HttpResponseServerError('JSON request error')
     else:
