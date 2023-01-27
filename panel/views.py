@@ -5,7 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 import json
 # Create your views here.
 
-from pdf.models import Company, Participant, ReportData, Report, Category, ReportGroup, ReportGroupSquare, Industry, Employee, EmployeeRole, EmployeePosition
+from pdf.models import Company, Participant, ReportData, Report, Category, ReportGroup, ReportGroupSquare, Industry, \
+    Employee, EmployeeRole, EmployeePosition, EmployeeGender, Study, StudyQuestionGroup, Section
 # from django.contrib.auth.models import User
 
 from login.models import UserRole, UserProfile, User
@@ -15,6 +16,8 @@ from pdf_group.views import pdf_group_generator
 from django.contrib.auth.decorators import login_required, wraps
 from login import urls as login_urls
 from django.utils import timezone
+import time
+from pdf.views import pdf_single_generator
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -421,4 +424,105 @@ def delete_group_report(request):
 
         return HttpResponse('ok')
 
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def migration(request):
+    context = info_common(request)
+    context.update(
+        {'user_profiles': UserProfile.objects.all()}
+    )
+
+    return render(request, 'panel_migration.html', context)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def save_migration(request):
+    if request.method == 'POST':
+        start_time = time.perf_counter()
+        json_data = json.loads(request.body.decode('utf-8'))
+        # print(request)
+        # print(json_data)
+        # print(type(json.loads(json_data)))
+        companies = json.loads(json_data)['companies']
+        # print(type(companies))
+        reports_qnt = 0
+        employee_qnt = 0
+        final_dict = {"lang": "ru"}
+        for company in companies:
+            if Company.objects.filter(public_code=company['public_code']).exists():
+                company_inst = Company.objects.get(public_code=company['public_code'])
+            else:
+                company_inst = Company()
+                company_inst.name = company['name']
+                company_inst.public_code = company['public_code']
+                company_inst.save()
+            # print('--------')
+            # print(f'Компания {company["name"]}')
+            # print('===========')
+            employees = company['employees']
+            # studies = company['studies']
+            for employee in employees:
+                employee_qnt = employee_qnt + 1
+                # if employee['name'] == '':
+                #     print('Нет имени')
+                # else:
+                #     print(employee['name'])
+                # if employee['email'] == '':
+                #     print('Нет имейла')
+                # else:
+                #     print(employee['email'])
+                participants = employee['participants']
+                for participant in participants:
+                    report_data = participant['report']
+                    participant_info = participant['report']['participant_info']
+                    study = participant['report']['study']
+                    if Employee.objects.filter(email=participant_info['email']).exists():
+                        employee_inst = Employee.objects.get(email=participant_info['email'])
+                    else:
+                        employee_inst = Employee()
+                        employee_inst.name = participant_info['name']
+                        employee_inst.email = participant_info['email']
+                        employee_inst.sex = EmployeeGender.objects.get(public_code=participant_info['sex'])
+                        employee_inst.birth_year = participant_info['year']
+                        employee_inst.company = company_inst
+                        employee_inst.save()
+
+                    if Study.objects.filter(public_code=study['id']).exists():
+                        study_inst = Study.objects.get(public_code=study['id'])
+                    else:
+                        study_inst = Study()
+                        study_inst.name = study['name']
+                        study_inst.public_code = study['id']
+                        study_inst.company = company_inst
+                        study_inst.save()
+
+                    if not Participant.objects.filter(employee__email=participant_info['email'],
+                                                  study=study_inst).exists():
+                        participant_inst = Participant()
+                        participant_inst.employee = employee_inst
+                        participant_inst.started_at = timezone.now()
+                        participant_inst.completed_at = timezone.now()
+                        participant_inst.invitation_sent_datetime = timezone.now()
+                        participant_inst.study = study_inst
+                        participant_inst.invitation_sent = True
+                        participant_inst.total_questions_qnt = 441
+                        participant_inst.answered_questions_qnt = 441
+                        participant_inst.current_percentage = 100
+                        participant_inst.save()
+
+                    pdf_single_generator(report_data)
+                    # report_code = participant['report']['code']
+                    # participant_info = participant['report']['participant_info']
+
+                    # reports_qnt = reports_qnt + 1
+                    # appraisal_data = participant['report']['appraisal_data']
+                    # for data in appraisal_data:
+                    #     point = data['point']
+                    #     for points in point:
+                    #         if points['points'] < 0:
+                    #             print(f'{company["name"]} - {employee["name"]} - {points["category"]} - {points["points"]}')
+        finished_time = time.perf_counter()
+        print(f'time - {finished_time - start_time}')
+        # print(f'reports_qnt - {reports_qnt} employee_qnt - {employee_qnt}')
+        return HttpResponse('ok')
 

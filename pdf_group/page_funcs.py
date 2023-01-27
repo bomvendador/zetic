@@ -63,6 +63,7 @@ def data_by_points(square_results, section_code, category_code):
             # print(f'участик - {report.participant.employee.name} секция - {report_data.section_name} категория - {report_data.category_name} points - {report_data.points}')
             scale_data.append([square_result[2], report_data.points, cnt])
     # print(f'scale data - {scale_data}')
+
     data_by_points_ = {
         1: [],
         2: [],
