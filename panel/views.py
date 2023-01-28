@@ -463,14 +463,18 @@ def save_migration(request):
             # studies = company['studies']
             for employee in employees:
                 employee_qnt = employee_qnt + 1
-                # if employee['name'] == '':
-                #     print('Нет имени')
-                # else:
-                #     print(employee['name'])
-                # if employee['email'] == '':
-                #     print('Нет имейла')
-                # else:
-                #     print(employee['email'])
+                email = employee['email']
+                name = employee['name']
+
+                if not Employee.objects.filter(email=email).exists():
+                    employee_inst = Employee()
+                    employee_inst.name = name
+                    employee_inst.email = email
+                    employee_inst.sex = ''
+                    employee_inst.birth_year = 0
+                    employee_inst.company = company_inst
+                    employee_inst.save()
+
                 participants = employee['participants']
                 for participant in participants:
                     if 'report' in participant:
