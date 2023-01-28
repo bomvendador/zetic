@@ -1,0 +1,15 @@
+
+
+scheme.dia
+zetic-panel.tar.gz
+debug.log
+
+Dockerfile
+docker-compose.yml
+containers-run.sh
+
+# Tests
+test.log
+test.py
+text.pdf
+

@@ -1,0 +1,18 @@
+---
+- name: Deploy panel
+  hosts:
+    - panel
+  become: "{{ become_globally }}"
+  vars:
+    container_mounts:
+      - type: bind
+        source: "/var/lib/zetic-panel/media"
+        target: "/reports/media"
+  pre_tasks:
+    - name: Ensure directory exists
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0755
+      with_items:
+        - "/var/lib/zetic-panel/media"

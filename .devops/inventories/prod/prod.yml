@@ -1,0 +1,14 @@
+all:
+  vars:
+    docker_pull: yes
+    container_tag: main
+    become_globally: yes
+  hosts:
+    prod1:
+      ansible_host: node2.zetic.ru
+  children:
+    panel:
+      vars:
+        
+      hosts:
+        prod1:
