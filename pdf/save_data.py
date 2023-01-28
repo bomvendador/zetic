@@ -66,7 +66,7 @@ def save_data_to_db(request_json, file_name):
             report_data.section_code = section['code']
             report_data.section_name = section['section']
             # print(point['code'])
-            report_data.category_name = point['category']
+            report_data.category_name = point['category'][:50]
             report_data.category_code = point['code']
             report_data.points = raw_to_t_point.get_t_point(point['points'], point['code'], request_json['participant_info']['sex'], int(request_json['participant_info']['year']))
             # report_data.points = point['points']
