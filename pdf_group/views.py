@@ -41,7 +41,7 @@ def pdf_group_generator(request_json):
     line_height = 5.5
     table_height = round(total_participant_qnt / 2) * line_height
     table_y = max_y - table_height
-    print(f'line_height = {line_height} total_participant_qnt = {total_participant_qnt} table_height = {table_height} table_y = {table_y}')
+    # print(f'line_height = {line_height} total_participant_qnt = {total_participant_qnt} table_height = {table_height} table_y = {table_y}')
 
     pdf.add_page()
     # print(request_json)

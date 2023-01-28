@@ -80,6 +80,9 @@ urlpatterns = [
 
     path('monthly_report', tasks.monthly_report, name='monthly_report'),
 
+    path('migration', panel_views.migration, name='migration'),
+    path('save_migration', panel_views.save_migration, name='save_migration'),
+
     # path('get_company_employees', employee.get_company_employees, name='get_company_employees'),
 
 

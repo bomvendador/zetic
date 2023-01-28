@@ -58,6 +58,9 @@
                 case'menu_monthly_report':
                     window.location.href = url_monthly_report;
                     break;
+                case'menu_migration':
+                    window.location.href = url_migration;
+                    break;
                 default:
                     break;
             }

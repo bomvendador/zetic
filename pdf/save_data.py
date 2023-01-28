@@ -33,8 +33,11 @@ def save_data_to_db(request_json, file_name):
     #     employee.email = request_json['participant_info']['email']
     #     # employee.company = company
     #     employee.save()
+    if Participant.objects.filter(employee__email=request_json['participant_info']['email'], study=study).exists():
 
-    participant = Participant.objects.get(employee__email=request_json['participant_info']['email'], study=study)
+        participant = Participant.objects.get(employee__email=request_json['participant_info']['email'], study=study)
+    else:
+        participant = Participant()
     participant.completed_at = timezone.now()
     participant.current_percentage = 100
     participant.answered_questions_qnt = participant.total_questions_qnt
@@ -62,12 +65,11 @@ def save_data_to_db(request_json, file_name):
             report_data.report = report
             report_data.section_code = section['code']
             report_data.section_name = section['section']
-            print(point['code'])
+            # print(point['code'])
             report_data.category_name = point['category']
             report_data.category_code = point['code']
-            report_data.points = point['points']
-            # report_data.points = raw_to_t_point.get_t_point(point['points'], point['code'], request_json['participant_info']['sex'], int(request_json['participant_info']['year']))
-            report_data.points = point['points']
+            report_data.points = raw_to_t_point.get_t_point(point['points'], point['code'], request_json['participant_info']['sex'], int(request_json['participant_info']['year']))
+            # report_data.points = point['points']
             report_data.save()
 
     if participant.send_admin_notification_after_filling_up:
