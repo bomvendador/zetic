@@ -1,7 +1,7 @@
 all:
   vars:
     docker_pull: yes
-    container_tag: main
+    container_tag: v2.1.0
     become_globally: yes
   hosts:
     prod1:

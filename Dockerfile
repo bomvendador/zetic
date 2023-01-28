@@ -21,5 +21,5 @@ COPY . /reports/
             
 RUN python manage.py collectstatic --noinput
 
-ENTRYPOINT ["./entrypoint.sh"]
+CMD ["./entrypoint.sh"]
 

@@ -4,10 +4,14 @@
     - panel
   become: "{{ become_globally }}"
   vars:
+    lib_dir: "/var/lib/zetic-panel"
+    container_name: "zetic-panel"
+    container_image: "zetic/zetic-panel:{{ container_tag }}"
+    container_app_dir: "/reports"
     container_mounts:
       - type: bind
-        source: "/var/lib/zetic-panel/media"
-        target: "/reports/media"
+        source: "{{ lib_dir }}/media"
+        target: "{{ container_app_dir }}/media"
   pre_tasks:
     - name: Ensure directory exists
       file:
@@ -15,4 +19,11 @@
         state: directory
         mode: 0755
       with_items:
-        - "/var/lib/zetic-panel/media"
+        - "{{ lib_dir }}/media"
+        - "{{ lib_dir }}/static"
+  tasks:
+    - name: Stop docker container
+      docker_container:
+        name: "{{ container_name }}"
+        state: stopped
+        force_kill: yes

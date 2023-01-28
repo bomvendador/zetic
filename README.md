@@ -29,8 +29,7 @@ docker stop zetic-panel && docker rm zetic-panel
 ```bash
 docker run -d --restart=always \
   --name zetic-panel \
-  -p 127.0.0.1:10005:10005 \
-  -e SERVER_PORT=10005 \
+  -p 127.0.0.1:8000:8000 \
   zetic/zetic-panel:2.1.0
 ```
 
