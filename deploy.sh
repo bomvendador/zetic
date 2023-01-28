@@ -40,7 +40,7 @@ docker run --name zetic-panel \
         -e CELERY_HOST="redis://zetic-redis:6379" \
         --link zetic-mysql:zetic-mysql \
         --link zetic-redis:zetic-redis \
-        -v /var/lib/zetic/panel/media:/reports/media \
+        -v /var/lib/zetic/panel/media/reportsPDF:/reports/media/reportsPDF \
         -p 8000:8000 \
         -d zetic/zetic-panel:v2.2.0
 
