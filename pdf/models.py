@@ -296,7 +296,7 @@ class ReportData(models.Model):
     report = models.ForeignKey(Report, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Отчет')
     section_name = models.CharField(max_length=50, blank=True, null=True, default=None)
     section_code = models.CharField(max_length=2, blank=True, null=True, default=None)
-    category_name = models.CharField(max_length=50, blank=True, null=True, default=None)
+    category_name = models.CharField(max_length=100, blank=True, null=True, default=None)
     category_code = models.CharField(max_length=5, blank=True, null=True, default=None)
     points = models.IntegerField(null=False, default=0)
 
