@@ -473,44 +473,45 @@ def save_migration(request):
                 #     print(employee['email'])
                 participants = employee['participants']
                 for participant in participants:
-                    report_data = participant['report']
-                    participant_info = participant['report']['participant_info']
-                    study = participant['report']['study']
-                    if Employee.objects.filter(email=participant_info['email']).exists():
-                        employee_inst = Employee.objects.get(email=participant_info['email'])
-                    else:
-                        employee_inst = Employee()
-                        employee_inst.name = participant_info['name']
-                        employee_inst.email = participant_info['email']
-                        employee_inst.sex = EmployeeGender.objects.get(public_code=participant_info['sex'])
-                        employee_inst.birth_year = participant_info['year']
-                        employee_inst.company = company_inst
-                        employee_inst.save()
+                    if 'report' in participant:
+                        report_data = participant['report']
+                        participant_info = participant['report']['participant_info']
+                        study = participant['report']['study']
+                        if Employee.objects.filter(email=participant_info['email']).exists():
+                            employee_inst = Employee.objects.get(email=participant_info['email'])
+                        else:
+                            employee_inst = Employee()
+                            employee_inst.name = participant_info['name']
+                            employee_inst.email = participant_info['email']
+                            employee_inst.sex = EmployeeGender.objects.get(public_code=participant_info['sex'])
+                            employee_inst.birth_year = participant_info['year']
+                            employee_inst.company = company_inst
+                            employee_inst.save()
 
-                    if Study.objects.filter(public_code=study['id']).exists():
-                        study_inst = Study.objects.get(public_code=study['id'])
-                    else:
-                        study_inst = Study()
-                        study_inst.name = study['name']
-                        study_inst.public_code = study['id']
-                        study_inst.company = company_inst
-                        study_inst.save()
+                        if Study.objects.filter(public_code=study['id']).exists():
+                            study_inst = Study.objects.get(public_code=study['id'])
+                        else:
+                            study_inst = Study()
+                            study_inst.name = study['name']
+                            study_inst.public_code = study['id']
+                            study_inst.company = company_inst
+                            study_inst.save()
 
-                    if not Participant.objects.filter(employee__email=participant_info['email'],
-                                                  study=study_inst).exists():
-                        participant_inst = Participant()
-                        participant_inst.employee = employee_inst
-                        participant_inst.started_at = timezone.now()
-                        participant_inst.completed_at = timezone.now()
-                        participant_inst.invitation_sent_datetime = timezone.now()
-                        participant_inst.study = study_inst
-                        participant_inst.invitation_sent = True
-                        participant_inst.total_questions_qnt = 441
-                        participant_inst.answered_questions_qnt = 441
-                        participant_inst.current_percentage = 100
-                        participant_inst.save()
+                        if not Participant.objects.filter(employee__email=participant_info['email'],
+                                                      study=study_inst).exists():
+                            participant_inst = Participant()
+                            participant_inst.employee = employee_inst
+                            participant_inst.started_at = timezone.now()
+                            participant_inst.completed_at = timezone.now()
+                            participant_inst.invitation_sent_datetime = timezone.now()
+                            participant_inst.study = study_inst
+                            participant_inst.invitation_sent = True
+                            participant_inst.total_questions_qnt = 441
+                            participant_inst.answered_questions_qnt = 441
+                            participant_inst.current_percentage = 100
+                            participant_inst.save()
 
-                    pdf_single_generator(report_data)
+                        pdf_single_generator(report_data)
                     # report_code = participant['report']['code']
                     # participant_info = participant['report']['participant_info']
 
