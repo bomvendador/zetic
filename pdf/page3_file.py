@@ -189,8 +189,8 @@ def page3(pdf, json_section, lang, participant_info):
     Четкость
         '''
         scale_legend_right = u'''
-    Рассудительность, 
-    Циничность
+    Влияние,
+    Хитрость
         '''
     else:
         scale_name = u'''
