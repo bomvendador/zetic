@@ -910,7 +910,7 @@
                         let html = ''
                         for(let i=0; i < participants.length; i++){
                             html += '<tr class="table-row cursor-pointer project-participant-added" id="participant_id_' + participants[i]['id'] + '">'
-                            html += '<td>' + participants[i]['name'] + '</td>'
+                            html += `<td>${participants[i]['name']} (${participants[i]['answered']}/${participants[i]['total']}) <br /> ${participants[i]['completed_at']}</td>`
                             html += '<td>' + participants[i]['email'] + '</td>'
                             html += '</tr>'
                             {#console.log(participants[i]['fio'])#}

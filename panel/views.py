@@ -123,6 +123,10 @@ def get_company_participants(request):
             data = {
                 'name': participant.employee.name,
                 'email': participant.employee.email,
+                'percentage': participant.current_percentage,
+                'completed_at': participant.completed_at,
+                'answered': participant.answered_questions_qnt,
+                'total': participant.total_questions_qnt,
                 'id': participant.id,
             }
             participants.append(data)
@@ -510,9 +514,9 @@ def save_migration(request):
                             participant_inst.invitation_sent_datetime = timezone.now()
                             participant_inst.study = study_inst
                             participant_inst.invitation_sent = True
-                            participant_inst.total_questions_qnt = 441
-                            participant_inst.answered_questions_qnt = 441
-                            participant_inst.current_percentage = 100
+                            participant_inst.total_questions_qnt = int(participant['total_questions_qnt'])
+                            participant_inst.answered_questions_qnt = int(participant['answered_questions_qnt'])
+                            participant_inst.current_percentage = int(participant['total_questions_qnt']) / int(participant['answered_questions_qnt']) * 100
                             participant_inst.save()
 
                         pdf_single_generator(report_data)
