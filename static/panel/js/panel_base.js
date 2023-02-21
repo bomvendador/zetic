@@ -164,3 +164,14 @@
         let regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     return regex.test(email);
 }
+
+    function set_checkbox_checked(el) {
+        $(el).attr('checked', 'checked')
+        $(el).prop('checked', true)
+        $(el).val(1)
+    }
+    function set_checkbox_unchecked(el) {
+        $(el).removeAttr('checked')
+        $(el).prop('checked', false)
+        $(el).val(0)
+    }

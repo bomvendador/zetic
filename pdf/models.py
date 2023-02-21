@@ -301,7 +301,7 @@ class ReportData(models.Model):
     points = models.IntegerField(null=False, default=0)
 
     def __str__(self):
-        return f'{self.report.participant.employee.name} - {self.report.participant.employee.company.name} - {self.section_name} - {self.category_name} - {self.points}'
+        return f'{self.report.participant.employee.name} - {self.report.participant.employee.company.name} - {self.section_name} - {self.category_code} - {self.category_name} - {self.points}'
 
     class Meta:
         verbose_name_plural = 'Данные индивидуальных отчетов'
@@ -328,6 +328,9 @@ class ReportGroupSquare(models.Model):
     report_group = models.ForeignKey(ReportGroup, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Отчет групповой')
     square_name = models.CharField(max_length=30, blank=False, null=False, verbose_name='Квадрат')
     report = models.ForeignKey(Report, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Отчет индивидуальный для группового')
+    participant_group = models.CharField(max_length=300, blank=True, null=True, verbose_name='Группа участника', default=None)
+    participant_group_color = models.CharField(max_length=20, blank=True, null=True, verbose_name='Цвет группы участника', default=None)
+    bold = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.report.participant.employee.name} - {self.square_name}'
