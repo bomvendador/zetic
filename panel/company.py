@@ -136,6 +136,16 @@ def update_company(request):
         return HttpResponse(status=200)
 
 
+@login_required(redirect_field_name=None, login_url='/login/')
+def delete_company(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        company_id = json_data['company_id']
+        company_inst = Company(id=company_id)
+        company_inst.delete()
+        return HttpResponse(status=200)
+
+
 
 
 

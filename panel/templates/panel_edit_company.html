@@ -138,6 +138,28 @@
                             <!-- ROW-1 CLOSED -->
 
                         </div>
+                        <div class="row">
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Удаление компании</h3>
+                                    </div>
+                                    <div class="card-body">
+
+                                        <div class="row">
+                                            <p class="text-danger">Внимание!</p>
+                                            <spa>При удалении компании также будут удалены все связанные данные: сотрудники, опросники, участники опросов, данные анкет</spa>
+
+                                        </div>
+                                   </div>
+                                    <div class="card-footer text-end">
+                                        <button class="btn btn-danger my-1 nav-buttons" type="button" id="delete_company">Удалить компанию</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                         <!--CONTAINER CLOSED -->
 
                     </div>
@@ -207,6 +229,7 @@
     let url_appoint_company_admin = "{% url 'appoint_company_admin' %}"
     let url_deactivate_company_admin = "{% url 'deactivate_company_admin' %}"
     let url_delete_company_admin = "{% url 'delete_company_admin' %}"
+    let url_delete_company = "{% url 'delete_company' %}"
     let url_update_company = "{% url 'update_company' %}"
     let active;
     let company_id = {{ company.id }}

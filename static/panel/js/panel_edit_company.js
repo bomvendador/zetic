@@ -296,3 +296,41 @@ $('#save_company').on('click', function () {
 
 
 })
+
+$('#delete_company').on('click', function () {
+    let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                    '<div>Удалить компанию?</div>' +
+                    '<br>' +
+                    '<hr class="solid mt-0" style="background-color: black;">'
+    Swal.fire({
+      html: output_html,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Да',
+      cancelButtonText: 'Нет'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            show_progressbar_loader()
+            $.ajax({
+                headers: { "X-CSRFToken": token },
+                url: url_delete_company,
+                type: 'POST',
+                data: JSON.stringify({
+                            'company_id': company_id,
+                        }),
+                processData: false,
+                contentType: false,
+                error: function(data){
+                    toastr.error('Ошибка', data)
+                },
+                success:function (data) {
+                    window.location.href = url_companies_list
+                }
+            });
+
+        }
+    })
+
+})
