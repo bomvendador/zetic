@@ -206,59 +206,11 @@
                                         class="side-menu__label">Статистика</span>
                                 </div>
                             </li>
-                            {% if cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Суперадмин' %}
-                            <li class="sub-category">
-                                <h3>ZETIC</h3>
-                            </li>
-
-                            <li class="slide">
-                                <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
-                                    <i class="side-menu__icon fe fe-users"></i>
-                                    <span class="side-menu__label">Пользователи</span>
-                                    <i class="angle fe fe-chevron-right"></i>
-                                </a>
-                                <ul class="slide-menu">
-                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_users_list"> Список</div></li>
-                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_users_add"> Добавить</div></li>
-                                </ul>
-                            </li>
-                            <li class="slide">
-                                <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
-                                    <i class="side-menu__icon fe fe-users"></i>
-                                    <span class="side-menu__label">Отчеты</span>
-                                    <i class="angle fe fe-chevron-right"></i>
-                                </a>
-                                <ul class="slide-menu">
-                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_monthly_report"> Ежемесячные отчеты</div></li>
-                                </ul>
-                            </li>
-                            <li class="slide">
-                                <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
-                                    <i class="side-menu__icon fe fe-copy"></i>
-                                    <span class="side-menu__label">Служебное</span>
-                                    <i class="angle fe fe-chevron-right"></i>
-                                </a>
-                                <ul class="slide-menu">
-                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_migration"> Миграция</div></li>
-                                </ul>
-                            </li>
+                            {% if cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Суперадмин' or cur_userprofile.role.name == 'Менеджер' %}
                             <li class="sub-category">
                                 <h3>Заказчики</h3>
                             </li>
-{#                            <li class="slide">#}
-{#                                <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">#}
-{#                                    <i class="side-menu__icon fe fe-sliders"></i>#}
-{#                                    <span class="side-menu__label">Параметры</span>#}
-{#                                    <i class="angle fe fe-chevron-right"></i>#}
-{#                                </a>#}
-{#                                <ul class="slide-menu">#}
-{#                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_industries_list"> Индустрии</div></li>#}
-{#                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_employees_roles_list"> Роли сотрудников</div></li>#}
-{#                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_employees_positions_list" > Должности</div></li>#}
-{#                                </ul>#}
-{#                            </li>#}
-                            {% endif %}
-                            {% if cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Суперадмин' or cur_userprofile.role.name == 'Менеджер' %}
+
                             <li class="slide">
                                 <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
                                     <i class="side-menu__icon fe fe-briefcase"></i>
@@ -328,6 +280,47 @@
                                     {% endif %}
                                 </ul>
                             </li>
+
+                            {% if cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Суперадмин' %}
+                            <li class="sub-category">
+                                <h3>ZETIC</h3>
+                            </li>
+
+                            <li class="slide">
+                                <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
+                                    <i class="side-menu__icon fe fe-users"></i>
+                                    <span class="side-menu__label">Пользователи</span>
+                                    <i class="angle fe fe-chevron-right"></i>
+                                </a>
+                                <ul class="slide-menu">
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_users_list"> Список</div></li>
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_users_add"> Добавить</div></li>
+                                </ul>
+                            </li>
+                            <li class="slide">
+                                <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
+                                    <i class="side-menu__icon fe fe-users"></i>
+                                    <span class="side-menu__label">Отчеты</span>
+                                    <i class="angle fe fe-chevron-right"></i>
+                                </a>
+                                <ul class="slide-menu">
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_monthly_report"> Ежемесячные отчеты</div></li>
+                                </ul>
+                            </li>
+                            <li class="slide">
+                                <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
+                                    <i class="side-menu__icon fe fe-copy"></i>
+                                    <span class="side-menu__label">Служебное</span>
+                                    <i class="angle fe fe-chevron-right"></i>
+                                </a>
+                                <ul class="slide-menu">
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_migration"> Миграция</div></li>
+                                </ul>
+                            </li>
+                            {% endif %}
+
+
+
                         </ul>
                         <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191"
                                 width="24" height="24" viewBox="0 0 24 24">

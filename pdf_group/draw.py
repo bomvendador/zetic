@@ -3,6 +3,7 @@ import math
 
 
 def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
+    # print(f'data_by_points - {data_by_points}')
     pdf.set_draw_color(r, g, b)
     pdf.set_fill_color(r, g, b)
     # отрисовка прямоугольника
@@ -73,7 +74,10 @@ def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
             delta_y = 0
 
             for scale_number_data in value:
+                group_color = scale_number_data[3]
+                email = scale_number_data[4]
                 total_points = total_points + scale_number_data[1]
+                bold = scale_number_data[5]
                 circles_placed_cnt = circles_placed_cnt + 1
 
                 if cur_col > col_qnt:
@@ -82,7 +86,7 @@ def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
                     first_item_x = 0
 
                 scale_number_x = startX + scale_number_data[1] * section_width - section_width / 2  # x позиция черты на шкале
-                draw_single_circle_arrow(pdf, scale_number_x - 1.75 * col_qnt + first_item_x, startY + 5.5 + delta_y, scale_number_data[2])
+                draw_single_circle_arrow(pdf, scale_number_x - 1.75 * col_qnt + first_item_x, startY + 5.5 + delta_y, scale_number_data[2], group_color, email, bold)
                 first_item_x = first_item_x + 3.5
                 cur_col = cur_col + 1
 
@@ -94,6 +98,7 @@ def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
         # print(f'{total_points} / {total_participants_qnt} = {total_points // total_participants_qnt}')
 
         pdf.set_draw_color(r, g, b)
+        pdf.set_fill_color(r=r, g=g, b=b)
         pdf.set_text_color(105, 105, 105)
         point1 = (average_number_x - 5, startY - 3)
         point2 = (average_number_x + 5, startY - 3)
@@ -102,12 +107,27 @@ def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
         pdf.text(average_number_x - 4.5, startY - 3.5, 'СРЕДНЕЕ')
 
 
-def draw_single_circle_arrow(pdf, x, y, number):
+def draw_single_circle_arrow(pdf, x, y, number, group_color, email, bold):
     # print(f'start - {pdf.get_y()}')
+    # print(f'bold - {bold}')
+    if bold == 1:
+        pdf.set_line_width(0.5)
+    else:
+        pdf.set_line_width(0.2)
     pdf.set_draw_color(0, 0, 0)
     pdf.set_text_color(0, 0, 0)
     pdf.set_font("NotoSansDisplayMedium", "", 6)
-    pdf.circle(x, y, r=3.4)
+    if is_orange_color(email):
+        pdf.set_fill_color(241, 151, 15)
+    else:
+        if not group_color == 'rgba(0, 0, 0, 0)':
+            color_r = int(group_color[group_color.find('(') + len('('):group_color.rfind(')')].split(',')[0])
+            color_g = int(group_color[group_color.find('(') + len('('):group_color.rfind(')')].split(',')[1].strip())
+            color_b = int(group_color[group_color.find('(') + len('('):group_color.rfind(')')].split(',')[2].strip())
+            pdf.set_fill_color(color_r, color_g, color_b)
+        else:
+            pdf.set_fill_color(255, 255, 255)
+    pdf.circle(x, y, r=3.4, style="FD")
     if number < 10:
         pdf.text(x + 1.1, y + 2.5, str(number))
     else:
@@ -116,6 +136,7 @@ def draw_single_circle_arrow(pdf, x, y, number):
         else:
             pdf.text(x + 0.6, y + 2.5, str(number))
     # print(f'start - {pdf.get_y()}')
+    pdf.set_line_width(0.2)
 
 
 def draw_squares(pdf, square_results):
@@ -153,17 +174,17 @@ def draw_squares(pdf, square_results):
         square_name = square_result[0]
         if square_name == 'ESFJ - Массовик-затейник':
             ESFJ_1_1 = ESFJ_1_1 + 1
-        if square_name == 'ENFJ - Идеалист-харизматик':
+        if square_name == 'ENFJ - Чуткий наставник':
             ENFJ_1_2 = ENFJ_1_2 + 1
-        if square_name == 'ESFP - Спонтанный коммуникатор':
+        if square_name == 'ESFP - Развлекатель':
             ESFP_1_3 = ESFP_1_3 + 1
-        if square_name == 'ENFP - Инициатор':
+        if square_name == 'ENFP - Мотиватор':
             ENFP_1_4 = ENFP_1_4 + 1
-        if square_name == 'ESTJ - Контролер по жизни':
+        if square_name == 'ESTJ - Контролер':
             ESTJ_2_1 = ESTJ_2_1 + 1
-        if square_name == 'ENTJ - Предприниматель':
+        if square_name == 'ENTJ - Аналитик':
             ENTJ_2_2 = ENTJ_2_2 + 1
-        if square_name == 'ESTP - Ультра-реалист':
+        if square_name == 'ESTP - Искатель ресурсов':
             ESTP_2_3 = ESTP_2_3 + 1
         if square_name == 'ENTP - Изобретатель':
             ENTP_2_4 = ENTP_2_4 + 1
@@ -171,7 +192,7 @@ def draw_squares(pdf, square_results):
             ISFJ_3_1 = ISFJ_3_1 + 1
         if square_name == 'INFJ - Вдохновитель':
             INFJ_3_2 = INFJ_3_2 + 1
-        if square_name == 'ISFP - Посредник':
+        if square_name == 'ISFP - Опекун':
             ISFP_3_3 = ISFP_3_3 + 1
         if square_name == 'INFP - Благородный служитель':
             INFP_3_4 = INFP_3_4 + 1
@@ -179,7 +200,7 @@ def draw_squares(pdf, square_results):
             ISTJ_4_1 = ISTJ_4_1 + 1
         if square_name == 'INTJ - Любитель улучшений':
             INTJ_4_2 = INTJ_4_2 + 1
-        if square_name == 'ISTP - Экспериментатор':
+        if square_name == 'ISTP - Исполнитель':
             ISTP_4_3 = ISTP_4_3 + 1
         if square_name == 'INTP - Решатель проблем':
             INTP_4_4 = INTP_4_4 + 1
@@ -306,7 +327,7 @@ def draw_squares(pdf, square_results):
 
     # pdf.text(startX + width + width / 4 - 3, startY + 4, 'ESTJ')
     # pdf.text(startX + width + width / 4 - 14, startY + 7, 'Контролер по жизни')
-    pdf.text(startX + width + width / 4 - 8, startY + 4, 'Организатор')
+    pdf.text(startX + width + width / 4 - 8, startY + 4, 'Контролер')
 
     # pdf.text(startX + width + width * (3/4) - 3, startY + 4, 'ENTJ')
     # pdf.text(startX + width + width * (3/4) - 11, startY + 7, 'Предприниматель')
@@ -337,7 +358,7 @@ def draw_squares(pdf, square_results):
 
     # pdf.text(startX + width + width / 4 - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'ISTJ')
     # pdf.text(startX + width + width / 4 - 8, startY + width + 7 + delta_y_1 + delta_y_2, 'Организатор')
-    pdf.text(startX + width + width / 4 - 6, startY + width + 4 + delta_y_1 + delta_y_2, 'Контролер')
+    pdf.text(startX + width + width / 4 - 6, startY + width + 4 + delta_y_1 + delta_y_2, 'Организатор')
 
     # pdf.text(startX + width + width * (3/4) - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'INTJ')
     # pdf.text(startX + width + width * (3/4) - 14, startY + width + 7 + delta_y_1 + delta_y_2, 'Любитель улучшений')
@@ -371,37 +392,37 @@ def draw_squares(pdf, square_results):
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ENFJ - Идеалист-харизматик': {
+        'ENFJ - Чуткий наставник': {
             'circle_coords': [startX + 5 + width / 2, startY + 10],
             'text_coords': [startX + 5 + text_x_delta + width / 2, startY + 10 + text_y_delta],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ESFP - Спонтанный коммуникатор': {
+        'ESFP - Развлекатель': {
             'circle_coords': [startX + 5, startY + 10 + width / 2 - 2 + delta_y_1],
             'text_coords': [startX + 5 + text_x_delta, startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ENFP - Инициатор': {
+        'ENFP - Мотиватор': {
             'circle_coords': [startX + 5 + width / 2, startY + 10 + width / 2 - 2 + delta_y_1 + delta_y_2],
             'text_coords': [startX + 5 + text_x_delta + width / 2, startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ESTJ - Контролер по жизни': {
+        'ESTJ - Контролер': {
             'circle_coords': [startX + 5 + width, startY + 10],
             'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ENTJ - Предприниматель': {
+        'ENTJ - Аналитик': {
             'circle_coords': [startX + 5 + width + width / 2, startY + 10],
             'text_coords': [startX + 5 + text_x_delta + width  + width / 2, startY + 10 + text_y_delta],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ESTP - Ультра-реалист': {
+        'ESTP - Искатель ресурсов': {
             'circle_coords': [startX + 5 + width, startY + 10 + width / 2 - 2 + delta_y_1],
             'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1],
             'cur_X_pos': 0,
@@ -425,7 +446,7 @@ def draw_squares(pdf, square_results):
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ISFP - Посредник': {
+        'ISFP - Опекун': {
             'circle_coords': [startX + 5, startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
             'text_coords': [startX + 5 + text_x_delta, startY + 10 + text_y_delta + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
             'cur_X_pos': 0,
@@ -450,7 +471,7 @@ def draw_squares(pdf, square_results):
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ISTP - Экспериментатор': {
+        'ISTP - Исполнитель': {
             'circle_coords': [startX + 5 + width, startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
             'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
             'cur_X_pos': 0,
@@ -470,10 +491,7 @@ def draw_squares(pdf, square_results):
         draw_single_circle_squares(square_data, pdf, square_x_cnt, cnt)
 
 
-def draw_single_circle_squares(square_data, pdf, square_x_cnt, cnt):
-    square_name = square_data[0]
-    email = square_data[1]
-    participant_name = square_data[2]
+def is_orange_color(email):
     report = Report.objects.filter(participant__employee__email=email).latest('added')
     report_data = ReportData.objects.filter(report=report, section_code='3')
     section_1 = 0
@@ -489,9 +507,34 @@ def draw_single_circle_squares(square_data, pdf, square_x_cnt, cnt):
         elif int(split[1]) >= 9:
             section_3 = section_3 + report_data_item.points
     if section_1 > 18 or section_2 > 18 or section_3 > 18 or section_2 >= 7:
+        return True
+    else:
+        return False
+
+
+def draw_single_circle_squares(square_data, pdf, square_x_cnt, cnt):
+    square_name = square_data[0]
+    email = square_data[1]
+    participant_name = square_data[2]
+    group_color = square_data[5]
+    bold = square_data[3]
+
+    orange_color = is_orange_color(email)
+
+    if orange_color:
         pdf.set_fill_color(241, 151, 15)
     else:
-        pdf.set_fill_color(255, 255, 255)
+        if not group_color == 'rgba(0, 0, 0, 0)':
+            color_r = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[0])
+            color_g = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[1].strip())
+            color_b = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[2].strip())
+            pdf.set_fill_color(color_r, color_g, color_b)
+        else:
+            pdf.set_fill_color(255, 255, 255)
+    if bold == 1:
+        pdf.set_draw_color(r=0, g=0, b=0)
+    else:
+        pdf.set_draw_color(240)
     # print(f'participant_name - {participant_name} - секция 1 - {section_1} секция 2 - {section_2} секция 3 - {section_3}')
         # section_points_sum = section_points_sum + report_data_item['points']
     # print(participant_name + ' - ' + str(section_points_sum))
@@ -522,7 +565,27 @@ def draw_table(square_data, pdf, width, x, y):
     cnt = 1
     new_column_added = False
     all_participants_qnt = len(square_data)
+
+    pdf.multi_cell(7, line_height, '#', border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+    pdf.multi_cell((width - 10) - 7, line_height, 'Имя', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+    pdf.multi_cell(10, line_height, 'Цвет', border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+    pdf.ln(line_height)
+
+    pdf.set_xy(x + width, y)
+
+    pdf.multi_cell(7, line_height, '#', border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+    pdf.multi_cell((width - 10) - 7, line_height, 'Имя', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+    pdf.multi_cell(10, line_height, 'Цвет', border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+    pdf.ln(line_height)
+
+    y = y + line_height
+    pdf.set_xy(x, y)
+
     for square_data_item in square_data:
+        participant_name = square_data_item[2]
+        group_name = square_data_item[4]
+        group_color = square_data_item[5]
+        bold = square_data_item[3]
         report = Report.objects.filter(participant__employee__email=square_data_item[1]).latest('added')
         if report.lie_points > 4:
             pdf.set_text_color(255, 0, 0)
@@ -530,7 +593,27 @@ def draw_table(square_data, pdf, width, x, y):
             pdf.set_text_color(0, 0, 0)
 
         pdf.multi_cell(7, line_height, str(cnt), border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
-        pdf.multi_cell(width - 7, line_height, square_data_item[2], border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+        pdf.multi_cell((width - 10) - 7, line_height, participant_name, border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+        pdf.multi_cell(10, line_height, '', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+        if not group_color == 'rgba(0, 0, 0, 0)':
+            color_r = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[0])
+            color_g = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[1].strip())
+            color_b = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[2].strip())
+            pdf.set_fill_color(color_r, color_g, color_b)
+            pdf.set_draw_color(color_r, color_g, color_b)
+        else:
+            pdf.set_fill_color(r=255, g=255, b=255)
+        if bold == 1:
+            pdf.set_draw_color(r=0, g=0, b=0)
+            pdf.set_line_width(0.6)
+        else:
+            pdf.set_draw_color(r=255, g=255, b=255)
+
+        pdf.circle(x=x + width - line_height / 2 - 4, y=y + line_height / 2 - 2, r=4, style="FD")
+
+        pdf.set_line_width(0.1)
+        pdf.set_draw_color(230, 230, 227)
+
         pdf.ln(line_height)
         cnt = cnt + 1
         y = y + line_height
@@ -543,14 +626,14 @@ def draw_table(square_data, pdf, width, x, y):
         if cnt > new_line_cnt:
             if not new_column_added:
                 new_column_added = True
-                y = start_y
+                y = start_y + line_height
                 x = x + width
 
         pdf.set_xy(x, y)
 
     if all_participants_qnt // 2 != all_participants_qnt / 2:
         # y = y + line_height
-        pdf.multi_cell(7, line_height, '', border=1, align='C', new_x='RIGHT', new_y='TOP',
-                       max_line_height=pdf.font_size)
-        pdf.multi_cell(width - 7, line_height, '', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+        pdf.multi_cell(7, line_height, '', border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+        pdf.multi_cell((width - 10) - 7, line_height, '', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+        pdf.multi_cell(10, line_height, '', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
 

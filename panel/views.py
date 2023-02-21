@@ -147,7 +147,9 @@ def get_report_participants_data(request):
             lie_points.append({
                 'fio': report.participant.employee.name,
                 'email': report.participant.employee.email,
-                'lie_points': report.lie_points
+                'lie_points': report.lie_points,
+                'role_name': report.participant.employee.role.name_ru,
+                'position': report.participant.employee.position.name_ru,
             })
             report_datas = ReportData.objects.filter(report=report)
             for report_data in report_datas:

@@ -4,6 +4,7 @@
     {% block links %}
 
          <link href="{% static 'login/plugins/ion-rangeslider/css/ion.rangeSlider.css' %}" rel="stylesheet" />
+         <link href="{% static 'panel/plugins/coloris/dist/coloris.css' %}" rel="stylesheet" />
     {% endblock %}
 
     {% block content %}
@@ -208,19 +209,19 @@
                                                                             </ul>
                                                                         </div>
                                                                         <div class="col-6">
-                                                                            <h3 class="card-title">ENFJ - Идеалист-харизматик</h3>
+                                                                            <h3 class="card-title">ENFJ - Чуткий наставник</h3>
                                                                             <ul class="list-group-square" id="list_1_2">
                                                                             </ul>
                                                                         </div>
                                                                     </div>
                                                                     <div class="row mt-5">
                                                                         <div class="col-6">
-                                                                            <h3 class="card-title">ESFP - Спонтанный коммуникатор</h3>
+                                                                            <h3 class="card-title">ESFP - Развлекатель</h3>
                                                                             <ul class="list-group-square" id="list_1_3">
                                                                             </ul>
                                                                         </div>
                                                                         <div class="col-6">
-                                                                            <h3 class="card-title">ENFP - Инициатор</h3>
+                                                                            <h3 class="card-title">ENFP - Мотиватор</h3>
                                                                             <ul class="list-group-square" id="list_1_4">
                                                                             </ul>
                                                                         </div>
@@ -237,19 +238,19 @@
                                                                 <div class="card-body background-color_2">
                                                                     <div class="row">
                                                                         <div class="col-6">
-                                                                            <h3 class="card-title">ESTJ - Контролер по жизни</h3>
+                                                                            <h3 class="card-title">ESTJ - Контролер</h3>
                                                                             <ul class="list-group-square" id="list_2_1">
                                                                             </ul>
                                                                         </div>
                                                                         <div class="col-6">
-                                                                            <h3 class="card-title">ENTJ - Предприниматель</h3>
+                                                                            <h3 class="card-title">ENTJ - Аналитик</h3>
                                                                             <ul class="list-group-square" id="list_2_2">
                                                                             </ul>
                                                                         </div>
                                                                     </div>
                                                                     <div class="row mt-5">
                                                                         <div class="col-6">
-                                                                            <h3 class="card-title">ESTP - Ультра-реалист</h3>
+                                                                            <h3 class="card-title">ESTP - Искатель ресурсов</h3>
                                                                             <ul class="list-group-square" id="list_2_3">
                                                                             </ul>
                                                                         </div>
@@ -286,7 +287,7 @@
                                                                     </div>
                                                                     <div class="row mt-5">
                                                                         <div class="col-6">
-                                                                            <h3 class="card-title">ISFP - Посредник</h3>
+                                                                            <h3 class="card-title">ISFP - Опекун</h3>
                                                                             <ul class="list-group-square" id="list_3_3">
                                                                             </ul>
                                                                         </div>
@@ -320,7 +321,7 @@
                                                                     </div>
                                                                     <div class="row mt-5">
                                                                         <div class="col-6">
-                                                                            <h3 class="card-title">ISTP - Экспериментатор</h3>
+                                                                            <h3 class="card-title">ISTP - Исполнитель</h3>
                                                                             <ul class="list-group-square" id="list_4_3">
                                                                             </ul>
                                                                         </div>
@@ -347,12 +348,17 @@
                                                                 </div>
                                                                 <div class="col-sm-12 col-md-6">
                                                                     <div class="row">
-                                                                        <div class="col-md-6 col-sm-12">
-
-                                                                        </div>
-                                                                        <div class="col-md-6 col-sm-12">
+                                                                        <div class="col-12">
 {#                                                                            <a class="btn btn-blue col-md-12" style="color: white" id="distribute-undistributed-participants">Распределить</a>#}
-                                                                            <button class="btn btn-primary my-1 cursor-pointer col-md-12" type="button" id="distribute-undistributed-participants">Распределить</button>
+                                                                            <div class="row">
+                                                                                <div class="col-sm-12 col-lg-6">
+                                                                                  <button class="btn btn-primary my-1 cursor-pointer col-12" type="button" id="participants_groups">Группы</button>
+                                                                                </div>
+                                                                                <div class="col-sm-12 col-lg-6">
+                                                                                    <button class="btn btn-primary my-1 cursor-pointer col-12" type="button" id="distribute-undistributed-participants">Распределить</button>
+                                                                                </div>
+
+                                                                            </div>
                                                                         </div>
 
                                                                     </div>
@@ -364,9 +370,14 @@
                                                                     <thead>
             {#                                                            <tr class="table-header">#}
                                                                         <tr>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Выделить</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Группа</th>
                                                                             <th class="wd-15p border-bottom-0 table-header">ФИО</th>
                                                                             <th class="wd-15p border-bottom-0 table-header">email</th>
-                                                                            <th class="wd-15p border-bottom-0 table-header">Категории</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Роль</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Должность</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Распределено</th>
+                                                                            <th class="wd-15p border-bottom-0 table-header">Подходящие</th>
                                                                             <th class="wd-15p border-bottom-0 table-header">Шкала недобора</th>
                                                                             <th class="wd-15p border-bottom-0 table-header">Распределение</th>
                                                                         </tr>
@@ -509,6 +520,7 @@
             </div>
         </div>
 
+        {% include 'panel_distribution_participants_groups_modal.html' %}
 
 
     {% endblock %}
@@ -517,7 +529,137 @@
 
     <script src="{% static 'login/js/select2.js' %}"></script>
     <script src="{% static 'login/plugins/ion-rangeslider/js/ion.rangeSlider.min.js' %}"></script>
+    <script src="{% static 'login/plugins/ion-rangeslider/js/ion.rangeSlider.min.js' %}"></script>
+    <script src="{% static 'panel/plugins/coloris/dist/coloris.js' %}"></script>
 <script>
+
+
+let group_color
+let group_color_picker_element
+
+function coloris(element) {
+    Coloris({
+      themeMode: 'dark',
+      alpha: false,
+        wrap: true,
+        swatches: [
+            'rgb(255,255,0)',
+            'rgb(255,0,0)',
+            'rgb(102,178,255)',
+            'rgb(0,0,255)',
+            'rgb(255,51,255)',
+            'rgb(127,0,255)',
+            'rgb(102,255,178)',
+            'rgb(0,153,0)',
+          ],
+        {#parent: element#}
+    });
+
+}
+
+document.addEventListener('coloris:pick', event => {
+    {#console.log(event.target)#}
+   group_color = event.detail.color
+    {#console.log(group_color)#}
+    $(group_color_picker_element).css('background', event.detail.color).css('border', 'solid')
+});
+
+$('#distribution_participants_groups_modal').on('click', '.group-color-picker', function () {
+    group_color_picker_element = this
+})
+
+
+$('#main-container').on('click', '.checkbox-custom', function () {
+    if($(this).val() === '0'){
+        set_checkbox_checked(this)
+    }else {
+        set_checkbox_unchecked(this)
+    }
+})
+
+$('#distribution_participants_groups_modal').on('click', '.radio-custom', function () {
+    $('#distribution_participants_groups_modal').find('.radio-custom').each(function () {
+        set_checkbox_unchecked(this)
+    })
+    set_checkbox_checked(this)
+})
+
+$('#add_participants_group').on('click', function () {
+    let groups_qnt = $('#participants_groups_table tbody tr').length
+    {#let last_group_val = $('#participants_groups_table tbody tr:last-child').find('.group-name').val()#}
+    let last_group_val = $('#participants_groups_table tbody tr:last-child td:nth-child(2) input').val()
+    let tr_html = '<tr class="participants-group-modal-item" style="vertical-align: middle">' +
+              '<td style="vertical-align: middle"><input class="radio-custom" style="width: 16px; height: 16px" type="radio" name="" value="0"></td>' +
+              '<td><input type="text group-name" class="form-control" value=""></td>' +
+              '<td style="vertical-align: middle">' +
+               '<div class="media-body">' +
+                  '<input class="cursor-pointer group-color-picker" type="text" data-coloris style="width: 30px; color: transparent; background-color: rgb(255,255,0);border: solid" value="rgb(255,255,0)"/>' +
+                  '<span class="d-block w-80p">' +
+                    '<span class="color-picker"></span>' +
+                  '</span>' +
+                '</div>' +
+              '</td>' +
+              '<td style="vertical-align: middle"><i class="fa fa-times delete-group cursor-pointer" aria-hidden="true" style="font-size: 20px"></i></td>' +
+              '</tr>'
+    if(groups_qnt === 0){
+        let element = $('#participants_groups_table tbody').append(tr_html)
+        console.log(element)
+        coloris(element)
+    }else {
+        if( last_group_val !== ''){
+            let element = $('#participants_groups_table tbody').append(tr_html)
+            coloris(element)
+        }else {
+            toastr.error('Введите название группы')
+        }
+
+    }
+    set_checkbox_unchecked($('#participants_groups_table tbody tr td:nth-child(1) input'))
+    set_checkbox_checked($('#participants_groups_table tbody tr:last-child td:nth-child(1) input'))
+
+
+})
+
+
+$('#distribution_participants_groups_modal').on('click', '.delete-group', function () {
+    $(this).closest('tr').remove()
+})
+
+$('#participants_groups').on('click', function () {
+    let participants_chosen_for_group = $('#tbody_undistributed_participants tr td:nth-child(2) input[value=1]').length
+    console.log('participants_chosen_for_group - ' + participants_chosen_for_group)
+    if(participants_chosen_for_group == 0){
+        $('#set_groups_to_participants').hide()
+        console.log('hide')
+    }else {
+        $('#set_groups_to_participants').show()
+        console.log('show')
+    }
+    $('#distribution_participants_groups_modal').modal('show')
+})
+
+$('#set_groups_to_participants').on('click', function () {
+    let groups_chosen = $('#participants_groups_table tbody tr td:nth-child(1) input[value=1]').length
+    if(groups_chosen === 0){
+        toastr.error('Выберите группу')
+    }else {
+        let group_name = $('#participants_groups_table tbody tr td:nth-child(1) input[value=1]').closest('tr').find('td:nth-child(2) input').val()
+        if(group_name === ''){
+            toastr.error('Введите название группы')
+        }else {
+            let group_color = $('#participants_groups_table tbody tr td:nth-child(1) input[value=1]').closest('tr').find('td:nth-child(3) input').css('background-color')
+            $('#tbody_undistributed_participants tr td:nth-child(2) input[value=1]').each(function () {
+                $(this).closest('td').css('background-color', group_color).html('<span>' + group_name + '</span> <i class="fa fa-times cursor-pointer delete-participant-group" aria-hidden="true" style="margin-left: 5px"></i>')
+            })
+            $('#distribution_participants_groups_modal').modal('hide')
+        }
+    }
+})
+
+$('#undistributed-participants-table').on('click', '.delete-participant-group', function () {
+    $(this).closest('td').css('background-color', 'white').html('<input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0">')
+})
+
 
     let kernel1 = 0
     let kernel2 = 0
@@ -599,20 +741,20 @@
 
     let square_names_obj = {
     '1_1': 'ESFJ - Массовик-затейник',
-    '1_2': 'ENFJ - Идеалист-харизматик',
-    '1_3': 'ESFP - Спонтанный коммуникатор',
-    '1_4': 'ENFP - Инициатор',
-    '2_1': 'ESTJ - Контролер по жизни',
-    '2_2': 'ENTJ - Предприниматель',
-    '2_3': 'ESTP - Ультра-реалист',
+    '1_2': 'ENFJ - Чуткий наставник',
+    '1_3': 'ESFP - Развлекатель',
+    '1_4': 'ENFP - Мотиватор',
+    '2_1': 'ESTJ - Контролер',
+    '2_2': 'ENTJ - Аналитик',
+    '2_3': 'ESTP - Искатель ресурсов',
     '2_4': 'ENTP - Изобретатель',
     '3_1': 'ISFJ - Хранитель',
     '3_2': 'INFJ - Вдохновитель',
-    '3_3': 'ISFP - Посредник',
+    '3_3': 'ISFP - Опекун',
     '3_4': 'INFP - Благородный служитель',
     '4_1': 'ISTJ - Организатор',
     '4_2': 'INTJ - Любитель улучшений',
-    '4_3': 'ISTP - Экспериментатор',
+    '4_3': 'ISTP - Исполнитель',
     '4_4': 'INTP - Решатель проблем',
 }
 
@@ -958,7 +1100,7 @@
                         },
                         success:function (data) {
 
-                            {#console.log(data)#}
+                            console.log(data)
                             {#let data_json = $.parseJSON(data);#}
                             let participants_data = data['data'];
                             let lie_points = data['lie_points']
@@ -967,13 +1109,14 @@
                             let possible_categories_participant = []
                             let possible_scales = []
                             let distributed_participants_cnt = 0
-
+                            let distributed_categories_participant = []
 
                             for (let i=0; i < lie_points.length; i++){
                                 {#console.log('-------------------------')#}
                                 let html = ''
                                 let participant_distributed = false
                                 possible_categories_participant = []
+                                distributed_categories_participant = []
                                 {#possible_scales = []#}
                                 for (let j=0; j < rules.length; j++){
                                     {#console.log(rules[j])#}
@@ -1008,56 +1151,72 @@
 
                                     }
                                     if (rule_cnt === rule_length){
-                                        distributed_participants_cnt++
+                                        {#distributed_participants_cnt++#}
                                         participant_distributed = true
                                         switch (j) {
                                             case 0:
-                                                $('#list_1_1').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                distributed_categories_participant.push(square_names_obj["1_1"])
+                                                {#$('#list_1_1').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
                                                 break;
                                             case 1:
-                                                $('#list_1_2').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                distributed_categories_participant.push(square_names_obj["1_2"])
+                                                {#$('#list_1_2').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
                                                 break;
                                             case 2:
-                                                $('#list_1_3').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                distributed_categories_participant.push(square_names_obj["1_3"])
+                                                {#$('#list_1_3').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
                                                 break;
                                             case 3:
-                                                $('#list_1_4').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                distributed_categories_participant.push(square_names_obj["1_4"])
+                                                {#$('#list_1_4').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
                                                 break;
                                             case 4:
-                                                $('#list_2_1').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                distributed_categories_participant.push(square_names_obj["2_1"])
+                                                {#$('#list_2_1').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
                                                 break;
                                             case 5:
-                                                $('#list_2_2').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                distributed_categories_participant.push(square_names_obj["2_2"])
+                                                {#$('#list_2_2').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
                                                 break;
                                             case 6:
-                                                $('#list_2_3').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                distributed_categories_participant.push(square_names_obj["2_3"])
+                                                {#$('#list_2_3').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
                                                 break;
                                             case 7:
-                                                $('#list_2_4').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                distributed_categories_participant.push(square_names_obj["2_4"])
+                                                {#$('#list_2_4').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
                                                 break;
                                             case 8:
-                                                $('#list_3_1').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                distributed_categories_participant.push(square_names_obj["3_1"])
+                                                {#$('#list_3_1').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
                                                 break;
                                             case 9:
-                                                $('#list_3_2').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                distributed_categories_participant.push(square_names_obj["3_2"])
+                                                {#$('#list_3_2').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
                                                 break;
                                             case 10:
-                                                $('#list_3_3').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                distributed_categories_participant.push(square_names_obj["3_3"])
+                                                {#$('#list_3_3').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
                                                 break;
                                             case 11:
-                                                $('#list_3_4').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                distributed_categories_participant.push(square_names_obj["3_4"])
+                                                {#$('#list_3_4').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
                                                 break;
                                             case 12:
-                                                $('#list_4_1').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                distributed_categories_participant.push(square_names_obj["4_1"])
+                                                {#$('#list_4_1').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
                                                 break;
                                             case 13:
-                                                $('#list_4_2').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                distributed_categories_participant.push(square_names_obj["4_2"])
+                                                {#$('#list_4_2').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
                                                 break;
                                             case 14:
-                                                $('#list_4_3').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                distributed_categories_participant.push(square_names_obj["4_3"])
+                                                {#$('#list_4_3').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
                                                 break;
                                             case 15:
-                                                $('#list_4_4').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')
+                                                distributed_categories_participant.push(square_names_obj["4_4"])
+                                                {#$('#list_4_4').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
                                                 break;
                                             default:
                                                 break;
@@ -1150,11 +1309,24 @@
 
                                     }
                                 }
-                                if (possible_categories_participant.length > 0 && !participant_distributed){
+                                if ((possible_categories_participant.length > 0 && !participant_distributed) || distributed_categories_participant.length > 0){
 
                                     html += '<tr class="table-row-undistributed-participant" style="">'
+                                    html += '<td class="bold-participant" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'
+                                    html += '<td class="participant-group" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'
                                     html += '<td class="fio">' + lie_points[i]['fio'] + '</td>'
                                     html += '<td class="email">' + lie_points[i]['email'] + '</td>'
+                                    html += '<td class="role_name">' + lie_points[i]['role_name'] + '</td>'
+                                    html += '<td class="position">' + lie_points[i]['position'] + '</td>'
+                                    html += '<td>'
+                                    for(let h=0; h < distributed_categories_participant.length; h++){
+                                        if (h !== distributed_categories_participant.length - 1){
+                                            html += distributed_categories_participant[h] + '<br>'
+                                        }else {
+                                            html += distributed_categories_participant[h]
+                                        }
+                                    }
+                                    html += '</td>'
                                     html += '<td>'
                                     for(let h=0; h < possible_categories_participant.length; h++){
                                         for(let y=0; y < possible_categories_participant[h][0][2].length; y++) {
@@ -1177,9 +1349,19 @@
                                     html += '<td>'
                                     html += '<select name="category" class="form-control form-select select2 category-selected" data-bs-placeholder="Выберите категорию">'
                                     html += '<option value=""></option>'
+                                    //отображение возможных категорий
                                     for(let h=0; h < possible_categories_participant.length; h++){
                                         html += '<option value="' + possible_categories_participant[h][0][0] + '">' + possible_categories_participant[h][0][0] + '</option>'
                                     }
+                                    //отображение распределенных категорий
+                                    for(let h=0; h < distributed_categories_participant.length; h++){
+                                        if(distributed_categories_participant.length === 1){
+                                            html += '<option value="' + distributed_categories_participant[h] + '" selected>' + distributed_categories_participant[h] + '</option>'
+                                        }else {
+                                            html += '<option value="' + distributed_categories_participant[h] + '">' + distributed_categories_participant[h] + '</option>'
+                                        }
+                                    }
+
                                     {#for(let h=0; h < possible_categories_participant.length; h++){#}
                                     {#    html += '<option value="">' + possible_categories_participant[h][0][0] + '</option>'#}
                               //      {#}#}
@@ -1212,7 +1394,33 @@
                                 }
                                 {#console.log(possible_categories_participant)#}
                             }
-                            process_table('.undistributed-table')
+
+                            console.log(distributed_categories_participant)
+
+
+                            $('.undistributed-table').removeAttr('width').DataTable({
+                                'columnDefs': [
+                                    { 'orderable': false, 'targets': [0, 7] },
+                                    { width: 5, targets: 0 }
+                                ],
+                                autoWidth: false,
+                                "info": true,
+                                "bFilter":  true,
+                                order: [1, 'asc' ],
+                                "searching": true,
+                                "destroy": true,
+                                "paging": false,
+                                "language": {
+                                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"
+                                },
+                                "initComplete": function () {
+                                },
+                            })
+
+
+
+
+                            {#process_table('.undistributed-table')#}
                             for(let i=0; i < participants_data.length; i++){
 
                                 {#html += '<tr class="table-row cursor-pointer project-participant-added">'#}
@@ -1290,7 +1498,7 @@
             let square_name = get_square_name_by_listgroup_id($(this).attr('id'))
             {#console.log($(this).attr('id'))#}
             $(this).find('li').each(function (){
-                square_results.push([square_name, $(this).attr('id'), $(this).text()])
+                square_results.push([square_name, $(this).attr('id'), $(this).text(), $(this).data('bold'), $(this).data('group-name'), $(this).data('group-color')])
             })
         })
         console.log(square_results)
@@ -1426,20 +1634,6 @@
         $(element).html(text).removeClass('disabled')
     }
     let table = ''
-    {#function process_table(element){#}
-    {#   $(element).DataTable().destroy()#}
-    {#   $(element).DataTable({#}
-    {#       "searching": false,#}
-    {#      "destroy": true,#}
-    {#      "paging": false,#}
-    {#      "language": {#}
-    {#        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"#}
-    {#      },#}
-    {#      "initComplete": function () {#}
-    {##}
-    {#      },#}
-    {#    })#}
-    {#}#}
 
     $('#main-container').on('click', '.project-participant-added', function () {
         $(this).removeClass('project-participant-added').addClass('project-participant-chosen').css('background-color', '#6c5ffc').css('color', 'white')
@@ -1546,6 +1740,7 @@
 
     }
     // распределение участников
+    let participants_groups = []
     $('#distribute-undistributed-participants').on('click', function(){
         let category_not_selected = false
         $('.category-selected').each(function (){
@@ -1562,10 +1757,15 @@
                 let fio = $(this).find('.fio').text()
                 let email = $(this).find('.email').text()
                 let square_name = $(this).find('.category-selected').val()
+                let bold = $(this).find('td:nth-child(1) input').val()
+                let group_name = $(this).find('td:nth-child(2) span').text()
+                let group_color = $(this).find('td:nth-child(2)').css('background-color')
+
+                {#let #}
                 {#console.log($(this).find('.fio').text() + ' - ' + $(this).find('.category-selected').val())#}
 
                 let list_id = get_listgroup_id_by_name(square_name)
-                $('#' + list_id).append('<li class="list-group-item" id="' + email + '">' + fio + '</li>')
+                $('#' + list_id).append('<li class="list-group-item" id="' + email + '" data-bold="' + bold + '" data-group-name="' + group_name + '" data-group-color="' + group_color + '">' + fio + '</li>')
                 $(this).remove()
                 distributed_cnt++
             })

@@ -1,0 +1,54 @@
+    {% load static %}
+
+    <div id="distribution_participants_groups_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg task-detail-modal" role="document">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <header class="task-header" style="padding: 1.5rem; background-color: #ebebeb; margin-right: 0">
+
+                        <h4 class="d-flex align-items-center fw-bold mb-0 inline-editable-wrap">
+                            <span class="editable">Группы участников</span>
+                        </h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </header>
+
+                    <div class="p-4">
+                        <div class="">
+                            <div class="col-12 align-items-center mb-4" style="padding-right: 0; padding-left: 0">
+                                <button type="button" class="btn btn-primary w-100 m-0 btn-height" id="add_participants_group">Создать группу</button>
+                            </div>
+
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table text-nowrap text-md-nowrap mb-0" id="participants_groups_table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 10px"></th>
+                                        <th>Название</th>
+                                        <th style="width: 15px">Цвет</th>
+                                        <th style="width: 10px"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+
+
+                        <div class="modal-footer align-items-center pb-0 pt-4" style="padding-right: 0; padding-left: 0">
+                            <button type="button" class="btn btn-primary w-100 m-0 btn-height" id="set_groups_to_participants">Присвоить группу участникам</button>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+

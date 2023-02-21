@@ -100,7 +100,7 @@
                                             <h3 class="card-title">Участники</h3>
                                         </div>
                                         <div class="col col-lg-6 col-sm-6 text-end">
-                                            <button class="btn btn-primary my-1 nav-buttons" type="button" id="add_participant" style="padding: 9px"><i class="fe fe-edit" style="font-size: 20px"></i></button>
+                                            <button class="btn btn-primary my-1 nav-buttons" type="button" id="add_participant" style="padding: 9px">Назначить опрос</button>
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -112,6 +112,13 @@
                                                         <th>Ответы</th>
                                                         <th>Имя/псевдоним</th>
                                                         <th>Email</th>
+                                                        <th>Индустрия</th>
+                                                        <th>Роль</th>
+                                                        <th>Должность</th>
+                                                        <th>Год рождения</th>
+                                                        <th>Пол</th>
+                                                        <th>Когда создан</th>
+                                                        <th>Кем создан</th>
                                                         <th>Группы вопросов</th>
                                                         <th>Отправка приглашения</th>
                                                         <th>Напоминания</th>
@@ -148,6 +155,13 @@
                                                         <td>{{ participant.answered_questions_qnt }}/{{ participant.total_questions_qnt }}</td>
                                                         <td>{% if participant.employee.name %}{{ participant.employee.name }}{% endif %}</td>
                                                         <td>{{ participant.employee.email }}</td>
+                                                        <td>{{ participant.employee.industry.name_ru }}</td>
+                                                        <td>{{ participant.employee.role.name_ru }}</td>
+                                                        <td>{{ participant.employee.position.name_ru }}</td>
+                                                        <td>{{ participant.employee.birth_year }}</td>
+                                                        <td>{{ participant.employee.sex }}</td>
+                                                        <td>{{ participant.employee.created_at|date:"d.m.Y H:i" }}</td>
+                                                        <td>{{ participant.employee.created_by.first_name }}</td>
                                                         <td class="participant_selected_questions_groups_td">
                                                             {% for participant_questions_group in participant_questions_groups %}
                                                                 {% if participant_questions_group.participant == participant %}

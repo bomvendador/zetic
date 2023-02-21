@@ -76,7 +76,7 @@ def page(pdf, square_results, lang):
     else:
         y = y
 
-    scale_name = 'Шкала Q4\nВнутренний комфорт'
+    scale_name = 'Шкала Q4\nВнутреннее напряжение'
 
     scale_description = 'Внутренняя расслабленность,\nнетерпеливость, мотивация'
 

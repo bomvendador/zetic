@@ -56,12 +56,15 @@ def data_by_points(square_results, section_code, category_code):
     scale_data = []
     cnt = 0
     for square_result in square_results:
+        group_color = square_result[5]
+        email = square_result[1]
+        bold = square_result[3]
         cnt = cnt + 1
         report = Report.objects.filter(participant__employee__email=square_result[1]).latest('added')
         if ReportData.objects.filter(report=report, section_code=section_code, category_code=category_code).exists():
             report_data = ReportData.objects.get(report=report, section_code=section_code, category_code=category_code)
             # print(f'участик - {report.participant.employee.name} секция - {report_data.section_name} категория - {report_data.category_name} points - {report_data.points}')
-            scale_data.append([square_result[2], report_data.points, cnt])
+            scale_data.append([square_result[2], report_data.points, cnt, group_color, email, bold])
     # print(f'scale data - {scale_data}')
 
     data_by_points_ = {
