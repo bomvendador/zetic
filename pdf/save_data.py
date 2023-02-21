@@ -1,4 +1,4 @@
-from pdf.models import Report, Participant, Company, ReportData, Section, Category, Employee, Study
+from pdf.models import Report, Participant, Company, ReportData, Section, Category, Employee, Study, EmployeeRole, EmployeeGender
 from login.models import UserProfile
 from . import raw_to_t_point
 from panel import mail_handler
@@ -6,6 +6,7 @@ from django.utils import timezone
 
 
 def save_data_to_db(request_json, file_name):
+    # print(request_json)
 
     # if 'company_name' in request_json:
     #     if Company.objects.filter(name=request_json['company_name']).exists():
@@ -14,25 +15,30 @@ def save_data_to_db(request_json, file_name):
     #         company = Company()
     #         company.name = request_json['company_name']
     #         company.save()
+    #
+    if Employee.objects.filter(email=request_json['participant_info']['email']).exists():
+        employee = Employee.objects.get(email=request_json['participant_info']['email'])
+    else:
+        employee = Employee()
+        employee.name = request_json['participant_info']['name']
+        employee.sex = EmployeeGender.objects.get(public_code=request_json['participant_info']['sex'])
+        # employee.sex = EmployeeGender.objects.get(name_ru=request_json['participant_info']['sex'])
+        employee.birth_year = request_json['participant_info']['year']
+        employee.email = request_json['participant_info']['email']
+        # employee.company = company
+        employee.save()
+    #
+    #
 
     if Study.objects.filter(public_code=request_json['study']['id']).exists():
         study = Study.objects.get(public_code=request_json['study']['id'])
     else:
         study = Study()
         # study.company = company
-        study.name = request_json['study_name']
+        study.name = request_json['study']['name']
+        # study.name = request_json['study_name']
         study.save()
 
-    # if Employee.objects.filter(email=request_json['participant_info']['email']).exists():
-    #     employee = Employee.objects.get(email=request_json['participant_info']['email'])
-    # else:
-    #     employee = Employee()
-    #     employee.name = request_json['participant_info']['name']
-    #     employee.sex = request_json['participant_info']['sex']
-    #     employee.birth_year = request_json['participant_info']['year']
-    #     employee.email = request_json['participant_info']['email']
-    #     # employee.company = company
-    #     employee.save()
     if Participant.objects.filter(employee__email=request_json['participant_info']['email'], study=study).exists():
 
         participant = Participant.objects.get(employee__email=request_json['participant_info']['email'], study=study)

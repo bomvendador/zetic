@@ -1361,10 +1361,6 @@ $('#undistributed-participants-table').on('click', '.delete-participant-group', 
                                             html += '<option value="' + distributed_categories_participant[h] + '">' + distributed_categories_participant[h] + '</option>'
                                         }
                                     }
-
-                                    {#for(let h=0; h < possible_categories_participant.length; h++){#}
-                                    {#    html += '<option value="">' + possible_categories_participant[h][0][0] + '</option>'#}
-                              //      {#}#}
                                     html += '</select>'
                                     html += '</td>'
                                     html += '</tr>'
@@ -1372,10 +1368,16 @@ $('#undistributed-participants-table').on('click', '.delete-participant-group', 
                                 }else{
                                     //если участник не распределен и не попал ни в одну категорию
                                     if (possible_categories_participant.length === 0 && !participant_distributed){
+
                                         html += '<tr class="table-row-undistributed-participant" style="">'
+                                        html += '<td class="bold-participant" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'
+                                        html += '<td class="participant-group" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'
                                         html += '<td class="fio">' + lie_points[i]['fio'] + '</td>'
                                         html += '<td class="email">' + lie_points[i]['email'] + '</td>'
+                                        html += '<td class="role_name">' + lie_points[i]['role_name'] + '</td>'
+                                        html += '<td class="position">' + lie_points[i]['position'] + '</td>'
                                         html += '<td>Категория отсутствует</td>'
+                                        html += '<td></td>'
                                         html += '<td></td>'
                                         html += '<td>'
                                         html += '<select name="category" class="form-control form-select select2 category-selected" data-bs-placeholder="Выберите категорию">'
@@ -1388,8 +1390,28 @@ $('#undistributed-participants-table').on('click', '.delete-participant-group', 
                                         html += '</select>'
                                         html += '</td>'
                                         html += '</tr>'
-                                        $('#tbody_undistributed_participants').append(html)
 
+
+
+                                        {##}
+                                        {#html += '<tr class="table-row-undistributed-participant" style="">'#}
+                                        {#html += '<td class="fio">' + lie_points[i]['fio'] + '</td>'#}
+                                        {#html += '<td class="email">' + lie_points[i]['email'] + '</td>'#}
+                                        {#html += '<td>Категория отсутствует</td>'#}
+                                        {#html += '<td></td>'#}
+                                        {#html += '<td>'#}
+                                        {#html += '<select name="category" class="form-control form-select select2 category-selected" data-bs-placeholder="Выберите категорию">'#}
+                                        {#html += '<option value=""></option>'#}
+                                        {##}
+                                        {#Object.values(square_names_obj).forEach(function (item) {#}
+                                        {#    html += '<option value="' + item + '">' + item + '</option>'#}
+                                        {#})#}
+                                        {##}
+                                        {#html += '</select>'#}
+                                        {#html += '</td>'#}
+                                        {#html += '</tr>'#}
+                                        $('#tbody_undistributed_participants').append(html)
+                                        {##}
                                     }
                                 }
                                 {#console.log(possible_categories_participant)#}
