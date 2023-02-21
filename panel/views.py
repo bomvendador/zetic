@@ -18,6 +18,7 @@ from login import urls as login_urls
 from django.utils import timezone
 import time
 from pdf.views import pdf_single_generator
+from datetime import datetime, timedelta
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -39,28 +40,194 @@ def info_common(request):
         return context
 
 
+def millisec_to_time(millisec):
+    d = datetime(1, 1, 1)+millisec
+    if d.day - 1 == 0:
+        return "{0}:{1}:{2}".format(d.hour, d.minute, d.second)
+    else:
+        return "{0}:{1}:{2}:{3}".format(d.day-1, d.hour, d.minute, d.second)
+
+
 @login_required(redirect_field_name=None, login_url='/login/')
 def home(request):
 
     context = info_common(request)
+
+    participants = Participant.objects.filter(created_by=request.user)
+    cnt = 0
+    time_diff_total = 0
+
+    for participant in participants:
+        if participant.completed_at is not None and participant.started_at is not None:
+            cnt = cnt + 1
+            cur_time_diff = participant.completed_at - participant.started_at
+            time_diff_total = time_diff_total + cur_time_diff.total_seconds()
+
+    total_completion_time = time_diff_total / cnt
+
+    points_1 = {
+        '1_1': 0,
+        '1_2': 0,
+        '1_3': 0,
+        '1_4': 0,
+        '1_5': 0,
+        '1_6': 0,
+        '1_7': 0,
+        '1_8': 0,
+        '1_9': 0,
+        '1_10': 0,
+        '1_11': 0,
+        '1_12': 0,
+        '1_13': 0,
+        '1_14': 0,
+        '1_15': 0,
+    }
+    points_2 = {
+        '2_1': 0,
+        '2_2': 0,
+        '2_3': 0,
+        '2_4': 0,
+        '2_5': 0,
+        '2_6': 0,
+        '2_7': 0,
+        '2_8': 0,
+        '2_9': 0,
+        '2_10': 0,
+        '2_11': 0,
+        '2_12': 0,
+        '2_13': 0,
+        '2_14': 0,
+        '2_15': 0,
+        '2_16': 0,
+    }
+    points_3 = {
+        '3_1': 0,
+        '3_2': 0,
+        '3_3': 0,
+        '3_4': 0,
+        '3_5': 0,
+        '3_6': 0,
+        '3_7': 0,
+        '3_8': 0,
+        '3_9': 0,
+        '3_10': 0,
+        '3_11': 0,
+        '3_12': 0,
+    }
+    points_4 = {
+        '4_1': 0,
+        '4_2': 0,
+        '4_3': 0,
+        '4_4': 0,
+        '4_5': 0,
+        '4_6': 0,
+        '4_7': 0,
+        '4_8': 0,
+        '4_9': 0,
+        '4_10': 0,
+    }
+
+    individual_reports = ReportData.objects.filter(report__participant__created_by=request.user)
+    for report in individual_reports:
+        # print(report.report.participant.employee.name)
+        if report.section_code == '1':
+            points_1[report.category_code] = points_1[report.category_code] + report.points
+        if report.section_code == '2':
+            points_2[report.category_code] = points_2[report.category_code] + report.points
+        if report.section_code == '3':
+            points_3[report.category_code] = points_3[report.category_code] + report.points
+        if report.section_code == '4':
+            points_4[report.category_code] = points_4[report.category_code] + report.points
+
+    points_1_arr = []
+    points_2_arr = []
+    points_3_arr = []
+    points_4_arr = []
+
+
+    # points_1_copy = points_1.copy()
+    # for k_copy, v_copy in points_1_copy:
+    #     for k, v in points_1:
+    #         if not k_copy == k:
+
+
+    # for k, v in points_2:
+    #     points_2_arr.append(v)
+    # for k, v in points_3:
+    #     points_3_arr.append(v)
+    # for k, v in points_4:
+    #     points_4_arr.append(v)
+
+    print(points_1)
+    print(points_2)
+    print(points_3)
+    print(points_4)
+
+    print('-----')
+    sorted_dict_1 = sorted(points_1, key=points_1.get, reverse=True)[:5]
+    sorted_dict_2 = sorted(points_2, key=points_2.get, reverse=True)[:5]
+    sorted_dict_3 = sorted(points_3, key=points_3.get, reverse=True)[:5]
+    sorted_dict_4 = sorted(points_4, key=points_4.get, reverse=True)[:5]
+
+    sorted_dict_1_min = [(k, v) for k, v in points_1.items()]
+    sorted_dict_1_min.sort(key=lambda s: s[1])
+    top_1_min = [i[0] for i in sorted_dict_1_min[:5]]
+
+    categories_names_1 = []
+    categories_names_1_min = []
+    categories_names_2 = []
+    categories_names_3 = []
+    categories_names_4 = []
+
+    for sorted_dict in top_1_min:
+        category_name = Category.objects.get(code=sorted_dict).name
+        categories_names_1_min.append(category_name)
+    for sorted_dict in sorted_dict_1:
+        category_name = Category.objects.get(code=sorted_dict).name
+        categories_names_1.append(category_name)
+    for sorted_dict in sorted_dict_2:
+        category_name = Category.objects.get(code=sorted_dict).name
+        categories_names_2.append(category_name)
+    for sorted_dict in sorted_dict_3:
+        category_name = Category.objects.get(code=sorted_dict).name
+        categories_names_3.append(category_name)
+    for sorted_dict in sorted_dict_4:
+        category_name = Category.objects.get(code=sorted_dict).name
+        categories_names_4.append(category_name)
+
+    print(categories_names_1)
+    print(categories_names_2)
+    print(categories_names_3)
+    print(categories_names_4)
+
+    stats = {
+        'total_completion_time': str(timedelta(seconds=total_completion_time)).split('.')[0],
+        'top_1': categories_names_1,
+        'top_2': categories_names_2,
+        'top_3': categories_names_3,
+        'top_4': categories_names_4,
+        'categories_names_1_min': categories_names_1_min,
+    }
+
     if context == 'logout':
         return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
     else:
         userprofile = UserProfile.objects.get(user=request.user)
         if userprofile.role.name == 'Админ заказчика':
             company = Employee.objects.get(user=request.user).company
-            stats = {
+            stats.update({
                 'employees_qnt': Employee.objects.filter(company=company).count(),
                 'individual_reports_qnt': Report.objects.filter(study__company=company).count(),
                 'group_reports_qnt': ReportGroup.objects.filter(company=company).count()
-            }
+            })
         if userprofile.role.name == 'Админ' or userprofile.role.name == 'Суперадмин':
-            stats = {
+
+            stats.update({
                 'companies_qnt': Company.objects.all().count(),
                 'employees_qnt': Employee.objects.all().count(),
                 'individual_reports_qnt': Report.objects.all().count(),
                 'group_reports_qnt': ReportGroup.objects.all().count()
-            }
+            })
         if userprofile.role.name == 'Менеджер':
             companies = Company.objects.filter(created_by=request.user)
             individual_reports = Report.objects.all()
@@ -76,12 +243,12 @@ def home(request):
                 for group_report in group_reports:
                     if group_report.company == company:
                         group_reports_qnt = group_reports_qnt + 1
-            stats = {
+            stats.update({
                 'companies_qnt': companies.count(),
                 'employees_qnt': Employee.objects.filter(created_by=request.user).count(),
                 'individual_reports_qnt': individual_reports_qnt,
                 'group_reports_qnt': group_reports_qnt
-            }
+            })
 
         context.update({
             'stats': stats

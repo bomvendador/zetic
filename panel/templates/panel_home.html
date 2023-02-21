@@ -89,6 +89,113 @@
                                 <div class="card-body">
                                     <div class="d-flex">
                                         <div class="mt-2">
+                                            <h6 class="">Среднее время заполнения</h6>
+                                            <h2 class="mb-0 number-font">{{ stats.total_completion_time }}</h2>
+                                        </div>
+                                        <div class="ms-auto">
+                                            <div class="chart-wrapper mt-1">
+                                                <i class="side-menu__icon fe fe-clock stats-icons"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3">
+                            <div class="card overflow-hidden">
+                                <div class="card-body" style="background-color: rgb(248, 216, 31)">
+                                    <div class="d-flex">
+                                        <div class="mt-2">
+                                            <h6 class="">ТОП-5 Ценностей (MAX)</h6>
+                                            {% for item in stats.top_4 %}
+                                            <ul>
+                                                <li style="font-size: 16px"><b>{{ item }}</b></li>
+                                            </ul>
+                                            {% endfor %}
+                                        </div>
+{#                                        <div class="ms-auto">#}
+{#                                            <div class="chart-wrapper mt-1">#}
+{#                                                <i class="side-menu__icon fe fe-briefcase stats-icons"></i>#}
+{#                                            </div>#}
+{#                                        </div>#}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3">
+                            <div class="card overflow-hidden">
+                                <div class="card-body" style="background-color: rgb(107, 196, 38)">
+                                    <div class="d-flex">
+                                        <div class="mt-2">
+                                            <h6 class="">ТОП-5 Стратегии стресса (MAX)</h6>
+                                            {% for item in stats.top_2 %}
+                                            <ul>
+                                                <li style="font-size: 16px"><b>{{ item }}</b></li>
+                                            </ul>
+                                            {% endfor %}
+                                        </div>
+{#                                        <div class="ms-auto">#}
+{#                                            <div class="chart-wrapper mt-1">#}
+{#                                                <i class="side-menu__icon fe fe-briefcase stats-icons"></i>#}
+{#                                            </div>#}
+{#                                        </div>#}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3">
+                            <div class="card overflow-hidden">
+                                <div class="card-body" style="background-color: rgb(34, 170, 245)">
+                                    <div class="d-flex">
+                                        <div class="mt-2">
+                                            <h6 class="">ТОП-5 Черты характера (MAX)</h6>
+                                            {% for item in stats.top_1 %}
+                                            <ul>
+                                                <li style="font-size: 16px"><b>{{ item }}</b></li>
+                                            </ul>
+                                            {% endfor %}
+                                        </div>
+{#                                        <div class="ms-auto">#}
+{#                                            <div class="chart-wrapper mt-1">#}
+{#                                                <i class="side-menu__icon fe fe-briefcase stats-icons"></i>#}
+{#                                            </div>#}
+{#                                        </div>#}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3">
+                            <div class="card overflow-hidden">
+                                <div class="card-body" style="background-color: rgb(34, 170, 245)">
+                                    <div class="d-flex">
+                                        <div class="mt-2">
+                                            <h6 class="">ТОП-5 Черты характера (MIN)</h6>
+                                            {% for item in stats.categories_names_1_min %}
+                                            <ul>
+                                                <li style="font-size: 16px"><b>{{ item }}</b></li>
+                                            </ul>
+                                            {% endfor %}
+                                        </div>
+{#                                        <div class="ms-auto">#}
+{#                                            <div class="chart-wrapper mt-1">#}
+{#                                                <i class="side-menu__icon fe fe-briefcase stats-icons"></i>#}
+{#                                            </div>#}
+{#                                        </div>#}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xl-3">
+                            <div class="card overflow-hidden">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div class="mt-2">
                                             <h6 class="">Компании</h6>
                                             <h2 class="mb-0 number-font">{{ stats.companies_qnt }}</h2>
                                         </div>
