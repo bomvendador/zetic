@@ -16,17 +16,17 @@ def save_data_to_db(request_json, file_name):
     #         company.name = request_json['company_name']
     #         company.save()
     #
-    if Employee.objects.filter(email=request_json['participant_info']['email']).exists():
-        employee = Employee.objects.get(email=request_json['participant_info']['email'])
-    else:
-        employee = Employee()
-        employee.name = request_json['participant_info']['name']
-        employee.sex = EmployeeGender.objects.get(public_code=request_json['participant_info']['sex'])
-        # employee.sex = EmployeeGender.objects.get(name_ru=request_json['participant_info']['sex'])
-        employee.birth_year = request_json['participant_info']['year']
-        employee.email = request_json['participant_info']['email']
-        # employee.company = company
-        employee.save()
+    # if Employee.objects.filter(email=request_json['participant_info']['email']).exists():
+    #     employee = Employee.objects.get(email=request_json['participant_info']['email'])
+    # else:
+    #     employee = Employee()
+    #     employee.name = request_json['participant_info']['name']
+    #     employee.sex = EmployeeGender.objects.get(public_code=request_json['participant_info']['sex'])
+    #     # employee.sex = EmployeeGender.objects.get(name_ru=request_json['participant_info']['sex'])
+    #     employee.birth_year = request_json['participant_info']['year']
+    #     employee.email = request_json['participant_info']['email']
+    #     # employee.company = company
+    #     employee.save()
     #
     #
 
