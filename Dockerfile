@@ -18,7 +18,7 @@ COPY requirements.txt /reports/reqs-min.txt
 RUN pip install --no-cache-dir -r /reports/reqs-min.txt
 
 COPY . /reports/
-            
+
 RUN python manage.py collectstatic --noinput
 
 CMD ["./entrypoint.sh"]

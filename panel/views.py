@@ -472,6 +472,7 @@ def get_individual_reports_list(request):
                 'company': report.participant.employee.company.name,
                 'date': timezone.localtime(report.added).strftime("%d.%m.%Y %H:%M:%S"),
                 'name': report.participant.employee.name,
+                'email': report.participant.employee.email,
                 'file_name': report.file.name,
                 'comments': comments
             })
