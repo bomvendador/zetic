@@ -65,6 +65,7 @@ urlpatterns = [
     path('get_company_no_admins', employee.get_company_no_admins, name='get_company_no_admins'),
     path('deactivate_company_admin', employee.deactivate_company_admin, name='deactivate_company_admin'),
     path('delete_company_admin', employee.delete_company_admin, name='delete_company_admin'),
+    path('delete_company', company.delete_company, name='delete_company'),
 
     path('studies_list', study.studies_list, name='studies_list'),
     path('get_company_studies', study.get_company_studies, name='get_company_studies'),

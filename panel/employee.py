@@ -100,6 +100,12 @@ def get_company_employees(request):
                 'name': name,
                 'id': employee.id,
                 'email': employee.email,
+                'industry': employee.industry.name_ru,
+                'role': employee.role.name_ru,
+                'position': employee.position.name_ru,
+                'birth_year': employee.birth_year,
+                'sex': employee.sex.name_ru,
+
                 'created_by': created_by,
                 'active': employee.company_admin_active,
                 'created_at': timezone.localtime(employee.created_at).strftime("%d.%m.%Y %H:%M:%S"),

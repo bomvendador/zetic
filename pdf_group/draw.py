@@ -586,6 +586,7 @@ def draw_table(square_data, pdf, width, x, y):
         group_name = square_data_item[4]
         group_color = square_data_item[5]
         bold = square_data_item[3]
+        email = square_data_item[1]
         report = Report.objects.filter(participant__employee__email=square_data_item[1]).latest('added')
         if report.lie_points > 4:
             pdf.set_text_color(255, 0, 0)
@@ -595,14 +596,20 @@ def draw_table(square_data, pdf, width, x, y):
         pdf.multi_cell(7, line_height, str(cnt), border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
         pdf.multi_cell((width - 10) - 7, line_height, participant_name, border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
         pdf.multi_cell(10, line_height, '', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
-        if not group_color == 'rgba(0, 0, 0, 0)':
-            color_r = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[0])
-            color_g = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[1].strip())
-            color_b = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[2].strip())
-            pdf.set_fill_color(color_r, color_g, color_b)
-            pdf.set_draw_color(color_r, color_g, color_b)
+
+        orange_color = is_orange_color(email)
+
+        if orange_color:
+            pdf.set_fill_color(241, 151, 15)
         else:
-            pdf.set_fill_color(r=255, g=255, b=255)
+            if not group_color == 'rgba(0, 0, 0, 0)':
+                color_r = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[0])
+                color_g = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[1].strip())
+                color_b = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[2].strip())
+                pdf.set_fill_color(color_r, color_g, color_b)
+                pdf.set_draw_color(color_r, color_g, color_b)
+            else:
+                pdf.set_fill_color(r=255, g=255, b=255)
         if bold == 1:
             pdf.set_draw_color(r=0, g=0, b=0)
             pdf.set_line_width(0.6)

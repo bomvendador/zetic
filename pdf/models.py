@@ -164,7 +164,7 @@ class Employee(models.Model):
 
 class Study(models.Model):
     version = models.IntegerField(null=False, default=0)
-    company = models.ForeignKey(Company, on_delete=models.RESTRICT, default=None, null=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=None, null=True)
     research_id = models.IntegerField(null=False, default=0)
     research_name = models.CharField(max_length=100, blank=True, null=True, default=None)
     name = models.CharField(max_length=100, blank=True, null=True)
@@ -235,7 +235,7 @@ class ParticipantQuestionGroups(models.Model):
 class EmailSentToParticipant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
-    participant = models.ForeignKey(Participant, on_delete=models.PROTECT, default=None, null=True)
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, null=True)
     type = models.CharField(max_length=30, blank=True, null=True, default=None)
 
     def __str__(self):
@@ -278,7 +278,7 @@ class Report(models.Model):
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Участник')
     file = models.FileField(upload_to='media/reportsPDF/', default=None)
     lang = models.CharField(max_length=2, blank=True, null=True, default=None)
-    study = models.ForeignKey(Study, on_delete=models.RESTRICT, default=None, null=True, blank=True)
+    study = models.ForeignKey(Study, on_delete=models.CASCADE, default=None, null=True, blank=True)
     comments = models.TextField(default=None, blank=True, null=True, verbose_name='Комментарии индивидуальный отчет')
 
     def __str__(self):
@@ -300,8 +300,10 @@ class ReportData(models.Model):
     category_code = models.CharField(max_length=5, blank=True, null=True, default=None)
     points = models.IntegerField(null=False, default=0)
 
+    # def __str__(self):
+    #     return f'{self.report.participant.employee.name} - {self.report.participant.employee.company.name} - {self.section_name} - {self.category_code} - {self.category_name} - {self.points}'
     def __str__(self):
-        return f'{self.report.participant.employee.name} - {self.report.participant.employee.company.name} - {self.section_name} - {self.category_code} - {self.category_name} - {self.points}'
+        return f'{self.section_name} - {self.category_code} - {self.category_name} - {self.points}'
 
     class Meta:
         verbose_name_plural = 'Данные индивидуальных отчетов'
