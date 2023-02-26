@@ -218,3 +218,35 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
+def exclude_root(record):
+    return not record.args[0].startswith('GET / HTTP')
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'exclude_root': {
+            '()': 'django.utils.log.CallbackFilter',
+            'callback': exclude_root
+        }
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        }
+    },
+    'loggers': {
+        'django.server': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'filters': ['exclude_root']
+        },
+        # 'django.request': {
+        #     'handlers': ['console'],
+        #     'level': 'INFO',
+        #     'filters': ['exclude_root']
+        # }
+    }
+}

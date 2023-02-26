@@ -6,3 +6,6 @@ data
 media/reportsPDF/*.pdf
 
 questionnaire-report.tar.gz
+
+mysql-data/
+
