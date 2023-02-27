@@ -1097,6 +1097,7 @@ $('#undistributed-participants-table').on('click', '.delete-participant-group', 
                         contentType: false,
                         error: function(data){
                             toastr.error('Ошибка', data)
+                            btn_text($('#next'), '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
                         },
                         success:function (data) {
 
@@ -1541,6 +1542,7 @@ $('#undistributed-participants-table').on('click', '.delete-participant-group', 
             error: function(data){
                 toastr.error('Ошибка', data)
                 console.log(data)
+                btn_text($('#next'), '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
             },
             success:function (data) {
                 console.log('succes - ' + data['file_name'])
@@ -1771,9 +1773,10 @@ $('#undistributed-participants-table').on('click', '.delete-participant-group', 
             }
 
         })
+        // FIXME: распределять участников по категориям, людей без категории не распределять, ошибку не показывать
         if(category_not_selected){
             toastr.error('Выберите категорию для всех нераспределенных участников')
-        }else {
+        } else {
             let distributed_cnt = 0
             $('.table-row-undistributed-participant').each(function () {
                 let fio = $(this).find('.fio').text()
@@ -1787,7 +1790,9 @@ $('#undistributed-participants-table').on('click', '.delete-participant-group', 
                 {#console.log($(this).find('.fio').text() + ' - ' + $(this).find('.category-selected').val())#}
 
                 let list_id = get_listgroup_id_by_name(square_name)
-                $('#' + list_id).append('<li class="list-group-item" id="' + email + '" data-bold="' + bold + '" data-group-name="' + group_name + '" data-group-color="' + group_color + '">' + fio + '</li>')
+                $(`#${list_id}`).append(
+                  `<li class="list-group-item" id="${email}" data-bold="${bold}" data-group-name="${group_name}" data-group-color="${group_color}" style="background-color: ${group_color}" title="${group_name}">${fio}</li>`
+                  )
                 $(this).remove()
                 distributed_cnt++
             })
