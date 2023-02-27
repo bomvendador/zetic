@@ -117,16 +117,18 @@ def draw_single_circle_arrow(pdf, x, y, number, group_color, email, bold):
     pdf.set_draw_color(0, 0, 0)
     pdf.set_text_color(0, 0, 0)
     pdf.set_font("NotoSansDisplayMedium", "", 6)
-    if is_orange_color(email):
+    if not group_color == 'rgba(0, 0, 0, 0)':
+        # FIXME: Use regex
+        color_r = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[0])
+        color_g = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[1].strip())
+        color_b = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[2].strip())
+        pdf.set_fill_color(color_r, color_g, color_b)
+        # pdf.set_draw_color(color_r, color_g, color_b)
+    elif is_orange_color(email):
         pdf.set_fill_color(241, 151, 15)
     else:
-        if not group_color == 'rgba(0, 0, 0, 0)':
-            color_r = int(group_color[group_color.find('(') + len('('):group_color.rfind(')')].split(',')[0])
-            color_g = int(group_color[group_color.find('(') + len('('):group_color.rfind(')')].split(',')[1].strip())
-            color_b = int(group_color[group_color.find('(') + len('('):group_color.rfind(')')].split(',')[2].strip())
-            pdf.set_fill_color(color_r, color_g, color_b)
-        else:
-            pdf.set_fill_color(255, 255, 255)
+        pdf.set_fill_color(r=255, g=255, b=255)
+
     pdf.circle(x, y, r=3.4, style="FD")
     if number < 10:
         pdf.text(x + 1.1, y + 2.5, str(number))
@@ -519,18 +521,18 @@ def draw_single_circle_squares(square_data, pdf, square_x_cnt, cnt):
     group_color = square_data[5]
     bold = square_data[3]
 
-    orange_color = is_orange_color(email)
-
-    if orange_color:
+    if not group_color == 'rgba(0, 0, 0, 0)':
+        # FIXME: Use regex
+        color_r = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[0])
+        color_g = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[1].strip())
+        color_b = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[2].strip())
+        pdf.set_fill_color(color_r, color_g, color_b)
+        # pdf.set_draw_color(color_r, color_g, color_b)
+    elif is_orange_color(email):
         pdf.set_fill_color(241, 151, 15)
     else:
-        if not group_color == 'rgba(0, 0, 0, 0)':
-            color_r = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[0])
-            color_g = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[1].strip())
-            color_b = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[2].strip())
-            pdf.set_fill_color(color_r, color_g, color_b)
-        else:
-            pdf.set_fill_color(255, 255, 255)
+        pdf.set_fill_color(r=255, g=255, b=255)
+
     if bold == 1:
         pdf.set_draw_color(r=0, g=0, b=0)
     else:
@@ -598,6 +600,7 @@ def draw_table(square_data, pdf, width, x, y):
         pdf.multi_cell(10, line_height, '', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
 
         if not group_color == 'rgba(0, 0, 0, 0)':
+            # FIXME: Use regex
             color_r = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[0])
             color_g = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[1].strip())
             color_b = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[2].strip())
