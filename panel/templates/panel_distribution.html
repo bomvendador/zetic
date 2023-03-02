@@ -1362,6 +1362,13 @@ $('#undistributed-participants-table').on('click', '.delete-participant-group', 
                                             html += '<option value="' + distributed_categories_participant[h] + '">' + distributed_categories_participant[h] + '</option>'
                                         }
                                     }
+
+                                    // add all categories
+                                    html += '<option value="">----</option>'
+                                    Object.values(square_names_obj).forEach(function (item) {
+                                        html += '<option value="' + item + '">' + item + '</option>'
+                                    })
+
                                     html += '</select>'
                                     html += '</td>'
                                     html += '</tr>'

@@ -15,6 +15,8 @@ def update_attributes(request, response):
     positions = response['position']
     industries = response['industry']
     roles = response['role']
+    # @FIXME: Select in for loop
+
     for item in roles:
         item_inst_qnt = EmployeeRole.objects.filter(public_code=item['id']).count()
         if item_inst_qnt == 0:

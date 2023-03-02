@@ -138,7 +138,7 @@ expand_menu_item('#menu_employees_list')
                             $(this).prop('selected', true)
                         }
                     })
-                }else {
+                } else {
                     let role = data['role']
                     let position = data['position']
                     let industry = data['industry']
@@ -305,7 +305,7 @@ expand_menu_item('#menu_employees_list')
                         for(let i=0; i < data_json.length; i++){
                             if(data_json[i]['name'] === 'null'){
                                 name = ''
-                            }else {
+                            } else {
                                 name = data_json[i]['name']
                             }
                             html += '<tr class="" id=employee_id_' + data_json[i]['id'] + '>'

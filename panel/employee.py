@@ -103,7 +103,7 @@ def get_company_employees(request):
                 'industry': employee.industry.name_ru if employee.industry else '',
                 'role': employee.role.name_ru if employee.role else '',
                 'position': employee.position.name_ru if employee.position else '',
-                'birth_year': employee.birth_year if employee.birth_year else None,
+                'birth_year': employee.birth_year if employee.birth_year else '',
                 'sex': employee.sex.name_ru if employee.sex else '',
 
                 'created_by': created_by,
@@ -297,6 +297,8 @@ def employees_list(request):
         roles = response['role']
 
     except ValueError:
+        print('Error while getting attributes from API')
+
         sex = []
         positions = []
         industries = []
