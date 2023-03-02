@@ -1,13 +1,13 @@
 expand_menu_item('#menu_employee_add')
 
 
-$(document).ready(function() {
-   $(".yearpicker").yearpicker({
-      year: 2010,
-      startYear: 1940,
-      endYear: 2010,
-   });
-});
+// $(document).ready(function() {
+//    $(".yearpicker").yearpicker({
+//       year: 2000,
+      // startYear: 1940,
+      // endYear: 2010,
+   // });
+// });
 
 $('#employee_birth_year').keypress(function (e) {
     console.log(e.which)
@@ -460,7 +460,7 @@ let company_id
             show_error_message('Необходимый лист в файле осутствует')
         }
     }
-    
+
     // $('#parse_file').on('click', handleFileSelect(document.getElementById('files')))
 
 function show_error_message(text){
@@ -517,23 +517,25 @@ $('#save_employee').on('click', function () {
     let industry = $('#employee_industry').val()
     let gender = $('#employee_gender').val()
     let employee_birth_year = $('#employee_birth_year').val()
-    if (email === '' || role === '' || position === '' || industry === ' ' || gender === '' || employee_birth_year === ''){
+    if (email === ''
+      // || role === '' || position === '' || industry === ' ' || gender === '' || employee_birth_year === ''
+    ) {
         toastr.error('Все поля, кроме имени, должны быть заполнены')
-    }else {
+    } else {
         if(!isEmail(email)) {
             toastr.error('Указан некорректный email')
         }else {
             btn_spinner($('#save_employee'))
-            let role_id = $('#employee_role option:selected').val().split('_')[2]
-            let position_id = $('#employee_position option:selected').val().split('_')[2]
-            let industry_id = $('#employee_industry option:selected').val().split('_')[2]
+            // let role_id = $('#employee_role option:selected').val().split('_')[2]
+            // let position_id = $('#employee_position option:selected').val().split('_')[2]
+            // let industry_id = $('#employee_industry option:selected').val().split('_')[2]
 
             let data = {
                     'name': name,
-                    'role_id': role_id,
+                    'role_id': role,
                     'email': email,
-                    'position_id': position_id,
-                    'industry_id': industry_id,
+                    'position_id': position,
+                    'industry_id': industry,
                     'gender': gender,
                     'employee_birth_year': employee_birth_year
             }

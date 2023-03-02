@@ -61,9 +61,9 @@ def add_employee(request):
                 'name_ru': item.name_ru
             })
 
-    print(positions)
-    print(industries)
-    print(roles)
+    # print(positions)
+    # print(industries)
+    # print(roles)
     # for role in roles:
 
     context.update({
@@ -100,11 +100,11 @@ def get_company_employees(request):
                 'name': name,
                 'id': employee.id,
                 'email': employee.email,
-                'industry': employee.industry.name_ru,
-                'role': employee.role.name_ru,
-                'position': employee.position.name_ru,
-                'birth_year': employee.birth_year,
-                'sex': employee.sex.name_ru,
+                'industry': employee.industry.name_ru if employee.industry else '',
+                'role': employee.role.name_ru if employee.role else '',
+                'position': employee.position.name_ru if employee.position else '',
+                'birth_year': employee.birth_year if employee.birth_year else None,
+                'sex': employee.sex.name_ru if employee.sex else '',
 
                 'created_by': created_by,
                 'active': employee.company_admin_active,
@@ -237,7 +237,7 @@ def save_new_employee_html(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
         employee_data = json_data['employee_data']
-        print(employee_data)
+        # print(employee_data)
         email = employee_data['email']
         check_passed = True
         if 'employee_id' in employee_data:
@@ -256,11 +256,18 @@ def save_new_employee_html(request):
                 employee_inst.created_by = request.user
             employee_inst.name = employee_data['name']
             employee_inst.email = employee_data['email']
-            employee_inst.role = EmployeeRole.objects.get(public_code=employee_data['role_id'])
-            employee_inst.position = EmployeePosition.objects.get(public_code=employee_data['position_id'])
-            employee_inst.industry = Industry.objects.get(public_code=employee_data['industry_id'])
-            employee_inst.sex = EmployeeGender.objects.get(name_ru=employee_data['gender'])
-            employee_inst.birth_year = employee_data['employee_birth_year']
+            if 'role_id' in employee_data and employee_data['role_id'] != '':
+                employee_inst.role = EmployeeRole.objects.get(public_code=employee_data['role_id'])
+            if 'position_id' in employee_data and employee_data['position_id'] != '':
+                employee_inst.position = EmployeePosition.objects.get(public_code=employee_data['position_id'])
+            if 'industry_id' in employee_data and employee_data['industry_id'] != '':
+                employee_inst.industry = Industry.objects.get(public_code=employee_data['industry_id'])
+            if 'gender' in employee_data and employee_data['gender'] != '':
+                employee_inst.sex = EmployeeGender.objects.get(public_code=employee_data['gender'])
+
+            if 'employee_birth_year' in employee_data and employee_data['employee_birth_year'] != '':
+                employee_inst.birth_year = employee_data['employee_birth_year']
+
             employee_inst.save()
 
             sync_add_employee.delay(employee_inst.id)

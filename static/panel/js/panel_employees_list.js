@@ -149,14 +149,14 @@ expand_menu_item('#menu_employees_list')
                     $('#employee_industry').html('<option id="' + industry['id'] + '">' + industry['name_ru'] + '</option>')
                     $('#employee_gender').html('<option id="' + gender['id'] + '">' + gender['name_ru'] + '</option>')
                 }
-                $("#employee_birth_year").val(data['birth_year']).yearpicker({
-                    // onChange: function (val) {
-                    //     console.log(val)
-                    // },
-                    year: data['birth_year'],
-                    startYear: 1940,
-                    endYear: 2010,
-                })
+                // $("#employee_birth_year").val(data['birth_year']).yearpicker({
+                //     // onChange: function (val) {
+                //     //     console.log(val)
+                //     // },
+                //     year: data['birth_year'],
+                //     startYear: 1940,
+                //     endYear: 2010,
+                // })
                 $("#employee_name").val(data['name'])
                 $("#employee_email").val(data['email'])
             }

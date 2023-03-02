@@ -37,6 +37,7 @@ SECRET_KEY = 'django-insecure--lfbjn3qgosinvh0ls*wb*#72ckmd4-9ozyt*^=6=_w+ah1&qg
 DEBUG = bool(int(os.environ.get("DEBUG", default=0)))
 # DEBUG = True
 # DEBUG = int(os.getenv('DEBUG'))
+print(f"In DEBUG mode: {DEBUG}")
 
 ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
@@ -111,8 +112,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'reports.wsgi.application'
 
 # Celery Broker - Redis
-CELERY_BROKER_URL = env('CELERY_HOST', default='redis://localhost:6379')
-CELERY_RESULT_BACKEND = env('CELERY_HOST', default='redis://localhost:6379')
+CELERY_BROKER_URL = env('CELERY_HOST', default='redis://redis:6379')
+CELERY_RESULT_BACKEND = env('CELERY_HOST', default='redis://redis:6379')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

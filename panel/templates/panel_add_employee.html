@@ -134,7 +134,7 @@
                                                                                 <option></option>
 
                                                                                 {% for employee_role in employee_roles %}
-                                                                                <option value="role_id_{{ employee_role.id }}">{{ employee_role.name_ru }}</option>
+                                                                                <option value="{{ employee_role.id }}">{{ employee_role.name_ru }}</option>
                                                                                 {% endfor %}
 {#                                                                                {% for employee_role in employee_roles %}#}
 {#                                                                                <option value="role_id_{{ employee_role.id }}">{{ employee_role.name_ru }}</option>#}
@@ -143,36 +143,36 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="employee_position">Должность</label>
-                                                                            <select name="user_role" class="form-control form-select" id="employee_position">
+                                                                            <select name="user_position" class="form-control form-select" id="employee_position">
                                                                                 <option></option>
 
                                                                                 {% for employee_position in employee_positions %}
-                                                                                <option value="position_id_{{ employee_position.id }}">{{ employee_position.name_ru }}</option>
+                                                                                <option value="{{ employee_position.id }}">{{ employee_position.name_ru }}</option>
                                                                                 {% endfor %}
                                                                             </select>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="employee_position">Индустрия</label>
-                                                                            <select name="user_role" class="form-control form-select" id="employee_industry">
+                                                                            <select name="user_industry" class="form-control form-select" id="employee_industry">
                                                                                 <option></option>
 
                                                                                 {% for industry in industries %}
-                                                                                <option value="industry_id_{{ industry.id }}">{{ industry.name_ru }}</option>
+                                                                                <option value="{{ industry.id }}">{{ industry.name_ru }}</option>
                                                                                 {% endfor %}
                                                                             </select>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="employee_gender">Пол</label>
-                                                                            <select name="user_role" class="form-control form-select" id="employee_gender">
+                                                                            <select name="user_gender" class="form-control form-select" id="employee_gender">
                                                                                 <option></option>
                                                                                 {% for gender in genders %}
-                                                                                <option>{{ gender.name_ru }}</option>
+                                                                                <option value="{{ gender.id }}">{{ gender.name_ru }}</option>
                                                                                 {% endfor %}
                                                                             </select>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="datepicker-year">Год рождения</label>
-                                                                        <input class="yearpicker form-control cursor-pointer" id="employee_birth_year" type="text" style="caret-color: transparent">
+                                                                        <input class="form-control cursor-pointer" id="employee_birth_year" type="text" style="caret-color: transparent">
                                                                     </div>
 
 
