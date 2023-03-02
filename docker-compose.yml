@@ -1,19 +1,15 @@
 version: "3.9"
 
 services:
-  zetic-autoheal:
+#  autoheal:
 #    restart: always
-    image: willfarrell/autoheal
-    environment:
-      - AUTOHEAL_CONTAINER_LABEL=all
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-  zetic-report-db:
-#    image: postgres:14-alpine
+#    image: willfarrell/autoheal
+#    environment:
+#      - AUTOHEAL_CONTAINER_LABEL=all
 #    volumes:
-#      - db_reports:/var/lib/postgresql/data
-    image: mysql:8
-#    command: [--ignore-db-dir=lost+found]
+#      - /var/run/docker.sock:/var/run/docker.sock
+  db:
+    image: mysql:8.0.32-oracle
     ports:
       - "3306:3306"
     environment:
@@ -23,24 +19,25 @@ services:
       MYSQL_ROOT_PASSWORD: 'password'
     restart: always
     volumes:
-      - db_reports_mysql_8:/var/lib/mysql
+      - ./mysql-init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mysql-data:/var/lib/mysql
 
-  zetic-report-redis:
+  redis:
     image: redis:6.2.5-alpine
     ports:
       - "6379:6379"
     restart: always
-  zetic-report-web:
+  web:
     build:
       dockerfile: Dockerfile
       context: .
-    command: ['/reports/entrypoint.sh']
-    healthcheck:
-      retries: 3
-      interval: 5s
-      timeout: 5s
-      start_period: 5s
-      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+    command: ['python', 'manage.py', 'runserver', '0.0:8000']
+#    healthcheck:
+#      retries: 3
+#      interval: 5s
+#      timeout: 5s
+#      start_period: 5s
+#      test: ["CMD", "curl", "-f", "http://localhost:8000"]
     volumes:
       - .:/reports
     ports:
@@ -48,14 +45,14 @@ services:
     environment:
       DB_USER: "panel"
       DB_PASSWORD: "password"
-      DB_HOST: "zetic-report-db"
+      DB_HOST: "db"
       DB_NAME: "db_reports"
       DB_PORT: "3306"
+      DEBUG: "1"
 #    env_file:
 #      - ./.env.dev
+    links:
+      - db:db
     depends_on:
-      - zetic-report-db
-      - zetic-report-redis
-
-volumes:
-  db_reports_mysql_8:
+      - db
+      - redis

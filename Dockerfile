@@ -14,8 +14,8 @@ HEALTHCHECK --interval=5s \
 RUN apt-get -y install default-libmysqlclient-dev gcc
 
 WORKDIR /reports
-COPY requirements.txt /reports/reqs-min.txt
-RUN pip install --no-cache-dir -r /reports/reqs-min.txt
+COPY requirements.txt /reports/requirements.txt
+RUN pip install --no-cache-dir -r /reports/requirements.txt
 
 COPY . /reports/
 
