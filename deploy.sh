@@ -17,10 +17,15 @@ docker save ${DOCKER_IMAGE}:${DOCKER_TAG} | gzip > $FILE
 scp ${FILE} ${HOST}:~/
 rm ${FILE}
 
+echo "Load image"
 ssh ${HOST} "docker load < $FILE"
 ssh ${HOST} "rm $FILE"
 
+echo "Restart panel"
 ssh ${HOST} "./panel-start.sh ${DOCKER_TAG}"
+
+echo "Prune images"
+ssh ${HOST} -C "docker image prune -a -f"
 exit 0
 
 ####

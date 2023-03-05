@@ -417,7 +417,9 @@ $('#save_participants').on('click', function () {
                         }
                     }else {
                         if (!invitation_code) {
-                            html += '<li><a class="dropdown-item send-email-invitation cursor-pointer">Создать анкету</a></li>'
+                            html += '<li><a class="dropdown-item cursor-pointer" ' +
+                              'data-action="create_questionnaire" ' +
+                              `data-participant-id="${id}">Создать анкету</a></li>`
                         }
                         html += '<li><a class="dropdown-item send-email-invitation cursor-pointer">Отправить приглашение</a></li>'
                         html += '<li> <a class = "dropdown-item add-question-groups cursor-pointer">Добавить группы вопросов</a></li>'

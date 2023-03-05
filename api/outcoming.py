@@ -145,11 +145,11 @@ def sync_add_employee(employee_id):
     data = {
         "name": employee.name,
         "email": employee.email,
-        "role_id": employee.role.public_code,
-        "position_id": employee.position.public_code,
-        "industry_id": employee.industry.public_code,
-        "sex_id": employee.sex.public_code,
-        "birth_year": employee.birth_year
+        "role_id": employee.role.public_code if employee.role else '',
+        "position_id": employee.position.public_code if employee.position else '',
+        "industry_id": employee.industry.public_code if employee.industry else '',
+        "sex_id": employee.sex.public_code if employee.sex else '',
+        "birth_year": employee.birth_year if employee.birth_year else 0,
     }
     url = settings.API_LINK + 'company/' + company_id + '/employee'
     response = requests.post(url,
