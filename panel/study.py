@@ -295,6 +295,7 @@ def save_study_participants(request):
                 'id': participant.id,
                 'name': name,
                 'email': participant.employee.email,
+                'invitation_code': participant.invitation_code,
                 'invitation': participant.invitation_sent,
                 'invitation_sent_datetime': invitation_sent_datetime,
                 'reminder': reminders_arr,
@@ -312,6 +313,21 @@ def save_study_participants(request):
         return JsonResponse(response)
 
 
+def create_questionnaire(request):
+    if request.method == 'POST':
 
+        ## study_id | participant_id
+        json_request = json.loads(request.body.decode('utf-8'))
+        participant_id = json_request['participant_id']
+        # public_code | questions_count
+        response = outcoming.get_code_for_invitation(request, json_request)
 
+        participant_inst = Participant.objects.get(id=participant_id)
+        participant_inst.invitation_code = response['public_code']
+        participant_inst.total_questions_qnt = response['questions_count']
+        participant_inst.save()
 
+        return JsonResponse({
+            'response': response
+        })
+    return None

@@ -77,6 +77,7 @@ urlpatterns = [
 
     path('individual_report_file_index', individual_report_file.individual_report_file_index, name='individual_report_file_index'),
 
+    path('create_questionnaire', study.create_questionnaire, name='create_questionnaire'),
     path('send_invitation_email', mail_handler.send_invitation_email, name='send_invitation_email'),
 
     path('monthly_report', tasks.monthly_report, name='monthly_report'),

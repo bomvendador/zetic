@@ -279,9 +279,38 @@ $('#tbody_modal_participants').on('click', '.participant_item', function(){
     }
 })
 
+$('body').on('click', 'a[data-action=create_questionnaire]', function() {
+  const participant_id = $(this).data('participant-id');
+  const toast = toastr.info('Создаём анкету', `${study_id} -> ${participant_id}`, {timeOut: 0})
+
+  $.ajax({
+    headers: { "X-CSRFToken": token },
+    url: url_create_questionnaire,
+    type: 'POST',
+
+    data: JSON.stringify({
+      'study_id': study_id,
+      'participant_id': participant_id
+    }),
+    processData: false,
+    contentType: false,
+    error: function(data){
+      toastr.error('Ошибка', data)
+    },
+    success: function(data){
+      toast.success("Успех")
+      window.location.reload()
+    },
+    complete: function() {
+      toast.remove()
+    },
+  })
+
+})
+
 $('#save_participants').on('click', function () {
-let employees_ids = []
-let employees_selected = {}
+    const employees_ids = []
+    const employees_selected = {}
 
     $('#tbody_modal_participants').find('.participant_item_selected').each(function () {
         let id = $(this).attr('id').split('_')[2]
@@ -294,10 +323,11 @@ let employees_selected = {}
     })
     if(employees_ids.length === 0){
         toastr.error('Выберите участников')
-    }else {
+    } else {
         let data = {
             'employees_ids': employees_ids,
-            'study_id': study_id
+            'study_id': study_id,
+            'send_email': $('#select_send_email').is(':checked'),
         }
         btn_spinner($('#save_participants'))
         $.ajax({
@@ -320,6 +350,7 @@ let employees_selected = {}
                 console.log(data_json)
                 $.each(data_json, function (key, val) {
                     let employee_invitation = val['invitation']
+                    let invitation_code = val['invitation_code']
                     let employee_email = val['email']
                     let employee_name = val['name']
                     let id = val['id']
@@ -385,6 +416,9 @@ let employees_selected = {}
                             html += '<li><a class="dropdown-item send-email-invitation cursor-pointer">Повторно отправить приглашение</a></li>'
                         }
                     }else {
+                        if (!invitation_code) {
+                            html += '<li><a class="dropdown-item send-email-invitation cursor-pointer">Создать анкету</a></li>'
+                        }
                         html += '<li><a class="dropdown-item send-email-invitation cursor-pointer">Отправить приглашение</a></li>'
                         html += '<li> <a class = "dropdown-item add-question-groups cursor-pointer">Добавить группы вопросов</a></li>'
                     }
