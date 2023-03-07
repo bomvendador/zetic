@@ -4,7 +4,7 @@
 {% block links %}
 
 <link id="style" href="{% static 'panel/plugins/yearpicker/css/yearpicker.css' %}" rel="stylesheet" />
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
 {% endblock %}
     {% block content %}
 
@@ -215,7 +215,7 @@
 
     <script src="{% static 'login/js/select2.js' %}"></script>
     <script src="{% static 'panel/plugins/yearpicker/js/yearpicker.js' %}"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 {#    <script src="{% static 'login/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>#}
 <script>
     let url_get_company_studies = "{% url 'get_company_studies' %}"
@@ -224,6 +224,6 @@
     {#let url_save_new_employee_html = "{% url 'save_new_employee_html' %}"#}
 
 </script>
-    <script src="{% static 'panel/js/panel_studies_list.js' %}"></script>
+    <script src="{% static 'panel/js/panel_studies_list.js' %}?v=2"></script>
 
 {% endblock %}

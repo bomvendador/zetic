@@ -49,12 +49,13 @@ def study_details(request, study_public_code):
         participant_questions_groups = ParticipantQuestionGroups.objects.filter(participant__study=study)
         study_question_groups = StudyQuestionGroup.objects.filter(study=study)
         reports = Report.objects.filter(study=study).order_by('-added')
+        participants = Participant.objects.filter(study=study)
         context.update(
             {
                 'study': study,
                 'participant_questions_groups': participant_questions_groups,
                 'study_question_groups': study_question_groups,
-                'participants': Participant.objects.filter(study=study),
+                'participants': participants,
                 'emails_sent': EmailSentToParticipant.objects.filter(participant__study=study, type='reminder'),
                 'reports': reports
             }

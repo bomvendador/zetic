@@ -4,6 +4,7 @@
 
 from django.http import HttpResponse, HttpResponseNotFound, StreamingHttpResponse, JsonResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 import datetime
 from pdf.title_page import title_page
 
@@ -99,6 +100,7 @@ def save_serve_file(pdf, path, file_name, request_json):
 
 
 @csrf_exempt
+@login_required(redirect_field_name=None, login_url='/login/')
 def download_single_report(request, filename):
     reportsPDF_folder = os.path.join(settings.MEDIA_ROOT, 'reportsPDF')
     group_reports_folder = os.path.join(reportsPDF_folder, 'single')
@@ -112,6 +114,7 @@ def download_single_report(request, filename):
 
 
 @csrf_exempt
+@login_required(redirect_field_name=None, login_url='/login/')
 def download_file(request, filename):
     files_folder = os.path.join(settings.MEDIA_ROOT, 'files')
     # group_reports_folder = os.path.join(files_folder, 'single')
@@ -122,6 +125,7 @@ def download_file(request, filename):
 
 
 @csrf_exempt
+@login_required(redirect_field_name=None, login_url='/login/')
 def download_group_report(request, filename):
     reportsPDF_folder = os.path.join(settings.MEDIA_ROOT, 'reportsPDF')
     group_reports_folder = os.path.join(reportsPDF_folder, 'group')

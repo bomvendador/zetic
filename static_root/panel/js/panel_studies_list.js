@@ -96,7 +96,7 @@ expand_menu_item('#menu_study_list')
 
 
     $('#main-container').on('click', '.study-details', function () {
-        let study_id = $(this).closest('tr').attr('id').split('_')[2]
+        let study_id = $(this).closest('tr').data('study-id')
         window.location.href = 'study/' + study_id
     });
 
@@ -163,7 +163,7 @@ expand_menu_item('#menu_study_list')
                             }else {
                                 name = data_json[i]['name']
                             }
-                            html += '<tr class="" id=study_id_' + data_json[i]['id'] + '>'
+                            html += `<tr class="" id="${data_json[i]['id']}" data-study-id="${data_json[i]['id']}">`
                             html += '<td>' + data_json[i]['name'] + '</td>'
                             html += '<td>' + data_json[i]['company_name'] + '</td>'
                             html += '<td>' + data_json[i]['research_name'] + '</td>'
