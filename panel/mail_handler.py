@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from login.models import UserProfile
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, ParticipantQuestionGroups, Participant, EmailSentToParticipant
 from django.http import HttpResponse, JsonResponse
@@ -57,9 +57,9 @@ def send_invitation_email(request):
 
             subject = 'Опросник ZETIC'
             if email_type == 'initial':
-                html_message = render_to_string('invitation_message.html', context)
+                html_message = render_to_string('emails/invitation_message.html', context)
             else:
-                html_message = render_to_string('invitation_message_reminder.html', context)
+                html_message = render_to_string('emails/invitation_message_reminder.html', context)
 
             plain_text = strip_tags(html_message)
             from_email = 'ZETIC <info@zetic.ru>'
@@ -116,7 +116,7 @@ def send_reminder(data):
         'participant_email': participant_email,
     }
     subject = 'Опросник ZETIC (напоминание)'
-    html_message = render_to_string('invitation_message_reminder.html', context)
+    html_message = render_to_string('emails/invitation_message_reminder.html', context)
 
     plain_text = strip_tags(html_message)
     from_email = 'ZETIC <info@zetic.ru>'
@@ -148,7 +148,7 @@ def send_month_report(data):
         'reports': data,
     }
     subject = 'Ежемесячный отчет'
-    html_message = render_to_string('month_report.html', context)
+    html_message = render_to_string('emails/month_report.html', context)
 
     plain_text = strip_tags(html_message)
     from_email = 'ZETIC <info@zetic.ru>'
@@ -177,7 +177,7 @@ def send_notification_report_made(data):
         'data': data,
     }
     subject = participant_name + ' окончил(а) заполнение опросника'
-    html_message = render_to_string('notification_report_made.html', context)
+    html_message = render_to_string('emails/notification_report_made.html', context)
 
     plain_text = strip_tags(html_message)
     from_email = 'ZETIC <info@zetic.ru>'
@@ -197,3 +197,16 @@ def send_notification_report_made(data):
             'error': 'Указан некорректный Email'
         }
         return result
+
+
+def send_participant_report(to_email, pdf_report):
+    subject = '[Zetic] Отчет по опроснику'
+    from_email = 'ZETIC <info@zetic.ru>'
+
+    html_content = render_to_string('emails/participant_report.html', {
+
+    })
+    text_content = strip_tags(html_content)
+
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+

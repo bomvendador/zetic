@@ -24,7 +24,6 @@ from pdf.save_data import save_data_to_db
 import cyrtranslit
 from reports import settings
 import time
-import fitz
 
 
 def pdf_single_generator(request_json):
@@ -44,8 +43,10 @@ def pdf_single_generator(request_json):
 
     participant_info = request_json['participant_info']
     participant_name = participant_info['name']
+
     lang = request_json['lang']
     lie_points = round(request_json['lie_points']/40 * 10)
+    # lie_points = request_json['lie_points']
 
     title_page(pdf, participant_name, lang)
 

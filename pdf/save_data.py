@@ -1,4 +1,5 @@
-from pdf.models import Report, Participant, Company, ReportData, Section, Category, Employee, Study, EmployeeRole, EmployeeGender
+from pdf.models import Report, Participant, Company, ReportData, Section, Category, Employee, Study, \
+    EmployeeRole, EmployeeGender, EmployeePosition, Industry
 from login.models import UserProfile
 from . import raw_to_t_point
 from panel import mail_handler
@@ -16,19 +17,23 @@ def save_data_to_db(request_json, file_name):
     #         company.name = request_json['company_name']
     #         company.save()
     #
-    # if Employee.objects.filter(email=request_json['participant_info']['email']).exists():
-    #     employee = Employee.objects.get(email=request_json['participant_info']['email'])
-    # else:
-    #     employee = Employee()
-    #     employee.name = request_json['participant_info']['name']
-    #     employee.sex = EmployeeGender.objects.get(public_code=request_json['participant_info']['sex'])
-    #     # employee.sex = EmployeeGender.objects.get(name_ru=request_json['participant_info']['sex'])
-    #     employee.birth_year = request_json['participant_info']['year']
-    #     employee.email = request_json['participant_info']['email']
-    #     # employee.company = company
-    #     employee.save()
-    #
-    #
+
+    employees = Employee.objects.filter(email=request_json['participant_info']['email'])
+    if employees.exists():
+        sexes = EmployeeGender.objects.filter(public_code=request_json['participant_info']['sex'])
+        roles = EmployeeRole.objects.filter(public_code=request_json['participant_info']['role'])
+        industries = Industry.objects.filter(public_code=request_json['participant_info']['industry'])
+        positions = EmployeePosition.objects.filter(public_code=request_json['participant_info']['position'])
+
+        employee = employees.first()
+        employee.name = request_json['participant_info']['name']
+        employee.birth_year = request_json['participant_info']['year']
+        employee.sex = sexes.first() if sexes.exists() else None
+        employee.role = roles.first() if roles.exists() else None
+        employee.industry = industries.first() if industries.exists() else None
+        employee.position = positions.first() if positions.exists() else None
+        employee.save()
+        print(f'Employee updated {employee.year} {employee.sex} {employee.role} {employee.industry} {employee.position}')
 
     if Study.objects.filter(public_code=request_json['study']['id']).exists():
         study = Study.objects.get(public_code=request_json['study']['id'])
