@@ -33,16 +33,17 @@ def save_data_to_db(request_json, file_name):
         employee.industry = industries.first() if industries.exists() else None
         employee.position = positions.first() if positions.exists() else None
         employee.save()
-        print(f'Employee updated {employee.year} {employee.sex} {employee.role} {employee.industry} {employee.position}')
+        print(f'Employee updated {employee.birth_year} {employee.sex} {employee.role} {employee.industry} {employee.position}')
 
-    if Study.objects.filter(public_code=request_json['study']['id']).exists():
-        study = Study.objects.get(public_code=request_json['study']['id'])
-    else:
-        study = Study()
-        # study.company = company
-        study.name = request_json['study']['name']
-        # study.name = request_json['study_name']
-        study.save()
+    study = Study.objects.get(public_code=request_json['study']['id'])
+    # if Study.objects.filter(public_code=request_json['study']['id']).exists():
+    #
+    # else:
+    #     study = Study()
+    #     # study.company = company
+    #     study.name = request_json['study']['name']
+    #     # study.name = request_json['study_name']
+    #     study.save()
 
     if Participant.objects.filter(employee__email=request_json['participant_info']['email'], study=study).exists():
 
@@ -84,13 +85,7 @@ def save_data_to_db(request_json, file_name):
             report_data.save()
 
     if participant.send_admin_notification_after_filling_up:
-        created_by_user = participant.created_by
-        user_profile = UserProfile.objects.get(user=created_by_user)
-        role_name = user_profile.role.name
-        if role_name == 'Админ заказчика':
-            to_email = created_by_user.email
-        else:
-            to_email = 'info@zetic.ru'
+        to_email = 'info@zetic.ru'
         data_for_mail = {
             'participant_name': participant.employee.name,
             'email': request_json['participant_info']['email'],

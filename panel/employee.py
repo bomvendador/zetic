@@ -131,23 +131,35 @@ def get_employee_data(request):
         response = {
             'name': name,
             'email': employee.email,
-            'gender': {
+            'gender': ({
                 'name_ru': employee.sex.name_ru,
                 'id': employee.sex.public_code,
-                       },
+            }) if employee.sex else ({
+                'name_ru': '',
+                'id': '',
+            }),
             'birth_year': employee.birth_year,
-            'role': {
+            'role': ({
                 'name_ru': employee.role.name_ru,
                 'id': employee.role.public_code,
-                       },
-            'position': {
+            }) if employee.role else ({
+                'name_ru': '',
+                'id': '',
+            }),
+            'position': ({
                 'name_ru': employee.position.name_ru,
                 'id': employee.position.public_code,
-                       },
+            }) if employee.position else ({
+                'name_ru': '',
+                'id': '',
+            }),
             'industry': {
                 'name_ru': employee.industry.name_ru,
                 'id': employee.industry.public_code,
-                       }
+            } if employee.industry else {
+                'name_ru': '',
+                'id': '',
+            },
         }
         return JsonResponse(response)
 

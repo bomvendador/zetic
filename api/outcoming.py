@@ -162,6 +162,5 @@ def sync_add_employee(employee_id):
 def get_company_studies(company_public_code):
     url = settings.API_LINK + 'company/' + company_public_code + '/study'
     response = requests.get(url, headers={'Authorization': 'Bearer ' + settings.API_BEARER})
-    print('---')
-    print(response.json())
+    print(f'---{url}\n{response.status_code} {response.content}')
     return response.json()
