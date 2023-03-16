@@ -19,7 +19,9 @@ from django.utils import timezone
 import time
 from pdf.views import pdf_single_generator
 from datetime import datetime, timedelta
-
+from panel import mail_handler
+import os
+from reports import settings
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def info_common(request):
@@ -481,6 +483,24 @@ def get_individual_reports_list(request):
         }
         return JsonResponse(response)
 
+@login_required(redirect_field_name=None, login_url='/login/')
+def send_individual_report(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        report_id = json_data['report_id']
+        report = Report.objects.get(id=report_id)
+        full_path = os.path.join(settings.MEDIA_ROOT, 'reportsPDF', 'single', report.file.name)
+        print(full_path)
+        file_data: bytes = None
+        with open(full_path, 'rb') as f:
+            file_data = f.read()
+
+        mail_handler.send_participant_report(
+            to_email='debug@borsky.dev',
+            pdf_report=file_data
+        )
+
+        return HttpResponse(status=200)
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def users_list(request):

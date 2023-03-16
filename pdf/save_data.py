@@ -4,9 +4,10 @@ from login.models import UserProfile
 from . import raw_to_t_point
 from panel import mail_handler
 from django.utils import timezone
+from fpdf import FPDF
 
 
-def save_data_to_db(request_json, file_name):
+def save_data_to_db(request_json: dict, file_name: str, pdf: FPDF):
     # print(request_json)
 
     # if 'company_name' in request_json:
@@ -94,4 +95,19 @@ def save_data_to_db(request_json, file_name):
             'to_email': to_email
         }
         mail_handler.send_notification_report_made(data_for_mail)
+
+    if participant.send_report_on_complete and participant.report_sent_at is None:
+        participant.report_sent_at = timezone.now()
+        participant.save()
+        to_email = participant.employee.email
+        data_for_mail = {
+            'participant_name': participant.employee.name,
+            'company_name': participant.employee.company.name,
+            'study_name': participant.study.name,
+            'to_email': to_email
+        }
+        mail_handler.send_participant_report(
+            to_email=to_email,
+            pdf_report=pdf.output(dest='S'),
+        )
 

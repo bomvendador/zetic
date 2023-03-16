@@ -453,10 +453,9 @@ $('#modal_send_invitation_btn').on('click', function () {
     let participant_tr_id = $('#modal_participant_name').attr('data-tr-id')
     let participant_tr = $('#' + participant_tr_id)
     let participant_id = participant_tr_id.split('_')[2]
-    let send_admin_notification_after_filling_up = 0
-    if ($('#send_admin_notification_after_filling_up').attr('checked') === 'checked') {
-        send_admin_notification_after_filling_up = 1
-    }
+    let send_admin_notification_after_filling_up = $('#send_admin_notification_after_filling_up').is(':checked')
+    let send_report = $('#send_report_on_complete').is(':checked')
+    
     $.ajax({
         headers: { "X-CSRFToken": token },
         url: url_send_invitation_email,
@@ -466,7 +465,8 @@ $('#modal_send_invitation_btn').on('click', function () {
                             'study_id': study_id,
                             'participant_id': participant_id,
                             'type': 'initial',
-                            'send_admin_notification_after_filling_up': send_admin_notification_after_filling_up
+                            'send_admin_notification_after_filling_up': send_admin_notification_after_filling_up,
+                            'send_report_on_complete': send_report,
                         }),
         processData: false,
         contentType: false,

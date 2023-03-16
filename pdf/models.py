@@ -205,6 +205,8 @@ class Participant(models.Model):
     answered_questions_qnt = models.IntegerField(default=0, null=True, blank=True)
     current_percentage = models.IntegerField(default=0, null=True, blank=True)
     send_admin_notification_after_filling_up = models.BooleanField(default=False)
+    send_report_on_complete = models.BooleanField(default=False)
+    report_sent_at = models.DateTimeField(blank=True, null=True, default=None)
 
     def __str__(self):
         if self.employee:

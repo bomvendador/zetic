@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.mail import send_mail, EmailMessage
 from login.models import UserProfile
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, ParticipantQuestionGroups, Participant, EmailSentToParticipant
 from django.http import HttpResponse, JsonResponse
@@ -8,6 +8,8 @@ from django.utils.html import strip_tags
 from django.utils import timezone
 from reports import settings
 from smtplib import SMTPException, SMTPRecipientsRefused
+from fpdf import FPDF
+import os
 
 import json
 from api.outcoming import get_code_for_invitation
@@ -21,6 +23,7 @@ def send_invitation_email(request):
         participant_id = json_request['participant_id']
         email_type = json_request['type']
         send_admin_notification_after_filling_up = json_request['send_admin_notification_after_filling_up']
+        send_report_on_complete = json_request['send_report_on_complete']
 
         participant_inst = Participant.objects.get(id=participant_id)
         participant_email = participant_inst.employee.email
@@ -77,8 +80,10 @@ def send_invitation_email(request):
                 participant_inst.invitation_sent = True
                 participant_inst.invitation_sent_datetime = timezone.now()
                 participant_inst.invitation_code = code_for_participant
-                if send_admin_notification_after_filling_up == 1:
+                if send_admin_notification_after_filling_up:
                     participant_inst.send_admin_notification_after_filling_up = True
+                if send_report_on_complete:
+                    participant_inst.send_report_on_complete = True
                 participant_inst.save()
 
                 email_sent_to_participant_inst = EmailSentToParticipant()
@@ -199,14 +204,26 @@ def send_notification_report_made(data):
         return result
 
 
-def send_participant_report(to_email, pdf_report):
-    subject = '[Zetic] Отчет по опроснику'
+def send_participant_report(to_email: str, pdf_report: bytes):
+    subject = '[Zetic] Ваш отчет готов'
     from_email = 'ZETIC <info@zetic.ru>'
 
-    html_content = render_to_string('emails/participant_report.html', {
+    logo_cid = 'logo_cid'
 
+    email = EmailMessage(subject)
+    email.from_email = from_email
+    email.to = [to_email]
+    email.content_subtype = "html"
+    email.mixed_subtype = "related"
+    email.attach_file(os.path.join(settings.BASE_DIR, 'media', 'email', 'email_logo.jpg'), 'image/jpeg', cid=logo_cid)
+    email.attach_file('report.pdf', 
+        'application/pdf',
+        content = pdf_report
+    )
+
+    email.body = render_to_string('emails/participant_report.html', {
+        logo_cid: logo_cid,
     })
-    text_content = strip_tags(html_content)
 
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+    email.send()
 

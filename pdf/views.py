@@ -79,7 +79,7 @@ def pdf_single_generator(request_json):
 
     path = "media/reportsPDF/single/"
 
-    save_data_to_db(request_json, file_name)
+    save_data_to_db(request_json, file_name, pdf)
 
     response = save_serve_file(pdf, path, file_name, request_json)
 
@@ -103,9 +103,7 @@ def save_serve_file(pdf, path, file_name, request_json):
 @csrf_exempt
 @login_required(redirect_field_name=None, login_url='/login/')
 def download_single_report(request, filename):
-    reportsPDF_folder = os.path.join(settings.MEDIA_ROOT, 'reportsPDF')
-    group_reports_folder = os.path.join(reportsPDF_folder, 'single')
-    full_path = os.path.join(group_reports_folder, filename)
+    full_path = os.path.join(settings.MEDIA_ROOT, 'reportsPDF', 'single', filename)
     print(full_path)
     with open(full_path, 'rb') as f:
         file_data = f.read()
