@@ -218,10 +218,10 @@ def send_participant_report(to_email: str, pdf_report: bytes):
     email.content_subtype = "html"
     email.mixed_subtype = "related"
 
-    with open(os.path.join(settings.BASE_DIR, 'media', 'email', 'email_logo.jpg'), 'rb') as f:
+    with open(os.path.join(settings.BASE_DIR, 'media', 'email', 'email_logo.png'), 'rb') as f:
         logo = MIMEImage(f.read())
         logo.add_header('Content-ID', '<{}>'.format(logo_cid))
-        logo.add_header('Content-Disposition', 'inline', filename='email_logo.jpg')
+        logo.add_header('Content-Disposition', 'inline', filename='email_logo.png')
         email.attach(logo)
 
     report = MIMEApplication(pdf_report, 'pdf')

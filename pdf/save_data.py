@@ -108,6 +108,6 @@ def save_data_to_db(request_json: dict, file_name: str, pdf: FPDF):
         }
         mail_handler.send_participant_report(
             to_email=to_email,
-            pdf_report=pdf.output(dest='S'),
+            pdf_report=pdf.output(),
         )
 
