@@ -491,14 +491,11 @@ def send_individual_report(request):
         report = Report.objects.get(id=report_id)
         full_path = os.path.join(settings.MEDIA_ROOT, 'reportsPDF', 'single', report.file.name)
         print(full_path)
-        file_data: bytes = None
         with open(full_path, 'rb') as f:
-            file_data = f.read()
-
-        mail_handler.send_participant_report(
-            to_email='debug@borsky.dev',
-            pdf_report=file_data
-        )
+            mail_handler.send_participant_report(
+                to_email='debug@paul-borsky.com',
+                pdf_report=f.read(),
+            )
 
         return HttpResponse(status=200)
 

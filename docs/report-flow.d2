@@ -1,0 +1,22 @@
+
+shape: sequence_diagram
+
+django_admin: Django Admin
+n: Nadya
+panel: Panel
+console: Console
+report: PDF
+
+Report Generate {
+    console.a -> panel.a: Questionnaire Complete
+    panel.a <-> django_admin.a: Load Parameters
+    panel.a -> panel.a: Generate Report
+    panel.a -> report.a: Save PDF
+    panel.a -> panel.a: Send Email
+}
+
+Update Parameters {
+    n.a -> django_admin.b: Update Parameters
+    n.a -> console.b: Sync Report
+    console.b -> panel.b: Report Generate
+}

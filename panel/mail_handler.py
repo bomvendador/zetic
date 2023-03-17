@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.core.mail import send_mail, EmailMessage
+from email.mime.image import MIMEImage
+from email.mime.application import MIMEApplication
 from login.models import UserProfile
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, ParticipantQuestionGroups, Participant, EmailSentToParticipant
 from django.http import HttpResponse, JsonResponse
@@ -215,15 +217,20 @@ def send_participant_report(to_email: str, pdf_report: bytes):
     email.to = [to_email]
     email.content_subtype = "html"
     email.mixed_subtype = "related"
-    email.attach_file(os.path.join(settings.BASE_DIR, 'media', 'email', 'email_logo.jpg'), 'image/jpeg', cid=logo_cid)
-    email.attach_file('report.pdf', 
-        'application/pdf',
-        content = pdf_report
-    )
+
+    with open(os.path.join(settings.BASE_DIR, 'media', 'email', 'email_logo.jpg'), 'rb') as f:
+        logo = MIMEImage(f.read())
+        logo.add_header('Content-ID', '<{}>'.format(logo_cid))
+        logo.add_header('Content-Disposition', 'inline', filename='email_logo.jpg')
+        email.attach(logo)
+
+    report = MIMEApplication(pdf_report, 'pdf')
+    report.add_header('Content-Disposition', 'attachment', filename='report.pdf')
+    email.attach(report)
 
     email.body = render_to_string('emails/participant_report.html', {
         logo_cid: logo_cid,
     })
 
-    email.send()
+    email.send(fail_silently=False)
 
