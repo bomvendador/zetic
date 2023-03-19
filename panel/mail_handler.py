@@ -10,7 +10,6 @@ from django.utils.html import strip_tags
 from django.utils import timezone
 from reports import settings
 from smtplib import SMTPException, SMTPRecipientsRefused
-from fpdf import FPDF
 import os
 
 import json
@@ -55,9 +54,11 @@ def send_invitation_email(request):
             else:
                 code_for_participant = participant_inst.invitation_code
 
+            logo_cid = 'logo'
             context = {
                 'code_for_participant': code_for_participant,
                 'participant_email': participant_email,
+                'logo_cid': logo_cid,
             }
 
             subject = 'Опросник ZETIC'
@@ -66,19 +67,20 @@ def send_invitation_email(request):
             else:
                 html_message = render_to_string('emails/invitation_message_reminder.html', context)
 
-            plain_text = strip_tags(html_message)
+            # plain_text = strip_tags(html_message)
             from_email = 'ZETIC <info@zetic.ru>'
             to_email = participant_email
 
-
             try:
-                send_mail(
-                    subject,
-                    plain_text,
-                    from_email,
-                    [to_email],
-                    html_message=html_message
-                )
+                email = EmailMessage(subject)
+                email.from_email = from_email
+                email.to = [to_email]
+                email.content_subtype = "html"
+                email.mixed_subtype = "related"
+                email.attach(create_logo_mime(logo_cid))
+                email.body = html_message
+                email.send(fail_silently=False)
+
                 participant_inst.invitation_sent = True
                 participant_inst.invitation_sent_datetime = timezone.now()
                 participant_inst.invitation_code = code_for_participant
@@ -117,10 +119,11 @@ def send_reminder(data):
     participant_email = participant_inst.employee.email
 
     code_for_participant = participant_inst.invitation_code
-
+    logo_cid = 'logo'
     context = {
         'code_for_participant': code_for_participant,
         'participant_email': participant_email,
+        'logo_cid': logo_cid,
     }
     subject = 'Опросник ZETIC (напоминание)'
     html_message = render_to_string('emails/invitation_message_reminder.html', context)
@@ -130,13 +133,14 @@ def send_reminder(data):
     to_email = participant_email
 
     try:
-        send_mail(
-            subject,
-            plain_text,
-            from_email,
-            [to_email],
-            html_message=html_message
-        )
+        email = EmailMessage(subject)
+        email.from_email = from_email
+        email.to = [to_email]
+        email.content_subtype = "html"
+        email.mixed_subtype = "related"
+        email.attach(create_logo_mime(logo_cid))
+        email.body = html_message
+        email.send(fail_silently=False)
 
         email_sent_to_participant_inst = EmailSentToParticipant()
         email_sent_to_participant_inst.participant = participant_inst
@@ -151,8 +155,10 @@ def send_reminder(data):
 
 
 def send_month_report(data):
+    logo_cid = 'logo'
     context = {
         'reports': data,
+        'logo_cid': logo_cid,
     }
     subject = 'Ежемесячный отчет'
     html_message = render_to_string('emails/month_report.html', context)
@@ -162,13 +168,14 @@ def send_month_report(data):
     to_email = 'info@zetic.ru'
 
     try:
-        send_mail(
-            subject,
-            plain_text,
-            from_email,
-            [to_email],
-            html_message=html_message
-        )
+        email = EmailMessage(subject)
+        email.from_email = from_email
+        email.to = [to_email]
+        email.content_subtype = "html"
+        email.mixed_subtype = "related"
+        email.attach(create_logo_mime(logo_cid))
+        email.body = html_message
+        email.send(fail_silently=False)
 
     except SMTPRecipientsRefused as e:
         result = {
@@ -180,8 +187,10 @@ def send_month_report(data):
 def send_notification_report_made(data):
     participant_name = data['participant_name']
     to_email = data['to_email']
+    logo_cid = 'logo'
     context = {
         'data': data,
+        'logo_cid': logo_cid,
     }
     subject = participant_name + ' окончил(а) заполнение опросника'
     html_message = render_to_string('emails/notification_report_made.html', context)
@@ -191,13 +200,14 @@ def send_notification_report_made(data):
     to_email = to_email
 
     try:
-        send_mail(
-            subject,
-            plain_text,
-            from_email,
-            [to_email],
-            html_message=html_message
-        )
+        email = EmailMessage(subject)
+        email.from_email = from_email
+        email.to = [to_email]
+        email.content_subtype = "html"
+        email.mixed_subtype = "related"
+        email.attach(create_logo_mime(logo_cid))
+        email.body = html_message
+        email.send(fail_silently=False)
 
     except SMTPRecipientsRefused as e:
         result = {
@@ -218,11 +228,7 @@ def send_participant_report(to_email: str, pdf_report: bytes):
     email.content_subtype = "html"
     email.mixed_subtype = "related"
 
-    with open(os.path.join(settings.BASE_DIR, 'media', 'email', 'email_logo.png'), 'rb') as f:
-        logo = MIMEImage(f.read())
-        logo.add_header('Content-ID', '<{}>'.format(logo_cid))
-        logo.add_header('Content-Disposition', 'inline', filename='email_logo.png')
-        email.attach(logo)
+    email.attach(create_logo_mime(logo_cid))
 
     report = MIMEApplication(pdf_report, 'pdf')
     report.add_header('Content-Disposition', 'attachment', filename='report.pdf')
@@ -234,3 +240,10 @@ def send_participant_report(to_email: str, pdf_report: bytes):
 
     email.send(fail_silently=False)
 
+
+def create_logo_mime(logo_cid: str) -> MIMEImage:
+    with open(os.path.join(settings.BASE_DIR, 'media', 'email', 'email_logo.png'), 'rb') as f:
+        logo = MIMEImage(f.read())
+        logo.add_header('Content-ID', '<{}>'.format(logo_cid))
+        logo.add_header('Content-Disposition', 'inline', filename='email_logo.png')
+        return logo
