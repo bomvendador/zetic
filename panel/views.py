@@ -490,14 +490,17 @@ def send_individual_report(request):
         report_id = json_data['report_id']
         report = Report.objects.get(id=report_id)
         full_path = os.path.join(settings.MEDIA_ROOT, 'reportsPDF', 'single', report.file.name)
-        print(full_path)
+        sent = False
         with open(full_path, 'rb') as f:
+            sent = True
             mail_handler.send_participant_report(
-                to_email='debug@paul-borsky.com',
+                to_email=report.participant.employee.email,
                 pdf_report=f.read(),
             )
-
-        return HttpResponse(status=200)
+        if sent:
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse(status=400)
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def users_list(request):
