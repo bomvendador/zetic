@@ -490,13 +490,17 @@ def send_individual_report(request):
         report_id = json_data['report_id']
         report = Report.objects.get(id=report_id)
         full_path = os.path.join(settings.MEDIA_ROOT, 'reportsPDF', 'single', report.file.name)
+        print(full_path)
         sent = False
         with open(full_path, 'rb') as f:
             sent = True
+            report.participant.report_sent_at = timezone.now()
+            report.participant.save()
             mail_handler.send_participant_report(
                 to_email=report.participant.employee.email,
                 pdf_report=f.read(),
             )
+
         if sent:
             return HttpResponse(status=200)
         else:
