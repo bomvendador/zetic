@@ -67,6 +67,7 @@ def companies_list(request):
 def edit_company(request, company_id):
     context = info_common(request)
     company_inst = Company.objects.get(id=company_id)
+    print(f'Is Ros: {company_inst.name == "Ростелеком"}')
     context.update(
         {
             'company': company_inst,

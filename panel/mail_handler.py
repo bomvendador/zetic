@@ -62,11 +62,16 @@ def send_invitation_email(request):
             }
 
             subject = 'Опросник ZETIC'
-            if email_type == 'initial':
-                html_message = render_to_string('emails/invitation_message.html', context)
-            else:
-                html_message = render_to_string('emails/invitation_message_reminder.html', context)
+            email_template = 'emails/invitation_message.html'
 
+            if participant_inst.employee.company.name == "Ростелеком":
+                subject = 'Приглашение сотрудников Ростелеком к тестированию опросника выгорания'
+                email_template = 'emails/invitation_message_rt.html'
+
+            if email_type != 'initial':
+                email_template = 'emails/invitation_message_reminder.html'
+
+            html_message = render_to_string(email_template, context)
             # plain_text = strip_tags(html_message)
             from_email = 'ZETIC <info@zetic.ru>'
             to_email = participant_email
