@@ -1,27 +1,28 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseServerError, JsonResponse, HttpResponseRedirect
-from django.contrib.auth import authenticate, login, logout
-
 import json
-# Create your views here.
+import logging
+import os
+import time
+from datetime import datetime, timedelta
 
-from pdf.models import Company, Participant, ReportData, Report, Category, ReportGroup, ReportGroupSquare, Industry, \
-    Employee, EmployeeRole, EmployeePosition, EmployeeGender, Study, StudyQuestionGroup, Section
-# from django.contrib.auth.models import User
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
+from django.shortcuts import render
+from django.utils import timezone
 
 from login.models import UserRole, UserProfile, User
-from login.views import home as login_home
-
-from pdf_group.views import pdf_group_generator
-from django.contrib.auth.decorators import login_required, wraps
-from login import urls as login_urls
-from django.utils import timezone
-import time
-from pdf.views import pdf_single_generator
-from datetime import datetime, timedelta
 from panel import mail_handler
-import os
+from pdf.models import Company, Participant, ReportData, Report, Category, ReportGroup, ReportGroupSquare, Employee, \
+    EmployeeGender, Study
+from pdf.views import pdf_single_generator
+from pdf_group.views import pdf_group_generator
 from reports import settings
+
+# Create your views here.
+# from django.contrib.auth.models import User
+
+logger = logging.getLogger(__name__)
+
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def info_common(request):
@@ -43,16 +44,15 @@ def info_common(request):
 
 
 def millisec_to_time(millisec):
-    d = datetime(1, 1, 1)+millisec
+    d = datetime(1, 1, 1) + millisec
     if d.day - 1 == 0:
         return "{0}:{1}:{2}".format(d.hour, d.minute, d.second)
     else:
-        return "{0}:{1}:{2}:{3}".format(d.day-1, d.hour, d.minute, d.second)
+        return "{0}:{1}:{2}:{3}".format(d.day - 1, d.hour, d.minute, d.second)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def home(request):
-
     context = info_common(request)
 
     participants = Participant.objects.filter(created_by=request.user)
@@ -146,12 +146,10 @@ def home(request):
     points_3_arr = []
     points_4_arr = []
 
-
     # points_1_copy = points_1.copy()
     # for k_copy, v_copy in points_1_copy:
     #     for k, v in points_1:
     #         if not k_copy == k:
-
 
     # for k, v in points_2:
     #     points_2_arr.append(v)
@@ -223,7 +221,6 @@ def home(request):
                 'group_reports_qnt': ReportGroup.objects.filter(company=company).count()
             })
         if userprofile.role.name == 'Админ' or userprofile.role.name == 'Суперадмин':
-
             stats.update({
                 'companies_qnt': Company.objects.all().count(),
                 'employees_qnt': Employee.objects.all().count(),
@@ -282,7 +279,6 @@ def team_distribution(request):
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def get_company_participants(request):
-
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
         company = json_data['company']
@@ -347,8 +343,12 @@ def save_group_report_data(request):
         # print(json_data)
         # for item in json_data['square_results']:
         #     print(item)
-        response = pdf_group_generator(json_data)
-        return response
+        try:
+            response = pdf_group_generator(json_data)
+            return response
+        except Exception as e:
+            logger.error('An error occurred: %s', str(e), exc_info=True)
+            return HttpResponseBadRequest('Ошибка при создании отчета')
 
 
 # список командных отчетов
@@ -483,6 +483,7 @@ def get_individual_reports_list(request):
         }
         return JsonResponse(response)
 
+
 @login_required(redirect_field_name=None, login_url='/login/')
 def send_individual_report(request):
     if request.method == 'POST':
@@ -505,6 +506,7 @@ def send_individual_report(request):
             return HttpResponse(status=200)
         else:
             return HttpResponse(status=400)
+
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def users_list(request):
@@ -700,7 +702,7 @@ def save_migration(request):
                             study_inst.save()
 
                         if not Participant.objects.filter(employee__email=participant_info['email'],
-                                                      study=study_inst).exists():
+                                                          study=study_inst).exists():
                             participant_inst = Participant()
                             participant_inst.employee = employee_inst
                             participant_inst.started_at = timezone.now()
@@ -710,7 +712,8 @@ def save_migration(request):
                             participant_inst.invitation_sent = True
                             participant_inst.total_questions_qnt = int(participant['total_questions_qnt'])
                             participant_inst.answered_questions_qnt = int(participant['answered_questions_qnt'])
-                            participant_inst.current_percentage = int(participant['total_questions_qnt']) / int(participant['answered_questions_qnt']) * 100
+                            participant_inst.current_percentage = int(participant['total_questions_qnt']) / int(
+                                participant['answered_questions_qnt']) * 100
                             participant_inst.save()
 
                         pdf_single_generator(report_data)
@@ -728,4 +731,3 @@ def save_migration(request):
         print(f'time - {finished_time - start_time}')
         # print(f'reports_qnt - {reports_qnt} employee_qnt - {employee_qnt}')
         return HttpResponse('ok')
-

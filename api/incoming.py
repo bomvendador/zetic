@@ -63,7 +63,12 @@ def data_for_report(request):
     if 'type' in request_json:
         return pdf_group_generator(request_json)
     else:
-        return pdf_single_generator(request_json)
+        try:
+            return pdf_single_generator(request_json)
+        except Exception as e:
+            print(request_json)
+            print(e)
+            return HttpResponseServerError('JSON request error')
 
 
 @api_view(['POST'])

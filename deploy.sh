@@ -12,8 +12,10 @@ docker build \
         --platform linux/amd64 \
         --file Dockerfile .
 
+echo "Save image"
 docker save ${DOCKER_IMAGE}:${DOCKER_TAG} | gzip > $FILE
 
+echo "Upload image"
 scp ${FILE} ${HOST}:~/
 rm ${FILE}
 

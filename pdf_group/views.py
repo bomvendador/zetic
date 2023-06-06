@@ -126,6 +126,7 @@ def pdf_group_generator(request_json):
 
     path = "media/reportsPDF/group/"
 
+    print(f'file_name = {file_name} path = {path}')
     save_data_group(request_json, file_name)
     # print(request_json['square_results'])
     response = save_serve_file(pdf, path, file_name, request_json)
