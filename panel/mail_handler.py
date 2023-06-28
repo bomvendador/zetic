@@ -68,6 +68,9 @@ def send_invitation_email(request):
                 subject = 'Приглашение сотрудников Ростелеком к тестированию опросника выгорания'
                 email_template = 'emails/invitation_message_rt.html'
 
+            if participant_inst.employee.email.endswith('@yandex-team.ru'):
+                email_template = 'emails/invitation_message_ya.html'
+
             if email_type != 'initial':
                 email_template = 'emails/invitation_message_reminder.html'
 
@@ -239,7 +242,12 @@ def send_participant_report(to_email: str, pdf_report: bytes):
     report.add_header('Content-Disposition', 'attachment', filename='report.pdf')
     email.attach(report)
 
-    email.body = render_to_string('emails/participant_report.html', {
+    email_template = 'emails/participant_report.html'
+
+    if to_email.endswith('@yandex-team.ru'):
+        email_template = 'emails/invitation_message_ya.html'
+
+    email.body = render_to_string(email_template, {
         logo_cid: logo_cid,
     })
 
