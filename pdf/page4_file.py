@@ -89,7 +89,7 @@ self-affirmation'''
     else:
         scale_name = u'''Stress minimization'''
         draw_full_scale(pdf, scale_name, x, y + 12, y + 12, json_section, '2_4',
-                        scale_element_file, lang)
+                        scale_element_file, lang, participant_info)
 
     y += 15
     if lang == 'ru':
@@ -126,7 +126,8 @@ self-affirmation'''
     if lang == 'ru':
         scale_name = u'''Антиципирующее
 избегание'''
-        draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_8', scale_element_file, lang, participant_info)
+        draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_8',
+                        scale_element_file, lang, participant_info)
     else:
         scale_name = u'''Avoidance'''
         draw_full_scale(pdf, scale_name, x, y + 12, y + 12 - 2, json_section, '2_8',

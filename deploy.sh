@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+set -o errexit
+set -o pipefail
+set -o nounset
+
 #region Configuration
 DOCKER_IMAGE=zetic/zetic-panel
 DOCKER_TAG=$1 #$(git symbolic-ref --short HEAD)

@@ -1,4 +1,4 @@
-import datetime
+import datetime, traceback
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.views import APIView
@@ -68,6 +68,7 @@ def data_for_report(request):
         except Exception as e:
             print(request_json)
             print(e)
+            traceback.print_exc()
             return HttpResponseServerError('JSON request error')
 
 
