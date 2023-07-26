@@ -244,7 +244,7 @@ def send_participant_report(to_email: str, pdf_report: bytes):
 
     email_template = 'emails/participant_report.html'
 
-    if to_email.endswith('@yandex-team.ru'):
+    if to_email.endswith('@yandex-team.ru') or to_email.endswith('@zetic.ru'):
         email_template = 'emails/invitation_message_ya.html'
 
     email.body = render_to_string(email_template, {
