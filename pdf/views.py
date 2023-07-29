@@ -27,7 +27,7 @@ from pdf.title_page import title_page
 from reports import settings
 
 
-def pdf_single_generator(request_json):
+def pdf_single_generator_v1(request_json):
     time_start = time.perf_counter()
     pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
     pdf.add_font(

@@ -1,9 +1,30 @@
+from abc import ABC, abstractmethod
+from enum import Enum
+from typing import Dict
+
+
+class AgeGroup(Enum):
+    MAYOR = "Mayor"
+    JOVEN = "Joven"
+
+    @staticmethod
+    def from_age(year: int):
+        if year < 1991:
+            return AgeGroup.MAYOR
+        else:
+            return AgeGroup.JOVEN
+
+
 class RawToTPointMapper:
-    _gender: str = "N/A"
-    _year_range: int = 1992
+    def __init__(
+        self,
+        gender: str,
+        age: AgeGroup,
+        points_mapper: Dict[str, Dict[str, Dict[int, int]]],
+    ):
+        self._gender = gender
+        self._age = age
+        self._points = points_mapper
 
-    _data: dict
-
-    def map_to_t_points(self, section: int, category: int, points: int):
-
-        return 0
+    def map_to_t_points(self, section: str, category: str, points: int):
+        return self._points[section][category][points]

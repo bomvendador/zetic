@@ -17,7 +17,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from pdf.models import Participant, Company, Employee
-from pdf.views import pdf_single_generator
+from pdf.views import pdf_single_generator_v1
 from pdf_group.views import pdf_group_generator
 
 TOKEN = "b55a461f947c6d315ad67f1d65d2ec592e400679"
@@ -60,21 +60,20 @@ def participant_started(request):
 @permission_classes([IsAuthenticated])
 @parser_classes([JSONParser])
 def single_report_v1(request):
-    if request.method == "POST":
-        try:
-            request_json = json.loads(request.body.decode("utf-8"))
-        except KeyError:
-            HttpResponseServerError("JSON request error")
-    else:
-        file = "media/json/single-report-example.json"
-        with open(file, encoding="utf8") as f:
-            request_json = json.load(f)
+    if request.method != "POST":
+        return HttpResponseServerError("Only POST method allowed")
+
+    try:
+        request_json = json.loads(request.body.decode("utf-8"))
+    except KeyError:
+        return HttpResponseServerError("JSON request error")
+
     # print(request_json['type'])
     if "type" in request_json:
         return pdf_group_generator(request_json)
     else:
         try:
-            return pdf_single_generator(request_json)
+            return pdf_single_generator_v1(request_json)
         except Exception as e:
             print(request_json)
             print(e)

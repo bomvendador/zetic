@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
-from pdf.views import pdf_single_generator
+from pdf.views import pdf_single_generator_v1
 from pdf_group.views import pdf_group_generator
 
 
@@ -34,7 +34,7 @@ def json_request(request):
     if "type" in request_json:
         return pdf_group_generator(request_json)
     else:
-        return pdf_single_generator(request_json)
+        return pdf_single_generator_v1(request_json)
 
 
 def home(request):

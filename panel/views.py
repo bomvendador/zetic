@@ -24,7 +24,7 @@ from pdf.models import (
     EmployeeGender,
     Study,
 )
-from pdf.views import pdf_single_generator
+from pdf.views import pdf_single_generator_v1
 from pdf_group.views import pdf_group_generator
 from reports import settings
 
@@ -783,7 +783,7 @@ def save_migration(request):
                             )
                             participant_inst.save()
 
-                        pdf_single_generator(report_data)
+                        pdf_single_generator_v1(report_data)
                     # report_code = participant['report']['code']
                     # participant_info = participant['report']['participant_info']
 
