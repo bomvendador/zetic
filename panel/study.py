@@ -1,15 +1,17 @@
-from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, ParticipantQuestionGroups, Participant, \
-    EmailSentToParticipant, Report, StudyQuestionGroup
-from login.models import UserProfile
-from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseServerError, JsonResponse
 import json
+
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import render
 from django.utils import timezone
 
-from .views import info_common
 from api import outcoming
+from login.models import UserProfile
+from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, \
+    ParticipantQuestionGroups, Participant, \
+    EmailSentToParticipant, Report, StudyQuestionGroup
+from .views import info_common
 
 
 @login_required(redirect_field_name=None, login_url='/login/')

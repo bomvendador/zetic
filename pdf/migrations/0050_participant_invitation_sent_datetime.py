@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pdf', '0049_employee_user_alter_employee_created_by'),
+        ("pdf", "0049_employee_user_alter_employee_created_by"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='participant',
-            name='invitation_sent_datetime',
+            model_name="participant",
+            name="invitation_sent_datetime",
             field=models.DateTimeField(blank=True, default=None, null=True),
         ),
     ]

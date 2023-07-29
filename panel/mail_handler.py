@@ -1,30 +1,36 @@
-from django.conf import settings
-from django.core.mail import send_mail, EmailMessage
-from email.mime.image import MIMEImage
-from email.mime.application import MIMEApplication
-from login.models import UserProfile
-from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, ParticipantQuestionGroups, Participant, EmailSentToParticipant
-from django.http import HttpResponse, JsonResponse
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
-from django.utils import timezone
-from reports import settings
-from smtplib import SMTPException, SMTPRecipientsRefused
-import os
-
 import json
+import os
+from email.mime.application import MIMEApplication
+from email.mime.image import MIMEImage
+from smtplib import SMTPRecipientsRefused
+
+from django.conf import settings
+from django.core.mail import EmailMessage
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+from django.utils import timezone
+from django.utils.html import strip_tags
+
 from api.outcoming import get_code_for_invitation
+from login.models import UserProfile
+from pdf.models import (
+    Participant,
+    EmailSentToParticipant,
+)
+from reports import settings
 
 
 def send_invitation_email(request):
-    if request.method == 'POST':
-        json_request = json.loads(request.body.decode('utf-8'))
+    if request.method == "POST":
+        json_request = json.loads(request.body.decode("utf-8"))
         print(json_request)
-        study_id = json_request['study_id']
-        participant_id = json_request['participant_id']
-        email_type = json_request['type']
-        send_admin_notification_after_filling_up = json_request['send_admin_notification_after_filling_up']
-        send_report_on_complete = json_request['send_report_on_complete']
+        study_id = json_request["study_id"]
+        participant_id = json_request["participant_id"]
+        email_type = json_request["type"]
+        send_admin_notification_after_filling_up = json_request[
+            "send_admin_notification_after_filling_up"
+        ]
+        send_report_on_complete = json_request["send_report_on_complete"]
 
         participant_inst = Participant.objects.get(id=participant_id)
         participant_email = participant_inst.employee.email
@@ -34,49 +40,53 @@ def send_invitation_email(request):
 
         result = {}
 
-        if user_profile.role.name == 'Админ заказчика':
+        if user_profile.role.name == "Админ заказчика":
             company = participant_inst.employee.company
             if not company.active:
-                result = {
-                    'company_error': 'company_deactivated'
-                }
+                result = {"company_error": "company_deactivated"}
                 check_passed = False
         if check_passed:
-            if email_type == 'initial':
+            if email_type == "initial":
                 if participant_inst.invitation_code is None:
-                    get_code_for_invitation_response = get_code_for_invitation(request, json_request)
-                    code_for_participant = get_code_for_invitation_response['public_code']
+                    get_code_for_invitation_response = get_code_for_invitation(
+                        request, json_request
+                    )
+                    code_for_participant = get_code_for_invitation_response[
+                        "public_code"
+                    ]
                     participant_inst.invitation_code = code_for_participant
-                    participant_inst.total_questions_qnt = get_code_for_invitation_response['questions_count']
+                    participant_inst.total_questions_qnt = (
+                        get_code_for_invitation_response["questions_count"]
+                    )
                     participant_inst.save()
                 else:
                     code_for_participant = participant_inst.invitation_code
             else:
                 code_for_participant = participant_inst.invitation_code
 
-            logo_cid = 'logo'
+            logo_cid = "logo"
             context = {
-                'code_for_participant': code_for_participant,
-                'participant_email': participant_email,
-                'logo_cid': logo_cid,
+                "code_for_participant": code_for_participant,
+                "participant_email": participant_email,
+                "logo_cid": logo_cid,
             }
 
-            subject = 'Опросник ZETIC'
-            email_template = 'emails/invitation_message.html'
+            subject = "Опросник ZETIC"
+            email_template = "emails/invitation_message.html"
 
             if participant_inst.employee.company.name == "Ростелеком":
-                subject = 'Приглашение сотрудников Ростелеком к тестированию опросника выгорания'
-                email_template = 'emails/invitation_message_rt.html'
+                subject = "Приглашение сотрудников Ростелеком к тестированию опросника выгорания"
+                email_template = "emails/invitation_message_rt.html"
 
-            if participant_inst.employee.email.endswith('@yandex-team.ru'):
-                email_template = 'emails/invitation_message_ya.html'
+            if participant_inst.employee.email.endswith("@yandex-team.ru"):
+                email_template = "emails/invitation_message_ya.html"
 
-            if email_type != 'initial':
-                email_template = 'emails/invitation_message_reminder.html'
+            if email_type != "initial":
+                email_template = "emails/invitation_message_reminder.html"
 
             html_message = render_to_string(email_template, context)
             # plain_text = strip_tags(html_message)
-            from_email = 'ZETIC <info@zetic.ru>'
+            from_email = "ZETIC <info@zetic.ru>"
             to_email = participant_email
 
             try:
@@ -103,41 +113,41 @@ def send_invitation_email(request):
                 email_sent_to_participant_inst.type = email_type
                 email_sent_to_participant_inst.save()
 
-                result.update({
-                    'datetime_invitation_sent': timezone.localtime(participant_inst.invitation_sent_datetime).strftime("%d.%m.%Y %H:%M"),
-                    'questions_count': participant_inst.total_questions_qnt
-                })
+                result.update(
+                    {
+                        "datetime_invitation_sent": timezone.localtime(
+                            participant_inst.invitation_sent_datetime
+                        ).strftime("%d.%m.%Y %H:%M"),
+                        "questions_count": participant_inst.total_questions_qnt,
+                    }
+                )
 
             except SMTPRecipientsRefused as e:
                 print(e)
-                result.update({
-                    'error': 'Указан некорректный Email участника'
-                })
-        response = {
-            'response': result
-        }
+                result.update({"error": "Указан некорректный Email участника"})
+        response = {"response": result}
 
         return JsonResponse(response)
 
 
 def send_reminder(data):
-    participant_id = data['participant_id']
-    email_type = data['type']
+    participant_id = data["participant_id"]
+    email_type = data["type"]
     participant_inst = Participant.objects.get(id=participant_id)
     participant_email = participant_inst.employee.email
 
     code_for_participant = participant_inst.invitation_code
-    logo_cid = 'logo'
+    logo_cid = "logo"
     context = {
-        'code_for_participant': code_for_participant,
-        'participant_email': participant_email,
-        'logo_cid': logo_cid,
+        "code_for_participant": code_for_participant,
+        "participant_email": participant_email,
+        "logo_cid": logo_cid,
     }
-    subject = 'Опросник ZETIC (напоминание)'
-    html_message = render_to_string('emails/invitation_message_reminder.html', context)
+    subject = "Опросник ZETIC (напоминание)"
+    html_message = render_to_string("emails/invitation_message_reminder.html", context)
 
     plain_text = strip_tags(html_message)
-    from_email = 'ZETIC <info@zetic.ru>'
+    from_email = "ZETIC <info@zetic.ru>"
     to_email = participant_email
 
     try:
@@ -156,24 +166,22 @@ def send_reminder(data):
         email_sent_to_participant_inst.save()
 
     except SMTPRecipientsRefused as e:
-        result = {
-            'error': 'Указан некорректный Email участника'
-        }
+        result = {"error": "Указан некорректный Email участника"}
         return result
 
 
 def send_month_report(data):
-    logo_cid = 'logo'
+    logo_cid = "logo"
     context = {
-        'reports': data,
-        'logo_cid': logo_cid,
+        "reports": data,
+        "logo_cid": logo_cid,
     }
-    subject = 'Ежемесячный отчет'
-    html_message = render_to_string('emails/month_report.html', context)
+    subject = "Ежемесячный отчет"
+    html_message = render_to_string("emails/month_report.html", context)
 
     plain_text = strip_tags(html_message)
-    from_email = 'ZETIC <info@zetic.ru>'
-    to_email = 'info@zetic.ru'
+    from_email = "ZETIC <info@zetic.ru>"
+    to_email = "info@zetic.ru"
 
     try:
         email = EmailMessage(subject)
@@ -186,25 +194,23 @@ def send_month_report(data):
         email.send(fail_silently=False)
 
     except SMTPRecipientsRefused as e:
-        result = {
-            'error': 'Указан некорректный Email'
-        }
+        result = {"error": "Указан некорректный Email"}
         return result
 
 
 def send_notification_report_made(data):
-    participant_name = data['participant_name']
-    to_email = data['to_email']
-    logo_cid = 'logo'
+    participant_name = data["participant_name"]
+    to_email = data["to_email"]
+    logo_cid = "logo"
     context = {
-        'data': data,
-        'logo_cid': logo_cid,
+        "data": data,
+        "logo_cid": logo_cid,
     }
-    subject = participant_name + ' окончил(а) заполнение опросника'
-    html_message = render_to_string('emails/notification_report_made.html', context)
+    subject = participant_name + " окончил(а) заполнение опросника"
+    html_message = render_to_string("emails/notification_report_made.html", context)
 
     plain_text = strip_tags(html_message)
-    from_email = 'ZETIC <info@zetic.ru>'
+    from_email = "ZETIC <info@zetic.ru>"
     to_email = to_email
 
     try:
@@ -218,17 +224,15 @@ def send_notification_report_made(data):
         email.send(fail_silently=False)
 
     except SMTPRecipientsRefused as e:
-        result = {
-            'error': 'Указан некорректный Email'
-        }
+        result = {"error": "Указан некорректный Email"}
         return result
 
 
 def send_participant_report(to_email: str, pdf_report: bytes):
-    subject = '[Zetic] Ваш отчет готов'
-    from_email = 'ZETIC <info@zetic.ru>'
+    subject = "[Zetic] Ваш отчет готов"
+    from_email = "ZETIC <info@zetic.ru>"
 
-    logo_cid = 'logo_cid'
+    logo_cid = "logo_cid"
 
     email = EmailMessage(subject)
     email.from_email = from_email
@@ -238,25 +242,30 @@ def send_participant_report(to_email: str, pdf_report: bytes):
 
     email.attach(create_logo_mime(logo_cid))
 
-    report = MIMEApplication(pdf_report, 'pdf')
-    report.add_header('Content-Disposition', 'attachment', filename='report.pdf')
+    report = MIMEApplication(pdf_report, "pdf")
+    report.add_header("Content-Disposition", "attachment", filename="report.pdf")
     email.attach(report)
 
-    email_template = 'emails/participant_report.html'
+    email_template = "emails/participant_report.html"
 
-    if to_email.endswith('@yandex-team.ru') or to_email.endswith('@zetic.ru'):
-        email_template = 'emails/invitation_message_ya.html'
+    if to_email.endswith("@yandex-team.ru") or to_email.endswith("@zetic.ru"):
+        email_template = "emails/invitation_message_ya.html"
 
-    email.body = render_to_string(email_template, {
-        logo_cid: logo_cid,
-    })
+    email.body = render_to_string(
+        email_template,
+        {
+            logo_cid: logo_cid,
+        },
+    )
 
     email.send(fail_silently=False)
 
 
 def create_logo_mime(logo_cid: str) -> MIMEImage:
-    with open(os.path.join(settings.BASE_DIR, 'media', 'email', 'email_logo.png'), 'rb') as f:
+    with open(
+        os.path.join(settings.BASE_DIR, "media", "email", "email_logo.png"), "rb"
+    ) as f:
         logo = MIMEImage(f.read())
-        logo.add_header('Content-ID', '<{}>'.format(logo_cid))
-        logo.add_header('Content-Disposition', 'inline', filename='email_logo.png')
+        logo.add_header("Content-ID", "<{}>".format(logo_cid))
+        logo.add_header("Content-Disposition", "inline", filename="email_logo.png")
         return logo

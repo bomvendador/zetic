@@ -6,12 +6,15 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pdf', '0047_remove_participant_birth_year_and_more'),
+        ("pdf", "0047_remove_participant_birth_year_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='employee',
-            options={'verbose_name': 'Сотрудник (employee)', 'verbose_name_plural': 'Сотрудники (employee)'},
+            name="employee",
+            options={
+                "verbose_name": "Сотрудник (employee)",
+                "verbose_name_plural": "Сотрудники (employee)",
+            },
         ),
     ]

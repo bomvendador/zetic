@@ -1,5 +1,6 @@
-from pdf.models import Report, ReportData
 import math
+
+from pdf.models import Report, ReportData
 
 
 def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
@@ -9,12 +10,15 @@ def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
     # отрисовка прямоугольника
     rect_width = 140
     rect_height = 4
-    pdf.rect(startX, startY, rect_width, rect_height, 'FD')
+    pdf.rect(startX, startY, rect_width, rect_height, "FD")
     # отрисовка треугольника
     triangle_width = 7
-    point1 = (startX + rect_width, startY - rect_height/2)
-    point2 = (startX + rect_width + triangle_width, startY - rect_height/2 + rect_height)
-    point3 = (startX + rect_width, startY - rect_height/2 + rect_height * 2)
+    point1 = (startX + rect_width, startY - rect_height / 2)
+    point2 = (
+        startX + rect_width + triangle_width,
+        startY - rect_height / 2 + rect_height,
+    )
+    point3 = (startX + rect_width, startY - rect_height / 2 + rect_height * 2)
     pdf.polygon(point_list=[point1, point2, point3, point1], style="FD")
     pdf.set_font("NotoSansDisplayMedium", "", 8)
     section_qnt = 10
@@ -49,13 +53,24 @@ def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
         # pdf.set_fill_color(r, g, b)
 
         # отрисовка линий
-        pdf.line(line_x_start + cur_section_width, startY - rect_height/2 + 1, line_x_start + cur_section_width, startY + rect_height + rect_height/2 - 1)
+        pdf.line(
+            line_x_start + cur_section_width,
+            startY - rect_height / 2 + 1,
+            line_x_start + cur_section_width,
+            startY + rect_height + rect_height / 2 - 1,
+        )
         pdf.set_text_color(105, 105, 105)
         # цифры текст на шкале
         if cur_section + 1 == 10:
-            pdf.text(line_x_start + cur_section_width - 1.5, startY + 3, str(cur_section + 1))
+            pdf.text(
+                line_x_start + cur_section_width - 1.5, startY + 3, str(cur_section + 1)
+            )
         else:
-            pdf.text(line_x_start + cur_section_width - 0.75, startY + 3, str(cur_section + 1))
+            pdf.text(
+                line_x_start + cur_section_width - 0.75,
+                startY + 3,
+                str(cur_section + 1),
+            )
         line_x_start = line_x_start + cur_section_width
     total_points = 0
     total_participants_qnt = 0
@@ -85,16 +100,30 @@ def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
                     cur_col = 1
                     first_item_x = 0
 
-                scale_number_x = startX + scale_number_data[1] * section_width - section_width / 2  # x позиция черты на шкале
-                draw_single_circle_arrow(pdf, scale_number_x - 1.75 * col_qnt + first_item_x, startY + 5.5 + delta_y, scale_number_data[2], group_color, email, bold)
+                scale_number_x = (
+                    startX + scale_number_data[1] * section_width - section_width / 2
+                )  # x позиция черты на шкале
+                draw_single_circle_arrow(
+                    pdf,
+                    scale_number_x - 1.75 * col_qnt + first_item_x,
+                    startY + 5.5 + delta_y,
+                    scale_number_data[2],
+                    group_color,
+                    email,
+                    bold,
+                )
                 first_item_x = first_item_x + 3.5
                 cur_col = cur_col + 1
 
             total_participants_qnt = total_participants_qnt + circles_placed_cnt
 
-    #треугольник СРЕДНЕЕ
+    # треугольник СРЕДНЕЕ
     if total_participants_qnt > 0:
-        average_number_x = startX + (total_points // total_participants_qnt) * section_width - section_width / 2
+        average_number_x = (
+            startX
+            + (total_points // total_participants_qnt) * section_width
+            - section_width / 2
+        )
         # print(f'{total_points} / {total_participants_qnt} = {total_points // total_participants_qnt}')
 
         pdf.set_draw_color(r, g, b)
@@ -102,9 +131,9 @@ def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
         pdf.set_text_color(105, 105, 105)
         point1 = (average_number_x - 5, startY - 3)
         point2 = (average_number_x + 5, startY - 3)
-        point3 = (average_number_x, startY-1.5)
+        point3 = (average_number_x, startY - 1.5)
         pdf.polygon(point_list=[point1, point2, point3, point1], style="FD")
-        pdf.text(average_number_x - 4.5, startY - 3.5, 'СРЕДНЕЕ')
+        pdf.text(average_number_x - 4.5, startY - 3.5, "СРЕДНЕЕ")
 
 
 def draw_single_circle_arrow(pdf, x, y, number, group_color, email, bold):
@@ -117,11 +146,23 @@ def draw_single_circle_arrow(pdf, x, y, number, group_color, email, bold):
     pdf.set_draw_color(0, 0, 0)
     pdf.set_text_color(0, 0, 0)
     pdf.set_font("NotoSansDisplayMedium", "", 6)
-    if not group_color == 'rgba(0, 0, 0, 0)':
+    if not group_color == "rgba(0, 0, 0, 0)":
         # FIXME: Use regex
-        color_r = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[0])
-        color_g = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[1].strip())
-        color_b = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[2].strip())
+        color_r = int(
+            group_color[
+                group_color.find("(") + len("(") : group_color.rfind(")")
+            ].split(",")[0]
+        )
+        color_g = int(
+            group_color[group_color.find("(") + len("(") : group_color.rfind(")")]
+            .split(",")[1]
+            .strip()
+        )
+        color_b = int(
+            group_color[group_color.find("(") + len("(") : group_color.rfind(")")]
+            .split(",")[2]
+            .strip()
+        )
         pdf.set_fill_color(color_r, color_g, color_b)
         # pdf.set_draw_color(color_r, color_g, color_b)
     elif is_orange_color(email):
@@ -174,73 +215,72 @@ def draw_squares(pdf, square_results):
     for square_result in square_results:
         # print(f'square_result - {square_result}')
         square_name = square_result[0]
-        if square_name == 'ESFJ - Массовик-затейник':
+        if square_name == "ESFJ - Массовик-затейник":
             ESFJ_1_1 = ESFJ_1_1 + 1
-        if square_name == 'ENFJ - Чуткий наставник':
+        if square_name == "ENFJ - Чуткий наставник":
             ENFJ_1_2 = ENFJ_1_2 + 1
-        if square_name == 'ESFP - Развлекатель':
+        if square_name == "ESFP - Развлекатель":
             ESFP_1_3 = ESFP_1_3 + 1
-        if square_name == 'ENFP - Мотиватор':
+        if square_name == "ENFP - Мотиватор":
             ENFP_1_4 = ENFP_1_4 + 1
-        if square_name == 'ESTJ - Контролер':
+        if square_name == "ESTJ - Контролер":
             ESTJ_2_1 = ESTJ_2_1 + 1
-        if square_name == 'ENTJ - Аналитик':
+        if square_name == "ENTJ - Аналитик":
             ENTJ_2_2 = ENTJ_2_2 + 1
-        if square_name == 'ESTP - Искатель ресурсов':
+        if square_name == "ESTP - Искатель ресурсов":
             ESTP_2_3 = ESTP_2_3 + 1
-        if square_name == 'ENTP - Изобретатель':
+        if square_name == "ENTP - Изобретатель":
             ENTP_2_4 = ENTP_2_4 + 1
-        if square_name == 'ISFJ - Хранитель':
+        if square_name == "ISFJ - Хранитель":
             ISFJ_3_1 = ISFJ_3_1 + 1
-        if square_name == 'INFJ - Вдохновитель':
+        if square_name == "INFJ - Вдохновитель":
             INFJ_3_2 = INFJ_3_2 + 1
-        if square_name == 'ISFP - Опекун':
+        if square_name == "ISFP - Опекун":
             ISFP_3_3 = ISFP_3_3 + 1
-        if square_name == 'INFP - Благородный служитель':
+        if square_name == "INFP - Благородный служитель":
             INFP_3_4 = INFP_3_4 + 1
-        if square_name == 'ISTJ - Организатор':
+        if square_name == "ISTJ - Организатор":
             ISTJ_4_1 = ISTJ_4_1 + 1
-        if square_name == 'INTJ - Любитель улучшений':
+        if square_name == "INTJ - Любитель улучшений":
             INTJ_4_2 = INTJ_4_2 + 1
-        if square_name == 'ISTP - Исполнитель':
+        if square_name == "ISTP - Исполнитель":
             ISTP_4_3 = ISTP_4_3 + 1
-        if square_name == 'INTP - Решатель проблем':
+        if square_name == "INTP - Решатель проблем":
             INTP_4_4 = INTP_4_4 + 1
 
-
         # match square_result[0]:
-            # case 'ESFJ - Массовик-затейник':
-            #     ESFJ_1_1 = ESFJ_1_1 + 1
-            # case 'ENFJ - Идеалист-харизматик':
-            #     ENFJ_1_2 = ENFJ_1_2 + 1
-            # case 'ESFP - Спонтанный коммуникатор':
-            #     ESFP_1_3 = ESFP_1_3 + 1
-            # case 'ENFP - Инициатор':
-            #     ENFP_1_4 = ENFP_1_4 + 1
-            # case 'ESTJ - Контролер по жизни':
-            #     ESTJ_2_1 = ESTJ_2_1 + 1
-            # case 'ENTJ - Предприниматель':
-            #     ENTJ_2_2 = ENTJ_2_2 + 1
-            # case 'ESTP - Ультра-реалист':
-            #     ESTP_2_3 = ESTP_2_3 + 1
-            # case 'ENTP - Изобретатель':
-            #     ENTP_2_4 = ENTP_2_4 + 1
-            # case 'ISFJ - Хранитель':
-            #     ISFJ_3_1 = ISFJ_3_1 + 1
-            # case 'INFJ - Вдохновитель':
-            #     INFJ_3_2 = INFJ_3_2 + 1
-            # case 'ISFP - Посредник':
-            #     ISFP_3_3 = ISFP_3_3 + 1
-            # case 'INFP - Благородный служитель':
-            #     INFP_3_4 = INFP_3_4 + 1
-            # case 'ISTJ - Организатор':
-            #     ISTJ_4_1 = ISTJ_4_1 + 1
-            # case 'INTJ - Любитель улучшений':
-            #     INTJ_4_2 = INTJ_4_2 + 1
-            # case 'ISTP - Экспериментатор':
-            #     ISTP_4_3 = ISTP_4_3 + 1
-            # case 'INTP - Решатель проблем':
-            #     INTP_4_4 = INTP_4_4 + 1
+        # case 'ESFJ - Массовик-затейник':
+        #     ESFJ_1_1 = ESFJ_1_1 + 1
+        # case 'ENFJ - Идеалист-харизматик':
+        #     ENFJ_1_2 = ENFJ_1_2 + 1
+        # case 'ESFP - Спонтанный коммуникатор':
+        #     ESFP_1_3 = ESFP_1_3 + 1
+        # case 'ENFP - Инициатор':
+        #     ENFP_1_4 = ENFP_1_4 + 1
+        # case 'ESTJ - Контролер по жизни':
+        #     ESTJ_2_1 = ESTJ_2_1 + 1
+        # case 'ENTJ - Предприниматель':
+        #     ENTJ_2_2 = ENTJ_2_2 + 1
+        # case 'ESTP - Ультра-реалист':
+        #     ESTP_2_3 = ESTP_2_3 + 1
+        # case 'ENTP - Изобретатель':
+        #     ENTP_2_4 = ENTP_2_4 + 1
+        # case 'ISFJ - Хранитель':
+        #     ISFJ_3_1 = ISFJ_3_1 + 1
+        # case 'INFJ - Вдохновитель':
+        #     INFJ_3_2 = INFJ_3_2 + 1
+        # case 'ISFP - Посредник':
+        #     ISFP_3_3 = ISFP_3_3 + 1
+        # case 'INFP - Благородный служитель':
+        #     INFP_3_4 = INFP_3_4 + 1
+        # case 'ISTJ - Организатор':
+        #     ISTJ_4_1 = ISTJ_4_1 + 1
+        # case 'INTJ - Любитель улучшений':
+        #     INTJ_4_2 = INTJ_4_2 + 1
+        # case 'ISTP - Экспериментатор':
+        #     ISTP_4_3 = ISTP_4_3 + 1
+        # case 'INTP - Решатель проблем':
+        #     INTP_4_4 = INTP_4_4 + 1
 
     top_1_max_qnt = max(ESFJ_1_1, ENFJ_1_2, ESTJ_2_1, ENTJ_2_2)
     top_2_max_qnt = max(ESFP_1_3, ENFP_1_4, ESTP_2_3, ENTP_2_4)
@@ -261,124 +301,252 @@ def draw_squares(pdf, square_results):
         delta_y_4 = (rows_max_qnt_4 - 3) * 9
 
     # print(f'top_1_max_qnt - {top_1_max_qnt} top_2_max_qnt - {top_2_max_qnt} bottom_1_max_qnt - {bottom_1_max_qnt} bottom_2_max_qnt - {bottom_2_max_qnt}')
-    #1
+    # 1
     pdf.set_draw_color(255, 240, 193)
     pdf.set_fill_color(255, 240, 193)
-    pdf.rect(startX, startY, width, width + delta_y_1 + delta_y_2, 'FD')
-    #2
+    pdf.rect(startX, startY, width, width + delta_y_1 + delta_y_2, "FD")
+    # 2
     pdf.set_draw_color(253, 219, 246)
     pdf.set_fill_color(253, 219, 246)
-    pdf.rect(startX + width, startY, width, width + delta_y_1 + delta_y_2, 'FD')
-    #3
+    pdf.rect(startX + width, startY, width, width + delta_y_1 + delta_y_2, "FD")
+    # 3
     pdf.set_draw_color(217, 245, 251)
     pdf.set_fill_color(217, 245, 251)
-    pdf.rect(startX, startY + width, width, width + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'FD')
-    #4
+    pdf.rect(
+        startX,
+        startY + width,
+        width,
+        width + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4,
+        "FD",
+    )
+    # 4
     pdf.set_draw_color(226, 239, 218)
     pdf.set_fill_color(226, 239, 218)
-    pdf.rect(startX + width, startY + width, width, width + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'FD')
+    pdf.rect(
+        startX + width,
+        startY + width,
+        width,
+        width + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4,
+        "FD",
+    )
 
     pdf.set_draw_color(255, 255, 255)
     pdf.set_fill_color(255, 255, 255)
     # белый вертикальный разделитель первый
-    pdf.rect(startX + width / 2 - 0.3, startY, 0.6, startY + width * 2 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4 , 'FD')
+    pdf.rect(
+        startX + width / 2 - 0.3,
+        startY,
+        0.6,
+        startY + width * 2 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4,
+        "FD",
+    )
     # белый вертикальный разделитель второй
-    pdf.rect(startX + width + width / 2 - 0.3, startY, 0.6, startY + width * 2 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'FD')
+    pdf.rect(
+        startX + width + width / 2 - 0.3,
+        startY,
+        0.6,
+        startY + width * 2 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4,
+        "FD",
+    )
     # белый горизонтальный разделитель первый
-    pdf.rect(startX, startY + width / 2 - 0.3 + delta_y_1, startY + width * 2, 0.6, 'FD')
+    pdf.rect(
+        startX, startY + width / 2 - 0.3 + delta_y_1, startY + width * 2, 0.6, "FD"
+    )
     # белый горизонтальный разделитель второй
-    pdf.rect(startX, startY + width + width / 2 - 0.3 + delta_y_1 + delta_y_2 + delta_y_3, startY + width * 2, 0.6, 'FD')
+    pdf.rect(
+        startX,
+        startY + width + width / 2 - 0.3 + delta_y_1 + delta_y_2 + delta_y_3,
+        startY + width * 2,
+        0.6,
+        "FD",
+    )
 
     pdf.set_font("RalewayLight", "", 10)
 
-    pdf.rect(startX + width / 2 - 17, startY + width / 2 - 5 + delta_y_1, 34, 10, 'FD')
-    pdf.text(startX + width / 2 - 15 + 4, startY + width / 2 + 1 + delta_y_1, 'Интеграторы')
+    pdf.rect(startX + width / 2 - 17, startY + width / 2 - 5 + delta_y_1, 34, 10, "FD")
+    pdf.text(
+        startX + width / 2 - 15 + 4, startY + width / 2 + 1 + delta_y_1, "Интеграторы"
+    )
 
-    pdf.rect(startX + width + width / 2 - 17, startY + width / 2 - 5 + delta_y_1, 34, 10, 'FD')
-    pdf.text(startX + width + width / 2 - 15.5, startY + width / 2 + 1 + delta_y_1, 'Предприниматели')
+    pdf.rect(
+        startX + width + width / 2 - 17,
+        startY + width / 2 - 5 + delta_y_1,
+        34,
+        10,
+        "FD",
+    )
+    pdf.text(
+        startX + width + width / 2 - 15.5,
+        startY + width / 2 + 1 + delta_y_1,
+        "Предприниматели",
+    )
 
-    pdf.rect(startX + width / 2 - 17, startY + width + width / 2 - 5 + delta_y_1 + delta_y_2 + delta_y_3, 34, 10, 'FD')
-    pdf.text(startX + width / 2 - 15 + 0.5, startY + width + width / 2 + 1 + delta_y_1 + delta_y_2 + delta_y_3, 'Администраторы')
+    pdf.rect(
+        startX + width / 2 - 17,
+        startY + width + width / 2 - 5 + delta_y_1 + delta_y_2 + delta_y_3,
+        34,
+        10,
+        "FD",
+    )
+    pdf.text(
+        startX + width / 2 - 15 + 0.5,
+        startY + width + width / 2 + 1 + delta_y_1 + delta_y_2 + delta_y_3,
+        "Администраторы",
+    )
 
-    pdf.rect(startX + width + width / 2 - 17, startY + width + width / 2 - 5 + delta_y_1 + delta_y_2 + delta_y_3, 34, 10, 'FD')
-    pdf.text(startX + width + width / 2 - 15 + 2, startY + width + width / 2 + 1 + delta_y_1 + delta_y_2 + delta_y_3, 'Производители')
+    pdf.rect(
+        startX + width + width / 2 - 17,
+        startY + width + width / 2 - 5 + delta_y_1 + delta_y_2 + delta_y_3,
+        34,
+        10,
+        "FD",
+    )
+    pdf.text(
+        startX + width + width / 2 - 15 + 2,
+        startY + width + width / 2 + 1 + delta_y_1 + delta_y_2 + delta_y_3,
+        "Производители",
+    )
 
     # названия квадратов
     pdf.set_font("RalewayRegular", "", 8)
 
-    pdf.text(startX + width / 2 - 13, startY - 2.5, 'Фокус на процесс')
-    pdf.text(startX + width / 2 + width - 13.5, startY - 2.5, 'Фокус на результат')
+    pdf.text(startX + width / 2 - 13, startY - 2.5, "Фокус на процесс")
+    pdf.text(startX + width / 2 + width - 13.5, startY - 2.5, "Фокус на результат")
     with pdf.rotation(90, 12, startY + width / 2 + 10 + delta_y_1):
         pdf.text(0, startY + width / 2 + 10 + delta_y_1, "Неструктурированный подход")
     with pdf.rotation(270, startX + width * 2 + 3, startY + width / 2 - 18 + delta_y_1):
-        pdf.text(startX + width * 2 + 3, startY + width / 2 - 18 + delta_y_1, "Концептуальные решения")
-    with pdf.rotation(90, 12, startY + width / 2 + 7 + width + delta_y_1 + delta_y_2 + delta_y_3):
-        pdf.text(0, startY + width / 2 + 7 + width + delta_y_1 + delta_y_2 + delta_y_3, "Структурированный подход")
-    with pdf.rotation(270, startX + width * 2 + 3, startY + width / 2 - 15 + width + delta_y_1 + delta_y_2 + delta_y_3):
-        pdf.text(startX + width * 2 + 3, startY + width / 2 - 15 + width + delta_y_1 + delta_y_2 + delta_y_3, "Локальные решения")
+        pdf.text(
+            startX + width * 2 + 3,
+            startY + width / 2 - 18 + delta_y_1,
+            "Концептуальные решения",
+        )
+    with pdf.rotation(
+        90, 12, startY + width / 2 + 7 + width + delta_y_1 + delta_y_2 + delta_y_3
+    ):
+        pdf.text(
+            0,
+            startY + width / 2 + 7 + width + delta_y_1 + delta_y_2 + delta_y_3,
+            "Структурированный подход",
+        )
+    with pdf.rotation(
+        270,
+        startX + width * 2 + 3,
+        startY + width / 2 - 15 + width + delta_y_1 + delta_y_2 + delta_y_3,
+    ):
+        pdf.text(
+            startX + width * 2 + 3,
+            startY + width / 2 - 15 + width + delta_y_1 + delta_y_2 + delta_y_3,
+            "Локальные решения",
+        )
 
     pdf.set_font("RalewayLight", "", 8)
 
     # pdf.text(startX + width / 4 - 3, startY + 4, 'ESFJ')
     # pdf.text(startX + width / 4 - 13, startY + 7, 'Массовик-затейник')
-    pdf.text(startX + width / 4 - 13, startY + 4, 'Массовик-затейник')
+    pdf.text(startX + width / 4 - 13, startY + 4, "Массовик-затейник")
 
     # pdf.text(startX + width * (3/4) - 3, startY + 4, 'ENFJ')
     # pdf.text(startX + width * (3/4) - 13, startY + 7, 'Идеалист-харизматик')
-    pdf.text(startX + width * (3/4) - 12, startY + 4, 'Чуткий наставник')
+    pdf.text(startX + width * (3 / 4) - 12, startY + 4, "Чуткий наставник")
 
     # pdf.text(startX + width + width / 4 - 3, startY + 4, 'ESTJ')
     # pdf.text(startX + width + width / 4 - 14, startY + 7, 'Контролер по жизни')
-    pdf.text(startX + width + width / 4 - 8, startY + 4, 'Контролер')
+    pdf.text(startX + width + width / 4 - 8, startY + 4, "Контролер")
 
     # pdf.text(startX + width + width * (3/4) - 3, startY + 4, 'ENTJ')
     # pdf.text(startX + width + width * (3/4) - 11, startY + 7, 'Предприниматель')
-    pdf.text(startX + width + width * (3/4) - 5, startY + 4, 'Аналитик')
+    pdf.text(startX + width + width * (3 / 4) - 5, startY + 4, "Аналитик")
 
     # pdf.text(startX + width / 4 - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ESFP')
     # pdf.text(startX + width / 4 - 18.5, startY + width - 3 + delta_y_1 + delta_y_2, 'Спонтанный коммуникатор')
-    pdf.text(startX + width / 4 - 9, startY + width - 3 + delta_y_1 + delta_y_2, 'Развлекатель')
+    pdf.text(
+        startX + width / 4 - 9,
+        startY + width - 3 + delta_y_1 + delta_y_2,
+        "Развлекатель",
+    )
 
     # pdf.text(startX + width * (3/4) - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ENFP')
     # pdf.text(startX + width * (3/4) - 7, startY + width - 3 + delta_y_1 + delta_y_2, 'Инициатор')
-    pdf.text(startX + width * (3/4) - 7, startY + width - 3 + delta_y_1 + delta_y_2, 'Мотиватор')
+    pdf.text(
+        startX + width * (3 / 4) - 7,
+        startY + width - 3 + delta_y_1 + delta_y_2,
+        "Мотиватор",
+    )
 
     # pdf.text(startX + width + width / 4 - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ESTP')
     # pdf.text(startX + width + width / 4 - 10, startY + width - 3 + delta_y_1 + delta_y_2, 'Ультра-реалист')
-    pdf.text(startX + width + width / 4 - 12, startY + width - 3 + delta_y_1 + delta_y_2, 'Искатель ресурсов')
+    pdf.text(
+        startX + width + width / 4 - 12,
+        startY + width - 3 + delta_y_1 + delta_y_2,
+        "Искатель ресурсов",
+    )
 
     # pdf.text(startX + width + width * (3/4) - 3, startY + width - 6 + delta_y_1 + delta_y_2, 'ENTP')
-    pdf.text(startX + width + width * (3/4) - 9, startY + width - 3 + delta_y_1 + delta_y_2, 'Изобретатель')
+    pdf.text(
+        startX + width + width * (3 / 4) - 9,
+        startY + width - 3 + delta_y_1 + delta_y_2,
+        "Изобретатель",
+    )
 
     # pdf.text(startX + width / 4 - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'ISFJ')
     # pdf.text(startX + width / 4 - 7, startY + width + 7 + delta_y_1 + delta_y_2, 'Хранитель')
-    pdf.text(startX + width / 4 - 7, startY + width + 4 + delta_y_1 + delta_y_2, 'Хранитель')
+    pdf.text(
+        startX + width / 4 - 7, startY + width + 4 + delta_y_1 + delta_y_2, "Хранитель"
+    )
 
     # pdf.text(startX + width * (3/4) - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'INFJ')
     # pdf.text(startX + width * (3/4) - 9, startY + width + 7 + delta_y_1 + delta_y_2, 'Вдохновитель')
-    pdf.text(startX + width * (3/4) - 9, startY + width + 4 + delta_y_1 + delta_y_2, 'Вдохновитель')
+    pdf.text(
+        startX + width * (3 / 4) - 9,
+        startY + width + 4 + delta_y_1 + delta_y_2,
+        "Вдохновитель",
+    )
 
     # pdf.text(startX + width + width / 4 - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'ISTJ')
     # pdf.text(startX + width + width / 4 - 8, startY + width + 7 + delta_y_1 + delta_y_2, 'Организатор')
-    pdf.text(startX + width + width / 4 - 6, startY + width + 4 + delta_y_1 + delta_y_2, 'Организатор')
+    pdf.text(
+        startX + width + width / 4 - 6,
+        startY + width + 4 + delta_y_1 + delta_y_2,
+        "Организатор",
+    )
 
     # pdf.text(startX + width + width * (3/4) - 3, startY + width + 4 + delta_y_1 + delta_y_2, 'INTJ')
     # pdf.text(startX + width + width * (3/4) - 14, startY + width + 7 + delta_y_1 + delta_y_2, 'Любитель улучшений')
-    pdf.text(startX + width + width * (3/4) - 14, startY + width + 4 + delta_y_1 + delta_y_2, 'Любитель улучшений')
+    pdf.text(
+        startX + width + width * (3 / 4) - 14,
+        startY + width + 4 + delta_y_1 + delta_y_2,
+        "Любитель улучшений",
+    )
 
     # pdf.text(startX + width / 4 - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'ISFP')
     # pdf.text(startX + width / 4 - 7, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Посредник')
-    pdf.text(startX + width / 4 - 5, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Опекун')
+    pdf.text(
+        startX + width / 4 - 5,
+        startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4,
+        "Опекун",
+    )
 
     # pdf.text(startX + width * (3/4) - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'INFP')
-    pdf.text(startX + width * (3/4) - 16, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Благородный служитель')
+    pdf.text(
+        startX + width * (3 / 4) - 16,
+        startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4,
+        "Благородный служитель",
+    )
 
     # pdf.text(startX + width + width / 4 - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'ISTP')
     # pdf.text(startX + width + width / 4 - 12, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Экспериментатор')
-    pdf.text(startX + width + width / 4 - 9, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Исполнитель')
+    pdf.text(
+        startX + width + width / 4 - 9,
+        startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4,
+        "Исполнитель",
+    )
 
     # pdf.text(startX + width + width * (3/4) - 3, startY + width + width - 6 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'INTP')
-    pdf.text(startX + width + width * (3/4) - 12, startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4, 'Решатель проблем')
+    pdf.text(
+        startX + width + width * (3 / 4) - 12,
+        startY + width + width - 3 + delta_y_1 + delta_y_2 + delta_y_3 + delta_y_4,
+        "Решатель проблем",
+    )
 
     pdf.set_line_width(0.5)
     pdf.set_draw_color(240)
@@ -388,103 +556,225 @@ def draw_squares(pdf, square_results):
     text_x_delta = 3
 
     square_x_cnt = {
-        'ESFJ - Массовик-затейник': {
-            'circle_coords': [startX + 5, startY + 10],
-            'text_coords': [startX + 5 + text_x_delta, startY + 10 + text_y_delta],
-            'cur_X_pos': 0,
-            'cur_Y_pos': 0,
-            'cnt': 0},
-        'ENFJ - Чуткий наставник': {
-            'circle_coords': [startX + 5 + width / 2, startY + 10],
-            'text_coords': [startX + 5 + text_x_delta + width / 2, startY + 10 + text_y_delta],
-            'cur_X_pos': 0,
-            'cur_Y_pos': 0,
-            'cnt': 0},
-        'ESFP - Развлекатель': {
-            'circle_coords': [startX + 5, startY + 10 + width / 2 - 2 + delta_y_1],
-            'text_coords': [startX + 5 + text_x_delta, startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1],
-            'cur_X_pos': 0,
-            'cur_Y_pos': 0,
-            'cnt': 0},
-        'ENFP - Мотиватор': {
-            'circle_coords': [startX + 5 + width / 2, startY + 10 + width / 2 - 2 + delta_y_1 + delta_y_2],
-            'text_coords': [startX + 5 + text_x_delta + width / 2, startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1],
-            'cur_X_pos': 0,
-            'cur_Y_pos': 0,
-            'cnt': 0},
-        'ESTJ - Контролер': {
-            'circle_coords': [startX + 5 + width, startY + 10],
-            'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta],
-            'cur_X_pos': 0,
-            'cur_Y_pos': 0,
-            'cnt': 0},
-        'ENTJ - Аналитик': {
-            'circle_coords': [startX + 5 + width + width / 2, startY + 10],
-            'text_coords': [startX + 5 + text_x_delta + width  + width / 2, startY + 10 + text_y_delta],
-            'cur_X_pos': 0,
-            'cur_Y_pos': 0,
-            'cnt': 0},
-        'ESTP - Искатель ресурсов': {
-            'circle_coords': [startX + 5 + width, startY + 10 + width / 2 - 2 + delta_y_1],
-            'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1],
-            'cur_X_pos': 0,
-            'cur_Y_pos': 0,
-            'cnt': 0},
-        'ENTP - Изобретатель': {
-            'circle_coords': [startX + 5 + width + width / 2, startY + 10 + width / 2 - 2 + delta_y_1],
-            'text_coords': [startX + 5 + text_x_delta + width + width / 2, startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1],
-            'cur_X_pos': 0,
-            'cur_Y_pos': 0,
-            'cnt': 0},
-        'ISFJ - Хранитель': {
-            'circle_coords': [startX + 5, startY + 10 + width + delta_y_1 + delta_y_2],
-            'text_coords': [startX + 5 + text_x_delta, startY + 10 + text_y_delta + width + delta_y_1 + delta_y_2],
-            'cur_X_pos': 0,
-            'cur_Y_pos': 0,
-            'cnt': 0},
-        'INFJ - Вдохновитель': {
-            'circle_coords': [startX + 5 + width / 2, startY + 10 + width + delta_y_1 + delta_y_2],
-            'text_coords': [startX + 5 + text_x_delta + width / 2, startY + 10 + text_y_delta + width + delta_y_1 + delta_y_2],
-            'cur_X_pos': 0,
-            'cur_Y_pos': 0,
-            'cnt': 0},
-        'ISFP - Опекун': {
-            'circle_coords': [startX + 5, startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
-            'text_coords': [startX + 5 + text_x_delta, startY + 10 + text_y_delta + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
-            'cur_X_pos': 0,
-            'cur_Y_pos': 0,
-            'cnt': 0},
-        'INFP - Благородный служитель': {
-            'circle_coords': [startX + 5 + width / 2, startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
-            'text_coords': [startX + 5 + text_x_delta + width / 2, startY + 10 + text_y_delta + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
-            'cur_X_pos': 0,
-            'cur_Y_pos': 0,
-            'cnt': 0},
-
-        'ISTJ - Организатор': {
-            'circle_coords': [startX + 5 + width, startY + 10 + width + delta_y_1 + delta_y_2],
-            'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta + width + delta_y_1 + delta_y_2],
-            'cur_X_pos': 0,
-            'cur_Y_pos': 0,
-            'cnt': 0},
-        'INTJ - Любитель улучшений': {
-            'circle_coords': [startX + 5 + width + width / 2, startY + 10 + width + delta_y_1 + delta_y_2],
-            'text_coords': [startX + 5 + text_x_delta + width + width / 2, startY + 10 + text_y_delta + width + delta_y_1 + delta_y_2],
-            'cur_X_pos': 0,
-            'cur_Y_pos': 0,
-            'cnt': 0},
-        'ISTP - Исполнитель': {
-            'circle_coords': [startX + 5 + width, startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
-            'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
-            'cur_X_pos': 0,
-            'cur_Y_pos': 0,
-            'cnt': 0},
-        'INTP - Решатель проблем': {
-            'circle_coords': [startX + 5 + width + width / 2, startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
-            'text_coords': [startX + 5 + text_x_delta + width + width / 2, startY + 10 + text_y_delta + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
-            'cur_X_pos': 0,
-            'cur_Y_pos': 0,
-            'cnt': 0},
+        "ESFJ - Массовик-затейник": {
+            "circle_coords": [startX + 5, startY + 10],
+            "text_coords": [startX + 5 + text_x_delta, startY + 10 + text_y_delta],
+            "cur_X_pos": 0,
+            "cur_Y_pos": 0,
+            "cnt": 0,
+        },
+        "ENFJ - Чуткий наставник": {
+            "circle_coords": [startX + 5 + width / 2, startY + 10],
+            "text_coords": [
+                startX + 5 + text_x_delta + width / 2,
+                startY + 10 + text_y_delta,
+            ],
+            "cur_X_pos": 0,
+            "cur_Y_pos": 0,
+            "cnt": 0,
+        },
+        "ESFP - Развлекатель": {
+            "circle_coords": [startX + 5, startY + 10 + width / 2 - 2 + delta_y_1],
+            "text_coords": [
+                startX + 5 + text_x_delta,
+                startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1,
+            ],
+            "cur_X_pos": 0,
+            "cur_Y_pos": 0,
+            "cnt": 0,
+        },
+        "ENFP - Мотиватор": {
+            "circle_coords": [
+                startX + 5 + width / 2,
+                startY + 10 + width / 2 - 2 + delta_y_1 + delta_y_2,
+            ],
+            "text_coords": [
+                startX + 5 + text_x_delta + width / 2,
+                startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1,
+            ],
+            "cur_X_pos": 0,
+            "cur_Y_pos": 0,
+            "cnt": 0,
+        },
+        "ESTJ - Контролер": {
+            "circle_coords": [startX + 5 + width, startY + 10],
+            "text_coords": [
+                startX + 5 + text_x_delta + width,
+                startY + 10 + text_y_delta,
+            ],
+            "cur_X_pos": 0,
+            "cur_Y_pos": 0,
+            "cnt": 0,
+        },
+        "ENTJ - Аналитик": {
+            "circle_coords": [startX + 5 + width + width / 2, startY + 10],
+            "text_coords": [
+                startX + 5 + text_x_delta + width + width / 2,
+                startY + 10 + text_y_delta,
+            ],
+            "cur_X_pos": 0,
+            "cur_Y_pos": 0,
+            "cnt": 0,
+        },
+        "ESTP - Искатель ресурсов": {
+            "circle_coords": [
+                startX + 5 + width,
+                startY + 10 + width / 2 - 2 + delta_y_1,
+            ],
+            "text_coords": [
+                startX + 5 + text_x_delta + width,
+                startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1,
+            ],
+            "cur_X_pos": 0,
+            "cur_Y_pos": 0,
+            "cnt": 0,
+        },
+        "ENTP - Изобретатель": {
+            "circle_coords": [
+                startX + 5 + width + width / 2,
+                startY + 10 + width / 2 - 2 + delta_y_1,
+            ],
+            "text_coords": [
+                startX + 5 + text_x_delta + width + width / 2,
+                startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1,
+            ],
+            "cur_X_pos": 0,
+            "cur_Y_pos": 0,
+            "cnt": 0,
+        },
+        "ISFJ - Хранитель": {
+            "circle_coords": [startX + 5, startY + 10 + width + delta_y_1 + delta_y_2],
+            "text_coords": [
+                startX + 5 + text_x_delta,
+                startY + 10 + text_y_delta + width + delta_y_1 + delta_y_2,
+            ],
+            "cur_X_pos": 0,
+            "cur_Y_pos": 0,
+            "cnt": 0,
+        },
+        "INFJ - Вдохновитель": {
+            "circle_coords": [
+                startX + 5 + width / 2,
+                startY + 10 + width + delta_y_1 + delta_y_2,
+            ],
+            "text_coords": [
+                startX + 5 + text_x_delta + width / 2,
+                startY + 10 + text_y_delta + width + delta_y_1 + delta_y_2,
+            ],
+            "cur_X_pos": 0,
+            "cur_Y_pos": 0,
+            "cnt": 0,
+        },
+        "ISFP - Опекун": {
+            "circle_coords": [
+                startX + 5,
+                startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3,
+            ],
+            "text_coords": [
+                startX + 5 + text_x_delta,
+                startY
+                + 10
+                + text_y_delta
+                + width / 2
+                + width
+                - 2
+                + delta_y_1
+                + delta_y_2
+                + delta_y_3,
+            ],
+            "cur_X_pos": 0,
+            "cur_Y_pos": 0,
+            "cnt": 0,
+        },
+        "INFP - Благородный служитель": {
+            "circle_coords": [
+                startX + 5 + width / 2,
+                startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3,
+            ],
+            "text_coords": [
+                startX + 5 + text_x_delta + width / 2,
+                startY
+                + 10
+                + text_y_delta
+                + width / 2
+                + width
+                - 2
+                + delta_y_1
+                + delta_y_2
+                + delta_y_3,
+            ],
+            "cur_X_pos": 0,
+            "cur_Y_pos": 0,
+            "cnt": 0,
+        },
+        "ISTJ - Организатор": {
+            "circle_coords": [
+                startX + 5 + width,
+                startY + 10 + width + delta_y_1 + delta_y_2,
+            ],
+            "text_coords": [
+                startX + 5 + text_x_delta + width,
+                startY + 10 + text_y_delta + width + delta_y_1 + delta_y_2,
+            ],
+            "cur_X_pos": 0,
+            "cur_Y_pos": 0,
+            "cnt": 0,
+        },
+        "INTJ - Любитель улучшений": {
+            "circle_coords": [
+                startX + 5 + width + width / 2,
+                startY + 10 + width + delta_y_1 + delta_y_2,
+            ],
+            "text_coords": [
+                startX + 5 + text_x_delta + width + width / 2,
+                startY + 10 + text_y_delta + width + delta_y_1 + delta_y_2,
+            ],
+            "cur_X_pos": 0,
+            "cur_Y_pos": 0,
+            "cnt": 0,
+        },
+        "ISTP - Исполнитель": {
+            "circle_coords": [
+                startX + 5 + width,
+                startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3,
+            ],
+            "text_coords": [
+                startX + 5 + text_x_delta + width,
+                startY
+                + 10
+                + text_y_delta
+                + width / 2
+                + width
+                - 2
+                + delta_y_1
+                + delta_y_2
+                + delta_y_3,
+            ],
+            "cur_X_pos": 0,
+            "cur_Y_pos": 0,
+            "cnt": 0,
+        },
+        "INTP - Решатель проблем": {
+            "circle_coords": [
+                startX + 5 + width + width / 2,
+                startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3,
+            ],
+            "text_coords": [
+                startX + 5 + text_x_delta + width + width / 2,
+                startY
+                + 10
+                + text_y_delta
+                + width / 2
+                + width
+                - 2
+                + delta_y_1
+                + delta_y_2
+                + delta_y_3,
+            ],
+            "cur_X_pos": 0,
+            "cur_Y_pos": 0,
+            "cnt": 0,
+        },
     }
     cnt = 0
 
@@ -494,14 +784,14 @@ def draw_squares(pdf, square_results):
 
 
 def is_orange_color(email):
-    report = Report.objects.filter(participant__employee__email=email).latest('added')
-    report_data = ReportData.objects.filter(report=report, section_code='3')
+    report = Report.objects.filter(participant__employee__email=email).latest("added")
+    report_data = ReportData.objects.filter(report=report, section_code="3")
     section_1 = 0
     section_2 = 0
     section_3 = 0
 
     for report_data_item in report_data:
-        split = report_data_item.category_code.split('_')
+        split = report_data_item.category_code.split("_")
         if int(split[1]) <= 4:
             section_1 = section_1 + report_data_item.points
         elif 5 <= int(split[1]) <= 8:
@@ -521,11 +811,23 @@ def draw_single_circle_squares(square_data, pdf, square_x_cnt, cnt):
     group_color = square_data[5]
     bold = square_data[3]
 
-    if not group_color == 'rgba(0, 0, 0, 0)':
+    if not group_color == "rgba(0, 0, 0, 0)":
         # FIXME: Use regex
-        color_r = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[0])
-        color_g = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[1].strip())
-        color_b = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[2].strip())
+        color_r = int(
+            group_color[
+                group_color.find("(") + len("(") : group_color.rfind(")")
+            ].split(",")[0]
+        )
+        color_g = int(
+            group_color[group_color.find("(") + len("(") : group_color.rfind(")")]
+            .split(",")[1]
+            .strip()
+        )
+        color_b = int(
+            group_color[group_color.find("(") + len("(") : group_color.rfind(")")]
+            .split(",")[2]
+            .strip()
+        )
         pdf.set_fill_color(color_r, color_g, color_b)
         # pdf.set_draw_color(color_r, color_g, color_b)
     elif is_orange_color(email):
@@ -538,22 +840,46 @@ def draw_single_circle_squares(square_data, pdf, square_x_cnt, cnt):
     else:
         pdf.set_draw_color(240)
     # print(f'participant_name - {participant_name} - секция 1 - {section_1} секция 2 - {section_2} секция 3 - {section_3}')
-        # section_points_sum = section_points_sum + report_data_item['points']
+    # section_points_sum = section_points_sum + report_data_item['points']
     # print(participant_name + ' - ' + str(section_points_sum))
 
-    pdf.circle(square_x_cnt[square_name]['circle_coords'][0] + 9 * square_x_cnt[square_name]['cur_X_pos'], square_x_cnt[square_name]['circle_coords'][1] + 9 * square_x_cnt[square_name]['cur_Y_pos'], 8, style="FD")
+    pdf.circle(
+        square_x_cnt[square_name]["circle_coords"][0]
+        + 9 * square_x_cnt[square_name]["cur_X_pos"],
+        square_x_cnt[square_name]["circle_coords"][1]
+        + 9 * square_x_cnt[square_name]["cur_Y_pos"],
+        8,
+        style="FD",
+    )
     if cnt <= 9:
-        pdf.text(square_x_cnt[square_name]['text_coords'][0] + 9 * square_x_cnt[square_name]['cur_X_pos'], square_x_cnt[square_name]['text_coords'][1] + 9 * square_x_cnt[square_name]['cur_Y_pos'], str(cnt))
+        pdf.text(
+            square_x_cnt[square_name]["text_coords"][0]
+            + 9 * square_x_cnt[square_name]["cur_X_pos"],
+            square_x_cnt[square_name]["text_coords"][1]
+            + 9 * square_x_cnt[square_name]["cur_Y_pos"],
+            str(cnt),
+        )
     else:
-        pdf.text(square_x_cnt[square_name]['text_coords'][0] - 1.1 + 9 * square_x_cnt[square_name]['cur_X_pos'], square_x_cnt[square_name]['text_coords'][1] + 9 * square_x_cnt[square_name]['cur_Y_pos'], str(cnt))
+        pdf.text(
+            square_x_cnt[square_name]["text_coords"][0]
+            - 1.1
+            + 9 * square_x_cnt[square_name]["cur_X_pos"],
+            square_x_cnt[square_name]["text_coords"][1]
+            + 9 * square_x_cnt[square_name]["cur_Y_pos"],
+            str(cnt),
+        )
 
-    cur_X_cnt = square_x_cnt[square_name]['cur_X_pos']
+    cur_X_cnt = square_x_cnt[square_name]["cur_X_pos"]
     if cur_X_cnt < 3:
-        square_x_cnt[square_name]['cur_X_pos'] = square_x_cnt[square_name]['cur_X_pos'] + 1
+        square_x_cnt[square_name]["cur_X_pos"] = (
+            square_x_cnt[square_name]["cur_X_pos"] + 1
+        )
     else:
-        square_x_cnt[square_name]['cur_X_pos'] = 0
-        square_x_cnt[square_name]['cur_Y_pos'] = square_x_cnt[square_name]['cur_Y_pos'] + 1
-    square_x_cnt[square_name]['cnt'] = square_x_cnt[square_name]['cnt'] + 1
+        square_x_cnt[square_name]["cur_X_pos"] = 0
+        square_x_cnt[square_name]["cur_Y_pos"] = (
+            square_x_cnt[square_name]["cur_Y_pos"] + 1
+        )
+    square_x_cnt[square_name]["cnt"] = square_x_cnt[square_name]["cnt"] + 1
 
 
 def draw_table(square_data, pdf, width, x, y):
@@ -568,16 +894,68 @@ def draw_table(square_data, pdf, width, x, y):
     new_column_added = False
     all_participants_qnt = len(square_data)
 
-    pdf.multi_cell(7, line_height, '#', border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
-    pdf.multi_cell((width - 10) - 7, line_height, 'Имя', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
-    pdf.multi_cell(10, line_height, 'Цвет', border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+    pdf.multi_cell(
+        7,
+        line_height,
+        "#",
+        border=1,
+        align="C",
+        new_x="RIGHT",
+        new_y="TOP",
+        max_line_height=pdf.font_size,
+    )
+    pdf.multi_cell(
+        (width - 10) - 7,
+        line_height,
+        "Имя",
+        border=1,
+        new_x="RIGHT",
+        new_y="TOP",
+        max_line_height=pdf.font_size,
+    )
+    pdf.multi_cell(
+        10,
+        line_height,
+        "Цвет",
+        border=1,
+        align="C",
+        new_x="RIGHT",
+        new_y="TOP",
+        max_line_height=pdf.font_size,
+    )
     pdf.ln(line_height)
 
     pdf.set_xy(x + width, y)
 
-    pdf.multi_cell(7, line_height, '#', border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
-    pdf.multi_cell((width - 10) - 7, line_height, 'Имя', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
-    pdf.multi_cell(10, line_height, 'Цвет', border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+    pdf.multi_cell(
+        7,
+        line_height,
+        "#",
+        border=1,
+        align="C",
+        new_x="RIGHT",
+        new_y="TOP",
+        max_line_height=pdf.font_size,
+    )
+    pdf.multi_cell(
+        (width - 10) - 7,
+        line_height,
+        "Имя",
+        border=1,
+        new_x="RIGHT",
+        new_y="TOP",
+        max_line_height=pdf.font_size,
+    )
+    pdf.multi_cell(
+        10,
+        line_height,
+        "Цвет",
+        border=1,
+        align="C",
+        new_x="RIGHT",
+        new_y="TOP",
+        max_line_height=pdf.font_size,
+    )
     pdf.ln(line_height)
 
     y = y + line_height
@@ -589,21 +967,60 @@ def draw_table(square_data, pdf, width, x, y):
         group_color = square_data_item[5]
         bold = square_data_item[3]
         email = square_data_item[1]
-        report = Report.objects.filter(participant__employee__email=square_data_item[1]).latest('added')
+        report = Report.objects.filter(
+            participant__employee__email=square_data_item[1]
+        ).latest("added")
         if report.lie_points > 4:
             pdf.set_text_color(255, 0, 0)
         else:
             pdf.set_text_color(0, 0, 0)
 
-        pdf.multi_cell(7, line_height, str(cnt), border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
-        pdf.multi_cell((width - 10) - 7, line_height, participant_name, border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
-        pdf.multi_cell(10, line_height, '', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+        pdf.multi_cell(
+            7,
+            line_height,
+            str(cnt),
+            border=1,
+            align="C",
+            new_x="RIGHT",
+            new_y="TOP",
+            max_line_height=pdf.font_size,
+        )
+        pdf.multi_cell(
+            (width - 10) - 7,
+            line_height,
+            participant_name,
+            border=1,
+            new_x="RIGHT",
+            new_y="TOP",
+            max_line_height=pdf.font_size,
+        )
+        pdf.multi_cell(
+            10,
+            line_height,
+            "",
+            border=1,
+            new_x="RIGHT",
+            new_y="TOP",
+            max_line_height=pdf.font_size,
+        )
 
-        if not group_color == 'rgba(0, 0, 0, 0)':
+        if not group_color == "rgba(0, 0, 0, 0)":
             # FIXME: Use regex
-            color_r = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[0])
-            color_g = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[1].strip())
-            color_b = int(group_color[group_color.find('(')+len('('):group_color.rfind(')')].split(',')[2].strip())
+            color_r = int(
+                group_color[
+                    group_color.find("(") + len("(") : group_color.rfind(")")
+                ].split(",")[0]
+            )
+            color_g = int(
+                group_color[group_color.find("(") + len("(") : group_color.rfind(")")]
+                .split(",")[1]
+                .strip()
+            )
+            color_b = int(
+                group_color[group_color.find("(") + len("(") : group_color.rfind(")")]
+                .split(",")[2]
+                .strip()
+            )
             pdf.set_fill_color(color_r, color_g, color_b)
             # pdf.set_draw_color(color_r, color_g, color_b)
         elif is_orange_color(email):
@@ -617,7 +1034,12 @@ def draw_table(square_data, pdf, width, x, y):
         else:
             pdf.set_draw_color(r=255, g=255, b=255)
 
-        pdf.circle(x=x + width - line_height / 2 - 4, y=y + line_height / 2 - 2, r=4, style="FD")
+        pdf.circle(
+            x=x + width - line_height / 2 - 4,
+            y=y + line_height / 2 - 2,
+            r=4,
+            style="FD",
+        )
 
         pdf.set_line_width(0.1)
         pdf.set_draw_color(230, 230, 227)
@@ -641,7 +1063,31 @@ def draw_table(square_data, pdf, width, x, y):
 
     if all_participants_qnt // 2 != all_participants_qnt / 2:
         # y = y + line_height
-        pdf.multi_cell(7, line_height, '', border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
-        pdf.multi_cell((width - 10) - 7, line_height, '', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
-        pdf.multi_cell(10, line_height, '', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
-
+        pdf.multi_cell(
+            7,
+            line_height,
+            "",
+            border=1,
+            align="C",
+            new_x="RIGHT",
+            new_y="TOP",
+            max_line_height=pdf.font_size,
+        )
+        pdf.multi_cell(
+            (width - 10) - 7,
+            line_height,
+            "",
+            border=1,
+            new_x="RIGHT",
+            new_y="TOP",
+            max_line_height=pdf.font_size,
+        )
+        pdf.multi_cell(
+            10,
+            line_height,
+            "",
+            border=1,
+            new_x="RIGHT",
+            new_y="TOP",
+            max_line_height=pdf.font_size,
+        )

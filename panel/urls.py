@@ -1,13 +1,14 @@
 from django.urls import path
+
+from panel import company
+from panel import company_parameter as panel_company_parameter
+from panel import employee
+from panel import individual_report_file
+from panel import mail_handler
+from panel import study
 # import views as pdf_views
 from panel import views as panel_views
 from pdf import views as pdf_views
-from panel import company_parameter as panel_company_parameter
-from panel import employee
-from panel import study
-from panel import individual_report_file
-from panel import company
-from panel import mail_handler
 from sendemail import tasks
 
 urlpatterns = [

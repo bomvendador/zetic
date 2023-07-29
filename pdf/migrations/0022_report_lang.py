@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pdf', '0021_alter_report_file'),
+        ("pdf", "0021_alter_report_file"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='report',
-            name='lang',
+            model_name="report",
+            name="lang",
             field=models.CharField(blank=True, default=None, max_length=2, null=True),
         ),
     ]

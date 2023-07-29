@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pdf', '0004_alter_report_file'),
+        ("pdf", "0004_alter_report_file"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='participant',
-            name='email',
+            model_name="participant",
+            name="email",
             field=models.CharField(default=None, max_length=4),
         ),
         migrations.AlterField(
-            model_name='participant',
-            name='birth_year',
+            model_name="participant",
+            name="birth_year",
             field=models.IntegerField(max_length=4),
         ),
     ]

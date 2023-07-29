@@ -2,20 +2,19 @@
 
 from django.conf import settings
 from django.db import migrations, models
-import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('pdf', '0055_reportgroupsquare'),
+        ("pdf", "0055_reportgroupsquare"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='employee',
-            name='birth_year',
+            model_name="employee",
+            name="birth_year",
             field=models.IntegerField(default=None, null=True, blank=True),
         ),
     ]

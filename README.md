@@ -1,6 +1,13 @@
 # Zetic.ru Отчёты
 
-Microservice for PDF reports generation
+## Develop
+```bash
+docker compose up -d db redis
+```
+
+```
+docker compose up web
+```
 
 ## Build
 ```bash

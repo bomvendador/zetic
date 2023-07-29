@@ -6,50 +6,68 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pdf', '0032_reportgroup_comments_alter_reportgroup_project'),
+        ("pdf", "0032_reportgroup_comments_alter_reportgroup_project"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='category',
-            options={'verbose_name': 'Категория', 'verbose_name_plural': 'Категории'},
+            name="category",
+            options={"verbose_name": "Категория", "verbose_name_plural": "Категории"},
         ),
         migrations.AlterModelOptions(
-            name='participant',
-            options={'verbose_name': 'Участник опроса', 'verbose_name_plural': 'Участники опроса'},
+            name="participant",
+            options={
+                "verbose_name": "Участник опроса",
+                "verbose_name_plural": "Участники опроса",
+            },
         ),
         migrations.AlterModelOptions(
-            name='pointdescription',
-            options={'verbose_name': 'Оисание баллов', 'verbose_name_plural': 'Оисания баллов'},
+            name="pointdescription",
+            options={
+                "verbose_name": "Оисание баллов",
+                "verbose_name_plural": "Оисания баллов",
+            },
         ),
         migrations.AlterModelOptions(
-            name='project',
-            options={'verbose_name': 'Проект', 'verbose_name_plural': 'Проекты'},
+            name="project",
+            options={"verbose_name": "Проект", "verbose_name_plural": "Проекты"},
         ),
         migrations.AlterModelOptions(
-            name='report',
-            options={'verbose_name': 'Индивидуальный отчет', 'verbose_name_plural': 'Индивидуальные отчеты'},
+            name="report",
+            options={
+                "verbose_name": "Индивидуальный отчет",
+                "verbose_name_plural": "Индивидуальные отчеты",
+            },
         ),
         migrations.AlterModelOptions(
-            name='reportdata',
-            options={'verbose_name': 'Данные индивидуальных отчетов', 'verbose_name_plural': 'Данные индивидуальных отчетов'},
+            name="reportdata",
+            options={
+                "verbose_name": "Данные индивидуальных отчетов",
+                "verbose_name_plural": "Данные индивидуальных отчетов",
+            },
         ),
         migrations.AlterModelOptions(
-            name='reportgroup',
-            options={'verbose_name': 'Групповые отчеты', 'verbose_name_plural': 'Групповые отчеты'},
+            name="reportgroup",
+            options={
+                "verbose_name": "Групповые отчеты",
+                "verbose_name_plural": "Групповые отчеты",
+            },
         ),
         migrations.AlterModelOptions(
-            name='reportgroupsquare',
-            options={'verbose_name': 'Данные по квадратам групповых отчетов', 'verbose_name_plural': 'Данные по квадратам групповых отчетов'},
+            name="reportgroupsquare",
+            options={
+                "verbose_name": "Данные по квадратам групповых отчетов",
+                "verbose_name_plural": "Данные по квадратам групповых отчетов",
+            },
         ),
         migrations.AlterModelOptions(
-            name='section',
-            options={'verbose_name': 'Секция', 'verbose_name_plural': 'Секции'},
+            name="section",
+            options={"verbose_name": "Секция", "verbose_name_plural": "Секции"},
         ),
         migrations.DeleteModel(
-            name='UserProfile',
+            name="UserProfile",
         ),
         migrations.DeleteModel(
-            name='UserRole',
+            name="UserRole",
         ),
     ]

@@ -2,25 +2,24 @@
 
 from django.conf import settings
 from django.db import migrations, models
-import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('pdf', '0056_alter_employee_birth_year_alter_employee_industry_and_more'),
+        ("pdf", "0056_alter_employee_birth_year_alter_employee_industry_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='participant',
-            name='send_report_on_complete',
+            model_name="participant",
+            name="send_report_on_complete",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='participant',
-            name='report_sent_at',
-            field=models.DateTimeField(blank=True, null=True, default=None)
-        )
+            model_name="participant",
+            name="report_sent_at",
+            field=models.DateTimeField(blank=True, null=True, default=None),
+        ),
     ]

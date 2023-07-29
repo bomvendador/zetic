@@ -6,17 +6,20 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pdf', '0040_employee_company_admin_employee_company_admin_active'),
+        ("pdf", "0040_employee_company_admin_employee_company_admin_active"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='employeeposition',
-            options={'verbose_name': 'Должность участника', 'verbose_name_plural': 'Должности участников'},
+            name="employeeposition",
+            options={
+                "verbose_name": "Должность участника",
+                "verbose_name_plural": "Должности участников",
+            },
         ),
         migrations.RenameField(
-            model_name='employee',
-            old_name='fio',
-            new_name='name',
+            model_name="employee",
+            old_name="fio",
+            new_name="name",
         ),
     ]

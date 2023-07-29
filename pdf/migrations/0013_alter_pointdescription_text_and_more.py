@@ -6,18 +6,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pdf', '0012_pointdescription_text_en'),
+        ("pdf", "0012_pointdescription_text_en"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='pointdescription',
-            name='text',
-            field=models.TextField(blank=True, null=True, verbose_name='Русский'),
+            model_name="pointdescription",
+            name="text",
+            field=models.TextField(blank=True, null=True, verbose_name="Русский"),
         ),
         migrations.AlterField(
-            model_name='pointdescription',
-            name='text_en',
-            field=models.TextField(blank=True, default=None, null=True, verbose_name='Английский'),
+            model_name="pointdescription",
+            name="text_en",
+            field=models.TextField(
+                blank=True, default=None, null=True, verbose_name="Английский"
+            ),
         ),
     ]

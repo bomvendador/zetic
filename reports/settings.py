@@ -10,17 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
 
 import environ
 
 env = environ.Env()
 environ.Env.read_env()
 
-API_BEARER = env('API_BEARER')
+API_BEARER = env("API_BEARER")
 # 'https://console.zetic.ru/api/'
-API_LINK = env('API_LINK', default='https://demo-admin.zetic.borsky.dev/api/')
+API_LINK = env("API_LINK", default="https://demo-admin.zetic.borsky.dev/api/")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--lfbjn3qgosinvh0ls*wb*#72ckmd4-9ozyt*^=6=_w+ah1&qg'
+SECRET_KEY = "django-insecure--lfbjn3qgosinvh0ls*wb*#72ckmd4-9ozyt*^=6=_w+ah1&qg"
 # SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -39,84 +39,80 @@ DEBUG = bool(int(os.environ.get("DEBUG", default=0)))
 # DEBUG = int(os.getenv('DEBUG'))
 print(f"In DEBUG mode: {DEBUG}")
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
-CSRF_TRUSTED_ORIGINS = ['https://panel.zetic.ru', 'http://127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ["https://panel.zetic.ru", "http://127.0.0.1"]
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django_extensions',
-    'django_dia',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'celery',
-    'api',
-    'pdf',
-    'pdf_group',
-    'login',
-    'panel',
-    'sendemail',
-    'django_celery_beat'
-
+    "django_extensions",
+    "django_dia",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "celery",
+    "api",
+    "pdf",
+    "pdf_group",
+    "login",
+    "panel",
+    "sendemail",
+    "django_celery_beat",
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',  # <-- And here
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",  # <-- And here
     ],
-    'DEFAULT_PARSER_CLASSES': [
-        'rest_framework.parsers.JSONParser'
-    ]
+    "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],
 }
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'reports.urls'
+ROOT_URLCONF = "reports.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            BASE_DIR / 'templates',
-            BASE_DIR / 'login/templates',
-            BASE_DIR / 'panel/templates'
-        ]
-        ,
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [
+            BASE_DIR / "templates",
+            BASE_DIR / "login/templates",
+            BASE_DIR / "panel/templates",
+        ],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'reports.wsgi.application'
+WSGI_APPLICATION = "reports.wsgi.application"
 
 # Celery Broker - Redis
-CELERY_BROKER_URL = env('CELERY_HOST', default='redis://redis:6379')
-CELERY_RESULT_BACKEND = env('CELERY_HOST', default='redis://redis:6379')
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+CELERY_BROKER_URL = env("CELERY_HOST", default="redis://redis:6379")
+CELERY_RESULT_BACKEND = env("CELERY_HOST", default="redis://redis:6379")
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "Europe/Moscow"
 
 # Database
@@ -131,15 +127,15 @@ CELERY_TIMEZONE = "Europe/Moscow"
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': env('DB_NAME', default='db_reports'),
-        'USER': env('DB_USER', default='root'),
-        'PASSWORD': env('DB_PASSWORD', default='alexrodin'),
-        'HOST': env('DB_HOST', default='localhost'),
-        'PORT': env('DB_PORT', default='33060'),
-        'CHARSET': 'utf8',
-        'COLLATION': 'utf8_general_ci',
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": env("DB_NAME", default="db_reports"),
+        "USER": env("DB_USER", default="root"),
+        "PASSWORD": env("DB_PASSWORD", default="alexrodin"),
+        "HOST": env("DB_HOST", default="localhost"),
+        "PORT": env("DB_PORT", default="33060"),
+        "CHARSET": "utf8",
+        "COLLATION": "utf8_general_ci",
     }
 }
 
@@ -165,16 +161,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -182,9 +178,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'Europe/Moscow'
+TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
 
@@ -194,60 +190,58 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_root/')
+STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static_root/")
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-    'login/static'
-]
+STATICFILES_DIRS = [BASE_DIR / "static", "login/static"]
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
+
 def exclude_root(record):
-    return not record.args[0].startswith('GET / HTTP')
+    return not record.args[0].startswith("GET / HTTP")
 
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'exclude_root': {
-            '()': 'django.utils.log.CallbackFilter',
-            'callback': exclude_root
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {
+        "exclude_root": {
+            "()": "django.utils.log.CallbackFilter",
+            "callback": exclude_root,
         }
     },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
         }
     },
-    'loggers': {
-        'django.server': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'filters': ['exclude_root']
+    "loggers": {
+        "django.server": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "filters": ["exclude_root"],
         },
         # 'django.request': {
         #     'handlers': ['console'],
         #     'level': 'INFO',
         #     'filters': ['exclude_root']
         # }
-    }
+    },
 }

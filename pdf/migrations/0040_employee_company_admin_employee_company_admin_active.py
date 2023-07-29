@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pdf', '0039_rename_name_eng_employeeposition_name_en'),
+        ("pdf", "0039_rename_name_eng_employeeposition_name_en"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='employee',
-            name='company_admin',
+            model_name="employee",
+            name="company_admin",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='employee',
-            name='company_admin_active',
+            model_name="employee",
+            name="company_admin_active",
             field=models.BooleanField(default=False),
         ),
     ]

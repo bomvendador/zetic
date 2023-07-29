@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pdf', '0011_pointdescription_text'),
+        ("pdf", "0011_pointdescription_text"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='pointdescription',
-            name='text_en',
+            model_name="pointdescription",
+            name="text_en",
             field=models.TextField(blank=True, default=None, null=True),
         ),
     ]

@@ -2,35 +2,34 @@
 
 from django.conf import settings
 from django.db import migrations, models
-import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('pdf', '0053_alter_participantquestiongroups_question_group_code'),
+        ("pdf", "0053_alter_participantquestiongroups_question_group_code"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='company',
-            name='public_code',
-            field=models.CharField(default='', max_length=10),
+            model_name="company",
+            name="public_code",
+            field=models.CharField(default="", max_length=10),
         ),
         migrations.AddField(
-            model_name='employeeposition',
-            name='public_code',
-            field=models.CharField(blank=True, default='', max_length=10, null=True),
+            model_name="employeeposition",
+            name="public_code",
+            field=models.CharField(blank=True, default="", max_length=10, null=True),
         ),
         migrations.AddField(
-            model_name='employeerole',
-            name='public_code',
-            field=models.CharField(blank=True, default='', max_length=10, null=True),
+            model_name="employeerole",
+            name="public_code",
+            field=models.CharField(blank=True, default="", max_length=10, null=True),
         ),
         migrations.AddField(
-            model_name='industry',
-            name='public_code',
-            field=models.CharField(blank=True, default='', max_length=10, null=True),
+            model_name="industry",
+            name="public_code",
+            field=models.CharField(blank=True, default="", max_length=10, null=True),
         ),
     ]

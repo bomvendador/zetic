@@ -1,10 +1,19 @@
-from pdf.models import Report, Participant, Company, ReportData, Section, Category, Employee, Study, \
-    EmployeeRole, EmployeeGender, EmployeePosition, Industry
-from login.models import UserProfile
-from . import raw_to_t_point
-from panel import mail_handler
 from django.utils import timezone
 from fpdf import FPDF
+
+from panel import mail_handler
+from pdf.models import (
+    Report,
+    Participant,
+    ReportData,
+    Employee,
+    Study,
+    EmployeeRole,
+    EmployeeGender,
+    EmployeePosition,
+    Industry,
+)
+from . import raw_to_t_point
 
 
 def save_data_to_db(request_json: dict, file_name: str, pdf: FPDF):
@@ -19,24 +28,34 @@ def save_data_to_db(request_json: dict, file_name: str, pdf: FPDF):
     #         company.save()
     #
 
-    employees = Employee.objects.filter(email=request_json['participant_info']['email'])
+    employees = Employee.objects.filter(email=request_json["participant_info"]["email"])
     if employees.exists():
-        sexes = EmployeeGender.objects.filter(public_code=request_json['participant_info']['sex'])
-        roles = EmployeeRole.objects.filter(public_code=request_json['participant_info']['role'])
-        industries = Industry.objects.filter(public_code=request_json['participant_info']['industry'])
-        positions = EmployeePosition.objects.filter(public_code=request_json['participant_info']['position'])
+        sexes = EmployeeGender.objects.filter(
+            public_code=request_json["participant_info"]["sex"]
+        )
+        roles = EmployeeRole.objects.filter(
+            public_code=request_json["participant_info"]["role"]
+        )
+        industries = Industry.objects.filter(
+            public_code=request_json["participant_info"]["industry"]
+        )
+        positions = EmployeePosition.objects.filter(
+            public_code=request_json["participant_info"]["position"]
+        )
 
         employee = employees.first()
-        employee.name = request_json['participant_info']['name']
-        employee.birth_year = request_json['participant_info']['year']
+        employee.name = request_json["participant_info"]["name"]
+        employee.birth_year = request_json["participant_info"]["year"]
         employee.sex = sexes.first() if sexes.exists() else None
         employee.role = roles.first() if roles.exists() else None
         employee.industry = industries.first() if industries.exists() else None
         employee.position = positions.first() if positions.exists() else None
         employee.save()
-        print(f'Employee updated {employee.birth_year} {employee.sex} {employee.role} {employee.industry} {employee.position}')
+        print(
+            f"Employee updated {employee.birth_year} {employee.sex} {employee.role} {employee.industry} {employee.position}"
+        )
 
-    study = Study.objects.get(public_code=request_json['study']['id'])
+    study = Study.objects.get(public_code=request_json["study"]["id"])
     # if Study.objects.filter(public_code=request_json['study']['id']).exists():
     #
     # else:
@@ -46,9 +65,13 @@ def save_data_to_db(request_json: dict, file_name: str, pdf: FPDF):
     #     # study.name = request_json['study_name']
     #     study.save()
 
-    if Participant.objects.filter(employee__email=request_json['participant_info']['email'], study=study).exists():
+    if Participant.objects.filter(
+        employee__email=request_json["participant_info"]["email"], study=study
+    ).exists():
 
-        participant = Participant.objects.get(employee__email=request_json['participant_info']['email'], study=study)
+        participant = Participant.objects.get(
+            employee__email=request_json["participant_info"]["email"], study=study
+        )
     else:
         participant = Participant()
     participant.completed_at = timezone.now()
@@ -56,43 +79,48 @@ def save_data_to_db(request_json: dict, file_name: str, pdf: FPDF):
     participant.answered_questions_qnt = participant.total_questions_qnt
     participant.save()
 
-    if Report.objects.filter(code=request_json['code']).exists():
-        report = Report.objects.get(code=request_json['code'])
+    if Report.objects.filter(code=request_json["code"]).exists():
+        report = Report.objects.get(code=request_json["code"])
         ReportData.objects.filter(report=report).delete()
     else:
         report = Report()
-    lie_points = round(request_json['lie_points'] / 40 * 10)
+    lie_points = round(request_json["lie_points"] / 40 * 10)
     report.participant = participant
     report.lie_points = lie_points
-    report.code = request_json['code']
+    report.code = request_json["code"]
     report.file = file_name
-    report.lang = request_json['lang']
+    report.lang = request_json["lang"]
     report.study = study
     report.save()
 
-    for section in request_json['appraisal_data']:
+    for section in request_json["appraisal_data"]:
         # print(section['point'])
-        for point in section['point']:
+        for point in section["point"]:
             # print(f"{point['category']} - {point['points']}")
             report_data = ReportData()
             report_data.report = report
-            report_data.section_code = section['code']
-            report_data.section_name = section['section']
+            report_data.section_code = section["code"]
+            report_data.section_name = section["section"]
             # print(point['code'])
-            report_data.category_name = point['category'][:50]
-            report_data.category_code = point['code']
-            report_data.points = raw_to_t_point.get_t_point(point['points'], point['code'], request_json['participant_info']['sex'], int(request_json['participant_info']['year']))
+            report_data.category_name = point["category"][:50]
+            report_data.category_code = point["code"]
+            report_data.points = raw_to_t_point.get_t_point(
+                point["points"],
+                point["code"],
+                request_json["participant_info"]["sex"],
+                int(request_json["participant_info"]["year"]),
+            )
             # report_data.points = point['points']
             report_data.save()
 
     if participant.send_admin_notification_after_filling_up:
-        to_email = 'info@zetic.ru'
+        to_email = "info@zetic.ru"
         data_for_mail = {
-            'participant_name': participant.employee.name,
-            'email': request_json['participant_info']['email'],
-            'company_name': participant.employee.company.name,
-            'study_name': participant.study.name,
-            'to_email': to_email
+            "participant_name": participant.employee.name,
+            "email": request_json["participant_info"]["email"],
+            "company_name": participant.employee.company.name,
+            "study_name": participant.study.name,
+            "to_email": to_email,
         }
         mail_handler.send_notification_report_made(data_for_mail)
 
@@ -101,13 +129,12 @@ def save_data_to_db(request_json: dict, file_name: str, pdf: FPDF):
         participant.save()
         to_email = participant.employee.email
         data_for_mail = {
-            'participant_name': participant.employee.name,
-            'company_name': participant.employee.company.name,
-            'study_name': participant.study.name,
-            'to_email': to_email
+            "participant_name": participant.employee.name,
+            "company_name": participant.employee.company.name,
+            "study_name": participant.study.name,
+            "to_email": to_email,
         }
         mail_handler.send_participant_report(
             to_email=to_email,
             pdf_report=pdf.output(),
         )
-

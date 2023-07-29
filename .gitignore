@@ -10,3 +10,7 @@ questionnaire-report.tar.gz
 mysql-data/
 
 mysql-init.sql
+
+.idea/
+.vscode/
+__pycache__/

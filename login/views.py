@@ -1,9 +1,13 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
-from .models import UserProfile
-from pdf.models import Employee
 import json
+
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
+from django.shortcuts import render
+
+from pdf.models import Employee
+from .models import UserProfile
+
+
 # Create your views here.
 
 

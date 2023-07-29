@@ -15,14 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+
 from api import views
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('json_request/', views.json_request, name='json_request'),
-    path('admin/', admin.site.urls),
-    path('pdf/', include('pdf.urls'), name='pdf'),
-    path('api/', include('api.urls'), name='api'),
-    path('login/', include('login.urls'), name='login'),
-    path('panel/', include('panel.urls'), name='panel'),
+    path("", views.home, name="home"),
+    path("json_request/", views.json_request, name="json_request"),
+    path("admin/", admin.site.urls),
+    path("pdf/", include("pdf.urls"), name="pdf"),
+    path("api/", include("api.urls"), name="api"),
+    path("login/", include("login.urls"), name="login"),
+    path("panel/", include("panel.urls"), name="panel"),
 ]

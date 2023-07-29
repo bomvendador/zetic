@@ -1,5 +1,3 @@
-import math
-
 from pdf.draw import insert_page_number
 from pdf_group.draw import draw_table
 from pdf_group.page_funcs import START_Y
@@ -14,10 +12,10 @@ def page(pdf, square_results, lang):
     pdf.set_xy(x, y)
     pdf.set_font("RalewayBold", "", 10)
 
-    if lang == 'ru':
-        pdf.cell(0, 0, 'Состав участников исследования')
+    if lang == "ru":
+        pdf.cell(0, 0, "Состав участников исследования")
     else:
-        pdf.cell(0, 0, 'Study participants')
+        pdf.cell(0, 0, "Study participants")
     pdf.set_draw_color(0, 0, 0)
     pdf.line(x + 1, y + 5, x + 220, y + 5)
 
@@ -29,5 +27,3 @@ def page(pdf, square_results, lang):
     insert_page_number(pdf)
 
     pdf.set_line_width(0.1)
-
-

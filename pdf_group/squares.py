@@ -1,5 +1,5 @@
-from pdf_group.draw import draw_arrow,draw_squares, draw_table
 from pdf.draw import insert_page_number
+from pdf_group.draw import draw_squares
 
 
 def page(pdf, square_results, table_y):
@@ -7,11 +7,11 @@ def page(pdf, square_results, table_y):
 
     x = 12
     y = 12
-    pdf.set_xy(x,y)
+    pdf.set_xy(x, y)
     pdf.set_font("RalewayBold", "", 10)
 
     # if lang == 'ru':
-    pdf.cell(0, 0, 'Командный профиль: распределение ролей в группе')
+    pdf.cell(0, 0, "Командный профиль: распределение ролей в группе")
     # else:
     #     pdf.cell(0, 0, 'Section K')
     pdf.set_draw_color(0, 0, 0)

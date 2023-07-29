@@ -7,20 +7,19 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='State',
+            name="State",
             fields=[
-                ('state_id', models.AutoField(primary_key=True, serialize=False)),
-                ('state_name', models.CharField(blank=True, max_length=30, null=True)),
-                ('is_deleted', models.IntegerField(default=0)),
+                ("state_id", models.AutoField(primary_key=True, serialize=False)),
+                ("state_name", models.CharField(blank=True, max_length=30, null=True)),
+                ("is_deleted", models.IntegerField(default=0)),
             ],
             options={
-                'db_table': 'states',
-                'managed': True,
+                "db_table": "states",
+                "managed": True,
             },
         ),
     ]

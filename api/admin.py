@@ -1,8 +1,10 @@
 from django.contrib import admin
-from pdf.models import Participant, Report, Category, Section, PointDescription, Company, ReportData, ReportGroup, \
-    ReportGroupSquare, Industry, EmployeeRole, EmployeePosition, Employee, Study, ParticipantQuestionGroups, EmailSentToParticipant, \
-    RawToTPointsType, RawToTPoints, EmployeeGender, StudyQuestionGroup
+
 from login.models import UserRole, UserProfile
+from pdf.models import Participant, Report, Category, Section, PointDescription, Company, ReportData, ReportGroup, \
+    ReportGroupSquare, Industry, EmployeeRole, EmployeePosition, Employee, Study, ParticipantQuestionGroups, \
+    EmailSentToParticipant, \
+    RawToTPointsType, RawToTPoints, EmployeeGender, StudyQuestionGroup
 
 
 # Register your models here.

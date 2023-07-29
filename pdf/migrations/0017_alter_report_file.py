@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pdf', '0016_alter_report_file'),
+        ("pdf", "0016_alter_report_file"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='report',
-            name='file',
-            field=models.FileField(default=None, upload_to='reportsPDF/'),
+            model_name="report",
+            name="file",
+            field=models.FileField(default=None, upload_to="reportsPDF/"),
         ),
     ]
