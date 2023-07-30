@@ -79,7 +79,7 @@ BLOCK_R = 230
 BLOCK_G = 230
 BLOCK_B = 227
 
-text_border = 1
+text_border = 0
 
 
 @dataclass
@@ -606,6 +606,7 @@ class SingleReport(ABC):
 
                 pdf.set_y(scale_y + 10)
 
+        self._insert_page_number(pdf)
         pass
 
     def _add_boyko_page(self, data: SectionData, lang: str):
@@ -764,6 +765,7 @@ class SingleReport(ABC):
             scale_y += 5
 
         self._insert_page_number(pdf)
+        pass
 
     @staticmethod
     def _draw_header(pdf: FPDF, section_name, section_text):

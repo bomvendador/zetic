@@ -60,12 +60,12 @@ def pdf_single_generator_v1(request_json):
     print(f"QueryFilter: {q_filter}")
     if report_data.lang == "en":
         points_description_dict = {
-            item["category__code"]: item.text_en
+            item["category__code"]: item["text_en"]
             for item in points_description.values("category__code", "text_en")
         }
     else:
         points_description_dict = {
-            item["category__code"]: item.text
+            item["category__code"]: item["text"]
             for item in points_description.values("category__code", "text")
         }
 
