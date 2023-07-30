@@ -50,3 +50,42 @@ COPING_CATEGORIES: Dict[str, List[str]] = {
         "2_16",
     ],
 }
+
+BOYKO_CATEGORIES: Dict[str, List[str]] = {
+    "Phase 1. Tension": [
+        "3_1",
+        "3_2",
+        "3_3",
+        "3_4",
+    ],
+    "Phase 2. Resistance": [
+        "3_5",
+        "3_6",
+        "3_7",
+        "3_8",
+    ],
+    "Phase 3. Exhaustion": [
+        "3_9",
+        "3_10",
+        "3_11",
+        "3_12",
+    ],
+}
+
+
+VALUES_CATEGORIES: Dict[str, List[str]] = {
+    "Creating harmony": [
+        "4_1",
+        "4_2",
+        "4_3",
+        "4_4",
+        "4_5",
+    ],
+    "Overcoming resistance": [
+        "4_6",
+        "4_7",
+        "4_8",
+        "4_9",
+        "4_10",
+    ],
+}

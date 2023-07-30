@@ -35,14 +35,12 @@ TRANSLATIONS = {
 • The section K measures the basic personality traits and its influence of business behavior and performance.
 • The section С describes the basic reactions on stress, actions taken by a person to cope with the new worries, to adapt to tension and to find a way out of a traumatic situation.
 • The section B reflects the psychological factors that lead to burnout, the burnout indicator and intensity.
-• The section V describes the universal well-established needs and life priorities of the individual that influence decisions and choices.
-""",
+• The section V describes the universal well-established needs and life priorities of the individual that influence decisions and choices.""",
         "ru": """\
 • Cекция «Базовые черты личности» построена исходя из 5-факторной диспозициональной модели личности, отражающей восприятие людей друг другом. В ее основе - лексический подход, использующий факторный анализ словесных описаний характеристик человека; язык может отразить аспекты личности, которые описывают адаптацию человека к социальной среде с учетом его личных особенностей. Авторы: Г. Олпорт, П. Коста и Р. Маккрэй и Р. Кэттел. 1985-1992г.
 • Секция «Поведение в стрессе» сформирована исходя из модели психологического преодоления стресса, описывающей базовые реакции и действия, предпринимаемые человеком, чтобы справиться с переживанием, адаптироваться к нагрузке и найти выход из травмирующей ситуации. Автор: Ричард Лазарус, 1991г.
 • Секция «Факторы выгорания» построена на основе модели многофакторного эмоционального выгорания, описывающей механизмы психической защиты и переход в состояние физического и психического истощения, возникающее в ответ на эмоциональное перенапряжение.  Авторы: Б. Фрейденберг, К. Маслач 1992г.
-• Секция «Жизненные ценности» разработана на основе модели жизненных ценностей личности, описывающей универсальные устоявшиеся потребности и жизненные приоритеты личности, определяющие условия и порядок принятия личностью важных решений и реализации действий.  Авторы: Ш. Шварц, 1992г.
-""",
+• Секция «Жизненные ценности» разработана на основе модели жизненных ценностей личности, описывающей универсальные устоявшиеся потребности и жизненные приоритеты личности, определяющие условия и порядок принятия личностью важных решений и реализации действий.  Авторы: Ш. Шварц, 1992г.""",
     },
     "How to read the report": {
         "ru": "Как читать отчет",
@@ -97,6 +95,14 @@ TRANSLATIONS = {
             "The values within the red frame (are too high) correspond to insincerity, demonstrative behavior and "
             "need for social approval."
         ),
+    },
+    "scale_min": {
+        "ru": "Слабо выражено",
+        "en": "Weakly expressed",
+    },
+    "scale_max": {
+        "ru": "Ярко выражено",
+        "en": "Strongly expressed",
     },
     ## Cattell
     "Section K": {
@@ -176,8 +182,7 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Scale O
-            Apprehension
-            """
+            Apprehension"""
         ),
     },
     "1_2_min": {
@@ -213,36 +218,31 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
         Scale Q4
-        Tension
-        """
+        Tension"""
         ),
     },
     "1_3_min": {
         "ru": textwrap.dedent(
             """\
     Расслабленность,
-    Низкая мотивация
-        """
+    Низкая мотивация"""
         ),
         "en": textwrap.dedent(
             """\
     Relaxation, Tranquility,
-    Low drive,  Composure
-        """
+    Low drive,  Composure"""
         ),
     },
     "1_3_max": {
         "ru": textwrap.dedent(
             """\
     Собранность, Напряженность,
-    Раздражительность
-        """
+    Раздражительность"""
         ),
         "en": textwrap.dedent(
             """\
     Tension, Overthought,
-    High drive, Irritability
-        """
+    High drive, Irritability"""
         ),
     },
     "1_4": {
@@ -254,36 +254,31 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
     Scale F
-    Impulsiveness
-    """
+    Impulsiveness"""
         ),
     },
     "1_4_min": {
         "ru": textwrap.dedent(
             """\
     Молчаливость,
-    Расчетливость
-        """
+    Расчетливость"""
         ),
         "en": textwrap.dedent(
             """\
     Taciturnity, Prudence,
-    Temperance
-        """
+    Temperance"""
         ),
     },
     "1_4_max": {
         "ru": textwrap.dedent(
             """\
     Беззаботность, Беспечность,
-    Экспрессивность
-        """
+    Экспрессивность"""
         ),
         "en": textwrap.dedent(
             """\
     Carelessness, Enthusiasm,
-    Expressiveness
-        """
+    Expressiveness"""
         ),
     },
     "1_5": {
@@ -302,28 +297,24 @@ TRANSLATIONS = {
         "ru": textwrap.dedent(
             """\
     Прямолинейность,
-    Четкость
-        """
+    Четкость"""
         ),
         "en": textwrap.dedent(
             """\
     Straightforwardness,
-    Tactlessness, Genuiness
-        """
+    Tactlessness, Genuiness"""
         ),
     },
     "1_5_max": {
         "ru": textwrap.dedent(
             """\
     Влияние,
-    Хитрость
-        """
+    Хитрость"""
         ),
         "en": textwrap.dedent(
             """\
     Social awareness,
-    Influence, Cunning
-        """
+    Influence, Cunning"""
         ),
     },
     "1_6": {
@@ -335,36 +326,31 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
         Scale I
-         Sensitivity
-        """
+         Sensitivity"""
         ),
     },
     "1_6_min": {
         "ru": textwrap.dedent(
             """\
     Рассудительность, Циничность,
-    Ответственность
-        """
+    Ответственность"""
         ),
         "en": textwrap.dedent(
             """\
     Cynicism, Tough-mind,
-    Self-reliance
-        """
+    Self-reliance"""
         ),
     },
     "1_6_max": {
         "ru": textwrap.dedent(
             """\
     Эмпатичность,
-    Интуитивность
-        """
+    Интуитивность"""
         ),
         "en": textwrap.dedent(
             """\
     Tender-mind, Empathy,
-    Intuitiveness
-        """
+    Intuitiveness"""
         ),
     },
     "1_7": {
@@ -376,36 +362,31 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
         Scale A
-        Warmth
-        """
+        Warmth"""
         ),
     },
     "1_7_min": {
         "ru": textwrap.dedent(
             """\
     Замкнутость, Холодность,
-    Безучастность, Строгость
-        """
+    Безучастность, Строгость"""
         ),
         "en": textwrap.dedent(
             """\
     Reserveness, Coldness,
-    Indifference, Severity
-        """
+    Indifference, Severity"""
         ),
     },
     "1_7_max": {
         "ru": textwrap.dedent(
             """\
     Общительность,
-    Открытость
-        """
+    Открытость"""
         ),
         "en": textwrap.dedent(
             """\
     Sociability, Warmth,
-    Kindness, Openness
-        """
+    Kindness, Openness"""
         ),
     },
     "1_8": {
@@ -417,36 +398,31 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
         Scale M
-        Abstractedness
-        """
+        Abstractedness"""
         ),
     },
     "1_8_min": {
         "ru": textwrap.dedent(
             """\
     Практичность,
-    Реалистичность, Прозаичность
-        """
+    Реалистичность, Прозаичность"""
         ),
         "en": textwrap.dedent(
             """\
     Practicality, Integrity,
-    Realism, Grounding
-        """
+    Realism, Grounding"""
         ),
     },
     "1_8_max": {
         "ru": textwrap.dedent(
             """\
     Восторженность,
-    Воображение
-        """
+    Воображение"""
         ),
         "en": textwrap.dedent(
             """\
     Abstracteness, Imagination,
-    Idea-oriention
-        """
+    Idea-oriention"""
         ),
     },
     "1_9": {
@@ -458,36 +434,31 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
         Scale Q2
-        Self-reliance
-        """
+        Self-reliance"""
         ),
     },
     "1_9_min": {
         "ru": textwrap.dedent(
             """\
     Зависимость от группы,
-    Разделение ответственности
-        """
+    Разделение ответственности"""
         ),
         "en": textwrap.dedent(
             """\
     Group-dependence,
-    Division of responsibility
-        """
+    Division of responsibility"""
         ),
     },
     "1_9_max": {
         "ru": textwrap.dedent(
             """\
     Самостоятельность,
-    Независимость
-        """
+    Независимость"""
         ),
         "en": textwrap.dedent(
             """\
     Independence,
-    Resourcefulness
-        """
+    Resourcefulness"""
         ),
     },
     "1_10": {
@@ -499,35 +470,30 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
         Scale G
-        Rule-consciousness
-        """
+        Rule-consciousness"""
         ),
     },
     "1_10_min": {
         "ru": textwrap.dedent(
             """\
-    Непостоянство, Ненадежность
-        """
+    Непостоянство, Ненадежность"""
         ),
         "en": textwrap.dedent(
             """\
     Volatility, Insecurity,
-    Expediency
-        """
+    Expediency"""
         ),
     },
     "1_10_max": {
         "ru": textwrap.dedent(
             """\
     Настойчивость,
-    Дисциплина, Долг
-        """
+    Дисциплина, Долг"""
         ),
         "en": textwrap.dedent(
             """\
     Perseverance, Conformity
-    Discipline, Obligation
-        """
+    Discipline, Obligation"""
         ),
     },
     "1_11": {
@@ -546,28 +512,24 @@ TRANSLATIONS = {
         "ru": textwrap.dedent(
             """\
     Конфликтность,
-    Невнимательность
-        """
+    Невнимательность"""
         ),
         "en": textwrap.dedent(
             """\
     Self-conflict, Disorder Tolerance,
-    Inattention
-        """
+    Inattention"""
         ),
     },
     "1_11_max": {
         "ru": textwrap.dedent(
             """\
     Самоконтроль,
-    Сильная воля, Точность
-        """
+    Сильная воля, Точность"""
         ),
         "en": textwrap.dedent(
             """\
     Self control
-    Strong will, Accuracy
-        """
+    Strong will, Accuracy"""
         ),
     },
     "1_12": {
@@ -586,28 +548,24 @@ TRANSLATIONS = {
         "ru": textwrap.dedent(
             """\
     Консерватизм,
-    Принятие быстрых решений
-        """
+    Принятие быстрых решений"""
         ),
         "en": textwrap.dedent(
             """\
     Judgement-orientation
-    Change intolerance, Conservatism
-        """
+    Change intolerance, Conservatism"""
         ),
     },
     "1_12_max": {
         "ru": textwrap.dedent(
             """\
     Экспериментирование,
-    Анализ информации
-        """
+    Анализ информации"""
         ),
         "en": textwrap.dedent(
             """\
     Information analysis, Criticality
-    Work optimization
-        """
+    Work optimization"""
         ),
     },
     "1_13": {
@@ -619,36 +577,31 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
     Scale L
-    Vigilance
-        """
+    Vigilance"""
         ),
     },
     "1_13_min": {
         "ru": textwrap.dedent(
             """\
     Доверчивость, Терпимость,
-    Откровенность
-        """
+    Откровенность"""
         ),
         "en": textwrap.dedent(
             """\
     Confidence, Tolerance
-    Frankness
-        """
+    Frankness"""
         ),
     },
     "1_13_max": {
         "ru": textwrap.dedent(
             """\
     Подозрительность,
-    Осторожность
-        """
+    Осторожность"""
         ),
         "en": textwrap.dedent(
             """\
     Suspicion
-    Caution
-        """
+    Caution"""
         ),
     },
     "1_14": {
@@ -660,33 +613,28 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
         Scale H
-        Social boldness
-        """
+        Social boldness"""
         ),
     },
     "1_14_min": {
         "ru": textwrap.dedent(
             """\
-    Робость, Деликатность
-        """
+    Робость, Деликатность"""
         ),
         "en": textwrap.dedent(
             """\
-    Timidity, Delicacy
-        """
+    Timidity, Delicacy"""
         ),
     },
     "1_14_max": {
         "ru": textwrap.dedent(
             """\
-    Смелость, Авантюрность
-        """
+    Смелость, Авантюрность"""
         ),
         "en": textwrap.dedent(
             """\
     Courage, Boldness
-    Adventurism
-        """
+    Adventurism"""
         ),
     },
     "1_15": {
@@ -698,36 +646,31 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
         Scale E
-        Dominance
-        """
+        Dominance"""
         ),
     },
     "1_15_min": {
         "ru": textwrap.dedent(
             """\
     Мягкость, Тактичность,
-    Уступчивость
-        """
+    Уступчивость"""
         ),
         "en": textwrap.dedent(
             """\
     Softness, Tact
-    Compliance
-        """
+    Compliance"""
         ),
     },
     "1_15_max": {
         "ru": textwrap.dedent(
             """\
     Напористость, Властность,
-    Самоуверенность
-        """
+    Самоуверенность"""
         ),
         "en": textwrap.dedent(
             """\
     Assertiveness, Dominance
-    Self-confidence
-        """
+    Self-confidence"""
         ),
     },
     # Coping
@@ -761,14 +704,6 @@ TRANSLATIONS = {
         "en": "Strategies leading to further stress and strengthening worries",
     },
     # Coping Scales
-    "coping_scale_min": {
-        "ru": "Слабо выражено",
-        "en": "Weakly expressed",
-    },
-    "coping_scale_max": {
-        "ru": "Ярко выражено",
-        "en": "Strongly expressed",
-    },
     "2_1": {
         "ru": textwrap.dedent(
             """\
@@ -969,6 +904,276 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             """
+        ),
+    },
+    # Burnout / Boyko
+    "Section B": {
+        "en": "Section B",
+        "ru": "Факторы профессионального выгорания",
+    },
+    "Section B_text": {
+        "ru": (
+            "Ниже приведено исследование механизмов эмоционального выгорания из-за последовательного снижения "
+            "эмоционального ответа на ситуацию. Вы можете увидеть, какие факторы формируют каждую фазу выгорания и "
+            "в какой точке Вы находитесь прямо сейчас."
+        ),
+        "en": (
+            "The following scores describe the mechanisms of emotional burnout – a consistent decrease in emotional "
+            "response to work situations. You can explore behavioral markers shaping burnout phase."
+        ),
+    },
+    "3_1": {
+        "ru": textwrap.dedent(
+            """\
+            Переживание"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
+        ),
+    },
+    "3_2": {
+        "ru": textwrap.dedent(
+            """\
+            Неудовлетворенность
+            собой"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Self dissatisfaction"""
+        ),
+    },
+    "3_3": {
+        "ru": textwrap.dedent(
+            """\
+            «Загнанность в
+            клетку»"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Feeling trapped"""
+        ),
+    },
+    "3_4": {
+        "ru": textwrap.dedent(
+            """\
+            Тревога"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Anxiety"""
+        ),
+    },
+    "3_5": {
+        "ru": textwrap.dedent(
+            """\
+            Избирательное
+            реагирование"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Selective emotional
+            response"""
+        ),
+    },
+    "3_6": {
+        "ru": textwrap.dedent(
+            """\
+            Эмоциональная
+            защита"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Emotional
+            defense"""
+        ),
+    },
+    # 3_7 - 3_12
+    "3_7": {
+        "ru": textwrap.dedent(
+            """\
+            Экономия эмоций"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Emotional saving"""
+        ),
+    },
+    "3_8": {
+        "ru": textwrap.dedent(
+            """\
+            Эмпатическая
+            усталость"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Empathic fatigue""",
+        ),
+    },
+    "3_9": {
+        "ru": textwrap.dedent(
+            """\
+            Эмоциональная
+            опустошенность"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Emotional
+            emptiness""",
+        ),
+    },
+    "3_10": {
+        "ru": textwrap.dedent(
+            """\
+            Эмоциональная
+            отстраненность"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Emotional
+            detachment""",
+        ),
+    },
+    "3_11": {
+        "ru": textwrap.dedent(
+            """\
+            Личностная
+            отстраненность"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Personal
+            detachment""",
+        ),
+    },
+    "3_12": {
+        "ru": textwrap.dedent(
+            """\
+            Психосоматика"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Physical discomfort""",
+        ),
+    },
+    # Values
+    "Section V": {
+        "en": "Section V",
+        "ru": "Ценности",
+    },
+    "Section V_text": {
+        "ru": (
+            "Ниже приведено исследование жизненных ценностей — универсальных человеческих потребностей, определяющих "
+            "выборы и предпочтения индивида, его жизненную стратегию."
+        ),
+        "en": (
+            "The following scores reflect life values - fundamental human needs that determine personal choices "
+            "life strategies."
+        ),
+    },
+    # 4_1 - 4_10
+    "4_1": {
+        "ru": textwrap.dedent(
+            """\
+            Причастность"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Affiliation"""
+        ),
+    },
+    "4_2": {
+        "ru": textwrap.dedent(
+            """\
+            Традиционализм"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Conventionality"""
+        ),
+    },
+    "4_3": {
+        "ru": textwrap.dedent(
+            """\
+            Жажда
+            впечатлений"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Sensation
+            seeking"""
+        ),
+    },
+    "4_4": {
+        "ru": textwrap.dedent(
+            """\
+            Эстетичность"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Aesthetic"""
+        ),
+    },
+    "4_5": {
+        "ru": textwrap.dedent(
+            """\
+            Гедонизм"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Hedonism"""
+        ),
+    },
+    "4_6": {
+        "ru": textwrap.dedent(
+            """\
+            Признание"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Recognition"""
+        ),
+    },
+    "4_7": {
+        "ru": textwrap.dedent(
+            """\
+            Достижения"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Achievement"""
+        ),
+    },
+    "4_8": {
+        "ru": textwrap.dedent(
+            """\
+            Коммерческий
+            подход"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Commercial
+            attitude"""
+        ),
+    },
+    "4_9": {
+        "ru": textwrap.dedent(
+            """\
+            Безопасность"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Safety"""
+        ),
+    },
+    "4_10": {
+        "ru": textwrap.dedent(
+            """\
+            Интеллект"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Curiosity"""
         ),
     },
 }

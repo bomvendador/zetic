@@ -46,6 +46,44 @@ coping_example = SectionData(
     }
 )
 
+boyko_example = SectionData(
+    {
+        "3_1": 1,
+        "3_2": 2,
+        "3_3": 3,
+        "3_4": 4,
+        "3_5": 5,
+        "3_6": 6,
+        "3_7": 7,
+        "3_8": 8,
+        "3_9": 9,
+        "3_10": 10,
+        "3_11": 1,
+        "3_12": 2,
+        "3_13": 3,
+        "3_14": 4,
+        "3_15": 5,
+        "3_16": 6,
+        "3_17": 7,
+        "3_18": 8,
+    }
+)
+
+values_example = SectionData(
+    {
+        "4_1": 1,
+        "4_2": 2,
+        "4_3": 3,
+        "4_4": 4,
+        "4_5": 5,
+        "4_6": 6,
+        "4_7": 7,
+        "4_8": 8,
+        "4_9": 9,
+        "4_10": 10,
+    }
+)
+
 
 class SingleReportTest(TestCase):
     def test_single_report(self):
@@ -56,6 +94,8 @@ class SingleReportTest(TestCase):
                 lang="en",
                 cattell_data=cattel_example,
                 coping_data=coping_example,
+                boyko_data=boyko_example,
+                values_data=values_example,
             ),
             path="test",
         )
@@ -66,6 +106,8 @@ class SingleReportTest(TestCase):
                 lang="ru",
                 cattell_data=cattel_example,
                 coping_data=coping_example,
+                boyko_data=boyko_example,
+                values_data=values_example,
             ),
             path="test",
         )
