@@ -1,11 +1,14 @@
 import os
+import textwrap
 import time
 from abc import ABC
 from dataclasses import dataclass
+from typing import Dict, NamedTuple
 
 from fpdf import fpdf
-from fpdf.enums import Align
+from fpdf.enums import Align, XPos, YPos
 
+from pdf.report_sections_configuration import CATTELL_CATEGORIES, COPING_CATEGORIES
 from pdf.raw_to_t_point_mapper import RawToTPointMapper, AgeGroup
 from pdf.translations import TRANSLATIONS_DICT
 
@@ -24,12 +27,46 @@ BLOCK_R = 230
 BLOCK_G = 230
 BLOCK_B = 227
 
+text_border = 1
+
+
+# category: str, points: int
+@dataclass
+class SectionData:
+    data: Dict[str, int]
+
+    def __post_init__(self):
+        # check if points are in range
+        for points in self.data.values():
+            if points < 0 or points > 10:
+                raise ValueError(f"points must be between 0 and 10, got {points}")
+
+    def __getitem__(self, item):
+        return self.data[item]
+
+    def is_empty(self):
+        return len(self.data) == 0
+
 
 @dataclass
 class SingleReportData:
     participant_name: str = ""
     lie_points: int = 7  # from 0 to 10
     lang: str = "ru"
+    cattell_data: SectionData = SectionData({})
+    coping_data: SectionData = SectionData({})
+    burnout_data: SectionData = SectionData({})
+    values_data: SectionData = SectionData({})
+
+    def __post_init__(self):
+        # check if lang is supported
+        if self.lang not in ["ru", "en"]:
+            raise ValueError(f"lang must be either ru or en, got {self.lang}")
+        # check if lie_points is in range
+        if self.lie_points < 0 or self.lie_points > 10:
+            raise ValueError(
+                f"lie_points must be between 0 and 10, got {self.lie_points}"
+            )
 
 
 class SingleReport(ABC):
@@ -60,6 +97,10 @@ class SingleReport(ABC):
         self._add_fonts()
         self._title_page(data.participant_name, data.lang)
         self._add_report_description(data.lie_points, data.lang)
+
+        self._add_kettle_page(data.cattell_data, data.lang)
+        self._add_coping_page(data.coping_data, data.lang)
+
         time_end = time.perf_counter() - time_start
         self._pdf.output(f"{path}-{data.lang}.pdf")
         print(f"Time elapsed: {time_end:.2f} seconds")
@@ -190,6 +231,139 @@ class SingleReport(ABC):
         self._insert_page_number()
         pass
 
+    def _add_kettle_page(self, data: SectionData, lang: str):
+        if data.is_empty():
+            return
+
+        pdf = self._pdf
+        pdf.add_page()
+
+        # Header
+        pdf.set_font("RalewayBold", "", 10)
+        pdf.cell(0, 0, TRANSLATIONS_DICT.get_translation("Section K", lang))
+
+        pdf.set_font("RalewayLight", "", 9)
+        pdf.set_xy(pdf.l_margin, pdf.get_y() + 5)
+        pdf.multi_cell(
+            0,
+            4,
+            txt=TRANSLATIONS_DICT.get_translation("Section K_text", lang),
+            align=Align.J,
+        )
+
+        start_y = pdf.get_y() + 5
+
+        # Categories
+        category_height = 15.5
+        for category in CATTELL_CATEGORIES:
+            scales = CATTELL_CATEGORIES[category]
+            height = category_height * len(scales)
+
+            # Draw category header
+            pdf.set_font("RalewayLight", "", 9)
+            pdf.set_xy(pdf.l_margin, start_y + height)
+            with pdf.rotation(90):
+                pdf.cell(
+                    height,
+                    0,
+                    txt=TRANSLATIONS_DICT.get_translation(category, lang),
+                    align=Align.C,
+                    new_x=XPos.LEFT,
+                    new_y=YPos.TOP,
+                )
+            pdf.set_draw_color(0, 0, 0)
+            pdf.line(
+                pdf.l_margin + 5, pdf.get_y() - height, pdf.l_margin + 5, pdf.get_y()
+            )
+
+            # Draw scales
+            # | l_margin | 10 v_line | 3 padding txt | 35 text | 3 padding points | 14 points | 3 padding text | 31 txt
+            # 1_1, 1_2, ...
+            for scale in scales:
+                points = data[scale]
+                pdf.set_xy(pdf.l_margin + 8, start_y)
+                pdf.set_font("RalewayLight", "", 9)
+
+                # scale label
+                pdf.multi_cell(
+                    32,  # 50 - 10 - 8
+                    4,
+                    TRANSLATIONS_DICT.get_translation(scale, lang),
+                    new_x=XPos.LEFT,
+                    new_y=YPos.NEXT,
+                    align=Align.L,
+                    border=text_border,
+                )
+
+                # scale min
+                scale_min = TRANSLATIONS_DICT.get_translation(scale + "_min", lang)
+                # scale max
+                scale_max = TRANSLATIONS_DICT.get_translation(scale + "_max", lang)
+
+                pdf.set_xy(50, start_y + 10)
+                pdf.set_font("RalewayLight", "", 6)
+                pdf.multi_cell(
+                    35, 3, scale_min, align=Align.L, new_y=YPos.TOP, border=text_border
+                )
+
+                pdf.set_x(85)
+                pdf.multi_cell(
+                    35, 3, scale_max, align=Align.R, new_y=YPos.TOP, border=text_border
+                )
+
+                # draw rectangle
+                pdf.set_line_width(0.3)
+                pdf.set_fill_color(230, 230, 230)
+                pdf.rect(50, start_y, 70, 10, "F")
+
+                # draw images
+                for i in range(points):
+                    pdf.image(
+                        os.path.join(BASE_DIR, "images", "cattell.png"),
+                        x=51 + (6.9 * i),
+                        y=start_y + 1,
+                        w=5.9,
+                    )
+
+                # draw points
+                pdf.set_xy(120, start_y)
+                pdf.cell(
+                    14,
+                    h=10,
+                    txt=str(points),
+                    align="C",
+                    border=text_border,
+                    new_x=XPos.RIGHT,
+                    new_y=YPos.TOP,
+                )
+
+                # draw points description
+                # pdf.set_xy(134, start_y - 3)
+                # w = 210-10-134
+                pdf.multi_cell(
+                    0,
+                    h=4,
+                    txt=textwrap.dedent(
+                        """\
+                        Критичность к информации, исследование
+                        неочевидных скрытых факторов, недоверие
+                        авторитетам; исследование разных сценариев
+                        Консерватизм, развития ситуации."""
+                    ),
+                    border=text_border,
+                    align=Align.L,
+                    new_x=XPos.LEFT,
+                    new_y=YPos.TOP,
+                )
+
+                start_y += category_height + 1
+
+            # padding between categories
+            start_y += 5
+
+        self._insert_page_number()
+        pass
+
     def _insert_page_number(self):
         self._pdf.set_fill_color(BLOCK_R, BLOCK_G, BLOCK_B)
         self._pdf.set_draw_color(BLOCK_R, BLOCK_G, BLOCK_B)
@@ -202,3 +376,126 @@ class SingleReport(ABC):
         self._pdf.set_font("RalewayLight", "", 10)
         self._pdf.set_xy(200, 290)
         self._pdf.cell(0, 0, txt=str(self._pdf.page_no()))
+
+    def _add_coping_page(self, coping_data: SectionData, lang: str):
+        if coping_data.is_empty():
+            return
+
+        pdf = self._pdf
+        pdf.add_page()
+
+        # Header
+        pdf.set_font("RalewayBold", "", 10)
+        pdf.cell(0, 0, TRANSLATIONS_DICT.get_translation("Section C", lang))
+
+        pdf.set_font("RalewayLight", "", 9)
+        pdf.set_xy(pdf.l_margin, pdf.get_y() + 5)
+        pdf.multi_cell(
+            0,
+            4,
+            txt=TRANSLATIONS_DICT.get_translation("Section C_text", lang),
+            align=Align.J,
+        )
+
+        for category in COPING_CATEGORIES:
+            scales = COPING_CATEGORIES[category]
+            pdf.set_xy(pdf.l_margin, pdf.get_y() + 5)
+
+            category_label = TRANSLATIONS_DICT.get_translation(category, lang)
+            pdf.set_font("RalewayBold", "", 10)
+            pdf.multi_cell(
+                0,
+                0,
+                txt=category_label,
+                border=text_border,
+                new_y=YPos.NEXT,
+                align=Align.L,
+            )
+
+            pdf.set_xy(50, pdf.get_y() + 2)
+            pdf.set_font("RalewayLight", "", 6)
+            pdf.multi_cell(
+                35,
+                3,
+                TRANSLATIONS_DICT.get_translation("coping_scale_min", lang),
+                align=Align.L,
+                new_y=YPos.TOP,
+                border=text_border,
+            )
+            pdf.multi_cell(
+                35,
+                3,
+                TRANSLATIONS_DICT.get_translation("coping_scale_max", lang),
+                align=Align.R,
+                new_y=YPos.TOP,
+                border=text_border,
+            )
+
+            for scale in scales:
+                scale_name = TRANSLATIONS_DICT.get_translation(scale, lang)
+                points = coping_data[scale]
+
+                # padding between scales
+                scale_y = pdf.get_y() + 5
+                pdf.set_xy(pdf.l_margin, scale_y)
+                pdf.set_font("RalewayLight", "", 9)
+
+                # find height of the text depending on the number of lines
+                lines = len(
+                    pdf.multi_cell(32, 4, scale_name, align=Align.L, split_only=True)
+                )
+
+                # top corner (10-4) / 2
+                pdf.set_xy(pdf.l_margin, scale_y + (10 - (lines * 4)) / 2)
+                # w = 50 - l_margin
+                pdf.multi_cell(
+                    40, 4, scale_name, new_y=YPos.TOP, border=text_border, align=Align.L
+                )
+
+                # draw rectangle
+                pdf.set_line_width(0.3)
+                pdf.set_fill_color(230, 230, 230)
+                pdf.rect(50, scale_y, 70, 10, "F")
+
+                # draw images
+                for i in range(points):
+                    pdf.image(
+                        os.path.join(BASE_DIR, "images", "coping.png"),
+                        x=51 + (6.9 * i),
+                        y=scale_y + 1,
+                        w=5.9,
+                    )
+
+                # draw points
+                pdf.set_xy(120, scale_y)
+                pdf.cell(
+                    14,
+                    h=10,
+                    txt=str(points),
+                    align="C",
+                    border=text_border,
+                    new_x=XPos.RIGHT,
+                    new_y=YPos.TOP,
+                )
+
+                pdf.set_font("RalewayLight", "", 8)
+                text = textwrap.dedent(
+                    """\
+                    Стратегия проявляется локально: ощущение
+                    раздражения, злость на себя и ситуацию;
+                    потребность жестоко шутить /отстаивать свое
+                    мнение / проявлять эмоции."""
+                )
+                lines = text.count("\n") + 1
+                pdf.set_xy(pdf.get_x(), scale_y + (10 - (lines * 4)) / 2)
+
+                pdf.multi_cell(
+                    0,
+                    h=4,
+                    txt=text,
+                    align="L",
+                    border=text_border,
+                )
+                pdf.set_y(scale_y + 10)
+
+        pass

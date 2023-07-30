@@ -8,7 +8,7 @@ def draw_scale(pdf, x, y, w, h, points, img_link):
     pdf.set_fill_color(230, 230, 230)
 
     pdf.rect(x, y, w, h, "F")
-    print(f"point - {points}")
+    # print(f"point - {points}")
     for i in range(points):
         # pdf.rect(x+1, y+1, 5.9, h-2, 'F', round_corners=True, corner_radius=0.5)
         pdf.image(img_link, x=x + 1, y=y + 1, w=5.9)
