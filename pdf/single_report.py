@@ -607,6 +607,7 @@ class SingleReport(ABC):
         )
 
         categories = self._get_section_scales("2")
+        scale_min_max_drawn = False
         for category in self._get_section_scales("2"):
             scales = categories[category]
             pdf.set_xy(pdf.l_margin, pdf.get_y() + 5)
@@ -621,12 +622,14 @@ class SingleReport(ABC):
                 align=Align.L,
             )
 
-            pdf.set_xy(50, pdf.get_y() + 2)
-            self._draw_scale_min_max(
-                pdf,
-                scale_min=TRANSLATIONS_DICT.get_translation("scale_min", lang),
-                scale_max=TRANSLATIONS_DICT.get_translation("scale_max", lang),
-            )
+            if not scale_min_max_drawn:
+                scale_min_max_drawn = True
+                pdf.set_xy(50, pdf.get_y() + 2)
+                self._draw_scale_min_max(
+                    pdf,
+                    scale_min=TRANSLATIONS_DICT.get_translation("scale_min", lang),
+                    scale_max=TRANSLATIONS_DICT.get_translation("scale_max", lang),
+                )
 
             for scale in scales:
                 scale_name = TRANSLATIONS_DICT.get_translation(scale, lang)

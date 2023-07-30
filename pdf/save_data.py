@@ -14,10 +14,15 @@ from pdf.models import (
     Industry,
 )
 from . import raw_to_t_point
-from .single_report import IncomingSingleReportData
+from .single_report import IncomingSingleReportData, SingleReportData
 
 
-def save_data_to_db(data: IncomingSingleReportData, file_name: str, pdf: FPDF):
+def save_data_to_db(
+    report_data: SingleReportData,
+    data: IncomingSingleReportData,
+    file_name: str,
+    pdf: FPDF,
+):
     employees = Employee.objects.filter(email=data.participant_info.email)
     if employees.exists():
         sexes = EmployeeGender.objects.filter(public_code=data.participant_info.sex)
@@ -69,7 +74,7 @@ def save_data_to_db(data: IncomingSingleReportData, file_name: str, pdf: FPDF):
     report.study = study
     report.save()
 
-    for section in data.appraisal_data:
+    for section in report_data.cattell_data:
         # print(section['point'])
         for point in section.point:
             # print(f"{point['category']} - {point['points']}")

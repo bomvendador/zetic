@@ -131,3 +131,9 @@ curl -X POST ${HOST}/api/single-report/v1 --data '{
           ]
         }' --output single-report.pdf
 ```
+
+## Reset Admin Password
+
+```bash
+docker exec -it zetic-panel python manage.py changepassword dancetrain
+```

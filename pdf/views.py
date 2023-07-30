@@ -92,7 +92,7 @@ def pdf_single_generator(
 
     path = os.path.join(settings.BASE_DIR, "media", "reportsPDF", "single")
 
-    save_data_to_db(incoming_data, file_name, pdf)
+    # save_data_to_db(incoming_data, file_name, pdf)
 
     response = save_serve_file(pdf, path, file_name)
 
