@@ -14,11 +14,15 @@ from pdf.models import (
     Industry,
 )
 from . import raw_to_t_point
-from .single_report import IncomingSingleReportData, SingleReportData
+from .single_report import (
+    IncomingSingleReportData,
+    SingleReportData,
+    normalize_lie_points,
+)
 
 
 def save_data_to_db(
-    report_data: SingleReportData,
+    single_report_data: SingleReportData,
     data: IncomingSingleReportData,
     file_name: str,
     pdf: FPDF,
@@ -46,26 +50,30 @@ def save_data_to_db(
 
     study = Study.objects.get(public_code=data.study.id)
 
-    if Participant.objects.filter(
+    participants = Participant.objects.filter(
         employee__email=data.participant_info.email, study=study
-    ).exists():
-
-        participant = Participant.objects.get(
-            employee__email=data.participant_info.email, study=study
-        )
+    )
+    if participants.exists():
+        participant = participants.first()
     else:
         participant = Participant()
+        participant.study = study
+        participant.employee.email = data.participant_info.email
+
     participant.completed_at = timezone.now()
     participant.current_percentage = 100
     participant.answered_questions_qnt = participant.total_questions_qnt
     participant.save()
 
-    if Report.objects.filter(code=data.code).exists():
-        report = Report.objects.get(code=data.code)
+    reports = Report.objects.filter(code=data.code)
+    if reports.exists():
+        print(f"Report exists, deleting... {data.code}")
+        report = reports.first()
+        report.delete()
         ReportData.objects.filter(report=report).delete()
     else:
         report = Report()
-    lie_points = round(data.lie_points / 40 * 10)
+    lie_points = normalize_lie_points(data.lie_points)
     report.participant = participant
     report.lie_points = lie_points
     report.code = data.code
@@ -74,7 +82,7 @@ def save_data_to_db(
     report.study = study
     report.save()
 
-    for section in report_data.cattell_data:
+    for section in data.appraisal_data:
         # print(section['point'])
         for point in section.point:
             # print(f"{point['category']} - {point['points']}")
@@ -85,12 +93,7 @@ def save_data_to_db(
             # print(point['code'])
             report_data.category_name = point.category[:50]
             report_data.category_code = point.code
-            report_data.points = raw_to_t_point.get_t_point(
-                point.points,
-                point.code,
-                data.participant_info.sex,
-                data.participant_info.year,
-            )
+            report_data.points = single_report_data.t_point(section.code, point.code)
             # report_data.points = point['points']
             report_data.save()
 

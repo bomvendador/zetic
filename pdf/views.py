@@ -58,10 +58,7 @@ def pdf_single_generator(
     # load all points descriptions
     points_description = PointDescription.objects.filter(q_filter)
     time_end = time.perf_counter()
-    print(
-        f"load all points ({len(report_data.cattell_data)} + {len(report_data.coping_data)} + {len(report_data.boyko_data)} + {len(report_data.values_data)}) descriptions: {time_end - time_start}"
-    )
-    print(f"QueryFilter: {q_filter}")
+
     if report_data.lang == "en":
         points_description_dict = {
             item["category__code"]: item["text_en"]
@@ -77,7 +74,7 @@ def pdf_single_generator(
     report_generator = report_generator_class(points_description_dict)
     pdf = report_generator.generate_pdf(report_data)
     time_end = time.perf_counter()
-    print(f"generate pdf: {time_end - time_start}")
+    # print(f"generate pdf: {time_end - time_start}")
 
     now = datetime.datetime.now()
 
@@ -86,13 +83,20 @@ def pdf_single_generator(
     else:
         name_eng = report_data.participant_name.strip()
 
-    file_name = "{0}_{1}_{2}_single.pdf".format(
-        name_eng, now.strftime("%d_%m_%Y__%H_%M_%S"), report_data.lang.upper()
+    file_name = "{0}_{1}_{2}.pdf".format(
+        name_eng,
+        now.strftime("%d_%m_%Y__%H_%M_%S"),
+        report_data.lang.upper(),
     )
 
     path = os.path.join(settings.BASE_DIR, "media", "reportsPDF", "single")
 
-    # save_data_to_db(incoming_data, file_name, pdf)
+    save_data_to_db(
+        single_report_data=report_data,
+        data=incoming_data,
+        file_name=file_name,
+        pdf=pdf,
+    )
 
     response = save_serve_file(pdf, path, file_name)
 
@@ -104,7 +108,7 @@ def pdf_single_generator(
 def save_serve_file(pdf, path, file_name):
     if not os.path.exists(path):
         os.makedirs(path)
-    pdf.output(path + file_name)
+    pdf.output(os.path.join(path, file_name), "F")
 
     response = {"file_name": file_name}
     print(response)

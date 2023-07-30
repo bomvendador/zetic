@@ -147,6 +147,7 @@ class SectionData:
                 raise ValueError(f"points must be between 0 and 10, got {points}")
 
     def __getitem__(self, item):
+        # print(f"item: {item} {type(item)} {self.data}")
         return self.data[item]
 
     def __len__(self):
@@ -181,6 +182,20 @@ class SingleReportData:
             raise ValueError(
                 f"lie_points must be between 0 and 10, got {self.lie_points}"
             )
+
+    def t_point(self, section: str, category: str):
+        match section:
+            case "1":
+                return self.cattell_data[category]
+            case "2":
+                return self.coping_data[category]
+            case "3":
+                return self.boyko_data[category]
+            case "4":
+                return self.values_data[category]
+            case _:
+                raise ValueError(f"Unsupported section {section}")
+        pass
 
 
 def recursive_instantiate(target_cls, data):
@@ -329,6 +344,7 @@ class IncomingSingleReportData:
 
 class SingleReport(ABC):
     _pdf: FPDF
+    data: SingleReportData = None
 
     @abstractmethod
     def _get_scale_points_description(self, scale: str, points: int) -> str:
@@ -364,6 +380,7 @@ class SingleReport(ABC):
         self, data: SingleReportData, path: str = None
     ) -> Union[None, FPDF]:
         time_start = time.perf_counter()
+        self.data = data
         self._add_fonts()
         self._title_page(data.participant_name, data.lang)
         self._add_report_description(data.lie_points, data.lang)
@@ -382,7 +399,8 @@ class SingleReport(ABC):
                 return None
             return self._pdf
         finally:
-            print(f"Time with saving: {time_end:.2f} seconds")
+            # print(f"Time with saving: {time_end:.2f} seconds")
+            pass
 
     def _title_page(self, name, lang):
         pdf = self._pdf
