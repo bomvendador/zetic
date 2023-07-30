@@ -4,8 +4,9 @@ import time
 from abc import ABC, abstractmethod
 from collections import defaultdict
 from dataclasses import dataclass, fields, is_dataclass
-from typing import Dict, List
+from typing import Dict, List, Union
 
+from django.db.models import Q
 from fpdf import fpdf, FPDF, drawing
 from fpdf.enums import Align, XPos, YPos
 
@@ -93,6 +94,15 @@ class SectionData:
 
     def __getitem__(self, item):
         return self.data[item]
+
+    def __len__(self):
+        return len(self.data)
+
+    def to_query(self) -> Q:
+        q_objects = map(
+            lambda kv: Q(category__code=kv[0], value=kv[1]), self.data.items()
+        )
+        return Q(*q_objects, _connector=Q.OR)
 
     def is_empty(self):
         return len(self.data) == 0
@@ -271,7 +281,9 @@ class SingleReport(ABC):
             fname=os.path.join(FONT_DIR, "NotoSansDisplay-Medium.ttf"),
         )
 
-    def generate_pdf(self, data: SingleReportData, path: str = "test"):
+    def generate_pdf(
+        self, data: SingleReportData, path: str = None
+    ) -> Union[None, FPDF]:
         time_start = time.perf_counter()
         self._add_fonts()
         self._title_page(data.participant_name, data.lang)
@@ -283,8 +295,15 @@ class SingleReport(ABC):
         self._add_values_page(data.values_data, data.lang)
 
         time_end = time.perf_counter() - time_start
-        self._pdf.output(f"{path}-{data.lang}.pdf")
         print(f"Time elapsed: {time_end:.2f} seconds")
+
+        try:
+            if path is not None:
+                self._pdf.output(f"{path}-{data.lang}.pdf")
+                return None
+            return self._pdf
+        finally:
+            print(f"Time with saving: {time_end:.2f} seconds")
 
     def _title_page(self, name, lang):
         pdf = self._pdf

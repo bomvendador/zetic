@@ -17,17 +17,6 @@ from . import raw_to_t_point
 
 
 def save_data_to_db(request_json: dict, file_name: str, pdf: FPDF):
-    # print(request_json)
-
-    # if 'company_name' in request_json:
-    #     if Company.objects.filter(name=request_json['company_name']).exists():
-    #         company = Company.objects.get(name=request_json['company_name'])
-    #     else:
-    #         company = Company()
-    #         company.name = request_json['company_name']
-    #         company.save()
-    #
-
     employees = Employee.objects.filter(email=request_json["participant_info"]["email"])
     if employees.exists():
         sexes = EmployeeGender.objects.filter(

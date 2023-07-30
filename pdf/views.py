@@ -16,103 +16,77 @@ from django.http import (
     FileResponse,
 )
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
 
 from pdf.extract_data import extract_section
+from pdf.models import PointDescription
 from pdf.page2_file import page2
 from pdf.page3_file import page3
 from pdf.page4_file import page4
 from pdf.page5_file import page5
 from pdf.page6_file import page6
 from pdf.save_data import save_data_to_db
+from pdf.single_report import IncomingSingleReportData, SingleReportData
+from pdf.single_report_v1 import SingleReportV1
 from pdf.title_page import title_page
 from reports import settings
 
 
 def pdf_single_generator_v1(request_json):
+    incoming_data = IncomingSingleReportData.from_dict(request_json)
+    report_data: SingleReportData = incoming_data.to_single_report_data()
+
+    q_filter = Q()
+
+    if not report_data.cattell_data.is_empty():
+        q_filter |= report_data.cattell_data.to_query()
+
+    if not report_data.coping_data.is_empty():
+        q_filter |= report_data.coping_data.to_query()
+
+    if not report_data.boyko_data.is_empty():
+        q_filter |= report_data.boyko_data.to_query()
+
+    if not report_data.values_data.is_empty():
+        q_filter |= report_data.values_data.to_query()
+
     time_start = time.perf_counter()
-    pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
-    pdf.add_font(
-        "RalewayMedium",
-        style="",
-        fname=os.path.join(settings.BASE_DIR, "static/") + "/fonts/Raleway-Medium.ttf",
-        uni=True,
+    # load all points descriptions
+    points_description = PointDescription.objects.filter(q_filter)
+    time_end = time.perf_counter()
+    print(
+        f"load all points ({len(report_data.cattell_data)} + {len(report_data.coping_data)} + {len(report_data.boyko_data)} + {len(report_data.values_data)}) descriptions: {time_end - time_start}"
     )
-    pdf.add_font(
-        "RalewayRegular",
-        style="",
-        fname=os.path.join(settings.BASE_DIR, "static/") + "/fonts/Raleway-Regular.ttf",
-        uni=True,
-    )
-    pdf.add_font(
-        "RalewayLight",
-        style="",
-        fname=os.path.join(settings.BASE_DIR, "static/") + "/fonts/Raleway-Light.ttf",
-        uni=True,
-    )
-    pdf.add_font(
-        "RalewayBold",
-        style="",
-        fname=os.path.join(settings.BASE_DIR, "static/") + "/fonts/Raleway-Bold.ttf",
-        uni=True,
-    )
-    pdf.add_font(
-        "NotoSansDisplayMedium",
-        style="",
-        fname=os.path.join(settings.BASE_DIR, "static/")
-        + "/fonts/NotoSansDisplay-Medium.ttf",
-        uni=True,
-    )
-    pdf.add_page()
+    print(f"QueryFilter: {q_filter}")
+    if report_data.lang == "en":
+        points_description_dict = {
+            item["category__code"]: item.text_en
+            for item in points_description.values("category__code", "text_en")
+        }
+    else:
+        points_description_dict = {
+            item["category__code"]: item.text
+            for item in points_description.values("category__code", "text")
+        }
 
-    appraisal_data = request_json["appraisal_data"]
-    appraisal_data_in_request = []
-    for item in appraisal_data:
-        appraisal_data_in_request.append(item["code"])
-
-    participant_info = request_json["participant_info"]
-    participant_name = participant_info["name"]
-
-    lang = request_json["lang"]
-    lie_points = round(request_json["lie_points"] / 40 * 10)
-    # lie_points = request_json['lie_points']
-
-    title_page(pdf, participant_name, lang)
-
-    pdf.add_page()
-    page2(pdf, lie_points, lang)
-
-    if "1" in appraisal_data_in_request:
-        pdf.add_page()
-        # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
-        page3(pdf, extract_section(request_json, "1"), lang, participant_info)
-
-    if "2" in appraisal_data_in_request:
-        pdf.add_page()
-        # page4(pdf, extract_section(request_json, 'Копинги'), lang)
-        page4(pdf, extract_section(request_json, "2"), lang, participant_info)
-
-    if "3" in appraisal_data_in_request:
-        pdf.add_page()
-        page5(pdf, extract_section(request_json, "3"), lang, participant_info)
-        # page5(pdf, extract_section(request_json, 'Выгорание Бойко'), lang)
-
-    if "4" in appraisal_data_in_request:
-        pdf.add_page()
-        page6(pdf, extract_section(request_json, "4"), lang, participant_info)
-        # page6(pdf, extract_section(request_json, 'Ценности'), lang)
+    time_start = time.perf_counter()
+    report_generator = SingleReportV1(points_description_dict)
+    pdf = report_generator.generate_pdf(report_data)
+    time_end = time.perf_counter()
+    print(f"generate pdf: {time_end - time_start}")
 
     now = datetime.datetime.now()
 
-    file_name = (
-        cyrtranslit.to_latin(participant_name.strip(), "ru")
-        + "_"
-        + now.strftime("%d_%m_%Y__%H_%M_%S")
-        + "_"
-        + lang.upper()
-        + "_single.pdf"
+    if report_data.lang == "ru":
+        name_eng = cyrtranslit.to_latin(report_data.participant_name.strip(), "ru")
+    else:
+        name_eng = report_data.participant_name.strip()
+
+    file_name = "{0}_{1}_{2}_single.pdf".format(
+        name_eng, now.strftime("%d_%m_%Y__%H_%M_%S"), report_data.lang.upper()
     )
 
-    path = "media/reportsPDF/single/"
+    path = os.path.join(settings.BASE_DIR, "media", "reportsPDF", "single")
 
     save_data_to_db(request_json, file_name, pdf)
 
