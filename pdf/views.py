@@ -5,6 +5,7 @@
 import datetime
 import os
 import time
+from dataclasses import dataclass
 
 import cyrtranslit
 import fpdf

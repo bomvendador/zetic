@@ -1,6 +1,15 @@
+import json
+import os
+
 from django.test import TestCase
 
-from pdf.single_report import SingleReport, SingleReportData, SectionData
+from pdf.single_report import (
+    SingleReport,
+    SingleReportData,
+    SectionData,
+    PDF_MODULE_BASE_DIR,
+)
+from pdf.single_report import IncomingSingleReportData
 
 cattel_example = SectionData(
     {
@@ -85,9 +94,14 @@ values_example = SectionData(
 )
 
 
+class SingleReportWithDummyData(SingleReport):
+    def _get_scale_points_description(self, scale: str, points: int) -> str:
+        return f"{scale} {points}"
+
+
 class SingleReportTest(TestCase):
     def test_single_report(self):
-        single_report = SingleReport()
+        single_report = SingleReportWithDummyData()
         single_report.generate_pdf(
             SingleReportData(
                 participant_name="Pablo",
@@ -99,7 +113,7 @@ class SingleReportTest(TestCase):
             ),
             path="test",
         )
-        single_report = SingleReport()
+        single_report = SingleReportWithDummyData()
         single_report.generate_pdf(
             SingleReportData(
                 participant_name="Павел",
@@ -110,4 +124,33 @@ class SingleReportTest(TestCase):
                 values_data=values_example,
             ),
             path="test",
+        )
+
+    def test_incoming_report_data(self):
+        path_to_json = os.path.join(os.path.dirname(PDF_MODULE_BASE_DIR), "report.json")
+        with open(path_to_json, "r") as f:
+            parsed_data = json.load(f)
+
+        incoming_data = IncomingSingleReportData.from_dict(parsed_data)
+        assert incoming_data.participant_info.name == "Попов Артем Юрьевич "
+
+    def test_real_data(self):
+        path_to_json = os.path.join(
+            os.path.dirname(PDF_MODULE_BASE_DIR), "report-yana.json"
+        )
+        with open(path_to_json, "r") as f:
+            parsed_data = json.load(f)
+
+        incoming_data = IncomingSingleReportData.from_dict(parsed_data)
+        report_data = incoming_data.to_single_report_data()
+        single_report = SingleReportWithDummyData()
+        single_report.generate_pdf(
+            report_data,
+            path="test-real-data-yana",
+        )
+        report_data.lang = "en"
+        single_report = SingleReportWithDummyData()
+        single_report.generate_pdf(
+            report_data,
+            path="test-real-data-yana",
         )

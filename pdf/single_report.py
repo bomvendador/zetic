@@ -1,14 +1,24 @@
 import os
 import textwrap
 import time
-from abc import ABC
-from dataclasses import dataclass
-from typing import Dict
+from abc import ABC, abstractmethod
+from collections import defaultdict
+from dataclasses import dataclass, fields, is_dataclass
+from typing import Dict, List
 
 from fpdf import fpdf, FPDF, drawing
 from fpdf.enums import Align, XPos, YPos
 
-from pdf.raw_to_t_point_mapper import RawToTPointMapper, AgeGroup
+from pdf.raw_to_t_point_data import (
+    KETTEL_1_WOMEN_1994_2022,
+    KETTEL_1_WOMEN_1950_1993,
+    KETTEL_1_MEN_1994_2022,
+    KETTEL_1_MEN_1950_1993,
+    KOPPINGI_DEFAULT,
+    BOYKO_DEFAULT,
+    VALUES_DEFAULT,
+)
+from pdf.raw_to_t_point_mapper import RawToTPointMapper, AgeGroup, GenderGroup
 from pdf.report_sections_configuration import (
     CATTELL_CATEGORIES,
     COPING_CATEGORIES,
@@ -17,16 +27,52 @@ from pdf.report_sections_configuration import (
 )
 from pdf.translations import TRANSLATIONS_DICT
 
-mujer_joven = RawToTPointMapper("mujer", AgeGroup.JOVEN, {})
-mujer_mayor = RawToTPointMapper("mujer", AgeGroup.MAYOR, {})
-hombre_joven = RawToTPointMapper("hombre", AgeGroup.JOVEN, {})
-hombre_mayor = RawToTPointMapper("hombre", AgeGroup.MAYOR, {})
+mujer_joven = RawToTPointMapper(
+    GenderGroup.MUJER,
+    AgeGroup.JOVEN,
+    {
+        "1": KETTEL_1_WOMEN_1994_2022,
+        "2": KOPPINGI_DEFAULT,
+        "3": BOYKO_DEFAULT,
+        "4": VALUES_DEFAULT,
+    },
+)
+mujer_mayor = RawToTPointMapper(
+    GenderGroup.MUJER,
+    AgeGroup.MAYOR,
+    {
+        "1": KETTEL_1_WOMEN_1950_1993,
+        "2": KOPPINGI_DEFAULT,
+        "3": BOYKO_DEFAULT,
+        "4": VALUES_DEFAULT,
+    },
+)
+hombre_joven = RawToTPointMapper(
+    GenderGroup.HOMBRE,
+    AgeGroup.JOVEN,
+    {
+        "1": KETTEL_1_MEN_1994_2022,
+        "2": KOPPINGI_DEFAULT,
+        "3": BOYKO_DEFAULT,
+        "4": VALUES_DEFAULT,
+    },
+)
+hombre_mayor = RawToTPointMapper(
+    GenderGroup.HOMBRE,
+    AgeGroup.MAYOR,
+    {
+        "1": KETTEL_1_MEN_1950_1993,
+        "2": KOPPINGI_DEFAULT,
+        "3": BOYKO_DEFAULT,
+        "4": VALUES_DEFAULT,
+    },
+)
 
 # Assuming your settings.py is located at the project's root directory
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PDF_MODULE_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Add the font directory path to your settings
-FONT_DIR = os.path.join(BASE_DIR, "fonts")
+FONT_DIR = os.path.join(PDF_MODULE_BASE_DIR, "fonts")
 
 BLOCK_R = 230
 BLOCK_G = 230
@@ -35,7 +81,6 @@ BLOCK_B = 227
 text_border = 1
 
 
-# category: str, points: int
 @dataclass
 class SectionData:
     data: Dict[str, int]
@@ -56,7 +101,7 @@ class SectionData:
 @dataclass
 class SingleReportData:
     participant_name: str = ""
-    lie_points: int = 7  # from 0 to 10
+    lie_points: int = 0  # from 0 to 10
     lang: str = "ru"
     cattell_data: SectionData = SectionData({})
     coping_data: SectionData = SectionData({})
@@ -74,8 +119,135 @@ class SingleReportData:
             )
 
 
+def recursive_instantiate(target_cls, data):
+    if hasattr(target_cls, "__annotations__"):
+        fields = target_cls.__annotations__
+        filtered_data = {k: v for k, v in data.items() if k in fields}
+
+        for field, field_type in fields.items():
+            # Check if the field is a List of some dataclass
+            if getattr(field_type, "_name", None) == "List" and hasattr(
+                field_type.__args__[0], "__annotations__"
+            ):
+                nested_cls = field_type.__args__[0]
+                filtered_data[field] = [
+                    recursive_instantiate(nested_cls, item)
+                    for item in data.get(field, [])
+                ]
+            # Check if the field is a dataclass type
+            elif hasattr(field_type, "__annotations__"):
+                filtered_data[field] = recursive_instantiate(
+                    field_type, data.get(field, {})
+                )
+            else:
+                filtered_data[field] = data.get(field)
+
+        return target_cls(**filtered_data)
+    else:
+        return data
+
+
+@dataclass
+class IncomingParticipantInfo:
+    email: str
+    name: str
+    year: int
+    sex: str
+    role: str
+    position: str
+    industry: str
+
+
+@dataclass
+class IncomingStudy:
+    name: str
+    id: str
+
+
+@dataclass
+class IncomingAppraisalPoint:
+    code: str
+    points: int
+
+
+@dataclass
+class IncomingAppraisalData:
+    code: str
+    point: List[IncomingAppraisalPoint]
+
+
+def normalize_lie_points(lie_points: int) -> int:
+    return round(lie_points / 40 * 10)
+
+
+def load_point_mapper_v1(
+    age_group: AgeGroup, gender_group: GenderGroup
+) -> RawToTPointMapper:
+    match (age_group, gender_group):
+        case (AgeGroup.JOVEN, GenderGroup.MUJER):
+            return mujer_joven
+        case (AgeGroup.MAYOR, GenderGroup.MUJER):
+            return mujer_mayor
+        case (AgeGroup.JOVEN, GenderGroup.HOMBRE):
+            return hombre_joven
+        case (AgeGroup.MAYOR, GenderGroup.HOMBRE):
+            return hombre_mayor
+        case _:
+            raise ValueError(f"Unsupported age/gender {age_group}/{gender_group}")
+
+
+@dataclass
+class IncomingSingleReportData:
+    lang: str
+    code: str
+    participant_info: IncomingParticipantInfo
+    study: IncomingStudy
+    lie_points: int
+    appraisal_data: List[IncomingAppraisalData]
+
+    @staticmethod
+    def from_dict(data):
+        return recursive_instantiate(IncomingSingleReportData, data)
+
+    def to_single_report_data(self) -> SingleReportData:
+        # check gender/age
+        # normalize data
+        # load points description
+        # return SingleReportData
+
+        age_group = AgeGroup.from_year(self.participant_info.year)
+        gender_group = GenderGroup.from_sex(self.participant_info.sex)
+
+        point_mapper: RawToTPointMapper = load_point_mapper_v1(age_group, gender_group)
+
+        normalized_data: Dict[str, Dict[str, int]] = defaultdict(dict)
+        for appraisal_data in self.appraisal_data:
+            for point in appraisal_data.point:
+                normalized_data[appraisal_data.code][
+                    point.code
+                ] = point_mapper.map_to_t_points(
+                    section=appraisal_data.code,
+                    category=point.code,
+                    points=point.points,
+                )
+
+        return SingleReportData(
+            participant_name=self.participant_info.name,
+            lang=self.lang,
+            lie_points=normalize_lie_points(self.lie_points),
+            cattell_data=SectionData(normalized_data["1"]),
+            coping_data=SectionData(normalized_data["2"]),
+            boyko_data=SectionData(normalized_data["3"]),
+            values_data=SectionData(normalized_data["4"]),
+        )
+
+
 class SingleReport(ABC):
     _pdf: FPDF
+
+    @abstractmethod
+    def _get_scale_points_description(self, scale: str, points: int) -> str:
+        pass
 
     def __init__(self):
         self._pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
@@ -117,7 +289,12 @@ class SingleReport(ABC):
     def _title_page(self, name, lang):
         pdf = self._pdf
         pdf.add_page()
-        pdf.image(os.path.join(BASE_DIR, "images", "title_page.png"), x=0, y=0, w=210)
+        pdf.image(
+            os.path.join(PDF_MODULE_BASE_DIR, "images", "title_page.png"),
+            x=0,
+            y=0,
+            w=210,
+        )
 
         pdf.set_xy(20, 150)
         pdf.set_font("RalewayRegular", size=18)
@@ -223,7 +400,7 @@ class SingleReport(ABC):
         w = 5.9
         for i in range(min(4, lie_points)):
             pdf.image(
-                os.path.join(BASE_DIR, "images", "scale_lie_green.png"),
+                os.path.join(PDF_MODULE_BASE_DIR, "images", "scale_lie_green.png"),
                 x=pdf.get_x() + (i * (w + 1)),
                 y=267,
                 w=w,
@@ -231,7 +408,7 @@ class SingleReport(ABC):
 
         for i in range(min(6, lie_points - 4)):
             pdf.image(
-                os.path.join(BASE_DIR, "images", "scale_lie_red.png"),
+                os.path.join(PDF_MODULE_BASE_DIR, "images", "scale_lie_red.png"),
                 x=pdf.get_x() + ((i + 4) * (w + 1)),
                 y=267,
                 w=w,
@@ -247,7 +424,7 @@ class SingleReport(ABC):
         pdf = self._pdf
         pdf.add_page()
 
-        cattell_img = os.path.join(BASE_DIR, "images", "scale_cattell.png")
+        cattell_img = os.path.join(PDF_MODULE_BASE_DIR, "images", "scale_cattell.png")
 
         # Header
         self._draw_header(
@@ -300,25 +477,12 @@ class SingleReport(ABC):
                     scale_max=TRANSLATIONS_DICT.get_translation(scale + "_max", lang),
                 )
 
-                pdf.set_xy(134, scale_y)
-
-                # draw points description
-                # pdf.set_xy(134, start_y - 3)
-                # w = 210-10-134
-                pdf.multi_cell(
-                    0,
-                    h=4,
-                    txt=textwrap.dedent(
-                        """\
-                        Критичность к информации, исследование
-                        неочевидных скрытых факторов, недоверие
-                        авторитетам; исследование разных сценариев
-                        Консерватизм, развития ситуации."""
-                    ),
+                self._draw_multi_text(
+                    pdf,
+                    text=self._get_scale_points_description(scale, points),
                     border=text_border,
-                    align=Align.L,
-                    new_x=XPos.LEFT,
-                    new_y=YPos.TOP,
+                    start_x=134,
+                    start_y=scale_y,
                 )
 
                 # padding between scales
@@ -393,7 +557,7 @@ class SingleReport(ABC):
                 # draw images
                 for i in range(points):
                     pdf.image(
-                        os.path.join(BASE_DIR, "images", "scale_coping.png"),
+                        os.path.join(PDF_MODULE_BASE_DIR, "images", "scale_coping.png"),
                         x=51 + (6.9 * i),
                         y=scale_y + 1,
                         w=5.9,
@@ -412,23 +576,15 @@ class SingleReport(ABC):
                 )
 
                 pdf.set_font("RalewayLight", "", 8)
-                text = textwrap.dedent(
-                    """\
-                    Стратегия проявляется локально: ощущение
-                    раздражения, злость на себя и ситуацию;
-                    потребность жестоко шутить /отстаивать свое
-                    мнение / проявлять эмоции."""
-                )
-                lines = text.count("\n") + 1
-                pdf.set_xy(pdf.get_x(), scale_y + (10 - (lines * 4)) / 2)
 
-                pdf.multi_cell(
-                    0,
-                    h=4,
-                    txt=text,
-                    align="L",
+                self._draw_multi_text(
+                    pdf,
+                    text=self._get_scale_points_description(scale, points),
+                    start_y=scale_y,
+                    start_x=pdf.get_x(),
                     border=text_border,
                 )
+
                 pdf.set_y(scale_y + 10)
 
         pass
@@ -439,7 +595,7 @@ class SingleReport(ABC):
 
         pdf = self._pdf
         pdf.add_page()
-        boyko_img = os.path.join(BASE_DIR, "images", "scale_boyko.png")
+        boyko_img = os.path.join(PDF_MODULE_BASE_DIR, "images", "scale_boyko.png")
 
         # Header
         self._draw_header(
@@ -497,10 +653,7 @@ class SingleReport(ABC):
                 # pdf.set_xy(134, start_y - 3)
                 # w = 210-10-134
 
-                text = (
-                    "Стратегия проявляется локально: ощущение раздражения, злость на себя и ситуацию; потребность "
-                    "жестоко шутить /отстаивать свое мнение / проявлять эмоции."
-                )
+                text = self._get_scale_points_description(scale, points)
                 self._draw_multi_text(
                     pdf,
                     start_y=scale_y,
@@ -508,7 +661,7 @@ class SingleReport(ABC):
                     start_x=pdf.get_x(),
                     line_height=3,
                     block_height=10,
-                    border=1,
+                    border=text_border,
                 )
 
                 # padding between scales
@@ -526,7 +679,7 @@ class SingleReport(ABC):
 
         pdf = self._pdf
         pdf.add_page()
-        values_img = os.path.join(BASE_DIR, "images", "scale_values.png")
+        values_img = os.path.join(PDF_MODULE_BASE_DIR, "images", "scale_values.png")
 
         # Header
         self._draw_header(
@@ -573,13 +726,7 @@ class SingleReport(ABC):
                     img=values_img,
                 )
 
-                text = textwrap.dedent(
-                    """\
-                    Критичность к информации, исследование
-                    неочевидных скрытых факторов, недоверие
-                    авторитетам; исследование разных сценариев
-                    Консерватизм, развития ситуации."""
-                )
+                text = self._get_scale_points_description(scale, points)
                 pdf.set_font("RalewayLight", "", 8)
                 self._draw_multi_text(
                     pdf,
@@ -588,7 +735,7 @@ class SingleReport(ABC):
                     start_x=pdf.get_x(),
                     line_height=4,
                     block_height=10,
-                    border=1,
+                    border=text_border,
                 )
 
                 # padding between scales

@@ -1,6 +1,21 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Dict
+from typing import Dict, Union
+
+
+class GenderGroup(Enum):
+    MUJER = "mujer"
+    HOMBRE = "hombre"
+
+    @staticmethod
+    def from_sex(sex: str):
+        match sex.lower().strip():
+            case "hombre" | "мужской":
+                return GenderGroup.HOMBRE
+            case "mujer" | "женский":
+                return GenderGroup.MUJER
+            case _:
+                return None
 
 
 class AgeGroup(Enum):
@@ -8,7 +23,7 @@ class AgeGroup(Enum):
     JOVEN = "Joven"
 
     @staticmethod
-    def from_age(year: int):
+    def from_year(year: int):
         if year < 1991:
             return AgeGroup.MAYOR
         else:
@@ -18,13 +33,21 @@ class AgeGroup(Enum):
 class RawToTPointMapper:
     def __init__(
         self,
-        gender: str,
+        gender: GenderGroup,
         age: AgeGroup,
-        points_mapper: Dict[str, Dict[str, Dict[int, int]]],
+        points_mapper: Dict[str, Dict[str, Union[Dict[str, int], int]]],
     ):
         self._gender = gender
         self._age = age
         self._points = points_mapper
 
     def map_to_t_points(self, section: str, category: str, points: int):
-        return self._points[section][category][points]
+        try:
+            if section == "4":
+                max_point = self._points[section][category]
+                return round(points / max_point * 10)
+            else:
+                return self._points[section][category][str(points)]
+        except Exception as e:
+            print(f"Exception: {section} {category} {points}")
+            raise e
