@@ -26,18 +26,18 @@ from pdf.page4_file import page4
 from pdf.page5_file import page5
 from pdf.page6_file import page6
 from pdf.save_data import save_data_to_db
-from pdf.single_report import IncomingSingleReportData, SingleReportData
-from pdf.single_report_v1 import SingleReportV1
+from pdf.single_report import (
+    IncomingSingleReportData,
+    SingleReportData,
+    load_point_mapper_v1,
+)
+from pdf.single_report_dict import SingleReportDict
 from pdf.title_page import title_page
 from reports import settings
 
 
-def pdf_single_generator_v1(request_json):
-    incoming_data = IncomingSingleReportData.from_dict(request_json)
-    report_data: SingleReportData = incoming_data.to_single_report_data()
-
+def pdf_single_generator(report_data: SingleReportData):
     q_filter = Q()
-
     if not report_data.cattell_data.is_empty():
         q_filter |= report_data.cattell_data.to_query()
 
@@ -70,7 +70,7 @@ def pdf_single_generator_v1(request_json):
         }
 
     time_start = time.perf_counter()
-    report_generator = SingleReportV1(points_description_dict)
+    report_generator = SingleReportDict(points_description_dict)
     pdf = report_generator.generate_pdf(report_data)
     time_end = time.perf_counter()
     print(f"generate pdf: {time_end - time_start}")

@@ -17,7 +17,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from pdf.models import Participant, Company, Employee
-from pdf.views import pdf_single_generator_v1
+from pdf.single_report import (
+    IncomingSingleReportData,
+    SingleReportData,
+    load_point_mapper_v2,
+    load_point_mapper_v1,
+)
+from pdf.views import pdf_single_generator
 from pdf_group.views import pdf_group_generator
 
 TOKEN = "b55a461f947c6d315ad67f1d65d2ec592e400679"
@@ -73,12 +79,42 @@ def single_report_v1(request):
         return pdf_group_generator(request_json)
     else:
         try:
-            return pdf_single_generator_v1(request_json)
+            incoming_data = IncomingSingleReportData.from_dict(request_json)
+            report_data: SingleReportData = incoming_data.to_single_report_data(
+                load_point_mapper_v1
+            )
+            return pdf_single_generator(report_data)
         except Exception as e:
             print(request_json)
             print(e)
             traceback.print_exc()
             return HttpResponseServerError("JSON request error")
+
+
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+@parser_classes([JSONParser])
+def single_report_v2(request):
+    if request.method != "POST":
+        return HttpResponseServerError("Only POST method allowed")
+
+    try:
+        request_json = json.loads(request.body.decode("utf-8"))
+    except KeyError:
+        return HttpResponseServerError("JSON request error")
+
+    try:
+        incoming_data = IncomingSingleReportData.from_dict(request_json)
+        report_data: SingleReportData = incoming_data.to_single_report_data(
+            load_point_mapper_v2
+        )
+        return pdf_single_generator(report_data)
+    except Exception as e:
+        print(request_json)
+        print(e)
+        traceback.print_exc()
+        return HttpResponseServerError("JSON request error")
 
 
 @api_view(["POST"])

@@ -3,7 +3,7 @@ from typing import Dict
 from pdf.single_report import SingleReport
 
 
-class SingleReportV1(SingleReport):
+class SingleReportDict(SingleReport):
     def __init__(self, scale_points_description: Dict[str, str]):
         super().__init__()
         self._scale_points_description = scale_points_description

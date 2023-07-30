@@ -4,7 +4,7 @@ import time
 from abc import ABC, abstractmethod
 from collections import defaultdict
 from dataclasses import dataclass, fields, is_dataclass
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Callable
 
 from django.db.models import Q
 from fpdf import fpdf, FPDF, drawing
@@ -27,8 +27,22 @@ from pdf.report_sections_configuration import (
     VALUES_CATEGORIES,
 )
 from pdf.translations import TRANSLATIONS_DICT
+from pdf.v2 import (
+    MUJER_JOVEN_COPING,
+    MUJER_JOVEN_BURNOUT,
+    MUJER_JOVEN_VALUES,
+    MUJER_MAYOR_COPING,
+    MUJER_MAYOR_BURNOUT,
+    MUJER_MAYOR_VALUES,
+    HOMBRE_JOVEN_COPING,
+    HOMBRE_JOVEN_BURNOUT,
+    HOMBRE_JOVEN_VALUES,
+    HOMBRE_MAYOR_COPING,
+    HOMBRE_MAYOR_BURNOUT,
+    HOMBRE_MAYOR_VALUES,
+)
 
-mujer_joven = RawToTPointMapper(
+mujer_joven_v1 = RawToTPointMapper(
     GenderGroup.MUJER,
     AgeGroup.JOVEN,
     {
@@ -38,7 +52,17 @@ mujer_joven = RawToTPointMapper(
         "4": VALUES_DEFAULT,
     },
 )
-mujer_mayor = RawToTPointMapper(
+mujer_joven_v2 = RawToTPointMapper(
+    GenderGroup.MUJER,
+    AgeGroup.JOVEN,
+    {
+        "1": KETTEL_1_WOMEN_1994_2022,
+        "2": MUJER_JOVEN_COPING,
+        "3": MUJER_JOVEN_BURNOUT,
+        "4": MUJER_JOVEN_VALUES,
+    },
+)
+mujer_mayor_v1 = RawToTPointMapper(
     GenderGroup.MUJER,
     AgeGroup.MAYOR,
     {
@@ -48,7 +72,17 @@ mujer_mayor = RawToTPointMapper(
         "4": VALUES_DEFAULT,
     },
 )
-hombre_joven = RawToTPointMapper(
+mujer_mayor_v2 = RawToTPointMapper(
+    GenderGroup.MUJER,
+    AgeGroup.MAYOR,
+    {
+        "1": KETTEL_1_WOMEN_1994_2022,
+        "2": MUJER_MAYOR_COPING,
+        "3": MUJER_MAYOR_BURNOUT,
+        "4": MUJER_MAYOR_VALUES,
+    },
+)
+hombre_joven_v1 = RawToTPointMapper(
     GenderGroup.HOMBRE,
     AgeGroup.JOVEN,
     {
@@ -58,7 +92,17 @@ hombre_joven = RawToTPointMapper(
         "4": VALUES_DEFAULT,
     },
 )
-hombre_mayor = RawToTPointMapper(
+hombre_joven_v2 = RawToTPointMapper(
+    GenderGroup.HOMBRE,
+    AgeGroup.JOVEN,
+    {
+        "1": KETTEL_1_WOMEN_1994_2022,
+        "2": HOMBRE_JOVEN_COPING,
+        "3": HOMBRE_JOVEN_BURNOUT,
+        "4": HOMBRE_JOVEN_VALUES,
+    },
+)
+hombre_mayor_v1 = RawToTPointMapper(
     GenderGroup.HOMBRE,
     AgeGroup.MAYOR,
     {
@@ -66,6 +110,16 @@ hombre_mayor = RawToTPointMapper(
         "2": KOPPINGI_DEFAULT,
         "3": BOYKO_DEFAULT,
         "4": VALUES_DEFAULT,
+    },
+)
+hombre_mayor_v2 = RawToTPointMapper(
+    GenderGroup.HOMBRE,
+    AgeGroup.MAYOR,
+    {
+        "1": KETTEL_1_WOMEN_1994_2022,
+        "2": HOMBRE_MAYOR_COPING,
+        "3": HOMBRE_MAYOR_BURNOUT,
+        "4": HOMBRE_MAYOR_VALUES,
     },
 )
 
@@ -195,15 +249,32 @@ def load_point_mapper_v1(
 ) -> RawToTPointMapper:
     match (age_group, gender_group):
         case (AgeGroup.JOVEN, GenderGroup.MUJER):
-            return mujer_joven
+            return mujer_joven_v1
         case (AgeGroup.MAYOR, GenderGroup.MUJER):
-            return mujer_mayor
+            return mujer_mayor_v1
         case (AgeGroup.JOVEN, GenderGroup.HOMBRE):
-            return hombre_joven
+            return hombre_joven_v1
         case (AgeGroup.MAYOR, GenderGroup.HOMBRE):
-            return hombre_mayor
+            return hombre_mayor_v1
         case _:
             raise ValueError(f"Unsupported age/gender {age_group}/{gender_group}")
+
+
+def load_point_mapper_v2(
+    age_group: AgeGroup, gender_group: GenderGroup
+) -> RawToTPointMapper:
+    match (age_group, gender_group):
+        case (AgeGroup.JOVEN, GenderGroup.MUJER):
+            return mujer_joven_v2
+        case (AgeGroup.MAYOR, GenderGroup.MUJER):
+            return mujer_mayor_v2
+        case (AgeGroup.JOVEN, GenderGroup.HOMBRE):
+            return hombre_joven_v2
+        case (AgeGroup.MAYOR, GenderGroup.HOMBRE):
+            return hombre_mayor_v2
+        case _:
+            raise ValueError(f"Unsupported age/gender {age_group}/{gender_group}")
+    pass
 
 
 @dataclass
@@ -219,7 +290,9 @@ class IncomingSingleReportData:
     def from_dict(data):
         return recursive_instantiate(IncomingSingleReportData, data)
 
-    def to_single_report_data(self) -> SingleReportData:
+    def to_single_report_data(
+        self, resolve_point_mapper: Callable[[AgeGroup, GenderGroup], RawToTPointMapper]
+    ) -> SingleReportData:
         # check gender/age
         # normalize data
         # load points description
@@ -228,7 +301,7 @@ class IncomingSingleReportData:
         age_group = AgeGroup.from_year(self.participant_info.year)
         gender_group = GenderGroup.from_sex(self.participant_info.sex)
 
-        point_mapper: RawToTPointMapper = load_point_mapper_v1(age_group, gender_group)
+        point_mapper: RawToTPointMapper = resolve_point_mapper(age_group, gender_group)
 
         normalized_data: Dict[str, Dict[str, int]] = defaultdict(dict)
         for appraisal_data in self.appraisal_data:

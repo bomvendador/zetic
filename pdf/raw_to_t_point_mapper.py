@@ -43,9 +43,9 @@ class RawToTPointMapper:
 
     def map_to_t_points(self, section: str, category: str, points: int):
         try:
-            if section == "4":
-                max_point = self._points[section][category]
-                return round(points / max_point * 10)
+            wtf = self._points[section][category]
+            if isinstance(wtf, int):
+                return round(points / wtf * 10)
             else:
                 return self._points[section][category][str(points)]
         except Exception as e:
