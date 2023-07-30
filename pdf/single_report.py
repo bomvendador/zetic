@@ -6,16 +6,15 @@ from dataclasses import dataclass
 from typing import Dict
 
 from fpdf import fpdf, FPDF, drawing
-from fpdf.drawing import DeviceRGB
 from fpdf.enums import Align, XPos, YPos
 
+from pdf.raw_to_t_point_mapper import RawToTPointMapper, AgeGroup
 from pdf.report_sections_configuration import (
     CATTELL_CATEGORIES,
     COPING_CATEGORIES,
     BOYKO_CATEGORIES,
     VALUES_CATEGORIES,
 )
-from pdf.raw_to_t_point_mapper import RawToTPointMapper, AgeGroup
 from pdf.translations import TRANSLATIONS_DICT
 
 mujer_joven = RawToTPointMapper("mujer", AgeGroup.JOVEN, {})
@@ -290,7 +289,7 @@ class SingleReport(ABC):
                 )
 
                 self._draw_rectangle_scale(
-                    pdf, start_y=scale_y, points=points, img=cattell_img
+                    pdf, start_x=50, start_y=scale_y, points=points, img=cattell_img
                 )
 
                 # draw under rectangle
@@ -449,7 +448,7 @@ class SingleReport(ABC):
             TRANSLATIONS_DICT.get_translation("Section B_text", lang),
         )
 
-        pdf.set_xy(50, pdf.get_y() + 2)
+        pdf.set_xy(56, pdf.get_y() + 2)
         self._draw_scale_min_max(
             pdf,
             scale_min=TRANSLATIONS_DICT.get_translation("scale_min", lang),
@@ -478,9 +477,16 @@ class SingleReport(ABC):
                 pdf.set_font("RalewayLight", "", 9)
 
                 scale_name = TRANSLATIONS_DICT.get_translation(scale, lang)
-                self._draw_scale_label(pdf, scale_name=scale_name, start_y=scale_y)
+                self._draw_multi_text(
+                    pdf,
+                    text=scale_name,
+                    start_x=pdf.get_x(),
+                    start_y=scale_y,
+                    label_width=38,
+                )
                 self._draw_rectangle_scale(
                     pdf,
+                    start_x=56,
                     start_y=scale_y,
                     points=points,
                     img=boyko_img,
@@ -491,19 +497,16 @@ class SingleReport(ABC):
                 # pdf.set_xy(134, start_y - 3)
                 # w = 210-10-134
 
-                text = textwrap.dedent(
-                    """\
-                    Стратегия проявляется локально: ощущение
-                    раздражения, злость на себя и ситуацию;
-                    потребность жестоко шутить /отстаивать свое
-                    мнение / проявлять эмоции."""
+                text = (
+                    "Стратегия проявляется локально: ощущение раздражения, злость на себя и ситуацию; потребность "
+                    "жестоко шутить /отстаивать свое мнение / проявлять эмоции."
                 )
                 self._draw_multi_text(
                     pdf,
                     start_y=scale_y,
                     text=text,
                     start_x=pdf.get_x(),
-                    line_height=4,
+                    line_height=3,
                     block_height=10,
                     border=1,
                 )
@@ -564,6 +567,7 @@ class SingleReport(ABC):
 
                 self._draw_rectangle_scale(
                     pdf,
+                    start_x=50,
                     start_y=scale_y,
                     points=points,
                     img=values_img,
@@ -652,26 +656,28 @@ class SingleReport(ABC):
         )
 
     @staticmethod
-    def _draw_rectangle_scale(pdf: FPDF, start_y: float, points: int, img: str = None):
+    def _draw_rectangle_scale(
+        pdf: FPDF, start_x: float, start_y: float, points: int, img: str = None
+    ):
         block_width = 5.9
 
         # draw rectangle
         pdf.set_line_width(0.3)
         pdf.set_fill_color(230, 230, 230)
-        pdf.rect(50, start_y, 70, 10, "F")
+        pdf.rect(start_x, start_y, 70, 10, "F")
 
         # draw images
         for i in range(points):
             pdf.image(
                 img,
-                x=51 + ((block_width + 1) * i),
+                x=start_x + 1 + ((block_width + 1) * i),
                 y=start_y + 1,
                 w=block_width,
                 h=8,
             )
 
-        # 120 = 50 + 70
-        pdf.set_xy(120, start_y)
+        # 120 = start_x + 70
+        pdf.set_xy(start_x + 70, start_y)
         pdf.cell(
             14,
             h=10,
