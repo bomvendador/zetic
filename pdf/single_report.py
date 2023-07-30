@@ -5,7 +5,8 @@ from abc import ABC
 from dataclasses import dataclass
 from typing import Dict
 
-from fpdf import fpdf, FPDF
+from fpdf import fpdf, FPDF, drawing
+from fpdf.drawing import DeviceRGB
 from fpdf.enums import Align, XPos, YPos
 
 from pdf.report_sections_configuration import (
@@ -284,6 +285,7 @@ class SingleReport(ABC):
                     label_width=32,
                     line_height=4,
                     block_height=category_height,
+                    border=text_border,
                 )
 
                 self._draw_rectangle_scale(
@@ -319,6 +321,7 @@ class SingleReport(ABC):
                     new_y=YPos.TOP,
                 )
 
+                # padding between scales
                 scale_y += category_height + 1
 
             # padding between categories
@@ -340,8 +343,6 @@ class SingleReport(ABC):
             TRANSLATIONS_DICT.get_translation("Section C_text", lang),
         )
 
-        start_y = pdf.get_y() + 5
-
         for category in COPING_CATEGORIES:
             scales = COPING_CATEGORIES[category]
             pdf.set_xy(pdf.l_margin, pdf.get_y() + 5)
@@ -352,7 +353,6 @@ class SingleReport(ABC):
                 0,
                 0,
                 txt=category_label,
-                border=text_border,
                 new_y=YPos.NEXT,
                 align=Align.L,
             )
@@ -635,8 +635,11 @@ class SingleReport(ABC):
                 new_x=XPos.LEFT,
                 new_y=YPos.TOP,
             )
+
+        prev_color: drawing.DeviceGray = pdf.draw_color
         pdf.set_draw_color(0, 0, 0)
         pdf.line(pdf.l_margin + 5, pdf.get_y() - height, pdf.l_margin + 5, pdf.get_y())
+        pdf.set_draw_color(prev_color.r * 255, prev_color.g * 255, prev_color.b * 255)
 
     @staticmethod
     def _draw_scale_min_max(pdf: FPDF, scale_min, scale_max):
@@ -748,6 +751,7 @@ class SingleReport(ABC):
         line_height: float = 4,
         block_height: float = 10,
         label_width: float = 0,
+        border: int = 0,
     ):
         lines = len(
             pdf.multi_cell(
@@ -769,6 +773,6 @@ class SingleReport(ABC):
             new_x=XPos.LEFT,
             new_y=YPos.NEXT,
             align=Align.L,
-            border=text_border,
+            border=border,
         )
         pass
