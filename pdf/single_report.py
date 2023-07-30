@@ -261,14 +261,15 @@ class SingleReport(ABC):
 
         # Categories
         category_height = 15.5
+        scale_padding = 1.5
         for category in CATTELL_CATEGORIES:
             scales = CATTELL_CATEGORIES[category]
-            height = category_height * len(scales)
+            height = (category_height + scale_padding) * len(scales)
 
             # Draw category header
             category_name = TRANSLATIONS_DICT.get_translation(category, lang)
             self._draw_category_vertically(
-                pdf, category_name, start_y=scale_y, height=height
+                pdf, category_name, start_y=scale_y, height=height - scale_padding
             )
 
             for scale in scales:
@@ -322,10 +323,10 @@ class SingleReport(ABC):
                 )
 
                 # padding between scales
-                scale_y += category_height + 1
+                scale_y += category_height + scale_padding
 
             # padding between categories
-            scale_y += 5
+            scale_y += 2
 
         self._insert_page_number(pdf)
         pass
@@ -456,7 +457,7 @@ class SingleReport(ABC):
         )
 
         # Categories
-        category_height = 15.5
+        category_height = 17
         scale_y = pdf.get_y() + 5
         for category in BOYKO_CATEGORIES:
             scales = BOYKO_CATEGORIES[category]
@@ -504,25 +505,14 @@ class SingleReport(ABC):
                     start_x=pdf.get_x(),
                     line_height=4,
                     block_height=10,
+                    border=1,
                 )
 
-                lines = text.count("\n") + 1
-                pdf.set_xy(pdf.get_x(), pdf.get_y() + (10 - (lines * 4)) / 2)
-
-                pdf.multi_cell(
-                    0,
-                    h=4,
-                    txt=text,
-                    border=text_border,
-                    align=Align.L,
-                    new_x=XPos.LEFT,
-                    new_y=YPos.TOP,
-                )
-
+                # padding between scales
                 scale_y += category_height + 1
 
             # padding between categories
-            scale_y += 5
+            scale_y += 10
 
         self._insert_page_number(pdf)
         pass
@@ -550,16 +540,17 @@ class SingleReport(ABC):
         )
 
         # Categories
-        category_height = 15.5
+        category_height = 20
+        scale_padding = 5
         scale_y = pdf.get_y() + 5
         for category in VALUES_CATEGORIES:
             scales = VALUES_CATEGORIES[category]
-            height = category_height * len(scales)
+            height = (category_height + scale_padding) * len(scales)
 
             # Draw category header
             category_name = TRANSLATIONS_DICT.get_translation(category, lang)
             self._draw_category_vertically(
-                pdf, category_name, start_y=scale_y, height=height
+                pdf, category_name, start_y=scale_y, height=height - scale_padding
             )
 
             # Draw scales
@@ -578,27 +569,26 @@ class SingleReport(ABC):
                     img=values_img,
                 )
 
+                text = textwrap.dedent(
+                    """\
+                    Критичность к информации, исследование
+                    неочевидных скрытых факторов, недоверие
+                    авторитетам; исследование разных сценариев
+                    Консерватизм, развития ситуации."""
+                )
                 pdf.set_font("RalewayLight", "", 8)
-                # draw points description
-                # pdf.set_xy(134, start_y)
-                # w = 210-10-134
-                pdf.multi_cell(
-                    0,
-                    h=4,
-                    txt=textwrap.dedent(
-                        """\
-                        Критичность к информации, исследование
-                        неочевидных скрытых факторов, недоверие
-                        авторитетам; исследование разных сценариев
-                        Консерватизм, развития ситуации."""
-                    ),
-                    border=text_border,
-                    align=Align.L,
-                    new_x=XPos.LEFT,
-                    new_y=YPos.TOP,
+                self._draw_multi_text(
+                    pdf,
+                    start_y=scale_y,
+                    text=text,
+                    start_x=pdf.get_x(),
+                    line_height=4,
+                    block_height=10,
+                    border=1,
                 )
 
-                scale_y += category_height + 1
+                # padding between scales
+                scale_y += category_height + 5
 
             # padding between categories
             scale_y += 5
