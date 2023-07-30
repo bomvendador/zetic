@@ -22,9 +22,9 @@ from pdf.raw_to_t_point_data import (
 from pdf.raw_to_t_point_mapper import RawToTPointMapper, AgeGroup, GenderGroup
 from pdf.report_sections_configuration import (
     CATTELL_CATEGORIES,
-    COPING_CATEGORIES,
-    BOYKO_CATEGORIES,
-    VALUES_CATEGORIES,
+    COPING_CATEGORIES_V1,
+    BOYKO_CATEGORIES_V1,
+    VALUES_CATEGORIES_V1,
 )
 from pdf.translations import TRANSLATIONS_DICT
 from pdf.v2 import (
@@ -231,11 +231,13 @@ class IncomingStudy:
 @dataclass
 class IncomingAppraisalPoint:
     code: str
+    category: str
     points: int
 
 
 @dataclass
 class IncomingAppraisalData:
+    section: str
     code: str
     point: List[IncomingAppraisalPoint]
 
@@ -330,6 +332,10 @@ class SingleReport(ABC):
 
     @abstractmethod
     def _get_scale_points_description(self, scale: str, points: int) -> str:
+        pass
+
+    @abstractmethod
+    def _get_section_scales(self, section: str) -> Dict[str, List[str]]:
         pass
 
     def __init__(self):
@@ -530,8 +536,9 @@ class SingleReport(ABC):
         # Categories
         category_height = 15.5
         scale_padding = 1.5
-        for category in CATTELL_CATEGORIES:
-            scales = CATTELL_CATEGORIES[category]
+        categories = self._get_section_scales("1")
+        for category in categories:
+            scales = categories[category]
             height = (category_height + scale_padding) * len(scales)
 
             # Draw category header
@@ -599,8 +606,9 @@ class SingleReport(ABC):
             TRANSLATIONS_DICT.get_translation("Section C_text", lang),
         )
 
-        for category in COPING_CATEGORIES:
-            scales = COPING_CATEGORIES[category]
+        categories = self._get_section_scales("2")
+        for category in self._get_section_scales("2"):
+            scales = categories[category]
             pdf.set_xy(pdf.l_margin, pdf.get_y() + 5)
 
             category_label = TRANSLATIONS_DICT.get_translation(category, lang)
@@ -707,8 +715,9 @@ class SingleReport(ABC):
         # Categories
         category_height = 17
         scale_y = pdf.get_y() + 5
-        for category in BOYKO_CATEGORIES:
-            scales = BOYKO_CATEGORIES[category]
+        categories = self._get_section_scales("3")
+        for category in categories:
+            scales = categories[category]
             height = category_height * len(scales)
 
             # Draw category header
@@ -792,8 +801,9 @@ class SingleReport(ABC):
         category_height = 20
         scale_padding = 5
         scale_y = pdf.get_y() + 5
-        for category in VALUES_CATEGORIES:
-            scales = VALUES_CATEGORIES[category]
+        categories = self._get_section_scales("4")
+        for category in categories:
+            scales = categories[category]
             height = (category_height + scale_padding) * len(scales)
 
             # Draw category header

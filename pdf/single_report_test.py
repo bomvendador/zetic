@@ -1,8 +1,15 @@
 import json
 import os
+from typing import Dict, List
 
 from django.test import TestCase
 
+from pdf.report_sections_configuration import (
+    CATTELL_CATEGORIES,
+    COPING_CATEGORIES_V1,
+    BOYKO_CATEGORIES_V1,
+    VALUES_CATEGORIES_V1,
+)
 from pdf.single_report import (
     SingleReport,
     SingleReportData,
@@ -97,6 +104,20 @@ values_example = SectionData(
 class SingleReportWithDummyData(SingleReport):
     def _get_scale_points_description(self, scale: str, points: int) -> str:
         return f"{scale} {points}"
+
+    def _get_section_scales(self, section: str) -> Dict[str, List[str]]:
+        match section:
+            case "1":
+                return CATTELL_CATEGORIES
+            case "2":
+                return COPING_CATEGORIES_V1
+            case "3":
+                return BOYKO_CATEGORIES_V1
+            case "4":
+                return VALUES_CATEGORIES_V1
+            case _:
+                raise Exception(f"Unknown section {section}")
+        pass
 
 
 class SingleReportTest(TestCase):

@@ -36,7 +36,11 @@ from pdf.title_page import title_page
 from reports import settings
 
 
-def pdf_single_generator(report_data: SingleReportData):
+def pdf_single_generator(
+    report_data: SingleReportData,
+    incoming_data: IncomingSingleReportData,
+    report_generator_class,
+):
     q_filter = Q()
     if not report_data.cattell_data.is_empty():
         q_filter |= report_data.cattell_data.to_query()
@@ -70,7 +74,7 @@ def pdf_single_generator(report_data: SingleReportData):
         }
 
     time_start = time.perf_counter()
-    report_generator = SingleReportDict(points_description_dict)
+    report_generator = report_generator_class(points_description_dict)
     pdf = report_generator.generate_pdf(report_data)
     time_end = time.perf_counter()
     print(f"generate pdf: {time_end - time_start}")
@@ -88,16 +92,16 @@ def pdf_single_generator(report_data: SingleReportData):
 
     path = os.path.join(settings.BASE_DIR, "media", "reportsPDF", "single")
 
-    save_data_to_db(request_json, file_name, pdf)
+    save_data_to_db(incoming_data, file_name, pdf)
 
-    response = save_serve_file(pdf, path, file_name, request_json)
+    response = save_serve_file(pdf, path, file_name)
 
     time_finish = time.perf_counter()
     # print(round(time_finish-time_start, 2))
     return response
 
 
-def save_serve_file(pdf, path, file_name, request_json):
+def save_serve_file(pdf, path, file_name):
     if not os.path.exists(path):
         os.makedirs(path)
     pdf.output(path + file_name)

@@ -23,6 +23,7 @@ from pdf.single_report import (
     load_point_mapper_v2,
     load_point_mapper_v1,
 )
+from pdf.single_report_dict import SingleReportV2, SingleReportV1
 from pdf.views import pdf_single_generator
 from pdf_group.views import pdf_group_generator
 
@@ -83,7 +84,7 @@ def single_report_v1(request):
             report_data: SingleReportData = incoming_data.to_single_report_data(
                 load_point_mapper_v1
             )
-            return pdf_single_generator(report_data)
+            return pdf_single_generator(report_data, incoming_data, SingleReportV1)
         except Exception as e:
             print(request_json)
             print(e)
@@ -109,7 +110,7 @@ def single_report_v2(request):
         report_data: SingleReportData = incoming_data.to_single_report_data(
             load_point_mapper_v2
         )
-        return pdf_single_generator(report_data)
+        return pdf_single_generator(report_data, incoming_data, SingleReportV2)
     except Exception as e:
         print(request_json)
         print(e)

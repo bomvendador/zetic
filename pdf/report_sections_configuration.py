@@ -26,7 +26,7 @@ CATTELL_CATEGORIES: Dict[str, List[str]] = {
     ],
 }
 
-COPING_CATEGORIES: Dict[str, List[str]] = {
+COPING_CATEGORIES_V1: Dict[str, List[str]] = {
     "Problem-focused": [
         "2_1",
         "2_2",
@@ -50,8 +50,36 @@ COPING_CATEGORIES: Dict[str, List[str]] = {
         "2_16",
     ],
 }
+COPING_CATEGORIES_V2: Dict[str, List[str]] = {
+    "Problem-focused": [
+        # "2_1",
+        "2_20",
+        "2_2",
+        # "2_3",
+        # "2_4",
+        # "2_5",
+        "2_18",
+    ],
+    "Emotion-focused": [
+        "2_17",
+        # "2_6",
+        # "2_7",
+        "2_8",
+        # "2_9",
+        "2_10",
+    ],
+    "Dysfunctional": [
+        # "2_11",
+        "2_19",
+        "2_12",
+        # "2_13",
+        "2_14",
+        "2_15",
+        "2_16",
+    ],
+}
 
-BOYKO_CATEGORIES: Dict[str, List[str]] = {
+BOYKO_CATEGORIES_V1: Dict[str, List[str]] = {
     "Phase 1. Tension": [
         "3_1",
         "3_2",
@@ -71,9 +99,51 @@ BOYKO_CATEGORIES: Dict[str, List[str]] = {
         "3_12",
     ],
 }
+BOYKO_CATEGORIES_V2: Dict[str, List[str]] = {
+    "Phase 1. Tension": [
+        # "3_1",
+        # "3_2",
+        # "3_3",
+        # "3_4",
+        "3_14",
+        "3_13",
+    ],
+    "Phase 2. Resistance": [
+        # "3_5",
+        # "3_6",
+        # "3_7",
+        # "3_8",
+        "3_15",
+        "3_16",
+    ],
+    "Phase 3. Exhaustion": [
+        # "3_9",
+        # "3_10",
+        # "3_11",
+        # "3_12",
+        "3_18",
+        "3_17",
+    ],
+}
 
 
-VALUES_CATEGORIES: Dict[str, List[str]] = {
+VALUES_CATEGORIES_V1: Dict[str, List[str]] = {
+    "Creating harmony": [
+        "4_1",
+        "4_2",
+        "4_3",
+        "4_4",
+        "4_5",
+    ],
+    "Overcoming resistance": [
+        "4_6",
+        "4_7",
+        "4_8",
+        "4_9",
+        "4_10",
+    ],
+}
+VALUES_CATEGORIES_V2: Dict[str, List[str]] = {
     "Creating harmony": [
         "4_1",
         "4_2",

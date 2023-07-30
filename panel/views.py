@@ -783,7 +783,7 @@ def save_migration(request):
                             )
                             participant_inst.save()
 
-                        pdf_single_generator(report_data)
+                        pdf_single_generator(report_data, SingleReportV1)
                     # report_code = participant['report']['code']
                     # participant_info = participant['report']['participant_info']
 

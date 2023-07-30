@@ -34,7 +34,7 @@ def json_request(request):
     if "type" in request_json:
         return pdf_group_generator(request_json)
     else:
-        return pdf_single_generator(request_json)
+        return pdf_single_generator(request_json, SingleReportV1)
 
 
 def home(request):
