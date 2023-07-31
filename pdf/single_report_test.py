@@ -123,7 +123,7 @@ class SingleReportWithDummyData(SingleReport):
 class SingleReportTest(TestCase):
     def test_single_report(self):
         single_report = SingleReportWithDummyData()
-        single_report.generate_pdf(
+        fpdf = single_report.generate_pdf(
             SingleReportData(
                 participant_name="Pablo",
                 lang="en",
@@ -131,9 +131,10 @@ class SingleReportTest(TestCase):
                 coping_data=coping_example,
                 boyko_data=boyko_example,
                 values_data=values_example,
-            ),
-            path="test",
+            )
         )
+        with open(f"test-{single_report.data.lang}.pdf", "wb") as f:
+            f.write(fpdf.output())
         single_report = SingleReportWithDummyData()
         single_report.generate_pdf(
             SingleReportData(

@@ -884,7 +884,7 @@ TRANSLATIONS = {
         ),
         "en": textwrap.dedent(
             """\
-            Замещение, отвлечение, бегство от стресса
+            Distraction, avoidance, escape
             """
         ),
     },
@@ -896,7 +896,7 @@ TRANSLATIONS = {
         ),
         "en": textwrap.dedent(
             """\
-            Позитивная мотивация и снижение стресса
+            Positive affirmation and stress minimization
             """
         ),
     },
@@ -908,7 +908,7 @@ TRANSLATIONS = {
         ),
         "en": textwrap.dedent(
             """\
-            Самообвинение и жалость к себе
+            Self-pity and blame
             """
         ),
     },
@@ -920,7 +920,7 @@ TRANSLATIONS = {
         ),
         "en": textwrap.dedent(
             """\
-            Самообладание и самоутверждение
+            Response control и self-assertion
             """
         ),
     },
@@ -1082,7 +1082,7 @@ TRANSLATIONS = {
         ),
         "en": textwrap.dedent(
             """\
-            Профессиональный тупик"""
+            Professional dead end"""
         ),
     },
     "3_14": {
@@ -1092,7 +1092,7 @@ TRANSLATIONS = {
         ),
         "en": textwrap.dedent(
             """\
-            Усталость от нагрузки, скорости и принципов работы"""
+            Workload, speed and working principles fatigue"""
         ),
     },
     "3_15": {
@@ -1102,7 +1102,7 @@ TRANSLATIONS = {
         ),
         "en": textwrap.dedent(
             """\
-            Усталость от коммуникаций"""
+            Communication fatigue"""
         ),
     },
     "3_16": {
@@ -1112,7 +1112,7 @@ TRANSLATIONS = {
         ),
         "en": textwrap.dedent(
             """\
-            Уход от коммуникаций"""
+            Emotional defense """
         ),
     },
     "3_17": {
@@ -1122,7 +1122,7 @@ TRANSLATIONS = {
         ),
         "en": textwrap.dedent(
             """\
-            Психосоматика"""
+            Physical discomfort"""
         ),
     },
     "3_18": {
@@ -1132,7 +1132,7 @@ TRANSLATIONS = {
         ),
         "en": textwrap.dedent(
             """\
-            Сокращение внимания"""
+            Personal detachment"""
         ),
     },
     # Values

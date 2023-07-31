@@ -77,16 +77,11 @@ def pdf_single_generator(
     # print(f"generate pdf: {time_end - time_start}")
 
     now = datetime.datetime.now()
+    name_eng = cyrtranslit.to_latin(report_data.participant_name.strip(), "ru")
+    lang = report_data.lang.upper()
 
-    if report_data.lang == "ru":
-        name_eng = cyrtranslit.to_latin(report_data.participant_name.strip(), "ru")
-    else:
-        name_eng = report_data.participant_name.strip()
-
-    file_name = "{0}_{1}_{2}.pdf".format(
-        name_eng,
-        now.strftime("%d_%m_%Y__%H_%M_%S"),
-        report_data.lang.upper(),
+    filename = "{0}_{1}_{2}.pdf".format(
+        name_eng, now.strftime("%d_%m_%Y__%H_%M_%S"), lang
     )
 
     path = os.path.join(settings.BASE_DIR, "media", "reportsPDF", "single")
@@ -94,23 +89,23 @@ def pdf_single_generator(
     save_data_to_db(
         single_report_data=report_data,
         data=incoming_data,
-        file_name=file_name,
+        filename=filename,
         pdf=pdf,
     )
 
-    response = save_serve_file(pdf, path, file_name)
+    response = save_serve_file(pdf, path, filename)
 
     time_finish = time.perf_counter()
     # print(round(time_finish-time_start, 2))
     return response
 
 
-def save_serve_file(pdf, path, file_name):
+def save_serve_file(pdf, path, filename):
     if not os.path.exists(path):
         os.makedirs(path)
-    pdf.output(os.path.join(path, file_name), "F")
+    pdf.output(os.path.join(path, filename), "F")
 
-    response = {"file_name": file_name}
+    response = {"file_name": filename}
     print(response)
     return JsonResponse(response, safe=False)
 

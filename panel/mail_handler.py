@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 from email.mime.application import MIMEApplication
 from email.mime.image import MIMEImage
 from smtplib import SMTPRecipientsRefused
@@ -10,6 +11,7 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import strip_tags
+from fpdf import FPDF
 
 from api.outcoming import get_code_for_invitation
 from login.models import UserProfile
@@ -198,7 +200,7 @@ def send_month_report(data):
         return result
 
 
-def send_notification_report_made(data):
+def send_notification_report_made(data, filename: str, pdf_report: bytes):
     participant_name = data["participant_name"]
     to_email = data["to_email"]
     logo_cid = "logo"
@@ -220,6 +222,11 @@ def send_notification_report_made(data):
         email.content_subtype = "html"
         email.mixed_subtype = "related"
         email.attach(create_logo_mime(logo_cid))
+
+        report = MIMEApplication(pdf_report, "pdf")
+
+        report.add_header("Content-Disposition", "attachment", filename=filename)
+        email.attach(report)
         email.body = html_message
         email.send(fail_silently=False)
 

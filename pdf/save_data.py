@@ -24,7 +24,7 @@ from .single_report import (
 def save_data_to_db(
     single_report_data: SingleReportData,
     data: IncomingSingleReportData,
-    file_name: str,
+    filename: str,
     pdf: FPDF,
 ):
     employees = Employee.objects.filter(email=data.participant_info.email)
@@ -77,7 +77,7 @@ def save_data_to_db(
     report.participant = participant
     report.lie_points = lie_points
     report.code = data.code
-    report.file = file_name
+    report.file = filename
     report.lang = data.lang
     report.study = study
     report.save()
@@ -106,7 +106,9 @@ def save_data_to_db(
             "study_name": participant.study.name,
             "to_email": to_email,
         }
-        mail_handler.send_notification_report_made(data_for_mail)
+        mail_handler.send_notification_report_made(
+            data_for_mail, filename=filename, pdf_report=pdf.output()
+        )
 
     if participant.send_report_on_complete and participant.report_sent_at is None:
         participant.report_sent_at = timezone.now()
