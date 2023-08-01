@@ -22,9 +22,10 @@ from pdf.single_report import (
     SingleReportData,
     load_point_mapper_v2,
     load_point_mapper_v1,
+    SingleReport,
 )
 from pdf.single_report_dict import SingleReportV2, SingleReportV1
-from pdf.views import pdf_single_generator
+from pdf.views import pdf_single_generator, pdf_single_generator_file
 from pdf_group.views import pdf_group_generator
 
 TOKEN = "b55a461f947c6d315ad67f1d65d2ec592e400679"
@@ -60,6 +61,28 @@ def participant_started(request):
     participant.total_questions_qnt = total_questions_qnt
     participant.save()
     return HttpResponse(status=200)
+
+
+@api_view(["POST"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+@parser_classes([JSONParser])
+def single_report_v1_pdf(request):
+    request_json = json.loads(request.body.decode("utf-8"))
+    try:
+        incoming_data = IncomingSingleReportData.from_dict(request_json)
+        report_data: SingleReportData = incoming_data.to_single_report_data(
+            load_point_mapper_v1
+        )
+        pdf, filename = pdf_single_generator_file(
+            report_data, incoming_data, SingleReportV1
+        )
+        return HttpResponse(content="OK", content_type="application/pdf")
+    except Exception as e:
+        print(request_json)
+        print(e)
+        traceback.print_exc()
+        return HttpResponseServerError("JSON request error")
 
 
 @api_view(["POST"])

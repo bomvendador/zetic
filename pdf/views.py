@@ -30,17 +30,18 @@ from pdf.single_report import (
     IncomingSingleReportData,
     SingleReportData,
     load_point_mapper_v1,
+    SingleReport,
 )
 from pdf.single_report_dict import SingleReportDict
 from pdf.title_page import title_page
 from reports import settings
 
 
-def pdf_single_generator(
+def pdf_single_generator_file(
     report_data: SingleReportData,
     incoming_data: IncomingSingleReportData,
     report_generator_class,
-):
+) -> (SingleReport, str):  # pdf, filename
     q_filter = Q()
     if not report_data.cattell_data.is_empty():
         q_filter |= report_data.cattell_data.to_query()
@@ -86,6 +87,23 @@ def pdf_single_generator(
 
     path = os.path.join(settings.BASE_DIR, "media", "reportsPDF", "single")
 
+    if not os.path.exists(path):
+        os.makedirs(path)
+    pdf.output(os.path.join(path, filename), "F")
+    return pdf, filename
+
+
+def pdf_single_generator(
+    report_data: SingleReportData,
+    incoming_data: IncomingSingleReportData,
+    report_generator_class,
+):
+    pdf, filename = pdf_single_generator_file(
+        report_data=report_data,
+        incoming_data=incoming_data,
+        report_generator_class=report_generator_class,
+    )
+
     save_data_to_db(
         single_report_data=report_data,
         data=incoming_data,
@@ -93,18 +111,14 @@ def pdf_single_generator(
         pdf=pdf,
     )
 
-    response = save_serve_file(pdf, path, filename)
+    response = save_serve_file(pdf, filename)
 
     time_finish = time.perf_counter()
     # print(round(time_finish-time_start, 2))
     return response
 
 
-def save_serve_file(pdf, path, filename):
-    if not os.path.exists(path):
-        os.makedirs(path)
-    pdf.output(os.path.join(path, filename), "F")
-
+def save_serve_file(pdf, filename):
     response = {"file_name": filename}
     print(response)
     return JsonResponse(response, safe=False)

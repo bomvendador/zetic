@@ -7,6 +7,7 @@ from . import outcoming
 urlpatterns = [
     path("", views.server_response, name="server_response"),
     path("single-report/v1", incoming.single_report_v1, name="json"),
+    path("single-report/v1/pdf", incoming.single_report_v1_pdf, name="json"),
     path("single-report/v2", incoming.single_report_v2, name="json"),
     path("group-report/v1", views.json_request, name="json"),
     path(

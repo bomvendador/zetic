@@ -346,6 +346,9 @@ class SingleReport(ABC):
     _pdf: FPDF
     data: SingleReportData = None
 
+    def output(self):
+        return self._pdf.output()
+
     @abstractmethod
     def _get_scale_points_description(self, scale: str, points: int) -> str:
         pass
