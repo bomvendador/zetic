@@ -1,4 +1,4 @@
-from pdf.extract_data import extract_categories
+from .extract_data import extract_categories
 from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B
 
 

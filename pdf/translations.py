@@ -1255,6 +1255,49 @@ TRANSLATIONS = {
             Curiosity"""
         ),
     },
+    # Team Report
+    "Team Report": {
+        "ru": "Командный отчет",
+        "en": "Team Report",
+    },
+    "Project": {
+        "ru": "Проект:",
+        "en": "Project:",
+    },
+    "group_report_description": {
+        "ru": (
+            "Модель описывает четыре управленческие роли. Выполнение каждой из них помогает команде или организации обеспечить "
+            "максимально эффективную деятельность. Роли распределяются исходя из особенностей характера и интуйтивных предпочтений в "
+            "работе (ценности, убеждения, мотиваторы). Сотрудник может совмещать одну или несколько ролей. При этом в матрице ролей "
+            "будет указываться доминантная роль."
+        ),
+        "en": (
+            "Based on decades of academic research Zetic has developed a tool for scientific personality measurement "
+            "for business. The tool can be used for a variety of recruitment and development purposes. The approach was "
+            "tested on a large sample of executives over several years. Our study of resilience and stress behavior has "
+            "become the largest in Russia over the past 15 years. Zetic 4S questionnaire consists of:"
+        ),
+    },
+    "Предприниматель": {
+        "ru": "Предприниматель",
+        "en": "Entrepreneur",
+    },
+    "Предприниматель Описание": {
+        "ru": (
+            "                            – роль направлена на формирование и реализацию долгосрочных планов / стратегии, обеспечение"
+            " развития бизнеса и продуктов. Сотрудникам в этой роли свойственно глубоко погружаться в предметную"
+            " область, развивать экспертизу, разрабатывать и предлагать варианты развития бизнеса (клиентов, продуктов,"
+            " вариантов монетизации, новых рыночных ниш и т.д.). Им свойственно фокусироваться на идеях, "
+            "ориентироваться на поиск новых / интересных решений, фантазировать. Они комфортно переживают перемены и эксперименты."
+        ),
+        "en": (
+            "Based on decades of academic research Zetic has developed a tool for scientific personality measurement "
+            "for business. The tool can be used for a variety of recruitment and development purposes. The approach was "
+            "tested on a large sample of executives over several years. Our study of resilience and s"
+            "tress behavior has "
+            "become the largest in Russia over the past 15 years. Zetic 4S questionnaire consists of:"
+        ),
+    },
 }
 
 DEFAULT_LANG = "en"

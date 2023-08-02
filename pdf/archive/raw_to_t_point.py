@@ -1,4 +1,4 @@
-from .raw_to_t_point_data import (
+from pdf.raw_point_v1 import (
     KOPPINGI_DEFAULT,
     KETTEL_1_MEN_1950_1993,
     KETTEL_1_WOMEN_1950_1993,

@@ -1,4 +1,4 @@
-from pdf.draw import insert_page_number
+from pdf.archive.draw import insert_page_number
 from pdf_group.draw import draw_squares
 
 

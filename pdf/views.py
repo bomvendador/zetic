@@ -18,22 +18,13 @@ from django.http import (
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 
-from pdf.extract_data import extract_section
 from pdf.models import PointDescription
-from pdf.page2_file import page2
-from pdf.page3_file import page3
-from pdf.page4_file import page4
-from pdf.page5_file import page5
-from pdf.page6_file import page6
 from pdf.save_data import save_data_to_db
 from pdf.single_report import (
     IncomingSingleReportData,
     SingleReportData,
-    load_point_mapper_v1,
     SingleReport,
 )
-from pdf.single_report_dict import SingleReportDict
-from pdf.title_page import title_page
 from reports import settings
 
 

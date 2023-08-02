@@ -13,7 +13,6 @@ from pdf.models import (
     EmployeePosition,
     Industry,
 )
-from . import raw_to_t_point
 from .single_report import (
     IncomingSingleReportData,
     SingleReportData,

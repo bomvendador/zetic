@@ -10,7 +10,7 @@ from django.db.models import Q
 from fpdf import fpdf, FPDF, drawing
 from fpdf.enums import Align, XPos, YPos
 
-from pdf.raw_to_t_point_data import (
+from pdf.raw_point_v1 import (
     KETTEL_1_WOMEN_1994_2022,
     KETTEL_1_WOMEN_1950_1993,
     KETTEL_1_MEN_1994_2022,
@@ -19,15 +19,10 @@ from pdf.raw_to_t_point_data import (
     BOYKO_DEFAULT,
     VALUES_DEFAULT,
 )
-from pdf.raw_to_t_point_mapper import RawToTPointMapper, AgeGroup, GenderGroup
-from pdf.report_sections_configuration import (
-    CATTELL_CATEGORIES,
-    COPING_CATEGORIES_V1,
-    BOYKO_CATEGORIES_V1,
-    VALUES_CATEGORIES_V1,
-)
+from pdf.raw_point_mapper import RawToTPointMapper, AgeGroup, GenderGroup
+
 from pdf.translations import TRANSLATIONS_DICT
-from pdf.v2 import (
+from pdf.raw_point_v2 import (
     MUJER_JOVEN_COPING,
     MUJER_JOVEN_BURNOUT,
     MUJER_JOVEN_VALUES,
@@ -40,6 +35,15 @@ from pdf.v2 import (
     HOMBRE_MAYOR_COPING,
     HOMBRE_MAYOR_BURNOUT,
     HOMBRE_MAYOR_VALUES,
+)
+
+from pdf.zetic_pdf import (
+    ZeticPDF,
+    PDF_MODULE_BASE_DIR,
+    text_border,
+    BLOCK_R,
+    BLOCK_G,
+    BLOCK_B,
 )
 
 mujer_joven_v1 = RawToTPointMapper(
@@ -122,18 +126,6 @@ hombre_mayor_v2 = RawToTPointMapper(
         "4": HOMBRE_MAYOR_VALUES,
     },
 )
-
-# Assuming your settings.py is located at the project's root directory
-PDF_MODULE_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# Add the font directory path to your settings
-FONT_DIR = os.path.join(PDF_MODULE_BASE_DIR, "fonts")
-
-BLOCK_R = 230
-BLOCK_G = 230
-BLOCK_B = 227
-
-text_border = 0
 
 
 @dataclass
@@ -343,7 +335,7 @@ class IncomingSingleReportData:
 
 
 class SingleReport(ABC):
-    _pdf: FPDF
+    _pdf: ZeticPDF
     data: SingleReportData = None
 
     def output(self):
@@ -358,33 +350,15 @@ class SingleReport(ABC):
         pass
 
     def __init__(self):
-        self._pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
+        self._pdf = ZeticPDF(orientation="P", unit="mm", format="A4")
         self._pdf.set_auto_page_break(False)
-
-    def _add_fonts(self):
-        self._pdf.add_font(
-            "RalewayMedium", fname=os.path.join(FONT_DIR, "Raleway-Medium.ttf")
-        )
-        self._pdf.add_font(
-            "RalewayRegular", fname=os.path.join(FONT_DIR, "Raleway-Regular.ttf")
-        )
-        self._pdf.add_font(
-            "RalewayLight", fname=os.path.join(FONT_DIR, "Raleway-Light.ttf")
-        )
-        self._pdf.add_font(
-            "RalewayBold", fname=os.path.join(FONT_DIR, "Raleway-Bold.ttf")
-        )
-        self._pdf.add_font(
-            "NotoSansDisplayMedium",
-            fname=os.path.join(FONT_DIR, "NotoSansDisplay-Medium.ttf"),
-        )
 
     def generate_pdf(
         self, data: SingleReportData, path: str = None
     ) -> Union[None, FPDF]:
         time_start = time.perf_counter()
         self.data = data
-        self._add_fonts()
+        self._pdf.add_fonts()
         self._title_page(data.participant_name, data.lang)
         self._add_report_description(data.lie_points, data.lang)
 
@@ -416,32 +390,32 @@ class SingleReport(ABC):
         )
 
         pdf.set_xy(20, 150)
-        pdf.set_font("RalewayRegular", size=18)
+        pdf.set_title_font(18)
         pdf.cell(0, 0, txt=TRANSLATIONS_DICT.get_translation("report", lang))
 
         pdf.set_xy(20, 170)
-        pdf.set_font("RalewayLight", size=12)
+        pdf.set_text_font(12)
         participant_label = TRANSLATIONS_DICT.get_translation("participant", lang)
         pdf.cell(20, txt=participant_label)
 
         if lang == "en":
             pdf.set_x(pdf.get_x() + 2)
 
-        pdf.set_font("RalewayRegular", size=12)
+        pdf.set_title_font(12)
         pdf.write(txt=name)
 
         pdf.set_xy(20, 180)
-        pdf.set_font("RalewayRegular", size=12)
+        pdf.set_title_font(12)
         pdf.cell(0, txt=TRANSLATIONS_DICT.get_translation("zetic", lang))
 
     def _add_report_description(self, lie_points: int, lang):
         pdf = self._pdf
         pdf.add_page()
         # pdf.set_xy(10, 10)
-        pdf.set_font("RalewayBold", "", 10)
+        pdf.set_label_font()
         pdf.cell(0, 0, TRANSLATIONS_DICT.get_translation("Introduction", lang))
 
-        pdf.set_font("RalewayLight", "", 9)
+        pdf.set_text_font(9)
         pdf.set_y(pdf.get_y() + 5)
         pdf.multi_cell(
             0, 4, txt=TRANSLATIONS_DICT.get_translation("Introduction_text", lang)
@@ -452,13 +426,13 @@ class SingleReport(ABC):
             0, 4, txt=TRANSLATIONS_DICT.get_translation("Introduction_text_2", lang)
         )
 
-        pdf.set_font("RalewayBold", "", 10)
+        pdf.set_label_font()
         pdf.set_xy(pdf.l_margin, pdf.get_y() + 5)
         pdf.cell(
             0, 0, txt=TRANSLATIONS_DICT.get_translation("How to read the report", lang)
         )
 
-        pdf.set_font("RalewayLight", "", 9)
+        pdf.set_text_font(9)
         pdf.set_xy(pdf.l_margin, pdf.get_y() + 5)
         pdf.multi_cell(
             0,
@@ -466,11 +440,11 @@ class SingleReport(ABC):
             txt=TRANSLATIONS_DICT.get_translation("How to read the report_text", lang),
         )
 
-        pdf.set_font("RalewayBold", "", 10)
+        pdf.set_label_font()
         pdf.set_xy(pdf.l_margin, pdf.get_y() + 5)
         pdf.cell(0, 0, txt=TRANSLATIONS_DICT.get_translation("The scales", lang))
 
-        pdf.set_font("RalewayLight", "", 9)
+        pdf.set_text_font(9)
         pdf.set_xy(pdf.l_margin, pdf.get_y() + 5)
         pdf.multi_cell(
             0, 4, txt=TRANSLATIONS_DICT.get_translation("The scales_text", lang)
@@ -480,7 +454,7 @@ class SingleReport(ABC):
         # 10 margin
         #
         # lie scale text
-        pdf.set_font("RalewayLight", "", 9)
+        pdf.set_text_font(9)
         pdf.set_xy(pdf.l_margin, 265)
         pdf.cell(30, 12, txt=TRANSLATIONS_DICT.get_translation("Validity", lang))
 
@@ -489,7 +463,7 @@ class SingleReport(ABC):
         pdf.set_x(116)
         pdf.cell(14, 12, txt=str(lie_points), align=Align.C)
 
-        pdf.set_font("RalewayLight", "", 7)
+        pdf.set_text_font(7)
 
         # 115 + 15 = 130
         pdf.set_x(130)
@@ -571,7 +545,7 @@ class SingleReport(ABC):
             for scale in scales:
                 points = data[scale]
                 pdf.set_xy(pdf.l_margin + 8, scale_y)
-                pdf.set_font("RalewayLight", "", 9)
+                pdf.set_text_font(9)
 
                 scale_name = TRANSLATIONS_DICT.get_translation(scale, lang)
                 self._draw_multi_text(
@@ -634,7 +608,7 @@ class SingleReport(ABC):
             pdf.set_xy(pdf.l_margin, pdf.get_y() + 5)
 
             category_label = TRANSLATIONS_DICT.get_translation(category, lang)
-            pdf.set_font("RalewayBold", "", 10)
+            pdf.set_label_font()
             pdf.multi_cell(
                 0,
                 0,
@@ -659,7 +633,7 @@ class SingleReport(ABC):
                 # padding between scales
                 scale_y = pdf.get_y() + 5
                 pdf.set_xy(pdf.l_margin, scale_y)
-                pdf.set_font("RalewayLight", "", 9)
+                pdf.set_text_font(9)
 
                 # find height of the text depending on the number of lines
                 lines = len(
@@ -699,7 +673,7 @@ class SingleReport(ABC):
                     new_y=YPos.TOP,
                 )
 
-                pdf.set_font("RalewayLight", "", 8)
+                pdf.set_text_font(8)
 
                 self._draw_multi_text(
                     pdf,
@@ -737,7 +711,7 @@ class SingleReport(ABC):
         )
 
         # Categories
-        category_height = 17
+        category_height = 19
         scale_y = pdf.get_y() + 5
         categories = self._get_section_scales("3")
         for category in categories:
@@ -756,7 +730,7 @@ class SingleReport(ABC):
             for scale in scales:
                 points = data[scale]
                 pdf.set_xy(pdf.l_margin + 8, scale_y)
-                pdf.set_font("RalewayLight", "", 9)
+                pdf.set_text_font(9)
 
                 scale_name = TRANSLATIONS_DICT.get_translation(scale, lang)
                 self._draw_multi_text(
@@ -774,7 +748,8 @@ class SingleReport(ABC):
                     img=boyko_img,
                 )
 
-                pdf.set_font("RalewayLight", "", 8)
+                pdf.set_text_font(8)
+
                 # draw points description
                 # pdf.set_xy(134, start_y - 3)
                 # w = 210-10-134
@@ -785,7 +760,6 @@ class SingleReport(ABC):
                     start_y=scale_y,
                     text=text,
                     start_x=pdf.get_x(),
-                    line_height=3,
                     block_height=10,
                     border=text_border,
                 )
@@ -840,7 +814,7 @@ class SingleReport(ABC):
             for scale in scales:
                 points = data[scale]
                 pdf.set_xy(pdf.l_margin + 8, scale_y)
-                pdf.set_font("RalewayLight", "", 9)
+                pdf.set_text_font(9)
 
                 scale_name = TRANSLATIONS_DICT.get_translation(scale, lang)
                 self._draw_scale_label(pdf, scale_name=scale_name, start_y=scale_y)
@@ -854,7 +828,7 @@ class SingleReport(ABC):
                 )
 
                 text = self._get_scale_points_description(scale, points)
-                pdf.set_font("RalewayLight", "", 8)
+                pdf.set_text_font(8)
                 self._draw_multi_text(
                     pdf,
                     start_y=scale_y,
@@ -876,10 +850,10 @@ class SingleReport(ABC):
 
     @staticmethod
     def _draw_header(pdf: FPDF, section_name, section_text):
-        pdf.set_font("RalewayBold", "", 10)
+        pdf.set_label_font()
         pdf.cell(0, 0, txt=section_name)
 
-        pdf.set_font("RalewayLight", "", 9)
+        pdf.set_text_font(9)
         pdf.set_xy(pdf.l_margin, pdf.get_y() + 5)
         pdf.multi_cell(
             0,
@@ -891,9 +865,9 @@ class SingleReport(ABC):
 
     @staticmethod
     def _draw_category_vertically(
-        pdf: FPDF, category_name: str, start_y: float, height: float
+        pdf: ZeticPDF, category_name: str, start_y: float, height: float
     ):
-        pdf.set_font("RalewayLight", "", 9)
+        pdf.set_text_font(9)
         pdf.set_xy(pdf.l_margin, start_y + height)
         with pdf.rotation(90):
             pdf.cell(
@@ -911,8 +885,8 @@ class SingleReport(ABC):
         pdf.set_draw_color(prev_color.r * 255, prev_color.g * 255, prev_color.b * 255)
 
     @staticmethod
-    def _draw_scale_min_max(pdf: FPDF, scale_min, scale_max):
-        pdf.set_font("RalewayLight", "", 6)
+    def _draw_scale_min_max(pdf: ZeticPDF, scale_min, scale_max):
+        pdf.set_text_font(6)
         pdf.multi_cell(
             35,
             3,
@@ -932,7 +906,7 @@ class SingleReport(ABC):
 
     @staticmethod
     def _draw_rectangle_scale(
-        pdf: FPDF, start_x: float, start_y: float, points: int, img: str = None
+        pdf: ZeticPDF, start_x: float, start_y: float, points: int, img: str = None
     ):
         block_width = 5.9
 
@@ -965,7 +939,7 @@ class SingleReport(ABC):
 
     @staticmethod
     def _draw_scale_label(
-        pdf: FPDF,
+        pdf: ZeticPDF,
         start_y: float,
         scale_name: str,
         label_width: float = 32,
@@ -996,7 +970,7 @@ class SingleReport(ABC):
         )
 
     @staticmethod
-    def _insert_page_number(pdf: FPDF):
+    def _insert_page_number(pdf: ZeticPDF):
         pdf.set_fill_color(BLOCK_R, BLOCK_G, BLOCK_B)
         pdf.set_draw_color(BLOCK_R, BLOCK_G, BLOCK_B)
         rect_width = 20
@@ -1005,13 +979,9 @@ class SingleReport(ABC):
 
         pdf.set_xy(200, 290)
         pdf.set_text_color(0, 0, 0)
-        pdf.set_font("RalewayLight", "", 10)
+        pdf.set_text_font(10)
         pdf.set_xy(200, 290)
         pdf.cell(0, 0, txt=str(pdf.page_no()))
-
-    @staticmethod
-    def _draw_section(pdf: FPDF):
-        pass
 
     @staticmethod
     def _draw_multi_text(
