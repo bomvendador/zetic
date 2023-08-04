@@ -156,15 +156,23 @@ def questions_answered_qnt(request):
     questions_answered = json_request["questions_answered_qnt"]
     participant_email = json_request["participant"]["email"]
     participant_name = json_request["participant"]["name"]
-    participant = Participant.objects.get(
-        employee__email=participant_email, study__public_code=study_public_code
-    )
+    try:
+        participant = Participant.objects.get(
+            employee__email=participant_email, study__public_code=study_public_code
+        )
+    except Participant.DoesNotExist:
+        return HttpResponse(status=404, content="Participant not found")
+
     participant.answered_questions_qnt = questions_answered
     participant.total_questions_qnt = total_questions_qnt
     participant.current_percentage = round(
         questions_answered / total_questions_qnt * 100
     )
-    employee = Employee.objects.get(email=participant_email)
+    try:
+        employee = Employee.objects.get(email=participant_email)
+    except Employee.DoesNotExist:
+        return HttpResponse(status=404, content="Employee not found")
+
     employee.name = participant_name
     employee.save()
     participant.save()
