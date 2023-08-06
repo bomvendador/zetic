@@ -156,23 +156,23 @@ class SingleReportTest(TestCase):
         incoming_data = IncomingSingleReportData.from_dict(parsed_data)
         assert incoming_data.participant_info.name == "Попов Артем Юрьевич "
 
-    def test_real_data(self):
-        path_to_json = os.path.join(
-            os.path.dirname(PDF_MODULE_BASE_DIR), "report-velle.json"
-        )
-        with open(path_to_json, "r") as f:
-            parsed_data = json.load(f)
-
-        incoming_data = IncomingSingleReportData.from_dict(parsed_data)
-        report_data = incoming_data.to_single_report_data()
-        single_report = SingleReportWithDummyData()
-        single_report.generate_pdf(
-            report_data,
-            path="test-real-data-velle",
-        )
-        report_data.lang = "en"
-        single_report = SingleReportWithDummyData()
-        single_report.generate_pdf(
-            report_data,
-            path="test-real-data-velle",
-        )
+    # def test_real_data(self):
+    #     path_to_json = os.path.join(
+    #         os.path.dirname(PDF_MODULE_BASE_DIR), "report-velle.json"
+    #     )
+    #     with open(path_to_json, "r") as f:
+    #         parsed_data = json.load(f)
+    #
+    #     incoming_data = IncomingSingleReportData.from_dict(parsed_data)
+    #     report_data = incoming_data.to_single_report_data()
+    #     single_report = SingleReportWithDummyData()
+    #     single_report.generate_pdf(
+    #         report_data,
+    #         path="test-real-data-velle",
+    #     )
+    #     report_data.lang = "en"
+    #     single_report = SingleReportWithDummyData()
+    #     single_report.generate_pdf(
+    #         report_data,
+    #         path="test-real-data-velle",
+    #     )

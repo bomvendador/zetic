@@ -30,26 +30,33 @@ class SquareId(Enum):
 class SquareUiConfig:
     x: int
     y: int
+    name: str
     pass
 
 
 SQUARE_UI_CONFIG: Dict[SquareId, SquareUiConfig] = {
-    SquareId.ESFJ_1_1: SquareUiConfig(x=0, y=0),
-    SquareId.ENFJ_1_2: SquareUiConfig(x=0, y=1),
-    SquareId.ESFP_1_3: SquareUiConfig(x=1, y=0),
-    SquareId.ENFP_1_4: SquareUiConfig(x=1, y=1),
-    SquareId.ESTJ_2_1: SquareUiConfig(x=2, y=0),
-    SquareId.ENTJ_2_2: SquareUiConfig(x=2, y=1),
-    SquareId.ESTP_2_3: SquareUiConfig(x=3, y=0),
-    SquareId.ENTP_2_4: SquareUiConfig(x=3, y=1),
-    SquareId.ISFJ_3_1: SquareUiConfig(x=0, y=2),
-    SquareId.INFJ_3_2: SquareUiConfig(x=0, y=3),
-    SquareId.ISFP_3_3: SquareUiConfig(x=1, y=2),
-    SquareId.INFP_3_4: SquareUiConfig(x=1, y=3),
-    SquareId.ISTJ_4_1: SquareUiConfig(x=2, y=2),
-    SquareId.INTJ_4_2: SquareUiConfig(x=2, y=3),
-    SquareId.ISTP_4_3: SquareUiConfig(x=3, y=2),
-    SquareId.INTP_4_4: SquareUiConfig(x=3, y=3),
+    SquareId.ESFJ_1_1: SquareUiConfig(x=0, y=0, name="Массовик-затейник"),
+    SquareId.ENFJ_1_2: SquareUiConfig(
+        x=1, y=0, name="Чуткий наставник / Коммуникатор"
+    ),  # ?
+    SquareId.ESFP_1_3: SquareUiConfig(
+        x=0, y=1, name="Развлекатель / Переговорщик"
+    ),  # ?
+    SquareId.ENFP_1_4: SquareUiConfig(x=1, y=1, name="Мотиватор"),
+    SquareId.ESTJ_2_1: SquareUiConfig(x=2, y=0, name="Контролер"),
+    SquareId.ENTJ_2_2: SquareUiConfig(x=2, y=1, name="Аналитик"),
+    SquareId.ESTP_2_3: SquareUiConfig(x=3, y=0, name="Искатель ресурсов"),
+    SquareId.ENTP_2_4: SquareUiConfig(x=3, y=1, name="Изобретатель"),
+    SquareId.ISFJ_3_1: SquareUiConfig(x=0, y=2, name="Хранитель / Визионер"),
+    SquareId.INFJ_3_2: SquareUiConfig(x=0, y=3, name="Вдохновитель / Авантюрист"),
+    SquareId.ISFP_3_3: SquareUiConfig(x=1, y=2, name="Опекун / Искатель ресурсов"),
+    SquareId.INFP_3_4: SquareUiConfig(
+        x=1, y=3, name="Благородный служитель /Изобретатель"
+    ),
+    SquareId.ISTJ_4_1: SquareUiConfig(x=2, y=2, name="Организатор"),
+    SquareId.INTJ_4_2: SquareUiConfig(x=2, y=3, name="Любитель улучшений"),
+    SquareId.ISTP_4_3: SquareUiConfig(x=3, y=2, name="Реализатор"),
+    SquareId.INTP_4_4: SquareUiConfig(x=3, y=3, name="Решатель проблем"),
 }
 
 
@@ -337,12 +344,13 @@ class ZeticGroupPDF(ZeticPDF):
         self.set_xy(self.l_margin + config.x * width, base_y + config.y * width)
 
         self.set_draw_color(240, 100, 40)
+
         width -= 4
         start_x = self.x + 2
         start_y = self.y + 7
         self.set_xy(start_x, start_y)
         self.set_text_font(7)
-        n_per_line = 4
+        n_per_line = 8
         padding = 1
         text_width = width / n_per_line - padding
         self.set_x(self.x + padding)
@@ -352,12 +360,13 @@ class ZeticGroupPDF(ZeticPDF):
             if int(self.x + text_width) > int(start_x + width):
                 self.set_xy(start_x + padding, self.y + text_width + padding)
 
+            self.set_draw_color(*color[participant_id])
             self.set_fill_color(*color[participant_id])
             self.circle(
                 self.x,
                 self.y,
                 text_width,
-                style="F",
+                style="FD",
             )
             self.cell(
                 w=text_width,
