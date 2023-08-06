@@ -1,6 +1,7 @@
 import textwrap
 from typing import Dict
 
+
 TRANSLATIONS = {
     "report": {
         "ru": "Индивидуальный отчет",
@@ -173,6 +174,18 @@ TRANSLATIONS = {
             Workability"""
         ),
     },
+    "1_1_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Управление своим состоянием,
+            обладание личной зрелостью
+            и стабильностью"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
+        ),
+    },
     "1_2": {
         "ru": textwrap.dedent(
             """\
@@ -207,6 +220,18 @@ TRANSLATIONS = {
             """\
             Self-blaming, Anxiety,
             Impressionability"""
+        ),
+    },
+    "1_2_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Склонность к беспокойству,
+            тревоге, вине, повышенной
+            требовательности к себе"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
         ),
     },
     "1_3": {
@@ -245,6 +270,14 @@ TRANSLATIONS = {
     High drive, Irritability"""
         ),
     },
+    "1_3_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+        Внутренняя расслабленность,
+        нетерпеливость, мотивация"""
+        ),
+        "en": "",
+    },
     "1_4": {
         "ru": textwrap.dedent(
             """\
@@ -280,6 +313,15 @@ TRANSLATIONS = {
     Carelessness, Enthusiasm,
     Expressiveness"""
         ),
+    },
+    "1_4_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+        Экспрессивность, яркость,
+        энергичность, активное
+        проявление себя в мире"""
+        ),
+        "en": "",
     },
     "1_5": {
         "ru": textwrap.dedent(
@@ -317,6 +359,15 @@ TRANSLATIONS = {
     Influence, Cunning"""
         ),
     },
+    "1_5_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Склонность к оказанию влияния,
+            построению коммуникаций через
+            эмпатию, утонченность"""
+        ),
+        "en": "",
+    },
     "1_6": {
         "ru": textwrap.dedent(
             """\
@@ -352,6 +403,14 @@ TRANSLATIONS = {
     Tender-mind, Empathy,
     Intuitiveness"""
         ),
+    },
+    "1_6_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Эмпатия, восприятие мира через
+            ощущения, сентиментальность"""
+        ),
+        "en": "",
     },
     "1_7": {
         "ru": textwrap.dedent(
@@ -389,6 +448,15 @@ TRANSLATIONS = {
     Kindness, Openness"""
         ),
     },
+    "1_7_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Готовность к новым знакомствам,
+            приветливость, теплота
+            коммуникации, уживчивость"""
+        ),
+        "en": "",
+    },
     "1_8": {
         "ru": textwrap.dedent(
             """\
@@ -424,6 +492,15 @@ TRANSLATIONS = {
     Abstracteness, Imagination,
     Idea-oriention"""
         ),
+    },
+    "1_8_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Богатое воображение,склонность
+            к концептуализации, яркость
+            проявления"""
+        ),
+        "en": "",
     },
     "1_9": {
         "ru": textwrap.dedent(
@@ -461,6 +538,15 @@ TRANSLATIONS = {
     Resourcefulness"""
         ),
     },
+    "1_9_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Независимость взглядов и мнений,
+            самостоятельность в решениях
+            и действиях"""
+        ),
+        "en": "",
+    },
     "1_10": {
         "ru": textwrap.dedent(
             """\
@@ -495,6 +581,15 @@ TRANSLATIONS = {
     Perseverance, Conformity
     Discipline, Obligation"""
         ),
+    },
+    "1_10_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Воля и выдержка, решимость,
+            обязательность, ответственность,
+            следование социальным нормам"""
+        ),
+        "en": "",
     },
     "1_11": {
         "ru": textwrap.dedent(
@@ -532,6 +627,15 @@ TRANSLATIONS = {
     Strong will, Accuracy"""
         ),
     },
+    "1_11_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Дисциплина, точное следование
+            социальным требованиям,
+            забота о репутации"""
+        ),
+        "en": "",
+    },
     "1_12": {
         "ru": textwrap.dedent(
             """\
@@ -567,6 +671,16 @@ TRANSLATIONS = {
     Information analysis, Criticality
     Work optimization"""
         ),
+    },
+    "1_12_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Склонность к подробному изучению
+            информации, исследованию новых
+            областей, изучению возможностей
+            для оптимизации работы"""
+        ),
+        "en": "",
     },
     "1_13": {
         "ru": textwrap.dedent(
@@ -604,6 +718,15 @@ TRANSLATIONS = {
     Caution"""
         ),
     },
+    "1_13_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Подозрительность,
+            раздражительность,
+            недоверие к информации"""
+        ),
+        "en": "",
+    },
     "1_14": {
         "ru": textwrap.dedent(
             """\
@@ -636,6 +759,14 @@ TRANSLATIONS = {
     Courage, Boldness
     Adventurism"""
         ),
+    },
+    "1_14_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Склонность к авантюризму,
+            предприимчивость"""
+        ),
+        "en": "",
     },
     "1_15": {
         "ru": textwrap.dedent(
@@ -672,6 +803,14 @@ TRANSLATIONS = {
     Assertiveness, Dominance
     Self-confidence"""
         ),
+    },
+    "1_15_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Желание лидировать,
+            доминирование, неуступчивость"""
+        ),
+        "en": "",
     },
     # Coping
     "Section C": {
@@ -714,6 +853,18 @@ TRANSLATIONS = {
             Response control"""
         ),
     },
+    "2_1_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Контроль собственных
+            реакций,чрезмерная
+            требовательность к себе"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
+        ),
+    },
     "2_2": {
         "ru": textwrap.dedent(
             """\
@@ -722,6 +873,17 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Situation control"""
+        ),
+    },
+    "2_2_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Поиск и реализация решений
+            для преодоления проблемы"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
         ),
     },
     "2_3": {
@@ -736,6 +898,18 @@ TRANSLATIONS = {
             self-affirmation"""
         ),
     },
+    "2_3_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Приписывание себе
+            способности управлять
+            ситуацией"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
+        ),
+    },
     "2_4": {
         "ru": textwrap.dedent(
             """\
@@ -747,6 +921,19 @@ TRANSLATIONS = {
             Stress minimization"""
         ),
     },
+    "2_4_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Снижение значения или
+            тяжести напряжения
+            (рационализация, юмор,
+            обесценивание)"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
+        ),
+    },
     "2_5": {
         "ru": textwrap.dedent(
             """\
@@ -755,6 +942,18 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Self-assertion"""
+        ),
+    },
+    "2_5_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Получение признания от
+            других, самоутверждение
+            в иной области"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
         ),
     },
     # Emotion-focused
@@ -768,6 +967,17 @@ TRANSLATIONS = {
             Distraction"""
         ),
     },
+    "2_6_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Отвлечение от стрессовой
+            ситуаций"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
+        ),
+    },
     "2_7": {
         "ru": textwrap.dedent(
             """\
@@ -777,6 +987,19 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Escape"""
+        ),
+    },
+    "2_7_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Отказ от преодоления ситуации,
+            отрицание/игнорирование
+            проблемы, уклонение от
+            ответственности, нетерпение"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
         ),
     },
     "2_8": {
@@ -790,6 +1013,18 @@ TRANSLATIONS = {
             Avoidance"""
         ),
     },
+    "2_8_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Попытка предотвратить
+            аналогичные стрессовые
+            ситуации в будущем"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
+        ),
+    },
     "2_9": {
         "ru": textwrap.dedent(
             """\
@@ -798,6 +1033,19 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Replacement"""
+        ),
+    },
+    "2_9_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Обращение к позитивным
+            аспектам; создание
+            комфортной среды для
+            себя и команды"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
         ),
     },
     "2_10": {
@@ -812,6 +1060,18 @@ TRANSLATIONS = {
             Social Support"""
         ),
     },
+    "2_10_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Стремление быть
+            выслушанным, разделить
+            с кем-либо переживания"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
+        ),
+    },
     # Dysfunctional
     "2_11": {
         "ru": textwrap.dedent(
@@ -821,6 +1081,19 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Self-pity"""
+        ),
+    },
+    "2_11_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Пребывание в жалости к себе,
+            зависти к другим;
+            недооценивание собственных
+            сил и возможностей"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
         ),
     },
     "2_12": {
@@ -835,6 +1108,19 @@ TRANSLATIONS = {
             withdrawal"""
         ),
     },
+    "2_12_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Избегание социальных контактов,
+            самоизоляция от
+            коммуникации/информации
+            """
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
+        ),
+    },
     "2_13": {
         "ru": textwrap.dedent(
             """\
@@ -843,6 +1129,18 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Self-blame"""
+        ),
+    },
+    "2_13_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Обвинение себя в
+            произошедшем,
+            поиск причин в себе"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
         ),
     },
     "2_14": {
@@ -856,6 +1154,18 @@ TRANSLATIONS = {
             Rumination"""
         ),
     },
+    "2_14_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Постоянное мысленное
+            прокручивание аспектов
+            стрессовой ситуации"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
+        ),
+    },
     "2_15": {
         "ru": textwrap.dedent(
             """\
@@ -864,6 +1174,17 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Denial of guilt"""
+        ),
+    },
+    "2_15_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Отказ от ответственности,
+            отказ от поиска решения"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            """
         ),
     },
     "2_16": {
@@ -876,51 +1197,94 @@ TRANSLATIONS = {
             Aggression"""
         ),
     },
-    "2_17": {
+    "2_16_group_desc": {
         "ru": textwrap.dedent(
             """\
-            Замещение, отвлечение, бегство от стресса
-            """
+            Пребывание в состоянии
+            " "сопротивления, ярость/агрессия"""
         ),
         "en": textwrap.dedent(
             """\
-            Distraction, avoidance, escape
+            """
+        ),
+    },
+    "2_17": {
+        "ru": textwrap.dedent(
+            """\
+            Замещение, отвлечение, бегство от стресса"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Distraction, avoidance, escape"""
+        ),
+    },
+    "2_17_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            2_17_group_desc"""
+        ),
+        "en": textwrap.dedent(
+            """\
             """
         ),
     },
     "2_18": {
         "ru": textwrap.dedent(
             """\
-            Позитивная мотивация и снижение стресса
-            """
+            Позитивная мотивация и снижение стресса"""
         ),
         "en": textwrap.dedent(
             """\
-            Positive affirmation and stress minimization
+            Positive affirmation and stress minimization"""
+        ),
+    },
+    "2_18_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            2_18_group_desc"""
+        ),
+        "en": textwrap.dedent(
+            """\
             """
         ),
     },
     "2_19": {
         "ru": textwrap.dedent(
             """\
-            Самообвинение и жалость к себе
-            """
+            Самообвинение и жалость к себе"""
         ),
         "en": textwrap.dedent(
             """\
-            Self-pity and blame
+            Self-pity and blame"""
+        ),
+    },
+    "2_19_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            2_19_group_desc"""
+        ),
+        "en": textwrap.dedent(
+            """\
             """
         ),
     },
     "2_20": {
         "ru": textwrap.dedent(
             """\
-            Самообладание и самоутверждение
-            """
+            Самообладание и самоутверждение"""
         ),
         "en": textwrap.dedent(
             """\
-            Response control и self-assertion
+            Response control и self-assertion"""
+        ),
+    },
+    "2_20_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            2_20_group_desc"""
+        ),
+        "en": textwrap.dedent(
+            """\
             """
         ),
     },
@@ -949,6 +1313,19 @@ TRANSLATIONS = {
             Concern"""
         ),
     },
+    "3_1_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Ощущение дискомфорта
+            в работе, раздражение
+            при решении стандартных
+            рабочих задач"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
+        ),
+    },
     "3_2": {
         "ru": textwrap.dedent(
             """\
@@ -958,6 +1335,19 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Self dissatisfaction"""
+        ),
+    },
+    "3_2_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Недовольство собой и
+            ситуацией, потребность
+            сменить условия работы,
+            ощущение"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
         ),
     },
     "3_3": {
@@ -971,6 +1361,20 @@ TRANSLATIONS = {
             Feeling trapped"""
         ),
     },
+    "3_3_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Ощущение невозможности
+            изменить ситуацию,
+            бессилие; отсутствие
+            энергии, ощущение
+            пустоты внутри"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
+        ),
+    },
     "3_4": {
         "ru": textwrap.dedent(
             """\
@@ -979,6 +1383,19 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Anxiety"""
+        ),
+    },
+    "3_4_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Эмоциональное напряжение,
+            ощущение тревоги и
+            беспричинного беспокойства,
+            желание «остановиться»ч"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
         ),
     },
     "3_5": {
@@ -993,6 +1410,19 @@ TRANSLATIONS = {
             response"""
         ),
     },
+    "3_5_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Зависимость коммуникации
+            от настроения («хочу или
+            не хочу»), эмоциональная
+            черствость, равнодушиеч"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
+        ),
+    },
     "3_6": {
         "ru": textwrap.dedent(
             """\
@@ -1003,6 +1433,20 @@ TRANSLATIONS = {
             """\
             Emotional
             defense"""
+        ),
+    },
+    "3_6_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Эмоциональная защита,
+            неготовность принимать
+            на себя дополнительные
+            эмоции и справляться
+            с ними"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
         ),
     },
     # 3_7 - 3_12
@@ -1016,6 +1460,20 @@ TRANSLATIONS = {
             Emotional saving"""
         ),
     },
+    "3_7_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Перенос защиты на другие
+            сферы жизни (общение с
+            близкими, семьей),
+            потребность в изоляции
+            от других людей"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
+        ),
+    },
     "3_8": {
         "ru": textwrap.dedent(
             """\
@@ -1025,6 +1483,20 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Empathic fatigue""",
+        ),
+    },
+    "3_8_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Попытки облегчить или
+            сократить обязанности,
+            требующие эмоциональных
+            затрат или эмоционального
+            вовлечения"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
         ),
     },
     "3_9": {
@@ -1039,6 +1511,18 @@ TRANSLATIONS = {
             emptiness""",
         ),
     },
+    "3_9_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Избегание эмоционального
+            ответа на важные ситуации
+            и коммуникации"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
+        ),
+    },
     "3_10": {
         "ru": textwrap.dedent(
             """\
@@ -1049,6 +1533,19 @@ TRANSLATIONS = {
             """\
             Emotional
             detachment""",
+        ),
+    },
+    "3_10_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Сокращение эмоционального
+            отклика на рабочие ситуации,
+            неготовность активно
+            общаться с другими"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
         ),
     },
     "3_11": {
@@ -1063,6 +1560,19 @@ TRANSLATIONS = {
             detachment""",
         ),
     },
+    "3_11_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Обесценивание рабочих задач,
+            агрессия на стандартные
+            рабочие ситуации ("ненавижу",
+            "не выношу", "не хочу")"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
+        ),
+    },
     "3_12": {
         "ru": textwrap.dedent(
             """\
@@ -1071,6 +1581,19 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Physical discomfort""",
+        ),
+    },
+    "3_12_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Телесные неприятные
+            состояния, плохое
+            самочувствие, отсутствие
+            сил/энергии"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
         ),
     },
     # Short v2
@@ -1085,6 +1608,16 @@ TRANSLATIONS = {
             Professional dead end"""
         ),
     },
+    "3_13_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            3_13_group_desc"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
+        ),
+    },
     "3_14": {
         "ru": textwrap.dedent(
             """\
@@ -1093,6 +1626,16 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Workload, speed and working principles fatigue"""
+        ),
+    },
+    "3_14_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            3_14_group_desc"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
         ),
     },
     "3_15": {
@@ -1105,6 +1648,16 @@ TRANSLATIONS = {
             Communication fatigue"""
         ),
     },
+    "3_15_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            3_15_group_desc"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
+        ),
+    },
     "3_16": {
         "ru": textwrap.dedent(
             """\
@@ -1113,6 +1666,16 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Emotional defense """
+        ),
+    },
+    "3_16_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            3_16_group_desc"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
         ),
     },
     "3_17": {
@@ -1125,6 +1688,16 @@ TRANSLATIONS = {
             Physical discomfort"""
         ),
     },
+    "3_17_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            3_17_group_desc"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
+        ),
+    },
     "3_18": {
         "ru": textwrap.dedent(
             """\
@@ -1133,6 +1706,16 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Personal detachment"""
+        ),
+    },
+    "3_18_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            3_18_group_desc"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Concern"""
         ),
     },
     # Values
@@ -1161,6 +1744,19 @@ TRANSLATIONS = {
             Affiliation"""
         ),
     },
+    "4_1_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Потребность в выстраивании
+            социальных контактов и
+            ощущении принадлежности
+            к группе"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Affiliation"""
+        ),
+    },
     "4_2": {
         "ru": textwrap.dedent(
             """\
@@ -1169,6 +1765,19 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Conventionality"""
+        ),
+    },
+    "4_2_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Уважение и следование
+            нормам, принятым в
+            культуре / социальной
+            группе"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Affiliation"""
         ),
     },
     "4_3": {
@@ -1183,6 +1792,20 @@ TRANSLATIONS = {
             seeking"""
         ),
     },
+    "4_3_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Потребность в разнообразии,
+            новизне и глубоких
+            переживаниях; желание
+            погружаться в приключения,
+            получать новый опыт"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Affiliation"""
+        ),
+    },
     "4_4": {
         "ru": textwrap.dedent(
             """\
@@ -1191,6 +1814,18 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Aesthetic"""
+        ),
+    },
+    "4_4_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Потребность в самовыражении,
+            ощущение важности
+            визуальности и гармоничности"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Affiliation"""
         ),
     },
     "4_5": {
@@ -1203,6 +1838,18 @@ TRANSLATIONS = {
             Hedonism"""
         ),
     },
+    "4_5_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Потребность в наслаждении
+            или чувственном удовольствии,
+            ощущении полноты жизни"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Affiliation"""
+        ),
+    },
     "4_6": {
         "ru": textwrap.dedent(
             """\
@@ -1213,6 +1860,20 @@ TRANSLATIONS = {
             Recognition"""
         ),
     },
+    "4_6_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Фокус на достижении
+            социального статуса или
+            престижа, контроля или
+            доминирования над
+            ресурсами и людьми"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Affiliation"""
+        ),
+    },
     "4_7": {
         "ru": textwrap.dedent(
             """\
@@ -1221,6 +1882,19 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Achievement"""
+        ),
+    },
+    "4_7_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Желание достичь личного успеха
+            через соревновательность
+            и преодоление «вызовов»,
+            стремление быть лучшим"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Affiliation"""
         ),
     },
     "4_8": {
@@ -1235,6 +1909,18 @@ TRANSLATIONS = {
             attitude"""
         ),
     },
+    "4_8_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Принятие ответственности за
+            бизнес-результаты, интерес
+            к запуску продуктов"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Affiliation"""
+        ),
+    },
     "4_9": {
         "ru": textwrap.dedent(
             """\
@@ -1245,6 +1931,18 @@ TRANSLATIONS = {
             Safety"""
         ),
     },
+    "4_9_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Стремление к предсказуемости,
+            структуре и порядку;
+            потребность ощущать стабильность"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Affiliation"""
+        ),
+    },
     "4_10": {
         "ru": textwrap.dedent(
             """\
@@ -1253,6 +1951,19 @@ TRANSLATIONS = {
         "en": textwrap.dedent(
             """\
             Curiosity"""
+        ),
+    },
+    "4_10_group_desc": {
+        "ru": textwrap.dedent(
+            """\
+            Наращивание экспертизы и
+            интеллектуального потенциала,
+            созданию сложных
+            интеллектуальных решений"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Affiliation"""
         ),
     },
     # Team Report
@@ -1343,7 +2054,7 @@ TRANSLATIONS = {
     },
     "Администратор Описание": {
         "ru": (
-            "**Администратор** – роль обеспечивает эффективность, технологичность, стандартизацию в краткосрочном аспекте. "
+            "**Администратор – роль обеспечивает эффективность, технологичность, стандартизацию в краткосрочном аспекте. "
             "Этим сотрудникам свойственно унифицировать работу, структурировать информацию и процессы, следить за порядком, "
             "согласовывать и поддерживать единые правила работы. Как правило они стремятся мыслить линейно, действовать "
             "осторожно и дисциплинировано, обращать внимание на мелкие детали."
@@ -1353,10 +2064,10 @@ TRANSLATIONS = {
     "Администратор Подробнее": {
         "ru": textwrap.dedent(
             """\
-            • Хранитель – обладает развитыми навыками общения, считывает пространство и команду, чуток к состоянию команды.Внимателен к деталям, мыслит от частного к общему, педантичен, проявляет перфекционизм. Воспринимает рабочие обязанности как личную ответственность, стремится выполнять их больше и лучше, чем ожидается.
-            • Вдохновитель – чуткий и проницательный, вносит гармонию в общение между людьми. Склонен идеализировать мир, верить в счастливое будущее. Ориентируется на формирование экологичных, гуманистичных, системных решений. Действует дисциплинировано и аккуратно.
-            • Опекун – обладает художественным восприятием и развитым вкусом, открыт к изменениям и экспериментам, не любит рутину. Находит правильные слова для создания доверительной коммуникации, выстраивает теплое общение с другими, чуток и тактичен. Готов поддерживать и помогать в развитии другим.
-            • Благородный служитель – формирует глубокую и продуманную систему моральных принципов и долга. Обладает очень хорошей интуицией и творческим чутьем. Располагает к себе, сглаживает острые углы. Ценит возможность быть частью коллектива и может жертвовать своими интересами ради других. Проявляется как вдумчивый, но не дистиллированный и непоследовательный.""",
+            • __Хранитель__ – обладает развитыми навыками общения, считывает пространство и команду, чуток к состоянию команды.Внимателен к деталям, мыслит от частного к общему, педантичен, проявляет перфекционизм. Воспринимает рабочие обязанности как личную ответственность, стремится выполнять их больше и лучше, чем ожидается.
+            • __Вдохновитель__ – чуткий и проницательный, вносит гармонию в общение между людьми. Склонен идеализировать мир, верить в счастливое будущее. Ориентируется на формирование экологичных, гуманистичных, системных решений. Действует дисциплинировано и аккуратно.
+            • __Опекун__ – обладает художественным восприятием и развитым вкусом, открыт к изменениям и экспериментам, не любит рутину. Находит правильные слова для создания доверительной коммуникации, выстраивает теплое общение с другими, чуток и тактичен. Готов поддерживать и помогать в развитии другим.
+            • __Благородный служитель__ – формирует глубокую и продуманную систему моральных принципов и долга. Обладает очень хорошей интуицией и творческим чутьем. Располагает к себе, сглаживает острые углы. Ценит возможность быть частью коллектива и может жертвовать своими интересами ради других. Проявляется как вдумчивый, но не дистиллированный и непоследовательный.""",
         ),
         "en": "",
     },
@@ -1389,7 +2100,6 @@ TRANSLATIONS = {
         "en": "",
     },
 }
-
 DEFAULT_LANG = "en"
 
 
