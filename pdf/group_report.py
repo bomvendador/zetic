@@ -16,7 +16,7 @@ from pdf.report_sections_configuration import (
 )
 from pdf.single_report import SingleReportData
 from pdf.translations import TRANSLATIONS_DICT
-from pdf.zetic_group_pdf import ZeticGroupPDF
+from pdf.zetic_group_pdf import ZeticGroupPDF, SquareId
 from pdf.zetic_pdf import ZeticPDF, BLOCK_R, BLOCK_G, BLOCK_B, PDF_MODULE_BASE_DIR
 
 
@@ -37,30 +37,6 @@ class ParticipantData:
 
 
 @dataclass
-class SquareResult:
-    group_id: int
-    participant_id: int
-    single_report_data: SingleReportData
-
-    @staticmethod
-    def from_client_list(
-        data: List[str],
-        group_data: Dict[str, GroupData],
-        participant_data: Dict[str, ParticipantData],
-        single_report_data: SingleReportData,
-    ):
-
-        return SquareResult(
-            single_report_data=single_report_data,
-            group_id=group_data[data[4]].id,  # idx=4 - group_name, sent from client
-            participant_id=participant_data[
-                data[1]
-            ].id,  # idx=1 - email, sent from client
-        )
-        pass
-
-
-@dataclass
 class GroupReportData:
     lang: str
     project_name: str
@@ -68,7 +44,7 @@ class GroupReportData:
     group_data: Dict[str, GroupData]
     participant_data: Dict[str, ParticipantData]
 
-    square_results: List[SquareResult]
+    square_results: Dict[SquareId, List[int]]
 
 
 class GroupReport:
@@ -334,7 +310,28 @@ class GroupReport:
         self._add_page_header("Командный профиль: распределение внимания в группе")
 
         pdf.set_y(pdf.get_y() + 5)
+        base_y = pdf.get_y()
         pdf.draw_group_profile_squares()
+
+        group_data_by_id = {group.id: group for group in data.group_data.values()}
+
+        participant_colors: Dict[int, Tuple[int, int, int]] = {
+            key: value
+            for key, value in map(
+                lambda participant: (
+                    participant.id,
+                    ImageColor.getrgb(group_data_by_id[participant.group_id].color),
+                ),
+                data.participant_data.values(),
+            )
+        }
+
+        for square in data.square_results:
+            results = data.square_results[square]
+            print(f"Square {square} results: {results}")
+            pdf.draw_group_profile_square(
+                square, results, base_y, color=participant_colors
+            )
 
         pass
 

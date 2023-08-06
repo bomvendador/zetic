@@ -1,8 +1,9 @@
 import math
 import os
 import random
+from collections import defaultdict
 from dataclasses import dataclass
-from typing import Dict
+from typing import Dict, Tuple, List
 from unittest import TestCase
 
 from PIL import ImageColor
@@ -10,11 +11,11 @@ from PIL import ImageColor
 from pdf.group_report import (
     GroupReport,
     GroupReportData,
-    SquareResult,
     GroupData,
     ParticipantData,
 )
 from pdf.single_report import SingleReportData
+from pdf.zetic_group_pdf import SquareId
 
 
 def rgb_to_hex(r: int, g: int, b: int):
@@ -32,30 +33,41 @@ class GroupReportDataGenerator:
         project_name: str = "Project Name",
         lang: str = "ru",
         group_count: int = 5,
-        participant_count: int = 25,
+        participant_per_group: int = 20,
     ) -> GroupReportData:
         group_data = {}
         participant_data = {}
-        square_results = []
+        max_participant_count = group_count * participant_per_group
+
         for i in range(group_count):
             group_name = f"Group {i}"
             group_data[group_name] = self.generate_group_data(group_name, i)
 
-        for i in range(participant_count):
+        for i in range(max_participant_count):
             participant_name = f"Participant {i}"
             participant_email = f"participan-{i}@group.pdf"
-            group_id = random.randint(0, group_count - 1)
-            participant_id = i + group_id * participant_count
+            group_id = i % group_count
+            participant_id = i
             participant_data[participant_email] = self.generate_participant_data(
                 participant_id, participant_name, participant_email, group_id
             )
 
+        def map_participant_to_square(
+            participant: ParticipantData,
+        ) -> Tuple[SquareId, int]:
+            return random.choice(list(SquareId)), participant.id
+
+        output_dict = map(map_participant_to_square, participant_data.values())
+        transformed_dict: Dict[SquareId, List[int]] = defaultdict(list)
+        for square_id, participant_id in output_dict:
+            transformed_dict[square_id].append(participant_id)
+
         return GroupReportData(
             lang=lang,
-            project_name=f"{project_name} {lang} - {group_count} groups, {participant_count} participants",
+            project_name=f"{project_name} {lang} - {group_count} groups ({participant_per_group}), {max_participant_count} participants",
             group_data=group_data,
             participant_data=participant_data,
-            square_results=square_results,
+            square_results=transformed_dict,
         )
         pass
 
@@ -96,7 +108,7 @@ class GroupReportTest(TestCase):
             "Project Name",
             "ru",
             9,
-            200,
+            25,
         )
 
         bytes = group_report.generate_pdf(data)

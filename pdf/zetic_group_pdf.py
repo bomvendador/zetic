@@ -1,8 +1,56 @@
-from typing import Tuple
+from dataclasses import dataclass
+from enum import Enum
+from typing import Tuple, Dict, List
 
 from fpdf.enums import Align, XPos, YPos
 
 from pdf.zetic_pdf import ZeticPDF
+
+
+class SquareId(Enum):
+    ESFJ_1_1 = 0
+    ENFJ_1_2 = 1
+    ESFP_1_3 = 2
+    ENFP_1_4 = 3
+    ESTJ_2_1 = 4
+    ENTJ_2_2 = 5
+    ESTP_2_3 = 6
+    ENTP_2_4 = 7
+    ISFJ_3_1 = 8
+    INFJ_3_2 = 9
+    ISFP_3_3 = 10
+    INFP_3_4 = 11
+    ISTJ_4_1 = 12
+    INTJ_4_2 = 13
+    ISTP_4_3 = 14
+    INTP_4_4 = 15
+
+
+@dataclass
+class SquareUiConfig:
+    x: int
+    y: int
+    pass
+
+
+SQUARE_UI_CONFIG: Dict[SquareId, SquareUiConfig] = {
+    SquareId.ESFJ_1_1: SquareUiConfig(x=0, y=0),
+    SquareId.ENFJ_1_2: SquareUiConfig(x=0, y=1),
+    SquareId.ESFP_1_3: SquareUiConfig(x=1, y=0),
+    SquareId.ENFP_1_4: SquareUiConfig(x=1, y=1),
+    SquareId.ESTJ_2_1: SquareUiConfig(x=2, y=0),
+    SquareId.ENTJ_2_2: SquareUiConfig(x=2, y=1),
+    SquareId.ESTP_2_3: SquareUiConfig(x=3, y=0),
+    SquareId.ENTP_2_4: SquareUiConfig(x=3, y=1),
+    SquareId.ISFJ_3_1: SquareUiConfig(x=0, y=2),
+    SquareId.INFJ_3_2: SquareUiConfig(x=0, y=3),
+    SquareId.ISFP_3_3: SquareUiConfig(x=1, y=2),
+    SquareId.INFP_3_4: SquareUiConfig(x=1, y=3),
+    SquareId.ISTJ_4_1: SquareUiConfig(x=2, y=2),
+    SquareId.INTJ_4_2: SquareUiConfig(x=2, y=3),
+    SquareId.ISTP_4_3: SquareUiConfig(x=3, y=2),
+    SquareId.INTP_4_4: SquareUiConfig(x=3, y=3),
+}
 
 
 class ZeticGroupPDF(ZeticPDF):
@@ -275,3 +323,52 @@ class ZeticGroupPDF(ZeticPDF):
         self.rect(self.x, self.y, rect_width, rect_height, "FD")
         self.set_text_color(118, 134, 146)
         self.cell(h=rect_height, txt=text, new_y=YPos.NEXT, new_x=XPos.LEFT)
+
+    def draw_group_profile_square(
+        self,
+        square: SquareId,
+        results: List[int],
+        base_y: float,
+        color: Dict[int, Tuple[int, int, int]] = None,
+    ):
+        config = SQUARE_UI_CONFIG[square]
+        width = (self.w - self.l_margin - self.r_margin) / 4
+
+        self.set_xy(self.l_margin + config.x * width, base_y + config.y * width)
+
+        self.set_draw_color(240, 100, 40)
+        width -= 4
+        start_x = self.x + 2
+        start_y = self.y + 7
+        self.set_xy(start_x, start_y)
+        self.set_text_font(7)
+        n_per_line = 4
+        padding = 1
+        text_width = width / n_per_line - padding
+        self.set_x(self.x + padding)
+        for participant_id in results:
+            print(f"Trying to draw {participant_id} in {square} square")
+            print(f"{self.x} + {text_width} > {start_x} + {width}, {padding}")
+            if int(self.x + text_width) > int(start_x + width):
+                self.set_xy(start_x + padding, self.y + text_width + padding)
+
+            self.set_fill_color(*color[participant_id])
+            self.circle(
+                self.x,
+                self.y,
+                text_width,
+                style="F",
+            )
+            self.cell(
+                w=text_width,
+                h=text_width,
+                txt=str(participant_id),
+                new_x=XPos.LEFT,
+                new_y=YPos.TOP,
+                align=Align.C,
+            )
+            self.set_x(self.x + text_width + padding)
+            print(f"Drawn {participant_id} in {square} square with width {text_width}")
+            pass
+
+        pass
