@@ -18,7 +18,7 @@ from pdf.single_report import (
 )
 from pdf.single_report import IncomingSingleReportData
 
-cattel_example = SectionData(
+CATTEL_EXAMPLE = SectionData(
     {
         "1_1": 1,
         "1_2": 2,
@@ -37,7 +37,7 @@ cattel_example = SectionData(
         "1_15": 5,
     }
 )
-coping_example = SectionData(
+COPING_EXAMPLE = SectionData(
     {
         "2_1": 1,
         "2_2": 2,
@@ -62,7 +62,7 @@ coping_example = SectionData(
     }
 )
 
-boyko_example = SectionData(
+BOYKO_EXAMPLE = SectionData(
     {
         "3_1": 1,
         "3_2": 2,
@@ -85,7 +85,7 @@ boyko_example = SectionData(
     }
 )
 
-values_example = SectionData(
+VALUES_EXAMPLE = SectionData(
     {
         "4_1": 1,
         "4_2": 2,
@@ -127,10 +127,10 @@ class SingleReportTest(TestCase):
             SingleReportData(
                 participant_name="Pablo",
                 lang="en",
-                cattell_data=cattel_example,
-                coping_data=coping_example,
-                boyko_data=boyko_example,
-                values_data=values_example,
+                cattell_data=CATTEL_EXAMPLE,
+                coping_data=COPING_EXAMPLE,
+                boyko_data=BOYKO_EXAMPLE,
+                values_data=VALUES_EXAMPLE,
             )
         )
         with open(f"test-{single_report.data.lang}.pdf", "wb") as f:
@@ -140,10 +140,10 @@ class SingleReportTest(TestCase):
             SingleReportData(
                 participant_name="Павел",
                 lang="ru",
-                cattell_data=cattel_example,
-                coping_data=coping_example,
-                boyko_data=boyko_example,
-                values_data=values_example,
+                cattell_data=CATTEL_EXAMPLE,
+                coping_data=COPING_EXAMPLE,
+                boyko_data=BOYKO_EXAMPLE,
+                values_data=VALUES_EXAMPLE,
             ),
             path="test",
         )

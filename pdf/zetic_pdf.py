@@ -67,15 +67,16 @@ class ZeticPDF(FPDF):
     def set_light_font(self, size=10):
         self.set_font("Light", "", size)
 
-    def draw_category_header(
+    def draw_category_header_and_arrow(
         self,
         category_label: str,
         category_description: str,
         arrow_color: Tuple[int, int, int],
-        line_delta_y=1.0,
+        line_delta_y: float = 1.0,
+        line_width: int = 46,
+        arrow_width: int = 140,
     ):
         start_y = self.y
-        line_width = 46
         category_height = 15.5
         self.set_text_color(0, 0, 0)
         self.set_medium_font(9)
@@ -97,6 +98,7 @@ class ZeticPDF(FPDF):
             self.l_margin + line_width + 1,
             line_y,
             arrow_color,
+            rect_width=arrow_width,
         )
         self.set_y(last_y)
 
@@ -128,7 +130,7 @@ class ZeticPDF(FPDF):
         )
         self.polygon(point_list=points, style="FD")
 
-        section_qnt = 10
+        section_qnt = 11
         section_width = rect_width / section_qnt
 
         start_x = x
@@ -157,10 +159,11 @@ class ZeticPDF(FPDF):
             self.set_text_color(105, 105, 105)
             # draw section label
             self.set_xy(line_x_start, start_y)
+
             self.cell(
                 w=cur_section_width,
                 h=rect_height,
-                txt=str(cur_section + 1),
+                txt=str(cur_section),
                 align=Align.C,
             )
             line_x_start += cur_section_width

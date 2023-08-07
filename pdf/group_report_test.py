@@ -14,7 +14,7 @@ from pdf.group_report import (
     GroupData,
     ParticipantData,
 )
-from pdf.single_report import SingleReportData
+from pdf.single_report import SingleReportData, SectionData
 from pdf.zetic_group_pdf import SquareId
 
 
@@ -28,6 +28,16 @@ class GroupReportDataGenerator:
         self.color_step = 255 / math.ceil(255 / color_step)
         pass
 
+    def generate_section_data(
+        self, start: int, end: int, section_format: str
+    ) -> SectionData:
+        section_data: Dict[str, int] = {}
+        for i in range(start, end):
+            section_data[section_format.format(i)] = random.randint(0, 10)
+
+        return SectionData(section_data)
+        pass
+
     def generate_group_report_data(
         self,
         project_name: str = "Project Name",
@@ -37,6 +47,11 @@ class GroupReportDataGenerator:
     ) -> GroupReportData:
         group_data = {}
         participant_data = {}
+        cattell_data: Dict[str, SectionData] = {}
+        coping_data: Dict[str, SectionData] = {}
+        boyko_data: Dict[str, SectionData] = {}
+        values_data: Dict[str, SectionData] = {}
+
         max_participant_count = group_count * participant_per_group
 
         for i in range(group_count):
@@ -51,6 +66,10 @@ class GroupReportDataGenerator:
             participant_data[participant_email] = self.generate_participant_data(
                 participant_id, participant_name, participant_email, group_id
             )
+            cattell_data[participant_email] = self.generate_section_data(1, 15, "1_{}")
+            coping_data[participant_email] = self.generate_section_data(1, 20, "2_{}")
+            boyko_data[participant_email] = self.generate_section_data(1, 18, "3_{}")
+            values_data[participant_email] = self.generate_section_data(1, 10, "4_{}")
 
         def map_participant_to_square(
             participant: ParticipantData,
@@ -68,6 +87,10 @@ class GroupReportDataGenerator:
             group_data=group_data,
             participant_data=participant_data,
             square_results=transformed_dict,
+            cattell_data=cattell_data,
+            coping_data=coping_data,
+            boyko_data=boyko_data,
+            values_data=values_data,
         )
         pass
 
@@ -84,6 +107,7 @@ class GroupReportDataGenerator:
             email=participant_email,
             group_id=group_id,
             burnout=int(random.randint(0, 100) < 30),
+            crown=int(random.randint(0, 100) < 30),
         )
         pass
 
@@ -108,7 +132,7 @@ class GroupReportTest(TestCase):
             "Project Name",
             "ru",
             9,
-            25,
+            31,
         )
 
         bytes = group_report.generate_pdf(data)

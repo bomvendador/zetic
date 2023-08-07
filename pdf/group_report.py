@@ -16,35 +16,14 @@ from pdf.report_sections_configuration import (
 )
 from pdf.single_report import SingleReportData
 from pdf.translations import TRANSLATIONS_DICT
-from pdf.zetic_group_pdf import ZeticGroupPDF, SquareId
+from pdf.zetic_group_pdf import (
+    ZeticGroupPDF,
+    SquareId,
+    GroupReportData,
+    GroupData,
+    ParticipantData,
+)
 from pdf.zetic_pdf import ZeticPDF, BLOCK_R, BLOCK_G, BLOCK_B, PDF_MODULE_BASE_DIR
-
-
-@dataclass
-class GroupData:
-    id: int
-    name: str  # Unique Name, used as key
-    color: str
-
-
-@dataclass
-class ParticipantData:
-    id: int
-    name: str
-    email: str  # Unique Email, used as key
-    group_id: int
-    burnout: int = 0
-
-
-@dataclass
-class GroupReportData:
-    lang: str
-    project_name: str
-
-    group_data: Dict[str, GroupData]
-    participant_data: Dict[str, ParticipantData]
-
-    square_results: Dict[SquareId, List[int]]
 
 
 class GroupReport:
@@ -52,10 +31,13 @@ class GroupReport:
     data: GroupReportData
 
     def __init__(self):
+        self._group_data_by_id = None
         self._pdf = ZeticGroupPDF(orientation="P", unit="mm", format="A4")
 
     def generate_pdf(self, data: GroupReportData) -> bytes:
         self.data = data
+
+        self._group_data_by_id = {group.id: group for group in data.group_data.values()}
         self._pdf.add_fonts()
         self._add_title_page(data.project_name, data.lang)
         self.add_description(data.lang)
@@ -215,12 +197,17 @@ class GroupReport:
         pdf.set_draw_color(BLOCK_R, BLOCK_G, BLOCK_B)
         rect_width = 20
         rect_height = 6
-        pdf.rect(197, 287, rect_width, rect_height, "FD")
+        pdf.rect(
+            pdf.w - pdf.r_margin - 3,
+            pdf.h - pdf.t_margin,
+            rect_width,
+            rect_height,
+            "FD",
+        )
 
-        pdf.set_xy(200, 290)
         pdf.set_text_color(0, 0, 0)
         pdf.set_text_font(10)
-        pdf.set_xy(200, 290)
+        pdf.set_xy(pdf.w - pdf.r_margin, pdf.h - pdf.t_margin + 3)
         pdf.cell(0, 0, txt=str(pdf.page_no()))
         pdf.set_xy(pdf.l_margin, pdf.t_margin)
         pdf.set_auto_page_break(prev)
@@ -254,7 +241,7 @@ class GroupReport:
             current_col += 1
             if current_col == cols:
                 current_col = 0
-                pdf.set_y(max_y + 5)
+                pdf.set_y(max_y + 2)
                 current_y = pdf.get_y()
                 max_y = 0
 
@@ -285,11 +272,12 @@ class GroupReport:
 
         pdf.set_x(start_x + pdf.font_size)
         pdf.cell(txt=group.name)
-        pdf.set_y(pdf.get_y() + 5)
-        pdf.set_text_font(9)
+        pdf.set_y(pdf.get_y() + 4)
+        pdf.set_text_font(8)
         pdf.set_text_color(0, 0, 0)
         pdf.set_x(start_x + 5)
         for participant in participants:
+            pdf.set_font(style="")
             if participant.burnout:
                 pdf.set_draw_color(241, 151, 15)
                 pdf.set_fill_color(241, 151, 15)
@@ -299,6 +287,16 @@ class GroupReport:
                     r=2,
                     style="FD",
                 )
+            if participant.crown:
+                name_width = pdf.get_string_width(participant.name)
+                pdf.image(
+                    name=participant.cron_image,
+                    x=pdf.get_x() + name_width + 1,
+                    y=pdf.get_y() - pdf.font_size * 0.6,
+                    w=3,
+                )
+                pdf.set_font(style="B")
+
             pdf.cell(txt=participant.name, new_x=XPos.LEFT, new_y=YPos.NEXT)
         pass
 
@@ -313,34 +311,60 @@ class GroupReport:
         base_y = pdf.get_y()
         pdf.draw_group_profile_squares()
 
-        group_data_by_id = {group.id: group for group in data.group_data.values()}
-
         participant_colors: Dict[int, Tuple[int, int, int]] = {
             key: value
             for key, value in map(
                 lambda participant: (
                     participant.id,
-                    ImageColor.getrgb(group_data_by_id[participant.group_id].color),
+                    ImageColor.getrgb(
+                        self._group_data_by_id[participant.group_id].color
+                    ),
                 ),
                 data.participant_data.values(),
             )
         }
+        participant_by_id = {
+            participant.id: participant
+            for participant in data.participant_data.values()
+        }
 
         for square in data.square_results:
             results = data.square_results[square]
-            print(f"Square {square} results: {results}")
+            # print(f"Square {square} results: {results}")
             pdf.draw_group_profile_square(
-                square, results, base_y, color=participant_colors
+                square,
+                results,
+                base_y,
+                color=participant_colors,
+                participant_data=participant_by_id,
             )
+
+        # draw legend
+        # groups inline + crown image + burnout border
+        # magic numbers
+        height = pdf.w - pdf.l_margin - pdf.r_margin + 15
+        pdf.set_y(pdf.t_margin + height)
+        for group in data.group_data:
+            group_data = data.group_data[group]
+            pdf.set_fill_color(*ImageColor.getrgb(group_data.color))
+            pdf.set_draw_color(*ImageColor.getrgb(group_data.color))
+            pdf.circle(
+                x=pdf.get_x(),
+                y=pdf.get_y(),
+                r=pdf.font_size,
+                style="FD",
+            )
+            pdf.set_x(pdf.get_x() + pdf.font_size)
+            pdf.cell(txt=group_data.name, new_x=XPos.RIGHT, new_y=YPos.TOP)
+            pdf.set_x(pdf.get_x() + pdf.font_size)
+
+        pdf.set_y(pdf.get_y() + 5)
 
         pass
 
     def _add_group_cattell(self, lang):
         pdf = self._pdf
         data = self.data
-        pdf.add_page(orientation="P")
-        self._insert_page_number(pdf)
-        self._add_page_header("Базовые черты личности: групповые результаты")
 
         pdf.set_text_font(9)
         # sections = [
@@ -349,25 +373,126 @@ class GroupReport:
         #     "Stability of the results",
         #     "Resilience to change",
         # ]
+
+        data_by_section: Dict[str, List[Tuple[int, ParticipantData]]] = defaultdict(
+            list
+        )
+        for email in data.cattell_data:
+            participant = data.participant_data[email]
+            section_data = data.cattell_data[email]
+            for section, value in section_data.data.items():
+                data_by_section[section].append((value, participant))
+
         sections = CATTELL_CATEGORIES
         for section in sections:
+            pdf.add_page(orientation="L")
+            self._insert_page_number(pdf)
+            self._add_page_header("Базовые черты личности: групповые результаты")
+
             section_label = TRANSLATIONS_DICT.get_translation(section, lang)
             pdf.draw_section_header(section_label)
             categories = CATTELL_CATEGORIES[section]
             pdf.set_y(pdf.get_y() + 2)
 
+            # category format expected 1_1
             for category in categories:
                 category_label = TRANSLATIONS_DICT.get_translation(category, lang)
                 category_description = TRANSLATIONS_DICT.get_translation(
                     f"{category}_group_desc", lang
                 )
-                pdf.draw_category_header(
-                    category_label, category_description, arrow_color=(34, 170, 245)
+                line_width = 46
+                start_x = pdf.get_x()
+                start_y = pdf.get_y()
+                arrow_width = (
+                    pdf.w - line_width - pdf.l_margin - pdf.r_margin - pdf.l_margin
+                )
+                pdf.draw_category_header_and_arrow(
+                    category_label,
+                    category_description,
+                    arrow_color=(34, 170, 245),
+                    line_width=line_width,
+                    arrow_width=arrow_width,
                 )
 
+                section_data = data_by_section[category]
+                section_data.sort(key=lambda x: x[0])
+                count_per_score = defaultdict(int)
+                participant_per_score = defaultdict(list)
+                for score, participant in section_data:
+                    count_per_score[score] += 1
+                    participant_per_score[score].append(participant)
+                    pass
+
+                pdf.set_medium_font(9)
+                rows = pdf.multi_cell(split_only=True, txt=category_label, w=line_width)
+                # magic number 14 = 140/11 - width of arrow
+                score_width = arrow_width / 11
+                start_x += line_width
+                for score in range(11):
+                    pdf.set_xy(
+                        start_x + score * score_width + 1,
+                        start_y + len(rows) * 4 + 1,
+                    )
+                    participants = participant_per_score[score]
+                    per_group = defaultdict(list)
+                    for participant in participants:
+                        group = self._group_data_by_id[participant.group_id]
+                        per_group[group.id].append(
+                            (participant.email, participant.burnout, participant.crown)
+                        )
+                        pass
+
+                    # sort per_group by len and print in order
+                    per_group = sorted(
+                        per_group.items(), key=lambda x: len(x[1]), reverse=True
+                    )
+                    max_per_group = 1.0
+                    if per_group:
+                        max_per_group = float(len(per_group[0][1]))
+
+                    v_padding = 3
+                    padding = 1
+                    n_per_line = 7
+                    text_width = score_width / n_per_line - padding
+                    score_start_x = start_x + score * score_width + 1
+                    pdf.set_x(score_start_x + padding)
+                    for group_id, group_data in per_group:
+                        group = self._group_data_by_id[group_id]
+                        # calc width based on max_per_group
+                        for participant_id, burnout, crown in group_data:
+                            participant = data.participant_data[participant_id]
+
+                            if int(pdf.x + text_width) > int(start_x + score_width):
+                                pdf.set_xy(
+                                    score_start_x + padding,
+                                    pdf.y + text_width + v_padding,
+                                )
+
+                            pdf.draw_participant_circle(
+                                participant=participant,
+                                x=pdf.x,
+                                y=pdf.y,
+                                color=ImageColor.getrgb(group.color),
+                                w=2,
+                            )
+                            pdf.set_x(pdf.get_x() + padding)
+
+                        # width = score_width * (current_len / max_per_group)
+                        # pdf.cell(
+                        #     txt=f"{current_len}",
+                        #     h=4.0,
+                        #     w=width,
+                        #     new_x=XPos.LEFT,
+                        #     new_y=YPos.NEXT,
+                        #     border=0,
+                        #     fill=True,
+                        # )
+                        # font_size * 2 for borders
+                        pdf.set_xy(pdf.x, pdf.y)
+                    pass
                 pdf.set_y(pdf.get_y() + 2)
 
-            pdf.set_y(pdf.get_y() + 4)
+            # pdf.set_y(pdf.get_y() + 4)
         pass
 
     def _add_group_coping(self, lang):
@@ -389,7 +514,7 @@ class GroupReport:
                 category_desc = TRANSLATIONS_DICT.get_translation(
                     f"{category}_group_desc", lang
                 )
-                pdf.draw_category_header(
+                pdf.draw_category_header_and_arrow(
                     category_label, category_desc, arrow_color=(107, 196, 38)
                 )
 
@@ -417,7 +542,7 @@ class GroupReport:
                 category_desc = TRANSLATIONS_DICT.get_translation(
                     f"{category}_group_desc", lang
                 )
-                pdf.draw_category_header(
+                pdf.draw_category_header_and_arrow(
                     category_label, category_desc, arrow_color=(255, 168, 29)
                 )
 
@@ -445,7 +570,7 @@ class GroupReport:
                 category_desc = TRANSLATIONS_DICT.get_translation(
                     f"{category}_group_desc", lang
                 )
-                pdf.draw_category_header(
+                pdf.draw_category_header_and_arrow(
                     category_label, category_desc, arrow_color=(248, 216, 31)
                 )
 
