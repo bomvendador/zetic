@@ -44,18 +44,18 @@ SQUARE_UI_CONFIG: Dict[SquareId, SquareUiConfig] = {
     ),  # ?
     SquareId.ENFP_1_4: SquareUiConfig(x=1, y=1, name="Мотиватор"),
     SquareId.ESTJ_2_1: SquareUiConfig(x=2, y=0, name="Контролер"),
-    SquareId.ENTJ_2_2: SquareUiConfig(x=2, y=1, name="Аналитик"),
-    SquareId.ESTP_2_3: SquareUiConfig(x=3, y=0, name="Искатель ресурсов"),
+    SquareId.ENTJ_2_2: SquareUiConfig(x=3, y=0, name="Аналитик"),
+    SquareId.ESTP_2_3: SquareUiConfig(x=2, y=1, name="Искатель ресурсов"),
     SquareId.ENTP_2_4: SquareUiConfig(x=3, y=1, name="Изобретатель"),
     SquareId.ISFJ_3_1: SquareUiConfig(x=0, y=2, name="Хранитель / Визионер"),
-    SquareId.INFJ_3_2: SquareUiConfig(x=0, y=3, name="Вдохновитель / Авантюрист"),
-    SquareId.ISFP_3_3: SquareUiConfig(x=1, y=2, name="Опекун / Искатель ресурсов"),
+    SquareId.INFJ_3_2: SquareUiConfig(x=1, y=2, name="Вдохновитель / Авантюрист"),
+    SquareId.ISFP_3_3: SquareUiConfig(x=0, y=3, name="Опекун / Искатель ресурсов"),
     SquareId.INFP_3_4: SquareUiConfig(
         x=1, y=3, name="Благородный служитель /Изобретатель"
     ),
     SquareId.ISTJ_4_1: SquareUiConfig(x=2, y=2, name="Организатор"),
-    SquareId.INTJ_4_2: SquareUiConfig(x=2, y=3, name="Любитель улучшений"),
-    SquareId.ISTP_4_3: SquareUiConfig(x=3, y=2, name="Реализатор"),
+    SquareId.INTJ_4_2: SquareUiConfig(x=3, y=2, name="Любитель улучшений"),
+    SquareId.ISTP_4_3: SquareUiConfig(x=2, y=3, name="Реализатор"),
     SquareId.INTP_4_4: SquareUiConfig(x=3, y=3, name="Решатель проблем"),
 }
 
@@ -343,7 +343,9 @@ class ZeticGroupPDF(ZeticPDF):
 
         self.set_xy(self.l_margin + config.x * width, base_y + config.y * width)
 
-        self.set_draw_color(240, 100, 40)
+        # Draw square title
+        # self.set_text_color(240, 100, 40)
+        # self.cell(w=width, h=4, txt=config.name, new_y=YPos.TOP, new_x=XPos.LEFT)
 
         width -= 4
         start_x = self.x + 2
@@ -355,8 +357,6 @@ class ZeticGroupPDF(ZeticPDF):
         text_width = width / n_per_line - padding
         self.set_x(self.x + padding)
         for participant_id in results:
-            print(f"Trying to draw {participant_id} in {square} square")
-            print(f"{self.x} + {text_width} > {start_x} + {width}, {padding}")
             if int(self.x + text_width) > int(start_x + width):
                 self.set_xy(start_x + padding, self.y + text_width + padding)
 
@@ -377,7 +377,6 @@ class ZeticGroupPDF(ZeticPDF):
                 align=Align.C,
             )
             self.set_x(self.x + text_width + padding)
-            print(f"Drawn {participant_id} in {square} square with width {text_width}")
             pass
 
         pass
