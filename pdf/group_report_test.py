@@ -15,7 +15,7 @@ from pdf.group_report import (
     ParticipantData,
 )
 from pdf.single_report import SingleReportData, SectionData
-from pdf.zetic_group_pdf import SquareId
+from pdf.zetic_group_pdf import SquareQuadId
 
 
 def rgb_to_hex(r: int, g: int, b: int):
@@ -73,11 +73,11 @@ class GroupReportDataGenerator:
 
         def map_participant_to_square(
             participant: ParticipantData,
-        ) -> Tuple[SquareId, int]:
-            return random.choice(list(SquareId)), participant.id
+        ) -> Tuple[SquareQuadId, int]:
+            return random.choice(list(SquareQuadId)), participant.id
 
         output_dict = map(map_participant_to_square, participant_data.values())
-        transformed_dict: Dict[SquareId, List[int]] = defaultdict(list)
+        transformed_dict: Dict[SquareQuadId, List[int]] = defaultdict(list)
         for square_id, participant_id in output_dict:
             transformed_dict[square_id].append(participant_id)
 
@@ -131,8 +131,8 @@ class GroupReportTest(TestCase):
         data = group_report_data_generator.generate_group_report_data(
             "Project Name",
             "ru",
-            9,
-            31,
+            group_count=10,
+            participant_per_group=31,
         )
 
         bytes = group_report.generate_pdf(data)

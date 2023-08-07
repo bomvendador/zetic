@@ -18,7 +18,7 @@ from pdf.single_report import SingleReportData
 from pdf.translations import TRANSLATIONS_DICT
 from pdf.zetic_group_pdf import (
     ZeticGroupPDF,
-    SquareId,
+    SquareQuadId,
     GroupReportData,
     GroupData,
     ParticipantData,
@@ -55,12 +55,13 @@ class GroupReport:
     def _add_title_page(self, project_name, lang):
         pdf = self._pdf
 
-        pdf.add_page()
+        pdf.add_page(orientation="L")
         pdf.image(
             os.path.join(PDF_MODULE_BASE_DIR, "images", "title_page.png"),
             x=0,
             y=0,
-            w=210,
+            w=pdf.w,
+            h=pdf.h,
         )
 
         pdf.set_xy(20, 150)
@@ -86,7 +87,7 @@ class GroupReport:
 
     def add_description(self, lang: str):
         pdf = self._pdf
-        pdf.add_page()
+        pdf.add_page(orientation="L", format="A4")
         self._insert_page_number(pdf)
 
         page_header = TRANSLATIONS_DICT.get_translation(
@@ -95,24 +96,24 @@ class GroupReport:
         self._add_page_header(page_header)
 
         text = TRANSLATIONS_DICT.get_translation("group_report_description", lang)
-        pdf.set_text_font(9)
+        pdf.set_text_font(7)
         pdf.multi_cell(0, 4, text)
-        pdf.set_xy(pdf.l_margin, pdf.get_y() + 5)
+        pdf.set_xy(pdf.l_margin, pdf.get_y() + 2)
 
         self._add_description_section(
             "Производитель Описание", "Производитель Подробнее", lang
         )
-        pdf.set_y(pdf.get_y() + 5)
+        pdf.set_y(pdf.get_y() + 3)
         self._add_description_section(
             "Предприниматель Описание",
             "Предприниматель Подробнее",
             lang,
         )
-        pdf.set_y(pdf.get_y() + 5)
+        pdf.set_y(pdf.get_y() + 3)
         self._add_description_section(
             "Администратор Описание", "Администратор Подробнее", lang
         )
-        pdf.set_y(pdf.get_y() + 5)
+        pdf.set_y(pdf.get_y() + 3)
         self._add_description_section(
             "Интегратор Описание", "Интегратор Подробнее", lang
         )
@@ -121,7 +122,7 @@ class GroupReport:
 
     def _add_description_section(self, text, description, lang):
         pdf = self._pdf
-        pdf.set_text_font(9)
+        pdf.set_text_font(6)
 
         text = TRANSLATIONS_DICT.get_translation(text, lang)
         text_description = TRANSLATIONS_DICT.get_translation(description, lang)
@@ -146,7 +147,7 @@ class GroupReport:
         # end of page check
 
         pdf.set_x(pdf.l_margin)
-        pdf.set_text_font(9)
+        pdf.set_text_font(6)
         pdf.multi_cell(
             0,
             4,
@@ -155,7 +156,7 @@ class GroupReport:
         )
 
         pdf.set_xy(pdf.l_margin + 5, pdf.get_y() + padding)
-        pdf.set_text_font(9)
+        pdf.set_text_font(6)
         lines = pdf.multi_cell(
             0, 4, text_description, align=Align.L, split_only=True, markdown=True
         )
@@ -215,7 +216,7 @@ class GroupReport:
     def _add_participants(self, lang: str):
         pdf = self._pdf
         data = self.data
-        pdf.add_page()
+        pdf.add_page(orientation="L")
         self._insert_page_number(pdf)
 
         self._add_page_header(
@@ -230,7 +231,7 @@ class GroupReport:
             self.data.group_data.values(),
             key=lambda x: len(participants_by_group[x.id]),
         )
-        cols = 3
+        cols = 5
         current_col = 0
         current_y = pdf.get_y()
         max_y = 0
@@ -303,13 +304,17 @@ class GroupReport:
     def _add_group_profile(self, lang):
         pdf = self._pdf
         data = self.data
-        pdf.add_page()
+        pdf.add_page(orientation="L")
         self._insert_page_number(pdf)
         self._add_page_header("Командный профиль: распределение внимания в группе")
 
         pdf.set_y(pdf.get_y() + 5)
         base_y = pdf.get_y()
-        pdf.draw_group_profile_squares()
+        if pdf.h > pdf.w:
+            width = (pdf.w - pdf.l_margin - pdf.r_margin) / 2
+        else:
+            width = (pdf.h - pdf.y - 5) / 2
+        pdf.draw_group_profile_squares(square_width=width)
 
         participant_colors: Dict[int, Tuple[int, int, int]] = {
             key: value
@@ -330,20 +335,21 @@ class GroupReport:
 
         for square in data.square_results:
             results = data.square_results[square]
-            # print(f"Square {square} results: {results}")
-            pdf.draw_group_profile_square(
+            print(f"Square {square} results: {results}")
+            pdf.draw_group_profile_square_quad(
                 square,
                 results,
                 base_y,
                 color=participant_colors,
                 participant_data=participant_by_id,
+                square_width=width,
             )
 
         # draw legend
         # groups inline + crown image + burnout border
         # magic numbers
         height = pdf.w - pdf.l_margin - pdf.r_margin + 15
-        pdf.set_y(pdf.t_margin + height)
+        pdf.set_xy(x=pdf.h, y=pdf.t_margin + 15)
         for group in data.group_data:
             group_data = data.group_data[group]
             pdf.set_fill_color(*ImageColor.getrgb(group_data.color))
@@ -355,8 +361,8 @@ class GroupReport:
                 style="FD",
             )
             pdf.set_x(pdf.get_x() + pdf.font_size)
-            pdf.cell(txt=group_data.name, new_x=XPos.RIGHT, new_y=YPos.TOP)
-            pdf.set_x(pdf.get_x() + pdf.font_size)
+            pdf.cell(txt=group_data.name, new_x=XPos.LEFT, new_y=YPos.NEXT)
+            pdf.set_xy(pdf.get_x() - pdf.font_size, pdf.get_y() + 2)
 
         pdf.set_y(pdf.get_y() + 5)
 
@@ -380,18 +386,20 @@ class GroupReport:
         for email in data.cattell_data:
             participant = data.participant_data[email]
             section_data = data.cattell_data[email]
-            for section, value in section_data.data.items():
-                data_by_section[section].append((value, participant))
+            for scale, value in section_data.data.items():
+                data_by_section[scale].append((value, participant))
 
-        sections = CATTELL_CATEGORIES
-        for section in sections:
+        # pdf.add_page(orientation="L")
+        # self._insert_page_number(pdf)
+        # self._add_page_header("Базовые черты личности: групповые результаты")
+        scales = CATTELL_CATEGORIES
+        for scale in scales:
             pdf.add_page(orientation="L")
             self._insert_page_number(pdf)
             self._add_page_header("Базовые черты личности: групповые результаты")
-
-            section_label = TRANSLATIONS_DICT.get_translation(section, lang)
+            section_label = TRANSLATIONS_DICT.get_translation(scale, lang)
             pdf.draw_section_header(section_label)
-            categories = CATTELL_CATEGORIES[section]
+            categories = CATTELL_CATEGORIES[scale]
             pdf.set_y(pdf.get_y() + 2)
 
             # category format expected 1_1
@@ -403,9 +411,7 @@ class GroupReport:
                 line_width = 46
                 start_x = pdf.get_x()
                 start_y = pdf.get_y()
-                arrow_width = (
-                    pdf.w - line_width - pdf.l_margin - pdf.r_margin - pdf.l_margin
-                )
+                arrow_width = pdf.w - line_width - pdf.l_margin - pdf.r_margin
                 pdf.draw_category_header_and_arrow(
                     category_label,
                     category_description,
@@ -424,14 +430,18 @@ class GroupReport:
                     pass
 
                 pdf.set_medium_font(9)
-                rows = pdf.multi_cell(split_only=True, txt=category_label, w=line_width)
+                category_label_rows = pdf.multi_cell(
+                    split_only=True, txt=category_label, w=line_width
+                )
                 # magic number 14 = 140/11 - width of arrow
                 score_width = arrow_width / 11
                 start_x += line_width
                 for score in range(11):
+                    score_start_x = start_x + score * score_width + 1.5
+                    score_start_y = start_y + len(category_label_rows) * 4 + 3
                     pdf.set_xy(
-                        start_x + score * score_width + 1,
-                        start_y + len(rows) * 4 + 1,
+                        score_start_x,
+                        score_start_y,
                     )
                     participants = participant_per_score[score]
                     per_group = defaultdict(list)
@@ -446,25 +456,24 @@ class GroupReport:
                     per_group = sorted(
                         per_group.items(), key=lambda x: len(x[1]), reverse=True
                     )
-                    max_per_group = 1.0
-                    if per_group:
-                        max_per_group = float(len(per_group[0][1]))
 
-                    v_padding = 3
+                    v_padding = 1.5
                     padding = 1
-                    n_per_line = 7
+                    n_per_line = 6
                     text_width = score_width / n_per_line - padding
-                    score_start_x = start_x + score * score_width + 1
-                    pdf.set_x(score_start_x + padding)
+                    pdf.set_x(score_start_x)
+                    score_max_y = score_start_y
                     for group_id, group_data in per_group:
                         group = self._group_data_by_id[group_id]
-                        # calc width based on max_per_group
+                        group_color = ImageColor.getrgb(group.color)
                         for participant_id, burnout, crown in group_data:
                             participant = data.participant_data[participant_id]
 
-                            if int(pdf.x + text_width) > int(start_x + score_width):
+                            if int(pdf.x + text_width) > int(
+                                score_start_x + score_width
+                            ):
                                 pdf.set_xy(
-                                    score_start_x + padding,
+                                    score_start_x,
                                     pdf.y + text_width + v_padding,
                                 )
 
@@ -472,25 +481,37 @@ class GroupReport:
                                 participant=participant,
                                 x=pdf.x,
                                 y=pdf.y,
-                                color=ImageColor.getrgb(group.color),
+                                color=group_color,
                                 w=2,
+                                f=4,
                             )
-                            pdf.set_x(pdf.get_x() + padding)
+                            pdf.set_x(pdf.get_x() + text_width + padding)
+                        score_max_y = max(score_max_y, pdf.y + text_width + v_padding)
+                    pdf.set_xy(pdf.x, score_max_y)
 
-                        # width = score_width * (current_len / max_per_group)
-                        # pdf.cell(
-                        #     txt=f"{current_len}",
-                        #     h=4.0,
-                        #     w=width,
-                        #     new_x=XPos.LEFT,
-                        #     new_y=YPos.NEXT,
-                        #     border=0,
-                        #     fill=True,
-                        # )
-                        # font_size * 2 for borders
-                        pdf.set_xy(pdf.x, pdf.y)
+                    # if score == 1:
+                    #     break
                     pass
                 pdf.set_y(pdf.get_y() + 2)
+                # break
+
+            # pdf.set_y(pdf.get_y() + 2)
+            # pdf.cell(0, 0, "Расшифровка цветов:", 0, 1)
+            # pdf.set_y(pdf.get_y() + 2)
+            # for email in self.data.participant_data:
+            #     participant = self.data.participant_data[email]
+            #     group = self._group_data_by_id[participant.group_id]
+            #     pdf.draw_participant_circle(
+            #         participant=participant,
+            #         x=pdf.get_x(),
+            #         y=pdf.get_y(),
+            #         color=ImageColor.getrgb(group.color),
+            #         w=2,
+            #         f=4,
+            #     )
+            #     pdf.cell(0, 0, f"{participant.id}", 0)
+            #     pdf.set_y(pdf.get_y() + 2)
+            #     pass
 
             # pdf.set_y(pdf.get_y() + 4)
         pass
@@ -498,27 +519,119 @@ class GroupReport:
     def _add_group_coping(self, lang):
         pdf = self._pdf
         data = self.data
-        pdf.add_page()
-        self._insert_page_number(pdf)
-        self._add_page_header("Реакция на стресс: групповые результаты")
+
+        data_by_section: Dict[str, List[Tuple[int, ParticipantData]]] = defaultdict(
+            list
+        )
+        for email in data.coping_data:
+            participant = data.participant_data[email]
+            section_data = data.coping_data[email]
+            for section, value in section_data.data.items():
+                data_by_section[section].append((value, participant))
 
         scales = COPING_CATEGORIES_V1
         for scale in scales:
+            pdf.add_page(orientation="L", format="A4")
+            pdf.set_auto_page_break(False)
+            self._insert_page_number(pdf)
+            self._add_page_header("Реакция на стресс: групповые результаты")
             scale_label = TRANSLATIONS_DICT.get_translation(scale, lang)
             pdf.draw_section_header(scale_label)
-
             categories = COPING_CATEGORIES_V1[scale]
             pdf.set_y(pdf.get_y() + 2)
+
+            # "2_X" expected
             for category in categories:
                 category_label = TRANSLATIONS_DICT.get_translation(category, lang)
                 category_desc = TRANSLATIONS_DICT.get_translation(
                     f"{category}_group_desc", lang
                 )
+                line_width = 46
+                start_x = pdf.get_x()
+                start_y = pdf.get_y()
+                arrow_width = pdf.w - line_width - pdf.l_margin - pdf.r_margin
                 pdf.draw_category_header_and_arrow(
-                    category_label, category_desc, arrow_color=(107, 196, 38)
+                    category_label,
+                    category_desc,
+                    arrow_color=(107, 196, 38),
+                    line_width=line_width,
+                    arrow_width=arrow_width,
                 )
 
-                pdf.set_y(pdf.get_y() + 5)
+                section_data = data_by_section[category]
+                section_data.sort(key=lambda x: x[0])
+                count_per_score = defaultdict(int)
+                participant_per_score = defaultdict(list)
+                for score, participant in section_data:
+                    count_per_score[score] += 1
+                    participant_per_score[score].append(participant)
+                    pass
+
+                pdf.set_medium_font(9)
+                category_label_rows = pdf.multi_cell(
+                    split_only=True, txt=category_label, w=line_width
+                )
+                # magic number 14 = 140/11 - width of arrow
+                score_width = arrow_width / 11
+                start_x += line_width
+                for score in range(11):
+                    score_start_x = start_x + score * score_width + 1.5
+                    score_start_y = start_y + len(category_label_rows) * 4 + 3
+                    pdf.set_xy(
+                        score_start_x,
+                        score_start_y,
+                    )
+                    participants = participant_per_score[score]
+                    per_group = defaultdict(list)
+                    for participant in participants:
+                        group = self._group_data_by_id[participant.group_id]
+                        per_group[group.id].append(
+                            (participant.email, participant.burnout, participant.crown)
+                        )
+                        pass
+
+                    # sort per_group by len and print in order
+                    per_group = sorted(
+                        per_group.items(), key=lambda x: len(x[1]), reverse=True
+                    )
+
+                    v_padding = 1.5
+                    padding = 1
+                    n_per_line = 4
+                    text_width = score_width / n_per_line - padding
+                    pdf.set_x(score_start_x)
+                    score_max_y = score_start_y
+                    for group_id, group_data in per_group:
+                        group = self._group_data_by_id[group_id]
+                        group_color = ImageColor.getrgb(group.color)
+                        for participant_id, burnout, crown in group_data:
+                            participant = data.participant_data[participant_id]
+
+                            if int(pdf.x + text_width) > int(
+                                score_start_x + score_width
+                            ):
+                                pdf.set_xy(
+                                    score_start_x,
+                                    pdf.y + text_width + v_padding,
+                                )
+
+                            pdf.draw_participant_circle(
+                                participant=participant,
+                                x=pdf.x,
+                                y=pdf.y,
+                                color=group_color,
+                                w=2,
+                                f=4,
+                            )
+                            pdf.set_x(pdf.get_x() + text_width + padding)
+                        score_max_y = max(score_max_y, pdf.y + text_width + v_padding)
+                    pdf.set_xy(pdf.x, score_max_y)
+
+                    # if score == 1:
+                    #     break
+                    pass
+                pdf.set_y(pdf.get_y() + 2)
+                # break
 
             pdf.set_y(pdf.get_y() + 5)
         pass
@@ -526,12 +639,21 @@ class GroupReport:
     def _add_group_boyko(self, lang):
         pdf = self._pdf
         data = self.data
-        pdf.add_page()
-        self._insert_page_number(pdf)
-        self._add_page_header("Интенсивность выгорания: групповые результаты")
+
+        data_by_section: Dict[str, List[Tuple[int, ParticipantData]]] = defaultdict(
+            list
+        )
+        for email in data.boyko_data:
+            participant = data.participant_data[email]
+            section_data = data.boyko_data[email]
+            for section, value in section_data.data.items():
+                data_by_section[section].append((value, participant))
 
         scales = BOYKO_CATEGORIES_V1
         for scale in scales:
+            pdf.add_page(orientation="L")
+            self._insert_page_number(pdf)
+            self._add_page_header("Интенсивность выгорания: групповые результаты")
             scale_label = TRANSLATIONS_DICT.get_translation(scale, lang)
             pdf.draw_section_header(scale_label)
 
@@ -542,11 +664,93 @@ class GroupReport:
                 category_desc = TRANSLATIONS_DICT.get_translation(
                     f"{category}_group_desc", lang
                 )
+                line_width = 46
+                start_x = pdf.get_x()
+                start_y = pdf.get_y()
+                arrow_width = pdf.w - line_width - pdf.l_margin - pdf.r_margin
+
                 pdf.draw_category_header_and_arrow(
-                    category_label, category_desc, arrow_color=(255, 168, 29)
+                    category_label,
+                    category_desc,
+                    arrow_color=(255, 168, 29),
+                    line_width=line_width,
+                    arrow_width=arrow_width,
                 )
 
-                pdf.set_y(pdf.get_y() + 5)
+                section_data = data_by_section[category]
+                section_data.sort(key=lambda x: x[0])
+                count_per_score = defaultdict(int)
+                participant_per_score = defaultdict(list)
+                for score, participant in section_data:
+                    count_per_score[score] += 1
+                    participant_per_score[score].append(participant)
+                    pass
+
+                pdf.set_medium_font(9)
+                category_label_rows = pdf.multi_cell(
+                    split_only=True, txt=category_label, w=line_width
+                )
+                # magic number 14 = 140/11 - width of arrow
+                score_width = arrow_width / 11
+                start_x += line_width
+                for score in range(11):
+                    score_start_x = start_x + score * score_width + 1.5
+                    score_start_y = start_y + len(category_label_rows) * 4 + 3
+                    pdf.set_xy(
+                        score_start_x,
+                        score_start_y,
+                    )
+                    participants = participant_per_score[score]
+                    per_group = defaultdict(list)
+                    for participant in participants:
+                        group = self._group_data_by_id[participant.group_id]
+                        per_group[group.id].append(
+                            (participant.email, participant.burnout, participant.crown)
+                        )
+                        pass
+
+                    # sort per_group by len and print in order
+                    per_group = sorted(
+                        per_group.items(), key=lambda x: len(x[1]), reverse=True
+                    )
+
+                    v_padding = 1.5
+                    padding = 1
+                    n_per_line = 4
+                    text_width = score_width / n_per_line - padding
+                    pdf.set_x(score_start_x)
+                    score_max_y = score_start_y
+                    for group_id, group_data in per_group:
+                        group = self._group_data_by_id[group_id]
+                        group_color = ImageColor.getrgb(group.color)
+                        for participant_id, burnout, crown in group_data:
+                            participant = data.participant_data[participant_id]
+
+                            if int(pdf.x + text_width) > int(
+                                score_start_x + score_width
+                            ):
+                                pdf.set_xy(
+                                    score_start_x,
+                                    pdf.y + text_width + v_padding,
+                                )
+
+                            pdf.draw_participant_circle(
+                                participant=participant,
+                                x=pdf.x,
+                                y=pdf.y,
+                                color=group_color,
+                                w=2,
+                                f=4,
+                            )
+                            pdf.set_x(pdf.get_x() + text_width + padding)
+                        score_max_y = max(score_max_y, pdf.y + text_width + v_padding)
+                    pdf.set_xy(pdf.x, score_max_y)
+
+                    # if score == 1:
+                    #     break
+                    pass
+                pdf.set_y(pdf.get_y() + 2)
+                # break
 
             pdf.set_y(pdf.get_y() + 5)
         pass
@@ -554,12 +758,21 @@ class GroupReport:
     def _add_group_values(self, lang):
         pdf = self._pdf
         data = self.data
-        pdf.add_page()
-        self._insert_page_number(pdf)
-        self._add_page_header("Жизненные ценности: групповые результаты")
+        data_by_section: Dict[str, List[Tuple[int, ParticipantData]]] = defaultdict(
+            list
+        )
+        for email in data.values_data:
+            participant = data.participant_data[email]
+            section_data = data.values_data[email]
+            for section, value in section_data.data.items():
+                data_by_section[section].append((value, participant))
 
         scales = VALUES_CATEGORIES_V1
         for scale in scales:
+            pdf.add_page(orientation="L")
+            self._insert_page_number(pdf)
+            self._add_page_header("Жизненные ценности: групповые результаты")
+
             scale_label = TRANSLATIONS_DICT.get_translation(scale, lang)
             pdf.draw_section_header(scale_label)
 
@@ -570,11 +783,92 @@ class GroupReport:
                 category_desc = TRANSLATIONS_DICT.get_translation(
                     f"{category}_group_desc", lang
                 )
+                line_width = 46
+                start_x = pdf.get_x()
+                start_y = pdf.get_y()
+                arrow_width = pdf.w - line_width - pdf.l_margin - pdf.r_margin
                 pdf.draw_category_header_and_arrow(
-                    category_label, category_desc, arrow_color=(248, 216, 31)
+                    category_label,
+                    category_desc,
+                    arrow_color=(248, 216, 31),
+                    line_width=line_width,
+                    arrow_width=arrow_width,
                 )
 
-                pdf.set_y(pdf.get_y() + 5)
+                section_data = data_by_section[category]
+                section_data.sort(key=lambda x: x[0])
+                count_per_score = defaultdict(int)
+                participant_per_score = defaultdict(list)
+                for score, participant in section_data:
+                    count_per_score[score] += 1
+                    participant_per_score[score].append(participant)
+                    pass
+
+                pdf.set_medium_font(9)
+                category_label_rows = pdf.multi_cell(
+                    split_only=True, txt=category_label, w=line_width
+                )
+                # magic number 14 = 140/11 - width of arrow
+                score_width = arrow_width / 11
+                start_x += line_width
+                for score in range(11):
+                    score_start_x = start_x + score * score_width + 1.5
+                    score_start_y = start_y + len(category_label_rows) * 4 + 3
+                    pdf.set_xy(
+                        score_start_x,
+                        score_start_y,
+                    )
+                    participants = participant_per_score[score]
+                    per_group = defaultdict(list)
+                    for participant in participants:
+                        group = self._group_data_by_id[participant.group_id]
+                        per_group[group.id].append(
+                            (participant.email, participant.burnout, participant.crown)
+                        )
+                        pass
+
+                    # sort per_group by len and print in order
+                    per_group = sorted(
+                        per_group.items(), key=lambda x: len(x[1]), reverse=True
+                    )
+
+                    v_padding = 1.5
+                    padding = 1
+                    n_per_line = 4
+                    text_width = score_width / n_per_line - padding
+                    pdf.set_x(score_start_x)
+                    score_max_y = score_start_y
+                    for group_id, group_data in per_group:
+                        group = self._group_data_by_id[group_id]
+                        group_color = ImageColor.getrgb(group.color)
+                        for participant_id, burnout, crown in group_data:
+                            participant = data.participant_data[participant_id]
+
+                            if int(pdf.x + text_width) > int(
+                                score_start_x + score_width
+                            ):
+                                pdf.set_xy(
+                                    score_start_x,
+                                    pdf.y + text_width + v_padding,
+                                )
+
+                            pdf.draw_participant_circle(
+                                participant=participant,
+                                x=pdf.x,
+                                y=pdf.y,
+                                color=group_color,
+                                w=2,
+                                f=4,
+                            )
+                            pdf.set_x(pdf.get_x() + text_width + padding)
+                        score_max_y = max(score_max_y, pdf.y + text_width + v_padding)
+                    pdf.set_xy(pdf.x, score_max_y)
+
+                    # if score == 1:
+                    #     break
+                    pass
+                pdf.set_y(pdf.get_y() + 2)
+                # break
 
             pdf.set_y(pdf.get_y() + 5)
         pass

@@ -9,7 +9,7 @@ from pdf.single_report import SectionData
 from pdf.zetic_pdf import ZeticPDF, PDF_MODULE_BASE_DIR
 
 
-class SquareId(Enum):
+class SquareQuadId(Enum):
     ESFJ_1_1 = 0
     ENFJ_1_2 = 1
     ESFP_1_3 = 2
@@ -55,7 +55,7 @@ class GroupReportData:
     group_data: Dict[str, GroupData]
     participant_data: Dict[str, ParticipantData]
 
-    square_results: Dict[SquareId, List[int]]
+    square_results: Dict[SquareQuadId, List[int]]
     cattell_data: Dict[str, SectionData]
     coping_data: Dict[str, SectionData]
     boyko_data: Dict[str, SectionData]
@@ -70,29 +70,29 @@ class SquareUiConfig:
     pass
 
 
-SQUARE_UI_CONFIG: Dict[SquareId, SquareUiConfig] = {
-    SquareId.ESFJ_1_1: SquareUiConfig(x=0, y=0, name="Массовик-затейник"),
-    SquareId.ENFJ_1_2: SquareUiConfig(
+SQUARE_UI_CONFIG: Dict[SquareQuadId, SquareUiConfig] = {
+    SquareQuadId.ESFJ_1_1: SquareUiConfig(x=0, y=0, name="Массовик-затейник"),
+    SquareQuadId.ENFJ_1_2: SquareUiConfig(
         x=1, y=0, name="Чуткий наставник / Коммуникатор"
     ),  # ?
-    SquareId.ESFP_1_3: SquareUiConfig(
+    SquareQuadId.ESFP_1_3: SquareUiConfig(
         x=0, y=1, name="Развлекатель / Переговорщик"
     ),  # ?
-    SquareId.ENFP_1_4: SquareUiConfig(x=1, y=1, name="Мотиватор"),
-    SquareId.ESTJ_2_1: SquareUiConfig(x=2, y=0, name="Контролер"),
-    SquareId.ENTJ_2_2: SquareUiConfig(x=3, y=0, name="Аналитик"),
-    SquareId.ESTP_2_3: SquareUiConfig(x=2, y=1, name="Искатель ресурсов"),
-    SquareId.ENTP_2_4: SquareUiConfig(x=3, y=1, name="Изобретатель"),
-    SquareId.ISFJ_3_1: SquareUiConfig(x=0, y=2, name="Хранитель / Визионер"),
-    SquareId.INFJ_3_2: SquareUiConfig(x=1, y=2, name="Вдохновитель / Авантюрист"),
-    SquareId.ISFP_3_3: SquareUiConfig(x=0, y=3, name="Опекун / Искатель ресурсов"),
-    SquareId.INFP_3_4: SquareUiConfig(
+    SquareQuadId.ENFP_1_4: SquareUiConfig(x=1, y=1, name="Мотиватор"),
+    SquareQuadId.ESTJ_2_1: SquareUiConfig(x=2, y=0, name="Контролер"),
+    SquareQuadId.ENTJ_2_2: SquareUiConfig(x=3, y=0, name="Аналитик"),
+    SquareQuadId.ESTP_2_3: SquareUiConfig(x=2, y=1, name="Искатель ресурсов"),
+    SquareQuadId.ENTP_2_4: SquareUiConfig(x=3, y=1, name="Изобретатель"),
+    SquareQuadId.ISFJ_3_1: SquareUiConfig(x=0, y=2, name="Хранитель / Визионер"),
+    SquareQuadId.INFJ_3_2: SquareUiConfig(x=1, y=2, name="Вдохновитель / Авантюрист"),
+    SquareQuadId.ISFP_3_3: SquareUiConfig(x=0, y=3, name="Опекун / Искатель ресурсов"),
+    SquareQuadId.INFP_3_4: SquareUiConfig(
         x=1, y=3, name="Благородный служитель /Изобретатель"
     ),
-    SquareId.ISTJ_4_1: SquareUiConfig(x=2, y=2, name="Организатор"),
-    SquareId.INTJ_4_2: SquareUiConfig(x=3, y=2, name="Любитель улучшений"),
-    SquareId.ISTP_4_3: SquareUiConfig(x=2, y=3, name="Реализатор"),
-    SquareId.INTP_4_4: SquareUiConfig(x=3, y=3, name="Решатель проблем"),
+    SquareQuadId.ISTJ_4_1: SquareUiConfig(x=2, y=2, name="Организатор"),
+    SquareQuadId.INTJ_4_2: SquareUiConfig(x=3, y=2, name="Любитель улучшений"),
+    SquareQuadId.ISTP_4_3: SquareUiConfig(x=2, y=3, name="Реализатор"),
+    SquareQuadId.INTP_4_4: SquareUiConfig(x=3, y=3, name="Решатель проблем"),
 }
 
 
@@ -168,10 +168,14 @@ class ZeticGroupPDF(ZeticPDF):
             )
         pass
 
-    def draw_group_profile_squares(self):
+    def draw_group_profile_squares(self, square_width: int):
         start_x = self.get_x()
         start_y = self.get_y()
-        width = (self.w - self.l_margin - self.r_margin) / 2
+        width = square_width
+
+        print(
+            f"h={self.h}, w={self.w}, width={width}, y={self.y}, b_margin={self.b_margin}, x={self.x}, l_margin={self.l_margin}, r_margin={self.r_margin}"
+        )
 
         self.draw_square(
             start_x,
@@ -332,41 +336,44 @@ class ZeticGroupPDF(ZeticPDF):
     def draw_section_header(self, text: str):
         self.set_fill_color(230, 230, 227)
         self.set_draw_color(230, 230, 227)
-        rect_width = 210
+        rect_width = self.w - self.x
         rect_height = 8
         self.rect(self.x, self.y, rect_width, rect_height, "FD")
         self.set_text_color(118, 134, 146)
         self.cell(h=rect_height, txt=text, new_y=YPos.NEXT, new_x=XPos.LEFT)
 
-    def draw_group_profile_square(
+    def draw_group_profile_square_quad(
         self,
-        square: SquareId,
-        results: List[int],
+        quad: SquareQuadId,
+        participants: List[int],
         base_y: float,
         color: Dict[int, Tuple[int, int, int]] = None,
         participant_data: Dict[int, ParticipantData] = None,
+        square_width: int = None,
     ):
-        config = SQUARE_UI_CONFIG[square]
-        width = (self.w - self.l_margin - self.r_margin) / 4
+        config = SQUARE_UI_CONFIG[quad]
+        quad_width = square_width / 2
 
-        self.set_xy(self.l_margin + config.x * width, base_y + config.y * width)
+        self.set_xy(
+            self.l_margin + config.x * quad_width, base_y + config.y * quad_width
+        )
 
         # Draw square title
         # self.set_text_color(240, 100, 40)
         # self.cell(w=width, h=4, txt=config.name, new_y=YPos.TOP, new_x=XPos.LEFT)
 
-        width -= 4
-        start_x = self.x + 2
+        quad_width -= 4
+        start_x = self.x
         start_y = self.y + 8.5
         self.set_xy(start_x, start_y)
         self.set_text_font(7)
         n_per_line = 8
         padding = 1
         v_padding = 3
-        text_width = width / n_per_line - padding
+        text_width = quad_width / n_per_line - padding
         self.set_x(self.x + padding)
-        for participant_id in results:
-            if int(self.x + text_width) > int(start_x + width):
+        for participant_id in participants:
+            if int(self.x + text_width) > int(start_x + quad_width):
                 self.set_xy(start_x + padding, self.y + text_width + v_padding)
 
             participant = participant_data[participant_id]
@@ -393,6 +400,7 @@ class ZeticGroupPDF(ZeticPDF):
         y: float,
         w: float,
         color: Tuple[int, int, int],
+        f: int = 6,
     ):
         self.set_draw_color(*color)
         self.set_fill_color(*color)
@@ -416,7 +424,7 @@ class ZeticGroupPDF(ZeticPDF):
             style="FD",
         )
 
-        self.set_text_font(6)
+        self.set_text_font(f)
         self.cell(
             w=w,
             h=w,
