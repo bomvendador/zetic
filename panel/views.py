@@ -1,8 +1,10 @@
 import json
 import logging
 import os
+import io
 import time
 from datetime import datetime, timedelta
+from typing import Dict
 
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -12,6 +14,8 @@ from django.utils import timezone
 
 from login.models import UserRole, UserProfile, User
 from panel import mail_handler
+from pdf.group_report import GroupReport
+from pdf.group_report_test import GroupReportDataGenerator
 from pdf.models import (
     Company,
     Participant,
@@ -24,7 +28,9 @@ from pdf.models import (
     EmployeeGender,
     Study,
 )
+from pdf.single_report import SectionData
 from pdf.views import pdf_single_generator
+from pdf.zetic_group_pdf import GroupData, ParticipantData
 from pdf_group.views import pdf_group_generator
 from reports import settings
 
@@ -393,6 +399,101 @@ def save_group_report_data(request):
         except Exception as e:
             logger.error("An error occurred: %s", str(e), exc_info=True)
             return HttpResponseBadRequest("Ошибка при создании отчета")
+
+
+@login_required(redirect_field_name=None, login_url="/login/")
+def generate_group_report_data(request):
+    if request.method == "POST":
+        json_data = json.loads(request.body.decode("utf-8"))
+        company_name = json_data["project"]
+        try:
+            response = _generate_group_for_project(project=company_name)
+            return response
+        except Exception as e:
+            logger.error("An error occurred: %s", str(e), exc_info=True)
+            return HttpResponseBadRequest("Ошибка при создании отчета")
+
+
+def _generate_group_for_project(project: str) -> HttpResponse:
+    company = Company.objects.get(name=project)
+    participants = Participant.objects.filter(
+        employee__company=company, completed_at__isnull=False
+    )
+    reports = Report.objects.filter(participant__in=participants)
+    points = ReportData.objects.filter(report__in=reports)
+    print(f"points - {len(points)}")
+
+    group_data: Dict[str, GroupData] = {}
+    participant_data: Dict[str, ParticipantData] = {}
+    # email -> Answers
+    cattell_data: Dict[str, SectionData] = {}
+    coping_data: Dict[str, SectionData] = {}
+    boyko_data: Dict[str, SectionData] = {}
+    values_data: Dict[str, SectionData] = {}
+
+    default_group_data = GroupData(id=0, name="Default", color="#6A5FF3")
+    group_data[default_group_data.name] = default_group_data
+
+    group_report_data_generator = GroupReportDataGenerator(color_step=50)
+    group_data = group_report_data_generator.generate_groups(1)
+    groups = list(group_data.values())
+    groups_len = len(groups)
+
+    for point in points:
+        email = point.report.participant.employee.email
+        section_code = point.section_code
+        category_code = point.category_code
+        points = point.points
+        if section_code == "1":
+            section_data = cattell_data.get(email, SectionData({}))
+        elif section_code == "2":
+            section_data = coping_data.get(email, SectionData({}))
+        elif section_code == "3":
+            section_data = boyko_data.get(email, SectionData({}))
+        elif section_code == "4":
+            section_data = values_data.get(email, SectionData({}))
+        else:
+            raise ValueError(f"Unknown section code: {section_code}")
+        print(f"{email} - {section_code} - {category_code} - {points}")
+
+        section_data.data[category_code] = points
+        if section_code == "1":
+            cattell_data[email] = section_data
+        elif section_code == "2":
+            coping_data[email] = section_data
+        elif section_code == "3":
+            boyko_data[email] = section_data
+        elif section_code == "4":
+            values_data[email] = section_data
+
+    def group_picker(i: int) -> int:
+        return groups[i % groups_len].id
+
+    for index, participant in enumerate(participants):
+        participant_data[participant.employee.email] = ParticipantData(
+            id=index,
+            group_id=group_picker(index),
+            name=participant.employee.name,
+            email=participant.employee.email,
+        )
+
+    group_report = GroupReport()
+    data = group_report_data_generator.generate_group_report_data(
+        group_data=group_data,
+        participant_data=participant_data,
+        cattell_data=cattell_data,
+        coping_data=coping_data,
+        boyko_data=boyko_data,
+        values_data=values_data,
+        lang="ru",
+        project_name=f"Team {company.name}",
+    )
+    pdf = group_report.generate_pdf(data)
+    output = io.BytesIO()
+    output.write(pdf)
+    response = HttpResponse(content=output.getvalue(), content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="Group {company.name}.pdf"'
+    return response
 
 
 # список командных отчетов

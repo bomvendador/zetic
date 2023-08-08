@@ -93,6 +93,9 @@
 
                                                         <div class="col-xl-6 col-md-12 col-sm-12 mt-5">
                                                             <div class="row" style="margin-bottom: 15px">
+                                                                <div class="col-xs-12">
+                                                                    <button type="button" id="mflnglck">I'm feeling lucky!</button>
+                                                                </div>
                                                                 <div class="col-xl-6 col-md-12 col-sm-12 mt-5 mb-5">
                                                                     <h2 class="card-title">Участники проекта</h2>
                                                                 </div>
@@ -1717,6 +1720,47 @@ $('#undistributed-participants-table').on('click', '.delete-participant-group', 
             toastr.error('Участники отсутствуют')
         }
     })
+    $('#mflnglck').on('click', function() {
+        const companyName = $('.company-chosen').text().trim()
+        let url = "{% url 'generate_group_report_data' %}"
+        $.ajax({
+          headers: { "X-CSRFToken": token },
+          method: "POST",
+          url: url,
+          xhrFields: {
+            responseType: 'blob'
+          },
+          data: JSON.stringify({
+             'project': companyName,
+          }),
+          success:function (data, textStatus, jqXHR) {
+
+                const contentDisposition = jqXHR.getResponseHeader('Content-Disposition');
+                let filename = "test-group.pdf";  // Default filename in case extraction fails
+
+                const dispositionMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+                if (dispositionMatch != null && dispositionMatch[1]) {
+                    filename = dispositionMatch[1].replace(/['"]/g, '');  // Remove quotes if present
+                }
+
+
+                const blob = new Blob([data] , { type: jqXHR.getResponseHeader('Content-Type') })
+                const blobUrl = URL.createObjectURL(blob);
+                const link = document.createElement("a"); // Or maybe get it from the current document
+                link.href = blobUrl;
+                link.download = filename;
+                link.innerHTML = "Click here to download the file";
+                $('#mflnglck').parent().append(link);
+
+                link.click();
+                $('#mflnglck').parent().find('a').remove();
+
+
+          }
+        })
+
+        console.log('current company: ' + $('.company-chosen').text().trim());
+    });
 
     function add_participant_to_report(element){
         let html_report = ''
@@ -1927,6 +1971,7 @@ $('#undistributed-participants-table').on('click', '.delete-participant-group', 
         }
         return square_name
     }
+
 
 
 

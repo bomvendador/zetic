@@ -145,6 +145,13 @@ class SectionData:
     def __len__(self):
         return len(self.data)
 
+    def add(self, category: str, points: int):
+        if points < 0 or points > 10:
+            raise ValueError(f"points must be between 0 and 10, got {points}")
+        if category in self.data:
+            raise ValueError(f"category {category} already exists")
+        self.data[category] = points
+
     def to_query(self) -> Q:
         q_objects = map(
             lambda kv: Q(category__code=kv[0], value=kv[1]), self.data.items()

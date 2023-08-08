@@ -298,7 +298,11 @@ class GroupReport:
                 )
                 pdf.set_font(style="B")
 
-            pdf.cell(txt=participant.name, new_x=XPos.LEFT, new_y=YPos.NEXT)
+            pdf.cell(
+                txt=f"#{participant.id} {participant.name} ({participant.email})",
+                new_x=XPos.LEFT,
+                new_y=YPos.NEXT,
+            )
         pass
 
     def _add_group_profile(self, lang):
@@ -419,6 +423,7 @@ class GroupReport:
                     line_width=line_width,
                     arrow_width=arrow_width,
                 )
+                score_max_y = pdf.get_y()
 
                 section_data = data_by_section[category]
                 section_data.sort(key=lambda x: x[0])
@@ -462,7 +467,6 @@ class GroupReport:
                     n_per_line = 6
                     text_width = score_width / n_per_line - padding
                     pdf.set_x(score_start_x)
-                    score_max_y = score_start_y
                     for group_id, group_data in per_group:
                         group = self._group_data_by_id[group_id]
                         group_color = ImageColor.getrgb(group.color)
@@ -494,25 +498,6 @@ class GroupReport:
                     pass
                 pdf.set_y(pdf.get_y() + 2)
                 # break
-
-            # pdf.set_y(pdf.get_y() + 2)
-            # pdf.cell(0, 0, "Расшифровка цветов:", 0, 1)
-            # pdf.set_y(pdf.get_y() + 2)
-            # for email in self.data.participant_data:
-            #     participant = self.data.participant_data[email]
-            #     group = self._group_data_by_id[participant.group_id]
-            #     pdf.draw_participant_circle(
-            #         participant=participant,
-            #         x=pdf.get_x(),
-            #         y=pdf.get_y(),
-            #         color=ImageColor.getrgb(group.color),
-            #         w=2,
-            #         f=4,
-            #     )
-            #     pdf.cell(0, 0, f"{participant.id}", 0)
-            #     pdf.set_y(pdf.get_y() + 2)
-            #     pass
-
             # pdf.set_y(pdf.get_y() + 4)
         pass
 
@@ -557,6 +542,7 @@ class GroupReport:
                     line_width=line_width,
                     arrow_width=arrow_width,
                 )
+                score_max_y = pdf.y
 
                 section_data = data_by_section[category]
                 section_data.sort(key=lambda x: x[0])
@@ -600,7 +586,6 @@ class GroupReport:
                     n_per_line = 4
                     text_width = score_width / n_per_line - padding
                     pdf.set_x(score_start_x)
-                    score_max_y = score_start_y
                     for group_id, group_data in per_group:
                         group = self._group_data_by_id[group_id]
                         group_color = ImageColor.getrgb(group.color)
@@ -656,6 +641,7 @@ class GroupReport:
             self._add_page_header("Интенсивность выгорания: групповые результаты")
             scale_label = TRANSLATIONS_DICT.get_translation(scale, lang)
             pdf.draw_section_header(scale_label)
+            score_max_y = pdf.y
 
             categories = BOYKO_CATEGORIES_V1[scale]
             pdf.set_y(pdf.get_y() + 2)
@@ -719,7 +705,6 @@ class GroupReport:
                     n_per_line = 4
                     text_width = score_width / n_per_line - padding
                     pdf.set_x(score_start_x)
-                    score_max_y = score_start_y
                     for group_id, group_data in per_group:
                         group = self._group_data_by_id[group_id]
                         group_color = ImageColor.getrgb(group.color)
@@ -775,6 +760,7 @@ class GroupReport:
 
             scale_label = TRANSLATIONS_DICT.get_translation(scale, lang)
             pdf.draw_section_header(scale_label)
+            score_max_y = pdf.y
 
             categories = VALUES_CATEGORIES_V1[scale]
             pdf.set_y(pdf.get_y() + 2)
@@ -837,7 +823,6 @@ class GroupReport:
                     n_per_line = 4
                     text_width = score_width / n_per_line - padding
                     pdf.set_x(score_start_x)
-                    score_max_y = score_start_y
                     for group_id, group_data in per_group:
                         group = self._group_data_by_id[group_id]
                         group_color = ImageColor.getrgb(group.color)
