@@ -1303,6 +1303,36 @@ TRANSLATIONS = {
             "response to work situations. You can explore behavioral markers shaping burnout phase."
         ),
     },
+    "Phase 1. Tension": {
+        "ru": textwrap.dedent(
+            """\
+            Фаза 1. Напряжение"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Phase 1. Tension"""
+        ),
+    },
+    "Phase 2. Resistance": {
+        "ru": textwrap.dedent(
+            """\
+             Фаза 2. Сопротивление   """
+        ),
+        "en": textwrap.dedent(
+            """\
+            Phase 2. Resistance"""
+        ),
+    },
+    "Phase 3. Exhaustion": {
+        "ru": textwrap.dedent(
+            """\
+            Фаза 3. Истощение"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Phase 3. Exhaustion"""
+        ),
+    },
     "3_1": {
         "ru": textwrap.dedent(
             """\
@@ -1731,6 +1761,26 @@ TRANSLATIONS = {
         "en": (
             "The following scores reflect life values - fundamental human needs that determine personal choices "
             "life strategies."
+        ),
+    },
+    "Creating harmony": {
+        "ru": textwrap.dedent(
+            """\
+            Создание гармонии"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Creating harmony"""
+        ),
+    },
+    "Overcoming resistance": {
+        "ru": textwrap.dedent(
+            """\
+            Преодоление"""
+        ),
+        "en": textwrap.dedent(
+            """\
+            Overcoming resistance"""
         ),
     },
     # 4_1 - 4_10
