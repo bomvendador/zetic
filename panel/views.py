@@ -3,8 +3,9 @@ import logging
 import os
 import io
 import time
+from collections import defaultdict
 from datetime import datetime, timedelta
-from typing import Dict
+from typing import Dict, List
 
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -14,6 +15,7 @@ from django.utils import timezone
 
 from login.models import UserRole, UserProfile, User
 from panel import mail_handler
+from pdf.burnout_calculator import BURNOUT_RULES, BurnoutCalculator
 from pdf.group_report import GroupReport
 from pdf.group_report_test import GroupReportDataGenerator
 from pdf.models import (
@@ -29,8 +31,15 @@ from pdf.models import (
     Study,
 )
 from pdf.single_report import SectionData
+from pdf.square_quad_calculator import SquareQuadCalculator
+from pdf.square_quad_data import RULES
 from pdf.views import pdf_single_generator
-from pdf.zetic_group_pdf import GroupData, ParticipantData
+from pdf.zetic_group_pdf import (
+    GroupData,
+    ParticipantData,
+    GroupReportData,
+    SquareQuadId,
+)
 from pdf_group.views import pdf_group_generator
 from reports import settings
 
@@ -421,7 +430,7 @@ def _generate_group_for_project(project: str) -> HttpResponse:
     )
     reports = Report.objects.filter(participant__in=participants)
     points = ReportData.objects.filter(report__in=reports)
-    print(f"points - {len(points)}")
+    # print(f"points - {len(points)}")
 
     group_data: Dict[str, GroupData] = {}
     participant_data: Dict[str, ParticipantData] = {}
@@ -431,13 +440,13 @@ def _generate_group_for_project(project: str) -> HttpResponse:
     boyko_data: Dict[str, SectionData] = {}
     values_data: Dict[str, SectionData] = {}
 
-    default_group_data = GroupData(id=0, name="Default", color="#6A5FF3")
-    group_data[default_group_data.name] = default_group_data
+    for group in [
+        GroupData(id=25, name="Hombres", color="#4068E0"),
+        GroupData(id=99, name="Mujeres", color="#E04872"),
+    ]:
+        group_data[group.name] = group
 
-    group_report_data_generator = GroupReportDataGenerator(color_step=50)
-    group_data = group_report_data_generator.generate_groups(1)
-    groups = list(group_data.values())
-    groups_len = len(groups)
+    points_data: Dict[str, Dict[str, ReportData]] = defaultdict(defaultdict)
 
     for point in points:
         email = point.report.participant.employee.email
@@ -454,7 +463,7 @@ def _generate_group_for_project(project: str) -> HttpResponse:
             section_data = values_data.get(email, SectionData({}))
         else:
             raise ValueError(f"Unknown section code: {section_code}")
-        print(f"{email} - {section_code} - {category_code} - {points}")
+        # print(f"{email} - {section_code} - {category_code} - {points}")
 
         section_data.data[category_code] = points
         if section_code == "1":
@@ -466,28 +475,68 @@ def _generate_group_for_project(project: str) -> HttpResponse:
         elif section_code == "4":
             values_data[email] = section_data
 
-    def group_picker(i: int) -> int:
-        return groups[i % groups_len].id
+        points_data[email][point.category_code] = point
+
+    square_results: Dict[SquareQuadId, List[int]] = defaultdict(list)
+
+    def group_picker_by_gender(i: int, model: Participant) -> GroupData:
+        gender = model.employee.sex.public_code.lower()
+        # switch/case
+        hombres = ["hombre", "мужской"]
+        mujeres = ["mujer", "женский"]
+
+        if gender in hombres:
+            return group_data["Hombres"]
+        elif gender in mujeres:
+            return group_data["Mujeres"]
+        else:
+            raise ValueError(f"Incorrect participant gender {model.employee.sex}")
+
+    square_quad_calculator = SquareQuadCalculator(RULES)
+
+    def square_picker(i: int, email: str):
+        report_data = points_data[email]
+        answers: Dict[str, int] = {}
+        for item in report_data.values():
+            answers[item.category_code] = item.points
+
+        return square_quad_calculator.calculate(answers)
+        pass
+
+    burnout_calculator = BurnoutCalculator(BURNOUT_RULES)
 
     for index, participant in enumerate(participants):
         participant_data[participant.employee.email] = ParticipantData(
-            id=index,
-            group_id=group_picker(index),
+            id=(index + 1),
+            group_id=group_picker_by_gender(
+                index,
+                participant,
+            ).id,
             name=participant.employee.name,
             email=participant.employee.email,
+            burnout=burnout_calculator.has_burnout(
+                points_data[participant.employee.email]
+            ),
+            crown=True,
         )
 
+        square_quad_result = square_picker(index, participant.employee.email)
+
+        square_results[square_quad_result.square_quad_id].append((index + 1))
+
     group_report = GroupReport()
-    data = group_report_data_generator.generate_group_report_data(
+    data = GroupReportData(
+        lang="ru",
+        project_name=f"Team {company.name}",
         group_data=group_data,
         participant_data=participant_data,
+        square_results=square_results,
         cattell_data=cattell_data,
         coping_data=coping_data,
         boyko_data=boyko_data,
         values_data=values_data,
-        lang="ru",
-        project_name=f"Team {company.name}",
     )
+
     pdf = group_report.generate_pdf(data)
     output = io.BytesIO()
     output.write(pdf)

@@ -425,6 +425,7 @@ class ZeticGroupPDF(ZeticPDF):
         )
 
         self.set_text_font(f)
+        self.set_text_color(255, 255, 255)
         self.cell(
             w=w,
             h=w,

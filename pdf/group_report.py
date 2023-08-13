@@ -231,27 +231,30 @@ class GroupReport:
             self.data.group_data.values(),
             key=lambda x: len(participants_by_group[x.id]),
         )
-        cols = 5
-        current_col = 0
+
         current_y = pdf.get_y()
         max_y = 0
+
         for group in groups_by_name:
             self._add_group_section(group, participants_by_group[group.id])
             max_y = max(max_y, pdf.get_y())
-            pdf.set_y(current_y)
-            current_col += 1
-            if current_col == cols:
-                current_col = 0
-                pdf.set_y(max_y + 2)
-                current_y = pdf.get_y()
-                max_y = 0
+            max_width = 0
+            for participant in participants_by_group[group.id]:
+                max_width = max(
+                    max_width,
+                    pdf.get_string_width(self._get_participant_name(participant)),
+                )
 
-            pdf.set_x(
-                pdf.l_margin
-                + (pdf.w - pdf.l_margin - pdf.r_margin) / cols * current_col
-            )
+            if max_width * 2 + pdf.x > pdf.w - pdf.r_margin:
+                pdf.set_y(max_y + 2)
+            else:
+                pdf.set_xy(pdf.x + max_width, current_y)
 
         pass
+
+    @staticmethod
+    def _get_participant_name(participant: ParticipantData):
+        return f"#{participant.id} {participant.name} {participant.email}"
 
     def _add_group_section(self, group: GroupData, participants: List[ParticipantData]):
         pdf = self._pdf
@@ -278,6 +281,7 @@ class GroupReport:
         pdf.set_text_color(0, 0, 0)
         pdf.set_x(start_x + 5)
         for participant in participants:
+            participant_name = self._get_participant_name(participant)
             pdf.set_font(style="")
             if participant.burnout:
                 pdf.set_draw_color(241, 151, 15)
@@ -289,7 +293,7 @@ class GroupReport:
                     style="FD",
                 )
             if participant.crown:
-                name_width = pdf.get_string_width(participant.name)
+                name_width = pdf.get_string_width(participant_name)
                 pdf.image(
                     name=participant.cron_image,
                     x=pdf.get_x() + name_width + 1,
@@ -299,7 +303,7 @@ class GroupReport:
                 pdf.set_font(style="B")
 
             pdf.cell(
-                txt=f"#{participant.id} {participant.name} ({participant.email})",
+                txt=participant_name,
                 new_x=XPos.LEFT,
                 new_y=YPos.NEXT,
             )
@@ -356,14 +360,16 @@ class GroupReport:
         pdf.set_xy(x=pdf.h, y=pdf.t_margin + 15)
         for group in data.group_data:
             group_data = data.group_data[group]
-            pdf.set_fill_color(*ImageColor.getrgb(group_data.color))
-            pdf.set_draw_color(*ImageColor.getrgb(group_data.color))
+            color = ImageColor.getrgb(group_data.color)
+            pdf.set_fill_color(*color)
+            pdf.set_draw_color(*color)
             pdf.circle(
                 x=pdf.get_x(),
                 y=pdf.get_y(),
                 r=pdf.font_size,
                 style="FD",
             )
+            pdf.set_text_color(*color)
             pdf.set_x(pdf.get_x() + pdf.font_size)
             pdf.cell(txt=group_data.name, new_x=XPos.LEFT, new_y=YPos.NEXT)
             pdf.set_xy(pdf.get_x() - pdf.font_size, pdf.get_y() + 2)
