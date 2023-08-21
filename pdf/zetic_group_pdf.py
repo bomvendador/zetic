@@ -5,7 +5,7 @@ from typing import Tuple, Dict, List
 
 from fpdf.enums import Align, XPos, YPos
 
-from pdf.single_report import SectionData
+from pdf.zetic_pdf import SectionData
 from pdf.zetic_pdf import ZeticPDF, PDF_MODULE_BASE_DIR
 
 

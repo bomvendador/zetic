@@ -1,6 +1,8 @@
 import os
-from typing import Tuple
+from dataclasses import dataclass
+from typing import Tuple, Dict
 
+from django.db.models import Q
 from fpdf import FPDF, XPos, YPos
 from fpdf.enums import Align
 
@@ -15,6 +17,40 @@ BLOCK_G = 230
 BLOCK_B = 227
 
 text_border = 0
+
+
+@dataclass
+class SectionData:
+    data: Dict[str, int]
+
+    def __post_init__(self):
+        # check if points are in range
+        for points in self.data.values():
+            if points < 0 or points > 10:
+                raise ValueError(f"points must be between 0 and 10, got {points}")
+
+    def __getitem__(self, item):
+        # print(f"item: {item} {type(item)} {self.data}")
+        return self.data[item]
+
+    def __len__(self):
+        return len(self.data)
+
+    def add(self, category: str, points: int):
+        if points < 0 or points > 10:
+            raise ValueError(f"points must be between 0 and 10, got {points}")
+        if category in self.data:
+            raise ValueError(f"category {category} already exists")
+        self.data[category] = points
+
+    def to_query(self) -> Q:
+        q_objects = map(
+            lambda kv: Q(category__code=kv[0], value=kv[1]), self.data.items()
+        )
+        return Q(*q_objects, _connector=Q.OR)
+
+    def is_empty(self):
+        return len(self.data) == 0
 
 
 class ZeticPDF(FPDF):
@@ -176,6 +212,6 @@ class ZeticPDF(FPDF):
         point3 = (x, y + height)
         return [point1, point2, point3, point1]
 
-    def draw_scale_as_arrow(self, min_value: int = 0, max_value: int = 10):
+    def draw_section(self, section_data: Dict[str, SectionData]):
 
         pass

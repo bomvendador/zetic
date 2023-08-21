@@ -44,6 +44,7 @@ from pdf.zetic_pdf import (
     BLOCK_R,
     BLOCK_G,
     BLOCK_B,
+    SectionData,
 )
 
 mujer_joven_v1 = RawToTPointMapper(
@@ -126,40 +127,6 @@ hombre_mayor_v2 = RawToTPointMapper(
         "4": HOMBRE_MAYOR_VALUES,
     },
 )
-
-
-@dataclass
-class SectionData:
-    data: Dict[str, int]
-
-    def __post_init__(self):
-        # check if points are in range
-        for points in self.data.values():
-            if points < 0 or points > 10:
-                raise ValueError(f"points must be between 0 and 10, got {points}")
-
-    def __getitem__(self, item):
-        # print(f"item: {item} {type(item)} {self.data}")
-        return self.data[item]
-
-    def __len__(self):
-        return len(self.data)
-
-    def add(self, category: str, points: int):
-        if points < 0 or points > 10:
-            raise ValueError(f"points must be between 0 and 10, got {points}")
-        if category in self.data:
-            raise ValueError(f"category {category} already exists")
-        self.data[category] = points
-
-    def to_query(self) -> Q:
-        q_objects = map(
-            lambda kv: Q(category__code=kv[0], value=kv[1]), self.data.items()
-        )
-        return Q(*q_objects, _connector=Q.OR)
-
-    def is_empty(self):
-        return len(self.data) == 0
 
 
 @dataclass
@@ -536,17 +503,27 @@ class SingleReport(ABC):
         scale_y = pdf.get_y() + 5
 
         # Categories
-        category_height = 15.5
-        scale_padding = 1.5
         categories = self._get_section_scales("1")
+        scale_padding = 1.5
+        # calculate number of scales in all categories
+        scale_count = 0
+        for category in categories:
+            scale_count += len(categories[category])
+
+        scale_height = (
+            pdf.h - pdf.t_margin * 2 - scale_padding * scale_count
+        ) / scale_count
+
         for category in categories:
             scales = categories[category]
-            height = (category_height + scale_padding) * len(scales)
 
-            # Draw category header
+            # region Category
             category_name = TRANSLATIONS_DICT.get_translation(category, lang)
             self._draw_category_vertically(
-                pdf, category_name, start_y=scale_y, height=height - scale_padding
+                pdf,
+                category_name,
+                start_y=scale_y,
+                height=scale_height * len(scales) - scale_padding,
             )
 
             for scale in scales:
@@ -562,7 +539,7 @@ class SingleReport(ABC):
                     start_x=pdf.l_margin + 8,
                     label_width=32,
                     line_height=4,
-                    block_height=category_height,
+                    block_height=scale_height,
                     border=text_border,
                 )
 
@@ -578,6 +555,7 @@ class SingleReport(ABC):
                     scale_max=TRANSLATIONS_DICT.get_translation(scale + "_max", lang),
                 )
 
+                pdf.set_text_font(8)
                 self._draw_multi_text(
                     pdf,
                     text=self._get_scale_points_description(scale, points),
@@ -587,10 +565,11 @@ class SingleReport(ABC):
                 )
 
                 # padding between scales
-                scale_y += category_height + scale_padding
+                scale_y += scale_height
 
             # padding between categories
             scale_y += 2
+            # endregion
 
         self._insert_page_number(pdf)
         pass
@@ -610,9 +589,12 @@ class SingleReport(ABC):
 
         categories = self._get_section_scales("2")
         scale_min_max_drawn = False
+        category_height = 15.5
+        scale_padding = 1.5
         for category in self._get_section_scales("2"):
             scales = categories[category]
-            pdf.set_xy(pdf.l_margin, pdf.get_y() + 5)
+            height = (category_height + scale_padding) * len(scales)
+            pdf.set_xy(pdf.l_margin, pdf.get_y() + height - scale_padding)
 
             category_label = TRANSLATIONS_DICT.get_translation(category, lang)
             pdf.set_label_font()
@@ -894,16 +876,22 @@ class SingleReport(ABC):
     @staticmethod
     def _draw_scale_min_max(pdf: ZeticPDF, scale_min, scale_max):
         pdf.set_text_font(6)
+        max_width = 70
+        scale_min_width = pdf.get_string_width(scale_min)
+        scale_max_width = pdf.get_string_width(scale_max)
+
         pdf.multi_cell(
-            35,
+            scale_min_width,
             3,
             txt=scale_min,
             align=Align.L,
+            new_x=XPos.LEFT,
             new_y=YPos.TOP,
             border=text_border,
         )
+        pdf.set_x(pdf.x + max_width - scale_max_width)
         pdf.multi_cell(
-            35,
+            scale_max_width,
             3,
             txt=scale_max,
             align=Align.R,

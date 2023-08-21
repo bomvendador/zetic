@@ -25,6 +25,7 @@ from pdf.single_report import (
     SingleReportData,
     SingleReport,
 )
+from pdf.zetic_pdf import ZeticPDF
 from reports import settings
 
 
@@ -32,7 +33,7 @@ def pdf_single_generator_file(
     report_data: SingleReportData,
     incoming_data: IncomingSingleReportData,
     report_generator_class,
-) -> (SingleReport, str):  # pdf, filename
+) -> (ZeticPDF, str):  # pdf, filename
     q_filter = Q()
     if not report_data.cattell_data.is_empty():
         q_filter |= report_data.cattell_data.to_query()

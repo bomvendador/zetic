@@ -1,4 +1,5 @@
 import datetime
+import io
 import json
 import traceback
 from datetime import datetime
@@ -77,7 +78,13 @@ def single_report_v1_pdf(request):
         pdf, filename = pdf_single_generator_file(
             report_data, incoming_data, SingleReportV1
         )
-        return HttpResponse(content="OK", content_type="application/pdf")
+        output = io.BytesIO()
+        output.write(pdf.output())
+        response = HttpResponse(
+            content=output.getvalue(), content_type="application/pdf"
+        )
+        response["Content-Disposition"] = f"attachment; filename={filename}"
+        return response
     except Exception as e:
         print(request_json)
         print(e)
