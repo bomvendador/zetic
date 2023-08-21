@@ -504,15 +504,9 @@ class SingleReport(ABC):
 
         # Categories
         categories = self._get_section_scales("1")
-        scale_padding = 1.5
-        # calculate number of scales in all categories
-        scale_count = 0
-        for category in categories:
-            scale_count += len(categories[category])
-
-        scale_height = (
-            pdf.h - pdf.t_margin * 2 - scale_padding * scale_count
-        ) / scale_count
+        scale_height, scale_padding, category_padding = self.calc_scale_height(
+            categories, pdf
+        )
 
         for category in categories:
             scales = categories[category]
@@ -574,6 +568,22 @@ class SingleReport(ABC):
         self._insert_page_number(pdf)
         pass
 
+    def calc_scale_height(
+        self,
+        categories: Dict[str, List[str]],
+        pdf,
+        scale_padding: float = 1.5,
+        category_padding: float = 5,
+    ):
+        # calculate number of scales in all categories
+        scale_count = 0
+        for category in categories:
+            scale_count += len(categories[category])
+        scale_height = (
+            pdf.h - pdf.t_margin * 2 - scale_padding * scale_count
+        ) / scale_count
+        return scale_height, scale_padding, category_padding
+
     def _add_coping_page(self, coping_data: SectionData, lang: str):
         if coping_data.is_empty():
             return
@@ -588,13 +598,27 @@ class SingleReport(ABC):
         )
 
         categories = self._get_section_scales("2")
+        scale_height, scale_padding, category_padding = self.calc_scale_height(
+            categories, pdf
+        )
+
         scale_min_max_drawn = False
-        category_height = 15.5
-        scale_padding = 1.5
+
+        # layout
+        # Category Header
+        # min/max
+        # scale label | scale | points | scale description
+        scale_label_width = 40
+        scale_width = 70
+        scale_x = pdf.l_margin + scale_label_width + 5
+        points_x = scale_x + scale_width
+        scale_description_width = 100
+        # add padding from header
         for category in self._get_section_scales("2"):
+            # region Category
             scales = categories[category]
-            height = (category_height + scale_padding) * len(scales)
-            pdf.set_xy(pdf.l_margin, pdf.get_y() + height - scale_padding)
+            # Align to center of box (scale_height - scale_padding) / 2
+            pdf.set_xy(pdf.l_margin, pdf.get_y() + category_padding)
 
             category_label = TRANSLATIONS_DICT.get_translation(category, lang)
             pdf.set_label_font()
@@ -608,11 +632,13 @@ class SingleReport(ABC):
 
             if not scale_min_max_drawn:
                 scale_min_max_drawn = True
-                pdf.set_xy(50, pdf.get_y() + 2)
+                # 50 is a padding from left
+                pdf.set_xy(scale_x, pdf.get_y() + 2)
                 self._draw_scale_min_max(
                     pdf,
                     scale_min=TRANSLATIONS_DICT.get_translation("scale_min", lang),
                     scale_max=TRANSLATIONS_DICT.get_translation("scale_max", lang),
+                    max_width=scale_width,
                 )
 
             for scale in scales:
@@ -626,32 +652,39 @@ class SingleReport(ABC):
 
                 # find height of the text depending on the number of lines
                 lines = len(
-                    pdf.multi_cell(32, 4, scale_name, align=Align.L, split_only=True)
+                    pdf.multi_cell(
+                        scale_label_width, 4, scale_name, align=Align.L, split_only=True
+                    )
                 )
 
                 # top corner (10-4) / 2
                 pdf.set_xy(pdf.l_margin, scale_y + (10 - (lines * 4)) / 2)
                 # w = 50 - l_margin
                 pdf.multi_cell(
-                    40, 4, scale_name, new_y=YPos.TOP, border=text_border, align=Align.L
+                    scale_label_width,
+                    4,
+                    scale_name,
+                    new_y=YPos.TOP,
+                    border=text_border,
+                    align=Align.L,
                 )
 
                 # draw rectangle
                 pdf.set_line_width(0.3)
                 pdf.set_fill_color(230, 230, 230)
-                pdf.rect(50, scale_y, 70, 10, "F")
+                pdf.rect(scale_x, scale_y, 70, 10, "F")
 
                 # draw images
                 for i in range(points):
                     pdf.image(
                         os.path.join(PDF_MODULE_BASE_DIR, "images", "scale_coping.png"),
-                        x=51 + (6.9 * i),
+                        x=scale_x + 1 + (6.9 * i),
                         y=scale_y + 1,
                         w=5.9,
                     )
 
                 # draw points
-                pdf.set_xy(120, scale_y)
+                pdf.set_xy(points_x, scale_y)
                 pdf.cell(
                     14,
                     h=10,
@@ -673,6 +706,7 @@ class SingleReport(ABC):
                 )
 
                 pdf.set_y(scale_y + 10)
+            # endregion
 
         self._insert_page_number(pdf)
         pass
@@ -838,7 +872,7 @@ class SingleReport(ABC):
         pass
 
     @staticmethod
-    def _draw_header(pdf: FPDF, section_name, section_text):
+    def _draw_header(pdf: ZeticPDF, section_name, section_text):
         pdf.set_label_font()
         pdf.cell(0, 0, txt=section_name)
 
@@ -874,11 +908,22 @@ class SingleReport(ABC):
         pdf.set_draw_color(prev_color.r * 255, prev_color.g * 255, prev_color.b * 255)
 
     @staticmethod
-    def _draw_scale_min_max(pdf: ZeticPDF, scale_min, scale_max):
+    def _draw_scale_min_max(pdf: ZeticPDF, scale_min, scale_max, max_width=70):
+        ###
+        # Draw scale min and max values
+        # Can be placed above or below the scale
+        # Multiline text is supported
+        ###
         pdf.set_text_font(6)
-        max_width = 70
+
         scale_min_width = pdf.get_string_width(scale_min)
         scale_max_width = pdf.get_string_width(scale_max)
+
+        # hack, because get_string_width returns wrong value for one line text
+        half = max_width / 2
+        if scale_min_width < half and scale_max_width < half:
+            scale_min_width = half
+            scale_max_width = half
 
         pdf.multi_cell(
             scale_min_width,
