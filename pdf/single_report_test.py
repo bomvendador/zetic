@@ -15,8 +15,10 @@ from pdf.single_report import (
     SingleReportData,
     SectionData,
     PDF_MODULE_BASE_DIR,
+    load_point_mapper_v2,
 )
 from pdf.single_report import IncomingSingleReportData
+from pdf.single_report_dict import SingleReportV2
 
 CATTEL_EXAMPLE = SectionData(
     {
@@ -123,7 +125,7 @@ class SingleReportWithDummyData(SingleReport):
 class SingleReportTest(TestCase):
     def test_single_report(self):
         single_report = SingleReportWithDummyData()
-        fpdf = single_report.generate_pdf(
+        single_report.generate_pdf(
             SingleReportData(
                 participant_name="Pablo",
                 lang="en",
@@ -131,10 +133,10 @@ class SingleReportTest(TestCase):
                 coping_data=COPING_EXAMPLE,
                 boyko_data=BOYKO_EXAMPLE,
                 values_data=VALUES_EXAMPLE,
-            )
+            ),
+            path=f"test_single_report",
         )
-        with open(f"test-{single_report.data.lang}.pdf", "wb") as f:
-            f.write(fpdf.output())
+
         single_report = SingleReportWithDummyData()
         single_report.generate_pdf(
             SingleReportData(
@@ -145,7 +147,7 @@ class SingleReportTest(TestCase):
                 boyko_data=BOYKO_EXAMPLE,
                 values_data=VALUES_EXAMPLE,
             ),
-            path="test",
+            path="test_single_report",
         )
 
     def test_incoming_report_data(self):
@@ -155,6 +157,20 @@ class SingleReportTest(TestCase):
 
         incoming_data = IncomingSingleReportData.from_dict(parsed_data)
         assert incoming_data.participant_info.name == "Попов Артем Юрьевич "
+
+    def test_single_v2(self):
+        path_to_json = os.path.join(PDF_MODULE_BASE_DIR, "single-v2.json")
+        with open(path_to_json, "r") as f:
+            parsed_data = json.load(f)
+
+        incoming_data = IncomingSingleReportData.from_dict(parsed_data)
+        report_data: SingleReportData = incoming_data.to_single_report_data(
+            load_point_mapper_v2
+        )
+
+        report_v2 = SingleReportV2({})
+        report_v2.generate_pdf(report_data, path=report_data.participant_name)
+        pass
 
     # def test_real_data(self):
     #     path_to_json = os.path.join(

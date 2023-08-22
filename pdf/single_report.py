@@ -329,7 +329,7 @@ class SingleReport(ABC):
 
     def generate_pdf(
         self, data: SingleReportData, path: str = None
-    ) -> Union[None, FPDF]:
+    ) -> Union[None, ZeticPDF]:
         time_start = time.perf_counter()
         self.data = data
         self._pdf.add_fonts()
@@ -504,9 +504,12 @@ class SingleReport(ABC):
 
         # Categories
         categories = self._get_section_scales("1")
-        scale_height, scale_padding, category_padding = self.calc_scale_height(
-            categories, pdf
-        )
+        (
+            scale_height,
+            scale_padding,
+            category_padding,
+            scale_count,
+        ) = self.calc_scale_height(categories, pdf)
 
         for category in categories:
             scales = categories[category]
@@ -579,10 +582,8 @@ class SingleReport(ABC):
         scale_count = 0
         for category in categories:
             scale_count += len(categories[category])
-        scale_height = (
-            pdf.h - pdf.t_margin * 2 - scale_padding * scale_count
-        ) / scale_count
-        return scale_height, scale_padding, category_padding
+        scale_height = (pdf.h - pdf.t_margin * 2) / scale_count - scale_padding
+        return scale_height, scale_padding, category_padding, scale_count
 
     def _add_coping_page(self, coping_data: SectionData, lang: str):
         if coping_data.is_empty():
@@ -598,11 +599,18 @@ class SingleReport(ABC):
         )
 
         categories = self._get_section_scales("2")
-        scale_height, scale_padding, category_padding = self.calc_scale_height(
-            categories, pdf
-        )
+        (
+            scale_height,
+            scale_padding,
+            category_padding,
+            scale_count,
+        ) = self.calc_scale_height(categories, pdf)
 
         scale_min_max_drawn = False
+
+        print(
+            f"scale_height: {scale_height}+{scale_padding} scale_n={scale_count} max_h={pdf.h-pdf.t_margin*2}"
+        )
 
         # layout
         # Category Header
@@ -618,7 +626,11 @@ class SingleReport(ABC):
             # region Category
             scales = categories[category]
             # Align to center of box (scale_height - scale_padding) / 2
-            pdf.set_xy(pdf.l_margin, pdf.get_y() + category_padding)
+
+            if not scale_min_max_drawn:
+                pdf.set_xy(pdf.l_margin, pdf.get_y() + 5)
+            else:
+                pdf.set_xy(pdf.l_margin, pdf.get_y() + 0)
 
             category_label = TRANSLATIONS_DICT.get_translation(category, lang)
             pdf.set_label_font()
@@ -631,6 +643,11 @@ class SingleReport(ABC):
             )
 
             if not scale_min_max_drawn:
+                pdf.set_xy(pdf.l_margin, pdf.get_y() + 2)
+            else:
+                pdf.set_xy(pdf.l_margin, pdf.get_y() + 5)
+
+            if not scale_min_max_drawn:
                 scale_min_max_drawn = True
                 # 50 is a padding from left
                 pdf.set_xy(scale_x, pdf.get_y() + 2)
@@ -641,12 +658,11 @@ class SingleReport(ABC):
                     max_width=scale_width,
                 )
 
+            scale_y = pdf.get_y()
             for scale in scales:
                 scale_name = TRANSLATIONS_DICT.get_translation(scale, lang)
                 points = coping_data[scale]
 
-                # padding between scales
-                scale_y = pdf.get_y() + 5
                 pdf.set_xy(pdf.l_margin, scale_y)
                 pdf.set_text_font(9)
 
@@ -705,7 +721,9 @@ class SingleReport(ABC):
                     border=text_border,
                 )
 
-                pdf.set_y(scale_y + 10)
+                # padding between scales
+                scale_y += scale_height
+                pdf.set_y(scale_y)
             # endregion
 
         self._insert_page_number(pdf)
