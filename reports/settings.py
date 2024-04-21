@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'celery',
     'api',
     'pdf',
     'pdf_group',
