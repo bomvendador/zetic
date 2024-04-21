@@ -6,7 +6,7 @@ import json
 # Create your views here.
 
 from pdf.models import Company, Participant, ReportData, Report, Category, ReportGroup, ReportGroupSquare, Industry, \
-    Employee, EmployeeRole, EmployeePosition, EmployeeGender, Study, StudyQuestionGroup, Section
+    Employee, EmployeeRole, EmployeePosition, EmployeeGender, Study, ResearchTemplate, ResearchTemplateSections, Section
 # from django.contrib.auth.models import User
 
 from login.models import UserRole, UserProfile, User
@@ -139,31 +139,6 @@ def home(request):
         if report.section_code == '4':
             points_4[report.category_code] = points_4[report.category_code] + report.points
 
-    points_1_arr = []
-    points_2_arr = []
-    points_3_arr = []
-    points_4_arr = []
-
-
-    # points_1_copy = points_1.copy()
-    # for k_copy, v_copy in points_1_copy:
-    #     for k, v in points_1:
-    #         if not k_copy == k:
-
-
-    # for k, v in points_2:
-    #     points_2_arr.append(v)
-    # for k, v in points_3:
-    #     points_3_arr.append(v)
-    # for k, v in points_4:
-    #     points_4_arr.append(v)
-
-    print(points_1)
-    print(points_2)
-    print(points_3)
-    print(points_4)
-
-    print('-----')
     sorted_dict_1 = sorted(points_1, key=points_1.get, reverse=True)[:5]
     sorted_dict_2 = sorted(points_2, key=points_2.get, reverse=True)[:5]
     sorted_dict_3 = sorted(points_3, key=points_3.get, reverse=True)[:5]
@@ -194,11 +169,6 @@ def home(request):
     for sorted_dict in sorted_dict_4:
         category_name = Category.objects.get(code=sorted_dict).name
         categories_names_4.append(category_name)
-
-    print(categories_names_1)
-    print(categories_names_2)
-    print(categories_names_3)
-    print(categories_names_4)
 
     stats = {
         'total_completion_time': str(timedelta(seconds=total_completion_time)).split('.')[0],

@@ -246,7 +246,7 @@
                             <li class="slide">
                                 <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
                                     <i class="side-menu__icon fe fe-book-open"></i>
-                                    <span class="side-menu__label">Опросники</span>
+                                    <span class="side-menu__label">Опросы</span>
                                     <i class="angle fe fe-chevron-right"></i>
                                 </a>
                                 <ul class="slide-menu">
@@ -295,6 +295,32 @@
                                 <ul class="slide-menu">
                                     <li><div class="slide-item cursor-pointer menu_item" id="menu_users_list"> Список</div></li>
                                     <li><div class="slide-item cursor-pointer menu_item" id="menu_users_add"> Добавить</div></li>
+                                </ul>
+                            </li>
+                            <li class="slide">
+                                <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
+                                    <i class="side-menu__icon fe fe-user-check"></i>
+                                    <span class="side-menu__label">Хар-ки сотрудников</span>
+                                    <i class="angle fe fe-chevron-right"></i>
+                                </a>
+                                <ul class="slide-menu">
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_employee_functions_list"> Функции</div></li>
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_industries_list"> Индустрии</div></li>
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_employees_positions_list"> Должности</div></li>
+                                </ul>
+                            </li>
+                            <li class="slide">
+                                <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
+                                    <i class="side-menu__icon fe fe-layers"></i>
+                                    <span class="side-menu__label">Опросники</span>
+                                    <i class="angle fe fe-chevron-right"></i>
+                                </a>
+                                <ul class="slide-menu">
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_sections_list"> Секции</div></li>
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_categories_list"> Категории (шкалы)</div></li>
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_research_templates_list"> Шаблоны</div></li>
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_companies_studies_list"> Исследования</div></li>
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_filters_list"> Фильтры</div></li>
                                 </ul>
                             </li>
                             <li class="slide">
@@ -901,10 +927,10 @@
 
     <!-- Perfect SCROLLBAR JS-->
 {#    <script src="../assets/plugins/p-scroll/perfect-scrollbar.js"></script>#}
-{#    <script src="{% static 'login/plugins/p-scroll/perfect-scrollbar.js' %}"></script>#}
+    <script src="{% static 'login/plugins/p-scroll/perfect-scrollbar.js' %}"></script>
 
 {#    <script src="../assets/plugins/p-scroll/pscroll.js"></script>#}
-{#    <script src="{% static 'login/plugins/p-scroll/pscroll.js' %}"></script>#}
+    <script src="{% static 'login/plugins/p-scroll/pscroll.js' %}"></script>
 
 {#    <script src="../assets/plugins/p-scroll/pscroll-1.js"></script>#}
 {#    <script src="{% static 'login/plugins/p-scroll/pscroll-1.js' %}"></script>#}
@@ -993,6 +1019,8 @@
         let url_group_reports_list = "{% url 'group_reports_list' %}"
         let url_individual_reports_list = "{% url 'individual_reports_list' %}"
         let url_users_list = "{% url 'users_list' %}"
+        {#let menu_employee_industries_list = "{% url 'menu_employee_industries_list' %}"#}
+        {#let menu_employee_positions_list = "{% url 'menu_employee_positions_list' %}"#}
         let url_add_user = "{% url 'add_user' %}"
         let url_logout = "{% url 'logout' %}"
         let url_login_home = "{% url 'login_home' %}"
@@ -1007,8 +1035,12 @@
         let url_individual_report_file_index = "{% url 'individual_report_file_index' %}"
         let url_monthly_report = "{% url 'monthly_report' %}"
         let url_migration = "{% url 'migration' %}"
-
-
+        let url_sections_list = "{% url 'sections_list' %}"
+        let url_categories_list = "{% url 'categories_list' %}"
+        let url_get_categories_by_section = "{% url 'get_categories_by_section' %}"
+        let url_research_templates_list = "{% url 'research_templates_list' %}"
+        let url_companies_studies_list = "{% url 'companies_studies_list' %}"
+        let url_filters_list = "{% url 'filters_list' %}"
 
     </script>
     <script src="{% static 'panel/js/panel_base.js' %}"></script>

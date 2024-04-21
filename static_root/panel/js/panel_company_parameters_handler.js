@@ -11,9 +11,12 @@ function save_company_parameter(dict, url_save, modal_selector, swal_title, swal
             toastr.error('Ошибка', data)
         },
         success:function (data) {
+            console.log('data')
+            console.log(data)
             if (modal_selector !== ''){
                 $(modal_selector).modal('hide') //'#input_modal_add_industry'
             }
+            console.log('sssssssss')
             if(swal_text !== ''){
                 Swal.fire({
                   title: swal_title,
@@ -24,12 +27,12 @@ function save_company_parameter(dict, url_save, modal_selector, swal_title, swal
                   confirmButtonText: 'ОК'
                 }).then((result) => {
                   if (result.isConfirmed) {
-                      window.location.reload()
+                      // window.location.reload()
                   }
                 })
 
             }else {
-                window.location.reload()
+                // window.location.reload()
 
             }
         }

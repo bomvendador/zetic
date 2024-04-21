@@ -1,0 +1,344 @@
+{% extends 'questionnaire_base.html' %}
+{% load static %}
+{% block links %}
+    <link href="{% static 'panel/plugins/circle_progress_bar/css/circle.css' %}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid" style="width: 50%">
+
+            <!-- PAGE-HEADER -->
+            {#                        <div class="page-header" style="margin-top: 1em; margin-bottom: 1em">#}
+            {#                            <h1 class="page-title">Секции вопросов</h1>#}
+            {#                            <div>#}
+            {#                                <ol class="breadcrumb">#}
+            {#                                    <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>#}
+            {#                                    <li class="breadcrumb-item active" aria-current="page">Изменение исследования</li>#}
+            {#                                </ol>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            <!-- PAGE-HEADER END -->
+
+            <!-- ROW-1 OPEN -->
+            <div class="row" style="margin-top: 3em">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Выбор секции вопросов</h3>
+                        </div>
+                        <div class="card-body">
+                            {% for section in sections %}
+                                {#                                <a href="{% url section_view section.id code %}">#}
+                                {% if section.percentage != 100 %}
+                                    <a href="section/{{ section.id }}/{{ code }}">
+                                {% endif %}
+                            <div id="research_template_section_id_{{ section.id }}"
+                                 class="research-template-section-card card text-white" style="background-color:
+                                    {% if section.percentage == 0 %}
+                                        #f71d1db8
+                                    {% elif 100 > section.percentage > 0 %}
+                                        #efb40ed1
+                                    {% else %}
+                                        #03c300b5
+                                    {% endif %}
+
+                                    ;
+                                    {% if section.percentage != 100 %}
+                                        cursor: pointer
+                                    {% endif %}
+                                    ">
+                                <div class="card-body">
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <h4 class="card-title">{{ section.name }}</h4>
+                                        <div>
+                                            <div>
+                                                <span>Прогресс</span>
+                                            </div>
+                                            <div style="text-align: right">
+                                                <span>{{ section.percentage }}%</span>
+                                                {#                                                <span>{{ section.percentage|floatformat:"0" }}%</span>#}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    {#                                    <p class="card-text">Some quick example text to build on the card title and make up#}
+                                    {#                                        the bulk of the card's content.</p>#}
+                                </div>
+                            </div>
+                            {% if section.percentage != 100 %}
+                                </a>
+                            {% endif %}
+                            {% endfor %}
+
+
+                        </div>
+                        {#                                    <div class="card-footer text-end">#}
+                        {#                                        <button class="btn btn-primary my-1 nav-buttons" type="button" id="save_company">Сохранить</button>#}
+                        {#                                    </div>#}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="card" style="background-color: #0071AD; color: white">
+{#                        <div class="card-header">#}
+{#                            <h3 class="card-title">Выбор секции вопросов</h3>#}
+{#                        </div>#}
+                        <div class="card-body">
+Вам будет предложено ответить на ряд вопросов, отражающих фундаментальные черты личности. Все сведения, полученные от Вас являются конфиденциальными и будут сохранены в соответствии с российскими и международными стандартами работы с личными данными.
+
+Приготовьтесь к тому, что вопросов будет достаточно много. При переходе со страницу на страницу Ваши данные сохраняются, Вы можете взять перерыв и вернуться к заполнению опросника позже.
+
+Прочтите вопрос и варианты ответов и выберите один из предложенных вариантов ответа, отражающих в большей степени ваше мнение.  Старайтесь не прибегать слишком часто к промежуточному ответу типа «Не уверен», «Нечто среднее». Выбирайте его только тогда, когда не можете ответить иначе.
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            {#            <div class="row">#}
+            {#                <div class="col-xl-12 col-sm-12">#}
+            {#                    <div class="card">#}
+            {#                        <div class="card-header row pt-2 pb-2 justify-content-md-center">#}
+            {#                            <div class="">#}
+            {#                                <table style="width: 100%">#}
+            {#                                    <thead></thead>#}
+            {#                                    <tbody>#}
+            {#                                    <tr>#}
+            {#                                        <td>#}
+            {#                                            <h3 class="card-title">Участники</h3>#}
+            {#                                        </td>#}
+            {#                                        <td>#}
+            {#                                            <button class="btn btn-primary my-1" type="button" id="add_participants"#}
+            {#                                                    style="float: right">Добавить участников#}
+            {#                                            </button>#}
+            {#                                        </td>#}
+            {#                                    </tr>#}
+            {#                                    </tbody>#}
+            {#                                </table>#}
+            {##}
+            {#                            </div>#}
+            {#                                        <div class="col col-lg-6 col-sm-6">#}
+            {#                                        </div>#}
+            {#                                        <div class="col col-lg-6 col-sm-6 text-end">#}
+            {#                                        </div>#}
+            {#                        </div>#}
+            {#                        <div class="card-body">#}
+            {#                            <div class="table-responsive">#}
+            {#                                <table class="table text-nowrap border-bottom team-table dataTable no-footer"#}
+            {#                                       id="table_participants_for_study">#}
+            {#                                    <thead class="thead-style">#}
+            {#                                    <tr>#}
+            {#                                        <th>Имя/псевдоним</th>#}
+            {#                                        <th>Email</th>#}
+            {#                                        <th>Индустрия</th>#}
+            {#                                        <th>Роль</th>#}
+            {#                                        <th>Должность</th>#}
+            {#                                        <th>Год рождения</th>#}
+            {#                                        <th>Пол</th>#}
+            {#                                        <th></th>#}
+            {#                                    </tr>#}
+            {#                                    </thead>#}
+            {#                                    <tbody id="tbody_participants_selected">#}
+            {#                                    {% for participant in participants %}#}
+            {#                                        <tr>#}
+            {##}
+            {#                                        </tr>#}
+            {#                                    {% endfor %}#}
+            {##}
+            {##}
+            {#                                    </tbody>#}
+            {#                                </table>#}
+            {#                            </div>#}
+            {##}
+            {#                        </div>#}
+            {#                        <div>#}
+            {#                            <div class="row" style="padding: 0px 15px 15px">#}
+            {#                                <div class="col-lg-12 col-sm-12 mt-3">#}
+            {#                                    <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"#}
+            {#                                            id="save_study">Сохранить исследование#}
+            {#                                    </button>#}
+            {#                                </div>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            {##}
+            {#                    </div>#}
+            {#                </div>#}
+            {#            </div>                        <!-- ROW-1 CLOSED -->#}
+
+
+        </div>
+        <!--CONTAINER CLOSED -->
+
+    </div>
+
+    <!-- Модальное окно добавление группы вопросов -->
+    <div class="modal fade" id="modal_question_groups">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title">Группа вопросов</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table text-wrap mb-0">
+                            <thead>
+                            <tr>
+                                <th>Наименование</th>
+                                <th>
+                                    <div class="form-switch text-end">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                               id="select_all_question_groups">
+                                        <label class="form-check-label" for="select_all_question_groups"></label>
+                                    </div>
+
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody_modal_questions_groups">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="save_question_groups">Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Модальное окно добавление участника -->
+    <div class="modal fade" id="modal_participants">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title"><b>Сотрудники</b></h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table text-nowrap border-bottom team-table dataTable no-footer"
+                               id="modal_add_participant">
+                            <thead class="thead-style">
+                            <tr>
+                                <th><input id="check_all_employees_for_study" type="checkbox" class=""
+                                           name="example-checkbox1" value="option1" style="transform: scale(1.1)"></th>
+                                <th>Имя/псевдоним</th>
+                                <th>Email</th>
+                                <th>Индустрия</th>
+                                <th>Роль</th>
+                                <th>Должность</th>
+                                <th>Год рождения</th>
+                                <th>Пол</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody_participants_to_choose">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row" style="padding: 0px 15px 15px">
+                    <div class="col-lg-12 col-sm-12 mt-3">
+                        <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                id="add_participants_to_study">Добавить
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- Модальное окно отправки приглашения -->
+    <div class="modal fade" id="modal_before_send_invitation">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title">Отправка приглашения участнику</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <b>Участник</b>
+                        </div>
+                        <div class="col-lg-9" id="modal_participant_name" data-tr-id="">
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <b>Email</b>
+                        </div>
+
+                        <div class="col-lg-9" id="modal_participant_email" data-email="">
+
+
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       id="send_admin_notification_after_filling_up">
+                                <label class="form-check-label" for="send_admin_notification_after_filling_up">Отправить
+                                    уведомление админу после заполнения</label>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="modal_send_invitation_btn">Отправить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+
+    <script>
+
+        let code = "{{ code }}"
+        {#let url_add_new_study = "{% url 'add_new_study' %}"#}
+        {#let url_get_company_employees = "{% url 'get_company_employees' %}"#}
+        {#let study_id = {{ study.id }};#}
+        {#let url_save_participant_questions_groups = "{% url 'save_participant_questions_groups' %}"#}
+        {#let url_get_employees_for_study = "{% url 'get_employees_for_study' %}"#}
+        {#let url_save_study_participants = "{% url 'save_study_participants' %}"#}
+        {#let url_send_invitation_email = "{% url 'send_invitation_email' %}"#}
+
+    </script>
+    <script src="{% static 'login/js/select2.js' %}"></script>
+
+    <script src="{% static 'panel/js/panel_add_study.js' %}"></script>
+    <script src="{% static 'questionnaire/js/questionnaire_sections.js' %}"></script>
+{% endblock %}

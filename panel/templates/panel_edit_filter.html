@@ -1,0 +1,428 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+{% block links %}
+    <link href="{% static 'panel/plugins/circle_progress_bar/css/circle.css' %}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">Изменение фильтра</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Изменение фильтра</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- ROW-1 OPEN -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Параметры фильтра</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                               id="default_filter"{% if filter.is_default %}
+                                               checked="checked"{% endif %}>
+                                        <label class="form-check-label" for="default_filter">Базовый фильтр</label>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-md-6 col-sm-12">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label for="input_study_name" class="col-form-label"><h5>Название</h5>
+                                            </label>
+                                            <input type="text" class="form-control" id="input_filter_name" value="{{ filter.name_ru }}">
+                                        </div>
+                                    </form>
+
+                                </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <label for="select_company"><h5>Пол-Возраст</h5></label>
+                                    <select class="form-control select2-show-search form-select"
+                                            data-placeholder="Выберите шаблон" id="select_age_gender">
+                                        <option label="Choose one">-- Сделайте выбор --</option>
+                                        {% for age_gender in ages_genders %}
+                                            <option value="{{ age_gender.id }}"{% if filter.age_gender_group == age_gender %} selected {% endif %}>{{ age_gender.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                            </div>
+                            <div id="filter_params_block">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <label for="select_company"><h5>Индустрия</h5></label>
+                                        <select class="form-control select2-show-search form-select"
+                                                data-placeholder="Выберите комапнию" id="select_industry">
+
+                                            <option label="Choose one">-- Сделайте выбор --</option>
+                                            {% for industry in industries %}
+                                                <option id="industry_id_{{ industry.id }}" {% if filter.industry == industry %} selected {% endif %}
+                                                        value="{{ industry.id }}">{{ industry.name_ru }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <label for="select_company"><h5>Орг уровень</h5></label>
+                                        <select class="form-control select2-show-search form-select"
+                                                data-placeholder="Выберите должноcть" id="select_position">
+                                            <option label="Choose one">-- Сделайте выбор --</option>
+                                            {% for position in positions %}
+                                                <option value="{{ position.id }}" {% if filter.employee_position == position %} selected {% endif %}>{{ position.name_ru }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-md-6 col-sm-12">
+                                        <label for="select_company"><h5>Функция</h5></label>
+                                        <select class="form-control select2-show-search form-select"
+                                                data-placeholder="Выберите функцию" id="select_role">
+
+                                            <option label="Choose one">-- Сделайте выбор --</option>
+                                            {% for role in roles %}
+                                                <option id="role_id_{{ role.id }}"
+                                                        value="{{ role.id }}" {% if filter.employee_role == role %} selected {% endif %}>{{ role.name_ru }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        {#                                    <div class="card-footer text-end">#}
+                        {#                                        <button class="btn btn-primary my-1 nav-buttons" type="button" id="save_company">Сохранить</button>#}
+                        {#                                    </div>#}
+                    </div>
+                </div>
+            </div>
+            {#                        <div class="row">#}
+            {#                            <div class="col-xl-12 col-sm-12">#}
+            {#                                <div class="card">#}
+            {#                                    <div class="card-header">#}
+            {#                                            <h3 class="card-title">Группы вопросов опросника</h3>#}
+            {#                                    </div>#}
+            {#                                    <div class="card-body">#}
+            {#                                        <div class="table-responsive">#}
+            {#                                            <table class="table text-wrap mb-0">#}
+            {#                                                <thead class="thead-style">#}
+            {#                                                    <tr>#}
+            {#                                                        <th>Наименование</th>#}
+            {#                                                    </tr>#}
+            {#                                                </thead>#}
+            {#                                                <tbody id="tbody_question_groups_selected" data-participant-tr-id="">#}
+            {#                                                {% if study_question_groups %}#}
+            {#                                                {% for study_question_group in study_question_groups %}#}
+            {#                                                    <tr id="section_code_{{ study_question_group.section.code }}">#}
+            {#                                                        <td>{{ study_question_group.section.name }}</td>#}
+            {#                                                    </tr>#}
+            {#                                                {% endfor %}#}
+            {#                                                {% else %}#}
+            {#                                                    <tr>#}
+            {#                                                    <td class="no-data-text">Данные отсутствуют</td>#}
+            {##}
+            {#                                                    </tr>#}
+            {##}
+            {#                                                {% endif %}#}
+            {#                                                </tbody>#}
+            {#                                            </table>#}
+            {#                                        </div>#}
+            {#                                    </div>#}
+            {#                                </div>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            <div class="row">
+                <div class="col-xl-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Таблица баллов</h3>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table text-nowrap border-bottom team-table dataTable no-footer"
+                                       id="table_filter_points">
+                                    <thead class="thead-style" id="filter_table_header">
+                                    <tr>
+                                        <th rowspan="2">
+                                            Секции/шкалы
+                                        </th>
+                                        <th colspan="36">Сырые баллы</th>
+                                    </tr>
+                                    <tr>
+                                        {% for number in numbers %}
+                                            <th style="">{{ number }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbody_participants_selected">
+                                    {% for section in sections %}
+                                        <tr>
+                                            <td colspan="37" style="background-color: lightgrey">
+                                                {{ section.name }}
+                                            </td>
+                                        </tr>
+                                        {% for category in categories %}
+                                            {% if category.section == section %}
+                                                <tr>
+                                                    <td>
+                                                        {{ category.name }} - {{ category.code }}
+                                                    </td>
+                                                    {% for number in numbers %}
+                                                        <td style="padding: 9px 3px;">
+                                                            {% for raw_point in raw_points %}
+                                                                {% if raw_point.category_id == category.id and raw_point.raw_point == number %}
+                                                                    <input style="padding: 5px 5px;" type="number"
+                                                                           min="0"
+                                                                           max="10" class="form-control tpoint" id="raw_point_id_{{ raw_point.raw_point_id }}"
+                                                                           data-category-id="{{ category.id }}"
+                                                                           data-raw-point="{{ number }}" value="{{ raw_point.t_point }}">
+
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </td>
+                                                    {% endfor %}
+
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div>
+                            <div class="row" style="padding: 0px 15px 15px">
+                                <div class="col-lg-12 col-sm-12 mt-3">
+                                    <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                            id="save_filter">Сохранить фильтр
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>                        <!-- ROW-1 CLOSED -->
+
+            {#            <div class="row">#}
+            {#                <div class="col-lg-12 col-md-12 col-sm-12">#}
+            {#                    <div class="card">#}
+            {#                        <div class="card-body">#}
+            {#                            <form>#}
+            {#                            <div class="form-group" id="input_filter_file_form">#}
+            {#                                <label class="form-label mt-0">Файл фильтра</label>#}
+            {#                                <input class="form-control" type="file" id="input_filter_file">#}
+            {#                            </div>#}
+            {#                                </form>#}
+            {#                            <div class="row" >#}
+            {#                                <div class="col-lg-12 col-sm-12 mt-3">#}
+            {#                                    <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"#}
+            {#                                            id="save_filter_file">Сохранить файл фильтра#}
+            {#                                    </button>#}
+            {#                                </div>#}
+            {#                            </div>#}
+            {##}
+            {#                        </div>#}
+            {##}
+            {#                    </div>#}
+            {#                </div>#}
+            {#            </div>#}
+
+        </div>
+        <!--CONTAINER CLOSED -->
+
+    </div>
+
+    <!-- Модальное окно добавление группы вопросов -->
+    <div class="modal fade" id="modal_question_groups">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title">Группа вопросов</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table text-wrap mb-0">
+                            <thead>
+                            <tr>
+                                <th>Наименование</th>
+                                <th>
+                                    <div class="form-switch text-end">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                               id="select_all_question_groups">
+                                        <label class="form-check-label" for="select_all_question_groups"></label>
+                                    </div>
+
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody_modal_questions_groups">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="save_question_groups">Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Модальное окно добавление участника -->
+    <div class="modal fade" id="modal_participants">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title"><b>Сотрудники</b></h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table text-nowrap border-bottom team-table dataTable no-footer"
+                               id="modal_add_participant">
+                            <thead class="thead-style">
+                            <tr>
+                                <th><input id="check_all_employees_for_study" type="checkbox" class=""
+                                           name="example-checkbox1" value="option1" style="transform: scale(1.1)"></th>
+                                <th>Имя/псевдоним</th>
+                                <th>Email</th>
+                                <th>Индустрия</th>
+                                <th>Роль</th>
+                                <th>Должность</th>
+                                <th>Год рождения</th>
+                                <th>Пол</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody_participants_to_choose">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row" style="padding: 0px 15px 15px">
+                    <div class="col-lg-12 col-sm-12 mt-3">
+                        <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                id="add_participants_to_study">Добавить
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- Модальное окно отправки приглашения -->
+    <div class="modal fade" id="modal_before_send_invitation">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title">Отправка приглашения участнику</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <b>Участник</b>
+                        </div>
+                        <div class="col-lg-9" id="modal_participant_name" data-tr-id="">
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <b>Email</b>
+                        </div>
+
+                        <div class="col-lg-9" id="modal_participant_email" data-email="">
+
+
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       id="send_admin_notification_after_filling_up">
+                                <label class="form-check-label" for="send_admin_notification_after_filling_up">Отправить
+                                    уведомление админу после заполнения</label>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="modal_send_invitation_btn">Отправить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+
+    <script>
+
+        {#let url_save_new_filter = "{% url 'save_new_filter' %}";#}
+        let url_save_new_filter_from_file = "{% url 'save_new_filter_from_file' %}";
+        let url_save_edited_filter = "{% url 'save_edited_filter' %}";
+        let filter_id = {{ filter.id }};
+        {#let default_filters_cnt = {{ default_filters_cnt }};#}
+        {#let url_get_company_employees = "{% url 'get_company_employees' %}"#}
+        {#let study_id = {{ study.id }};#}
+        {#let url_save_participant_questions_groups = "{% url 'save_participant_questions_groups' %}"#}
+        {#let url_get_employees_for_study = "{% url 'get_employees_for_study' %}"#}
+        {#let url_save_study_participants = "{% url 'save_study_participants' %}"#}
+        {#let url_send_invitation_email = "{% url 'send_invitation_email' %}"#}
+
+    </script>
+    <script src="{% static 'login/js/select2.js' %}"></script>
+
+    <script src="{% static 'panel/js/panel_edit_filter.js' %}"></script>
+{% endblock %}

@@ -1,5 +1,5 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, ParticipantQuestionGroups, Participant, \
-    EmailSentToParticipant, Report, StudyQuestionGroup
+    EmailSentToParticipant, Report, ResearchTemplate, ResearchTemplateSections
 from login.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
@@ -39,21 +39,26 @@ def studies_list(request):
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
-def study_details(request, study_public_code):
+def study_details(request, study_id):
     context = info_common(request)
 
     if context == 'logout':
         return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
     else:
-        study = Study.objects.get(public_code=study_public_code)
-        participant_questions_groups = ParticipantQuestionGroups.objects.filter(participant__study=study)
-        study_question_groups = StudyQuestionGroup.objects.filter(study=study)
+        study = Study.objects.get(id=study_id)
+        # participant_questions_groups = ParticipantQuestionGroups.objects.filter(participant__study=study)
+        # study_question_groups = StudyQuestionGroup.objects.filter(study=study)
         reports = Report.objects.filter(study=study).order_by('-added')
+        research_template = ResearchTemplate.objects.get(id=study.research_template.id)
+        print(research_template)
+        sections = ResearchTemplateSections.objects.filter(research_template=research_template).order_by('position')
+        print(sections)
         context.update(
             {
                 'study': study,
-                'participant_questions_groups': participant_questions_groups,
-                'study_question_groups': study_question_groups,
+                'sections': sections,
+                # 'participant_questions_groups': participant_questions_groups,
+                # 'study_question_groups': study_question_groups,
                 'participants': Participant.objects.filter(study=study),
                 'emails_sent': EmailSentToParticipant.objects.filter(participant__study=study, type='reminder'),
                 'reports': reports
@@ -71,33 +76,35 @@ def get_company_studies(request):
         company_id = json_data['company_id']
         # studies = Study.objects.filter(company_id=company_id)
         company = Company.objects.get(id=company_id)
-        studies = outcoming.get_company_studies(company.public_code)
+        # studies = outcoming.get_company_studies(company.public_code)
+        studies = Study.objects.filter(company_id=company_id)
         studies_arr = []
         for study in studies:
-            name = study['name']
+            name = study.name
             studies_arr.append({
                 'name': name,
-                'id': study['public_code'],
+                'id': study.id,
                 'company_name': company.name,
-                'research_name': '',
+                'research_name': study.research_template.name,
             })
-            studies_db_qnt = Study.objects.filter(public_code=study['public_code']).count()
-            if studies_db_qnt == 0:
-                study_inst = Study()
-                study_inst.company = company
-                study_inst.name = name
-                study_inst.public_code = study['public_code']
-                study_inst.save()
-            else:
-                study_inst = Study.objects.get(public_code=study['public_code'])
+            # studies_db_qnt = Study.objects.filter(public_code=study['public_code']).count()
+            # studies_db_qnt = studies.count()
+            # if studies_db_qnt == 0:
+            #     study_inst = Study()
+            #     study_inst.company = company
+            #     study_inst.name = name
+            #     study_inst.public_code = study['public_code']
+            #     study_inst.save()
+            # else:
+            #     study_inst = Study.objects.get(public_code=study['public_code'])
 
-            for section in study['sections']:
-                study_question_group_qnt = StudyQuestionGroup.objects.filter(study=study_inst, section__code=section['public_code']).count()
-                if study_question_group_qnt == 0:
-                    study_question_group_inst = StudyQuestionGroup()
-                    study_question_group_inst.study = study_inst
-                    study_question_group_inst.section = Section.objects.get(code=section['public_code'])
-                    study_question_group_inst.save()
+            # for section in study['sections']:
+                # study_question_group_qnt = StudyQuestionGroup.objects.filter(study=study_inst, section__code=section['public_code']).count()
+                # if study_question_group_qnt == 0:
+                #     study_question_group_inst = StudyQuestionGroup()
+                #     study_question_group_inst.study = study_inst
+                #     study_question_group_inst.section = Section.objects.get(code=section['public_code'])
+                #     study_question_group_inst.save()
 
         response = {
             'data': list(studies_arr)
@@ -125,6 +132,16 @@ def get_company_studies(request):
 #             'response': result,
 #         }
 #         return JsonResponse(response)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def delete_participants_from_study(request):
+    if request.method == 'POST':
+        json_request = json.loads(request.body.decode('utf-8'))
+        participants_ids_to_send_invitation_to = json_request['participants_ids_to_send_invitation_to']
+        for participant_id in participants_ids_to_send_invitation_to:
+            Participant.objects.get(id=participant_id['id']).delete()
+    return HttpResponse(status=200)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -204,21 +221,21 @@ def get_employees_for_study(request):
             for employee in employees:
                 can_be_sent = True
                 participant_id = 0
-                if Participant.objects.filter(employee=employee, study=study_inst).exists():
-                    participant = Participant.objects.get(employee=employee, study=study_inst)
-                    participant_id = participant.id
-                    if participant.invitation_sent:
-                        can_be_sent = False
-                if can_be_sent:
-                    if employee.name:
-                        name = employee.name
-                    else:
-                        name = ''
-
+                # if Participant.objects.filter(employee=employee, study=study_inst).exists():
+                #     participant = Participant.objects.get(employee=employee, study=study_inst)
+                #     participant_id = participant.id
+                #     if participant.invitation_sent:
+                #         can_be_sent = False
+                # if can_be_sent:
+                #     if employee.name:
+                #         name = employee.name
+                #     else:
+                #         name = ''
+                if not Participant.objects.filter(employee=employee, study=study_inst).exists():
                     item = {
                         'employee_id': employee.id,
                         'participant_id': participant_id,
-                        'name': name,
+                        'name': employee.name,
                         'email': employee.email
                     }
                     employees_arr.append(item)
@@ -242,14 +259,14 @@ def save_study_participants(request):
         study_id = json_data['study_id']
         study_inst = Study.objects.get(id=study_id)
         participants = Participant.objects.filter(study=study_inst, invitation_sent=False)
-        for participant in participants:
-            check_employee_id = participant.employee.id
-            participant_exists = False
-            for employee_id in employees_ids:
-                if int(check_employee_id) == int(employee_id):
-                    participant_exists = True
-            if not participant_exists:
-                participant.delete()
+        # for participant in participants:
+        #     check_employee_id = participant.employee.id
+        #     participant_exists = False
+        #     for employee_id in employees_ids:
+        #         if int(check_employee_id) == int(employee_id):
+        #             participant_exists = True
+        #     if not participant_exists:
+        #         participant.delete()
         for employee_id in employees_ids:
             employee = Employee.objects.get(id=employee_id)
             if not Participant.objects.filter(employee=employee, study=study_inst).exists():
@@ -311,6 +328,20 @@ def save_study_participants(request):
         }
         return JsonResponse(response)
 
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def save_study_name(request):
+    if request.method == 'POST':
+        json_request = json.loads(request.body.decode('utf-8'))
+        study_name = json_request['study_name']
+        study_id = json_request['study_id']
+        study_inst = Study.objects.get(id=study_id)
+        study_inst.name = study_name
+        study_inst.save()
+        response = {
+            'study_name': study_name,
+        }
+        return JsonResponse(response)
 
 
 

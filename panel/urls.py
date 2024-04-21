@@ -3,11 +3,12 @@ from django.urls import path
 from panel import views as panel_views
 from pdf import views as pdf_views
 from panel import company_parameter as panel_company_parameter
-from panel import employee
-from panel import study
-from panel import individual_report_file
-from panel import company
-from panel import mail_handler
+from panel import employee, study, sections, individual_report_file, company, mail_handler, categories, questions, \
+    research_templates, companies_studies, filters
+# from panel import study
+# from panel import individual_report_file
+# from panel import company
+# from panel import mail_handler
 from sendemail import tasks
 
 urlpatterns = [
@@ -69,22 +70,64 @@ urlpatterns = [
 
     path('studies_list', study.studies_list, name='studies_list'),
     path('get_company_studies', study.get_company_studies, name='get_company_studies'),
-    path('study/<str:study_public_code>', study.study_details, name='study_details'),
+    path('study/<str:study_id>', study.study_details, name='study_details'),
     # path('get_question_groups', study.get_question_groups, name='get_question_groups'),
     path('save_participant_questions_groups', study.save_participant_questions_groups, name='save_participant_questions_groups'),
     path('get_employees_for_study', study.get_employees_for_study, name='get_employees_for_study'),
     path('save_study_participants', study.save_study_participants, name='save_study_participants'),
+    path('save_study_name', study.save_study_name, name='save_study_name'),
+    path('delete_participants_from_study', study.delete_participants_from_study, name='delete_participants_from_study'),
 
     path('individual_report_file_index', individual_report_file.individual_report_file_index, name='individual_report_file_index'),
 
     path('send_invitation_email', mail_handler.send_invitation_email, name='send_invitation_email'),
+    path('mass_send_invitation_email', mail_handler.mass_send_invitation_email, name='mass_send_invitation_email'),
 
     path('monthly_report', tasks.monthly_report, name='monthly_report'),
 
     path('migration', panel_views.migration, name='migration'),
     path('save_migration', panel_views.save_migration, name='save_migration'),
 
+    path('sections_list', sections.sections_list, name='sections_list'),
+    path('edit_section', sections.edit_section, name='edit_section'),
+    path('delete_section', sections.delete_section, name='delete_section'),
+    path('save_new_section', sections.save_new_section, name='save_new_section'),
+
+    path('categories_list', categories.categories_list, name='categories_list'),
+    path('get_categories_by_section', categories.get_categories_by_section, name='get_categories_by_section'),
+    path('edit_category', categories.edit_category, name='edit_category'),
+    path('delete_category', categories.delete_category, name='delete_category'),
+    path('save_new_category', categories.save_new_category, name='save_new_category'),
     # path('get_company_employees', employee.get_company_employees, name='get_company_employees'),
 
+    path('questions/<int:category_id>', questions.questions_list, name='questions_list'),
+    path('add_new_question', questions.add_new_question, name='add_new_question'),
+    path('get_question_data', questions.get_question_data, name='get_question_data'),
+    path('delete_answer', questions.delete_answer, name='delete_answer'),
+    path('delete_question', questions.delete_question, name='delete_question'),
+    path('edit_question', questions.edit_question, name='edit_question'),
+
+    path('research_templates_list', research_templates.research_templates_list, name='research_templates_list'),
+    path('get_research_template_data', research_templates.get_research_template_data, name='get_research_template_data'),
+    path('get_all_sections', research_templates.get_all_sections, name='get_all_sections'),
+    path('add_new_research_template', research_templates.add_new_research_template, name='add_new_research_template'),
+    path('add_new_research_template', research_templates.edit_research_template, name='edit_research_template'),
+    path('delete_section_from_template', research_templates.delete_section_from_template, name='delete_section_from_template'),
+    path('edit_research_template', research_templates.edit_research_template, name='edit_research_template'),
+    path('delete_template', research_templates.delete_template, name='delete_template'),
+
+    path('companies_studies_list', companies_studies.companies_studies_list, name='companies_studies_list'),
+    path('add_study', companies_studies.add_study, name='add_study'),
+    path('get_company_employees_for_new_study', companies_studies.get_company_employees, name='get_company_employees_for_new_study'),
+    path('add_new_study', companies_studies.add_new_study, name='add_new_study'),
+    # path('edit_company_study/<int:study_id>', companies_studies.edit_company_study, name='edit_company_study'),
+
+    path('filters_list', filters.filters_list, name='filters_list'),
+    path('add_filter', filters.add_filter, name='add_filter'),
+    # path('save_new_filter', filters.save_new_filter, name='save_new_filter'),
+    path('save_new_filter_from_file', filters.save_new_filter_from_file, name='save_new_filter_from_file'),
+    path('delete_filter', filters.delete_filter, name='delete_filter'),
+    path('save_edited_filter', filters.save_edited_filter, name='save_edited_filter'),
+    path('filter/<int:filter_id>', filters.edit_filter, name='edit_filter'),
 
 ]

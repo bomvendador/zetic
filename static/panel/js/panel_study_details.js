@@ -2,6 +2,330 @@ expand_menu_item('#menu_study_list')
 
 let table = process_table('.team-table')
 
+$('#select_all_participants_for_group_action').on('click', function () {
+    if($(this).prop('checked')){
+        $('#table_participants .select-participant-for-group-action').prop('checked', true)
+        $('#select_group_action').removeAttr('disabled')
+        $('#run_group_action').removeAttr('disabled')
+    }else {
+        $('#table_participants .select-participant-for-group-action').prop('checked', false)
+        $('#select_group_action').attr('disabled', true)
+        $('#run_group_action').attr('disabled', true)
+
+    }
+})
+
+$('.select-participant-for-group-action').on('click', function () {
+    let checked_checkboxes_cnt = $('#table_participants .select-participant-for-group-action:checked').length
+    if($(this).prop('checked')){
+        if(checked_checkboxes_cnt === 1){
+            $('#select_group_action').removeAttr('disabled')
+            $('#run_group_action').removeAttr('disabled')
+        }
+    }else {
+        if(checked_checkboxes_cnt === 0){
+            $('#select_group_action').attr('disabled', true)
+            $('#run_group_action').attr('disabled', true)
+        }
+
+    }
+})
+
+$('#select_group_action').on('click', function () {
+    $(this).removeClass('is-invalid')
+})
+
+let participants_ids_to_send_invitation_to = []
+
+function getParticipantsWithoutInvitations() {
+    $('#tbody_participants_selected .select-participant-for-group-action:checked').each(function () {
+        let invitation_datetime = $(this).closest('tr').find('.invitation-datetime').text()
+        if (invitation_datetime === '') {
+            let participant_id = $(this).closest('tr').attr('id').split('_')[2]
+            let participant_name = $(this).closest('tr').find('.participant-name').text()
+            participants_ids_to_send_invitation_to.push({
+                'id': participant_id,
+                'name': participant_name,
+            })
+        }
+    })
+}
+
+$('#run_group_action').on('click', function () {
+    participants_ids_to_send_invitation_to = []
+    let action_name = $('#select_group_action option:selected').val()
+    if(action_name === 'no_action'){
+        toastr.error('Действие для группы не выбрано')
+        $('#select_group_action').addClass('is-invalid')
+    }else {
+        switch (action_name) {
+            case "send_invitations":
+
+                getParticipantsWithoutInvitations();
+
+                if(participants_ids_to_send_invitation_to.length >= 1){
+                    $('#modal_before_mass_send_invitation').attr('data-invitation-type', 'initial')
+                    $('#modal_participants_qnt').text(participants_ids_to_send_invitation_to.length)
+                    $('#modal_before_mass_send_invitation_title').text('Отправка приглашения участникам')
+                    $('#modal_before_mass_send_invitation').modal('show')
+
+                }else {
+                    let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<div>Выбранным участникам приглашение уже отправлено </div>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
+                    Swal.fire({
+                        html: output_html,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ОК'
+                    })
+
+                }
+                break;
+            case "send_reminder":
+
+                $('#tbody_participants_selected .select-participant-for-group-action:checked').each(function () {
+                    let invitation_datetime = $(this).closest('tr').find('.invitation-datetime').text()
+                    if (invitation_datetime !== '') {
+                        let participant_id = $(this).closest('tr').attr('id').split('_')[2]
+                        let participant_name = $(this).closest('tr').find('.participant-name').text()
+                        participants_ids_to_send_invitation_to.push({
+                            'id': participant_id,
+                            'name': participant_name,
+                        })
+                    }
+                })
+                if(participants_ids_to_send_invitation_to.length >= 1){
+                    $('#modal_before_mass_send_invitation').attr('data-invitation-type', 'reminder')
+                    $('#modal_participants_qnt').text(participants_ids_to_send_invitation_to.length)
+                    $('#modal_before_mass_send_invitation_title').text('Отправка напоминания участникам')
+                    $('#modal_before_mass_send_invitation').modal('show')
+
+                }else {
+                    let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<div>Выбранным участникам еще не отправлено приглашение</div>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
+                    Swal.fire({
+                        html: output_html,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ОК'
+                    })
+
+                }
+                break;
+            case "delete_participants":
+                getParticipantsWithoutInvitations()
+
+                if(participants_ids_to_send_invitation_to.length >= 1){
+                    $('#modal_participants_qnt_to_delete').text(participants_ids_to_send_invitation_to.length)
+                    $('#modal_before_delete_participants').modal('show')
+
+                }else {
+                    let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<div style="color: red">Выбранных участников удалить нельзя</div>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<div><b>Им уже были отправлены приглашения</b></div>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
+                    Swal.fire({
+                        html: output_html,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ОК'
+                    })
+
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+})
+
+$('#modal_delete_participants_btn').on('click', function () {
+    console.log(participants_ids_to_send_invitation_to)
+
+    btn_spinner($('#modal_delete_participants_btn'))
+
+    $.ajax({
+        headers: { "X-CSRFToken": token },
+        url: url_delete_participants_from_study,
+        type: 'POST',
+
+        data: JSON.stringify({
+            'participants_ids_to_send_invitation_to': participants_ids_to_send_invitation_to,
+            // 'study_id': study_id,
+        }),
+        processData: false,
+        contentType: false,
+        error: function(data){
+            toastr.error('Ошибка', data)
+        },
+        success:function (data) {
+
+            btn_text($('#modal_delete_participants_btn'), 'Удалить')
+            $('#modal_before_delete_participants').modal('hide')
+            let role_name = $('#cur_role_name').text()
+            console.log(data)
+            let data_json = data['response']
+            if(data_json === 'logout'){
+                window.location.href = url_login_home
+            }else {
+                if (data_json === 'company_deactivated' && role_name === 'Админ заказчика') {
+                    $('#modal_question_groups').modal('hide')
+                    btn_text($('#save_question_groups'), 'Сохранить')
+
+                    let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<div>Компания деактивирована' + '</div>' +
+                        '<div>Если Вы не знаете причин - обратитесь к менеджеру' + '</div>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
+                    Swal.fire({
+                        html: output_html,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ОК'
+                    })
+                } else {
+                    if (data['warning']) {
+                        toastr.warning(data['warning'])
+                    }else {
+                        let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                            '<div>Участники удалены из исследования</div>' +
+                            '<br>' +
+                            '<hr class="solid mt-0" style="background-color: black;">'
+                        Swal.fire({
+                            html: output_html,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'ОК'
+                        }).then((result) => {
+                            if(result.value){
+                                window.location.reload()
+                            }
+                        })
+
+                    }
+                }
+
+            }
+
+        }
+    });
+
+
+})
+
+
+$('#modal_send_mass_invitation_btn').on('click', function () {
+    let send_admin_notification_after_filling_up_mass = $('#send_admin_notification_after_filling_up_mass').prop('checked')
+    let send_report_to_participant_after_filling_up_mass = $('#send_report_to_participant_after_filling_up_mass').prop('checked')
+    btn_spinner($('#modal_send_mass_invitation_btn'))
+    let invitation_type = $('#modal_before_mass_send_invitation').attr('data-invitation-type')
+
+    $.ajax({
+        headers: { "X-CSRFToken": token },
+        url: url_mass_send_invitation_email,
+        type: 'POST',
+
+        data: JSON.stringify({
+            'participants_ids_to_send_invitation_to': participants_ids_to_send_invitation_to,
+            'study_id': study_id,
+            'send_report_to_participant_after_filling_up_mass': send_report_to_participant_after_filling_up_mass,
+            'send_admin_notification_after_filling_up_mass': send_admin_notification_after_filling_up_mass,
+            'type': invitation_type
+
+        }),
+        processData: false,
+        contentType: false,
+        error: function(data){
+            toastr.error('Ошибка', data)
+        },
+        success:function (data) {
+            btn_text($('#modal_send_mass_invitation_btn'), 'Отправить')
+            $('#modal_before_mass_send_invitation').modal('hide')
+            let role_name = $('#cur_role_name').text()
+            console.log(data)
+            let data_json = data['response']
+            if(data_json === 'logout'){
+                window.location.href = url_login_home
+            }else {
+                if (data_json === 'company_deactivated' && role_name === 'Админ заказчика') {
+                    $('#modal_question_groups').modal('hide')
+                    btn_text($('#save_question_groups'), 'Сохранить')
+
+                    let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<div>Компания деактивирована' + '</div>' +
+                        '<div>Если Вы не знаете причин - обратитесь к менеджеру' + '</div>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
+                    Swal.fire({
+                        html: output_html,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ОК'
+                    })
+                } else {
+                    if (data['warning']) {
+                        toastr.warning(data['warning'])
+                    }else {
+                        let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                            '<div>Письма успешно отправлены участникам</div>' +
+                            '<br>' +
+                            '<hr class="solid mt-0" style="background-color: black;">'
+                        Swal.fire({
+                            html: output_html,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'ОК'
+                        }).then((result) => {
+                            if(result.value){
+                                window.location.reload()
+                            }
+                        })
+
+                    }
+
+
+                    // let html = ''
+                    // for (let i = 0; i < questions_groups_selected.length; i++) {
+                    //     let questions_group_selected = questions_groups_selected[i]
+                    //     html += '<p class="mb-0 participant-selected-question-group" id="participant_selected_question_group_id_' + questions_group_selected['code'] + '">' + questions_group_selected['name'] + '</p>'
+                    // }
+                    // let el = $('#' + participant_tr_id).find('.participant_selected_questions_groups_td')
+                    // el.html('')
+                    // el.html(html)
+                    // $('#modal_question_groups').modal('hide')
+                    // btn_text($('#save_question_groups'), 'Сохранить')
+                    // toastr.success('Группы вопросов сохранены')
+                    //
+
+                }
+
+            }
+
+
+
+
+
+        }
+    });
+
+})
+
+
 function process_circle_progress(){
     $('svg.radial-progress').each(function( index, value ) {
         // If svg.radial-progress is approximately 25% vertically into the window when scrolling from the top or the bottom
@@ -202,7 +526,7 @@ $('#add_participant').on('click', function () {
                 if(data_json === 'None'){
 
                     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                                    '<div>Cотрудники для распределения отсутстуют' + '</div>' +
+                                    '<div>Все сотрудники компании уже добавалены' + '</div>' +
                                     '<br>' +
                                     '<hr class="solid mt-0" style="background-color: black;">'
                     Swal.fire({
@@ -318,89 +642,105 @@ let employees_selected = {}
                 let data_json = data['response']
                 let html = ''
                 console.log(data_json)
-                $.each(data_json, function (key, val) {
-                    let employee_invitation = val['invitation']
-                    let employee_email = val['email']
-                    let employee_name = val['name']
-                    let id = val['id']
 
-                    let employee_invitation_sent_datetime = val['invitation_sent_datetime']
-                    let completed_at_datetime = val['completed_at_datetime']
-                    let reminder = val['reminder']
-                    let questions_groups_arr = val['questions_groups_arr']
-                    let current_percentage = val['current_percentage']
-                    let total_questions_qnt = val['total_questions_qnt']
-                    let answered_questions_qnt = val['answered_questions_qnt']
-                    let filename = val['filename']
-                    html += '<tr class="" id="participant_id_' + id + '">'
-                    html += '<td>'
-                    if(answered_questions_qnt > 0){
-
-                        if(completed_at_datetime){
-                            html += '<i class="fa fa-circle font-color-success" aria-hidden="true" title="Опросник заполнен"><span style="color: transparent">3</span></i>'
-                        }else {
-                            html += '<i class="fa fa-circle font-color-warning" aria-hidden="true" title="Приглашение отправлено"><span style="color: transparent">2</span></i>'
-                        }
-                        html += '<span title="' + current_percentage + '%">'
-                        html += '<svg class="radial-progress" data-percentage="' + current_percentage + '" viewBox="0 0 80 80">'
-                        html += '<circle class="incomplete" cx="40" cy="40" r="35"></circle>'
-                        html += '<circle class="complete" cx="40" cy="40" r="35" style="stroke-dashoffset: 39.58406743523136;"></circle>'
-                        html += '</svg>'
-                        html += '</span>'
-
-                    }else {
-                        html += '<i class="fa fa-circle font-color-danger" aria-hidden="true" title="Приглашение не отправлено"><span style="color: transparent">1</span></i>'
-                    }
-                    html += '</td>'
-                    html += '<td>' + answered_questions_qnt + '/' + total_questions_qnt + '</td>'
-                    html += '<td>' + employee_name + '</td>'
-                    html += '<td>' + employee_email + '</td>'
-
-                    html += '<td class="participant_selected_questions_groups_td">'
-                    for(let i = 0; i < questions_groups_arr.length; i++){
-                        html += '<p class="mb-0 participant-selected-question-group" id="participant_selected_question_group_id_' + questions_groups_arr[i]['code'] +
-                            '">' + questions_groups_arr[i]['name'] + '</p>'
-                    }
-                    html += '</td>'
-
-                    html += '<td>' + employee_invitation_sent_datetime + '</td>'
-                    if(reminder !== ''){
-                        html += '<td>'
-                        for(let i=0; i < reminder.length; i++){
-                            html += reminder[i] + '<br>'
-                        }
-                        html += '</td>'
-                    }else {
-                        html += '<td></td>'
-                    }
-
-                    html += '<td>' +
-                        '<div style="text-align: center;" >' +
-                            '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>' +
-                            '<ul class="dropdown-menu">'
-                    if(employee_invitation){
-                        if(completed_at_datetime){
-                            html += '<li><a class="dropdown-item" href="/panel/download_single_report/' + filename + '">Скачать</a></li>'
-                        }else {
-                            html += '<li><a class="dropdown-item send-email-invitation cursor-pointer">Повторно отправить приглашение</a></li>'
-                        }
-                    }else {
-                        html += '<li><a class="dropdown-item send-email-invitation cursor-pointer">Отправить приглашение</a></li>'
-                        html += '<li> <a class = "dropdown-item add-question-groups cursor-pointer">Добавить группы вопросов</a></li>'
-                    }
-                    html += '</ul>' +
-                        '</div>' +
-                        '</td>'
-                    html += '</tr>'
-
+                let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                '<div>Участник/и добавлены в исследование' + '</div>' +
+                '<br>' +
+                '<hr class="solid mt-0" style="background-color: black;">'
+                Swal.fire({
+                  html: output_html,
+                  icon: 'success',
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'ОК'
+                }).then(function (result) {
+                    window.location.reload()
                 })
-                $('#tbody_participants_selected').html(html)
-                process_circle_progress()
-                $('#modal_participants').modal('hide')
-                btn_text($('#save_participants'), 'Сохранить')
-                toastr.success('Участники обновлены')
-                process_table_clear('.team-table')
-                // $('.team-table').DataTable().raw(html).add()
+
+
+                // $.each(data_json, function (key, val) {
+                //     let employee_invitation = val['invitation']
+                //     let employee_email = val['email']
+                //     let employee_name = val['name']
+                //     let id = val['id']
+                //
+                //     let employee_invitation_sent_datetime = val['invitation_sent_datetime']
+                //     let completed_at_datetime = val['completed_at_datetime']
+                //     let reminder = val['reminder']
+                //     let questions_groups_arr = val['questions_groups_arr']
+                //     let current_percentage = val['current_percentage']
+                //     let total_questions_qnt = val['total_questions_qnt']
+                //     let answered_questions_qnt = val['answered_questions_qnt']
+                //     let filename = val['filename']
+                //     html += '<tr class="" id="participant_id_' + id + '">'
+                //     html += '<td>'
+                //     if(answered_questions_qnt > 0){
+                //
+                //         if(completed_at_datetime){
+                //             html += '<i class="fa fa-circle font-color-success" aria-hidden="true" title="Опросник заполнен"><span style="color: transparent">3</span></i>'
+                //         }else {
+                //             html += '<i class="fa fa-circle font-color-warning" aria-hidden="true" title="Приглашение отправлено"><span style="color: transparent">2</span></i>'
+                //         }
+                //         html += '<span title="' + current_percentage + '%">'
+                //         html += '<svg class="radial-progress" data-percentage="' + current_percentage + '" viewBox="0 0 80 80">'
+                //         html += '<circle class="incomplete" cx="40" cy="40" r="35"></circle>'
+                //         html += '<circle class="complete" cx="40" cy="40" r="35" style="stroke-dashoffset: 39.58406743523136;"></circle>'
+                //         html += '</svg>'
+                //         html += '</span>'
+                //
+                //     }else {
+                //         html += '<i class="fa fa-circle font-color-danger" aria-hidden="true" title="Приглашение не отправлено"><span style="color: transparent">1</span></i>'
+                //     }
+                //     html += '</td>'
+                //     html += '<td>' + answered_questions_qnt + '/' + total_questions_qnt + '</td>'
+                //     html += '<td>' + employee_name + '</td>'
+                //     html += '<td>' + employee_email + '</td>'
+                //
+                //     html += '<td class="participant_selected_questions_groups_td">'
+                //     for(let i = 0; i < questions_groups_arr.length; i++){
+                //         html += '<p class="mb-0 participant-selected-question-group" id="participant_selected_question_group_id_' + questions_groups_arr[i]['code'] +
+                //             '">' + questions_groups_arr[i]['name'] + '</p>'
+                //     }
+                //     html += '</td>'
+                //
+                //     html += '<td>' + employee_invitation_sent_datetime + '</td>'
+                //     if(reminder !== ''){
+                //         html += '<td>'
+                //         for(let i=0; i < reminder.length; i++){
+                //             html += reminder[i] + '<br>'
+                //         }
+                //         html += '</td>'
+                //     }else {
+                //         html += '<td></td>'
+                //     }
+                //
+                //     html += '<td>' +
+                //         '<div style="text-align: center;" >' +
+                //             '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>' +
+                //             '<ul class="dropdown-menu">'
+                //     if(employee_invitation){
+                //         if(completed_at_datetime){
+                //             html += '<li><a class="dropdown-item" href="/panel/download_single_report/' + filename + '">Скачать</a></li>'
+                //         }else {
+                //             html += '<li><a class="dropdown-item send-email-invitation cursor-pointer">Повторно отправить приглашение</a></li>'
+                //         }
+                //     }else {
+                //         html += '<li><a class="dropdown-item send-email-invitation cursor-pointer">Отправить приглашение</a></li>'
+                //         html += '<li> <a class = "dropdown-item add-question-groups cursor-pointer">Добавить группы вопросов</a></li>'
+                //     }
+                //     html += '</ul>' +
+                //         '</div>' +
+                //         '</td>'
+                //     html += '</tr>'
+                //
+                // })
+                // $('#tbody_participants_selected').html(html)
+                // process_circle_progress()
+                // $('#modal_participants').modal('hide')
+                // btn_text($('#save_participants'), 'Сохранить')
+                // toastr.success('Участники обновлены')
+                // process_table_clear('.team-table')
+                // // $('.team-table').DataTable().raw(html).add()
 
             }
         });
@@ -484,16 +824,21 @@ $('#tbody_participants_selected').on('click', '.send-email-invitation', function
         toastr.warning('Обратите внимание - компания деактивирована!')
     }
 
-    let question_groups_qnt = $(this).closest('tr').find('.participant_selected_questions_groups_td p').length
-    if(question_groups_qnt === 0){
-        toastr.error('Выберите группы вопросов для участника')
-    }else {
-        let participant_name = $(this).closest('tr').find('td').eq(2).text()
-        let participant_email = $(this).closest('tr').find('td').eq(3).text()
-        $('#modal_participant_name').html('<b>' + participant_name + '</b>').attr('data-tr-id', $(this).closest('tr').attr('id'))
-        $('#modal_participant_email').html('<b>' + participant_email + '</b>')
-        $('#modal_before_send_invitation').modal('show')
-    }
+    let participant_name = $(this).closest('tr').find('td').eq(2).text()
+    let participant_email = $(this).closest('tr').find('td').eq(3).text()
+    $('#modal_participant_name').html('<b>' + participant_name + '</b>').attr('data-tr-id', $(this).closest('tr').attr('id'))
+    $('#modal_participant_email').html('<b>' + participant_email + '</b>')
+    $('#modal_before_send_invitation').modal('show')
+    // let question_groups_qnt = $(this).closest('tr').find('.participant_selected_questions_groups_td p').length
+    // if(question_groups_qnt === 0){
+    //     toastr.error('Выберите группы вопросов для участника')
+    // }else {
+    //     let participant_name = $(this).closest('tr').find('td').eq(2).text()
+    //     let participant_email = $(this).closest('tr').find('td').eq(3).text()
+    //     $('#modal_participant_name').html('<b>' + participant_name + '</b>').attr('data-tr-id', $(this).closest('tr').attr('id'))
+    //     $('#modal_participant_email').html('<b>' + participant_email + '</b>')
+    //     $('#modal_before_send_invitation').modal('show')
+    // }
 })
 
 $('#send_admin_notification_after_filling_up').on('click', function () {
@@ -506,4 +851,58 @@ $('#send_admin_notification_after_filling_up').on('click', function () {
     }
 })
 
+$('#change_study_name_btn').on('click', function () {
+    let current_study_name = $('#input_name').val()
+    $('#input_new_study_name').val(current_study_name)
+    $('#modal_change_study_name').modal('show')
+})
 
+$('#modal_save_new_study_name_btn').on('click', function () {
+    let new_study_name = $('#input_new_study_name').val()
+    if(new_study_name === ''){
+        $('#input_new_study_name').addClass('is-invalid state-invalid')
+        toastr.error('Имя должно быть заполнено')
+    }else {
+
+        btn_spinner($('#modal_save_new_study_name_btn'))
+        $.ajax({
+            headers: { "X-CSRFToken": token },
+            url: url_save_study_name,
+            type: 'POST',
+
+            data: JSON.stringify({
+                            'study_name': new_study_name,
+                            'study_id': study_id
+                        }),
+            processData: false,
+            contentType: false,
+            error: function(data){
+                toastr.error('Ошибка', data)
+            },
+            success:function (data) {
+                $('#input_name').val(data['study_name'])
+                btn_text($('#modal_save_new_study_name_btn'), 'Сохранить')
+
+                $('#modal_change_study_name').modal('hide')
+
+                let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                    '<div>Название исследования изменено' + '</div>' +
+                    '<br>' +
+                    '<hr class="solid mt-0" style="background-color: black;">'
+                Swal.fire({
+                    html: output_html,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ОК'
+                })
+            }
+        });
+
+
+    }
+})
+
+$('#input_new_study_name').on('focus', function () {
+    $('#input_new_study_name').removeClass('is-invalid state-invalid')
+})

@@ -47,12 +47,12 @@ $('.delete-industry').on('click', function () {
         cancelButtonText: 'Нет',
         showCancelButton: true
     }).then((result) => {
-        if (result.isConfirmed) {
+        if (result.value) {
             industry_id = $(this).closest('ul').attr('id').split("_")[2]
             let dict = {
                 'id': industry_id
             }
-            save_company_parameter(dict, url_delete_industry, '', '', '')
+            save_company_parameter(dict, url_delete_industry, '', 'Запись удалена', 'Индустрия успешно удалена')
         }
     })
 

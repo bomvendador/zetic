@@ -1,0 +1,232 @@
+{% extends 'questionnaire_base.html' %}
+{% load static %}
+{% block links %}
+    <link href="{% static 'panel/plugins/circle_progress_bar/css/circle.css' %}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid" style="width: 50%">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header" style="margin-top: 1em; margin-bottom: 1em">
+                <h1 class="page-title">{{ section.name }}</h1>
+                <div>
+{#                    <ol class="breadcrumb">#}
+{#                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>#}
+{#                        <li class="breadcrumb-item active" aria-current="page">Изменение исследования</li>#}
+{#                    </ol>#}
+                    <span>Прогресс в секции:</span><span style="color: blue"> {{ progress }}%</span>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- ROW-1 OPEN -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                        {#                        <div class="card-header">#}
+                        {#                            <h3 class="card-title">Вопросы</h3>#}
+                        {#                        </div>#}
+                        <div class="card-body">
+                            {% for question in questions %}
+                                <div class="form-group section-question" style="margin-bottom: 3em" id="question_id_{{ question.id }}">
+                                    <div class="form-label">{{ question.text }}</div>
+                                    <hr style="background-color: blue">
+                                    <div class="custom-controls-stacked">
+                                        {% for answer in question.answers %}
+                                            <label class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input question-answer-input" name="answer_{{ question.id }}"
+                                                       value="{{ answer.id }}" id="ww_{{ answer.id }}">
+                                                <span class="custom-control-label">{{ answer.text }}</span>
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                            <button class="btn ripple btn-primary w-100" style="height: 40px; cursor: pointer" type="button"
+                                    id="save_page_answers" disabled>Далее
+                            </button>
+
+                        </div>
+                        {#                                    <div class="card-footer text-end">#}
+                        {#                                        <button class="btn btn-primary my-1 nav-buttons" type="button" id="save_company">Сохранить</button>#}
+                        {#                                    </div>#}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--CONTAINER CLOSED -->
+
+    </div>
+
+    <!-- Модальное окно добавление группы вопросов -->
+    <div class="modal fade" id="modal_question_groups">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title">Группа вопросов</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table text-wrap mb-0">
+                            <thead>
+                            <tr>
+                                <th>Наименование</th>
+                                <th>
+                                    <div class="form-switch text-end">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                               id="select_all_question_groups">
+                                        <label class="form-check-label" for="select_all_question_groups"></label>
+                                    </div>
+
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody_modal_questions_groups">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="save_question_groups">Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Модальное окно добавление участника -->
+    <div class="modal fade" id="modal_participants">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title"><b>Сотрудники</b></h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table text-nowrap border-bottom team-table dataTable no-footer"
+                               id="modal_add_participant">
+                            <thead class="thead-style">
+                            <tr>
+                                <th><input id="check_all_employees_for_study" type="checkbox" class=""
+                                           name="example-checkbox1" value="option1" style="transform: scale(1.1)"></th>
+                                <th>Имя/псевдоним</th>
+                                <th>Email</th>
+                                <th>Индустрия</th>
+                                <th>Роль</th>
+                                <th>Должность</th>
+                                <th>Год рождения</th>
+                                <th>Пол</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody_participants_to_choose">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row" style="padding: 0px 15px 15px">
+                    <div class="col-lg-12 col-sm-12 mt-3">
+                        <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                id="add_participants_to_study">Добавить
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- Модальное окно отправки приглашения -->
+    <div class="modal fade" id="modal_before_send_invitation">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title">Отправка приглашения участнику</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <b>Участник</b>
+                        </div>
+                        <div class="col-lg-9" id="modal_participant_name" data-tr-id="">
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <b>Email</b>
+                        </div>
+
+                        <div class="col-lg-9" id="modal_participant_email" data-email="">
+
+
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       id="send_admin_notification_after_filling_up">
+                                <label class="form-check-label" for="send_admin_notification_after_filling_up">Отправить
+                                    уведомление админу после заполнения</label>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="modal_send_invitation_btn">Отправить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+
+    <script>
+
+        let code = "{{ code }}";
+        let url_save_answers = "{% url 'save_answers' %}"
+        let section_id = {{ section.id }}
+        {#let url_get_company_employees = "{% url 'get_company_employees' %}"#}
+        {#let study_id = {{ study.id }};#}
+        {#let url_save_participant_questions_groups = "{% url 'save_participant_questions_groups' %}"#}
+        {#let url_get_employees_for_study = "{% url 'get_employees_for_study' %}"#}
+        {#let url_save_study_participants = "{% url 'save_study_participants' %}"#}
+        {#let url_send_invitation_email = "{% url 'send_invitation_email' %}"#}
+
+    </script>
+    <script src="{% static 'login/js/select2.js' %}"></script>
+
+    <script src="{% static 'panel/js/panel_add_study.js' %}"></script>
+    <script src="{% static 'questionnaire/js/questionnaire_section_questions.js' %}"></script>
+{% endblock %}

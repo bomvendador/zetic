@@ -96,7 +96,8 @@ TEMPLATES = [
         'DIRS': [
             BASE_DIR / 'templates',
             BASE_DIR / 'login/templates',
-            BASE_DIR / 'panel/templates'
+            BASE_DIR / 'panel/templates',
+            BASE_DIR / 'questionnaire/templates'
         ]
         ,
         'APP_DIRS': True,

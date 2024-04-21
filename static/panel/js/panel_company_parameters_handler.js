@@ -11,25 +11,39 @@ function save_company_parameter(dict, url_save, modal_selector, swal_title, swal
             toastr.error('Ошибка', data)
         },
         success:function (data) {
+            console.log(data)
             if (modal_selector !== ''){
                 $(modal_selector).modal('hide') //'#input_modal_add_industry'
             }
-            if(swal_text !== ''){
+
+            if(data['error']){
                 Swal.fire({
-                  title: swal_title,
-                  text: swal_text,
-                  icon: 'success',
+                  title: 'Ошибка',
+                  text: data['error'],
+                  icon: 'error',
                   confirmButtonColor: '#3085d6',
                   cancelButtonColor: '#d33',
                   confirmButtonText: 'ОК'
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                      window.location.reload()
-                  }
                 })
-
             }else {
-                window.location.reload()
+                if(swal_text !== ''){
+                    Swal.fire({
+                      title: swal_title,
+                      text: swal_text,
+                      icon: 'success',
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'ОК'
+                    }).then((isConfirmed) => {
+                      if (isConfirmed) {
+                          window.location.reload()
+                      }
+                    })
+
+                }else {
+                    window.location.reload()
+
+                }
 
             }
         }

@@ -62,3 +62,13 @@
     color: #0c63e4;
 }
 
+
+.swal2-container {
+  z-index: 9999;
+}
+
+.button-icon {
+    margin-right: 10px!important;
+    transform: scale(1.1);
+}
+

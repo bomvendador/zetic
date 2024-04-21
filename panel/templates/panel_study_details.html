@@ -12,7 +12,7 @@
 
                         <!-- PAGE-HEADER -->
                         <div class="page-header">
-                            <h1 class="page-title">Опросник: {{ study.name }}</h1>
+                            <h1 class="page-title">Опросник: №{{ study.id }}</h1>
                             <div>
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
@@ -30,8 +30,21 @@
                                         <h3 class="card-title">Параметры опросника</h3>
                                     </div>
                                     <div class="card-body">
+                                        <div class="row mb-4">
+                                            <div class="col-lg-5 col-sm-11">
+                                                <div class="">
+                                                    <label for="input_name">Название</label>
+                                                    <input type="text" class="form-control" id="input_name" value="{{ study.name }}" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-1 col-md-1" style="width: 100%">
+                                                <div class="" style="position: absolute; left: 0; bottom: 0; width: 100%">
+                                                    <button id="change_study_name_btn" class="btn btn-default"  style="width: 100%"><i class="fa fa-pencil" style="transform: scale(1.1)"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="row">
-                                            <div class="col-lg-12 col-md-12">
+                                            <div class="col-lg-6 col-sm-12" style="padding-right: 0">
                                                 <div class="form-group">
                                                     <label for="input_fio">Компания</label>
                                                     <input type="text" class="form-control" id="input_company_name" value="{{ study.company.name }}" disabled>
@@ -40,7 +53,7 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-lg-12 col-md-12">
+                                            <div class="col-lg-6 col-sm-12" style="padding-right: 0">
                                                 <div class="form-switch">
                                                   <input class="form-check-input" type="checkbox" role="switch" id="company_active"{% if study.company.active %} checked="checked"{% endif %} disabled>
                                                   <label class="form-check-label" for="company_active">Компания активна</label>
@@ -61,7 +74,7 @@
                             <div class="col-xl-12 col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                            <h3 class="card-title">Группы вопросов опросника</h3>
+                                        <h3 class="card-title">Секции</h3>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
@@ -71,20 +84,13 @@
                                                         <th>Наименование</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="tbody_question_groups_selected" data-participant-tr-id="">
-                                                {% if study_question_groups %}
-                                                {% for study_question_group in study_question_groups %}
-                                                    <tr id="section_code_{{ study_question_group.section.code }}">
-                                                        <td>{{ study_question_group.section.name }}</td>
+                                                <tbody id="">
+                                                {% for section in sections %}
+                                                    <tr id="section_id_{{ section.id }}">
+                                                        <td>{{ section.section.name }}</td>
                                                     </tr>
                                                 {% endfor %}
-                                                {% else %}
-                                                    <tr>
-                                                    <td class="no-data-text">Данные отсутствуют</td>
 
-                                                    </tr>
-
-                                                {% endif %}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -96,19 +102,35 @@
                             <div class="col-xl-12 col-sm-12">
                                 <div class="card">
                                     <div class="card-header row pt-2 pb-2 justify-content-md-center">
-                                        <div class="col col-lg-6 col-sm-6">
+                                        <div class="col col-lg-6 col-sm-12">
                                             <h3 class="card-title">Участники</h3>
                                         </div>
-                                        <div class="col col-lg-6 col-sm-6 text-end">
-                                            <button class="btn btn-primary my-1 nav-buttons" type="button" id="add_participant" style="padding: 9px">Назначить опрос</button>
+                                        <div class="col col-lg-4 col-sm-12 text-end">
+                                            <div>
+                                                <div style="display: inline-block">
+                                                    <select name="country" class="form-control form-select" data-bs-placeholder="Действие" id="select_group_action" disabled>
+                                                        <option value="no_action">-- Выберите действие --</option>
+                                                        <option value="send_invitations"><span><i class="fa fa-user-plus button-icon"></i>Отправить приглашение</span></option>
+                                                        <option value="send_reminder">Отправить напоминание</option>
+                                                        <option value="delete_participants" style="color: red">Удалить участников</option>
+                                                    </select>
+                                                </div>
+                                                <div style="display: inline-block">
+                                                    <button class="btn btn-primary my-1" type="button" id="run_group_action" disabled><i class="fa fa-play button-icon"></i>Выполнить</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col col-lg-2 col-sm-12 text-end">
+                                            <button class="btn btn-primary my-1" type="button" id="add_participant"><i class="fa fa-user-plus button-icon"></i>Добавить участника</button>
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table text-nowrap border-bottom team-table dataTable no-footer">
+                                            <table class="table text-nowrap border-bottom team-table dataTable no-footer" id="table_participants">
                                                 <thead class="thead-style">
                                                     <tr>
-                                                        <th></th>
+                                                        <th data-orderable="false"><input id="select_all_participants_for_group_action" type="checkbox" class="" style="transform: scale(1.1)"></th>
+                                                        <th data-orderable="false"></th>
                                                         <th>Ответы</th>
                                                         <th>Имя/псевдоним</th>
                                                         <th>Email</th>
@@ -122,13 +144,16 @@
                                                         <th>Группы вопросов</th>
                                                         <th>Отправка приглашения</th>
                                                         <th>Напоминания</th>
-                                                        <th></th>
+{#                                                        <th data-orderable="false"></th>#}
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbody_participants_selected">
                                                 {% if participants %}
                                                 {% for participant in participants %}
-                                                    <tr id="participant_id_{{ participant.id }}">
+                                                    <tr id="participant_id_{{ participant.id }}" class="">
+                                                        <td>
+                                                            <input type="checkbox" class="select-participant-for-group-action" style="transform: scale(1.1)">
+                                                        </td>
                                                         <td>
                                                             {% if participant.invitation_sent %}
                                                                 {% if participant.completed_at %}
@@ -153,7 +178,7 @@
 
                                                         </td>
                                                         <td>{{ participant.answered_questions_qnt }}/{{ participant.total_questions_qnt }}</td>
-                                                        <td>{% if participant.employee.name %}{{ participant.employee.name }}{% endif %}</td>
+                                                        <td class="participant-name">{% if participant.employee.name %}{{ participant.employee.name }}{% endif %}</td>
                                                         <td>{{ participant.employee.email }}</td>
                                                         <td>{{ participant.employee.industry.name_ru }}</td>
                                                         <td>{{ participant.employee.role.name_ru }}</td>
@@ -169,7 +194,7 @@
                                                                 {% endif %}
                                                             {% endfor %}
                                                         </td>
-                                                        <td>{{ participant.invitation_sent_datetime|date:"d.m.Y H:i" }}</td>
+                                                        <td class="invitation-datetime">{{ participant.invitation_sent_datetime|date:"d.m.Y H:i" }}</td>
                                                     <td>
                                                         {% for email_sent in emails_sent %}
                                                             {% if email_sent.participant == participant %}
@@ -179,46 +204,46 @@
                                                         {% endfor %}
                                                     </td>
 
-                                                        <td>
-                                                            <div style="text-align: center;" >
-                                                                <i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>
-                                                                <ul class="dropdown-menu">
-                                                                     <li><a class="dropdown-item {% if not participant.completed_at %}{% if not participant.started_at %} send-email-invitation cursor-pointer{% endif %}{% endif %}"
-                                                                     {% for report in reports %}
-                                                                         {% if report.participant == participant  %}
-                                                                            href="{% url 'download_single_report' filename=report.filename %}"
-                                                                         {% endif %}
-                                                                     {% endfor %}
-                                                                     >
-                                                                         {% if participant.invitation_sent %}
-                                                                             {% if participant.completed_at %}
-                                                                                Скачать
-                                                                             {% else %}
-                                                                                 {% if participant.started_at %}
-                                                                                     Действия отсутствуют
-                                                                                 {% else %}
-                                                                                    Повторно отправить приглашение
-                                                                                 {% endif %}
-
-                                                                             {% endif %}
-
-                                                                         {% else %}
-                                                                         Отправить приглашение
-                                                                         {% endif %}
-
-                                                                         </a>
-                                                                     </li>
-                                                                    {% if not participant.invitation_sent %}
-                                                                     <li><a class="dropdown-item add-question-groups cursor-pointer">
-                                                                          Добавить группы вопросов
-                                                                        </a>
-                                                                     </li>
-                                                                    {% endif %}
-
-                                                                </ul>
-                                                            </div>
-
-                                                        </td>
+{#                                                        <td>#}
+{#                                                            <div style="text-align: center;" >#}
+{#                                                                <i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>#}
+{#                                                                <ul class="dropdown-menu">#}
+{#                                                                     <li><a class="dropdown-item {% if not participant.completed_at %}{% if not participant.started_at %} send-email-invitation cursor-pointer{% endif %}{% endif %}"#}
+{#                                                                     {% for report in reports %}#}
+{#                                                                         {% if report.participant == participant  %}#}
+{#                                                                            href="{% url 'download_single_report' filename=report.filename %}"#}
+{#                                                                         {% endif %}#}
+{#                                                                     {% endfor %}#}
+{#                                                                     >#}
+{#                                                                         {% if participant.invitation_sent %}#}
+{#                                                                             {% if participant.completed_at %}#}
+{#                                                                                Скачать#}
+{#                                                                             {% else %}#}
+{#                                                                                 {% if participant.started_at %}#}
+{#                                                                                     Действия отсутствуют#}
+{#                                                                                 {% else %}#}
+{#                                                                                    Повторно отправить приглашение#}
+{#                                                                                 {% endif %}#}
+{##}
+{#                                                                             {% endif %}#}
+{##}
+{#                                                                         {% else %}#}
+{#                                                                         <span style="color: green"><i class="fe fe-send" style="transform: scale(1.1); margin-right: 5px"></i>  Отправить приглашение</span>#}
+{#                                                                         {% endif %}#}
+{##}
+{#                                                                         </a>#}
+{#                                                                     </li>#}
+{#                                                                    {% if not participant.invitation_sent %}#}
+{#                                                                     <li><a class="dropdown-item add-question-groups cursor-pointer">#}
+{#                                                                          Добавить группы вопросов#}
+{#                                                                        </a>#}
+{#                                                                     </li>#}
+{#                                                                    {% endif %}#}
+{##}
+{#                                                                </ul>#}
+{#                                                            </div>#}
+{##}
+{#                                                        </td>#}
 
 
                                                     </tr>
@@ -325,7 +350,7 @@
                 </div>
             </div>
         </div>
-        <!-- Модальное окно отправки приглашения -->
+        <!-- Модальное окно отправки приглашения одному участнику-->
         <div class="modal fade" id="modal_before_send_invitation">
             <div class="modal-dialog " role="document">
                 <div class="modal-content modal-content-demo">
@@ -364,11 +389,120 @@
 
                             </div>
                         </div>
+                        <div class="row mt-5">
+                            <div class="col-12">
+                                <div class="form-switch">
+                                  <input class="form-check-input" type="checkbox" role="switch" id="send_report_to_participant_after_filling_up">
+                                  <label class="form-check-label" for="send_report_to_participant_after_filling_up">Отправить отчет участнику после заполнения</label>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                     <div>
                         <div class="row" style="padding: 0px 15px 15px">
                             <div class="col-lg-12 col-sm-12 mt-3">
                                 <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="modal_send_invitation_btn">Отправить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Модальное окно отправки приглашения массово-->
+        <div class="modal fade" id="modal_before_mass_send_invitation" data-invitation-type="">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content modal-content-demo">
+                    <div class="modal-header" style="background-color: #dbdbdb">
+                        <h5 class="modal-title" id="modal_before_mass_send_invitation_title"></h5>
+                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <b>Кол-во участников для отправки приглашения: <span id="modal_participants_qnt"></span></b>
+                            </div>
+                        </div>
+                        <div class="row mt-5">
+                            <div class="col-12">
+                                <div class="form-switch">
+                                  <input class="form-check-input" type="checkbox" role="switch" id="send_admin_notification_after_filling_up_mass">
+                                  <label class="form-check-label" for="send_admin_notification_after_filling_up_mass">Отправить уведомление админу после заполнения</label>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-switch">
+                                  <input class="form-check-input" type="checkbox" role="switch" id="send_report_to_participant_after_filling_up_mass">
+                                  <label class="form-check-label" for="send_report_to_participant_after_filling_up">Отправить отчеты участникам после заполнения</label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="row" style="padding: 0px 15px 15px">
+                            <div class="col-lg-12 col-sm-12 mt-3">
+                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="modal_send_mass_invitation_btn">Отправить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Модальное окно удаление участников-->
+        <div class="modal fade" id="modal_before_delete_participants">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content modal-content-demo">
+                    <div class="modal-header" style="background-color: orangered">
+                        <h5 class="modal-title" style="color: white">Удаление пользователей</h5>
+                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="color: white">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                Кол-во участников для удаления: <b><span id="modal_participants_qnt_to_delete"></span></b>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="row" style="padding: 0px 15px 15px">
+                            <div class="col-lg-12 col-sm-12 mt-3">
+                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="modal_delete_participants_btn">Удалить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Модальное окно изменения названия исследования -->
+        <div class="modal fade" id="modal_change_study_name">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content modal-content-demo">
+                    <div class="modal-header" style="background-color: #dbdbdb">
+                        <h5 class="modal-title">Название исследования</h5>
+                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                  <label class="form-check-label" for="input_new_study_name">Название</label>
+                                  <input class="form-control" type="text" role="switch" id="input_new_study_name">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="row" style="padding: 0px 15px 15px">
+                            <div class="col-lg-12 col-sm-12 mt-3">
+                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="modal_save_new_study_name_btn">Сохранить</button>
                             </div>
                         </div>
                     </div>
@@ -390,6 +524,9 @@
     let url_get_employees_for_study = "{% url 'get_employees_for_study' %}"
     let url_save_study_participants = "{% url 'save_study_participants' %}"
     let url_send_invitation_email = "{% url 'send_invitation_email' %}"
+    let url_mass_send_invitation_email = "{% url 'mass_send_invitation_email' %}"
+    let url_save_study_name = "{% url 'save_study_name' %}"
+    let url_delete_participants_from_study = "{% url 'delete_participants_from_study' %}"
 
 </script>
 <script src="{% static 'panel/js/panel_study_details.js' %}"></script>

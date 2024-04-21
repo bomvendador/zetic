@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Данные респондента --ZETIC--</title>
+    {% block links %}
+        <link href="{% static 'questionnaire/css/participant_data.css' %}" rel="stylesheet"/>
+        <link rel="shortcut icon" type="image/x-icon" href="{% static 'login/images/brand/favicon.ico' %}"/>
+        <link href="{% static 'login/plugins/toastr/css/toastr.css' %}" rel="stylesheet"/>
+    {% endblock %}
+
+</head>
+<body>
+
+<div class="container">
+    <div>
+        <img src="{% static 'images/zetic_logo.png' %}" class="header-brand-img desktop-logo" alt="logo"
+             style="height: 5em">
+
+    </div>
+    <hr>
+    <div>
+        <h2 style="color: #0071AD">Проверьте и подтвердите свои данные</h2>
+    </div>
+    <hr>
+    <form>
+        <div class="row">
+            <h4>Имя</h4>
+            <div class="input-group input-group-icon">
+                <input type="text" placeholder="Введите имя" value="{{ employee.name }}" id="name"/>
+                <div class="input-icon">
+                    <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 21C5 17.134 8.13401 14 12 14C15.866 14 19 17.134 19 21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+                              stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h4>Год рождения</h4>
+                <div class="input-group">
+                    <select id="year">
+                        {% for year in years %}
+                            <option {% if employee.birth_year == year %} selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h4>Пол</h4>
+                <div class="input-group">
+                    <input id="gender-male" type="radio" name="gender" value="male"
+                            {% if employee.sex.name_en == 'Male' %} checked {% endif %}/>
+                    <label for="gender-male" style="cursor: pointer">Мужской</label>
+                    <input id="gender-female" type="radio" name="gender" value="female"
+                            {% if employee.sex.name_en == 'Female' %} checked {% endif %}/>
+                    <label for="gender-female" style="cursor: pointer">Женский</label>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <h4>Функция</h4>
+                <div class="input-group">
+                    <select style="width: 100%; text-align: left;" id="role">
+                        {% for role in roles %}
+                            <option {% if employee.role == role %} selected{% endif %}
+                                                                   value="role_id_{{ role.id }}">{{ role.name_ru }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h4>Организационный уровень</h4>
+                <div class="input-group">
+                    <select style="width: 100%; text-align: left;" id="position">
+                        {% for position in positions %}
+                            <option {% if employee.position == position %} selected{% endif %}
+                                                                           value="position_id_{{ position.id }}">{{ position.name_ru }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h4>Индустрия</h4>
+                <div class="input-group">
+                    <select style="width: 100%; text-align: left;" id="industry">
+                        {% for industry in industries %}
+                            <option {% if employee.industry == industry %} selected{% endif %}
+                                                                           value="position_id_{{ industry.id }}">{{ industry.name_ru }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <h4>Согласие на обработку персональных данных</h4>
+            <div class="input-group">
+                <div class="conditions-text">
+                    <div style="color: black">
+                            <span>Я даю согласие на использование персональных данных исключительно в целях формирования диагностического отчета и разработки рекомендаций по развитию, а также на хранение всех вышеназванных данных на электронных носителях.
+                                Также данным согласием я разрешаю сбор моих персональных данных, их хранение, систематизацию, обновление, использование, а также осуществление любых иных действий, предусмотренных действующим законом Российской Федерации. До моего сведения доведено, что компания Zetic гарантирует обработку моих персональных данных в соответствии с действующим законодательством Российской Федерации. Срок действия данного согласия 5 лет. Согласие может быть отозвано в любой момент по моему письменному заявлению.
+                            </span>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="input-group">
+                <input id="terms" type="checkbox"/>
+                <label for="terms" style="color: grey" id="agree">Я даю согласие на обработку персональных
+                    данных</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <button class="btn1" id="next_btn" disabled>Далее</button>
+
+            </div>
+        </div>
+    </form>
+
+</div>
+
+</body>
+
+
+<script src="{% static 'login/js/jquery.min.js' %}"></script>
+<script src="{% static 'login/plugins/toastr/js/toastr.js' %}"></script>
+<script src="{% static 'questionnaire/js/participant_data.js' %}"></script>
+
+<script>
+
+    {#let ff= "{% url 'participant_data' %}"#}
+    let url_questionnaire_save_participant_data = "{% url 'questionnaire_save_participant_data' %}"
+    let csrf_token = '{{ csrf_token }}';
+    let code = '{{ code }}'
+
+</script>
+
+</html>

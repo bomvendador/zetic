@@ -59,9 +59,11 @@ def delete_industry(request):
         json_data = json.loads(request.body.decode('utf-8'))
         industry_id = json_data['id']
         industry_inst = Industry.objects.get(id=industry_id)
-        industry_inst.delete()
-
-        return HttpResponse(status=200)
+        try:
+            industry_inst.delete()
+            return HttpResponse(status=200)
+        except Exception:
+            return JsonResponse({"error": "Индустрия связана с одним из объектов и не может быть удалена"})
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -115,9 +117,11 @@ def delete_employee_role(request):
         json_data = json.loads(request.body.decode('utf-8'))
         role_id = json_data['id']
         role_inst = EmployeeRole.objects.get(id=role_id)
-        role_inst.delete()
-
-        return HttpResponse(status=200)
+        try:
+            role_inst.delete()
+            return HttpResponse(status=200)
+        except Exception:
+            return JsonResponse({"error": "Роль/функция связана с одним из объектов и не может быть удалена"})
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -171,6 +175,9 @@ def delete_employee_position(request):
         json_data = json.loads(request.body.decode('utf-8'))
         position_id = json_data['id']
         employee_position_inst = EmployeePosition.objects.get(id=position_id)
-        employee_position_inst.delete()
+        try:
+            employee_position_inst.delete()
+            return HttpResponse(status=200)
+        except Exception:
+            return JsonResponse({"error": "Должность связана с одним из объектов и не может быть удалена"})
 
-        return HttpResponse(status=200)

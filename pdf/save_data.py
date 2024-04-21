@@ -1,8 +1,17 @@
-from pdf.models import Report, Participant, Company, ReportData, Section, Category, Employee, Study, EmployeeRole, EmployeeGender
+from pdf.models import Report, Participant, Company, ReportData, Section, Category, Employee, Study, EmployeeRole, \
+    EmployeeGender, QuestionnaireQuestionAnswers, Questionnaire
 from login.models import UserProfile
 from . import raw_to_t_point
 from panel import mail_handler
 from django.utils import timezone
+
+
+def create_report(questionnaire_id):
+    questionnaire_inst = Questionnaire.objects.get(id=questionnaire_id)
+    report_inst = Report()
+
+
+
 
 
 def save_data_to_db(request_json, file_name):
