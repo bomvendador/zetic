@@ -1,6 +1,8 @@
 from pdf_group.draw import draw_arrow, draw_table
-from pdf.models import Report, ReportData
+from pdf.models import Report, ReportData, Questionnaire, QuestionnaireQuestionAnswers, Participant, Category
 import math
+from pdf import raw_to_t_point
+
 
 # цвет прямоугольника названия блока
 BLOCK_R = 230
@@ -61,10 +63,27 @@ def data_by_points(square_results, section_code, category_code):
         bold = square_result[3]
         cnt = cnt + 1
         report = Report.objects.filter(participant__employee__email=square_result[1]).latest('added')
-        if ReportData.objects.filter(report=report, section_code=section_code, category_code=category_code).exists():
-            report_data = ReportData.objects.get(report=report, section_code=section_code, category_code=category_code)
-            # print(f'участик - {report.participant.employee.name} секция - {report_data.section_name} категория - {report_data.category_name} points - {report_data.points}')
-            scale_data.append([square_result[2], report_data.points, cnt, group_color, email, bold])
+
+        participant_email = square_result[1]
+        questionnaire_inst = Questionnaire.objects.filter(participant__employee__email=participant_email).latest('created_at')
+        questionnaire_questions_answers = QuestionnaireQuestionAnswers.objects.filter(questionnaire=questionnaire_inst,
+
+                                                                                      question__category__code=category_code)
+        participant_inst = Participant.objects.get(employee__email=participant_email)
+        print(f'category code = {category_code}')
+        category_inst = Category.objects.get(code=category_code)
+        raw_points = 0
+        for answer in questionnaire_questions_answers:
+            if answer.question.category.code == category_code:
+                raw_points = raw_points + answer.answer.raw_point
+        t_points = raw_to_t_point.filter_raw_points_to_t_points(raw_points, participant_inst.employee_id, category_inst.id)
+        scale_data.append([square_result[2], t_points, cnt, group_color, email, bold])
+
+
+        # if ReportData.objects.filter(report=report, section_code=section_code, category_code=category_code).exists():
+        #     report_data = ReportData.objects.get(report=report, section_code=section_code, category_code=category_code)
+        #     # print(f'участик - {report.participant.employee.name} секция - {report_data.section_name} категория - {report_data.category_name} points - {report_data.points}')
+        #     scale_data.append([square_result[2], report_data.points, cnt, group_color, email, bold])
     # print(f'scale data - {scale_data}')
 
     data_by_points_ = {

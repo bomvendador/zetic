@@ -166,7 +166,7 @@
                                                                             <select name="user_role" class="form-control form-select" id="employee_gender">
                                                                                 <option></option>
                                                                                 {% for gender in genders %}
-                                                                                <option>{{ gender.name_ru }}</option>
+                                                                                <option value="gender_id_{{ gender.id }}">{{ gender.name_ru }}</option>
                                                                                 {% endfor %}
                                                                             </select>
                                                                     </div>

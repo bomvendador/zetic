@@ -59,10 +59,11 @@ def page4(pdf, json_section, lang, participant_info):
     pdf.set_font("RalewayLight", "", 6)
     pdf.multi_cell(50, 3, scale_legend_right, align='R')
     if lang == 'ru':
-        scale_name = u'''Самообладание'''
+        scale_name = u'''Самообладание и 
+самоутверждение'''
     else:
         scale_name = u'''Response control'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_1', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_20', scale_element_file, lang, participant_info)
 
     y += 15
     if lang == 'ru':
@@ -73,30 +74,30 @@ def page4(pdf, json_section, lang, participant_info):
 
     y += 15
     if lang == 'ru':
-        scale_name = u'''Позитивная
-самомотивация'''
+        scale_name = u'''Позитивная мотивация
+и снижение стресса'''
     else:
         scale_name = u'''Positive
 self-affirmation'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_3', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_18', scale_element_file, lang, participant_info)
 
-    y += 15
-    if lang == 'ru':
-        scale_name = u'''Снижение значения
-стрессовой ситуации'''
-        draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_4', scale_element_file, lang, participant_info)
-
-    else:
-        scale_name = u'''Stress minimization'''
-        draw_full_scale(pdf, scale_name, x, y + 12, y + 12, json_section, '2_4',
-                        scale_element_file, lang)
-
-    y += 15
-    if lang == 'ru':
-        scale_name = u'''Самоутверждение'''
-    else:
-        scale_name = u'''Self-assertion'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_5', scale_element_file, lang, participant_info)
+# #     y += 15
+# #     if lang == 'ru':
+# #         scale_name = u'''Снижение значения
+# # стрессовой ситуации'''
+# #         draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_4', scale_element_file, lang, participant_info)
+# #
+# #     else:
+# #         scale_name = u'''Stress minimization'''
+# #         draw_full_scale(pdf, scale_name, x, y + 12, y + 12, json_section, '2_4',
+# #                         scale_element_file, lang)
+#
+#     y += 15
+#     if lang == 'ru':
+#         scale_name = u'''Самоутверждение'''
+#     else:
+#         scale_name = u'''Self-assertion'''
+#     draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_5', scale_element_file, lang, participant_info)
 
     y += 23
     pdf.set_xy(x, y)
@@ -108,19 +109,20 @@ self-affirmation'''
 
     y -= 2
     if lang == 'ru':
-        scale_name = u'''Отвлечение'''
+        scale_name = u'''Замещение, отвлечение,
+бегство от стресса'''
     else:
         scale_name = u'''Distraction'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_6', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_17', scale_element_file, lang, participant_info)
 
-    y += 15
-    if lang == 'ru':
-        scale_name = u'''Бегство от стрессовой
-ситуации'''
-        draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_7', scale_element_file, lang, participant_info)
-    else:
-        scale_name = u'''Escape'''
-        draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_7', scale_element_file, lang, participant_info)
+#     y += 15
+#     if lang == 'ru':
+#         scale_name = u'''Бегство от стрессовой
+# ситуации'''
+#         draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_7', scale_element_file, lang, participant_info)
+#     else:
+#         scale_name = u'''Escape'''
+#         draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_7', scale_element_file, lang, participant_info)
 
     y += 15
     if lang == 'ru':
@@ -132,13 +134,13 @@ self-affirmation'''
         draw_full_scale(pdf, scale_name, x, y + 12, y + 12 - 2, json_section, '2_8',
                         scale_element_file, lang, participant_info)
 
-    y += 15
-    if lang == 'ru':
-        scale_name = u'''Замещение'''
-    else:
-        scale_name = u'''Substitution'''
-
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_9', 'media/images/kopingi_page4.png', lang, participant_info)
+    # y += 15
+    # if lang == 'ru':
+    #     scale_name = u'''Замещение'''
+    # else:
+    #     scale_name = u'''Substitution'''
+    #
+    # draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_9', 'media/images/kopingi_page4.png', lang, participant_info)
 
     y += 15
     if lang == 'ru':
@@ -159,10 +161,11 @@ Social Support'''
 
     y -= 2
     if lang == 'ru':
-        scale_name = u'''Жалость к себе'''
+        scale_name = u'''Самообвинение 
+и жалость к себе'''
     else:
         scale_name = u'''Self-pity'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_11', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_19', scale_element_file, lang, participant_info)
 
     y += 15
     if lang == 'ru':
@@ -173,12 +176,12 @@ Social Support'''
 withdrawal'''
     draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_12', scale_element_file, lang, participant_info)
 
-    y += 15
-    if lang == 'ru':
-        scale_name = u'''Самообвинение'''
-    else:
-        scale_name = u'''Self-blame'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_13', scale_element_file, lang, participant_info)
+    # y += 15
+    # if lang == 'ru':
+    #     scale_name = u'''Самообвинение'''
+    # else:
+    #     scale_name = u'''Self-blame'''
+    # draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_13', scale_element_file, lang, participant_info)
 
     y += 15
     if lang == 'ru':

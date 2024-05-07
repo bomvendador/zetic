@@ -76,7 +76,7 @@ def get_question_data(request):
         response = {
             'answers': answers,
             'question_text': question_inst.text,
-            'question_id': question_id
+            'question_id': question_id,
         }
         return JsonResponse({'response': response})
 

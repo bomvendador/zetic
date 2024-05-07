@@ -261,7 +261,7 @@ $('#save_new_research_template').on('click', function () {
     }
 })
 
-$('#save_edited_question').on('click', function () {
+$('#save_edited_template').on('click', function () {
     let test_ok = true
     let sections = []
     let template_name = $('#input_edit_research_template_name').val()

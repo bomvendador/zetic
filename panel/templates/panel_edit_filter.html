@@ -47,20 +47,23 @@
                                 <div class="col-md-6 col-sm-12">
                                     <form>
                                         <div class="mb-3">
-                                            <label for="input_study_name" class="col-form-label"><h5>Название</h5>
+                                            <label for="input_filter_name" class="col-form-label"><h5>Название</h5>
                                             </label>
-                                            <input type="text" class="form-control" id="input_filter_name" value="{{ filter.name_ru }}">
+                                            <input type="text" class="form-control" id="input_filter_name"
+                                                   value="{{ filter.name_ru }}">
                                         </div>
                                     </form>
 
                                 </div>
                                 <div class="col-md-6 col-sm-12">
-                                    <label for="select_company"><h5>Пол-Возраст</h5></label>
+                                    <label for="select_age_gender"><h5>Пол-Возраст</h5></label>
                                     <select class="form-control select2-show-search form-select"
                                             data-placeholder="Выберите шаблон" id="select_age_gender">
                                         <option label="Choose one">-- Сделайте выбор --</option>
                                         {% for age_gender in ages_genders %}
-                                            <option value="{{ age_gender.id }}"{% if filter.age_gender_group == age_gender %} selected {% endif %}>{{ age_gender.name }}</option>
+                                            <option value="{{ age_gender.id }}"
+                                                    {% if filter.age_gender_group == age_gender %}
+                                                    selected {% endif %}>{{ age_gender.name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -70,38 +73,42 @@
                             <div id="filter_params_block">
                                 <div class="row">
                                     <div class="col-md-6 col-sm-12">
-                                        <label for="select_company"><h5>Индустрия</h5></label>
+                                        <label for="select_industry"><h5>Индустрия</h5></label>
                                         <select class="form-control select2-show-search form-select"
                                                 data-placeholder="Выберите комапнию" id="select_industry">
 
                                             <option label="Choose one">-- Сделайте выбор --</option>
                                             {% for industry in industries %}
-                                                <option id="industry_id_{{ industry.id }}" {% if filter.industry == industry %} selected {% endif %}
+                                                <option id="industry_id_{{ industry.id }}"
+                                                        {% if filter.industry == industry %} selected {% endif %}
                                                         value="{{ industry.id }}">{{ industry.name_ru }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <div class="col-md-6 col-sm-12">
-                                        <label for="select_company"><h5>Орг уровень</h5></label>
+                                        <label for="select_position"><h5>Орг уровень</h5></label>
                                         <select class="form-control select2-show-search form-select"
                                                 data-placeholder="Выберите должноcть" id="select_position">
                                             <option label="Choose one">-- Сделайте выбор --</option>
                                             {% for position in positions %}
-                                                <option value="{{ position.id }}" {% if filter.employee_position == position %} selected {% endif %}>{{ position.name_ru }}</option>
+                                                <option value="{{ position.id }}"
+                                                        {% if filter.employee_position == position %}
+                                                        selected {% endif %}>{{ position.name_ru }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col-md-6 col-sm-12">
-                                        <label for="select_company"><h5>Функция</h5></label>
+                                        <label for="select_role"><h5>Функция</h5></label>
                                         <select class="form-control select2-show-search form-select"
                                                 data-placeholder="Выберите функцию" id="select_role">
 
                                             <option label="Choose one">-- Сделайте выбор --</option>
                                             {% for role in roles %}
                                                 <option id="role_id_{{ role.id }}"
-                                                        value="{{ role.id }}" {% if filter.employee_role == role %} selected {% endif %}>{{ role.name_ru }}</option>
+                                                        value="{{ role.id }}" {% if filter.employee_role == role %}
+                                                        selected {% endif %}>{{ role.name_ru }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -164,39 +171,39 @@
                                        id="table_filter_points">
                                     <thead class="thead-style" id="filter_table_header">
                                     <tr>
-                                        <th rowspan="2">
+                                        <th>
                                             Секции/шкалы
                                         </th>
                                         <th colspan="36">Сырые баллы</th>
-                                    </tr>
-                                    <tr>
-                                        {% for number in numbers %}
-                                            <th style="">{{ number }}</th>
-                                        {% endfor %}
                                     </tr>
                                     </thead>
                                     <tbody id="tbody_participants_selected">
                                     {% for section in sections %}
                                         <tr>
-                                            <td colspan="37" style="background-color: lightgrey">
+                                            <td style="background-color: lightgrey">
                                                 {{ section.name }}
                                             </td>
+                                            {% for number in numbers %}
+                                                <td style="background-color: lightgrey">{{ number }}</td>
+                                            {% endfor %}
+
                                         </tr>
                                         {% for category in categories %}
+
                                             {% if category.section == section %}
                                                 <tr>
-                                                    <td>
-                                                        {{ category.name }} - {{ category.code }}
-                                                    </td>
+                                                    <td>{{ category.name }} - {{ category.code }}</td>
                                                     {% for number in numbers %}
                                                         <td style="padding: 9px 3px;">
                                                             {% for raw_point in raw_points %}
                                                                 {% if raw_point.category_id == category.id and raw_point.raw_point == number %}
-                                                                    <input style="padding: 5px 5px;" type="number"
+                                                                    <input style="padding: 5px 5px; width: 3.3em" type="number"
                                                                            min="0"
-                                                                           max="10" class="form-control tpoint" id="raw_point_id_{{ raw_point.raw_point_id }}"
+                                                                           max="10" class="form-control tpoint"
+                                                                           id="raw_point_id_{{ raw_point.raw_point_id }}"
                                                                            data-category-id="{{ category.id }}"
-                                                                           data-raw-point="{{ number }}" value="{{ raw_point.t_point }}">
+                                                                           data-raw-point="{{ number }}"
+                                                                           value="{{ raw_point.t_point }}">
 
                                                                 {% endif %}
                                                             {% endfor %}

@@ -26,40 +26,65 @@ def add_employee(request):
             if cur_user_role_name == 'Админ заказчика':
                 employee = Employee.objects.get(user=request.user)
                 companies = Company.objects.filter(id=employee.company.id)
-    try:
-        response = requests.get(settings.API_LINK + 'attributes',
-                                headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
-        update_attributes(request, response)
-        sex = response['sex']
-        positions = response['position']
-        industries = response['industry']
-        roles = response['role']
+    # try:
+    #     response = requests.get(settings.API_LINK + 'attributes',
+    #                             headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+    #     update_attributes(request, response)
+    #     sex = response['sex']
+    #     positions = response['position']
+    #     industries = response['industry']
+    #     roles = response['role']
+    #
+    # except ValueError:
+    #     sex = []
+    #     positions = []
+    #     industries = []
+    #     roles = []
+    #     for item in EmployeeGender.objects.all():
+    #         sex.append({
+    #             'id': item.public_code,
+    #             'name_ru': item.name_ru
+    #         })
+    #     for item in EmployeeRole.objects.all():
+    #         roles.append({
+    #             'id': item.public_code,
+    #             'name_ru': item.name_ru
+    #         })
+    #     for item in EmployeePosition.objects.all():
+    #         positions.append({
+    #             'id': item.public_code,
+    #             'name_ru': item.name_ru
+    #         })
+    #     for item in Industry.objects.all():
+    #         industries.append({
+    #             'id': item.public_code,
+    #             'name_ru': item.name_ru
+    #         })
 
-    except ValueError:
-        sex = []
-        positions = []
-        industries = []
-        roles = []
-        for item in EmployeeGender.objects.all():
-            sex.append({
-                'id': item.public_code,
-                'name_ru': item.name_ru
-            })
-        for item in EmployeeRole.objects.all():
-            roles.append({
-                'id': item.public_code,
-                'name_ru': item.name_ru
-            })
-        for item in EmployeePosition.objects.all():
-            positions.append({
-                'id': item.public_code,
-                'name_ru': item.name_ru
-            })
-        for item in Industry.objects.all():
-            industries.append({
-                'id': item.public_code,
-                'name_ru': item.name_ru
-            })
+    sex = []
+    positions = []
+    industries = []
+    roles = []
+    for item in EmployeeGender.objects.all():
+        sex.append({
+            'id': item.id,
+            'name_ru': item.name_ru
+        })
+    for item in EmployeeRole.objects.all():
+        roles.append({
+            'id': item.id,
+            'name_ru': item.name_ru
+        })
+    for item in EmployeePosition.objects.all():
+        positions.append({
+            'id': item.id,
+            'name_ru': item.name_ru
+        })
+    for item in Industry.objects.all():
+        industries.append({
+            'id': item.id,
+            'name_ru': item.name_ru
+        })
 
     print(positions)
     print(industries)
@@ -133,20 +158,20 @@ def get_employee_data(request):
             'email': employee.email,
             'gender': {
                 'name_ru': employee.sex.name_ru,
-                'id': employee.sex.public_code,
+                'id': 'gender_id_' + str(employee.sex.id),
                        },
             'birth_year': employee.birth_year,
             'role': {
                 'name_ru': employee.role.name_ru,
-                'id': employee.role.public_code,
+                'id': 'role_id_' + str(employee.role.id),
                        },
             'position': {
                 'name_ru': employee.position.name_ru,
-                'id': employee.position.public_code,
+                'id': 'position_id_' + str(employee.position.id),
                        },
             'industry': {
                 'name_ru': employee.industry.name_ru,
-                'id': employee.industry.public_code,
+                'id': 'industry_id_' + str(employee.industry.id),
                        }
         }
         return JsonResponse(response)
@@ -256,14 +281,14 @@ def save_new_employee_html(request):
                 employee_inst.created_by = request.user
             employee_inst.name = employee_data['name']
             employee_inst.email = employee_data['email']
-            employee_inst.role = EmployeeRole.objects.get(public_code=employee_data['role_id'])
-            employee_inst.position = EmployeePosition.objects.get(public_code=employee_data['position_id'])
-            employee_inst.industry = Industry.objects.get(public_code=employee_data['industry_id'])
-            employee_inst.sex = EmployeeGender.objects.get(name_ru=employee_data['gender'])
+            employee_inst.role = EmployeeRole.objects.get(id=employee_data['role_id'])
+            employee_inst.position = EmployeePosition.objects.get(id=employee_data['position_id'])
+            employee_inst.industry = Industry.objects.get(id=employee_data['industry_id'])
+            employee_inst.sex = EmployeeGender.objects.get(id=employee_data['gender_id'])
             employee_inst.birth_year = employee_data['employee_birth_year']
             employee_inst.save()
 
-            sync_add_employee.delay(employee_inst.id)
+            # sync_add_employee.delay(employee_inst.id)
             return HttpResponse(status=200)
         else:
             return HttpResponse('email exists')
@@ -280,42 +305,66 @@ def employees_list(request):
         companies = Company.objects.filter(id=employee.company.id)
     if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
         companies = Company.objects.all()
-    try:
-        response = requests.get(settings.API_LINK + 'attributes',
-                                headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
-        update_attributes(request, response)
-        sex = response['sex']
-        positions = response['position']
-        industries = response['industry']
-        roles = response['role']
+    # try:
+    #     response = requests.get(settings.API_LINK + 'attributes',
+    #                             headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
+    #     update_attributes(request, response)
+    #     sex = response['sex']
+    #     positions = response['position']
+    #     industries = response['industry']
+    #     roles = response['role']
+    #
+    # except ValueError:
+    #     sex = []
+    #     positions = []
+    #     industries = []
+    #     roles = []
+    #     for item in EmployeeGender.objects.all():
+    #         sex.append({
+    #             'id': item.public_code,
+    #             'name_ru': item.name_ru
+    #         })
+    #     for item in EmployeeRole.objects.all():
+    #         roles.append({
+    #             'id': item.public_code,
+    #             'name_ru': item.name_ru
+    #         })
+    #     for item in EmployeePosition.objects.all():
+    #         positions.append({
+    #             'id': item.public_code,
+    #             'name_ru': item.name_ru
+    #         })
+    #     for item in Industry.objects.all():
+    #         industries.append({
+    #             'id': item.public_code,
+    #             'name_ru': item.name_ru
+    #         })
 
-    except ValueError:
-        sex = []
-        positions = []
-        industries = []
-        roles = []
-        for item in EmployeeGender.objects.all():
-            sex.append({
-                'id': item.public_code,
-                'name_ru': item.name_ru
-            })
-        for item in EmployeeRole.objects.all():
-            roles.append({
-                'id': item.public_code,
-                'name_ru': item.name_ru
-            })
-        for item in EmployeePosition.objects.all():
-            positions.append({
-                'id': item.public_code,
-                'name_ru': item.name_ru
-            })
-        for item in Industry.objects.all():
-            industries.append({
-                'id': item.public_code,
-                'name_ru': item.name_ru
-            })
+    sex = []
+    positions = []
+    industries = []
+    roles = []
 
-
+    for item in EmployeeGender.objects.all():
+        sex.append({
+            'id': 'gender_id_' + str(item.id),
+            'name_ru': item.name_ru
+        })
+    for item in EmployeeRole.objects.all():
+        roles.append({
+            'id': 'role_id_' + str(item.id),
+            'name_ru': item.name_ru
+        })
+    for item in EmployeePosition.objects.all():
+        positions.append({
+            'id': 'position_id_' + str(item.id),
+            'name_ru': item.name_ru
+        })
+    for item in Industry.objects.all():
+        industries.append({
+            'id': 'industry_id_' + str(item.id),
+            'name_ru': item.name_ru
+        })
 
     context.update(
         {

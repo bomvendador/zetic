@@ -2,293 +2,344 @@
 {% load static %}
 {% load tz %}
 
-    {% block links %}
-    <link href="{% static 'panel/plugins/jquery_ui/jquery-ui.min.css' %}" rel="stylesheet" />
-    {% endblock %}
+{% block links %}
+    <link href="{% static 'panel/plugins/jquery_ui/jquery-ui.min.css' %}" rel="stylesheet"/>
+{% endblock %}
 
-    {% block content %}
+{% block content %}
 
-        <!-- CONTAINER -->
-        <div class="main-container container-fluid" id="main-container">
+    <!-- CONTAINER -->
+    <div class="main-container container-fluid" id="main-container">
 
-            <!-- PAGE-HEADER -->
-            <div class="page-header" style="margin-bottom: 0px">
-                <h1 class="page-title">Вопросы</h1>
-                <div>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'categories_list' %}">Категории</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Вопросы</li>
-                    </ol>
-                </div>
-
-            </div>
-            <hr style="margin-top: 0.5rem; margin-bottom: 0.5rem; border: 0; border-top: 1px solid grey;">
-
-            <!-- PAGE-HEADER END -->
+        <!-- PAGE-HEADER -->
+        <div class="page-header" style="margin-bottom: 0px">
+            <h1 class="page-title">Вопросы</h1>
             <div>
-                <span style="font-size: 16px">Секция: </span><span><b>{{ category.section.name }}</b></span>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'categories_list' %}">Категории</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Вопросы</li>
+                </ol>
             </div>
-            <div>
-                <span style="font-size: 16px">Категория: </span><span><b>{{ category.name }}</b></span>
-            </div>
-            <hr style="margin-top: 0.5rem; margin-bottom: 1.5rem; border: 0; border-top: 1px solid grey;">
 
-            <!-- ROW-1 -->
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
+        </div>
+        <hr style="margin-top: 0.5rem; margin-bottom: 0.5rem; border: 0; border-top: 1px solid grey;">
 
-                    <div class="row ">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div id="wizard1" role="application" class="wizard clearfix">
-                                            <div class="content clearfix">
-{#                                                <h3 id="wizard1-h-0" tabindex="-1" class="title current">Выбор проекта</h3>#}
-                                                <section id="wizard1-p-0" role="tabpanel" aria-labelledby="wizard1-h-0" class="body current" aria-hidden="false">
+        <!-- PAGE-HEADER END -->
+        <div>
+            <span style="font-size: 16px">Секция: </span><span><b>{{ category.section.name }}</b></span>
+        </div>
+        <div>
+            <span style="font-size: 16px">Категория: </span><span><b>{{ category.name }}</b></span>
+        </div>
+        <hr style="margin-top: 0.5rem; margin-bottom: 1.5rem; border: 0; border-top: 1px solid grey;">
 
-                                                    <div class="table-responsive">
-                                                        <table class="table table-bordered text-nowrap border-bottom list-table dataTable no-footer" id="">
-                                                            <thead>
-    {#                                                            <tr class="table-header">#}
-                                                                <tr>
-                                                                    <th class="wd-15p border-bottom-0 table-header">Вопрос</th>
-                                                                    <th class="wd-15p border-bottom-0 table-header">Дата создания</th>
-                                                                    <th class="wd-15p border-bottom-0 table-header">Кем создан</th>
-                                                                    <th class="wd-15p border-bottom-0 table-header">Ответы</th>
-                                                                    <th class="wd-15p border-bottom-0 table-header"></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id="wizard1-tbody-1">
-                                                            {% for question in questions %}
-                                                                <tr>
-                                                                    <td class="section-name-ru">
-                                                                        {{ question.text }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ question.created_at|date:"d.m.Y H:i" }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ question.created_by.first_name }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {% for answer in answers %}
-                                                                            {% if answer.question == question %}
-                                                                            <div>
-                                                                                <span>{{ answer.text }} - {{ answer.raw_point }}</span>
-                                                                            </div>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </td>
+        <!-- ROW-1 -->
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
 
-                                                                    <td>
-                                                                        <div style="text-align: center;">
-                                                                            <i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>
-                                                                            <ul class="dropdown-menu" id="question_id_{{ question.id }}">
-                                                                                <li>
-                                                                                    <a class="dropdown-item edit-question cursor-pointer">
-                                                                                        <svg style="margin-right: 5px" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-                                                                                        Изменить
-                                                                                    </a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a class="dropdown-item delete-question cursor-pointer font-color-danger">
-                                                                                    <svg style="margin-right: 5px" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                                                                                    Удалить
-                                                                                    </a>
-                                                                                </li>
+                <div class="row ">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="wizard1" role="application" class="wizard clearfix">
+                                    <div class="content clearfix">
+                                        {#                                                <h3 id="wizard1-h-0" tabindex="-1" class="title current">Выбор проекта</h3>#}
+                                        <section id="wizard1-p-0" role="tabpanel" aria-labelledby="wizard1-h-0"
+                                                 class="body current" aria-hidden="false">
 
-    {#                                                                            <li><a class="dropdown-item delete-industry cursor-pointer">Удалить</a></li>#}
-                                                                            </ul>
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered text-nowrap border-bottom list-table dataTable no-footer"
+                                                       id="">
+                                                    <thead>
+                                                    {#                                                            <tr class="table-header">#}
+                                                    <tr>
+                                                        <th class="wd-15p border-bottom-0 table-header">Вопрос</th>
+                                                        <th class="wd-15p border-bottom-0 table-header">Дата создания
+                                                        </th>
+                                                        <th class="wd-15p border-bottom-0 table-header">Кем создан</th>
+                                                        <th class="wd-15p border-bottom-0 table-header">Ответы</th>
+                                                        <th class="wd-15p border-bottom-0 table-header"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="wizard1-tbody-1">
+                                                    {% for question in questions %}
+                                                        <tr>
+                                                            <td class="section-name-ru">
+                                                                {{ question.text }}
+                                                            </td>
+                                                            <td>
+                                                                {{ question.created_at|date:"d.m.Y H:i" }}
+                                                            </td>
+                                                            <td>
+                                                                {{ question.created_by.first_name }}
+                                                            </td>
+                                                            <td>
+                                                                {% for answer in answers %}
+                                                                    {% if answer.question == question %}
+                                                                        <div>
+                                                                            <span>{{ answer.text }} - {{ answer.raw_point }}</span>
                                                                         </div>
-                                                                    </td>
-                                                                </tr>
-                                                            {% endfor %}
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </td>
 
-                                                </section>
+                                                            <td>
+                                                                <div style="text-align: center;">
+                                                                    <i class="fe fe-more-vertical cursor-pointer"
+                                                                       data-bs-toggle="dropdown" aria-expanded="false"
+                                                                       style="font-size: 20px"></i>
+                                                                    <ul class="dropdown-menu"
+                                                                        id="question_id_{{ question.id }}">
+                                                                        <li>
+                                                                            <a class="dropdown-item edit-question cursor-pointer">
+                                                                                <svg style="margin-right: 5px"
+                                                                                     xmlns="http://www.w3.org/2000/svg"
+                                                                                     width="15" height="15"
+                                                                                     viewBox="0 0 24 24" fill="none"
+                                                                                     stroke="currentColor"
+                                                                                     stroke-width="2"
+                                                                                     stroke-linecap="round"
+                                                                                     stroke-linejoin="round"
+                                                                                     class="feather feather-edit-2">
+                                                                                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                                                                </svg>
+                                                                                Изменить
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a class="dropdown-item delete-question cursor-pointer font-color-danger">
+                                                                                <svg style="margin-right: 5px"
+                                                                                     xmlns="http://www.w3.org/2000/svg"
+                                                                                     width="15" height="15"
+                                                                                     viewBox="0 0 24 24" fill="none"
+                                                                                     stroke="currentColor"
+                                                                                     stroke-width="2"
+                                                                                     stroke-linecap="round"
+                                                                                     stroke-linejoin="round"
+                                                                                     class="feather feather-trash-2">
+                                                                                    <polyline
+                                                                                            points="3 6 5 6 21 6"></polyline>
+                                                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                                                    <line x1="10" y1="11" x2="10"
+                                                                                          y2="17"></line>
+                                                                                    <line x1="14" y1="11" x2="14"
+                                                                                          y2="17"></line>
+                                                                                </svg>
+                                                                                Удалить
+                                                                            </a>
+                                                                        </li>
 
-
+                                                                        {#                                                                            <li><a class="dropdown-item delete-industry cursor-pointer">Удалить</a></li>#}
+                                                                    </ul>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
                                             </div>
 
-{#                                        </div>#}
+                                        </section>
+
+
                                     </div>
 
-
-
+                                    {#                                        </div>#}
                                 </div>
+
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <button type="button" class="btn btn-primary float-button" id="add_question"><i class="fe fe-plus"></i></button>
+    <button type="button" class="btn btn-primary float-button" id="add_question"><i class="fe fe-plus"></i></button>
 
-        <!-- Модальное окно добавление вопроса -->
-        <div class="modal fade" id="input_modal_add_question">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content modal-content-demo">
-                    <div class="modal-header" style="background-color: #dbdbdb">
-                        <h5 class="modal-title"><b>Добавление вопроса</b></h5>
-                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                          <div class="mb-3">
-                              <h4 class="card-title mb-2">Текст вопроса</h4>
-{#                            <label for="input_section_name" class="col-form-label">Текст вопроса</label>#}
-                              <textarea class="form-control" id="input_question_text"></textarea>
-                          </div>
-                        </form>
-                        <div>
-                            <div>
-                                <hr style="margin-top: 0.5rem; margin-bottom: 0.5rem; border: 0; border-top: 1px solid grey;">
-                                <h4 class="card-title mb-0">Ответы</h4>
-                                <hr style="margin-top: 0.5rem; margin-bottom: 0.5rem; border: 0; border-top: 1px solid grey;">
-                            </div>
-                            <div>
-                                <div class="row" style="">
-                                    <div class="col-lg-12 col-sm-12 mt-0">
-                                        <button class="btn ripple btn-warning w-100" style="height: 40px; color: black" type="button" id="add_answer">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8 12H16" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M12 16V8" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            </svg>
-                                            <span style="color: black; margin-left: 5px">Добавить ответ</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="answers_block">
-                                <ul id="sortable_add">
-
-                                </ul>
-
-                            </div>
+    <!-- Модальное окно добавление вопроса -->
+    <div class="modal fade" id="input_modal_add_question">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title"><b>Добавление вопроса</b></h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <h4 class="card-title mb-2">Текст вопроса</h4>
+                            {#                            <label for="input_section_name" class="col-form-label">Текст вопроса</label>#}
+                            <textarea class="form-control" id="input_question_text"></textarea>
                         </div>
-                    </div>
+                    </form>
                     <div>
-                        <div class="row" style="padding: 0px 15px 15px">
-                            <div class="col-lg-12 col-sm-12 mt-3">
-                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="save_new_question">Сохранить</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <template id="new_answer_row_template">
-            <div class="row mt-2 mb-2 new-answer-row answer-row">
-                <div class="col-1" style="text-align: center; display: flex; align-items: center; -ms-flex-pack: center; justify-content: center;">
-                    <i class="fe fe-move" style="font-size: 18px"></i>
-                </div>
-                <div class="col-7">
-                    <input type="text" class="form-control answer_text" placeholder="Текст ответа">
-                </div>
-                <div class="col-3">
-                    <input type="number" class="form-control answer_point" placeholder="Балл" min="0">
-                </div>
-                <div class="col-1" style="text-align: center; display: flex; align-items: center; -ms-flex-pack: center; justify-content: center;">
-                    <i class="fe fe-x delete-answer-row" style="font-size: 20px; cursor: pointer"></i>
-                </div>
-
-            </div>
-
-        </template>
-
-
-
-        <!-- Модальное окно изменения вопроса -->
-        <div class="modal fade" id="input_modal_edit_question" style="z-index: 9999" data-question-id>
-            <div class="modal-dialog" role="document">
-                <div class="modal-content modal-content-demo">
-                    <div class="modal-header" style="background-color: #dbdbdb">
-                        <h5 class="modal-title"><b>Изменение вопроса</b></h5>
-                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                          <div class="mb-3">
-                              <h4 class="card-title mb-2">Текст вопроса</h4>
-{#                            <label for="input_section_name" class="col-form-label">Текст вопроса</label>#}
-                              <textarea class="form-control" id="input_edit_question_text"></textarea>
-                          </div>
-                        </form>
                         <div>
-                            <div>
-                                <hr style="margin-top: 0.5rem; margin-bottom: 0.5rem; border: 0; border-top: 1px solid grey;">
-                                <h4 class="card-title mb-0">Ответы</h4>
-                                <hr style="margin-top: 0.5rem; margin-bottom: 0.5rem; border: 0; border-top: 1px solid grey;">
-                            </div>
-                            <div>
-                                <div class="row" style="">
-                                    <div class="col-lg-12 col-sm-12 mt-0">
-                                        <button class="btn ripple btn-warning w-100" style="height: 40px; color: black" type="button" id="add_answer">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8 12H16" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M12 16V8" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            </svg>
-                                            <span style="color: black; margin-left: 5px">Добавить ответ</span>
-                                        </button>
-                                    </div>
+                            <hr style="margin-top: 0.5rem; margin-bottom: 0.5rem; border: 0; border-top: 1px solid grey;">
+                            <h4 class="card-title mb-0">Ответы</h4>
+                            <hr style="margin-top: 0.5rem; margin-bottom: 0.5rem; border: 0; border-top: 1px solid grey;">
+                        </div>
+                        <div>
+                            <div class="row" style="">
+                                <div class="col-lg-12 col-sm-12 mt-0">
+                                    <button class="btn ripple btn-warning w-100" style="height: 40px; color: black"
+                                            type="button" id="add_answer">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M8 12H16" stroke="#292D32" stroke-width="1.5"
+                                                  stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M12 16V8" stroke="#292D32" stroke-width="1.5"
+                                                  stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z"
+                                                  stroke="#292D32" stroke-width="1.5" stroke-linecap="round"
+                                                  stroke-linejoin="round"/>
+                                        </svg>
+                                        <span style="color: black; margin-left: 5px">Добавить ответ</span>
+                                    </button>
                                 </div>
                             </div>
+                        </div>
 
-                            <div id="answers_edit_block">
-                                <ul id="sortable_edit">
+                        <div id="answers_block">
+                            <ul id="sortable_add">
 
-                                </ul>
+                            </ul>
 
-
-                            </div>
                         </div>
                     </div>
-                    <div>
-                        <div class="row" style="padding: 0px 15px 15px">
-                            <div class="col-lg-12 col-sm-12 mt-3">
-                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="save_edited_question">Сохранить</button>
-                            </div>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="save_new_question">Сохранить
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <template id="new_answer_row_template">
+        <div class="row mt-2 mb-2 new-answer-row answer-row">
+            <div class="col-1"
+                 style="text-align: center; display: flex; align-items: center; -ms-flex-pack: center; justify-content: center;">
+                <i class="fe fe-move" style="font-size: 18px"></i>
+            </div>
+            <div class="col-7">
+                <input type="text" class="form-control answer_text" placeholder="Текст ответа">
+            </div>
+            <div class="col-3">
+                <input type="number" class="form-control answer_point" placeholder="Балл" min="0">
+            </div>
+            <div class="col-1"
+                 style="text-align: center; display: flex; align-items: center; -ms-flex-pack: center; justify-content: center;">
+                <i class="fe fe-x delete-answer-row" style="font-size: 20px; cursor: pointer"></i>
+            </div>
+
+        </div>
+
+    </template>
 
 
 
-    {% endblock %}
+    <!-- Модальное окно изменения вопроса -->
+    <div class="modal fade" id="input_modal_edit_question" style="z-index: 9999" data-question-id>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title"><b>Изменение вопроса</b></h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <form>
+                        <div class="mb-3">
+                            <h4 class="card-title mb-2">Текст вопроса</h4>
+                            {#                            <label for="input_section_name" class="col-form-label">Текст вопроса</label>#}
+                            <textarea class="form-control" id="input_edit_question_text"></textarea>
+                        </div>
+                    </form>
+                    <div>
+                        <div>
+                            <hr style="margin-top: 0.5rem; margin-bottom: 0.5rem; border: 0; border-top: 1px solid grey;">
+                            <h4 class="card-title mb-0">Ответы</h4>
+                            <hr style="margin-top: 0.5rem; margin-bottom: 0.5rem; border: 0; border-top: 1px solid grey;">
+                        </div>
+                        <div>
+                            <div class="row" style="">
+                                <div class="col-lg-12 col-sm-12 mt-0">
+                                    <button class="btn ripple btn-warning w-100" style="height: 40px; color: black"
+                                            type="button" id="add_answer">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M8 12H16" stroke="#292D32" stroke-width="1.5"
+                                                  stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M12 16V8" stroke="#292D32" stroke-width="1.5"
+                                                  stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z"
+                                                  stroke="#292D32" stroke-width="1.5" stroke-linecap="round"
+                                                  stroke-linejoin="round"/>
+                                        </svg>
+                                        <span style="color: black; margin-left: 5px">Добавить ответ</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="answers_edit_block">
+                            <ul id="sortable_edit">
+
+                            </ul>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="save_edited_question">Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
 
 {% block script %}
 
     <script src="{% static 'login/js/select2.js' %}"></script>
     <script src="{% static 'panel/plugins/jquery_ui/jquery-ui.min.js' %}"></script>
-{#    <script src="{% static 'login/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>#}
-<script>
+    {#    <script src="{% static 'login/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>#}
+    <script>
 
-let category_id = {{ category.id }};
-let url_add_new_question = "{% url 'add_new_question' %}"
-let url_get_question_data = "{% url 'get_question_data' %}"
-let url_delete_answer = "{% url 'delete_answer' %}"
-let url_delete_question = "{% url 'delete_question' %}"
-let url_edit_question = "{% url 'edit_question' %}"
-{#let url_edit_section = "{% url 'edit_section' %}"#}
-{#let url_delete_section = "{% url 'delete_section' %}"#}
+        let category_id = {{ category.id }};
+        let url_add_new_question = "{% url 'add_new_question' %}"
+        let url_get_question_data = "{% url 'get_question_data' %}"
+        let url_delete_answer = "{% url 'delete_answer' %}"
+        let url_delete_question = "{% url 'delete_question' %}"
+        let url_edit_question = "{% url 'edit_question' %}"
+        {#let url_edit_section = "{% url 'edit_section' %}"#}
+        {#let url_delete_section = "{% url 'delete_section' %}"#}
 
 
-</script>
+    </script>
 
-<script src="{% static 'panel/js/panel_questions_list.js' %}"></script>
+    <script src="{% static 'panel/js/panel_questions_list.js' %}"></script>
 
 {% endblock %}

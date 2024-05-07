@@ -19,6 +19,7 @@ from django.utils import timezone
 import time
 from pdf.views import pdf_single_generator
 from datetime import datetime, timedelta
+from django.db.models import ProtectedError
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -83,36 +84,25 @@ def home(request):
         '1_15': 0,
     }
     points_2 = {
-        '2_1': 0,
         '2_2': 0,
-        '2_3': 0,
-        '2_4': 0,
-        '2_5': 0,
-        '2_6': 0,
-        '2_7': 0,
         '2_8': 0,
-        '2_9': 0,
         '2_10': 0,
-        '2_11': 0,
         '2_12': 0,
-        '2_13': 0,
         '2_14': 0,
         '2_15': 0,
         '2_16': 0,
+        '2_17': 0,
+        '2_18': 0,
+        '2_19': 0,
+        '2_20': 0,
     }
     points_3 = {
-        '3_1': 0,
-        '3_2': 0,
-        '3_3': 0,
-        '3_4': 0,
-        '3_5': 0,
-        '3_6': 0,
-        '3_7': 0,
-        '3_8': 0,
-        '3_9': 0,
-        '3_10': 0,
-        '3_11': 0,
-        '3_12': 0,
+        '3_13': 0,
+        '3_14': 0,
+        '3_15': 0,
+        '3_16': 0,
+        '3_17': 0,
+        '3_18': 0,
     }
     points_4 = {
         '4_1': 0,
@@ -308,7 +298,7 @@ def get_report_participants_data(request):
 def save_group_report_data(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
-        # print(json_data)
+        print(json_data)
         # for item in json_data['square_results']:
         #     print(item)
         response = pdf_group_generator(json_data)
@@ -550,8 +540,14 @@ def delete_user(request):
         json_data = json.loads(request.body.decode('utf-8'))
         user_id = json_data['user_id']
         user = User.objects.get(id=user_id)
-        user.delete()
-        return HttpResponse('ok')
+        try:
+            user.delete()
+            return HttpResponse('ok')
+        except ProtectedError:
+            user_profile_inst = UserProfile.objects.get(user=user)
+            user_profile_inst.active = False
+            user_profile_inst.save()
+            return HttpResponse('error')
 
 
 @login_required(redirect_field_name=None, login_url='/login/')

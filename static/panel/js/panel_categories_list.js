@@ -38,10 +38,16 @@ $('#section_select').on('change', function () {
                     $('#categories_tbody').html('')
                     data['response'].forEach(function (el) {
                         // categories_table.row.add(el)
-                        html = '<tr id="category_id_' + el['id'] + '" data-code="' + el['code'] + '">' +
+                        let background_color = ''
+                        if (el['for_validity']) {
+                            background_color = '#05f3ff'
+                        }
+
+                        html = '<tr style="background-color: ' + background_color + '" id="category_id_' + el['id'] + '" data-code="' + el['code'] + '" data-for-validity="' + el['for_validity'] + '">' +
                             '<td class="category-name-ru">' + el['name'] + '</td>' +
                             '<td class="">' + el['section'] + '</td>' +
                             '<td class="">' + el['code'] + '</td>' +
+                            '<td class="">' + el['questions_qnt'] + '</td>' +
                             '<td class="">' + el['created_at'] + '</td>' +
                             '<td class="">' + el['created_by'] + '</td>' +
                             '<td>' +
@@ -55,7 +61,7 @@ $('#section_select').on('change', function () {
                             '            </a>\n' +
                             '        </li>\n' +
                             '        <li>\n' +
-                            '            <a class="dropdown-item cursor-pointer" href="questions/'+ el['id'] + '">\n' +
+                            '            <a class="dropdown-item cursor-pointer" href="questions/' + el['id'] + '">\n' +
                             '            <svg style="margin-right: 5px"  width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
                             '<path d="M10.125 8.875C10.125 7.83947 10.9645 7 12 7C13.0355 7 13.875 7.83947 13.875 8.875C13.875 9.56245 13.505 10.1635 12.9534 10.4899C12.478 10.7711 12 11.1977 12 11.75V13" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>\n' +
                             '<circle cx="12" cy="16" r="1" fill="#1C274C"/>\n' +
@@ -94,8 +100,8 @@ $('#section_select').on('change', function () {
         });
 
 
-    }else {
-        if(!first_show){
+    } else {
+        if (!first_show) {
             // $('#categories_table').fadeOut(100)
             // $('#categories_tbody').html('')
 
@@ -125,6 +131,7 @@ $('#add_category').on('click', function () {
 $('#save_new_category').on('click', function () {
     let name = $('#input_category_name').val()
     let code = $('#input_category_code').val()
+    let for_validity = $('#for_validity').prop('checked')
     if (name === '' || code === []) {
         toastr.error('Название и код должны быть заполнены')
     } else {
@@ -136,7 +143,8 @@ $('#save_new_category').on('click', function () {
             data: JSON.stringify({
                 'name': name,
                 'code': code,
-                'section_id': section_id
+                'section_id': section_id,
+                'for_validity': for_validity
             }),
             processData: false,
             contentType: false,
@@ -173,10 +181,16 @@ $('#categories_table').on('click', '.edit-category', function () {
     console.log(`category_id = ${category_id}`)
     let name = $(this).closest('tr').find('.category-name-ru').text().trim()
     let code = $(this).closest('tr').attr('data-code')
+    let for_validity = $(this).closest('tr').attr('data-for-validity')
     $('#input_category_edit_name').val(name)
     $('#input_category_edit_code').val(code)
-
     $('#input_modal_edit_category').modal('show')
+    if (for_validity === 'false') {
+        $('#for_validity_edit').prop('checked', false)
+    } else {
+        $('#for_validity_edit').prop('checked', true)
+    }
+
 
 })
 
@@ -207,7 +221,7 @@ $('#main-container').on('click', '.delete-category', function () {
                 },
                 success: function (data) {
                     console.log(data)
-                    if(data['error']){
+                    if (data['error']) {
                         Swal.fire({
                             title: 'Ошибка',
                             text: data['error'],
@@ -216,7 +230,7 @@ $('#main-container').on('click', '.delete-category', function () {
                             cancelButtonColor: '#d33',
                             confirmButtonText: 'ОК'
                         })
-                    }else {
+                    } else {
                         Swal.fire({
                             title: 'Категория удалена',
                             text: "Данные успешено обновлены",
@@ -243,6 +257,8 @@ $('#main-container').on('click', '.delete-category', function () {
 $('#edit_category').on('click', function () {
     let name = $('#input_category_edit_name').val()
     let code = $('#input_category_edit_code').val()
+    let for_validity = $('#for_validity_edit').prop('checked')
+
 
     if (name === '' || code === '') {
         toastr.error('Название и код должны быть заполнено')
@@ -256,7 +272,8 @@ $('#edit_category').on('click', function () {
             data: JSON.stringify({
                 'name': name,
                 'code': code,
-                'category_id': category_id
+                'category_id': category_id,
+                'for_validity': for_validity
             }),
             processData: false,
             contentType: false,
@@ -265,8 +282,14 @@ $('#edit_category').on('click', function () {
             },
             success: function (data) {
                 console.log(data)
-                $('#categories_tbody').find(`#category_id_${data['category_id']}`).attr('data-code', data['code'])
+                $('#categories_tbody').find(`#category_id_${data['category_id']}`).attr('data-code', data['code']).attr('data-for-validity', data['for_validity'])
                 $('#categories_tbody').find(`#category_id_${data['category_id']}`).find('.category-name-ru').eq(0).text(data['name'])
+                let background_color = ''
+                if (data['for_validity']) {
+                    background_color = '#05f3ff'
+                }
+                $('#categories_tbody').find(`#category_id_${data['category_id']}`).css('background-color', background_color)
+
                 // $('#input_category_edit_name').val(data['name'])
                 // $('#input_category_code').val(data['code'])
                 $('#input_modal_edit_category').modal('hide')

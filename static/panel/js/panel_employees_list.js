@@ -17,9 +17,10 @@ expand_menu_item('#menu_employees_list')
             }else {
                 btn_spinner($('#save_edited_employee'))
 
-                let role_id = $('#employee_role').children(':selected').prop('id')
-                let position_id = $('#employee_position').children(':selected').prop('id')
-                let industry_id = $('#employee_industry').children(':selected').prop('id')
+                let role_id = $('#employee_role').children(':selected').attr('id').split('_')[2]
+                let position_id = $('#employee_position').children(':selected').attr('id').split('_')[2]
+                let industry_id = $('#employee_industry').children(':selected').attr('id').split('_')[2]
+                let gender_id = $('#employee_gender').children(':selected').attr('id').split('_')[2]
 
                 let data = {
                         'name': name,
@@ -27,7 +28,7 @@ expand_menu_item('#menu_employees_list')
                         'email': email,
                         'position_id': position_id,
                         'industry_id': industry_id,
-                        'gender': gender,
+                        'gender_id': gender_id,
                         'employee_birth_year': employee_birth_year,
                         'employee_id': employee_id
 
@@ -60,7 +61,7 @@ expand_menu_item('#menu_employees_list')
                                       cancelButtonColor: '#d33',
                                       confirmButtonText: 'ОК'
                                     }).then((result) => {
-                                      if (result.isConfirmed) {
+                                      if (result.value) {
                                           //window.location.href = url_panel_home
                                       }
                                     })
@@ -77,7 +78,7 @@ expand_menu_item('#menu_employees_list')
                                       cancelButtonColor: '#d33',
                                       confirmButtonText: 'ОК'
                                     }).then((result) => {
-                                      if (result.isConfirmed) {
+                                      if (result.value) {
                                           window.location.reload()
                                       }
                                     })
@@ -181,7 +182,7 @@ expand_menu_item('#menu_employees_list')
           cancelButtonText: 'Нет',
           showCancelButton: true
         }).then((result) => {
-          if (result.isConfirmed) {
+          if (result.value) {
             employee_id = $(this).closest('tr').attr('id').split('_')[2]
 
             show_progressbar_loader()
@@ -223,7 +224,7 @@ expand_menu_item('#menu_employees_list')
                           cancelButtonColor: '#d33',
                           confirmButtonText: 'ОК'
                         }).then((result) => {
-                          if (result.isConfirmed) {
+                          if (result.value) {
                               // window.location.href = url_panel_home
                           }
                         })

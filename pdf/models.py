@@ -54,6 +54,7 @@ class Category(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Секция')
     name = models.CharField(max_length=100, blank=False, null=False)
     code = models.CharField(max_length=10, blank=True, null=True, default=None)
+    for_validity = models.BooleanField(default=False, null=False)
 
     def __str__(self):
         # return f'категория - {self.name}'
@@ -299,8 +300,7 @@ class QuestionnaireQuestionAnswers(models.Model):
     participant = models.ForeignKey(Participant, on_delete=models.PROTECT, default=None, blank=True, null=True)
 
     def __str__(self):
-        # return f'{self.name} - {self.company.name}'
-        return self.questionnaire.participant.employee.name
+        return f'{self.questionnaire.participant.employee.name} - {self.question.category.section.name} - {self.question.category.name} - очки = {self.answer.raw_point}'
 
     class Meta:
         verbose_name_plural = 'Опросник респондента_ответы (QuestionnaireQuestionAnswers)'
@@ -378,7 +378,7 @@ class RawToTPoints(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=None, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.type.name} - {self.category.name}  {self.raw_points} - {self.t_point}'
+        return f'{self.type.name_ru} - {self.category.section.name}- {self.category.name}  {self.raw_points} - {self.t_point}'
 
     class Meta:
         verbose_name_plural = 'Сырые данные в Т баллы'

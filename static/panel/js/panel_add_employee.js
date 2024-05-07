@@ -517,82 +517,83 @@ $('#save_employee').on('click', function () {
     let industry = $('#employee_industry').val()
     let gender = $('#employee_gender').val()
     let employee_birth_year = $('#employee_birth_year').val()
-    if (email === '' || role === '' || position === '' || industry === ' ' || gender === '' || employee_birth_year === ''){
+    if (email === '' || role === '' || position === '' || industry === ' ' || gender === '' || employee_birth_year === '') {
         toastr.error('Все поля, кроме имени, должны быть заполнены')
-    }else {
-        if(!isEmail(email)) {
+    } else {
+        if (!isEmail(email)) {
             toastr.error('Указан некорректный email')
-        }else {
+        } else {
             btn_spinner($('#save_employee'))
             let role_id = $('#employee_role option:selected').val().split('_')[2]
             let position_id = $('#employee_position option:selected').val().split('_')[2]
             let industry_id = $('#employee_industry option:selected').val().split('_')[2]
+            let gender_id = $('#employee_gender option:selected').val().split('_')[2]
 
             let data = {
-                    'name': name,
-                    'role_id': role_id,
-                    'email': email,
-                    'position_id': position_id,
-                    'industry_id': industry_id,
-                    'gender': gender,
-                    'employee_birth_year': employee_birth_year
+                'name': name,
+                'role_id': role_id,
+                'email': email,
+                'position_id': position_id,
+                'industry_id': industry_id,
+                'gender_id': gender_id,
+                'employee_birth_year': employee_birth_year
             }
-                    $.ajax({
-                        headers: { "X-CSRFToken": token },
-                        url: url_save_new_employee_html,
-                        type: 'POST',
-                        data: JSON.stringify({
-                                    'employee_data': data,
-                                    'company_id': $('.company-chosen').attr('id').split('_')[2]
-                                }),
-                        processData: false,
-                        contentType: false,
-                        error: function(data){
-                            toastr.error('Ошибка', data)
-                        },
-                        success:function (data) {
-                            console.log(data)
-                            let output_html
-                            if(data === 'email exists'){
-                                output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                                                '<div>Сотрудник с указанным email уже существует в базе данных</div>' +
-                                                '<br>' +
-                                                '<hr class="solid mt-0" style="background-color: black;">'
-                                Swal.fire({
-                                  html: output_html,
-                                  icon: 'warning',
-                                  confirmButtonColor: '#3085d6',
-                                  cancelButtonColor: '#d33',
-                                  confirmButtonText: 'ОК'
-                                }).then((result) => {
-                                  if (result.isConfirmed) {
-                                      //window.location.href = url_panel_home
-                                  }
-                                })
-
-                            }else {
-                                output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                                                '<div>Сотрудник добавлен в базу данных' + '</div>' +
-                                                '<br>' +
-                                                '<hr class="solid mt-0" style="background-color: black;">'
-                                Swal.fire({
-                                  html: output_html,
-                                  icon: 'success',
-                                  confirmButtonColor: '#3085d6',
-                                  cancelButtonColor: '#d33',
-                                  confirmButtonText: 'ОК'
-                                }).then((result) => {
-                                  if (result.isConfirmed) {
-                                      window.location.reload()
-                                  }
-                                })
-
+            console.log(data)
+            $.ajax({
+                headers: {"X-CSRFToken": token},
+                url: url_save_new_employee_html,
+                type: 'POST',
+                data: JSON.stringify({
+                    'employee_data': data,
+                    'company_id': $('.company-chosen').attr('id').split('_')[2]
+                }),
+                processData: false,
+                contentType: false,
+                error: function (data) {
+                    toastr.error('Ошибка', data)
+                },
+                success: function (data) {
+                    console.log(data)
+                    let output_html
+                    if (data === 'email exists') {
+                        output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                            '<div>Сотрудник с указанным email уже существует в базе данных</div>' +
+                            '<br>' +
+                            '<hr class="solid mt-0" style="background-color: black;">'
+                        Swal.fire({
+                            html: output_html,
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'ОК'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                //window.location.href = url_panel_home
                             }
+                        })
 
-                            btn_text($('#save_employee'), 'Загрузить')
-                        }
-                    });
+                    } else {
+                        output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                            '<div>Сотрудник добавлен в базу данных' + '</div>' +
+                            '<br>' +
+                            '<hr class="solid mt-0" style="background-color: black;">'
+                        Swal.fire({
+                            html: output_html,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'ОК'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.reload()
+                            }
+                        })
 
+                    }
+
+                    btn_text($('#save_employee'), 'Загрузить')
+                }
+            });
 
 
         }

@@ -23,3 +23,24 @@ def extract_categories(json_section, category_code, lang, participant_info):
                 else:
                     point_description = PointDescription.objects.get(category__code=category_code, value=category_point).text_en
                 return {'points': category_point, 'point_description': point_description}
+
+
+def point_with_description(data, category_code, lang):
+    print(f'==== data ====')
+    print(data)
+    print('=============')
+    for answer in data:
+        if answer['code'] == category_code:
+            if lang == 'ru':
+                if PointDescription.objects.filter(category__code=category_code, value=answer['points']).exists():
+                    point_description = PointDescription.objects.get(category__code=category_code, value=answer['points']).text
+                else:
+                    point_description = 'Описание отутствует'
+            else:
+                if PointDescription.objects.filter(category__code=category_code, value=answer['points']).exists():
+                    point_description = PointDescription.objects.get(category__code=category_code,
+                                                                     value=answer['points']).text_en
+                else:
+                    point_description = 'Описание отутствует'
+
+            return {'points': answer['points'], 'point_description': point_description}

@@ -6,12 +6,9 @@ from panel import mail_handler
 from django.utils import timezone
 
 
-def create_report(questionnaire_id):
-    questionnaire_inst = Questionnaire.objects.get(id=questionnaire_id)
-    report_inst = Report()
-
-
-
+# def create_report(questionnaire_id):
+#     questionnaire_inst = Questionnaire.objects.get(id=questionnaire_id)
+#     report_inst = Report()
 
 
 def save_data_to_db(request_json, file_name):
@@ -102,5 +99,75 @@ def save_data_to_db(request_json, file_name):
             'study_name': participant.study.name,
             'to_email': to_email
         }
-        mail_handler.send_notification_report_made(data_for_mail)
+        mail_handler.send_notification_to_participant_report_made(data_for_mail)
+
+
+def save_data_to_db_and_send_report(participant_id, file_name, study_id, lie_points, lang):
+    # print(request_json)
+
+    # if 'company_name' in request_json:
+    #     if Company.objects.filter(name=request_json['company_name']).exists():
+    #         company = Company.objects.get(name=request_json['company_name'])
+    #     else:
+    #         company = Company()
+    #         company.name = request_json['company_name']
+    #         company.save()
+    #
+    # if Employee.objects.filter(email=request_json['participant_info']['email']).exists():
+    #     employee = Employee.objects.get(email=request_json['participant_info']['email'])
+    # else:
+    #     employee = Employee()
+    #     employee.name = request_json['participant_info']['name']
+    #     employee.sex = EmployeeGender.objects.get(public_code=request_json['participant_info']['sex'])
+    #     # employee.sex = EmployeeGender.objects.get(name_ru=request_json['participant_info']['sex'])
+    #     employee.birth_year = request_json['participant_info']['year']
+    #     employee.email = request_json['participant_info']['email']
+    #     # employee.company = company
+    #     employee.save()
+    #
+    #
+
+    study = Study.objects.get(id=study_id)
+
+    participant = Participant.objects.get(id=participant_id, study=study)
+    participant.completed_at = timezone.now()
+    participant.current_percentage = 100
+    participant.answered_questions_qnt = participant.total_questions_qnt
+    participant.save()
+
+    report = Report()
+    # lie_points = round(request_json['lie_points'] / 40 * 10)
+    report.participant = participant
+    report.lie_points = lie_points
+    report.file = file_name
+    report.lang = lang
+    report.study = study
+    report.save()
+
+    # for section in request_json['appraisal_data']:
+    #     # print(section['point'])
+    #     for point in section['point']:
+    #         # print(f"{point['category']} - {point['points']}")
+    #         report_data = ReportData()
+    #         report_data.report = report
+    #         report_data.section_code = section['code']
+    #         report_data.section_name = section['section']
+    #         # print(point['code'])
+    #         report_data.category_name = point['category']
+    #         report_data.category_code = point['code']
+    #         report_data.points = raw_to_t_point.get_t_point(point['points'], point['code'], request_json['participant_info']['sex'], int(request_json['participant_info']['year']))
+    #         # report_data.points = point['points']
+    #         report_data.save()
+
+    data_for_mail = {
+        'participant_name': participant.employee.name,
+        'email': participant.employee.email,
+        'company_name': participant.employee.company.name,
+        'study_name': participant.study.name,
+        # 'to_email': to_email
+    }
+
+    if participant.send_report_to_participant_after_filling_up:
+        mail_handler.send_notification_to_participant_report_made(data_for_mail, report.id)
+    mail_handler.send_notification_report_made(data_for_mail, report.id)
 

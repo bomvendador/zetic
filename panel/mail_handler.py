@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from login.models import UserProfile
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, ParticipantQuestionGroups, Participant, EmailSentToParticipant, \
-    CategoryQuestions, ResearchTemplate, ResearchTemplateSections, Category, Questionnaire
+    CategoryQuestions, ResearchTemplate, ResearchTemplateSections, Category, Questionnaire, Report
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -13,6 +13,7 @@ import uuid
 
 import json
 from api.outcoming import get_code_for_invitation
+from django.core.mail import EmailMessage
 
 
 def generate_participant_link_code(string_length):
@@ -382,30 +383,55 @@ def send_month_report(data):
         return result
 
 
-def send_notification_report_made(data):
+def send_notification_report_made(data, report_id):
+    report = Report.objects.get(id=report_id)
     participant_name = data['participant_name']
-    to_email = data['to_email']
+    to_email = 'info@zetic.ru'
     context = {
         'data': data,
     }
     subject = participant_name + ' окончил(а) заполнение опросника'
     html_message = render_to_string('notification_report_made.html', context)
 
-    plain_text = strip_tags(html_message)
     from_email = 'ZETIC <info@zetic.ru>'
-    to_email = to_email
 
-    try:
-        send_mail(
-            subject,
-            plain_text,
-            from_email,
-            [to_email],
-            html_message=html_message
-        )
+    email = EmailMessage(
+        subject, html_message, from_email, [to_email])
+    email.attach_file(settings.MEDIA_ROOT + '/reportsPDF/single/' + report.file.name, 'application/pdf')
+    email.content_subtype = "html"
+    email.send()
 
-    except SMTPRecipientsRefused as e:
-        result = {
-            'error': 'Указан некорректный Email'
-        }
-        return result
+
+def send_notification_to_participant_report_made(data, report_id):
+    report = Report.objects.get(id=report_id)
+    participant_name = data['participant_name']
+    to_email = data['email']
+    context = {
+        'data': data,
+    }
+    subject = 'Опросник ZETIC'
+    html_message = render_to_string('notification_report_to_participant_made.html', context)
+
+    from_email = 'ZETIC <info@zetic.ru>'
+
+    email = EmailMessage(
+        subject, html_message, from_email, [to_email])
+    email.attach_file(settings.MEDIA_ROOT + '/reportsPDF/single/' + report.file.name, 'application/pdf')
+    email.content_subtype = "html"
+    email.send()
+
+
+    # try:
+    #     send_mail(
+    #         subject,
+    #         plain_text,
+    #         from_email,
+    #         [to_email],
+    #         html_message=html_message
+    #     )
+    #
+    # except SMTPRecipientsRefused as e:
+    #     result = {
+    #         'error': 'Указан некорректный Email'
+    #     }
+    #     return result

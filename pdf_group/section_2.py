@@ -31,18 +31,18 @@ def page(pdf, square_results, lang):
     block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, x, "СТРАТЕГИИ ПРЕОДОЛЕНИЯ СТРЕССА")
 
     y = y + 12
-
-    category_code = '2_1'
-    section_data = data_by_points(square_results, section_code, category_code)
-
-    additional_delta_y = get_additional_delta_y(section_data)
-
-    scale_name = 'Самообладание'
-    scale_description = 'Контроль собственных\nреакций,чрезмерная\nтребовательность к себе'
-
-    proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code, description_delta_y=5, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
+    #
+    # category_code = '2_1'
+    # section_data = data_by_points(square_results, section_code, category_code)
+    #
+    # additional_delta_y = get_additional_delta_y(section_data)
+    #
+    # scale_name = 'Самообладание'
+    # scale_description = 'Контроль собственных\nреакций,чрезмерная\nтребовательность к себе'
+    #
+    # proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code, description_delta_y=5, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
 # -------------------------
-    y = y + MIN_SCALE_DELTA_Y + additional_delta_y
+#     y = y + MIN_SCALE_DELTA_Y + additional_delta_y
 
     category_code = '2_2'
     section_data = data_by_points(square_results, section_code, category_code)
@@ -63,7 +63,7 @@ def page(pdf, square_results, lang):
 # ----------------------
     y = y + MIN_SCALE_DELTA_Y + additional_delta_y
 
-    category_code = '2_3'
+    category_code = '2_8'
     section_data = data_by_points(square_results, section_code, category_code)
 
     additional_delta_y = get_additional_delta_y(section_data)
@@ -75,15 +75,15 @@ def page(pdf, square_results, lang):
     else:
         y = y
 
-    scale_name = 'Позитивная\nсамомотивация'
+    scale_name = 'Антиципирующее\nизбегание'
 
-    scale_description = 'Приписывание себе\nспособности управлять\nситуацией'
+    scale_description = 'Попытка предотвратить\nаналогичные стрессовые\nситуации в будущем'
 
     proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code, description_delta_y=9, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
 # -------------------------
     y = y + MIN_SCALE_DELTA_Y + additional_delta_y
 
-    category_code = '2_4'
+    category_code = '2_10'
     section_data = data_by_points(square_results, section_code, category_code)
 
     additional_delta_y = get_additional_delta_y(section_data)
@@ -95,15 +95,15 @@ def page(pdf, square_results, lang):
     else:
         y = y
 
-    scale_name = 'Снижение значения\nстрессовой ситуации'
+    scale_name = 'Поиск социальной\nподдержки'
 
-    scale_description = 'Снижение значения или\nтяжести напряжения\n(рационализация, юмор,\nобесценивание)'
+    scale_description = 'Стремление быть\nвыслушанным, разделить\nс кем-либо переживания'
 
     proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code, description_delta_y=9, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
 # -------------------------
     y = y + MIN_SCALE_DELTA_Y + additional_delta_y
 
-    category_code = '2_5'
+    category_code = '2_12'
     section_data = data_by_points(square_results, section_code, category_code)
 
     additional_delta_y = get_additional_delta_y(section_data)
@@ -115,9 +115,9 @@ def page(pdf, square_results, lang):
     else:
         y = y
 
-    scale_name = 'Самоутверждение'
+    scale_name = 'Социальная замкнутость'
 
-    scale_description = 'Получение признания от\nдругих, самоутверждение\nв иной области'
+    scale_description = 'Избегание социальных контактов,\nсамоизоляция от\nкоммуникации/информации'
 
     proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code, description_delta_y=5, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
 # -------------------------
@@ -126,7 +126,7 @@ def page(pdf, square_results, lang):
 
     y = y + MIN_SCALE_DELTA_Y + additional_delta_y + 12
 
-    category_code = '2_6'
+    category_code = '2_14'
     section_data = data_by_points(square_results, section_code, category_code)
 
     additional_delta_y = get_additional_delta_y(section_data)
@@ -142,16 +142,16 @@ def page(pdf, square_results, lang):
 
     block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, start_block_name_y, x, "СТРАТЕГИИ ИГНОРИРОВАНИЯ СТРЕССА")
 
-    scale_name = 'Отвлечение'
+    scale_name = '«Заезженная пластинка»'
 
-    scale_description = 'Отвлечение от стрессовой\nситуаций'
+    scale_description = 'Постоянное мысленное\nпрокручивание аспектов\nстрессовой ситуации'
 
     proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
                   description_delta_y=5, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
     # -----------------
     y = y + MIN_SCALE_DELTA_Y + additional_delta_y
 
-    category_code = '2_7'
+    category_code = '2_15'
     section_data = data_by_points(square_results, section_code, category_code)
 
     additional_delta_y = get_additional_delta_y(section_data)
@@ -172,7 +172,7 @@ def page(pdf, square_results, lang):
     # -------------------------
     y = y + MIN_SCALE_DELTA_Y + additional_delta_y
 
-    category_code = '2_8'
+    category_code = '2_16'
     section_data = data_by_points(square_results, section_code, category_code)
 
     additional_delta_y = get_additional_delta_y(section_data)
@@ -193,7 +193,7 @@ def page(pdf, square_results, lang):
     # -------------------------
     y = y + MIN_SCALE_DELTA_Y + additional_delta_y
 
-    category_code = '2_9'
+    category_code = '2_17'
     section_data = data_by_points(square_results, section_code, category_code)
 
     additional_delta_y = get_additional_delta_y(section_data)
@@ -214,7 +214,7 @@ def page(pdf, square_results, lang):
     # -------------------------
     y = y + MIN_SCALE_DELTA_Y + additional_delta_y
 
-    category_code = '2_10'
+    category_code = '2_18'
     section_data = data_by_points(square_results, section_code, category_code)
 
     additional_delta_y = get_additional_delta_y(section_data)
@@ -237,7 +237,7 @@ def page(pdf, square_results, lang):
 
     y = y + MIN_SCALE_DELTA_Y + additional_delta_y + 12
 
-    category_code = '2_11'
+    category_code = '2_19'
     section_data = data_by_points(square_results, section_code, category_code)
 
     additional_delta_y = get_additional_delta_y(section_data)
@@ -262,7 +262,7 @@ def page(pdf, square_results, lang):
     # -----------------
     y = y + MIN_SCALE_DELTA_Y + additional_delta_y
 
-    category_code = '2_12'
+    category_code = '2_20'
     section_data = data_by_points(square_results, section_code, category_code)
 
     additional_delta_y = get_additional_delta_y(section_data)
@@ -281,90 +281,90 @@ def page(pdf, square_results, lang):
     proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
                   description_delta_y=5, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
     # -------------------------
-    y = y + MIN_SCALE_DELTA_Y + additional_delta_y
-
-    category_code = '2_13'
-    section_data = data_by_points(square_results, section_code, category_code)
-
-    additional_delta_y = get_additional_delta_y(section_data)
-
-    if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
-        insert_page_number(pdf)
-        pdf.add_page()
-        y = START_Y
-    else:
-        y = y
-
-    scale_name = 'Самообвинение'
-
-    scale_description = 'Обвинение себя в\nпроизошедшем,\nпоиск причин в себе'
-
-    proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
-                  description_delta_y=5, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
-    # -------------------------
-    y = y + MIN_SCALE_DELTA_Y + additional_delta_y
-
-    category_code = '2_14'
-    section_data = data_by_points(square_results, section_code, category_code)
-
-    additional_delta_y = get_additional_delta_y(section_data)
-
-    if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
-        insert_page_number(pdf)
-        pdf.add_page()
-        y = START_Y
-    else:
-        y = y
-
-    scale_name = '«Заезженная пластинка»'
-
-    scale_description = 'Постоянное мысленное\nпрокручивание аспектов\nстрессовой ситуации'
-
-    proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
-                  description_delta_y=5, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
-    # -------------------------
-    y = y + MIN_SCALE_DELTA_Y + additional_delta_y
-
-    category_code = '2_15'
-    section_data = data_by_points(square_results, section_code, category_code)
-
-    additional_delta_y = get_additional_delta_y(section_data)
-
-    if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
-        insert_page_number(pdf)
-        pdf.add_page()
-        y = START_Y
-    else:
-        y = y
-
-    scale_name = 'Самооправдание'
-
-    scale_description = 'Отказ от ответственности,\nотказ от поиска решения'
-
-    proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
-                  description_delta_y=5, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
-    # -------------------------
-    y = y + MIN_SCALE_DELTA_Y + additional_delta_y
-
-    category_code = '2_16'
-    section_data = data_by_points(square_results, section_code, category_code)
-
-    additional_delta_y = get_additional_delta_y(section_data)
-
-    if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
-        insert_page_number(pdf)
-        pdf.add_page()
-        y = START_Y
-    else:
-        y = y
-
-    scale_name = 'Агрессия'
-
-    scale_description = 'Пребывание в состоянии \n' \
-                        'сопротивления, ярость/агрессия'
-
-    proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
-                  description_delta_y=5, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
+    # y = y + MIN_SCALE_DELTA_Y + additional_delta_y
+    #
+    # category_code = '2_13'
+    # section_data = data_by_points(square_results, section_code, category_code)
+    #
+    # additional_delta_y = get_additional_delta_y(section_data)
+    #
+    # if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
+    #     insert_page_number(pdf)
+    #     pdf.add_page()
+    #     y = START_Y
+    # else:
+    #     y = y
+    #
+    # scale_name = 'Самообвинение'
+    #
+    # scale_description = 'Обвинение себя в\nпроизошедшем,\nпоиск причин в себе'
+    #
+    # proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
+    #               description_delta_y=5, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
+    # # -------------------------
+    # y = y + MIN_SCALE_DELTA_Y + additional_delta_y
+    #
+    # category_code = '2_14'
+    # section_data = data_by_points(square_results, section_code, category_code)
+    #
+    # additional_delta_y = get_additional_delta_y(section_data)
+    #
+    # if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
+    #     insert_page_number(pdf)
+    #     pdf.add_page()
+    #     y = START_Y
+    # else:
+    #     y = y
+    #
+    # scale_name = '«Заезженная пластинка»'
+    #
+    # scale_description = 'Постоянное мысленное\nпрокручивание аспектов\nстрессовой ситуации'
+    #
+    # proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
+    #               description_delta_y=5, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
+    # # -------------------------
+    # y = y + MIN_SCALE_DELTA_Y + additional_delta_y
+    #
+    # category_code = '2_15'
+    # section_data = data_by_points(square_results, section_code, category_code)
+    #
+    # additional_delta_y = get_additional_delta_y(section_data)
+    #
+    # if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
+    #     insert_page_number(pdf)
+    #     pdf.add_page()
+    #     y = START_Y
+    # else:
+    #     y = y
+    #
+    # scale_name = 'Самооправдание'
+    #
+    # scale_description = 'Отказ от ответственности,\nотказ от поиска решения'
+    #
+    # proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
+    #               description_delta_y=5, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
+    # # -------------------------
+    # y = y + MIN_SCALE_DELTA_Y + additional_delta_y
+    #
+    # category_code = '2_16'
+    # section_data = data_by_points(square_results, section_code, category_code)
+    #
+    # additional_delta_y = get_additional_delta_y(section_data)
+    #
+    # if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
+    #     insert_page_number(pdf)
+    #     pdf.add_page()
+    #     y = START_Y
+    # else:
+    #     y = y
+    #
+    # scale_name = 'Агрессия'
+    #
+    # scale_description = 'Пребывание в состоянии \n' \
+    #                     'сопротивления, ярость/агрессия'
+    #
+    # proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
+    #               description_delta_y=5, line_delta_y=2.5, arrow_color_r=107, arrow_color_g=196, arrow_color_b=38)
     # -------------------------
 
     # draw_table(square_results, pdf, width=90, x=14, y=table_y)
