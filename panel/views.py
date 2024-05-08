@@ -64,8 +64,10 @@ def home(request):
             cur_time_diff = participant.completed_at - participant.started_at
             time_diff_total = time_diff_total + cur_time_diff.total_seconds()
 
-    total_completion_time = time_diff_total / cnt
-
+    if cnt > 0:
+        total_completion_time = time_diff_total / cnt
+    else:
+        total_completion_time = 0
     points_1 = {
         '1_1': 0,
         '1_2': 0,

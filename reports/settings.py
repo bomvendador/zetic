@@ -118,12 +118,12 @@ WSGI_APPLICATION = 'reports.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 # Celery Broker - Redis
@@ -135,19 +135,19 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = "Europe/Moscow"
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'reports',
-        'USER': 'db_user',
-        'PASSWORD': 'Jiu8yGtyf-=-=',
-        'HOST': 'localhost',
-        'PORT': '',
-        'CHARSET': 'utf8',
-        'COLLATION': 'utf8_general_ci',
-
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'reports',
+#         'USER': 'db_user',
+#         'PASSWORD': 'Jiu8yGtyf-=-=',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#         'CHARSET': 'utf8',
+#         'COLLATION': 'utf8_general_ci',
+#
+#     }
+# }
 
 
 # print(os.environ.get('SQL_NAME', BASE_DIR / 'db.sqlite3'))
