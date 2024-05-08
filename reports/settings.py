@@ -204,8 +204,8 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root/')
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
-    'login/static/login'
+    BASE_DIR / "static/",
+    'login/static/login/'
 ]
 
 MEDIA_URL = '/media/'
