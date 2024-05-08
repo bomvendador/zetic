@@ -62,12 +62,13 @@ $('.delete-position').on('click', function () {
         cancelButtonText: 'Нет',
         showCancelButton: true
     }).then((result) => {
-        if (result.isConfirmed) {
+        if (result.value) {
+            console.log('dfger')
             id = $(this).closest('ul').attr('id').split("_")[2]
             let dict = {
                 'id': id
             }
-            save_company_parameter(dict, url_delete_employee_position, '', '', '')
+            save_company_parameter(dict, url_delete_employee_position, '', 'Запись удалена', 'Должность успешно удалена')
         }
     })
 

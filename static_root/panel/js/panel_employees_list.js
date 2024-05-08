@@ -16,9 +16,11 @@ expand_menu_item('#menu_employees_list')
                 toastr.error('Указан некорректный email')
             }else {
                 btn_spinner($('#save_edited_employee'))
-                let role_id = $('#employee_role option:selected').val().split('_')[2]
-                let position_id = $('#employee_position option:selected').val().split('_')[2]
-                let industry_id = $('#employee_industry option:selected').val().split('_')[2]
+
+                let role_id = $('#employee_role').children(':selected').attr('id').split('_')[2]
+                let position_id = $('#employee_position').children(':selected').attr('id').split('_')[2]
+                let industry_id = $('#employee_industry').children(':selected').attr('id').split('_')[2]
+                let gender_id = $('#employee_gender').children(':selected').attr('id').split('_')[2]
 
                 let data = {
                         'name': name,
@@ -26,11 +28,12 @@ expand_menu_item('#menu_employees_list')
                         'email': email,
                         'position_id': position_id,
                         'industry_id': industry_id,
-                        'gender': gender,
+                        'gender_id': gender_id,
                         'employee_birth_year': employee_birth_year,
                         'employee_id': employee_id
 
                 }
+                console.log(data)
                         $.ajax({
                             headers: { "X-CSRFToken": token },
                             url: url_save_new_employee_html,
@@ -58,7 +61,7 @@ expand_menu_item('#menu_employees_list')
                                       cancelButtonColor: '#d33',
                                       confirmButtonText: 'ОК'
                                     }).then((result) => {
-                                      if (result.isConfirmed) {
+                                      if (result.value) {
                                           //window.location.href = url_panel_home
                                       }
                                     })
@@ -75,7 +78,7 @@ expand_menu_item('#menu_employees_list')
                                       cancelButtonColor: '#d33',
                                       confirmButtonText: 'ОК'
                                     }).then((result) => {
-                                      if (result.isConfirmed) {
+                                      if (result.value) {
                                           window.location.reload()
                                       }
                                     })
@@ -115,26 +118,38 @@ expand_menu_item('#menu_employees_list')
             success:function (data) {
                 hide_progressbar_loader()
                 console.log(data)
-                $('#employee_role option').each(function (e) {
-                    if(data['role'] === $(this).text()){
-                        $(this).prop('selected', true)
-                    }
-                })
-                $('#employee_position option').each(function (e) {
-                    if(data['position'] === $(this).text()){
-                        $(this).prop('selected', true)
-                    }
-                })
-                $('#employee_industry option').each(function (e) {
-                    if(data['industry'] === $(this).text()){
-                        $(this).prop('selected', true)
-                    }
-                })
-                $('#employee_gender option').each(function (e) {
-                    if(data['gender'] === $(this).text()){
-                        $(this).prop('selected', true)
-                    }
-                })
+                if (!server_error){
+                    $('#employee_role option').each(function (e) {
+                        if(data['role']['id'] === $(this).prop('id')){
+                            $(this).prop('selected', true)
+                        }
+                    })
+                    $('#employee_position option').each(function (e) {
+                        if(data['position']['id'] === $(this).prop('id')){
+                            $(this).prop('selected', true)
+                        }
+                    })
+                    $('#employee_industry option').each(function (e) {
+                        if(data['industry']['id'] === $(this).prop('id')){
+                            $(this).prop('selected', true)
+                        }
+                    })
+                    $('#employee_gender option').each(function (e) {
+                        if(data['gender']['id'] === $(this).prop('id')){
+                            $(this).prop('selected', true)
+                        }
+                    })
+                }else {
+                    let role = data['role']
+                    let position = data['position']
+                    let industry = data['industry']
+                    let gender = data['gender']
+
+                    $('#employee_role').html('<option id="' + role['id'] + '">' + role['name_ru'] + '</option>')
+                    $('#employee_position').html('<option id="' + position['id'] + '">' + position['name_ru'] + '</option>')
+                    $('#employee_industry').html('<option id="' + industry['id'] + '">' + industry['name_ru'] + '</option>')
+                    $('#employee_gender').html('<option id="' + gender['id'] + '">' + gender['name_ru'] + '</option>')
+                }
                 $("#employee_birth_year").val(data['birth_year']).yearpicker({
                     // onChange: function (val) {
                     //     console.log(val)
@@ -145,18 +160,91 @@ expand_menu_item('#menu_employees_list')
                 })
                 $("#employee_name").val(data['name'])
                 $("#employee_email").val(data['email'])
-
-
-
-                // {#let data_json = $.parseJSON(data);#}
-
             }
         });
-
-
-
         $('#modal_edit_imployee').modal('show')
     })
+    $('#main-container').on('click', '.delete-employee', function () {
+        let employee_tr_id = $(this).closest('tr').attr('id')
+        let employee_name = $(this).closest('tr').find('td').eq(0).text()
+
+        let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<div>Удалить сотудника?</div>' +
+                        '<div><b>' + employee_name + '</b></div>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
+        Swal.fire({
+          html: output_html,
+          icon: 'question',
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Да',
+          cancelButtonText: 'Нет',
+          showCancelButton: true
+        }).then((result) => {
+          if (result.value) {
+            employee_id = $(this).closest('tr').attr('id').split('_')[2]
+
+            show_progressbar_loader()
+
+            $.ajax({
+                headers: { "X-CSRFToken": token },
+                url: url_delete_employee,
+                type: 'POST',
+
+                data: JSON.stringify({
+                            'employee_id': employee_id,
+                        }),
+                processData: false,
+                contentType: false,
+                error: function(data){
+                    toastr.error('Ошибка', data)
+                },
+                success:function (data) {
+                    hide_progressbar_loader()
+
+                    if('errors' in data){
+                        output_html = ''
+                        let list_html = '<ul><hr class="solid" style="background-color: black;">'
+                        for(let i=0; i < data['errors'].length; i++){
+                            console.log(data['errors'][i])
+
+                            list_html += '<li style="text-align: left; padding-left: 7px;"><b>'
+                            list_html += '- ' + data['errors'][i]
+                            list_html += '</b></li>'
+                        }
+                        list_html += '</ul>'
+                        output_html = '<div>Сотрудник не может быть удален по следующим причинам:' +
+                                         list_html +
+                                        '</div>'
+                        Swal.fire({
+                          html: output_html,
+                          icon: 'warning',
+                          confirmButtonColor: '#3085d6',
+                          cancelButtonColor: '#d33',
+                          confirmButtonText: 'ОК'
+                        }).then((result) => {
+                          if (result.value) {
+                              // window.location.href = url_panel_home
+                          }
+                        })
+
+
+
+                    }else {
+                        $('#' + employee_tr_id).remove()
+                        toastr.success('Сотрудник удален')
+                    }
+
+
+                }
+            });
+          }
+        })
+
+
+    })
+
 
     let company_id
 
@@ -190,8 +278,8 @@ expand_menu_item('#menu_employees_list')
 
 
     function route_handler(route_index) {
-    console.log('project - ' + $('.project-chosen').text().trim())
-        console.log('route_index - ' + route_index)
+    // console.log('project - ' + $('.project-chosen').text().trim())
+    //     console.log('route_index - ' + route_index)
         btn_spinner($('#next'))
         switch (route_index) {
             case 1:
@@ -224,6 +312,11 @@ expand_menu_item('#menu_employees_list')
                             html += '<tr class="" id=employee_id_' + data_json[i]['id'] + '>'
                             html += '<td>' + data_json[i]['name'] + '</td>'
                             html += '<td>' + data_json[i]['email'] + '</td>'
+                            html += '<td>' + data_json[i]['industry'] + '</td>'
+                            html += '<td>' + data_json[i]['role'] + '</td>'
+                            html += '<td>' + data_json[i]['position'] + '</td>'
+                            html += '<td>' + data_json[i]['birth_year'] + '</td>'
+                            html += '<td>' + data_json[i]['sex'] + '</td>'
                             html += '<td>' + data_json[i]['created_at'] + '</td>'
                             html += '<td>' + data_json[i]['created_by'] + '</td>'
                             html += '<td>'
@@ -231,7 +324,14 @@ expand_menu_item('#menu_employees_list')
                             html += '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>'
                             html += '<ul class="dropdown-menu">'
                             html += '<li><a class="dropdown-item edit-employee cursor-pointer">Изменить</a></li>'
-                            html += '<li><a class="dropdown-item cursor-pointer"">Удалить</a></li>'
+                            if($('#cur_role_name').text() === 'Менеджер' || $('#cur_role_name').text() === 'Админ заказчика'){
+                                console.log(data_json[i]['created_by_email'])
+                                if(cur_user_email === data_json[i]['created_by_email']){
+                                    html += '<li><a class="dropdown-item cursor-pointer delete-employee">Удалить</a></li>'
+                                }
+                            }else {
+                                html += '<li><a class="dropdown-item cursor-pointer delete-employee">Удалить</a></li>'
+                            }
                             html += '</ul>'
                             html += '</div>'
 
@@ -339,7 +439,7 @@ expand_menu_item('#menu_employees_list')
        $(element).DataTable({
            "searching": true,
           "destroy": true,
-          "paging": true,
+          "paging": false,
           "language": {
             "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"
           },

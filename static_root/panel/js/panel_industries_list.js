@@ -35,7 +35,7 @@ $('.edit-industry').on('click', function () {
 })
 
 $('.delete-industry').on('click', function () {
-    console.log('Удаление')
+
 
     Swal.fire({
         title: 'Удаление индустрии',
@@ -46,9 +46,8 @@ $('.delete-industry').on('click', function () {
         confirmButtonText: 'Да',
         cancelButtonText: 'Нет',
         showCancelButton: true
-    }).then((isConfirmed) => {
-        if (isConfirmed) {
-            console.log('Удаление индустрии')
+    }).then((result) => {
+        if (result.value) {
             industry_id = $(this).closest('ul').attr('id').split("_")[2]
             let dict = {
                 'id': industry_id

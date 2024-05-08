@@ -36,3 +36,39 @@
     color: red;
     text-align: center;
 }
+
+.modal-header-style{
+    background-color: #dbdbdb
+}
+
+.font-color-success{
+    color: #09ad95 !important
+}
+
+.font-color-warning{
+    color: #f7b731 !important
+}
+
+.font-color-danger{
+    color: #e82646 !important
+}
+
+.thead-style {
+    background-color: #e5e5e5
+}
+
+.stats-icons {
+    font-size: 37px;
+    color: #0c63e4;
+}
+
+
+.swal2-container {
+  z-index: 9999;
+}
+
+.button-icon {
+    margin-right: 10px!important;
+    transform: scale(1.1);
+}
+

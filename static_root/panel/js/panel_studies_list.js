@@ -171,7 +171,7 @@ expand_menu_item('#menu_study_list')
                             html += '<div style="text-align: center;">'
                             html += '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>'
                             html += '<ul class="dropdown-menu">'
-                            html += '<li><a class="dropdown-item study-details cursor-pointer">Подробно</a></li>'
+                            html += '<li><a class="dropdown-item study-details cursor-pointer"><i class="fa fa-sign-in" style="transform: scale(1.1); margin-right: 10px"></i>Подробно</a></li>'
                             html += '</ul>'
                             html += '</div>'
 
@@ -273,18 +273,18 @@ expand_menu_item('#menu_study_list')
 
     })
 
-    let table = ''
-    function process_table(element){
-        $(element).DataTable().destroy()
-       $(element).DataTable({
-           "searching": true,
-          "destroy": true,
-          "paging": true,
-          "language": {
-            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"
-          },
-          "initComplete": function () {
-
-          },
-        })
-    }
+    // let table = ''
+    // function process_table(element){
+    //     $(element).DataTable().destroy()
+    //    $(element).DataTable({
+    //        "searching": true,
+    //       "destroy": true,
+    //       "paging": true,
+    //       "language": {
+    //         "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"
+    //       },
+    //       "initComplete": function () {
+    //
+    //       },
+    //     })
+    // }

@@ -1,4 +1,4 @@
-expand_menu_item('#menu_employees_roles_list')
+expand_menu_item('#menu_employee_functions_list')
 
 $('#add_role').on('click', function () {
     $('#input_modal_add_role').modal('show')
@@ -47,14 +47,14 @@ $('#edit_role').on('click', function () {
             'id': role_id
         }
         btn_spinner($('#edit_role'))
-        save_company_parameter(dict, url_edit_employee_role, '#input_modal_edit_role','Данные обновлены', 'Данные роли сотрудника успешно обновлены')
+        save_company_parameter(dict, url_edit_employee_role, '#input_modal_edit_role','Данные обновлены', 'Данные роли/функции сотрудника успешно обновлены')
     }
 })
 
 $('.delete-role').on('click', function () {
     Swal.fire({
         title: 'Удаление роли',
-        text: "Удалить роль сотрудника?",
+        text: "Удалить роль/функцию сотрудника?",
         icon: 'question',
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
@@ -62,12 +62,12 @@ $('.delete-role').on('click', function () {
         cancelButtonText: 'Нет',
         showCancelButton: true
     }).then((result) => {
-        if (result.isConfirmed) {
+        if (result.value) {
             role_id = $(this).closest('ul').attr('id').split("_")[2]
             let dict = {
                 'id': role_id
             }
-            save_company_parameter(dict, url_delete_employee_role, '', '', '')
+            save_company_parameter(dict, url_delete_employee_role, '', 'Запись удалена', 'Роль/должность успешно удалена')
         }
     })
 
