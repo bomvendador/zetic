@@ -1,4 +1,4 @@
-from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, ParticipantQuestionGroups, Participant, EmailSentToParticipant
+from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, Participant, EmailSentToParticipant
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse

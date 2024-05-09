@@ -1,4 +1,4 @@
-from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, ParticipantQuestionGroups, Participant, \
+from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, Participant, \
     EmailSentToParticipant, Report, ResearchTemplate, ResearchTemplateSections
 from login.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
@@ -144,51 +144,51 @@ def delete_participants_from_study(request):
     return HttpResponse(status=200)
 
 
-@login_required(redirect_field_name=None, login_url='/login/')
-def save_participant_questions_groups(request):
-    if request.method == 'POST':
-        json_request = json.loads(request.body.decode('utf-8'))
-        json_data = json_request['data']
-        study_id = json_request['study_id']
-        user_profile = UserProfile.objects.get(user=request.user)
-        check_passed = True
-        response = {}
-        company = Study.objects.get(id=study_id).company
-
-        if user_profile.role.name == 'Админ заказчика':
-
-            company_admin = Employee.objects.get(user=request.user)
-            if not company_admin.company_admin_active:
-                logout(request)
-                result = 'logout'
-                check_passed = False
-
-        if not company.active:
-            response.update({
-                'warning': 'Обратите внимание - компания деактивирована!'
-            })
-            result = 'company_deactivated'
-            if not user_profile.role.name == 'Админ заказчика':
-                check_passed = True
-
-        if check_passed:
-            result = '200'
-            questions_groups_selected = json_data['questions_groups_selected']
-            participant_id = json_data['participant_id']
-            participant_inst = Participant.objects.get(id=participant_id)
-            ParticipantQuestionGroups.objects.filter(participant=participant_inst).delete()
-
-            for questions_group_selected in questions_groups_selected:
-                participant_questions_group_inst = ParticipantQuestionGroups()
-                participant_questions_group_inst.question_group_name = questions_group_selected['name']
-                participant_questions_group_inst.question_group_code = questions_group_selected['code']
-                participant_questions_group_inst.created_by = request.user
-                participant_questions_group_inst.participant = participant_inst
-                participant_questions_group_inst.save()
-        response.update({
-            'response': result,
-        })
-        return JsonResponse(response)
+# @login_required(redirect_field_name=None, login_url='/login/')
+# def save_participant_questions_groups(request):
+#     if request.method == 'POST':
+#         json_request = json.loads(request.body.decode('utf-8'))
+#         json_data = json_request['data']
+#         study_id = json_request['study_id']
+#         user_profile = UserProfile.objects.get(user=request.user)
+#         check_passed = True
+#         response = {}
+#         company = Study.objects.get(id=study_id).company
+#
+#         if user_profile.role.name == 'Админ заказчика':
+#
+#             company_admin = Employee.objects.get(user=request.user)
+#             if not company_admin.company_admin_active:
+#                 logout(request)
+#                 result = 'logout'
+#                 check_passed = False
+#
+#         if not company.active:
+#             response.update({
+#                 'warning': 'Обратите внимание - компания деактивирована!'
+#             })
+#             result = 'company_deactivated'
+#             if not user_profile.role.name == 'Админ заказчика':
+#                 check_passed = True
+#
+#         if check_passed:
+#             result = '200'
+#             questions_groups_selected = json_data['questions_groups_selected']
+#             participant_id = json_data['participant_id']
+#             participant_inst = Participant.objects.get(id=participant_id)
+#             ParticipantQuestionGroups.objects.filter(participant=participant_inst).delete()
+#
+#             for questions_group_selected in questions_groups_selected:
+#                 participant_questions_group_inst = ParticipantQuestionGroups()
+#                 participant_questions_group_inst.question_group_name = questions_group_selected['name']
+#                 participant_questions_group_inst.question_group_code = questions_group_selected['code']
+#                 participant_questions_group_inst.created_by = request.user
+#                 participant_questions_group_inst.participant = participant_inst
+#                 participant_questions_group_inst.save()
+#         response.update({
+#             'response': result,
+#         })
+#         return JsonResponse(response)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -298,12 +298,12 @@ def save_study_participants(request):
             else:
                 reminders_arr = ''
             questions_groups_arr = []
-            questions_groups = ParticipantQuestionGroups.objects.filter(participant=participant)
-            for question_groups in questions_groups:
-                questions_groups_arr.append({
-                    'name': question_groups.question_group_name,
-                    'code': question_groups.question_group_code,
-                })
+            # questions_groups = ParticipantQuestionGroups.objects.filter(participant=participant)
+            # for question_groups in questions_groups:
+            #     questions_groups_arr.append({
+            #         'name': question_groups.question_group_name,
+            #         'code': question_groups.question_group_code,
+            #     })
             if Report.objects.filter(participant=participant).exists():
                 filename = Report.objects.filter(participant=participant).latest('added').filename()
             else:

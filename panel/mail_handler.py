@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.mail import send_mail
 from login.models import UserProfile
-from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, ParticipantQuestionGroups, Participant, EmailSentToParticipant, \
+from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, Participant, EmailSentToParticipant, \
     CategoryQuestions, ResearchTemplate, ResearchTemplateSections, Category, Questionnaire, Report
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
@@ -12,7 +12,7 @@ from smtplib import SMTPException, SMTPRecipientsRefused
 import uuid
 
 import json
-from api.outcoming import get_code_for_invitation
+# from api.outcoming import get_code_for_invitation
 from django.core.mail import EmailMessage
 
 
@@ -253,10 +253,10 @@ def send_invitation_email(request):
         if check_passed:
             if email_type == 'initial':
                 if participant_inst.invitation_code is None:
-                    get_code_for_invitation_response = get_code_for_invitation(request, json_request)
-                    code_for_participant = get_code_for_invitation_response['public_code']
-                    participant_inst.invitation_code = code_for_participant
-                    participant_inst.total_questions_qnt = get_code_for_invitation_response['questions_count']
+                    # get_code_for_invitation_response = get_code_for_invitation(request, json_request)
+                    # code_for_participant = get_code_for_invitation_response['public_code']
+                    # participant_inst.invitation_code = code_for_participant
+                    # participant_inst.total_questions_qnt = get_code_for_invitation_response['questions_count']
                     participant_inst.save()
                 else:
                     code_for_participant = participant_inst.invitation_code
@@ -264,7 +264,7 @@ def send_invitation_email(request):
                 code_for_participant = participant_inst.invitation_code
 
             context = {
-                'code_for_participant': code_for_participant,
+                # 'code_for_participant': code_for_participant,
                 'participant_email': participant_email,
             }
 
