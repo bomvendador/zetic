@@ -417,7 +417,7 @@ class ReportData(models.Model):
     # def __str__(self):
     #     return f'{self.report.participant.employee.name} - {self.report.participant.employee.company.name} - {self.section_name} - {self.category_code} - {self.category_name} - {self.points}'
     def __str__(self):
-        return f'{self.section_name} - {self.category_code} - {self.category_name} - {self.points}'
+        return f'{self.section_name} - {self.category_code} - {self.category_name} - {self.points} - {self.report.filename()}'
 
     class Meta:
         verbose_name_plural = 'Данные индивидуальных отчетов'
