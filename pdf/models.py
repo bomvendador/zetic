@@ -307,20 +307,20 @@ class QuestionnaireQuestionAnswers(models.Model):
         verbose_name = 'Опросники респондентов_ответы (QuestionnaireQuestionAnswers)'
 
 
-class ParticipantQuestionGroups(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
-    question_group_name = models.CharField(max_length=30, blank=True, null=True, default=None)
-    question_group_code = models.CharField(max_length=2, blank=True, null=True, default=None)
-    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, null=True, blank=True)
-
-    def __str__(self):
-        return f'Группа вопросов - {self.question_group_name} Опросник - {self.participant}'
-
-    class Meta:
-        verbose_name_plural = 'Группы вопросов для участника'
-        verbose_name = 'Группа вопросов для участника'
-
+# class ParticipantQuestionGroups(models.Model):
+#     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+#     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+#     question_group_name = models.CharField(max_length=30, blank=True, null=True, default=None)
+#     question_group_code = models.CharField(max_length=2, blank=True, null=True, default=None)
+#     participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, null=True, blank=True)
+#
+#     def __str__(self):
+#         return f'Группа вопросов - {self.question_group_name} Опросник - {self.participant}'
+#
+#     class Meta:
+#         verbose_name_plural = 'Группы вопросов для участника'
+#         verbose_name = 'Группа вопросов для участника'
+#
 
 class EmailSentToParticipant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
