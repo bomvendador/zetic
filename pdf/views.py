@@ -192,13 +192,13 @@ def category_data(code_prefix, questionnaire_id, employee_id):
                 if answer.question.category == category:
                     raw_points = raw_points + answer.answer.raw_point
                 # print(f'raw_point - {answer.answer.raw_point} categoryname - {answer.question.category.name} answer - {answer.question.text}')
-            if not raw_points == 0:
-                answers.append({
-                    "category": category.name,
-                    "code": category.code,
-                    "points": raw_to_t_point.filter_raw_points_to_t_points(raw_points, employee_id, category.id)
+            # if not raw_points == 0:
+            answers.append({
+                "category": category.name,
+                "code": category.code,
+                "points": raw_to_t_point.filter_raw_points_to_t_points(raw_points, employee_id, category.id)
 
-                })
+            })
                 # print('=== answers_code_1 ===')
                 # print(answers_code_1)
                 # print('======================')
