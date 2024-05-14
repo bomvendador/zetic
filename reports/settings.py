@@ -29,6 +29,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure--lfbjn3qgosinvh0ls*wb*#72ckmd4-9ozyt*^=6=_w+ah1&qg'
 # SECRET_KEY = os.environ.get("SECRET_KEY")
 
+CSRF_TRUSTED_ORIGINS = ['http://51.250.113.32/']
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 1
 # DEBUG = True
@@ -118,12 +120,12 @@ WSGI_APPLICATION = 'reports.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 # Celery Broker - Redis
@@ -135,19 +137,19 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = "Europe/Moscow"
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'reports',
-        'USER': 'db_user',
-        'PASSWORD': 'Jiu8yGtyf-=-=',
-        'HOST': 'localhost',
-        'PORT': '',
-        'CHARSET': 'utf8',
-        'COLLATION': 'utf8_general_ci',
-
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'reports',
+#         'USER': 'db_user',
+#         'PASSWORD': 'Jiu8yGtyf-=-=',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#         'CHARSET': 'utf8',
+#         'COLLATION': 'utf8_general_ci',
+#
+#     }
+# }
 
 
 # print(os.environ.get('SQL_NAME', BASE_DIR / 'db.sqlite3'))
