@@ -119,6 +119,7 @@ def home(request):
         '4_10': 0,
     }
 
+
     individual_reports = ReportData.objects.filter(report__participant__created_by=request.user)
     for report in individual_reports:
         # print(report.report.participant.employee.name)
