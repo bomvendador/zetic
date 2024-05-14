@@ -125,8 +125,8 @@ def home(request):
         # print(report.report.participant.employee.name)
         if report.section_code == '1':
             points_1[report.category_code] = points_1[report.category_code] + report.points
-        if report.section_code == '2':
-            points_2[report.category_code] = points_2[report.category_code] + report.points
+        # if report.section_code == '2':
+        #     points_2[report.category_code] = points_2[report.category_code] + report.points
         if report.section_code == '3':
             points_3[report.category_code] = points_3[report.category_code] + report.points
         if report.section_code == '4':
