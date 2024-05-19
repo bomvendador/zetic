@@ -29,10 +29,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure--lfbjn3qgosinvh0ls*wb*#72ckmd4-9ozyt*^=6=_w+ah1&qg'
 # SECRET_KEY = os.environ.get("SECRET_KEY")
 
-CSRF_TRUSTED_ORIGINS = ['http://51.250.113.32',
-                        'http://zetictest.ru',
-                        'https://zetictest.ru',
-                        ]
+CSRF_TRUSTED_ORIGINS = [
+    'http://51.250.113.32',
+    'http://zetictest.ru',
+    'https://zetictest.ru',
+]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 1
@@ -49,6 +50,11 @@ else:
 ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
+CORS_ORIGIN_WHITELIST = [
+    'http://51.250.113.32',
+    'http://zetictest.ru',
+    'https://zetictest.ru',
+]
 
 # Application definition
 
