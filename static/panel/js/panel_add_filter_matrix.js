@@ -283,13 +283,19 @@ $('#save_matrix_filter').on('click', function () {
             success: function (data) {
                 console.log(data)
                 btn_text('#save_matrix_filter', 'Сохранить фильтр')
+
+                let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
+                                    '<br>' +
+                                    '<hr class="solid mt-0" style="background-color: black;">' +
+                                    '<h4 style="text-align: center">Фильтр добавлен</h4>' +
+                                    '<hr class="solid mt-0" style="background-color: black;">'
+
                 Swal.fire({
-                  title: 'Данные сохранены',
-                  text: "Фильтр добавлен",
-                  icon: 'success',
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'ОК'
+                    html: output_html,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ОК'
                 }).then((result) => {
                     if (result.value) {
                         window.location.href = url_filters_matrix_list
