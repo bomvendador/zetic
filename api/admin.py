@@ -2,7 +2,8 @@ from django.contrib import admin
 from pdf.models import Participant, Report, Category, Section, PointDescription, Company, ReportData, ReportGroup, \
     ReportGroupSquare, Industry, EmployeeRole, EmployeePosition, Employee, Study, EmailSentToParticipant, \
     RawToTPointsType, RawToTPoints, EmployeeGender, ResearchTemplate, ResearchTemplateSections, CategoryQuestions, QuestionAnswers, \
-    AgeGenderGroup, Questionnaire, QuestionnaireQuestionAnswers
+    AgeGenderGroup, Questionnaire, QuestionnaireQuestionAnswers, MatrixFilter, MatrixFilterCategory, MatrixFilterInclusiveEmployeePosition, \
+    MatrixFilterParticipantNotDistributed, MatrixFilterParticipantNotDistributedEmployeePosition
 from login.models import UserRole, UserProfile
 
 
@@ -39,3 +40,8 @@ admin.site.register(QuestionAnswers)
 admin.site.register(AgeGenderGroup)
 admin.site.register(Questionnaire)
 admin.site.register(QuestionnaireQuestionAnswers)
+admin.site.register(MatrixFilter)
+admin.site.register(MatrixFilterCategory)
+admin.site.register(MatrixFilterInclusiveEmployeePosition)
+admin.site.register(MatrixFilterParticipantNotDistributed)
+admin.site.register(MatrixFilterParticipantNotDistributedEmployeePosition)

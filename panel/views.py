@@ -6,7 +6,10 @@ import json
 # Create your views here.
 
 from pdf.models import Company, Participant, ReportData, Report, Category, ReportGroup, ReportGroupSquare, Industry, \
-    Employee, EmployeeRole, EmployeePosition, EmployeeGender, Study, ResearchTemplate, ResearchTemplateSections, Section
+    Employee, EmployeeRole, EmployeePosition, EmployeeGender, Study, ResearchTemplate, ResearchTemplateSections, \
+    Section, \
+    MatrixFilter, MatrixFilterParticipantNotDistributed, MatrixFilterInclusiveEmployeePosition, MatrixFilterCategory, \
+    MatrixFilterParticipantNotDistributedEmployeePosition
 # from django.contrib.auth.models import User
 
 from login.models import UserRole, UserProfile, User
@@ -20,6 +23,10 @@ import time
 from pdf.views import pdf_single_generator
 from datetime import datetime, timedelta
 from django.db.models import ProtectedError
+
+from django.db.models import Q
+
+from .custom_funcs import squares_data
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -42,16 +49,15 @@ def info_common(request):
 
 
 def millisec_to_time(millisec):
-    d = datetime(1, 1, 1)+millisec
+    d = datetime(1, 1, 1) + millisec
     if d.day - 1 == 0:
         return "{0}:{1}:{2}".format(d.hour, d.minute, d.second)
     else:
-        return "{0}:{1}:{2}:{3}".format(d.day-1, d.hour, d.minute, d.second)
+        return "{0}:{1}:{2}:{3}".format(d.day - 1, d.hour, d.minute, d.second)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def home(request):
-
     context = info_common(request)
 
     participants = Participant.objects.filter(created_by=request.user)
@@ -119,7 +125,6 @@ def home(request):
         '4_10': 0,
     }
 
-
     individual_reports = ReportData.objects.filter(report__participant__created_by=request.user)
     for report in individual_reports:
         # print(report.report.participant.employee.name)
@@ -184,7 +189,6 @@ def home(request):
                 'group_reports_qnt': ReportGroup.objects.filter(company=company).count()
             })
         if userprofile.role.name == 'Админ' or userprofile.role.name == 'Суперадмин':
-
             stats.update({
                 'companies_qnt': Company.objects.all().count(),
                 'employees_qnt': Employee.objects.all().count(),
@@ -243,7 +247,6 @@ def team_distribution(request):
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def get_company_participants(request):
-
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
         company = json_data['company']
@@ -268,44 +271,276 @@ def get_report_participants_data(request):
         json_data = json.loads(request.body.decode('utf-8'))
         report_participants = json_data['report_participants']
         print(report_participants)
-        participants_data = []
-        lie_points = []
-        # response = {}
-        for participant in report_participants:
-            print(f'participant - {participant}')
-            report = Report.objects.filter(participant__employee__email=participant).latest('added')
-            lie_points.append({
-                'fio': report.participant.employee.name,
-                'email': report.participant.employee.email,
-                'lie_points': report.lie_points,
-                'role_name': report.participant.employee.role.name_ru,
-                'position': report.participant.employee.position.name_ru,
-            })
-            report_datas = ReportData.objects.filter(report=report)
-            for report_data in report_datas:
-                # print(report_data)
-                participants_data.append({
-                    'fio': report_data.report.participant.employee.name,
-                    'section_code': report_data.section_code,
-                    'category_code': report_data.category_code,
-                    'points': report_data.points,
-                })
+        participants_data = get_participants_data_for_group_report(report_participants)
+        response = {}
+
+
+        # matrix_filters = MatrixFilter.objects.all()
+        # for participant in report_participants:
+        #     participant_position_is_in_filter = False
+        #     print(f'participant - {participant}')
+        #     employee_inst = Employee.objects.get(email=participant)
+        #     employee_position_inst = EmployeePosition.objects.get(employee=employee_inst)
+        #     report = Report.objects.filter(participant__employee__email=participant).latest('added')
+        #     participant_squares = []
+        #     for matrix_filter in matrix_filters:
+        #         filter_has_positions = False
+        #         filter_positions_inst = MatrixFilterInclusiveEmployeePosition.objects.filter(
+        #             matrix_filter=matrix_filter)
+        #         if filter_positions_inst:
+        #             filter_has_positions = True
+        #             for filter_position in filter_positions_inst:
+        #                 if filter_position.employee_position == employee_position_inst:
+        #                     participant_position_is_in_filter = True
+        #         if (filter_has_positions and participant_position_is_in_filter) or not filter_has_positions:
+        #             filter_categories = MatrixFilterCategory.objects.filter(matrix_filter=matrix_filter)
+        #             report_data_inst = ReportData.objects.filter(report=report)
+        #             total_filter_categories = len(filter_categories)
+        #             categories_fits_cnt = 0
+        #             for filter_category in filter_categories:
+        #                 for data in report_data_inst:
+        #                     if data.category_code == filter_category.category.code and \
+        #                             (filter_category.points_from <= data.points <= filter_category.points_to):
+        #                         categories_fits_cnt = categories_fits_cnt + 1
+        #             if categories_fits_cnt > 0:
+        #                 participant_squares.append({
+        #                     'square_name': matrix_filter.square_name,
+        #                     'square_code': matrix_filter.square_code,
+        #                     'percentage': categories_fits_cnt * 100 / total_filter_categories
+        #                 })
+        #     if len(participant_squares) == 0:
+        #         matrix_filters_participant_not_distributed_inst = MatrixFilterParticipantNotDistributed.objects.all()
+        #         for matrix_filter_participant_not_distributed in matrix_filters_participant_not_distributed_inst:
+        #             matrix_filters_participant_not_distributed_employee_position = MatrixFilterParticipantNotDistributedEmployeePosition.objects.filter(matrix_filter=matrix_filter_participant_not_distributed)
+        #             for matrix_filter_participant_not_distributed_employee_position in matrix_filters_participant_not_distributed_employee_position:
+        #                 if matrix_filter_participant_not_distributed_employee_position.employee_position == employee_position_inst:
+        #                     participant_squares.append({
+        #                         'square_name': matrix_filter_participant_not_distributed.square_name,
+        #                         'square_code': matrix_filter_participant_not_distributed.square_code,
+        #                         'percentage': 0
+        #                     })
+        #
+        #     participants_data.append({
+        #         'fio': report.participant.employee.name,
+        #         'email': report.participant.employee.email,
+        #         'lie_points': report.lie_points,
+        #         'role_name': report.participant.employee.role.name_ru,
+        #         'position': report.participant.employee.position.name_ru,
+        #         'participant_squares': participant_squares,
+        #     })
+
+        # report_datas = ReportData.objects.filter(report=report)
+        # for report_data in report_datas:
+        #     # print(report_data)
+        #     participants_data.append({
+        #         'fio': report_data.report.participant.employee.name,
+        #         'section_code': report_data.section_code,
+        #         'category_code': report_data.category_code,
+        #         'points': report_data.points,
+        #     })
         response = {
-            'data': list(participants_data),
-            'lie_points': list(lie_points)
+            'squares_data': squares_data,
+            # 'data': list(participants_data),
+            'participants_data': list(participants_data)
         }
         return JsonResponse(response, safe=False)
+
+
+def get_participants_data_for_group_report(participants_emails):
+    participants_data = []
+    matrix_filters = MatrixFilter.objects.all()
+    for participant in participants_emails:
+        participant_position_is_in_filter = False
+        print(f'participant - {participant}')
+        employee_inst = Employee.objects.get(email=participant)
+        employee_position_inst = EmployeePosition.objects.get(employee=employee_inst)
+        report = Report.objects.filter(participant__employee__email=participant).latest('added')
+        participant_squares = []
+        participant_squares_ordered = []
+        for matrix_filter in matrix_filters:
+            filter_has_positions = False
+            filter_positions_inst = MatrixFilterInclusiveEmployeePosition.objects.filter(
+                matrix_filter=matrix_filter)
+            if filter_positions_inst:
+                filter_has_positions = True
+                for filter_position in filter_positions_inst:
+                    if filter_position.employee_position == employee_position_inst:
+                        participant_position_is_in_filter = True
+            if (filter_has_positions and participant_position_is_in_filter) or not filter_has_positions:
+                filter_categories = MatrixFilterCategory.objects.filter(matrix_filter=matrix_filter)
+                report_data_inst = ReportData.objects.filter(report=report)
+                total_filter_categories = len(filter_categories)
+                categories_fits_cnt = 0
+                for filter_category in filter_categories:
+                    for data in report_data_inst:
+                        if data.category_code == filter_category.category.code and \
+                                (filter_category.points_from <= data.points <= filter_category.points_to):
+                            categories_fits_cnt = categories_fits_cnt + 1
+                if categories_fits_cnt > 0:
+                    participant_squares.append({
+                        'square_name': matrix_filter.square_name,
+                        'square_code': matrix_filter.square_code,
+                        'percentage': int(categories_fits_cnt * 100 / total_filter_categories)
+                    })
+                    if len(participant_squares) > 1:
+                        for i in range(len(participant_squares) - 1, 0, -1):
+                            # print(f'i = {i}')
+                            # print(f"{participant_squares[i]['percentage']} > {participant_squares[i - 1]['percentage']}")
+                            if participant_squares[i]['percentage'] > participant_squares[i - 1]['percentage']:
+                                cur_val = participant_squares[i]['percentage']
+                                prev_val = participant_squares[i - 1]['percentage']
+                                participant_squares[i - 1]['percentage'] = cur_val
+                                participant_squares[i]['percentage'] = prev_val
+        if len(participant_squares) == 0:
+            matrix_filters_participant_not_distributed_inst = MatrixFilterParticipantNotDistributed.objects.all()
+            for matrix_filter_participant_not_distributed in matrix_filters_participant_not_distributed_inst:
+                matrix_filters_participant_not_distributed_employee_position = MatrixFilterParticipantNotDistributedEmployeePosition.objects.filter(
+                    matrix_filter=matrix_filter_participant_not_distributed)
+                for matrix_filter_participant_not_distributed_employee_position in matrix_filters_participant_not_distributed_employee_position:
+                    if matrix_filter_participant_not_distributed_employee_position.employee_position == employee_position_inst:
+                        participant_squares.append({
+                            'square_name': matrix_filter_participant_not_distributed.square_name,
+                            'square_code': matrix_filter_participant_not_distributed.square_code,
+                            'percentage': 0
+                        })
+
+        participants_data.append({
+            'fio': report.participant.employee.name,
+            'email': report.participant.employee.email,
+            'lie_points': report.lie_points,
+            'role_name': report.participant.employee.role.name_ru,
+            'position': report.participant.employee.position.name_ru,
+            'participant_squares': participant_squares,
+            'employee_id': report.participant.employee.id
+        })
+        print(participant_squares)
+    return participants_data
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def save_group_report_data(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
+        print('--- 421 ---')
         print(json_data)
+        print('===421===')
+
+        operation = json_data['operation']
+        square_results = json_data['square_results']
+
+        if operation == 'edit':
+            group_report_inst = ReportGroup.objects.get(id=json_data['group_report_id'])
+            # report_group_square = ReportGroupSquare.objects.filter(report_group=group_report_inst).delete()
+            # ReportGroupSquare.objects.filter(report_group=group_report_inst).delete()
+            for square_result in square_results:
+                participant_number = square_result[7]
+                if participant_number == '':
+                    report_group_square_inst = ReportGroupSquare.objects.filter(report_group=group_report_inst)
+                    biggest_number = 0
+                    if report_group_square_inst:
+                        for report_group_square in report_group_square_inst:
+                            if int(report_group_square.participant_number) > int(biggest_number):
+                                biggest_number = report_group_square.participant_number
+                    else:
+                        biggest_number = 1
+                    new_report_group_square = ReportGroupSquare()
+                    new_report_group_square.report_group = group_report_inst
+                    new_report_group_square.participant_number = biggest_number + 1
+                    new_report_group_square.save()
+                    square_result[7] = biggest_number + 1
+            json_data['square_results'] = square_results
+            ReportGroupSquare.objects.filter(report_group=group_report_inst).delete()
+        else:
+            cnt = 0
+            for square_result in square_results:
+                cnt = cnt + 1
+                square_result.append(cnt)
+
+        print('--- 449 ---')
+        print(json_data)
+        print('===449===')
+
+
         # for item in json_data['square_results']:
         #     print(item)
         response = pdf_group_generator(json_data)
         return response
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def delete_participant_from_group_report(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        employee_id = json_data['employee_id']
+        group_report_id = json_data['group_report_id']
+        group_report_squares = ReportGroupSquare.objects.filter(Q(report_group=ReportGroup.objects.get(id=group_report_id)) & Q(report__participant__employee_id=employee_id))[0]
+        group_report_squares.delete()
+        return HttpResponse(200)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def get_available_participants_for_group_report(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        company_id = json_data['company_id']
+        group_report_id = json_data['group_report_id']
+        group_report_inst = ReportGroup.objects.get(id=group_report_id)
+        group_report_squares_inst = ReportGroupSquare.objects.filter(report_group=group_report_inst)
+        company_inst = Company.objects.get(id=company_id)
+        reports_inst = Report.objects.filter(participant__employee__company=company_inst)
+        employees_inst = Employee.objects.filter(company_id=company_id)
+        employees = []
+        for report in reports_inst:
+            # print(employee.name)
+            employee_is_in_group_report = False
+            for group_report_participant in group_report_squares_inst:
+                if group_report_participant.report.participant.employee == report.participant.employee:
+                    employee_is_in_group_report = True
+            if not employee_is_in_group_report:
+                # print(employee.email)
+                employees.append({
+                    'participant_data': get_participants_data_for_group_report([report.participant.employee.email]),
+                    'squares_data': squares_data
+                })
+        print(employees)
+        return JsonResponse(employees, safe=False)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def edit_group_report_data(request, report_id):
+    context = info_common(request)
+    group_report_inst = ReportGroup.objects.get(id=report_id)
+    group_report_squares_inst = ReportGroupSquare.objects.filter(report_group=group_report_inst)
+    participants_emails = []
+    group_reports = []
+    for group_report in group_report_squares_inst:
+
+        # participants_emails.append(group_report.report.participant.employee.email)
+        participant_data = get_participants_data_for_group_report([group_report.report.participant.employee.email])
+        print(participant_data)
+        group_reports.append({
+            'participant_data': participant_data[0],
+            'report': {
+                'group_name': group_report.participant_group,
+                'group_color': group_report.participant_group_color,
+                'bold': group_report.bold,
+                'square_code': group_report.square_code,
+                'participant_number': group_report.participant_number,
+                'employee_id': group_report.report.participant.employee.id
+            },
+
+        })
+
+    context.update({
+        'group_reports': group_reports,
+        'squares_data': squares_data,
+        'company_id': group_report_inst.company.id,
+        'group_report_id': report_id,
+        'company_name': group_report_inst.company.name,
+    })
+    print(group_reports)
+
+    return render(request, 'panel_edit_group_report.html', context)
 
 
 # список командных отчетов
@@ -351,6 +586,7 @@ def get_group_reports_list(request):
                 'company': group_report.company.name,
                 'id': group_report.id,
                 'date': timezone.localtime(group_report.added).strftime("%d.%m.%Y %H:%M:%S"),
+                'timestamp': group_report.added,
                 'participants': report_group_square_arr,
                 'qnt': len(report_group_square_arr),
                 'file_name': group_report.file.name,
@@ -636,7 +872,7 @@ def save_migration(request):
                             study_inst.save()
 
                         if not Participant.objects.filter(employee__email=participant_info['email'],
-                                                      study=study_inst).exists():
+                                                          study=study_inst).exists():
                             participant_inst = Participant()
                             participant_inst.employee = employee_inst
                             participant_inst.started_at = timezone.now()
@@ -664,4 +900,3 @@ def save_migration(request):
         print(f'time - {finished_time - start_time}')
         # print(f'reports_qnt - {reports_qnt} employee_qnt - {employee_qnt}')
         return HttpResponse('ok')
-

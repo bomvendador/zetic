@@ -2,6 +2,89 @@ from pdf.models import EmployeePosition, EmployeeRole, Industry, User, Participa
 
 import rstr
 
+squares_data = [
+    {
+        'code': '1_1',
+        'square_name': 'ИНТЕГРАТОРЫ',
+        'square_role_name': 'Магнит'
+    },
+    {
+        'code': '1_2',
+        'square_name': 'ИНТЕГРАТОРЫ',
+        'square_role_name': 'Фасилитатор'
+    },
+    {
+        'code': '1_3',
+        'square_name': 'ИНТЕГРАТОРЫ',
+        'square_role_name': 'Переговорщик'
+    },
+    {
+        'code': '1_4',
+        'square_name': 'ИНТЕГРАТОРЫ',
+        'square_role_name': 'Коннектор'
+    },
+    {
+        'code': '2_1',
+        'square_name': 'ПРЕДПРИНИМАТЕЛИ',
+        'square_role_name': 'Визионер'
+    },
+    {
+        'code': '2_2',
+        'square_name': 'ПРЕДПРИНИМАТЕЛИ',
+        'square_role_name': 'Авантюрист'
+    },
+    {
+        'code': '2_3',
+        'square_name': 'ПРЕДПРИНИМАТЕЛИ',
+        'square_role_name': 'Искатель ресурсов'
+    },
+    {
+        'code': '2_4',
+        'square_name': 'ПРЕДПРИНИМАТЕЛИ',
+        'square_role_name': 'Изобретатель'
+    },
+    {
+        'code': '3_1',
+        'square_name': 'АДМИНИСТРАТОРЫ',
+        'square_role_name': 'Хранитель'
+    },
+    {
+        'code': '3_2',
+        'square_name': 'АДМИНИСТРАТОРЫ',
+        'square_role_name': 'Вдохновитель'
+    },
+    {
+        'code': '3_3',
+        'square_name': 'АДМИНИСТРАТОРЫ',
+        'square_role_name': 'Контролер'
+    },
+    {
+        'code': '3_4',
+        'square_name': 'АДМИНИСТРАТОРЫ',
+        'square_role_name': 'Благородный служитель'
+    },
+    {
+        'code': '4_1',
+        'square_name': 'ПРОИЗВОДИТЕЛИ',
+        'square_role_name': 'Организатор'
+    },
+    {
+        'code': '4_2',
+        'square_name': 'ПРОИЗВОДИТЕЛИ',
+        'square_role_name': 'Любитель улучшений'
+    },
+    {
+        'code': '4_3',
+        'square_name': 'ПРОИЗВОДИТЕЛИ',
+        'square_role_name': 'Реализатор'
+    },
+    {
+        'code': '4_4',
+        'square_name': 'ПРОИЗВОДИТЕЛИ',
+        'square_role_name': 'Решатель проблем'
+    },
+]
+
 
 def generate_code(symbol_qnt):
     code = ''

@@ -189,6 +189,7 @@
         $('#input-modal-report-comments').modal('show')
     })
 
+
     $('#modal_save_comments_btn').on('click', function () {
         btn_spinner('#modal_save_comments_btn')
         let comments = $('#report-comments-text').val()
@@ -281,7 +282,7 @@
                         for(let i=0; i < data_json.length; i++){
                             html += '<tr class="" id="report_id_' + data_json[i]['id'] + '">'
                             html += '<td>' + data_json[i]['company'] + '</td>'
-                            html += '<td>' + data_json[i]['date'] + '</td>'
+                            html += '<td><span style="display: none">' + data_json[i]['timestamp'] + '</span> ' + data_json[i]['date'] + '</td>'
                             html += '<td>' + data_json[i]['qnt'] + '</td>'
                             html += '<td>'
                             for(let j=0; j < data_json[i]['participants'].length; j++){
@@ -301,6 +302,7 @@
                             html += '<ul class="dropdown-menu">'
                             html += '<li><a target="_blank" class="dropdown-item" href="download_group_report/' + data_json[i]['file_name'] + '">Скачать</a></li>'
                             {% if not cur_userprofile.role.name == 'Админ заказчика' %}
+                            html += '<li><a href="edit_group_report_data/' + data_json[i]['id'] + '" class="dropdown-item edit_group_report cursor-pointer">Изменить</a></li>'
                             html += '<li><a class="dropdown-item report_comments cursor-pointer">Комментарий</a></li>'
                             html += '<li><a class="dropdown-item delete_group_report cursor-pointer" data-report-id="' + data_json[i]['id'] + '" style="color: red" >Удалить</a></li>'
                             {% endif %}
@@ -469,20 +471,6 @@
     })
 
     let table = ''
-    {#function process_table(element){#}
-    {#    $(element).DataTable().destroy()#}
-    {#   $(element).DataTable({#}
-    {#       "searching": false,#}
-    {#      "destroy": true,#}
-    {#      "paging": true,#}
-    {#      "language": {#}
-    {#        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"#}
-    {#      },#}
-    {#      "initComplete": function () {#}
-    {##}
-    {#      },#}
-    {#    })#}
-    {#}#}
 
 
 

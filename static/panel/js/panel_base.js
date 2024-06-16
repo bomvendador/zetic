@@ -77,6 +77,9 @@ $('.menu_item').on('click', function () {
         case'menu_filters_list':
             window.location.href = url_filters_list;
             break;
+        case'menu_matrix_filters_list':
+            window.location.href = url_filters_matrix_list;
+            break;
         default:
             break;
     }

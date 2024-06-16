@@ -436,23 +436,110 @@ class ReportGroup(models.Model):
 
     class Meta:
         verbose_name_plural = 'Групповые отчеты'
-        verbose_name = 'Групповые отчеты'
+        verbose_name = 'Групповой отчет'
 
 
 class ReportGroupSquare(models.Model):
     added = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     report_group = models.ForeignKey(ReportGroup, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Отчет групповой')
-    square_name = models.CharField(max_length=30, blank=False, null=False, verbose_name='Квадрат')
+    square_name = models.CharField(max_length=30, blank=False, null=False, verbose_name='Квадрат_имя')
+    square_code = models.CharField(max_length=30, blank=True, null=True, verbose_name='Квадрат_код', default=None)
     report = models.ForeignKey(Report, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Отчет индивидуальный для группового')
     participant_group = models.CharField(max_length=300, blank=True, null=True, verbose_name='Группа участника', default=None)
     participant_group_color = models.CharField(max_length=20, blank=True, null=True, verbose_name='Цвет группы участника', default=None)
     bold = models.BooleanField(default=False)
+    participant_number = models.IntegerField(null=False, default=0)
 
     def __str__(self):
         return f'{self.report.participant.employee.name} - {self.square_name}'
 
     class Meta:
         verbose_name_plural = 'Данные по квадратам групповых отчетов'
-        verbose_name = 'Данные по квадратам групповых отчетов'
+        verbose_name = 'Данные по квадрату групповых отчетов'
 
+
+# class SquareName(models.Model):
+#     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+#     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+#     code = models.CharField(max_length=30, blank=True, null=True)
+#     name = models.CharField(max_length=30, blank=True, null=True)
+#
+#     def __str__(self):
+#         return f'{self.code} - {self.name}'
+#
+#     class Meta:
+#         verbose_name_plural = 'Имя/коды квадратов'
+#         verbose_name = 'Имя/код квадрата'
+
+
+class MatrixFilter(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    square_code = models.CharField(max_length=30, blank=True, null=True)
+    square_name = models.CharField(max_length=30, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.square_code} - {self.square_name}'
+
+    class Meta:
+        verbose_name_plural = 'Фильтры матриц'
+        verbose_name = 'Фильтр матрицы'
+
+
+class MatrixFilterCategory(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, default=None, blank=True, null=True)
+    matrix_filter = models.ForeignKey(MatrixFilter, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    points_from = models.IntegerField(null=False, default=0)
+    points_to = models.IntegerField(null=False, default=0)
+
+    def __str__(self):
+        return f'{self.matrix_filter.square_code}-{self.matrix_filter.square_name} -- {self.category.name} : {self.points_from} - {self.points_to}'
+
+    class Meta:
+        verbose_name_plural = 'Категории (шкалы) фильтров матриц'
+        verbose_name = 'Категория (шкала) фильтра матрицы'
+
+
+class MatrixFilterInclusiveEmployeePosition(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    matrix_filter = models.ForeignKey(MatrixFilter, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    employee_position = models.ForeignKey(EmployeePosition, on_delete=models.PROTECT, default=None, null=True)
+
+    def __str__(self):
+        return f'{self.matrix_filter.square_code}-{self.matrix_filter.square_name} -- {self.employee_position.name_ru}'
+
+    class Meta:
+        verbose_name_plural = 'Должности, включенные в фильтры матриц'
+        verbose_name = 'Должность, включенная в фильтр матрицы'
+
+
+class MatrixFilterParticipantNotDistributed(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    square_code = models.CharField(max_length=30, blank=True, null=True)
+    square_name = models.CharField(max_length=30, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.created_at} - {self.created_by.username}'
+
+    class Meta:
+        verbose_name_plural = 'Фильтры матриц (если ни в один квадрет не попал)'
+        verbose_name = 'Фильтр матрицы (если ни в один квадрет не попал)'
+
+
+class MatrixFilterParticipantNotDistributedEmployeePosition(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    matrix_filter = models.ForeignKey(MatrixFilterParticipantNotDistributed, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    employee_position = models.ForeignKey(EmployeePosition, on_delete=models.PROTECT, default=None, null=True)
+
+    def __str__(self):
+        return f'{self.matrix_filter.id}-{self.matrix_filter.created_at} -- {self.employee_position.name_ru}'
+
+    class Meta:
+        verbose_name_plural = 'Должности, включенные в фильтры матриц'
+        verbose_name = 'Должность, включенная в фильтр матрицы'
 

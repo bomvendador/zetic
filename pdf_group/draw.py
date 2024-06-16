@@ -172,42 +172,42 @@ def draw_squares(pdf, square_results):
     for square_result in square_results:
         # print(f'square_result - {square_result}')
         square_name = square_result[0]
-        if square_name == 'ESFJ - Массовик-затейник':
+        if square_name == 'Магнит':
             ESFJ_1_1 = ESFJ_1_1 + 1
-        if square_name == 'ENFJ - Чуткий наставник':
+        if square_name == 'Фасилитатор':
             ENFJ_1_2 = ENFJ_1_2 + 1
-        if square_name == 'ESFP - Развлекатель':
+        if square_name == 'Переговорщик':
             ESFP_1_3 = ESFP_1_3 + 1
-        if square_name == 'ENFP - Мотиватор':
+        if square_name == 'Коннектор':
             ENFP_1_4 = ENFP_1_4 + 1
-        if square_name == 'ESTJ - Контролер':
+        if square_name == 'Визионер':
             ESTJ_2_1 = ESTJ_2_1 + 1
-        if square_name == 'ENTJ - Аналитик':
+        if square_name == 'Авантюрист':
             ENTJ_2_2 = ENTJ_2_2 + 1
-        if square_name == 'ESTP - Искатель ресурсов':
+        if square_name == 'Искатель ресурсов':
             ESTP_2_3 = ESTP_2_3 + 1
-        if square_name == 'ENTP - Изобретатель':
+        if square_name == 'Изобретатель':
             ENTP_2_4 = ENTP_2_4 + 1
-        if square_name == 'ISFJ - Хранитель':
+        if square_name == 'Хранитель':
             ISFJ_3_1 = ISFJ_3_1 + 1
-        if square_name == 'INFJ - Вдохновитель':
+        if square_name == 'Вдохновитель':
             INFJ_3_2 = INFJ_3_2 + 1
-        if square_name == 'ISFP - Опекун':
+        if square_name == 'Контролер':
             ISFP_3_3 = ISFP_3_3 + 1
-        if square_name == 'INFP - Благородный служитель':
+        if square_name == 'Благородный служитель':
             INFP_3_4 = INFP_3_4 + 1
-        if square_name == 'ISTJ - Организатор':
+        if square_name == 'Организатор':
             ISTJ_4_1 = ISTJ_4_1 + 1
-        if square_name == 'INTJ - Любитель улучшений':
+        if square_name == 'Любитель улучшений':
             INTJ_4_2 = INTJ_4_2 + 1
-        if square_name == 'ISTP - Исполнитель':
+        if square_name == 'Реализатор':
             ISTP_4_3 = ISTP_4_3 + 1
-        if square_name == 'INTP - Решатель проблем':
+        if square_name == 'Решатель проблем':
             INTP_4_4 = INTP_4_4 + 1
 
 
         # match square_result[0]:
-            # case 'ESFJ - Массовик-затейник':
+            # case 'Магнит':
             #     ESFJ_1_1 = ESFJ_1_1 + 1
             # case 'ENFJ - Идеалист-харизматик':
             #     ENFJ_1_2 = ENFJ_1_2 + 1
@@ -215,29 +215,29 @@ def draw_squares(pdf, square_results):
             #     ESFP_1_3 = ESFP_1_3 + 1
             # case 'ENFP - Инициатор':
             #     ENFP_1_4 = ENFP_1_4 + 1
-            # case 'ESTJ - Контролер по жизни':
+            # case 'Визионер по жизни':
             #     ESTJ_2_1 = ESTJ_2_1 + 1
             # case 'ENTJ - Предприниматель':
             #     ENTJ_2_2 = ENTJ_2_2 + 1
             # case 'ESTP - Ультра-реалист':
             #     ESTP_2_3 = ESTP_2_3 + 1
-            # case 'ENTP - Изобретатель':
+            # case 'Изобретатель':
             #     ENTP_2_4 = ENTP_2_4 + 1
-            # case 'ISFJ - Хранитель':
+            # case 'Хранитель':
             #     ISFJ_3_1 = ISFJ_3_1 + 1
-            # case 'INFJ - Вдохновитель':
+            # case 'Вдохновитель':
             #     INFJ_3_2 = INFJ_3_2 + 1
             # case 'ISFP - Посредник':
             #     ISFP_3_3 = ISFP_3_3 + 1
-            # case 'INFP - Благородный служитель':
+            # case 'Благородный служитель':
             #     INFP_3_4 = INFP_3_4 + 1
-            # case 'ISTJ - Организатор':
+            # case 'Организатор':
             #     ISTJ_4_1 = ISTJ_4_1 + 1
-            # case 'INTJ - Любитель улучшений':
+            # case 'Любитель улучшений':
             #     INTJ_4_2 = INTJ_4_2 + 1
             # case 'ISTP - Экспериментатор':
             #     ISTP_4_3 = ISTP_4_3 + 1
-            # case 'INTP - Решатель проблем':
+            # case 'Решатель проблем':
             #     INTP_4_4 = INTP_4_4 + 1
 
     top_1_max_qnt = max(ESFJ_1_1, ENFJ_1_2, ESTJ_2_1, ENTJ_2_2)
@@ -386,98 +386,98 @@ def draw_squares(pdf, square_results):
     text_x_delta = 3
 
     square_x_cnt = {
-        'ESFJ - Массовик-затейник': {
+        'Магнит': {
             'circle_coords': [startX + 5, startY + 10],
             'text_coords': [startX + 5 + text_x_delta, startY + 10 + text_y_delta],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ENFJ - Чуткий наставник': {
+        'Фасилитатор': {
             'circle_coords': [startX + 5 + width / 2, startY + 10],
             'text_coords': [startX + 5 + text_x_delta + width / 2, startY + 10 + text_y_delta],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ESFP - Развлекатель': {
+        'Переговорщик': {
             'circle_coords': [startX + 5, startY + 10 + width / 2 - 2 + delta_y_1],
             'text_coords': [startX + 5 + text_x_delta, startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ENFP - Мотиватор': {
+        'Коннектор': {
             'circle_coords': [startX + 5 + width / 2, startY + 10 + width / 2 - 2 + delta_y_1 + delta_y_2],
             'text_coords': [startX + 5 + text_x_delta + width / 2, startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ESTJ - Контролер': {
+        'Визионер': {
             'circle_coords': [startX + 5 + width, startY + 10],
             'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ENTJ - Аналитик': {
+        'Авантюрист': {
             'circle_coords': [startX + 5 + width + width / 2, startY + 10],
             'text_coords': [startX + 5 + text_x_delta + width  + width / 2, startY + 10 + text_y_delta],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ESTP - Искатель ресурсов': {
+        'Искатель ресурсов': {
             'circle_coords': [startX + 5 + width, startY + 10 + width / 2 - 2 + delta_y_1],
             'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ENTP - Изобретатель': {
+        'Изобретатель': {
             'circle_coords': [startX + 5 + width + width / 2, startY + 10 + width / 2 - 2 + delta_y_1],
             'text_coords': [startX + 5 + text_x_delta + width + width / 2, startY + 10 + text_y_delta + width / 2 - 2 + delta_y_1],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ISFJ - Хранитель': {
+        'Хранитель': {
             'circle_coords': [startX + 5, startY + 10 + width + delta_y_1 + delta_y_2],
             'text_coords': [startX + 5 + text_x_delta, startY + 10 + text_y_delta + width + delta_y_1 + delta_y_2],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'INFJ - Вдохновитель': {
+        'Вдохновитель': {
             'circle_coords': [startX + 5 + width / 2, startY + 10 + width + delta_y_1 + delta_y_2],
             'text_coords': [startX + 5 + text_x_delta + width / 2, startY + 10 + text_y_delta + width + delta_y_1 + delta_y_2],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ISFP - Опекун': {
+        'Контролер': {
             'circle_coords': [startX + 5, startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
             'text_coords': [startX + 5 + text_x_delta, startY + 10 + text_y_delta + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'INFP - Благородный служитель': {
+        'Благородный служитель': {
             'circle_coords': [startX + 5 + width / 2, startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
             'text_coords': [startX + 5 + text_x_delta + width / 2, startY + 10 + text_y_delta + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
 
-        'ISTJ - Организатор': {
+        'Организатор': {
             'circle_coords': [startX + 5 + width, startY + 10 + width + delta_y_1 + delta_y_2],
             'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta + width + delta_y_1 + delta_y_2],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'INTJ - Любитель улучшений': {
+        'Любитель улучшений': {
             'circle_coords': [startX + 5 + width + width / 2, startY + 10 + width + delta_y_1 + delta_y_2],
             'text_coords': [startX + 5 + text_x_delta + width + width / 2, startY + 10 + text_y_delta + width + delta_y_1 + delta_y_2],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'ISTP - Исполнитель': {
+        'Реализатор': {
             'circle_coords': [startX + 5 + width, startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
             'text_coords': [startX + 5 + text_x_delta + width, startY + 10 + text_y_delta + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
             'cur_X_pos': 0,
             'cur_Y_pos': 0,
             'cnt': 0},
-        'INTP - Решатель проблем': {
+        'Решатель проблем': {
             'circle_coords': [startX + 5 + width + width / 2, startY + 10 + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
             'text_coords': [startX + 5 + text_x_delta + width + width / 2, startY + 10 + text_y_delta + width / 2 + width - 2 + delta_y_1 + delta_y_2 + delta_y_3],
             'cur_X_pos': 0,
@@ -540,6 +540,7 @@ def draw_single_circle_squares(square_data, pdf, square_x_cnt, cnt):
     # print(participant_name + ' - ' + str(section_points_sum))
 
     pdf.circle(square_x_cnt[square_name]['circle_coords'][0] + 9 * square_x_cnt[square_name]['cur_X_pos'], square_x_cnt[square_name]['circle_coords'][1] + 9 * square_x_cnt[square_name]['cur_Y_pos'], 8, style="FD")
+    pdf.text_annotation(square_x_cnt[square_name]['circle_coords'][0] + 9 * square_x_cnt[square_name]['cur_X_pos'] + 3, square_x_cnt[square_name]['circle_coords'][1] + 9 * square_x_cnt[square_name]['cur_Y_pos'] - 3, 'Фамилия', 3, 3, flags=('NO_VIEW',))
     if cnt <= 9:
         pdf.text(square_x_cnt[square_name]['text_coords'][0] + 9 * square_x_cnt[square_name]['cur_X_pos'], square_x_cnt[square_name]['text_coords'][1] + 9 * square_x_cnt[square_name]['cur_Y_pos'], str(cnt))
     else:
@@ -593,7 +594,8 @@ def draw_table(square_data, pdf, width, x, y):
         else:
             pdf.set_text_color(0, 0, 0)
 
-        pdf.multi_cell(7, line_height, str(cnt), border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+        # pdf.multi_cell(7, line_height, str(cnt), border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+        pdf.multi_cell(7, line_height, str(square_data_item[7]), border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
         pdf.multi_cell((width - 10) - 7, line_height, participant_name, border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
         pdf.multi_cell(10, line_height, '', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
 

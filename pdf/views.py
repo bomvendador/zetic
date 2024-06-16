@@ -32,6 +32,10 @@ import fitz
 def pdf_single_generator(questionnaire_id):
     time_start = time.perf_counter()
     pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
+    pdf.add_font("Cambria", style="",
+                 fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Cambria.ttf", uni=True)
+    pdf.add_font("Cambria-Bold", style="",
+                 fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Cambria-Bold.ttf", uni=True)
     pdf.add_font("RalewayMedium", style="",
                  fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Medium.ttf", uni=True)
     pdf.add_font("RalewayRegular", style="",

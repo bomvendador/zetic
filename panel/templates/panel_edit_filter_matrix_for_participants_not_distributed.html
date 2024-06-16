@@ -1,0 +1,163 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+    {% block links %}
+     <link href="{% static 'panel/plugins/circle_progress_bar/css/circle.css' %}" rel="stylesheet" />
+    {% endblock %}
+    {% block content %}
+
+                <div class="side-app">
+
+                    <!-- CONTAINER -->
+                    <div class="main-container container-fluid">
+
+                        <!-- PAGE-HEADER -->
+                        <div class="page-header">
+                            <h1 class="page-title">Редактирование фильтра матрицы</h1>
+                            <div>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Редактирование фильтра матрицы (участник не распределен)</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <!-- PAGE-HEADER END -->
+
+                        <!-- ROW-1 OPEN -->
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Квадрат матрицы</h3>
+                                    </div>
+                                    <div class="card-body">
+
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-12">
+                                                <label for="select_company"><h5>Квадрат</h5></label>
+{#                                                <select class="form-control select2-show-search form-select" data-placeholder="Выберите квадрат" id="select_square">#}
+                                                <select class="form-control form-select" data-placeholder="Выберите квадрат" id="select_square">
+                                                    <option label="--Выберите квадрат--"></option>
+                                                    {% for square in squares_available %}
+                                                    <option value="{{ square.code }}"
+                                                        {% if square.code == matrix_filter.square_code %}
+                                                            selected
+                                                        {% endif %}
+                                                    >{{ square.square_name }} - {{ square.square_role_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                   </div>
+{#                                    <div class="card-footer text-end">#}
+{#                                        <button class="btn btn-primary my-1 nav-buttons" type="button" id="save_company">Сохранить</button>#}
+{#                                    </div>#}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12 col-sm-12">
+                                <div class="card">
+                                    <div class="card-header row pt-2 pb-2 justify-content-md-center">
+                                        <div class="">
+                                            <table style="width: 100%">
+                                                <thead></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <h3 class="card-title">Должности участниокв для отбора</h3>
+                                                            <small>Если список пуст - должность участника опроса приниматься во внимание НЕ БУДЕТ</small>
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-primary my-1" type="button" id="add_filter_position" style="float: right">Добавить должность</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+{#                                        <div class="col col-lg-6 col-sm-6">#}
+{#                                        </div>#}
+{#                                        <div class="col col-lg-6 col-sm-6 text-end">#}
+{#                                        </div>#}
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+{#                                            <table class="table text-nowrap border-bottom team-table dataTable no-footer" id="table_filter_categories">#}
+                                            <table class="table text-nowrap border-bottom" id="table_filter_positions">
+                                                <thead class="thead-style">
+                                                    <tr>
+                                                        <th>Должность</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbody_filter_positions">
+                                                    {% for filter_position in filter_positions %}
+                                                    <tr>
+                                                        <td>
+                                                        <select class="form-control form-select select_position" data-placeholder="Выберите должность">
+                                                            {% for position in positions %}
+                                                            <option value="{{ position.id }}"
+                                                                {% if position.id == filter_position.employee_position.id %}
+                                                                selected
+                                                                {% endif %}
+
+                                                            >{{ position.id }} - {{ position.name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        </td>
+                                                        <td style="text-align: center; vertical-align: middle;">
+                                                            <div style="float: right">
+                                                                <i class="fe fe-x delete-position-row" style="font-size: 20px; cursor: pointer"></i>
+                                                            </div>
+                                                        </td>
+
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>                        <!-- ROW-1 CLOSED -->
+
+                                    <div>
+                                        <div class="row">
+                                            <div class="col-lg-12 col-sm-12 mb-5">
+                                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="save_matrix_filter">Сохранить фильтр</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                    </div>
+                    <!--CONTAINER CLOSED -->
+
+                </div>
+
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+
+    let url_save_edited_matrix_filter_for_participants_not_distributed = "{% url 'save_edited_matrix_filter_for_participants_not_distributed' %}"
+    {#let url_get_available_squares = "{% url 'get_available_squares' %}"#}
+    let positions = {{ positions|safe }};
+    let matrix_filter = {{ matrix_filter.id }};
+    {#let url_get_company_employees = "{% url 'get_company_employees' %}"#}
+    {#let study_id = {{ study.id }};#}
+    {#let url_save_participant_questions_groups = "{% url 'save_participant_questions_groups' %}"#}
+    {#let url_get_employees_for_study = "{% url 'get_employees_for_study' %}"#}
+    {#let url_save_study_participants = "{% url 'save_study_participants' %}"#}
+    {#let url_send_invitation_email = "{% url 'send_invitation_email' %}"#}
+
+</script>
+        <script src="{% static 'login/js/select2.js' %}"></script>
+
+<script src="{% static 'panel/js/panel_edit_filter_matrix_for_participants_not_distributed.js' %}"></script>
+{% endblock %}

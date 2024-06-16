@@ -4,7 +4,7 @@ from panel import views as panel_views
 from pdf import views as pdf_views
 from panel import company_parameter as panel_company_parameter
 from panel import employee, study, sections, individual_report_file, company, mail_handler, categories, questions, \
-    research_templates, companies_studies, filters
+    research_templates, companies_studies, filters, filters_matrix
 # from panel import study
 # from panel import individual_report_file
 # from panel import company
@@ -16,17 +16,8 @@ urlpatterns = [
     path('team_distribution', panel_views.team_distribution, name='team_distribution'),
     path('get_project_participants', panel_views.get_company_participants, name='get_project_participants'),
     path('get_report_participants_data', panel_views.get_report_participants_data, name='get_report_participants_data'),
-    path('save_group_report_data', panel_views.save_group_report_data, name='save_group_report_data'),
-    path('download_single_report/<str:filename>', pdf_views.download_single_report, name='download_single_report'),
-    path('download_group_report/<str:filename>', pdf_views.download_group_report, name='download_group_report'),
     path('download_file/<str:filename>', pdf_views.download_file, name='download_file'),
     path('logout', panel_views.panel_logout, name='logout'),
-    path('get_group_reports_list', panel_views.get_group_reports_list, name='get_group_reports_list'),
-    path('group_reports_list', panel_views.group_reports_list, name='group_reports_list'),
-    path('individual_reports_list', panel_views.individual_reports_list, name='individual_reports_list'),
-    path('get_individual_reports_list', panel_views.get_individual_reports_list, name='get_individual_reports_list'),
-    path('save_individual_report_comments', panel_views.save_individual_report_comments, name='save_individual_report_comments'),
-    path('save_group_report_comments', panel_views.save_group_report_comments, name='save_group_report_comments'),
     path('users_list', panel_views.users_list, name='users_list'),
     path('user_profile/<int:user_id>', panel_views.user_profile, name='user_profile'),
     path('save_user_pwd', panel_views.save_user_pwd, name='save_user_pwd'),
@@ -34,7 +25,22 @@ urlpatterns = [
     path('add_user', panel_views.add_user, name='add_user'),
     path('save_new_user', panel_views.save_new_user, name='save_new_user'),
     path('delete_user', panel_views.delete_user, name='delete_user'),
+
+    path('individual_reports_list', panel_views.individual_reports_list, name='individual_reports_list'),
+    path('get_individual_reports_list', panel_views.get_individual_reports_list, name='get_individual_reports_list'),
+    path('save_individual_report_comments', panel_views.save_individual_report_comments,
+         name='save_individual_report_comments'),
+    path('download_single_report/<str:filename>', pdf_views.download_single_report, name='download_single_report'),
+
+    path('save_group_report_data', panel_views.save_group_report_data, name='save_group_report_data'),
+    path('download_group_report/<str:filename>', pdf_views.download_group_report, name='download_group_report'),
+    path('get_group_reports_list', panel_views.get_group_reports_list, name='get_group_reports_list'),
+    path('group_reports_list', panel_views.group_reports_list, name='group_reports_list'),
     path('delete_group_report', panel_views.delete_group_report, name='delete_group_report'),
+    path('save_group_report_comments', panel_views.save_group_report_comments, name='save_group_report_comments'),
+    path('delete_participant_from_group_report', panel_views.delete_participant_from_group_report, name='delete_participant_from_group_report'),
+    path('get_available_participants_for_group_report', panel_views.get_available_participants_for_group_report, name='get_available_participants_for_group_report'),
+    path('edit_group_report_data/<int:report_id>', panel_views.edit_group_report_data, name='edit_group_report_data'),
 
     path('add_company', company.add_company_init, name='add_company_init'),
     path('save_new_company', company.save_new_company, name='save_new_company'),
@@ -129,5 +135,18 @@ urlpatterns = [
     path('delete_filter', filters.delete_filter, name='delete_filter'),
     path('save_edited_filter', filters.save_edited_filter, name='save_edited_filter'),
     path('filter/<int:filter_id>', filters.edit_filter, name='edit_filter'),
+
+    path('filters_matrix_list', filters_matrix.filters_list, name='filters_matrix_list'),
+    path('add_filter_mitrix', filters_matrix.add_filter, name='add_filter_matrix'),
+    path('add_filter_matrix_participant_not_distributed', filters_matrix.add_filter_participant_not_distributed, name='add_filter_matrix_participant_not_distributed'),
+    path('save_new_matrix_filter', filters_matrix.save_new_matrix_filter, name='save_new_matrix_filter'),
+    path('save_new_matrix_filter_for_participants_not_distributed', filters_matrix.save_new_matrix_filter_for_participants_not_distributed, name='save_new_matrix_filter_for_participants_not_distributed'),
+    path('save_edited_matrix_filter', filters_matrix.save_edited_matrix_filter, name='save_edited_matrix_filter'),
+    path('save_edited_matrix_filter_for_participants_not_distributed', filters_matrix.save_edited_matrix_filter_for_participants_not_distributed, name='save_edited_matrix_filter_for_participants_not_distributed'),
+    path('delete_matrix_filter', filters_matrix.delete_matrix_filter, name='delete_matrix_filter'),
+    # path('get_available_squares', filters_matrix.get_available_squares, name='get_available_squares'),
+    path('matrix_filter/<int:filter_id>', filters_matrix.edit_matrix_filter, name='edit_matrix_filter'),
+    path('edit_matrix_filter_for_participants_not_distributed/<int:filter_id>', filters_matrix.edit_matrix_filter_for_participants_not_distributed, name='edit_matrix_filter_for_participants_not_distributed'),
+    path('delete_matrix_filter_for_participants_not_distributed', filters_matrix.delete_matrix_filter_for_participants_not_distributed, name='delete_matrix_filter_for_participants_not_distributed'),
 
 ]

@@ -1,0 +1,55 @@
+    {% load static %}
+
+    <div id="edit_group_report_add_participants_modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-xl task-detail-modal" role="document">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <header class="task-header" style="padding: 1.5rem; background-color: #ebebeb; margin-right: 0">
+                        <div class="row">
+                            <div class="col-6">
+                                <h4 class="d-flex align-items-center fw-bold mb-0 inline-editable-wrap">
+                                    <span class="editable">Добавление участников</span>
+                                </h4>
+
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+
+                            </div>
+                        </div>
+                    </header>
+
+                    <div class="p-4">
+                        <div class="table-responsive">
+                            <table class="table text-nowrap text-md-nowrap mb-0" id="participants_to_add_table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 10px">
+                                            <input id="check_all_participants_for_group_report" class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value ="0">
+                                        </th>
+                                        <th>Имя</th>
+                                        <th>Email</th>
+                                        <th>Роль</th>
+                                        <th>Должность</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer align-items-center pb-0 pt-4" style="padding-right: 0; padding-left: 0">
+                            <button type="button" class="btn btn-primary w-100 m-0 btn-height" id="add_participants_from_modal">Добавить в отчет</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+

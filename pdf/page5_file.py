@@ -66,23 +66,25 @@ def page5(pdf, json_section, lang, participant_info):
     pdf.set_font("RalewayLight", "", 6)
     pdf.multi_cell(50, 3, scale_legend_right, align='R')
 
-    if lang== 'ru':
-        scale_name = u'''Профессиональный 
-тупик'''
-    else:
-        scale_name = u''''''
-
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '3_13', scale_element_file, lang, participant_info)
-
-    y += 20
     if lang == 'ru':
         scale_name = u'''Усталость от нагрузки,
 скорости и принципов 
 работы'''
     else:
         scale_name = u''''''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '3_14', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y + 12, y + 12 - 2, json_section, '3_14', scale_element_file, lang,
+                    participant_info)
 
+    y += 20
+
+    if lang == 'ru':
+        scale_name = u'''Профессиональный 
+тупик'''
+    else:
+        scale_name = u''''''
+
+    draw_full_scale(pdf, scale_name, x, y + 12, y + 12 - 2, json_section, '3_13', scale_element_file, lang,
+                    participant_info)
 
     # vert_text_y = 152
     vert_text_y = 122
@@ -105,7 +107,7 @@ def page5(pdf, json_section, lang, participant_info):
 коммуникаций'''
     else:
         scale_name = u''''''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '3_15', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '3_15', scale_element_file, lang, participant_info)
 
     y += 20
     if lang == 'ru':
@@ -130,21 +132,24 @@ def page5(pdf, json_section, lang, participant_info):
     y += 40
     # y += vert_text_y
     if lang == 'ru':
-        scale_name = u'''Избирательное
-реагирование'''
-    else:
-        scale_name = u'''Selective emotional
-response'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '3_17', scale_element_file, lang, participant_info)
-
-    y += 20
-    if lang == 'ru':
-        scale_name = u'''Эмоциональная
-защита'''
+        scale_name = u'''Сокращение
+внимания'''
     else:
         scale_name = u'''Emotional
-defense'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '3_18', scale_element_file, lang, participant_info)
+    defense'''
+    draw_full_scale(pdf, scale_name, x, y + 12, y + 12 - 2, json_section, '3_18', scale_element_file, lang,
+                    participant_info)
+
+    y += 20
+
+    if lang == 'ru':
+        scale_name = u'''Психосоматика'''
+    else:
+        scale_name = u'''Selective emotional
+    response'''
+    draw_full_scale(pdf, scale_name, x, y + 12, y + 12, json_section, '3_17', scale_element_file, lang,
+                    participant_info)
+
 
     # y += 20
     # if lang == 'ru':

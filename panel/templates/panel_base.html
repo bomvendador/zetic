@@ -320,7 +320,8 @@
                                     <li><div class="slide-item cursor-pointer menu_item" id="menu_categories_list"> Категории (шкалы)</div></li>
                                     <li><div class="slide-item cursor-pointer menu_item" id="menu_research_templates_list"> Шаблоны</div></li>
                                     <li><div class="slide-item cursor-pointer menu_item" id="menu_companies_studies_list"> Исследования</div></li>
-                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_filters_list"> Фильтры</div></li>
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_filters_list"> Фильтры баллов</div></li>
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_matrix_filters_list"> Фильтры матрицы</div></li>
                                 </ul>
                             </li>
                             <li class="slide">
@@ -1041,6 +1042,7 @@
         let url_research_templates_list = "{% url 'research_templates_list' %}"
         let url_companies_studies_list = "{% url 'companies_studies_list' %}"
         let url_filters_list = "{% url 'filters_list' %}"
+        let url_filters_matrix_list = "{% url 'filters_matrix_list' %}"
 
     </script>
     <script src="{% static 'panel/js/panel_base.js' %}"></script>

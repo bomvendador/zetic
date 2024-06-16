@@ -40,10 +40,10 @@ def save_new_company(request):
 
         company_inst.save()
 
-        response = sync_add_company.delay(name, public_code)
+        # response = sync_add_company.delay(name, public_code)
 
-        # return HttpResponse(status=200)
-        return HttpResponse(response)
+        return HttpResponse(status=200)
+        # return HttpResponse(response)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')

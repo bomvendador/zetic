@@ -7,21 +7,24 @@ def page2(pdf, lie_points, lang):
     x = 12
     y = 12
     pdf.set_xy(x,y)
-    pdf.set_font("RalewayBold", "", 10)
+    # pdf.set_font("RalewayBold", "", 10)
+    pdf.set_font("Cambria-Bold", "", 11)
     if lang == 'ru':
-        pdf.cell(0, 0, 'Введение')
+        pdf.cell(0, 0, 'О Zetic')
     else:
         pdf.cell(0, 0, 'Introduction')
 
     # 17
-    pdf.set_font("RalewayLight", "", 9)
+    # pdf.set_font("RalewayLight", "", 9)
+    pdf.set_font("Cambria", "", 10)
 
     y = y + 5
     pdf.set_xy(x, y)
     if lang == 'ru':
-        text = u'Для разработки опросника ZETIC-4S был использован ряд иностранных и российских психологических исследований.' \
-               u'Подход был переработан под бизнес-контекст и апробирован на большой выборке руководителей в течение нескольких лет. ' \
-               u'Наше исследование жизнестойкости и поведения в стрессе стало самым крупным в России за последние 15 лет.'
+        text = u'Zetic – российский разработчик технологичных решений прогнозирования эффективности сотрудников и команд.' \
+               u'. Мы изучаем способы измерения и стандартизации поведения и создаем предиктивные психометрические инструменты оценки. ' \
+               u'Мы также проводим научные исследования в области прикладной психологии труда, изучая закономерности поведения руководителей.' \
+               u'в рабочей среде. Результаты исследования можно посмотреть на нашем сайте ww.zetic.ru в разделе «Материалы».'
     else:
         text = u'Based on decades of academic research Zetic has developed a tool for scientific personality measurement ' \
                u'for business. The tool can be used for a variety of recruitment and development purposes. The approach was ' \
@@ -29,18 +32,14 @@ def page2(pdf, lie_points, lang):
                u'become the largest in Russia over the past 15 years. Zetic 4S questionnaire consists of:'
     pdf.multi_cell(0, 4, text)
 
-    pdf.set_font("RalewayLight", "", 9)
+    # pdf.set_font("RalewayLight", "", 9)
     # 30
 
     if lang == 'ru':
-        y += 15
-        pdf.set_xy(x+5, y)
-        text = u'''
-• Cекция «Базовые черты личности» построена исходя из 5-факторной диспозициональной модели личности, отражающей восприятие людей друг другом. В ее основе - лексический подход, использующий факторный анализ словесных описаний характеристик человека; язык может отразить аспекты личности, которые описывают адаптацию человека к социальной среде с учетом его личных особенностей. Авторы: Г. Олпорт, П. Коста и Р. Маккрэй и Р. Кэттел. 1985-1992г. Метод апробирован на русскоязычной аудитории под руководством к.п.н. В. Хромова (УрФУ им. Б.Н.Ельцина) и д.м.н. Л. Вассермана (НИИ им. В. М. Бехтерева).  
-• Секция «Поведение в стрессе» сформирована исходя из модели психологического преодоления стресса, описывающей базовые реакции и действия, предпринимаемые человеком, чтобы справиться с переживанием, адаптироваться к нагрузке и найти выход из травмирующей ситуации. Автор: Ричард Лазарус, 1991г. Метод апробирован на русскоязычной аудитории под руководством к.п.н. Е.Битюцкой (МГУ им. М.В. Ломоносова), к.п.н. Е.Осина (НИУ ВШЭ), д.м.н. Л. Вассермана (НИИ им. В. М. Бехтерева). 
-• Секция «Факторы выгорания» построена на основе модели многофакторного эмоционального выгорания, описывающей механизмы психической защиты и переход в состояние физического и психического истощения, возникающее в ответ на эмоциональное перенапряжение.  Авторы: Б. Фрейденберг, К. Маслач 1992г. Модель апробирована на русскоязычной аудитории под руководством к.п.н. Н. Е. Водопьяновой (СПБГУ), д.м.н. Л.Вассермана (НИИ им. В. М. Бехтерева).
-• Секция «Жизненные ценности» разработана на основе модели жизненных ценностей личности, описывающей универсальные устоявшиеся потребности и жизненные приоритеты личности, определяющие условия и порядок принятия личностью важных решений и реализации действий.  Авторы: Ш. Шварц, 1992г. Модель апробирована на русскоязычной аудитории под руководством В.Н. Карандашева (СПБГУ). 
-'''
+        y += 25
+        pdf.set_xy(x, y)
+        text = u'Мы являемся резидентом «Российского инновационного кластера», совмещаем фундаментальный научный подход с анализом' \
+                u'больших данных с помощью искусственного интеллекта.'
         pdf.multi_cell(0, 4, text)
 
     else:
@@ -54,27 +53,33 @@ def page2(pdf, lie_points, lang):
 '''
         pdf.multi_cell(0, 5, text)
     # 127
-    pdf.set_font("RalewayBold", "", 10)
+
+
+    # pdf.set_font("RalewayBold", "", 10)
+    pdf.set_font("Cambria-Bold", "", 11)
 
     if lang == 'ru':
-        y += 82+5+3
+        y += 15
         pdf.set_xy(x, y)
-        pdf.cell(0, 0, 'Как читать отчет')
+        pdf.cell(0, 0, 'Введение')
     else:
         y += 40
         pdf.set_xy(x, y)
         pdf.cell(0, 0, 'How to read the report')
 
     # 131
+
+
     y += 4
     pdf.set_xy(x, y)
-    pdf.set_font("RalewayLight", "", 9)
+    pdf.set_font("Cambria", "", 10)
+    # pdf.set_font("RalewayLight", "", 9)
     if lang == 'ru':
-        text = u'Данные исследования описывают индивидуальный профиль устойчивости. Отчет помогает обозначить особенности ' \
-               u'реагирования на ситуации неопределенности или стресса, выявить черты личности, влияющие на рабочее поведение ' \
-               u'в сложных условиях. В данном отчете результаты сравниваются с нормативной группой русскоговорящих лидеров. ' \
-               u'Информация, содержащаяся в этом документе, является конфиденциальной. Отчет необходимо хранить в соответствии ' \
-               u'с принципами защиты персональных данных. Срок достоверности отчета — 2 года.'
+        text = u'Опросник Zetic – инструмент нового поколения с высокой валидностью и надежностью оценки. ' \
+               u'Опросник позволяет считать глубинные особенности поведения и построить эффективную программу развития. ' \
+               u'Для разработки опросника ZETIC были использованы фундаментальные модели описания поведения, переработанные под ' \
+               u'бизнес-контекст и апробированные на большой выборке руководителей в течение нескольких лет. '
+
     else:
         text = u'These studies describe an individual resistance profile. The report helps to identify the features of ' \
                u'response to uncertainty and stress and to release personality traits that affect behavior within though ' \
@@ -85,9 +90,78 @@ def page2(pdf, lie_points, lang):
 
     pdf.multi_cell(0, 4, text)
 
+
+
+    # pdf.set_font("RalewayLight", "", 9)
+    # 30
+
+    if lang == 'ru':
+        y += 15
+        pdf.set_xy(x, y)
+        text = u'''
+Cекция «Черты личности» построена исходя из 5-факторной диспозициональной модели личности, отражающей восприятие людей друг другом. В ее основе – лексическая гипотеза, использующая факторный семантический анализ словесных описаний характеристик человека (личностные характеристики, которые важны для группы людей станут частью языка этой группы, более важные личностные характеристики с большей вероятностью будут закодированы в языке в виде одного слова). Авторы модели: Г. Олпорт, П. Коста и Р. Маккрэй и Р. Кэттел (1985-1992г).  
+
+Секция «Поведение в стрессе» сформирована исходя из модели психологического преодоления стресса, описывающей базовые реакции и действия, предпринимаемые человеком, чтобы справиться с переживанием, адаптироваться к нагрузке и найти выход из травмирующей ситуации. Автор: Ричард Лазарус (1991г.) 
+
+Секция «Факторы выгорания» построена на основе модели многофакторного эмоционального выгорания, описывающей механизмы психической защиты и переход в состояние физического и психического истощения, возникающее в ответ на эмоциональное перенапряжение. Авторы: Б. Фрейденбергер, К. Маслач (1992г.)
+
+Секция «Жизненные ценности» разработана на основе модели жизненных ценностей личности, описывающей универсальные устоявшиеся потребности и жизненные приоритеты личности, определяющие условия и порядок принятия личностью важных решений и реализации действий. Автор: Ш. Шварц (1992г.) 
+
+Информация, содержащаяся в этом документе, является конфиденциальной. Отчет необходимо хранить в соответствии с принципами защиты персональных данных. Срок достоверности отчета — 2 года.
+
+    '''
+        pdf.multi_cell(0, 4, text)
+
+    else:
+        y += 15
+        pdf.set_xy(x + 5, y)
+        text = u'''
+    • The section K measures the basic personality traits and its influence of business behavior and performance.
+    • The section С describes the basic reactions on stress, actions taken by a person to cope with the new worries, to adapt to tension and to find a way out of a traumatic situation.
+    • The section B reflects the psychological factors that lead to burnout, the burnout indicator and intensity.
+    • The section V describes the universal well-established needs and life priorities of the individual that influence decisions and choices.
+    '''
+        pdf.multi_cell(0, 5, text)
+
+    pdf.set_font("Cambria-Bold", "", 11)
+    # pdf.set_font("RalewayBold", "", 10)
+
+    if lang == 'ru':
+        y += 80 - 2 + 15 + 2
+        pdf.set_xy(x, y)
+        pdf.cell(0, 0, 'Как читать отчет')
+    else:
+        y += 40
+        pdf.set_xy(x, y)
+        pdf.cell(0, 0, 'How to read the report')
+
+    # 131
+
+
+    y += 4
+    pdf.set_xy(x, y)
+    pdf.set_font("Cambria", "", 10)
+    # pdf.set_font("RalewayLight", "", 9)
+    if lang == 'ru':
+        text = u'Результаты оценки описывают индивидуальный профиль устойчивости. Отчет помогает обозначить особенности ' \
+               u'реагирования на ситуации неопределенности или стресса, выявить черты личности, влияющие на рабочее поведение ' \
+               u'в сложных условиях. В данном отчете результаты сравниваются с нормативной группой русскоговорящих лидеров. '
+    else:
+        text = u'These studies describe an individual resistance profile. The report helps to identify the features of ' \
+               u'response to uncertainty and stress and to release personality traits that affect behavior within though ' \
+               u'working conditions. In this report, the results are compared with a normative group of Russian-speaking ' \
+               u'leaders of the same age and gender comparing to the participant. The information contained in this document ' \
+               u'is confidential. The report need to be stored in accordance with the  personal data protection principles. ' \
+               u'The report validity period – 2 years.'
+
+    pdf.multi_cell(0, 4, text)
+
+
+
     # 160
-    pdf.set_font("RalewayBold", "", 10)
-    y += 27
+    # pdf.set_font("RalewayBold", "", 10)
+    pdf.set_font("Cambria-Bold", "", 11)
+    y += 15 + 3 + 3 + 2
     pdf.set_xy(x, y)
 
     if lang == 'ru':
@@ -99,7 +173,8 @@ def page2(pdf, lie_points, lang):
     # 164
     y += 4
     pdf.set_xy(x, y)
-    pdf.set_font("RalewayLight", "", 9)
+    pdf.set_font("Cambria", "", 10)
+    # pdf.set_font("RalewayLight", "", 9)
     if lang == 'ru':
 
         text = u'Результаты в отчете показаны в шкале стенов от 0 до 10 (от английского «стандартная десятка»). Стен означает, ' \
@@ -115,34 +190,35 @@ def page2(pdf, lie_points, lang):
 
     pdf.multi_cell(0, 4, text)
 
-    pdf.set_font("RalewayLight", "", 9)
+    # pdf.set_font("RalewayLight", "", 9)
     if lang == 'ru':
-        y += 116-5-3
+        y += 116-5-3-10-10-2-5-13-4-4
         text = u'Валидность отчета'
         pdf.set_xy(x, y)
         pdf.cell(115, 12, text, ln=0)
         pdf.cell(10, 12, str(lie_points), ln=0)
 
     else:
-        y += 158
+        y += 158-4
         text = u'Validity'
         pdf.set_xy(x, y)
         pdf.cell(108, 12, text, ln=0)
         pdf.cell(10, 12, str(round(lie_points/40*10)), ln=0)
 
-    pdf.set_font("RalewayLight", "", 7)
+    pdf.set_font("Cambria", "", 8)
     if lang == 'ru':
-        text = u'Значения, находящиеся в пределах красной рамки (слишком высокие), ' \
-               u'свидетельствуют о разнице в восприятии между желаемым (правильном) поведении и текущих возможностях'
+        text = u'Значения, находящиеся в зеленой рамке, соответствуют среднерыночному нормативному показателю; ' \
+               u'значения, попадающие в красную рамку, свидетельствуют о склонности участника создавать ' \
+               u'положительный образ себя в глазах своего окружения, действовать «правильно и ожидаемо».'
         pdf.multi_cell(0, 3, text)
     else:
         text = u'The values within the red frame (are too high) correspond to insincerity, demonstrative behavior and need for social approval.'
         pdf.multi_cell(0, 4, text)
 
     if lang == 'ru':
-        draw_lie_scale(pdf, 50, 266, 70, 10, lie_points, 'media/images/lie_scale_rec.png')
+        draw_lie_scale(pdf, 50, 266-3, 70, 10, lie_points, 'media/images/lie_scale_rec.png')
     else:
-        draw_lie_scale(pdf, 40, 266, 70, 10, lie_points, 'media/images/lie_scale_rec.png')
+        draw_lie_scale(pdf, 40, 266-3, 70, 10, lie_points, 'media/images/lie_scale_rec.png')
 
     insert_page_number(pdf)
 

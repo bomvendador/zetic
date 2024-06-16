@@ -271,7 +271,7 @@ function send_file_data(data) {
                             output_html = output_html + '<br><hr class="solid mt-0" style="background-color: black;">'
                         }
                         if (data['error']['filter_exists']) {
-                            output_html = output_html + '<div>Фильтр с выбранными параметр существует</div>' +
+                            output_html = output_html + '<div>Фильтр с выбранными параметрами существует</div>' +
                                 '<br>' +
                                 '<hr class="solid mt-0" style="background-color: black;">'
                         }

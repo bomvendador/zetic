@@ -29,6 +29,11 @@ from pdf_group.save_data import save_data_to_db as save_data_group
 
 def pdf_group_generator(request_json):
     pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
+    pdf.add_font("cambria", style="",
+                 fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Cambria.ttf", uni=True)
+    pdf.add_font("CambriaBold", style="",
+                 fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Cambria-Bold.ttf", uni=True)
+
     pdf.add_font("RalewayMedium", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Medium.ttf", uni=True)
     pdf.add_font("RalewayRegular", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Regular.ttf", uni=True)
     pdf.add_font("RalewayLight", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Light.ttf", uni=True)

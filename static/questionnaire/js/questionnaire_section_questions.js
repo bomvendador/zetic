@@ -1,4 +1,6 @@
-$(window).scrollTop(0);
+$(document).ready(function () {
+    $('html, body').animate({scrollTop: '0px'}, 300);
+})
 
 $('.question-answer-input').on('click', function () {
     let total_questions = $('.section-question').length
@@ -58,11 +60,11 @@ $('#save_page_answers').on('click', function () {
 
             if (response['total_questionnaire_answers_qnt'] === response['total_questionnaire_questions_qnt']) {
                 let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                    '<div><b>Вы ответили на все вопросы опросника</b></div>' +
+                    '<h4 style="text-align: center" class="mb-0"><b>Вы ответили на все вопросы опросника</b></h4>' +
                     '<br>' +
                     '<hr class="solid mt-0" style="background-color: black;">' +
-                    '<div>Отчет отправлен на Вашу почту</div>' +
-                    '<div><b>' + response['email'] + '</b></div>' +
+                    '<div style="text-align: center">Отчет отправлен на Вашу почту</div>' +
+                    '<div style="text-align: center"><b>' + response['email'] + '</b></div>' +
                     '<br>' +
                     '<hr class="solid mt-0" style="background-color: black;">'
                 Swal.fire({
@@ -83,7 +85,7 @@ $('#save_page_answers').on('click', function () {
             } else {
                 if (response['total_section_questions_qnt'] === response['questions_answered_qnt']) {
                     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                        '<div>Вы ответили на все вопросы в данной секции</div>' +
+                        '<div style="text-align: center">Вы ответили на все вопросы в данной секции</div>' +
                         '<br>' +
                         '<hr class="solid mt-0" style="background-color: black;">'
                     Swal.fire({

@@ -67,7 +67,6 @@ def data_by_points(square_results, section_code, category_code):
         participant_email = square_result[1]
         questionnaire_inst = Questionnaire.objects.filter(participant__employee__email=participant_email).latest('created_at')
         questionnaire_questions_answers = QuestionnaireQuestionAnswers.objects.filter(questionnaire=questionnaire_inst,
-
                                                                                       question__category__code=category_code)
         participant_inst = Participant.objects.get(employee__email=participant_email)
         print(f'category code = {category_code}')
