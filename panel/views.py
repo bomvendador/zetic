@@ -532,7 +532,7 @@ def edit_group_report_data(request, report_id):
     for group_report in group_report_squares_inst:
 
         # participants_emails.append(group_report.report.participant.employee.email)
-        participant_data = get_participants_data_for_group_report([group_report.report.participant.employee.email])
+        participant_data = get_participants_data_for_group_report([group_report.report.participant.id])
         print(participant_data)
         group_reports.append({
             'participant_data': participant_data[0],
@@ -597,6 +597,7 @@ def get_group_reports_list(request):
             report_group_square_arr = []
             reports_group_square = ReportGroupSquare.objects.filter(report_group=group_report)
             for report_group_square in reports_group_square:
+                # print(f'report_group_square - {report_group_square.id}')
                 report_group_square_arr.append(report_group_square.report.participant.employee.name)
             report.append({
                 'company': group_report.company.name,
