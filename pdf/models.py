@@ -476,7 +476,7 @@ class MatrixFilter(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
     square_code = models.CharField(max_length=30, blank=True, null=True)
-    square_name = models.CharField(max_length=30, blank=True, null=True)
+    square_name = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return f'{self.square_code} - {self.square_name}'
