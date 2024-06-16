@@ -81,9 +81,6 @@ def filters_list(request):
         no_available_positions = 0
     else:
         no_available_positions = 1
-
-
-
     context.update(
         {
             'filters': filters_inst,
