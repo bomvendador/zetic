@@ -17,10 +17,20 @@ def filter_raw_points_to_t_points(raw_point, employee_id, category_id):
     if custom_filter.exists():
         raw_points_filter = custom_filter
     else:
+
         raw_points_filter = RawToTPointsType.objects.get(is_default=True, age_gender_group=age_gender_group)
-    # print(f'type={raw_points_filter}, category={category}, raw_points={raw_point}')
-    t_point_inst = RawToTPoints.objects.get(type=raw_points_filter, category=category, raw_points=raw_point)
-    print(f'category - {category.name} raw_points_filter id - {raw_points_filter.name_ru} raw_points = {raw_point} t_points = {t_point_inst.t_point}')
+        # print(f'raw_points_filter id = {raw_points_filter.id}')
+    # print(f'type={raw_points_filter.id}, category={category.name}, raw_points={raw_point}')
+    # if custom filter not match
+    # print(f'category - {category.id} raw_points_filter id - {raw_points_filter.name_ru} raw_points = {raw_point}')
+
+    try:
+        t_point_inst = RawToTPoints.objects.get(type=raw_points_filter, category=category, raw_points=raw_point)
+    except RawToTPoints.DoesNotExist:
+        raw_points_filter = RawToTPointsType.objects.get(is_default=True, age_gender_group=age_gender_group)
+        t_point_inst = RawToTPoints.objects.get(type=raw_points_filter, category=category, raw_points=raw_point)
+
+    # print(f'category - {category.id} raw_points_filter id - {raw_points_filter.name_ru} raw_points = {raw_point} t_points = {t_point_inst.t_point}')
 
     return t_point_inst.t_point
 

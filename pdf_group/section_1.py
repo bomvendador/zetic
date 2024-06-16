@@ -33,8 +33,10 @@ def page(pdf, square_results, lang):
     y = y + 12
 
     category_code = '1_1'
+    # print(f'square_results 36 - {square_results}')
+
     section_data = data_by_points(square_results, section_code, category_code)
-    print(f'section_data - {section_data}')
+    # print(f'section_data - {section_data}')
 
     additional_delta_y = get_additional_delta_y(section_data)
 

@@ -168,7 +168,7 @@ def pdf_single_generator(questionnaire_id):
     # save_data_to_db(request_json, file_name)
     response = save_serve_file(pdf, path, file_name)
 
-    save_data_to_db_and_send_report(questionnaire_inst.participant.id, file_name, questionnaire_inst.participant.study.id,lie_points, lang)
+    save_data_to_db_and_send_report(questionnaire_inst.id, file_name, questionnaire_inst.participant.study.id,lie_points, lang)
 
 
     time_finish = time.perf_counter()

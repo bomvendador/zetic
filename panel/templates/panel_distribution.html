@@ -138,6 +138,7 @@
                                                             <tr>
                                                                 <th class="wd-15p border-bottom-0 table-header">ФИО</th>
                                                                 <th class="wd-15p border-bottom-0 table-header">email
+                                                                <th class="wd-15p border-bottom-0 table-header">Исследование
                                                                 </th>
                                                             </tr>
                                                             </thead>
@@ -203,6 +204,7 @@
                                                             <tr>
                                                                 <th class="wd-15p border-bottom-0 table-header">ФИО</th>
                                                                 <th class="wd-15p border-bottom-0 table-header">email
+                                                                <th class="wd-15p border-bottom-0 table-header">Исследование
                                                                 </th>
                                                             </tr>
                                                             </thead>
@@ -1111,9 +1113,10 @@
                             console.log(participants)
                             let html = ''
                             for (let i = 0; i < participants.length; i++) {
-                                html += '<tr class="table-row cursor-pointer project-participant-added" id="participant_id_' + participants[i]['id'] + '">'
+                                html += '<tr class="table-row cursor-pointer project-participant-added" data-employee-id="' + participants[i]['employee_id'] + '" id="participant_id_' + participants[i]['id'] + '" title="Исследование - ' + participants[i]['study_name'] + '">'
                                 html += '<td>' + participants[i]['name'] + '</td>'
                                 html += '<td>' + participants[i]['email'] + '</td>'
+                                html += '<td>' + participants[i]['study_name'] + '</td>'
                                 html += '</tr>'
                                 {#console.log(participants[i]['fio'])#}
                             }
@@ -1144,7 +1147,9 @@
                         let report_participants = []
                         $('.table-row-report').each(function () {
                             {#console.log($(this).find(':nth-child(2)').text())#}
-                            report_participants.push($(this).find(':nth-child(2)').text())
+                            {#report_participants.push($(this).find(':nth-child(2)').text())#}
+                            let participant_id = $(this).attr('id').split('_')
+                            report_participants.push(participant_id[2])
                         })
                         let url = "{% url 'get_report_participants_data' %}"
                         $.ajax({
@@ -1257,356 +1262,6 @@
                                         $('#undistributed-participants-table').addClass('d-none')
                                     }
                                     $('#next').text('Создать отчет')
-
-
-
-                                    {#$('#next').addClass('disabled')#}
-                                    {#$('#undistributed-participants-table').removeClass('d-none')#}
-                                    {#$('#next').text('Создать отчет')#}
-
-
-
-
-
-
-
-
-                                    {#let participant_distributed = false#}
-                                    {#possible_categories_participant = []#}
-                                    {#distributed_categories_participant = []#}
-                                    {#possible_scales = []#}
-                                    {#for (let j = 0; j < rules.length; j++) {#}
-                                    {#console.log(rules[j])#}
-                                    {#    let rule_cnt = 0#}
-                                    {#    let rule_length = rules[j].length#}
-                                    {#    let rule_category = ''#}
-                                    {#    possible_categories = []#}
-                                    {#    possible_scales = []#}
-                                    {#    let rule_not_passed = false#}
-                                    {##}
-                                    {#    for (let c = 0; c < rules[j].length; c++) {#}
-                                    {#        rule_not_passed = false#}
-                                    {#        rule_category = rules[j][c][0]#}
-                                    {#console.log('категория - ' + rules[j][c][0] + ' min - ' + rules[j][c][1] + ' max - ' + rules[j][c][2])#}
-                                    {#        for (let k = 0; k < participants_data.length; k++) {#}
-                                    {#console.log('participants_data_category - ' + participants_data[k]['category'] + ' - lie_points_category - ' + lie_points[i]['fio'])#}
-                                    {#            if (participants_data[k]['fio'] === lie_points[i]['fio'] && participants_data[k]['category_code'] === rules[j][c][0] && participants_data[k]['points'] >= rules[j][c][1] && participants_data[k]['points'] <= rules[j][c][2]) {#}
-                                    {#                rule_cnt++#}
-                                    {#            } else {#}
-                                    {#                rule_not_passed = true#}
-                                    {#            }#}
-                                    {##}
-                                    {#            if (participants_data[k]['fio'] === lie_points[i]['fio'] && participants_data[k]['category_code'] === rules[j][c][0] && (participants_data[k]['points'] < rules[j][c][1] || participants_data[k]['points'] > rules[j][c][2])) {#}
-                                    {#                possible_scales.push(rule_category)#}
-                                    {#            }#}
-                                    {##}
-                                    {#        }#}
-                                    {#if (rule_not_passed){#}
-                                    {#    possible_scales.push(rule_category)#}
-                                    {#console.log('ФИО - ' + lie_points[i]['fio'] + '|  категория - ' + rules[j][c] + ' | не прошел по шкале - ' + rule_category)#}
-                                    //{#        //   {#}#}
-                                    {##}
-                                    {#    }#}
-                                    {#    if (rule_cnt === rule_length) {#}
-                                    {#distributed_participants_cnt++#}
-                                    {#        participant_distributed = true#}
-                                    {#        switch (j) {#}
-                                    {#            case 0:#}
-                                    {#                distributed_categories_participant.push(square_names_obj["1_1"])#}
-                                    {#$('#list_1_1').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
-                                    {#                break;#}
-                                    {#            case 1:#}
-                                    {#                distributed_categories_participant.push(square_names_obj["1_2"])#}
-                                    {#$('#list_1_2').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
-                                    {#                break;#}
-                                    {#            case 2:#}
-                                    {#                distributed_categories_participant.push(square_names_obj["1_3"])#}
-                                    {#$('#list_1_3').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
-                                    {#                break;#}
-                                    {#            case 3:#}
-                                    {#                distributed_categories_participant.push(square_names_obj["1_4"])#}
-                                    {#$('#list_1_4').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
-                                    {#                break;#}
-                                    {#            case 4:#}
-                                    {#                distributed_categories_participant.push(square_names_obj["2_1"])#}
-                                    {#$('#list_2_1').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
-                                    {#                break;#}
-                                    {#            case 5:#}
-                                    {#                distributed_categories_participant.push(square_names_obj["2_2"])#}
-                                    {#$('#list_2_2').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
-                                    {#                break;#}
-                                    {#            case 6:#}
-                                    {#                distributed_categories_participant.push(square_names_obj["2_3"])#}
-                                    {#$('#list_2_3').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
-                                    {#                break;#}
-                                    {#            case 7:#}
-                                    {#                distributed_categories_participant.push(square_names_obj["2_4"])#}
-                                    {#$('#list_2_4').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
-                                    {#                break;#}
-                                    {#            case 8:#}
-                                    {#                distributed_categories_participant.push(square_names_obj["3_1"])#}
-                                    {#$('#list_3_1').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
-                                    {#                break;#}
-                                    {#            case 9:#}
-                                    {#                distributed_categories_participant.push(square_names_obj["3_2"])#}
-                                    {#$('#list_3_2').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
-                                    {#                break;#}
-                                    {#            case 10:#}
-                                    {#                distributed_categories_participant.push(square_names_obj["3_3"])#}
-                                    {#$('#list_3_3').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
-                                    {#                break;#}
-                                    {#            case 11:#}
-                                    {#                distributed_categories_participant.push(square_names_obj["3_4"])#}
-                                    {#$('#list_3_4').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
-                                    {#                break;#}
-                                    {#            case 12:#}
-                                    {#                distributed_categories_participant.push(square_names_obj["4_1"])#}
-                                    {#$('#list_4_1').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
-                                    {#                break;#}
-                                    {#            case 13:#}
-                                    {#                distributed_categories_participant.push(square_names_obj["4_2"])#}
-                                    {#$('#list_4_2').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
-                                    {#                break;#}
-                                    {#            case 14:#}
-                                    {#                distributed_categories_participant.push(square_names_obj["4_3"])#}
-                                    {#$('#list_4_3').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
-                                    {#                break;#}
-                                    {#            case 15:#}
-                                    {#                distributed_categories_participant.push(square_names_obj["4_4"])#}
-                                    {#$('#list_4_4').append('<li class="list-group-item" id="' + lie_points[i]['email'] + '">' + lie_points[i]['fio'] + '</li>')#}
-                                    {#                break;#}
-                                    {#            default:#}
-                                    {#                break;#}
-                                    {##}
-                                    {#        }#}
-                                    {#    } else {#}
-                                    {##}
-                                    {#let square_names_arr = [#}
-                                    {#    ['1_1', 'Магнит']#}
-                                    {#]#}
-                                    {##}
-                                    {#        //если кол-во удовлетворительных правил <= 2#}
-                                    {#console.log(' разница - ' + (rule_length - rule_cnt).toString())#}
-                                    {#console.log(' разница - ')#}
-                                    {#        if ((rule_length - rule_cnt) <= min_rules_for_exception) {#}
-                                    {#            let square_name = ''#}
-                                    {#            switch (j) {#}
-                                    {#                case 0:#}
-                                    {#square_name = 'Магнит'#}
-                                    {#                    square_name = square_names_obj["1_1"]#}
-                                    {#                    break;#}
-                                    {#                case 1:#}
-                                    {#square_name = 'ENFJ - Идеалист-харизматик'#}
-                                    {#                    square_name = square_names_obj["1_2"]#}
-                                    {#                    break;#}
-                                    {#                case 2:#}
-                                    {#square_name = 'ESFP - Спонтанный коммуникатор'#}
-                                    {#                    square_name = square_names_obj["1_3"]#}
-                                    {#                    break;#}
-                                    {#                case 3:#}
-                                    {#square_name = 'ENFP - Инициатор'#}
-                                    {#                    square_name = square_names_obj["1_4"]#}
-                                    {#                    break;#}
-                                    {#                case 4:#}
-                                    {#square_name = 'Визионер по жизни'#}
-                                    {#                    square_name = square_names_obj["2_1"]#}
-                                    {#                    break;#}
-                                    {#                case 5:#}
-                                    {#square_name = 'ENTJ - Предприниматель'#}
-                                    {#                    square_name = square_names_obj["2_2"]#}
-                                    {#                    break;#}
-                                    {#                case 6:#}
-                                    {#square_name = 'ESTP - Ультра-реалист'#}
-                                    {#                    square_name = square_names_obj["2_3"]#}
-                                    {#                    break;#}
-                                    {#                case 7:#}
-                                    {#square_name = 'Изобретатель'#}
-                                    {#                    square_name = square_names_obj["2_4"]#}
-                                    {#                    break;#}
-                                    {#                case 8:#}
-                                    {#square_name = 'Хранитель'#}
-                                    {#                    square_name = square_names_obj["3_1"]#}
-                                    {#                    break;#}
-                                    {#                case 9:#}
-                                    {#square_name = 'Вдохновитель'#}
-                                    {#                    square_name = square_names_obj["3_2"]#}
-                                    {#                    break;#}
-                                    {#                case 10:#}
-                                    {#square_name = 'ISFP - Посредник'#}
-                                    {#                    square_name = square_names_obj["3_3"]#}
-                                    {#                    break;#}
-                                    {#                case 11:#}
-                                    {#square_name = 'Благородный служитель'#}
-                                    {#                    square_name = square_names_obj["3_4"]#}
-                                    {#                    break;#}
-                                    {#                case 12:#}
-                                    {#square_name = 'Организатор'#}
-                                    {#                    square_name = square_names_obj["4_1"]#}
-                                    {#                    break;#}
-                                    {#                case 13:#}
-                                    {#square_name = 'Любитель улучшений'#}
-                                    {#                    square_name = square_names_obj["4_2"]#}
-                                    {#                    break;#}
-                                    {#                case 14:#}
-                                    {#square_name = 'ISTP - Экспериментатор'#}
-                                    {#                    square_name = square_names_obj["4_3"]#}
-                                    {#                    break;#}
-                                    {#                case 15:#}
-                                    {#square_name = 'Решатель проблем'#}
-                                    {#                    square_name = square_names_obj["4_4"]#}
-                                    {#                    break;#}
-                                    {#                default:#}
-                                    {#                    break;#}
-                                    {#            }#}
-                                    {#            possible_categories.push([square_name, (rule_length - rule_cnt).toString(), possible_scales])#}
-                                    {#        }#}
-                                    {#    }#}
-                                    {#    if (possible_categories.length > 0) {#}
-                                    {#        possible_categories_participant.push(possible_categories)#}
-                                    {##}
-                                    {#    }#}
-                                    //{#}#}
-                                    {#if ((possible_categories_participant.length > 0 && !participant_distributed) || distributed_categories_participant.length > 0) {#}
-                                    {##}
-                                    {#    html += '<tr class="table-row-undistributed-participant" style="">'#}
-                                    {#    html += '<td class="bold-participant" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'#}
-                                    {#    html += '<td class="participant-group" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'#}
-                                    {#    html += '<td class="fio">' + lie_points[i]['fio'] + '</td>'#}
-                                    {#    html += '<td class="email">' + lie_points[i]['email'] + '</td>'#}
-                                    {#    html += '<td class="role_name">' + lie_points[i]['role_name'] + '</td>'#}
-                                    {#    html += '<td class="position">' + lie_points[i]['position'] + '</td>'#}
-                                    {#    html += '<td>'#}
-                                    {#    for (let h = 0; h < distributed_categories_participant.length; h++) {#}
-                                    {#        if (h !== distributed_categories_participant.length - 1) {#}
-                                    {#            html += distributed_categories_participant[h] + '<br>'#}
-                                    {#        } else {#}
-                                    {#            html += distributed_categories_participant[h]#}
-                                    {#        }#}
-                                    {#    }#}
-                                    {#    html += '</td>'#}
-                                    {#    html += '<td>'#}
-                                    {#    for (let h = 0; h < possible_categories_participant.length; h++) {#}
-                                    {#        for (let y = 0; y < possible_categories_participant[h][0][2].length; y++) {#}
-                                    {#            if (y === 0) {#}
-                                    {#                html += possible_categories_participant[h][0][0] + '<br>'#}
-                                    {#            } else {#}
-                                    {#                html += '<br>'#}
-                                    {#            }#}
-                                    {##}
-                                    {#        }#}
-                                    {#    }#}
-                                    {#    html += '</td>'#}
-                                    {#    html += '<td>'#}
-                                    {#    for (let h = 0; h < possible_categories_participant.length; h++) {#}
-                                    {#        for (let y = 0; y < possible_categories_participant[h][0][2].length; y++) {#}
-                                    {#            html += code_name[possible_categories_participant[h][0][2][y]] + '<br>'#}
-                                    {#        }#}
-                                    {#    }#}
-                                    {#    html += '</td>'#}
-                                    {#    html += '<td>'#}
-                                    {#    html += '<select name="category" class="form-control form-select select2 category-selected" data-bs-placeholder="Выберите категорию">'#}
-                                    {#    html += '<option value=""></option>'#}
-                                    {#    //отображение возможных категорий#}
-                                    {#    for (let h = 0; h < possible_categories_participant.length; h++) {#}
-                                    {#        html += '<option value="' + possible_categories_participant[h][0][0] + '">' + possible_categories_participant[h][0][0] + '</option>'#}
-                                    {#    }#}
-                                    {#    //отображение распределенных категорий#}
-                                    {#    for (let h = 0; h < distributed_categories_participant.length; h++) {#}
-                                    {#        if (distributed_categories_participant.length === 1) {#}
-                                    {#            html += '<option value="' + distributed_categories_participant[h] + '" selected>' + distributed_categories_participant[h] + '</option>'#}
-                                    {#        } else {#}
-                                    {#            html += '<option value="' + distributed_categories_participant[h] + '">' + distributed_categories_participant[h] + '</option>'#}
-                                    {#        }#}
-                                    {#    }#}
-                                    {#    html += '</select>'#}
-                                    {#    html += '</td>'#}
-                                    {#    html += '</tr>'#}
-                                    {#    $('#tbody_undistributed_participants').append(html)#}
-                                    //{#} else {#}
-                                    {#    //если участник не распределен и не попал ни в одну категорию#}
-                                    {#    if (possible_categories_participant.length === 0 && !participant_distributed) {#}
-                                    {##}
-                                    {#        html += '<tr class="table-row-undistributed-participant" style="">'#}
-                                    {#        html += '<td class="bold-participant" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'#}
-                                    {#        html += '<td class="participant-group" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'#}
-                                    {#        html += '<td class="fio">' + lie_points[i]['fio'] + '</td>'#}
-                                    {#        html += '<td class="email">' + lie_points[i]['email'] + '</td>'#}
-                                    {#        html += '<td class="role_name">' + lie_points[i]['role_name'] + '</td>'#}
-                                    {#        html += '<td class="position">' + lie_points[i]['position'] + '</td>'#}
-                                    {#        html += '<td>Категория отсутствует</td>'#}
-                                    {#        html += '<td></td>'#}
-                                    {#        html += '<td></td>'#}
-                                    {#        html += '<td>'#}
-                                    {#        html += '<select name="category" class="form-control form-select select2 category-selected" data-bs-placeholder="Выберите категорию">'#}
-                                    {#        html += '<option value=""></option>'#}
-                                    {##}
-                                    {#        Object.values(square_names_obj).forEach(function (item) {#}
-                                    {#            html += '<option value="' + item + '">' + item + '</option>'#}
-                                    {#        })#}
-                                    {##}
-                                    {#        html += '</select>'#}
-                                    {#        html += '</td>'#}
-                                    {#        html += '</tr>'#}
-                                    {##}
-                                    {##}
-                                    {#            $('#tbody_undistributed_participants').append(html)#}
-                                    {#        }#}
-                                    {#    }#}
-                                    {#console.log(possible_categories_participant)#}
-                                    //{#}#}
-                                    {##}
-                                    {#console.log(distributed_categories_participant)#}
-                                    {##}
-                                    {##}
-                                    {#$('.undistributed-table').removeAttr('width').DataTable({#}
-                                    {#    'columnDefs': [#}
-                                    {#        {'orderable': false, 'targets': [0, 7]},#}
-                                    {#        {width: 5, targets: 0}#}
-                                    {#    ],#}
-                                    {#    autoWidth: false,#}
-                                    {#    "info": true,#}
-                                    {#    "bFilter": true,#}
-                                    {#    order: [1, 'asc'],#}
-                                    {#    "searching": true,#}
-                                    {#    "destroy": true,#}
-                                    {#    "paging": false,#}
-                                    {#    "language": {#}
-                                    {#        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"#}
-                                    {#    },#}
-                                    {#    "initComplete": function () {#}
-                                    {#    },#}
-                                    //{#})#}
-                                    {##}
-                                    {##}
-                                    {#process_table('.undistributed-table')#}
-                                    {#for (let i = 0; i < participants_data.length; i++) {#}
-                                    {##}
-                                    {#html += '<tr class="table-row cursor-pointer project-participant-added">'#}
-                                    {#html += '<td>' + participants[i]['fio'] + '</td>'#}
-                                    {#html += '<td>' + participants[i]['email'] + '</td>'#}
-                                    {#html += '</tr>'#}
-                                    {#console.log(participants_data[i]['fio'])#}
-                                    //{#}#}
-                                    {#$('#wizard1-tbody-1').html(html)#}
-                                    {#process_table('.team-table')#}
-                                    {##}
-                                    {#route_menu_handler(route_index)#}
-                                    {##}
-                                    {#$('#bage_distributed_participants').html(distributed_participants_cnt)#}
-                                    {#$('#wizard1-h-2').css('display', 'block')#}
-                                    {#$('#wizard1-p-2').css('display', 'block')#}
-                                    {#$('#wizard1-h-1').css('display', 'none')#}
-                                    {#$('#wizard1-p-1').css('display', 'none')#}
-                                    {#if ($('.table-row-undistributed-participant').length > 0) {#}
-                                    {#    $('#next').addClass('disabled')#}
-                                    {#    $('#undistributed-participants-table').removeClass('d-none')#}
-                                    //
-                                    //{#} else {#}
-                                    {#    $('#next').removeClass('disabled')#}
-                                    {#    $('#undistributed-participants-table').addClass('d-none')#}
-                                    //{#}#}
-                                    {#$('#next').text('Создать отчет')#}
-
 
                                 }
 
@@ -1841,16 +1496,67 @@
         })
 
         $('#add-all-participant').on('click', function () {
-            add_participant_to_report('#wizard1-tbody-1 tr')
+            let project_participant_chosen = $('.project-participant-chosen')
+            let employees_ids = []
+            let employees_ok = true
+            project_participant_chosen.each(function () {
+                let employee_id = $(this).data('employee-id')
+                console.log(employee_id)
+                if(employees_ids.includes(employee_id)){
+                    employees_ok = false
+                }else {
+                    employees_ids.push(employee_id)
+                }
+            })
+            $(".project-participant-added").each(function () {
+                let employee_id = $(this).data('employee-id')
+                console.log(employee_id)
+                if(employees_ids.includes(employee_id)){
+                    employees_ok = false
+                }else {
+                    employees_ids.push(employee_id)
+                }
+            })
+
+            if(employees_ok){
+                add_participant_to_report('#wizard1-tbody-1 tr')
+            }else {
+                toastr.error('Сотрудник может быть добавлен только олдин раз')
+            }
+
 
         })
 
-        $('#add-chosen-participant').on('click', function () {
+        function check_chosen_employees_() {
 
-            if ($('.project-participant-chosen').length) {
-                add_participant_to_report('.project-participant-chosen')
+        }
+
+
+        $('#add-chosen-participant').on('click', function () {
+            let participant_has_been_chosen = false
+            let project_participant_chosen = $('.project-participant-chosen')
+            if (project_participant_chosen.length) {
+                participant_has_been_chosen = true
             } else {
                 toastr.error('Участник не выбран')
+            }
+            if(participant_has_been_chosen){
+                let employees_ids = []
+                let employees_ok = true
+                project_participant_chosen.each(function () {
+                    let employee_id = $(this).data('employee-id')
+                    console.log(employee_id)
+                    if(employees_ids.includes(employee_id)){
+                        employees_ok = false
+                    }else {
+                        employees_ids.push(employee_id)
+                    }
+                })
+                if(employees_ok){
+                    add_participant_to_report('.project-participant-chosen')
+                }else {
+                    toastr.error('Сотрудник может быть добавлен только олдин раз')
+                }
             }
 
         })
@@ -1871,12 +1577,13 @@
             }
         })
 
-        function add_participant_to_report(element) {
+        function add_participant_to_report(element, title) {
             let html_report = ''
             let html_project = ''
 
             $(element).each(function (i, obj) {
-                html_report += '<tr class="table-row-report cursor-pointer report-participant-added odd" style="">'
+
+                html_report += '<tr class="table-row-report cursor-pointer report-participant-added odd" id="' + $(this).attr("id") + '" data-emplyee-id="' + $(this).data("employee-id") + '" style="" title="' + $(this).attr("title") +'">'
                 html_report += $(this).html()
                 html_report += '</tr>'
                 $(this).remove()

@@ -1,5 +1,5 @@
 from pdf.models import Report, Participant, Company, ReportData, Section, Category, Employee, Study, EmployeeRole, \
-    EmployeeGender, QuestionnaireQuestionAnswers, Questionnaire
+    EmployeeGender, QuestionnaireQuestionAnswers, Questionnaire, RawToTPointsType, RawToTPoints
 from login.models import UserProfile
 from . import raw_to_t_point
 from panel import mail_handler
@@ -102,7 +102,7 @@ def save_data_to_db(request_json, file_name):
         mail_handler.send_notification_to_participant_report_made(data_for_mail)
 
 
-def save_data_to_db_and_send_report(participant_id, file_name, study_id, lie_points, lang):
+def save_data_to_db_and_send_report(questionnaire_id, file_name, study_id, lie_points, lang):
     # print(request_json)
 
     # if 'company_name' in request_json:
@@ -128,6 +128,8 @@ def save_data_to_db_and_send_report(participant_id, file_name, study_id, lie_poi
     #
 
     study = Study.objects.get(id=study_id)
+    questionnaire_inst = Questionnaire.objects.get(id=questionnaire_id)
+    participant_id = questionnaire_inst.participant.id
 
     participant = Participant.objects.get(id=participant_id, study=study)
     participant.completed_at = timezone.now()
@@ -143,6 +145,23 @@ def save_data_to_db_and_send_report(participant_id, file_name, study_id, lie_poi
     report.lang = lang
     report.study = study
     report.save()
+
+    study_inst = Study.objects.get(id=study_id)
+    questionnaire_question_answers = QuestionnaireQuestionAnswers.objects.filter(questionnaire=questionnaire_inst)
+
+    for answer in questionnaire_question_answers:
+        if not answer.question.category.for_validity:
+            report_data = ReportData()
+            report_data.report = report
+            # report_data.section_code = section['code']
+            report_data.section_name = answer.section.name
+            # print(point['code'])
+            report_data.category_name = answer.question.category.name
+            report_data.category_code = answer.question.category.code
+
+            report_data.points = raw_to_t_point.filter_raw_points_to_t_points(answer.answer.raw_point, participant.employee_id, answer.question.category.id)
+            # report_data.points = point['points']
+            report_data.save()
 
     # for section in request_json['appraisal_data']:
     #     # print(section['point'])

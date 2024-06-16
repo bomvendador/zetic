@@ -57,24 +57,28 @@ def block_name_(pdf, block_r, block_g, block_b, y, x, block_name_str):
 def data_by_points(square_results, section_code, category_code):
     scale_data = []
     cnt = 0
+    # print(f'square_result - {square_results}')
     for square_result in square_results:
         group_color = square_result[5]
         email = square_result[1]
         bold = square_result[3]
         cnt = cnt + 1
-        report = Report.objects.filter(participant__employee__email=square_result[1]).latest('added')
+        report = Report.objects.filter(participant__employee__email=email).latest('added')
 
         participant_email = square_result[1]
         questionnaire_inst = Questionnaire.objects.filter(participant__employee__email=participant_email).latest('created_at')
+        # print(f'questionnaire_inst len = {questionnaire_inst.id}')
+
         questionnaire_questions_answers = QuestionnaireQuestionAnswers.objects.filter(questionnaire=questionnaire_inst,
                                                                                       question__category__code=category_code)
-        participant_inst = Participant.objects.get(employee__email=participant_email)
-        print(f'category code = {category_code}')
+        participant_inst = Participant.objects.get(id=questionnaire_inst.participant.id)
+        # print(f'category code = {category_code}')
         category_inst = Category.objects.get(code=category_code)
         raw_points = 0
         for answer in questionnaire_questions_answers:
             if answer.question.category.code == category_code:
                 raw_points = raw_points + answer.answer.raw_point
+                # print(f'raw_points = {raw_points}')
         t_points = raw_to_t_point.filter_raw_points_to_t_points(raw_points, participant_inst.employee_id, category_inst.id)
         scale_data.append([square_result[2], t_points, cnt, group_color, email, bold])
 
