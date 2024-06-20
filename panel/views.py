@@ -375,7 +375,7 @@ def get_participants_data_for_group_report(participants_ids):
                     if filter_position.employee_position == employee_position_inst:
                         participant_position_is_in_filter = True
             if (filter_has_positions and participant_position_is_in_filter) or not filter_has_positions:
-                print(f'---начало---')
+                print(f'---начало--- {matrix_filter.square_code} - {matrix_filter.square_name}')
 
                 filter_categories = MatrixFilterCategory.objects.filter(matrix_filter=matrix_filter)
 
