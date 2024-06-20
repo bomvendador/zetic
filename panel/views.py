@@ -373,7 +373,7 @@ def get_participants_data_for_group_report(participants_ids):
                     if filter_position.employee_position == employee_position_inst:
                         participant_position_is_in_filter = True
             if (filter_has_positions and participant_position_is_in_filter) or not filter_has_positions:
-                print(f'371')
+                print(f'---начало---')
 
                 filter_categories = MatrixFilterCategory.objects.filter(matrix_filter=matrix_filter)
 
@@ -389,10 +389,11 @@ def get_participants_data_for_group_report(participants_ids):
                         #     print(f'{filter_category.points_from} <= {data.points} <= {filter_category.points_to}')
                         if data.category_code == filter_category.category.code and \
                                 (filter_category.points_from <= data.points <= filter_category.points_to):
-                            print('фильтр сработал')
+                            print(f'фильтр {filter_category.category.code} сработал')
                             print(f'{filter_category.points_from} <= {data.points} <= {filter_category.points_to}')
                             print(f'categories_fits_cnt = {categories_fits_cnt}')
                             categories_fits_cnt = categories_fits_cnt + 1
+                print('---конец---')
                 if categories_fits_cnt > 0:
                     participant_squares.append({
                         'square_name': matrix_filter.square_name,
