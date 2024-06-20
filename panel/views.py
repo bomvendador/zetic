@@ -9,7 +9,7 @@ from pdf.models import Company, Participant, ReportData, Report, Category, Repor
     Employee, EmployeeRole, EmployeePosition, EmployeeGender, Study, ResearchTemplate, ResearchTemplateSections, \
     Section, \
     MatrixFilter, MatrixFilterParticipantNotDistributed, MatrixFilterInclusiveEmployeePosition, MatrixFilterCategory, \
-    MatrixFilterParticipantNotDistributedEmployeePosition, QuestionnaireQuestionAnswers
+    MatrixFilterParticipantNotDistributedEmployeePosition, QuestionnaireQuestionAnswers, QuestionAnswers
 # from django.contrib.auth.models import User
 
 from login.models import UserRole, UserProfile, User
@@ -385,10 +385,14 @@ def get_participants_data_for_group_report(participants_ids):
                 # print(f'report_data_inst = {len(report_data_inst)}')
                 categories_fits_cnt = 0
                 for filter_category in filter_categories:
-                    questions_answers_raw_points = QuestionnaireQuestionAnswers.objects.filter(Q(questionnaire__participant=participant_inst)
-                                                                                        & Q(question__category__code=filter_category.category.code)).aggregate(Sum('points'))
-                    t_points = raw_to_t_point.filter_raw_points_to_t_points(questions_answers_raw_points['points__sum'], participant_inst.employee_id, filter_category.category.id)
-                    report_data_categories_points_sum = ReportData.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).aggregate(Sum('points'))
+                    questionnaire_questions_answers_inst = QuestionnaireQuestionAnswers.objects.filter(Q(questionnaire__participant=participant_inst)
+                                                                                        & Q(question__category__code=filter_category.category.code))
+                    raw_points = 0
+                    for questionnaire_question in questionnaire_questions_answers_inst:
+                        raw_points = raw_points + questionnaire_question.answer.raw_point
+
+                    t_points = raw_to_t_point.filter_raw_points_to_t_points(raw_points, participant_inst.employee_id, filter_category.category.id)
+                    # report_data_categories_points_sum = ReportData.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).aggregate(Sum('points'))
                     print(f't_points = {t_points}')
                     if filter_category.points_from <= t_points <= filter_category.points_to:
                         print(f'шкала {filter_category.category.code} - {filter_category.category.name}')
