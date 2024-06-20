@@ -28,6 +28,8 @@ from django.db.models import Q
 
 from .custom_funcs import squares_data
 
+from django.db.models import Sum
+
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def info_common(request):
@@ -381,18 +383,24 @@ def get_participants_data_for_group_report(participants_ids):
                 # print(f'report_data_inst = {len(report_data_inst)}')
                 categories_fits_cnt = 0
                 for filter_category in filter_categories:
+                    report_data_categories_points_sum = ReportData.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).aggregate(Sum('points'))
+                    if filter_category.points_from <= report_data_categories_points_sum <= filter_category.points_to:
+                        categories_fits_cnt = categories_fits_cnt + 1
 
-                    for data in report_data_inst:
-                        # print(f'фильтры {data.category_code} - {filter_category.category.code}')
-                        # if data.category_code == filter_category.category.code:
-                        #     print(f'фильтр {data.category_code}')
-                        #     print(f'{filter_category.points_from} <= {data.points} <= {filter_category.points_to}')
-                        if data.category_code == filter_category.category.code and \
-                                (filter_category.points_from <= data.points <= filter_category.points_to):
-                            print(f'фильтр {filter_category.category.code} сработал')
-                            print(f'{filter_category.points_from} <= {data.points} <= {filter_category.points_to}')
-                            print(f'categories_fits_cnt = {categories_fits_cnt}')
-                            categories_fits_cnt = categories_fits_cnt + 1
+                    # for data in report_data_inst:
+                    #     # print(f'фильтры {data.category_code} - {filter_category.category.code}')
+                    #     # if data.category_code == filter_category.category.code:
+                    #     #     print(f'фильтр {data.category_code}')
+                    #     #     print(f'{filter_category.points_from} <= {data.points} <= {filter_category.points_to}')
+                    #
+                    #
+                    #     if data.category_code == filter_category.category.code and \
+                    #             (filter_category.points_from <= data.points <= filter_category.points_to):
+                    #         print(f'фильтр {filter_category.category.code} сработал')
+                    #         print(f'{filter_category.points_from} <= {data.points} <= {filter_category.points_to}')
+                    #         print(f'categories_fits_cnt = {categories_fits_cnt}')
+                    #         categories_fits_cnt = categories_fits_cnt + 1
+                print(f'categories_fits_cnt = {categories_fits_cnt}')
                 print('---конец---')
                 if categories_fits_cnt > 0:
                     participant_squares.append({
