@@ -9,7 +9,7 @@ from pdf.models import Company, Participant, ReportData, Report, Category, Repor
     Employee, EmployeeRole, EmployeePosition, EmployeeGender, Study, ResearchTemplate, ResearchTemplateSections, \
     Section, \
     MatrixFilter, MatrixFilterParticipantNotDistributed, MatrixFilterInclusiveEmployeePosition, MatrixFilterCategory, \
-    MatrixFilterParticipantNotDistributedEmployeePosition
+    MatrixFilterParticipantNotDistributedEmployeePosition, QuestionnaireQuestionAnswers
 # from django.contrib.auth.models import User
 
 from login.models import UserRole, UserProfile, User
@@ -29,6 +29,8 @@ from django.db.models import Q
 from .custom_funcs import squares_data
 
 from django.db.models import Sum
+
+from pdf import raw_to_t_point
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -383,11 +385,14 @@ def get_participants_data_for_group_report(participants_ids):
                 # print(f'report_data_inst = {len(report_data_inst)}')
                 categories_fits_cnt = 0
                 for filter_category in filter_categories:
+                    questions_answers_raw_points = QuestionnaireQuestionAnswers.objects.filter(Q(questionnaire__participant=participant_inst)
+                                                                                        & Q(question__category__code=filter_category.category.code)).aggregate(Sum('points'))
+                    t_points = raw_to_t_point.filter_raw_points_to_t_points(questions_answers_raw_points['points__sum'], participant_inst.employee_id, filter_category.category.id)
                     report_data_categories_points_sum = ReportData.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).aggregate(Sum('points'))
-                    print(f'sum = {report_data_categories_points_sum}')
-                    if filter_category.points_from <= report_data_categories_points_sum['points__sum'] <= filter_category.points_to:
+                    print(f't_points = {t_points}')
+                    if filter_category.points_from <= t_points <= filter_category.points_to:
                         print(f'шкала {filter_category.category.code} - {filter_category.category.name}')
-                        print(f'{filter_category.points_from} <= {report_data_categories_points_sum["points__sum"]} <= {filter_category.points_to}')
+                        print(f'{filter_category.points_from} <= {t_points} <= {filter_category.points_to}')
                         categories_fits_cnt = categories_fits_cnt + 1
 
                     # for data in report_data_inst:
