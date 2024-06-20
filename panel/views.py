@@ -400,6 +400,7 @@ def get_participants_data_for_group_report(participants_ids):
                     #         print(f'{filter_category.points_from} <= {data.points} <= {filter_category.points_to}')
                     #         print(f'categories_fits_cnt = {categories_fits_cnt}')
                     #         categories_fits_cnt = categories_fits_cnt + 1
+                # print(f'Категория - {}')
                 print(f'categories_fits_cnt = {categories_fits_cnt}')
                 print('---конец---')
                 if categories_fits_cnt > 0:
@@ -408,15 +409,15 @@ def get_participants_data_for_group_report(participants_ids):
                         'square_code': matrix_filter.square_code,
                         'percentage': int(categories_fits_cnt * 100 / total_filter_categories)
                     })
-                    if len(participant_squares) > 1:
-                        for i in range(len(participant_squares) - 1, 0, -1):
-                            # print(f'i = {i}')
-                            # print(f"{participant_squares[i]['percentage']} > {participant_squares[i - 1]['percentage']}")
-                            if participant_squares[i]['percentage'] > participant_squares[i - 1]['percentage']:
-                                cur_val = participant_squares[i]['percentage']
-                                prev_val = participant_squares[i - 1]['percentage']
-                                participant_squares[i - 1]['percentage'] = cur_val
-                                participant_squares[i]['percentage'] = prev_val
+                    # if len(participant_squares) > 1:
+                    #     for i in range(len(participant_squares) - 1, 0, -1):
+                    #         # print(f'i = {i}')
+                    #         # print(f"{participant_squares[i]['percentage']} > {participant_squares[i - 1]['percentage']}")
+                    #         if participant_squares[i]['percentage'] > participant_squares[i - 1]['percentage']:
+                    #             cur_val = participant_squares[i]['percentage']
+                    #             prev_val = participant_squares[i - 1]['percentage']
+                    #             participant_squares[i - 1]['percentage'] = cur_val
+                    #             participant_squares[i]['percentage'] = prev_val
         if len(participant_squares) == 0:
             matrix_filters_participant_not_distributed_inst = MatrixFilterParticipantNotDistributed.objects.all()
             for matrix_filter_participant_not_distributed in matrix_filters_participant_not_distributed_inst:
