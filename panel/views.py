@@ -515,7 +515,7 @@ def get_available_participants_for_group_report(request):
             if not employee_is_in_group_report:
                 # print(employee.email)
                 employees.append({
-                    'participant_data': get_participants_data_for_group_report([report.participant.employee.email]),
+                    'participant_data': get_participants_data_for_group_report([report.participant.id]),
                     'squares_data': squares_data
                 })
         print(employees)

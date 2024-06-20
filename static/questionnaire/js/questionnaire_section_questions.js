@@ -11,6 +11,8 @@ $('.question-answer-input').on('click', function () {
     }
 })
 
+console.log(questions)
+
 let section_ended = false
 let save_page_answers_clicked = false
 

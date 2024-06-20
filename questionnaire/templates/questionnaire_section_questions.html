@@ -216,7 +216,8 @@
 
         let code = "{{ code }}";
         let url_save_answers = "{% url 'save_answers' %}"
-        let section_id = {{ section.id }}
+        let section_id = {{ section.id }};
+        let questions = {{ questions|safe }};
         {#let url_get_company_employees = "{% url 'get_company_employees' %}"#}
         {#let study_id = {{ study.id }};#}
         {#let url_save_participant_questions_groups = "{% url 'save_participant_questions_groups' %}"#}

@@ -59,13 +59,18 @@ $('#save_study').on('click', function () {
                 btn_text('#save_study', 'Сохранить исследование')
                 // hide_progressbar_loader()
                 // let employees = data['response']['employees']
+                let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
+                    '<br>' +
+                    '<hr class="solid mt-0" style="background-color: black;">' +
+                    '<h4 style="text-align: center">Исследование добавлено</h4>' +
+                    '<hr class="solid mt-0" style="background-color: black;">'
+
                 Swal.fire({
-                  title: 'Данные сохранены',
-                  text: "Исследование добавлено",
-                  icon: 'success',
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'ОК'
+                    html: output_html,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ОК'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         window.location.href = url_studies_list

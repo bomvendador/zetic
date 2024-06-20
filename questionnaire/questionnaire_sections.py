@@ -29,21 +29,27 @@ def section_view(request, section_id, code):
         questions_already_answered_ids.append(questionnaire_question_answer.question.id)
     # questions_inst = sorted(CategoryQuestions.objects.filter(category__section_id=section_id).exclude()[:5], key=lambda x: random.random())
     CategoryQuestions.objects.filter(Q(category__section_id=section_id) & ~Q(id__in=questions_already_answered_ids))
-    questions_inst = sorted(CategoryQuestions.objects.filter(Q(category__section_id=section_id) & ~Q(id__in=questions_already_answered_ids))[:5], key=lambda x: random.random())
+    questions_inst = sorted(CategoryQuestions.objects.filter(Q(category__section_id=section_id) & ~Q(id__in=questions_already_answered_ids)), key=lambda x: random.random())
+    # questions_sections_inst_all = CategoryQuestions.objects.filter(Q(category__section_id=section_id) & ~Q(id__in=questions_already_answered_ids))
+    # questions_inst = random.sample(questions_sections_inst_all, 5)
     # questions_inst = CategoryQuestions.objects.filter(category__section_id=section_id)
+    questions_limit = 5
+    cur_questions_cnt = 0
     for question in questions_inst:
-        answers_inst = QuestionAnswers.objects.filter(question=question)
-        answers = []
-        for answer in answers_inst:
-            answers.append({
-                'text': answer.text,
-                'id': answer.id,
+        cur_questions_cnt = cur_questions_cnt + 1
+        if cur_questions_cnt <= questions_limit:
+            answers_inst = QuestionAnswers.objects.filter(question=question)
+            answers = []
+            for answer in answers_inst:
+                answers.append({
+                    'text': answer.text,
+                    'id': answer.id,
+                })
+            questions.append({
+                'text': question.text,
+                'id': question.id,
+                'answers': answers,
             })
-        questions.append({
-            'text': question.text,
-            'id': question.id,
-            'answers': answers,
-        })
     print(questions)
     section_questions = CategoryQuestions.objects.filter(Q(category__section_id=section_id))
     questions_answered_qnt = len(

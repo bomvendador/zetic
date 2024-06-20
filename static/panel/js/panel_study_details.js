@@ -280,10 +280,12 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
                     if (data['warning']) {
                         toastr.warning(data['warning'])
                     }else {
-                        let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                            '<div style="text-align: center">Письма успешно отправлены участникам</div>' +
+                        let output_html = '<h2 class="mb-0" style="text-align: center">Приглашения отправлены</h2>' +
                             '<br>' +
+                            '<hr class="solid mt-0" style="background-color: black;">' +
+                            '<h4 style="text-align: center">Письма успешно отправлены участникам</h4>' +
                             '<hr class="solid mt-0" style="background-color: black;">'
+
                         Swal.fire({
                             html: output_html,
                             icon: 'success',
