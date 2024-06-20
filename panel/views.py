@@ -384,6 +384,7 @@ def get_participants_data_for_group_report(participants_ids):
                 categories_fits_cnt = 0
                 for filter_category in filter_categories:
                     report_data_categories_points_sum = ReportData.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).aggregate(Sum('points'))
+                    print(f'sum = {report_data_categories_points_sum}')
                     if filter_category.points_from <= len(report_data_categories_points_sum) <= filter_category.points_to:
                         print(f'шкала {filter_category.category.code}')
                         print(f'{filter_category.points_from} <= {len(report_data_categories_points_sum)} <= {filter_category.points_to}')
