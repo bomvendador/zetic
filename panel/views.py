@@ -356,7 +356,6 @@ def get_participants_data_for_group_report(participants_ids):
     participants_data = []
     matrix_filters = MatrixFilter.objects.all()
     for participant_id in participants_ids:
-        participant_position_is_in_filter = False
         print(f'participant_id - {participant_id}')
         participant_inst = Participant.objects.get(id=participant_id)
         employee_inst = Employee.objects.get(id=participant_inst.employee.id)
@@ -368,6 +367,7 @@ def get_participants_data_for_group_report(participants_ids):
         participant_squares = []
         participant_squares_ordered = []
         for matrix_filter in matrix_filters:
+            participant_position_is_in_filter = False
             filter_has_positions = False
             filter_positions_inst = MatrixFilterInclusiveEmployeePosition.objects.filter(
                 matrix_filter=matrix_filter)
