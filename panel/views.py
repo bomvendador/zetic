@@ -419,7 +419,7 @@ def get_participants_data_for_group_report(participants_ids):
                     participant_squares.append({
                         'square_name': matrix_filter.square_name,
                         'square_code': matrix_filter.square_code,
-                        'percentage': round(categories_fits_cnt * 100 / total_filter_categories, 4)
+                        'percentage': int(categories_fits_cnt * 100 / total_filter_categories)
                     })
                     if len(participant_squares) > 1:
                         sorted_participant_squares = []
@@ -458,7 +458,7 @@ def get_participants_data_for_group_report(participants_ids):
             'lie_points': report.lie_points,
             'role_name': report.participant.employee.role.name_ru,
             'position': report.participant.employee.position.name_ru,
-            'participant_squares': participant_squares,
+            'participant_squares': participant_squares[:3],
             'employee_id': report.participant.employee.id,
             'participant_id': report.participant.id,
         })
