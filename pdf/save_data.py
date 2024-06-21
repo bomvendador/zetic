@@ -186,7 +186,7 @@ def save_data_to_db_and_send_report(questionnaire_id, file_name, study_id, lie_p
         # 'to_email': to_email
     }
 
-    # if participant.send_report_to_participant_after_filling_up:
-    #     mail_handler.send_notification_to_participant_report_made(data_for_mail, report.id)
-    # mail_handler.send_notification_report_made(data_for_mail, report.id)
+    if participant.send_report_to_participant_after_filling_up:
+        mail_handler.send_notification_to_participant_report_made(data_for_mail, report.id)
+    mail_handler.send_notification_report_made(data_for_mail, report.id)
 

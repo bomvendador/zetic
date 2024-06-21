@@ -356,14 +356,14 @@ def get_participants_data_for_group_report(participants_ids):
     participants_data = []
     matrix_filters = MatrixFilter.objects.all()
     for participant_id in participants_ids:
-        print(f'participant_id - {participant_id}')
+        # print(f'participant_id - {participant_id}')
         participant_inst = Participant.objects.get(id=participant_id)
         employee_inst = Employee.objects.get(id=participant_inst.employee.id)
         employee_position_inst = EmployeePosition.objects.get(employee=employee_inst)
         report = Report.objects.get(participant_id=participant_id)
         report_data_inst = ReportData.objects.filter(report=report)
 
-        print(f'report id - {report.id}')
+        # print(f'report id - {report.id}')
         participant_squares = []
         participant_squares_ordered = []
         for matrix_filter in matrix_filters:
@@ -377,7 +377,7 @@ def get_participants_data_for_group_report(participants_ids):
                     if filter_position.employee_position == employee_position_inst:
                         participant_position_is_in_filter = True
             if (filter_has_positions and participant_position_is_in_filter) or not filter_has_positions:
-                print(f'---начало--- {matrix_filter.square_code} - {matrix_filter.square_name}')
+                # print(f'---начало--- {matrix_filter.square_code} - {matrix_filter.square_name}')
 
                 filter_categories = MatrixFilterCategory.objects.filter(matrix_filter=matrix_filter)
 
@@ -462,7 +462,7 @@ def get_participants_data_for_group_report(participants_ids):
             'employee_id': report.participant.employee.id,
             'participant_id': report.participant.id,
         })
-        print(participant_squares)
+        # print(participant_squares)
     return participants_data
 
 
