@@ -63,7 +63,7 @@ def page(pdf, lang):
 
     # if lang == 'ru':
     y += 15
-    pdf.set_xy(x+2, y)
+    pdf.set_xy(x+5, y)
     text = u'• Авантюрист – действует и принимает решения по ситуации, смело идет в новые задачи / зону неопределенности, ' \
            u'терпим к рискам и сигналам об опасности.\n' \
            u'•  Изобретатель – обладает острым умом, способностью объединять разрозненные элементы в единые решения; ' \
@@ -101,12 +101,27 @@ def page(pdf, lang):
     # pdf.write(5,
     # """Производитель"""
     # )
+    pdf.multi_cell(0, 4, text)
+
+
 
     pdf.set_font("cambria", "", 10)
-    pdf.set_xy(x, y)
+    pdf.set_xy(x + 28, y)
 
-    text ="**Производитель** –  нацелен на выполнение планов и продуктивность здесь и сейчас; нетерпелив, прагматичен" \
-            "нацелен на организацию работы и достижение целей командой; получает удовлетворение от собственной вовлеченности" \
+    text ="– нацелен на выполнение планов и продуктивность здесь и сейчас; нетерпелив, прагматичен на -" \
+
+    # else:
+    #     text = u'Based on decades of academic research Zetic has developed a tool for scientific personality measurement ' \
+    #            u'for business. The tool can be used for a variety of recruitment and development purposes. The approach was ' \
+    #            u'tested on a large sample of executives over several years. Our study of resilience and stress behavior has ' \
+    #            u'become the largest in Russia over the past 15 years. Zetic 4S questionnaire consists of:'
+    # pdf.multi_cell(0, 4, text, markdown=True)
+    pdf.multi_cell(0, 4, text)
+
+    pdf.set_font("cambria", "", 10)
+    pdf.set_xy(x, y + 4)
+
+    text =  "целен на организацию работы и достижение целей командой; получает удовлетворение от собственной вовлеченности" \
             "в работу и достижения результатов."
     # else:
     #     text = u'Based on decades of academic research Zetic has developed a tool for scientific personality measurement ' \
@@ -146,7 +161,7 @@ def page(pdf, lang):
 
     pdf.set_font("CambriaBold", "", 10)
 
-    y = y + 35
+    y = y + 32
 
     pdf.set_xy(x, y)
     # if lang == 'ru':
@@ -159,10 +174,20 @@ def page(pdf, lang):
     pdf.multi_cell(0, 4, text)
 
     pdf.set_font("cambria", "", 10)
-    pdf.set_xy(x, y)
+    pdf.set_xy(x + 28, y)
 
-    text = u'                        – обеспечивает прозрачность и стандартизацию работы в краткосрочном аспекте; таким сотрудникам ' \
-           u'свойственно унифицировать работу, структурировать информацию и процессы, следить за порядком, ' \
+    text = u'– обеспечивает прозрачность и стандартизацию работы в краткосрочном аспекте; таким сотруд -' \
+    # else:
+    #     text = u'Based on decades of academic research Zetic has developed a tool for scientific personality measurement ' \
+    #            u'for business. The tool can be used for a variety of recruitment and development purposes. The approach was ' \
+    #            u'tested on a large sample of executives over several years. Our study of resilience and stress behavior has ' \
+    #            u'become the largest in Russia over the past 15 years. Zetic 4S questionnaire consists of:'
+    pdf.multi_cell(0, 4, text)
+
+    pdf.set_font("cambria", "", 10)
+    pdf.set_xy(x, y + 4)
+
+    text = u'никам свойственно унифицировать работу, структурировать информацию и процессы, следить за порядком, ' \
            u' согласовывать и поддерживать единые правила работы.'
     # else:
     #     text = u'Based on decades of academic research Zetic has developed a tool for scientific personality measurement ' \
@@ -203,7 +228,7 @@ def page(pdf, lang):
 
     pdf.set_font("CambriaBold", "", 10)
 
-    y += 35
+    y += 32
 
     pdf.set_xy(x, y)
     # if lang == 'ru':
@@ -231,7 +256,7 @@ def page(pdf, lang):
     # 30
 
     # if lang == 'ru':
-    y += 15
+    y += 12
     pdf.set_xy(x+5, y)
     text = u'•  Магнит – стремится быть в центре внимания, пользуется поддержкой; объединяет коллектив, создает среду для' \
            u' совместной работы и развития коммуникаций.\n' \
