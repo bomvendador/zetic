@@ -419,7 +419,7 @@ def get_participants_data_for_group_report(participants_ids):
                     participant_squares.append({
                         'square_name': matrix_filter.square_name,
                         'square_code': matrix_filter.square_code,
-                        'percentage': round(categories_fits_cnt * 100 / total_filter_categories, 2)
+                        'percentage': round(categories_fits_cnt * 100 / total_filter_categories, 4)
                     })
                     if len(participant_squares) > 1:
                         sorted_participant_squares = []
