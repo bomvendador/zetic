@@ -53,6 +53,7 @@ ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_WHITELIST = [
     'http://51.250.113.32',
     'http://zetictest.ru',
+    'http://zetictest.com',
     # 'https://zetictest.ru',
 ]
 
