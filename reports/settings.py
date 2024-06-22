@@ -32,6 +32,7 @@ SECRET_KEY = 'django-insecure--lfbjn3qgosinvh0ls*wb*#72ckmd4-9ozyt*^=6=_w+ah1&qg
 CSRF_TRUSTED_ORIGINS = [
     'http://51.250.113.32',
     'http://zetictest.ru',
+    'http://zetictest.com',
     # 'https://zetictest.ru',
 ]
 
