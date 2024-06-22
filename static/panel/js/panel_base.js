@@ -1,3 +1,5 @@
+console.log(window.location.hostname)
+
 $('.menu_item').each(function () {
     $(this).removeClass('active')
 })
