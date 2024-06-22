@@ -1,4 +1,4 @@
-console.log(window.location.hostname)
+console.log(`${window.location.protocol}\\${window.location.hostname}`)
 
 $('.menu_item').each(function () {
     $(this).removeClass('active')
