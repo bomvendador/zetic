@@ -49,14 +49,15 @@ def study_details(request, study_id):
         # participant_questions_groups = ParticipantQuestionGroups.objects.filter(participant__study=study)
         # study_question_groups = StudyQuestionGroup.objects.filter(study=study)
         reports = Report.objects.filter(study=study).order_by('-added')
-        research_template = ResearchTemplate.objects.get(id=study.research_template.id)
-        print(research_template)
-        sections = ResearchTemplateSections.objects.filter(research_template=research_template).order_by('position')
-        print(sections)
+        if study.research_template:
+            research_template = ResearchTemplate.objects.get(id=study.research_template.id)
+            sections = ResearchTemplateSections.objects.filter(research_template=research_template).order_by('position')
+            context.update({
+                'sections': sections,
+            })
         context.update(
             {
                 'study': study,
-                'sections': sections,
                 # 'participant_questions_groups': participant_questions_groups,
                 # 'study_question_groups': study_question_groups,
                 'participants': Participant.objects.filter(study=study),
@@ -81,11 +82,15 @@ def get_company_studies(request):
         studies_arr = []
         for study in studies:
             name = study.name
+            if study.research_template:
+                research_name = study.research_template.name
+            else:
+                research_name = ''
             studies_arr.append({
                 'name': name,
                 'id': study.id,
                 'company_name': company.name,
-                'research_name': study.research_template.name,
+                'research_name': research_name,
             })
             # studies_db_qnt = Study.objects.filter(public_code=study['public_code']).count()
             # studies_db_qnt = studies.count()

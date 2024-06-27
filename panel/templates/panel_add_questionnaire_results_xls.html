@@ -1,0 +1,140 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">Миграция данных опросника (файл XLS)</h1>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- ROW-1 OPEN -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="card mb-0">
+                        <div class="card-header">
+                            <h3 class="card-title">Загрузка файла</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <input class="form-control" type="file" accept=".xls,.xlsx" id="files" name="files">
+                            </div>
+                            <div class="mt-5">
+                                <a href="/panel/download_file/%D0%A8%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD_%D0%B4%D0%BB%D1%8F_%D0%B7%D0%B0%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F_%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85_%D0%BD%D0%B0_%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%B8%D0%BA%D0%BE%D0%B2.xlsx">Скачать
+                                    шаблон</a>
+                            </div>
+
+
+                        </div>
+                        <div class="card-footer text-end">
+                            <button class="btn btn-primary my-1 nav-buttons" type="button"
+                                    id="parse_questionnaire_results_file">Загрузить
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- ROW-1 CLOSED -->
+
+        </div>
+        <!--CONTAINER CLOSED -->
+
+    </div>
+
+    <template id="template_error_block">
+        {#        <div class="row">#}
+        {#            <div class="card mb-0">#}
+        {#                <div class="card-body pb-0">#}
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="btn-close error-message-close-btn" data-bs-dismiss="alert" aria-hidden="true">
+                ×
+            </button>
+            <div class="error_message">
+                message_text
+            </div>
+        </div>
+        {#                </div>#}
+        {#            </div>#}
+        {#        </div>#}
+
+    </template>
+    <!-- Модальное окно добавление группы вопросов -->
+    <div class="modal fade" id="modal_errors">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #ff0000; color: white">
+                    <h5 class="modal-title">Ошибки в файле</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="color: white">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal_errors_body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block script %}
+
+    <script>
+
+        let employee_roles_obj = {
+            'array': []
+        }
+        {% for employee_role in roles %}
+            employee_roles_obj['array'].push('{{ employee_role.name_ru }}')
+        {% endfor %}
+
+        let employee_positions_obj = {
+            'array': []
+        }
+        {% for employee_position in positions %}
+            employee_positions_obj['array'].push('{{ employee_position.name_ru }}')
+        {% endfor %}
+
+        let industries_obj = {
+            'array': []
+        }
+        {% for industry in industries %}
+            industries_obj['array'].push('{{ industry.name_ru }}')
+        {% endfor %}
+
+        let genders_obj = {
+            'array': []
+        }
+        {% for gender in genders %}
+            genders_obj['array'].push('{{ gender.name_ru }}')
+        {% endfor %}
+
+        let categories_obj = {
+            'array': []
+        }
+        {% for category in categories %}
+            categories_obj['array'].push('{{ category.code }}')
+        {% endfor %}
+
+        let url_save_report_data_from_xls = "{% url 'save_report_data_from_xls' %}"
+
+    </script>
+
+    <script src="{% static 'login/js/select2.js' %}"></script>
+    {#    <script src="{% static 'login/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>#}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
+
+
+    <script src="{% static 'panel/js/panel_add_questionnaire_results_xls.js' %}"></script>
+
+{% endblock %}

@@ -12,7 +12,7 @@ def page(pdf, square_results, lang):
 
     section_code = '2'
 
-    x = 10
+    x = 5
     y = START_Y
     pdf.set_xy(x, y)
     pdf.set_font("RalewayBold", "", 10)

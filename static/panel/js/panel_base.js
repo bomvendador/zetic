@@ -83,6 +83,9 @@ $('.menu_item').on('click', function () {
             console.log('url_filters_matrix_list - ' + url_filters_matrix_list)
             window.location.href = url_filters_matrix_list;
             break;
+        case'menu_add_questionnaire_results_xls':
+            window.location.href = url_migration_questionnaire_results_xls_home;
+            break;
         default:
             break;
     }
@@ -201,4 +204,9 @@ function set_checkbox_unchecked(el) {
     $(el).removeAttr('checked')
     $(el).prop('checked', false)
     $(el).val(0)
+}
+
+function isYear(year) {
+    let regex = /^\d\d\d\d$/g
+    return regex.test(year);
 }

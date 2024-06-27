@@ -9,7 +9,8 @@ from pdf.models import Company, Participant, ReportData, Report, Category, Repor
     Employee, EmployeeRole, EmployeePosition, EmployeeGender, Study, ResearchTemplate, ResearchTemplateSections, \
     Section, \
     MatrixFilter, MatrixFilterParticipantNotDistributed, MatrixFilterInclusiveEmployeePosition, MatrixFilterCategory, \
-    MatrixFilterParticipantNotDistributedEmployeePosition, QuestionnaireQuestionAnswers, QuestionAnswers
+    MatrixFilterParticipantNotDistributedEmployeePosition, QuestionnaireQuestionAnswers, QuestionAnswers, \
+    ReportDataByCategories
 # from django.contrib.auth.models import User
 
 from login.models import UserRole, UserProfile, User
@@ -352,6 +353,120 @@ def get_report_participants_data(request):
         return JsonResponse(response, safe=False)
 
 
+# def get_participants_data_for_group_report(participants_ids):
+#     participants_data = []
+#     matrix_filters = MatrixFilter.objects.all()
+#     for participant_id in participants_ids:
+#         # print(f'participant_id - {participant_id}')
+#         participant_inst = Participant.objects.get(id=participant_id)
+#         employee_inst = Employee.objects.get(id=participant_inst.employee.id)
+#         employee_position_inst = EmployeePosition.objects.get(employee=employee_inst)
+#         report = Report.objects.get(participant_id=participant_id)
+#         report_data_inst = ReportData.objects.filter(report=report)
+#
+#         # print(f'report id - {report.id}')
+#         participant_squares = []
+#         participant_squares_ordered = []
+#         for matrix_filter in matrix_filters:
+#             participant_position_is_in_filter = False
+#             filter_has_positions = False
+#             filter_positions_inst = MatrixFilterInclusiveEmployeePosition.objects.filter(
+#                 matrix_filter=matrix_filter)
+#             if filter_positions_inst:
+#                 filter_has_positions = True
+#                 for filter_position in filter_positions_inst:
+#                     if filter_position.employee_position == employee_position_inst:
+#                         participant_position_is_in_filter = True
+#             if (filter_has_positions and participant_position_is_in_filter) or not filter_has_positions:
+#                 # print(f'---начало--- {matrix_filter.square_code} - {matrix_filter.square_name}')
+#
+#                 filter_categories = MatrixFilterCategory.objects.filter(matrix_filter=matrix_filter)
+#
+#                 total_filter_categories = len(filter_categories)
+#                 # print(f'report_data_inst = {len(report_data_inst)}')
+#                 categories_fits_cnt = 0
+#                 for filter_category in filter_categories:
+#                     questionnaire_questions_answers_inst = QuestionnaireQuestionAnswers.objects.filter(Q(questionnaire__participant=participant_inst)
+#                                                                                         & Q(question__category__code=filter_category.category.code))
+#                     raw_points = 0
+#                     for questionnaire_question in questionnaire_questions_answers_inst:
+#                         raw_points = raw_points + questionnaire_question.answer.raw_point
+#
+#                     t_points = raw_to_t_point.filter_raw_points_to_t_points(raw_points, participant_inst.employee_id, filter_category.category.id)
+#                     # report_data_categories_points_sum = ReportData.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).aggregate(Sum('points'))
+#                     # print(f't_points = {t_points}')
+#                     if filter_category.points_from <= t_points <= filter_category.points_to:
+#                         # print(f'шкала {filter_category.category.code} - {filter_category.category.name}')
+#                         # print(f'{filter_category.points_from} <= {t_points} <= {filter_category.points_to}')
+#                         categories_fits_cnt = categories_fits_cnt + 1
+#
+#                     # for data in report_data_inst:
+#                     #     # print(f'фильтры {data.category_code} - {filter_category.category.code}')
+#                     #     # if data.category_code == filter_category.category.code:
+#                     #     #     print(f'фильтр {data.category_code}')
+#                     #     #     print(f'{filter_category.points_from} <= {data.points} <= {filter_category.points_to}')
+#                     #
+#                     #
+#                     #     if data.category_code == filter_category.category.code and \
+#                     #             (filter_category.points_from <= data.points <= filter_category.points_to):
+#                     #         print(f'фильтр {filter_category.category.code} сработал')
+#                     #         print(f'{filter_category.points_from} <= {data.points} <= {filter_category.points_to}')
+#                     #         print(f'categories_fits_cnt = {categories_fits_cnt}')
+#                     #         categories_fits_cnt = categories_fits_cnt + 1
+#                 # print(f'Категория - {}')
+#                 # print(f'categories_fits_cnt = {categories_fits_cnt}')
+#                 # print('---конец---')
+#                 if categories_fits_cnt > 0:
+#                     participant_squares.append({
+#                         'square_name': matrix_filter.square_name,
+#                         'square_code': matrix_filter.square_code,
+#                         'percentage': int(categories_fits_cnt * 100 / total_filter_categories)
+#                     })
+#                     if len(participant_squares) > 1:
+#                         sorted_participant_squares = []
+#                         for i in range(len(participant_squares) - 1, 0, -1):
+#                             # print(f'i = {i}')
+#                             # print(f"{participant_squares[i]['percentage']} > {participant_squares[i - 1]['percentage']}")
+#                             if participant_squares[i]['percentage'] > participant_squares[i - 1]['percentage']:
+#                                 cur_val_percentage = participant_squares[i]['percentage']
+#                                 cur_val_square_name = participant_squares[i]['square_name']
+#                                 cur_val_square_code = participant_squares[i]['square_code']
+#                                 prev_val_percentage = participant_squares[i - 1]['percentage']
+#                                 prev_val_square_name = participant_squares[i - 1]['square_name']
+#                                 prev_val_square_code = participant_squares[i - 1]['square_code']
+#                                 participant_squares[i - 1]['percentage'] = cur_val_percentage
+#                                 participant_squares[i - 1]['square_name'] = cur_val_square_name
+#                                 participant_squares[i - 1]['square_code'] = cur_val_square_code
+#                                 participant_squares[i]['percentage'] = prev_val_percentage
+#                                 participant_squares[i]['square_name'] = prev_val_square_name
+#                                 participant_squares[i]['square_code'] = prev_val_square_code
+#         if len(participant_squares) == 0:
+#             matrix_filters_participant_not_distributed_inst = MatrixFilterParticipantNotDistributed.objects.all()
+#             for matrix_filter_participant_not_distributed in matrix_filters_participant_not_distributed_inst:
+#                 matrix_filters_participant_not_distributed_employee_position = MatrixFilterParticipantNotDistributedEmployeePosition.objects.filter(
+#                     matrix_filter=matrix_filter_participant_not_distributed)
+#                 for matrix_filter_participant_not_distributed_employee_position in matrix_filters_participant_not_distributed_employee_position:
+#                     if matrix_filter_participant_not_distributed_employee_position.employee_position == employee_position_inst:
+#                         participant_squares.append({
+#                             'square_name': matrix_filter_participant_not_distributed.square_name,
+#                             'square_code': matrix_filter_participant_not_distributed.square_code,
+#                             'percentage': 0
+#                         })
+#
+#         participants_data.append({
+#             'fio': report.participant.employee.name,
+#             'email': report.participant.employee.email,
+#             'lie_points': report.lie_points,
+#             'role_name': report.participant.employee.role.name_ru,
+#             'position': report.participant.employee.position.name_ru,
+#             'participant_squares': participant_squares[:3],
+#             'employee_id': report.participant.employee.id,
+#             'participant_id': report.participant.id,
+#         })
+#         # print(participant_squares)
+#     return participants_data
+
+
 def get_participants_data_for_group_report(participants_ids):
     participants_data = []
     matrix_filters = MatrixFilter.objects.all()
@@ -360,7 +475,7 @@ def get_participants_data_for_group_report(participants_ids):
         participant_inst = Participant.objects.get(id=participant_id)
         employee_inst = Employee.objects.get(id=participant_inst.employee.id)
         employee_position_inst = EmployeePosition.objects.get(employee=employee_inst)
-        report = Report.objects.get(participant_id=participant_id)
+        report = Report.objects.filter(participant_id=participant_id).latest('added')
         report_data_inst = ReportData.objects.filter(report=report)
 
         # print(f'report id - {report.id}')
@@ -385,35 +500,34 @@ def get_participants_data_for_group_report(participants_ids):
                 # print(f'report_data_inst = {len(report_data_inst)}')
                 categories_fits_cnt = 0
                 for filter_category in filter_categories:
-                    questionnaire_questions_answers_inst = QuestionnaireQuestionAnswers.objects.filter(Q(questionnaire__participant=participant_inst)
-                                                                                        & Q(question__category__code=filter_category.category.code))
-                    raw_points = 0
-                    for questionnaire_question in questionnaire_questions_answers_inst:
-                        raw_points = raw_points + questionnaire_question.answer.raw_point
+                    report_data_by_categories_inst = ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code))
+                    if report_data_by_categories_inst:
+                        report_data_by_categories_inst = ReportDataByCategories.objects.get(
+                            Q(report=report) & Q(category_code=filter_category.category.code))
 
-                    t_points = raw_to_t_point.filter_raw_points_to_t_points(raw_points, participant_inst.employee_id, filter_category.category.id)
-                    # report_data_categories_points_sum = ReportData.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).aggregate(Sum('points'))
-                    # print(f't_points = {t_points}')
-                    if filter_category.points_from <= t_points <= filter_category.points_to:
-                        # print(f'шкала {filter_category.category.code} - {filter_category.category.name}')
-                        # print(f'{filter_category.points_from} <= {t_points} <= {filter_category.points_to}')
-                        categories_fits_cnt = categories_fits_cnt + 1
+                        t_points = report_data_by_categories_inst.t_points
+                        # report_data_categories_points_sum = ReportData.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).aggregate(Sum('points'))
+                        # print(f't_points = {t_points}')
+                        if filter_category.points_from <= t_points <= filter_category.points_to:
+                            # print(f'шкала {filter_category.category.code} - {filter_category.category.name}')
+                            # print(f'{filter_category.points_from} <= {t_points} <= {filter_category.points_to}')
+                            categories_fits_cnt = categories_fits_cnt + 1
 
-                    # for data in report_data_inst:
-                    #     # print(f'фильтры {data.category_code} - {filter_category.category.code}')
-                    #     # if data.category_code == filter_category.category.code:
-                    #     #     print(f'фильтр {data.category_code}')
-                    #     #     print(f'{filter_category.points_from} <= {data.points} <= {filter_category.points_to}')
-                    #
-                    #
-                    #     if data.category_code == filter_category.category.code and \
-                    #             (filter_category.points_from <= data.points <= filter_category.points_to):
-                    #         print(f'фильтр {filter_category.category.code} сработал')
-                    #         print(f'{filter_category.points_from} <= {data.points} <= {filter_category.points_to}')
-                    #         print(f'categories_fits_cnt = {categories_fits_cnt}')
-                    #         categories_fits_cnt = categories_fits_cnt + 1
-                # print(f'Категория - {}')
-                # print(f'categories_fits_cnt = {categories_fits_cnt}')
+                        # for data in report_data_inst:
+                        #     # print(f'фильтры {data.category_code} - {filter_category.category.code}')
+                        #     # if data.category_code == filter_category.category.code:
+                        #     #     print(f'фильтр {data.category_code}')
+                        #     #     print(f'{filter_category.points_from} <= {data.points} <= {filter_category.points_to}')
+                        #
+                        #
+                        #     if data.category_code == filter_category.category.code and \
+                        #             (filter_category.points_from <= data.points <= filter_category.points_to):
+                        #         print(f'фильтр {filter_category.category.code} сработал')
+                        #         print(f'{filter_category.points_from} <= {data.points} <= {filter_category.points_to}')
+                        #         print(f'categories_fits_cnt = {categories_fits_cnt}')
+                        #         categories_fits_cnt = categories_fits_cnt + 1
+                    # print(f'Категория - {}')
+                    # print(f'categories_fits_cnt = {categories_fits_cnt}')
                 # print('---конец---')
                 if categories_fits_cnt > 0:
                     participant_squares.append({
@@ -470,9 +584,9 @@ def get_participants_data_for_group_report(participants_ids):
 def save_group_report_data(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
-        print('--- 421 ---')
-        print(json_data)
-        print('===421===')
+        # print('--- 421 ---')
+        # print(json_data)
+        # print('===421===')
 
         operation = json_data['operation']
         square_results = json_data['square_results']
@@ -505,9 +619,9 @@ def save_group_report_data(request):
                 cnt = cnt + 1
                 square_result.append(cnt)
 
-        print('--- 449 ---')
-        print(json_data)
-        print('===449===')
+        # print('--- 449 ---')
+        # print(json_data)
+        # print('===449===')
 
 
         # for item in json_data['square_results']:
@@ -551,7 +665,7 @@ def get_available_participants_for_group_report(request):
                     'participant_data': get_participants_data_for_group_report([report.participant.id]),
                     'squares_data': squares_data
                 })
-        print(employees)
+        # print(employees)
         return JsonResponse(employees, safe=False)
 
 

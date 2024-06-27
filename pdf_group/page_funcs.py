@@ -1,7 +1,8 @@
 from pdf_group.draw import draw_arrow, draw_table
-from pdf.models import Report, ReportData, Questionnaire, QuestionnaireQuestionAnswers, Participant, Category
+from pdf.models import Report, ReportData, Questionnaire, QuestionnaireQuestionAnswers, Participant, Category, ReportDataByCategories
 import math
 from pdf import raw_to_t_point
+from django.db.models import Q
 
 
 # цвет прямоугольника названия блока
@@ -74,12 +75,16 @@ def data_by_points(square_results, section_code, category_code):
         participant_inst = Participant.objects.get(id=questionnaire_inst.participant.id)
         # print(f'category code = {category_code}')
         category_inst = Category.objects.get(code=category_code)
-        raw_points = 0
-        for answer in questionnaire_questions_answers:
-            if answer.question.category.code == category_code:
-                raw_points = raw_points + answer.answer.raw_point
-                # print(f'raw_points = {raw_points}')
-        t_points = raw_to_t_point.filter_raw_points_to_t_points(raw_points, participant_inst.employee_id, category_inst.id)
+
+        # raw_points = 0
+        # for answer in questionnaire_questions_answers:
+        #     if answer.question.category.code == category_code:
+        #         raw_points = raw_points + answer.answer.raw_point
+        #         # print(f'raw_points = {raw_points}')
+        # t_points = raw_to_t_point.filter_raw_points_to_t_points(raw_points, participant_inst.employee_id, category_inst.id)
+
+        t_points = ReportDataByCategories.objects.get(Q(report=report) & Q(category_code=category_code)).t_points
+        # print(f't_points 87 = {t_points}')
         scale_data.append([square_result[2], t_points, cnt, group_color, email, bold])
 
 
@@ -90,6 +95,7 @@ def data_by_points(square_results, section_code, category_code):
     # print(f'scale data - {scale_data}')
 
     data_by_points_ = {
+        0: [],
         1: [],
         2: [],
         3: [],
@@ -103,8 +109,8 @@ def data_by_points(square_results, section_code, category_code):
     }
 
     for data in scale_data:
-        if data[1] != 0:
-            data_by_points_[data[1]].append(data)
+        # if data[1] != 0:
+        data_by_points_[data[1]].append(data)
     # print(f'data_by_points - {data_by_points_}')
     return data_by_points_
 

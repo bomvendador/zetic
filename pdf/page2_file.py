@@ -192,7 +192,7 @@ Cекция «Черты личности» построена исходя из
 
     # pdf.set_font("RalewayLight", "", 9)
     if lang == 'ru':
-        y += 116-5-3-10-10-2-5-13-4-4
+        y += 116-5-3-10-10-2-5-13-4-4-10
         text = u'Валидность отчета'
         pdf.set_xy(x, y)
         pdf.cell(115, 12, text, ln=0)
@@ -205,7 +205,12 @@ Cекция «Черты личности» построена исходя из
         pdf.cell(108, 12, text, ln=0)
         pdf.cell(10, 12, str(round(lie_points/40*10)), ln=0)
 
+    pdf.line(x1=0, y1=y - 12, x2=250, y2=y - 12)
+
     pdf.set_font("Cambria", "", 8)
+    y += 17
+    pdf.set_xy(x, y)
+
     if lang == 'ru':
         text = u'Значения, находящиеся в зеленой рамке, соответствуют среднерыночному нормативному показателю; ' \
                u'значения, попадающие в красную рамку, свидетельствуют о склонности участника создавать ' \
@@ -216,9 +221,9 @@ Cекция «Черты личности» построена исходя из
         pdf.multi_cell(0, 4, text)
 
     if lang == 'ru':
-        draw_lie_scale(pdf, 50, 266-3, 70, 10, lie_points, 'media/images/lie_scale_rec.png')
+        draw_lie_scale(pdf, 50, 266-3-10, 70, 10, lie_points, 'media/images/lie_scale_rec.png')
     else:
-        draw_lie_scale(pdf, 40, 266-3, 70, 10, lie_points, 'media/images/lie_scale_rec.png')
+        draw_lie_scale(pdf, 40, 266-3-10, 70, 10, lie_points, 'media/images/lie_scale_rec.png')
 
     insert_page_number(pdf)
 

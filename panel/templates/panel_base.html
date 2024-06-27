@@ -341,7 +341,10 @@
                                     <i class="angle fe fe-chevron-right"></i>
                                 </a>
                                 <ul class="slide-menu">
-                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_migration"> Миграция</div></li>
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_migration"> Миграция (JSON)</div></li>
+                                </ul>
+                                <ul class="slide-menu">
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_add_questionnaire_results_xls"> Миграция результатов (XLS)</div></li>
                                 </ul>
                             </li>
                             {% endif %}
@@ -1043,6 +1046,7 @@
         let url_companies_studies_list = "{% url 'companies_studies_list' %}"
         let url_filters_list = "{% url 'filters_list' %}"
         let url_filters_matrix_list = "{% url 'filters_matrix_list' %}"
+        let url_migration_questionnaire_results_xls_home = "{% url 'migration_questionnaire_results_xls_home' %}"
 
     </script>
     <script src="{% static 'panel/js/panel_base.js' %}"></script>

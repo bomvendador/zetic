@@ -7,7 +7,7 @@ def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
     pdf.set_draw_color(r, g, b)
     pdf.set_fill_color(r, g, b)
     # отрисовка прямоугольника
-    rect_width = 140
+    rect_width = 140 + 10
     rect_height = 4
     pdf.rect(startX, startY, rect_width, rect_height, 'FD')
     # отрисовка треугольника
@@ -17,7 +17,7 @@ def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
     point3 = (startX + rect_width, startY - rect_height/2 + rect_height * 2)
     pdf.polygon(point_list=[point1, point2, point3, point1], style="FD")
     pdf.set_font("NotoSansDisplayMedium", "", 8)
-    section_qnt = 10
+    section_qnt = 11
     section_width = rect_width / section_qnt
 
     line_x_start = startX
@@ -52,10 +52,10 @@ def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
         pdf.line(line_x_start + cur_section_width, startY - rect_height/2 + 1, line_x_start + cur_section_width, startY + rect_height + rect_height/2 - 1)
         pdf.set_text_color(105, 105, 105)
         # цифры текст на шкале
-        if cur_section + 1 == 10:
-            pdf.text(line_x_start + cur_section_width - 1.5, startY + 3, str(cur_section + 1))
+        if cur_section + 1 == section_qnt:
+            pdf.text(line_x_start + cur_section_width - 1.5, startY + 3, str(cur_section))
         else:
-            pdf.text(line_x_start + cur_section_width - 0.75, startY + 3, str(cur_section + 1))
+            pdf.text(line_x_start + cur_section_width - 0.75, startY + 3, str(cur_section))
         line_x_start = line_x_start + cur_section_width
     total_points = 0
     total_participants_qnt = 0
@@ -85,7 +85,7 @@ def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
                     cur_col = 1
                     first_item_x = 0
 
-                scale_number_x = startX + scale_number_data[1] * section_width - section_width / 2  # x позиция черты на шкале
+                scale_number_x = startX + scale_number_data[1] * section_width - section_width / 2 + section_width  # x позиция черты на шкале
                 draw_single_circle_arrow(pdf, scale_number_x - 1.75 * col_qnt + first_item_x, startY + 5.5 + delta_y, scale_number_data[2], group_color, email, bold)
                 first_item_x = first_item_x + 3.5
                 cur_col = cur_col + 1
@@ -94,7 +94,7 @@ def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
 
     #треугольник СРЕДНЕЕ
     if total_participants_qnt > 0:
-        average_number_x = startX + (total_points // total_participants_qnt) * section_width - section_width / 2
+        average_number_x = (startX + section_width) + (total_points // total_participants_qnt) * section_width - section_width / 2
         # print(f'{total_points} / {total_participants_qnt} = {total_points // total_participants_qnt}')
 
         pdf.set_draw_color(r, g, b)

@@ -424,6 +424,24 @@ class ReportData(models.Model):
         verbose_name = 'Данные индивидуальных отчетов'
 
 
+class ReportDataByCategories(models.Model):
+    report = models.ForeignKey(Report, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Отчет')
+    section_name = models.CharField(max_length=50, blank=True, null=True, default=None)
+    section_code = models.CharField(max_length=2, blank=True, null=True, default=None)
+    category_name = models.CharField(max_length=100, blank=True, null=True, default=None)
+    category_code = models.CharField(max_length=5, blank=True, null=True, default=None)
+    t_points = models.IntegerField(null=False, default=0)
+
+    # def __str__(self):
+    #     return f'{self.report.participant.employee.name} - {self.report.participant.employee.company.name} - {self.section_name} - {self.category_code} - {self.category_name} - {self.points}'
+    def __str__(self):
+        return f'{self.section_name} - {self.category_code} - {self.category_name} - {self.t_points} - {self.report.filename()}'
+
+    class Meta:
+        verbose_name_plural = 'Данные индивидуальных отчетов'
+        verbose_name = 'Данные индивидуальных отчетов'
+
+
 class ReportGroup(models.Model):
     added = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     file = models.FileField(upload_to='media/reportsPDF/', default=None)
