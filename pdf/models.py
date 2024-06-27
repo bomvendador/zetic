@@ -438,8 +438,8 @@ class ReportDataByCategories(models.Model):
         return f'{self.section_name} - {self.category_code} - {self.category_name} - {self.t_points} - {self.report.filename()}'
 
     class Meta:
-        verbose_name_plural = 'Данные индивидуальных отчетов'
-        verbose_name = 'Данные индивидуальных отчетов'
+        verbose_name_plural = 'Данные индивидуальных отчетов по категориям'
+        verbose_name = 'Данные индивидуальных отчетов по категориям'
 
 
 class ReportGroup(models.Model):
