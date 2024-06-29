@@ -293,7 +293,7 @@ class Questionnaire(models.Model):
 
 class QuestionnaireQuestionAnswers(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.PROTECT, default=None, blank=True, null=True)
+    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE, default=None, blank=True, null=True)
     question = models.ForeignKey(CategoryQuestions, on_delete=models.PROTECT, default=None, blank=True, null=True)
     answer = models.ForeignKey(QuestionAnswers, on_delete=models.PROTECT, default=None, blank=True, null=True)
     section = models.ForeignKey(Section, on_delete=models.PROTECT, default=None, blank=True, null=True)
