@@ -37,19 +37,36 @@ def save_report_data_from_xls(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
         questionnaire_results_arr = json_data['questionnaire_results_arr']
-        print(questionnaire_results_arr)
+        # print(questionnaire_results_arr)
         categories = Category.objects.all()
         participants_not_allowed = []
         for result in questionnaire_results_arr:
             participant_allowed = True
-            completed_at_str = result['Дата заполнения']
+            completed_at_str = result['Дата заполнения'].strip()
             # completed_at = parse_datetime(completed_at_str)
             split_time_date = completed_at_str.split(' ')
-            split_date = split_time_date[0].split('/')
+            split_date_by_slash = split_time_date[0].split('/')
+            split_date_by_dot = split_time_date[0].split('.')
+            if len(split_date_by_slash) > 1:
+                split_date = split_date_by_slash
+            else:
+                split_date = split_date_by_dot
             split_time = split_time_date[1].split(':')
-            completed_at = datetime(int('20' + split_date[2]), int(split_date[0]), int(split_date[1]), int(split_time[0]), int(split_time[1]))
+            # print('------------------')
+            # print(len(split_date_by_slash))
+            # print(len(split_date_by_dot))
+            # print(split_time_date)
+            # print(split_date)
+            # print(split_time)
+            # print('+++++++++++++++++++')
+            year_str = split_date[2]
+            if len(year_str) < 4:
+                year_int = int('20' + split_date[2])
+            else:
+                year_int = int(split_date[2])
+            completed_at = datetime(year_int, int(split_date[0]), int(split_date[1]), int(split_time[0]), int(split_time[1]))
             # datetime.date()
-            print(completed_at)
+            # print(completed_at)
             company_name = result['Компания']
             company_inst = Company.objects.filter(name=company_name)
             if company_inst.exists():
@@ -79,6 +96,7 @@ def save_report_data_from_xls(request):
                 employee_inst.birth_year = employee_birth_year
                 employee_inst.company = company_inst
                 employee_inst.created_by = request.user
+                employee_inst.created_at = completed_at
                 employee_inst.email = employee_email
                 employee_inst.save()
             study_name = f'Исследование миграции ({company_name})'
@@ -122,6 +140,7 @@ def save_report_data_from_xls(request):
                 report_inst.participant = participant_inst
                 report_inst.lang = 'ru'
                 report_inst.study = study_inst
+                report_inst.added = completed_at
                 report_inst.save()
                 for category in categories:
                     for cat_key in category:
