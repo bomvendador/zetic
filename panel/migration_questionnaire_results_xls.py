@@ -52,21 +52,33 @@ def save_report_data_from_xls(request):
             else:
                 split_date = split_date_by_dot
             split_time = split_time_date[1].split(':')
-            print('------------------')
-            print(len(split_date_by_slash))
-            print(len(split_date_by_dot))
-            print(split_time_date)
-            print(split_date)
-            print(split_time)
-            print('+++++++++++++++++++')
+            # print('------------------')
+            # print(len(split_date_by_slash))
+            # print(len(split_date_by_dot))
+            # print(split_time_date)
+            # print(split_date)
+            # print(split_time)
+            # print('+++++++++++++++++++')
             year_str = split_date[2]
             if len(year_str) < 4:
                 year_int = int('20' + split_date[2])
             else:
                 year_int = int(split_date[2])
-            completed_at = datetime(year_int, int(split_date[0]), int(split_date[1]), int(split_time[0]), int(split_time[1]))
+            # print(split_date[1][0])
+            if split_date[1][0] == '0':
+                month_int = int(split_date[1][1])
+            else:
+                month_int = int(split_date[1])
+            # print(month_int)
+
+            completed_at = datetime(year_int, month_int, int(split_date[0]), int(split_time[0]), int(split_time[1]))
+            # print(completed_at.year)
+            # print(completed_at.month)
+            # print(completed_at.day)
+
             # datetime.date()
             # print(completed_at)
+
             company_name = result['Компания']
             company_inst = Company.objects.filter(name=company_name)
             if company_inst.exists():

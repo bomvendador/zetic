@@ -141,6 +141,7 @@
                                                         <th>Пол</th>
                                                         <th>Когда создан</th>
                                                         <th>Кем создан</th>
+                                                        <th>Дата окончания заполнения</th>
                                                         <th>Группы вопросов</th>
                                                         <th>Отправка приглашения</th>
                                                         <th>Напоминания</th>
@@ -187,6 +188,7 @@
                                                         <td>{{ participant.employee.sex }}</td>
                                                         <td>{{ participant.employee.created_at|date:"d.m.Y H:i" }}</td>
                                                         <td>{{ participant.employee.created_by.first_name }}</td>
+                                                        <td>{{ participant.completed_at|date:"d.m.Y H:i" }}</td>
                                                         <td class="participant_selected_questions_groups_td">
                                                             {% for participant_questions_group in participant_questions_groups %}
                                                                 {% if participant_questions_group.participant == participant %}
