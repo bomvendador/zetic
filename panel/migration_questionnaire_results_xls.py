@@ -52,13 +52,13 @@ def save_report_data_from_xls(request):
             else:
                 split_date = split_date_by_dot
             split_time = split_time_date[1].split(':')
-            # print('------------------')
-            # print(len(split_date_by_slash))
-            # print(len(split_date_by_dot))
-            # print(split_time_date)
-            # print(split_date)
-            # print(split_time)
-            # print('+++++++++++++++++++')
+            print('------------------')
+            print(len(split_date_by_slash))
+            print(len(split_date_by_dot))
+            print(split_time_date)
+            print(split_date)
+            print(split_time)
+            print('+++++++++++++++++++')
             year_str = split_date[2]
             if len(year_str) < 4:
                 year_int = int('20' + split_date[2])
