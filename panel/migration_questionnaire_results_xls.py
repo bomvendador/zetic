@@ -69,7 +69,7 @@ def save_report_data_from_xls(request):
                 month_int = int(split_date[1][1])
             else:
                 month_int = int(split_date[1])
-            # print(month_int)
+            print(month_int)
 
             completed_at = datetime(year_int, month_int, int(split_date[0]), int(split_time[0]), int(split_time[1]))
             # print(completed_at.year)
