@@ -201,7 +201,7 @@ function ProcessExcel(data) {
                             break;
                         case 'Роли/Функции сотрудников':
                             $.each(employee_roles_obj['array'], function (index, v) {
-                                console.log(`val - "${val}" v - "${v}"`)
+                                // console.log(`val - "${val}" v - "${v}"`)
                                 if (val === v.replace(/&amp;/g, '&')) {
                                     row_to_add[key] = val
                                     data_errors_exists = false
