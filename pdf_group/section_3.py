@@ -32,18 +32,6 @@ def page(pdf, square_results, lang):
 
     y = y + 12
 
-    category_code = '3_13'
-    section_data = data_by_points(square_results, section_code, category_code)
-
-    additional_delta_y = get_additional_delta_y(section_data)
-
-    scale_name = 'Переживание'
-    scale_description = 'Ощущение дискомфорта\nв работе, раздражение\nпри решении стандартных\nрабочих задач'
-
-    proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code, description_delta_y=5, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
-# -------------------------
-    y = y + MIN_SCALE_DELTA_Y + additional_delta_y
-
     category_code = '3_14'
     section_data = data_by_points(square_results, section_code, category_code)
 
@@ -56,12 +44,30 @@ def page(pdf, square_results, lang):
     else:
         y = y
 
-    scale_name = 'Неудовлетворенность\nсобой'
-    scale_description = 'Недовольство собой и\nситуацией, потребность\nсменить условия работы,\nощущение'
+    scale_name = 'Усталость от нагрузки,\nскорости и принципов\nработы'
+    scale_description = 'Ощущение дискомфорта\nот нагрузки и условий работы'
     proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
-                  description_delta_y=9, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
-# ----------------------
+                  description_delta_y=9 + 4, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
+
+# -------------------------
     y = y + MIN_SCALE_DELTA_Y + additional_delta_y
+
+    category_code = '3_13'
+    section_data = data_by_points(square_results, section_code, category_code)
+
+    additional_delta_y = get_additional_delta_y(section_data)
+
+    scale_name = 'Профессиональный тупик'
+    scale_description = 'Ощущение пустоты и проф.\nнереализованности'
+
+    proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code, description_delta_y=5, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
+    # ----------------------
+
+    start_block_name_y = y + MIN_SCALE_DELTA_Y + additional_delta_y + 15
+    block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, start_block_name_y, x, "ФАЗА 2. СОПРОТИВЛЕНИЕ")
+
+    # ----------------------
+    y = y + MIN_SCALE_DELTA_Y + additional_delta_y + 12 + 15
 
     category_code = '3_15'
     section_data = data_by_points(square_results, section_code, category_code)
@@ -75,9 +81,9 @@ def page(pdf, square_results, lang):
     else:
         y = y
 
-    scale_name = '«Загнанность в клетку»'
+    scale_name = 'Усталость от коммуникаций'
 
-    scale_description = 'Ощущение невозможности\nизменить ситуацию,\nбессилие; отсутствие\nэнергии, ощущение\nпустоты внутри'
+    scale_description = 'Усталость от объема\nкоммуникации'
 
     proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code, description_delta_y=5, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
 # -------------------------
@@ -95,15 +101,43 @@ def page(pdf, square_results, lang):
     else:
         y = y
 
-    scale_name = 'Тревога'
+    scale_name = 'Уход от\nкоммуникаций'
 
-    scale_description = 'Эмоциональное напряжение,\nощущение тревоги и\nбеспричинного беспокойства,\nжелание «остановиться»'
+    scale_description = 'Эмоциональная защита,\nформализация коммуникаций'
 
-    proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code, description_delta_y=5, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
-# -------------------------
-    start_block_name_y = y + MIN_SCALE_DELTA_Y + additional_delta_y
+    proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code, description_delta_y=9, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
+    # -------------------------
 
-    y = y + MIN_SCALE_DELTA_Y + additional_delta_y + 12
+    start_block_name_y = y + MIN_SCALE_DELTA_Y + additional_delta_y + 15
+    block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, start_block_name_y, x, "ФАЗА 3. ИСТОЩЕНИЕ")
+
+    # -------------------------
+
+    y = y + MIN_SCALE_DELTA_Y + additional_delta_y + 12 + 15
+
+    category_code = '3_18'
+
+    section_data = data_by_points(square_results, section_code, category_code)
+
+    additional_delta_y = get_additional_delta_y(section_data)
+
+    if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
+        insert_page_number(pdf)
+        pdf.add_page()
+        y = START_Y
+    else:
+        y = y
+
+    scale_name = 'Сокращение внимания'
+
+    scale_description = 'Снижение качества работы,\nигнорирование ошибок'
+
+    proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
+                  description_delta_y=5, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
+
+    # -------------------------
+    y = y + MIN_SCALE_DELTA_Y + additional_delta_y
+
 
     category_code = '3_17'
     section_data = data_by_points(square_results, section_code, category_code)
@@ -119,35 +153,14 @@ def page(pdf, square_results, lang):
     else:
         y = y
 
-    block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, start_block_name_y, x, "ФАЗА 2. СОПРОТИВЛЕНИЕ")
 
-    scale_name = 'Избирательное\nреагирование'
+    scale_name = 'Психосоматика'
 
-    scale_description = 'Зависимость коммуникации\nот настроения («хочу или\nне хочу»), эмоциональная\nчерствость, равнодушие'
-
-    proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
-                  description_delta_y=9, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
-    # -------------------------
-    y = y + MIN_SCALE_DELTA_Y + additional_delta_y
-
-    category_code = '3_18'
-    section_data = data_by_points(square_results, section_code, category_code)
-
-    additional_delta_y = get_additional_delta_y(section_data)
-
-    if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
-        insert_page_number(pdf)
-        pdf.add_page()
-        y = START_Y
-    else:
-        y = y
-
-    scale_name = 'Эмоциональная защита'
-
-    scale_description = 'Эмоциональная защита,\nнеготовность принимать\nна себя дополнительные\nэмоции и справляться\nс ними'
+    scale_description = 'Постоянное напряжение,\nусталость, отсутствие сил'
 
     proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
                   description_delta_y=5, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
+
     # -------------------------
     # y = y + MIN_SCALE_DELTA_Y + additional_delta_y
     #

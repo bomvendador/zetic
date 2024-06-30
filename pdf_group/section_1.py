@@ -193,7 +193,7 @@ def page(pdf, square_results, lang):
 
     block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, start_block_name_y, x, "УСТОЙЧИВОСТЬ РЕЗУЛЬТАТА")
 
-    scale_name = 'Шкала M\nВосторженность'
+    scale_name = 'Шкала M\nКонцептуальность'
 
     scale_description = 'Богатое воображение,склонность\nк концептуализации, яркость\nпроявления'
 
@@ -214,7 +214,7 @@ def page(pdf, square_results, lang):
     else:
         y = y
 
-    scale_name = 'Шкала Q2\nСамостоятельность'
+    scale_name = 'Шкала Q2\nАвтономность'
 
     scale_description = 'Независимость взглядов и мнений,\nсамостоятельность в решениях\nи действиях'
 
@@ -346,7 +346,7 @@ def page(pdf, square_results, lang):
     else:
         y = y
 
-    scale_name = 'Шкала E\nНезависимость'
+    scale_name = 'Шкала E\nЛидерство'
 
     scale_description = 'Желание лидировать,\nдоминирование, неуступчивость'
 
