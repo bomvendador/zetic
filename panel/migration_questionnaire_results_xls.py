@@ -79,7 +79,7 @@ def save_report_data_from_xls(request):
             # datetime.date()
             # print(completed_at)
 
-            company_name = result['Компания']
+            company_name = str(result['Компания']).strip()
             company_inst = Company.objects.filter(name=company_name)
             if company_inst.exists():
                 company_inst = Company.objects.get(name=company_name)
