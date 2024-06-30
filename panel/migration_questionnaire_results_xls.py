@@ -96,6 +96,7 @@ def save_report_data_from_xls(request):
             employee_role = str(result['Роли/Функции сотрудников']).strip()
             employee_birth_year = str(result['Год рождения']).strip()
             employee_inst = Employee.objects.filter(email=employee_email)
+            print(employee_fio)
             if employee_inst.exists():
                 employee_inst = Employee.objects.get(email=employee_email)
             else:
