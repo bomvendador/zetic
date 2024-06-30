@@ -47,10 +47,13 @@ def save_report_data_from_xls(request):
             split_time_date = completed_at_str.split(' ')
             split_date_by_slash = split_time_date[0].split('/')
             split_date_by_dot = split_time_date[0].split('.')
+            print(completed_at_str)
             if len(split_date_by_slash) > 1:
                 split_date = split_date_by_slash
+                month = split_date_by_slash[0]
             else:
                 split_date = split_date_by_dot
+                month = split_date_by_dot[1]
             split_time = split_time_date[1].split(':')
             # print('------------------')
             # print(len(split_date_by_slash))
@@ -65,10 +68,10 @@ def save_report_data_from_xls(request):
             else:
                 year_int = int(split_date[2])
             # print(split_date[1][0])
-            if split_date[1][0] == '0':
-                month_int = int(split_date[1][1])
+            if month[0] == '0':
+                month_int = int(month[1])
             else:
-                month_int = int(split_date[1])
+                month_int = int(month)
             print(month_int)
 
             completed_at = datetime(year_int, month_int, int(split_date[0]), int(split_time[0]), int(split_time[1]))
