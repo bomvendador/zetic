@@ -42,7 +42,7 @@ def save_report_data_from_xls(request):
         participants_not_allowed = []
         for result in questionnaire_results_arr:
             participant_allowed = True
-            completed_at_str = result['Дата заполнения'].strip()
+            completed_at_str = str(result['Дата заполнения']).strip()
             # completed_at = parse_datetime(completed_at_str)
             split_time_date = completed_at_str.split(' ')
             split_date_by_slash = split_time_date[0].split('/')
