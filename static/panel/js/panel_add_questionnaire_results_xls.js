@@ -172,9 +172,9 @@ function ProcessExcel(data) {
 
                 let row_to_add = {}
                 row_to_add['categories'] = []
-                $.each(excelRows[i], function (key, val) {
+                $.each(excelRows[i], function (key, v) {
                     console.log(`key - ${key} val - ${val}`)
-
+                    let val = v.trim()
                     data_errors_exists = true
                     switch (key) {
                         case 'Дата заполнения':

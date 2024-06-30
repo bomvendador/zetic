@@ -88,13 +88,13 @@ def save_report_data_from_xls(request):
                 company_inst.name = company_name
                 company_inst.created_by = request.user
                 company_inst.save()
-            employee_email = result['Email']
-            employee_fio = result['ФИО']
-            employee_gender = result['Пол']
-            employee_position = result['Должности']
-            employee_industry = result['Индустрии']
-            employee_role = result['Роли/Функции сотрудников']
-            employee_birth_year = result['Год рождения']
+            employee_email = str(result['Email']).strip()
+            employee_fio = str(result['ФИО']).strip()
+            employee_gender = str(result['Пол']).strip()
+            employee_position = str(result['Должности']).strip()
+            employee_industry = str(result['Индустрии']).strip()
+            employee_role = str(result['Роли/Функции сотрудников']).strip()
+            employee_birth_year = str(result['Год рождения']).strip()
             employee_inst = Employee.objects.filter(email=employee_email)
             if employee_inst.exists():
                 employee_inst = Employee.objects.get(email=employee_email)
