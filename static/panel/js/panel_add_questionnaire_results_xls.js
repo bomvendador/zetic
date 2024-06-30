@@ -172,9 +172,9 @@ function ProcessExcel(data) {
 
                 let row_to_add = {}
                 row_to_add['categories'] = []
-                $.each(excelRows[i], function (key, v) {
+                $.each(excelRows[i], function (key, vl) {
                     // console.log(`key - ${key} val - ${val}`)
-                    let val = v.trim()
+                    let val = vl.trim()
                     data_errors_exists = true
                     switch (key) {
                         case 'Дата заполнения':
@@ -201,7 +201,8 @@ function ProcessExcel(data) {
                             break;
                         case 'Роли/Функции сотрудников':
                             $.each(employee_roles_obj['array'], function (index, v) {
-                                if (val === v) {
+                                console.log(`val - "${val}" v - "${v}"`)
+                                if (val === v.replace(/&amp;/g, '&')) {
                                     row_to_add[key] = val
                                     data_errors_exists = false
                                 }
@@ -215,7 +216,7 @@ function ProcessExcel(data) {
                             break;
                         case 'Должности':
                             $.each(employee_positions_obj['array'], function (index, v) {
-                                if (val === v) {
+                                if (val === v.replace(/&amp;/g, '&')) {
                                     row_to_add[key] = val
                                     data_errors_exists = false
                                 }
@@ -228,7 +229,7 @@ function ProcessExcel(data) {
                             break;
                         case 'Индустрии':
                             $.each(industries_obj['array'], function (index, v) {
-                                if (val === v) {
+                                if (val === v.replace(/&amp;/g, '&')) {
                                     row_to_add[key] = val
                                     data_errors_exists = false
                                 }
