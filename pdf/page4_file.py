@@ -134,7 +134,7 @@ self-affirmation'''
         draw_full_scale(pdf, scale_name, x, y + 12, y + 12 - 2, json_section, '2_8',
                         scale_element_file, lang, participant_info)
 
-        y += 15
+    y += 15
     if lang == 'ru':
         scale_name = u'''Поиск социальной
 поддержки'''
