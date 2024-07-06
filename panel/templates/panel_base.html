@@ -278,6 +278,8 @@
                                     {% if not cur_userprofile.role.name == 'Админ заказчика' %}
                                     <li><div class="slide-item cursor-pointer menu_item" id="menu_individual_reports_add"> Добавить</div></li>
                                     {% endif %}
+                                    <li><div class="slide-item cursor-pointer menu_item" id="menu_individual_report_points_description_filters_list"> Описания баллов</div></li>
+
                                 </ul>
                             </li>
 
@@ -1046,6 +1048,7 @@
         let url_companies_studies_list = "{% url 'companies_studies_list' %}"
         let url_filters_list = "{% url 'filters_list' %}"
         let url_filters_matrix_list = "{% url 'filters_matrix_list' %}"
+        let url_individual_report_points_description_filters_list = "{% url 'individual_report_points_description_filters_list' %}"
         let url_migration_questionnaire_results_xls_home = "{% url 'migration_questionnaire_results_xls_home' %}"
 
     </script>

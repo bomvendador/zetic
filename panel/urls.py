@@ -4,7 +4,7 @@ from panel import views as panel_views
 from pdf import views as pdf_views
 from panel import company_parameter as panel_company_parameter
 from panel import employee, study, sections, individual_report_file, company, mail_handler, categories, questions, \
-    research_templates, companies_studies, filters, filters_matrix, migration_questionnaire_results_xls
+    research_templates, companies_studies, filters, filters_matrix, migration_questionnaire_results_xls, filters_individual_report_points_description
 # from panel import study
 # from panel import individual_report_file
 # from panel import company
@@ -149,7 +149,14 @@ urlpatterns = [
     path('edit_matrix_filter_for_participants_not_distributed/<int:filter_id>', filters_matrix.edit_matrix_filter_for_participants_not_distributed, name='edit_matrix_filter_for_participants_not_distributed'),
     path('delete_matrix_filter_for_participants_not_distributed', filters_matrix.delete_matrix_filter_for_participants_not_distributed, name='delete_matrix_filter_for_participants_not_distributed'),
 
+    path('individual_report_points_description_filters_list', filters_individual_report_points_description.individual_report_points_description_filters_list, name='individual_report_points_description_filters_list'),
+    path('add_individual_report_points_description_filter', filters_individual_report_points_description.add_filter, name='add_individual_report_points_description_filter'),
+    path('save_new_individual_report_points_description_filter', filters_individual_report_points_description.save_new_individual_report_points_description_filter, name='save_new_individual_report_points_description_filter'),
+    path('save_edited_individual_report_points_description_filter', filters_individual_report_points_description.save_edited_individual_report_points_description_filter, name='save_edited_individual_report_points_description_filter'),
+    path('individual_report_points_description_filter/<int:filter_id>', filters_individual_report_points_description.edit_individual_report_points_description_filter, name='individual_report_points_description_filter'),
+
     path('migration_questionnaire_results_xls_home', migration_questionnaire_results_xls.migration_home, name='migration_questionnaire_results_xls_home'),
     path('save_report_data_from_xls', migration_questionnaire_results_xls.save_report_data_from_xls, name='save_report_data_from_xls'),
 
 ]
+

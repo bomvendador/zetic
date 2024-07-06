@@ -26,9 +26,9 @@ def extract_categories(json_section, category_code, lang, participant_info):
 
 
 def point_with_description(data, category_code, lang):
-    print(f'==== data ====')
-    print(data)
-    print('=============')
+    # print(f'==== data ====')
+    # print(data)
+    # print('=============')
     for answer in data:
         if answer['code'] == category_code:
             if lang == 'ru':

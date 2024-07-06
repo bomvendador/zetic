@@ -9,6 +9,7 @@ from . import raw_to_t_point
 from django.views.decorators.csrf import csrf_exempt
 import datetime
 from pdf.title_page import title_page
+from pdf.page_conclusions import page as page_short_conclusions
 
 import os
 
@@ -108,8 +109,12 @@ def pdf_single_generator(questionnaire_id):
     #
     #             })
     # print(answers_code_1)
+
     pdf.add_page()
     page2(pdf, lie_points, lang)
+
+    pdf.add_page()
+    page_short_conclusions(pdf, questionnaire_id, 'ru')
 
     # if '1' in appraisal_data_in_request:
     #     pdf.add_page()

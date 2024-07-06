@@ -561,3 +561,46 @@ class MatrixFilterParticipantNotDistributedEmployeePosition(models.Model):
         verbose_name_plural = 'Должности, включенные в фильтры матриц'
         verbose_name = 'Должность, включенная в фильтр матрицы'
 
+
+class IndividualReportPointsDescriptionFilter(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.name}'
+
+    class Meta:
+        verbose_name_plural = 'Фильтры Описания баллов (личные отчеты)'
+        verbose_name = 'Фильтр Описания баллов (личные отчеты)'
+
+
+class IndividualReportPointsDescriptionFilterCategory(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, default=None, blank=True, null=True)
+    filter = models.ForeignKey(IndividualReportPointsDescriptionFilter, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    points_from = models.IntegerField(null=False, default=0)
+    points_to = models.IntegerField(null=False, default=0)
+
+    def __str__(self):
+        return f'{self.filter.name}'
+
+    class Meta:
+        verbose_name_plural = 'Категории (шкалы) фильтров описания баллов (личные отчеты)'
+        verbose_name = 'Категория (шкалы) фильтра описания баллов (личные отчеты)'
+
+
+class IndividualReportPointsDescriptionFilterText(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    filter = models.ForeignKey(IndividualReportPointsDescriptionFilter, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    text = models.TextField(default=None, blank=True, null=True, verbose_name='Текст описания')
+
+    def __str__(self):
+        return f'{self.filter.name}'
+
+    class Meta:
+        verbose_name_plural = 'Тексты описания фильтров описания баллов (личные отчеты)'
+        verbose_name = 'Текст описания фильтра описания баллов (личные отчеты)'
+

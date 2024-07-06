@@ -8,7 +8,7 @@ def draw_scale(pdf, x, y, w, h, points, img_link):
     pdf.set_fill_color(230, 230, 230)
 
     pdf.rect(x, y, w, h, 'F')
-    print(f'point - {points}')
+    # print(f'point - {points}')
     for i in range(points):
         # pdf.rect(x+1, y+1, 5.9, h-2, 'F', round_corners=True, corner_radius=0.5)
         pdf.image(img_link, x=x+1, y=y+1, w=5.9)
@@ -19,9 +19,9 @@ def draw_scale(pdf, x, y, w, h, points, img_link):
 def draw_full_scale(pdf, scale_name, x, y, scale_name_y, json_section, category_code, scale_element_file, lang, participant_info):
     # points_with_description = extract_categories(json_section, section_name, lang, participant_info)
     points_with_description = point_with_description(json_section, category_code, lang)
-    print('---- ' + category_code + ' ----')
-    print(points_with_description)
-    print('------------------------------')
+    # print('---- ' + category_code + ' ----')
+    # print(points_with_description)
+    # print('------------------------------')
     pdf.set_xy(x, scale_name_y-2)
     pdf.set_font("RalewayLight", "", 9)
     pdf.multi_cell(0, 4, scale_name)

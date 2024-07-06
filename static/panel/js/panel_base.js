@@ -86,6 +86,9 @@ $('.menu_item').on('click', function () {
         case'menu_add_questionnaire_results_xls':
             window.location.href = url_migration_questionnaire_results_xls_home;
             break;
+        case'menu_individual_report_points_description_filters_list':
+            window.location.href = url_individual_report_points_description_filters_list;
+            break;
         default:
             break;
     }
