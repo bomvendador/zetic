@@ -60,9 +60,13 @@ def page(pdf, questionnaire_id, lang):
                 'title': description_filter.name,
                 'texts': texts,
             })
-
+    cnt = 0
     for conclusion in conclusions_arr:
-        y = y + 10
+        cnt = cnt + 1
+        if cnt == 1:
+            y = y + 10
+        # else:
+        #     y = y + 2
         x = 12
         pdf.set_xy(x, y)
 

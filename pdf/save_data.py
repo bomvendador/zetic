@@ -171,7 +171,7 @@ def save_data_to_db_and_send_report(questionnaire_id, file_name, study_id, lie_p
                 if answer.answer.question.category.code == category.code:
                     category_in_answers = True
                     category_raw_points = category_raw_points + answer.answer.raw_point
-                    print(f'category_raw_points = {category_raw_points} + {answer.answer.raw_point}')
+                    # print(f'category_raw_points = {category_raw_points} + {answer.answer.raw_point}')
 
         if category_in_answers:
             report_data_by_categories = ReportDataByCategories()
