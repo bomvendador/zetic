@@ -112,7 +112,7 @@ def save_answers(request):
         participant_inst.save()
 
         if total_questionnaire_questions_qnt == total_questionnaire_answers_qnt:
-            pdf_single_generator(questionnaire_inst.id)
+            pdf_single_generator(questionnaire_inst.id, '')
 
         response = {
             'total_section_questions_qnt': total_section_questions_qnt,
@@ -121,7 +121,7 @@ def save_answers(request):
             'total_questionnaire_questions_qnt': total_questionnaire_questions_qnt,
             'email': participant_inst.employee.email,
         }
-        print(f'total_questionnaire_answers_qnt - {total_questionnaire_answers_qnt} total_questionnaire_questions_qnt - {total_questionnaire_questions_qnt}')
+        # print(f'total_questionnaire_answers_qnt - {total_questionnaire_answers_qnt} total_questionnaire_questions_qnt - {total_questionnaire_questions_qnt}')
         return JsonResponse({'response': response})
 
 # def get_participant_data(request, code):

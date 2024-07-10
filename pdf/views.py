@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Create your views here.
-from pdf.models import Questionnaire, QuestionnaireQuestionAnswers, QuestionAnswers, Category, CategoryQuestions
+from pdf.models import Questionnaire, QuestionnaireQuestionAnswers, QuestionAnswers, Category, CategoryQuestions, Report
 from django.http import HttpResponse, HttpResponseNotFound, StreamingHttpResponse, JsonResponse, FileResponse
 from django.db.models import Sum
 from . import raw_to_t_point
@@ -23,14 +23,15 @@ from pdf.page4_file import page4
 from pdf.page5_file import page5
 from pdf.page6_file import page6
 
-from pdf.save_data import save_data_to_db, save_data_to_db_and_send_report
+from pdf.save_data import save_data_to_db_and_send_report
 import cyrtranslit
 from reports import settings
 import time
 import fitz
+import json
 
 
-def pdf_single_generator(questionnaire_id):
+def pdf_single_generator(questionnaire_id, report_id):
     time_start = time.perf_counter()
     pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
     pdf.add_font("Cambria", style="",
@@ -173,12 +174,23 @@ def pdf_single_generator(questionnaire_id):
     # save_data_to_db(request_json, file_name)
     response = save_serve_file(pdf, path, file_name)
 
-    save_data_to_db_and_send_report(questionnaire_inst.id, file_name, questionnaire_inst.participant.study.id,lie_points, lang)
+    save_data_to_db_and_send_report(questionnaire_inst.id, file_name, questionnaire_inst.participant.study.id, lie_points, lang, report_id)
 
 
     time_finish = time.perf_counter()
     # print(round(time_finish-time_start, 2))
     return response
+
+
+def regenerate_report(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        print(json_data)
+        report_id = json_data['report_id']
+        report = Report.objects.get(id=report_id)
+        questionnaire = Questionnaire.objects.get(participant=report.participant)
+        pdf_single_generator(questionnaire.id, report_id)
+        return HttpResponse(report.participant.employee.company.name)
 
 
 def category_data(code_prefix, questionnaire_id, employee_id):

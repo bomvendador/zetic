@@ -10,7 +10,7 @@ from pdf.models import Company, Participant, ReportData, Report, Category, Repor
     Section, \
     MatrixFilter, MatrixFilterParticipantNotDistributed, MatrixFilterInclusiveEmployeePosition, MatrixFilterCategory, \
     MatrixFilterParticipantNotDistributedEmployeePosition, QuestionnaireQuestionAnswers, QuestionAnswers, \
-    ReportDataByCategories
+    ReportDataByCategories, Questionnaire
 # from django.contrib.auth.models import User
 
 from login.models import UserRole, UserProfile, User
@@ -832,7 +832,9 @@ def get_individual_reports_list(request):
                 'date': timezone.localtime(report.added).strftime("%d.%m.%Y %H:%M:%S"),
                 'name': report.participant.employee.name,
                 'file_name': report.file.name,
-                'comments': comments
+                'comments': comments,
+                'timestamp': report.added,
+                'primary': report.primary,
             })
         response = {
             'data': list(report_arr)

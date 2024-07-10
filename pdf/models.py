@@ -394,6 +394,7 @@ class Report(models.Model):
     lang = models.CharField(max_length=2, blank=True, null=True, default=None)
     study = models.ForeignKey(Study, on_delete=models.CASCADE, default=None, null=True, blank=True)
     comments = models.TextField(default=None, blank=True, null=True, verbose_name='Комментарии индивидуальный отчет')
+    primary = models.BooleanField(default=True)
 
     def __str__(self):
         return f'{self.participant} - {self.file.name}'

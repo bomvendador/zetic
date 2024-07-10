@@ -1,415 +1,503 @@
 {% extends 'panel_base.html' %}
 {% load static %}
-    {% block content %}
+{% block content %}
 
-        <!-- CONTAINER -->
-        <div class="main-container container-fluid" id="main-container">
+    <!-- CONTAINER -->
+    <div class="main-container container-fluid" id="main-container">
 
-            <!-- PAGE-HEADER -->
-            <div class="page-header">
-                <h1 class="page-title">Созданные личные отчеты</h1>
-                <div>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-{#                        <li class="breadcrumb-item active" aria-current="page">Dashboard 01</li>#}
-                        <li class="breadcrumb-item active" aria-current="page">Личные отчеты</li>
-                    </ol>
-                </div>
+        <!-- PAGE-HEADER -->
+        <div class="page-header">
+            <h1 class="page-title">Созданные личные отчеты</h1>
+            <div>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                    {#                        <li class="breadcrumb-item active" aria-current="page">Dashboard 01</li>#}
+                    <li class="breadcrumb-item active" aria-current="page">Личные отчеты</li>
+                </ol>
             </div>
-            <!-- PAGE-HEADER END -->
+        </div>
+        <!-- PAGE-HEADER END -->
 
-            <!-- ROW-1 -->
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
+        <!-- ROW-1 -->
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
 
-                    <div class="row ">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-header border-bottom-0">
-                                        <div class="card-title">
-                                            Определение параметров личных отчетов
-                                        </div>
+                <div class="row ">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header border-bottom-0">
+                                <div class="card-title">
+                                    Определение параметров личных отчетов
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="wizard1" role="application" class="wizard clearfix">
+                                    <div class="steps clearfix">
+                                        <ul role="tablist">
+                                            <li role="tab" class="current route-item" aria-disabled="false">
+                                                <a id="wizard1-t-0" aria-controls="wizard1-p-0">
+                                                    <span class="current-info audible">current step: </span>
+                                                    <span class="number">1</span>
+                                                    <span class="title">Выбор проекта</span>
+                                                </a>
+                                            </li>
+                                            <li role="tab" class="disabled route-item" aria-disabled="true">
+                                                <a id="wizard1-t-1" aria-controls="wizard1-p-1">
+                                                    <span class="number">2</span>
+                                                    <span class="title">Список отчетов</span>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
-                                    <div class="card-body">
-                                        <div id="wizard1" role="application" class="wizard clearfix">
-                                            <div class="steps clearfix">
-                                                <ul role="tablist">
-                                                    <li role="tab" class="current route-item" aria-disabled="false">
-                                                        <a id="wizard1-t-0" aria-controls="wizard1-p-0">
-                                                            <span class="current-info audible">current step: </span>
-                                                            <span class="number">1</span>
-                                                            <span class="title">Выбор проекта</span>
-                                                        </a>
-                                                    </li>
-                                                    <li role="tab" class="disabled route-item" aria-disabled="true">
-                                                        <a id="wizard1-t-1" aria-controls="wizard1-p-1">
-                                                            <span class="number">2</span>
-                                                            <span class="title">Список отчетов</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="content clearfix">
-{#                                                <h3 id="wizard1-h-0" tabindex="-1" class="title current">Выбор проекта</h3>#}
-                                                <section id="wizard1-p-0" role="tabpanel" aria-labelledby="wizard1-h-0" class="body current" aria-hidden="false">
+                                    <div class="content clearfix">
+                                        {#                                                <h3 id="wizard1-h-0" tabindex="-1" class="title current">Выбор проекта</h3>#}
+                                        <section id="wizard1-p-0" role="tabpanel" aria-labelledby="wizard1-h-0"
+                                                 class="body current" aria-hidden="false">
 
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered text-nowrap border-bottom list-table"
+                                                       id="responsive-datatable">
+                                                    <thead>
+                                                    {#                                                            <tr class="table-header">#}
+                                                    <tr>
+                                                        <th class="wd-15p border-bottom-0 table-header">Компания</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for company_arr in companies_arr %}
+                                                        <tr class="table-row cursor-pointer">
+                                                            <td>{{ company_arr }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </section>
+
+                                        {#                                                <h3 id="wizard1-h-1" tabindex="-1" class="title">Выбор членов команды</h3>#}
+                                        <section id="wizard1-p-1" role="tabpanel" aria-labelledby="wizard1-h-1"
+                                                 class="body" aria-hidden="true" style="display: none;">
+                                            <div class="row">
+                                                <div class="col-12">
                                                     <div class="table-responsive">
-                                                        <table class="table table-bordered text-nowrap border-bottom list-table" id="responsive-datatable">
+                                                        <table class="table table-bordered text-nowrap border-bottom team-table"
+                                                               id="project_participants_table">
                                                             <thead>
-    {#                                                            <tr class="table-header">#}
-                                                                <tr>
-                                                                    <th class="wd-15p border-bottom-0 table-header">Компания</th>
-                                                                </tr>
+                                                            {#                                                            <tr class="table-header">#}
+                                                            <tr>
+                                                                <th class="wd-15p border-bottom-0 table-header">
+                                                                    Участник
+                                                                </th>
+                                                                <th class="wd-15p border-bottom-0 table-header">Дата
+                                                                    заполнения
+                                                                </th>
+                                                                <th class="wd-15p border-bottom-0 table-header">
+                                                                    Компания
+                                                                </th>
+                                                                <th class="wd-15p border-bottom-0 table-header">
+                                                                    Первичность
+                                                                </th>
+                                                                {% if not cur_userprofile.role.name == 'Админ заказчика' %}
+                                                                    <th class="wd-15p border-bottom-0 table-header">
+                                                                        Комментарии
+                                                                    </th>
+                                                                {% endif %}
+                                                                <th class="wd-15p border-bottom-0 table-header"></th>
+                                                            </tr>
                                                             </thead>
-                                                            <tbody>
-                                                                {% for company_arr in companies_arr %}
-                                                                <tr class="table-row cursor-pointer">
-                                                                    <td>{{ company_arr }}</td>
-                                                                </tr>
-                                                                {% endfor %}
+                                                            <tbody id="wizard1-tbody-1">
+
                                                             </tbody>
                                                         </table>
                                                     </div>
-
-                                                </section>
-
-{#                                                <h3 id="wizard1-h-1" tabindex="-1" class="title">Выбор членов команды</h3>#}
-                                                <section id="wizard1-p-1" role="tabpanel" aria-labelledby="wizard1-h-1" class="body" aria-hidden="true" style="display: none;">
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            <div class="table-responsive">
-                                                                <table class="table table-bordered text-nowrap border-bottom team-table" id="project_participants_table">
-                                                                    <thead>
-            {#                                                            <tr class="table-header">#}
-                                                                        <tr>
-                                                                            <th class="wd-15p border-bottom-0 table-header">Участник</th>
-                                                                            <th class="wd-15p border-bottom-0 table-header">Дата заполнения</th>
-                                                                            <th class="wd-15p border-bottom-0 table-header">Опросник</th>
-                                                                            {% if not cur_userprofile.role.name == 'Админ заказчика' %}
-                                                                            <th class="wd-15p border-bottom-0 table-header">Комментарии</th>
-                                                                            {% endif %}
-                                                                            <th class="wd-15p border-bottom-0 table-header"></th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody id="wizard1-tbody-1">
-
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                </section>
+                                                </div>
 
                                             </div>
 
-                                            <div class="actions clearfix">
-                                                <ul role="menu" aria-label="Pagination" class="row">
-{#                                                    <li class="disabled cursor-pointer" aria-disabled="true" id="previous"><a class="nav-buttons" role="menuitem">Назад</a></li>#}
-                                                    <div class="col-sm-12 col-md-2" style="padding: 0">
-                                                        <button class="btn btn-primary my-1 nav-buttons disabled w-100" type="button" id="previous">
-                                                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
-                                                                <polyline points="15 18 9 12 15 6"></polyline>
-                                                            </svg>
-                                                        </button>
+                                        </section>
 
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-2" style="padding: 0">
-
-                                                        <button class="btn btn-primary my-1 nav-buttons float-end w-100 disabled" type="button" id="next">
-                                                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
-                                                                <polyline points="9 18 15 12 9 6"></polyline>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                        {#                                                    <li class="disabled cursor-pointer" aria-hidden="false" aria-disabled="false" id="next"><a class="nav-buttons" role="menuitem">Вперед</a></li>#}
-                                                    <li aria-hidden="true" style="display: none;"><a class="nav-buttons" href="#finish" role="menu  item">Finish</a></li>
-                                                </ul>
-                                            </div>
-{#                                        </div>#}
                                     </div>
 
+                                    <div class="actions clearfix">
+                                        <ul role="menu" aria-label="Pagination" class="row">
+                                            {#                                                    <li class="disabled cursor-pointer" aria-disabled="true" id="previous"><a class="nav-buttons" role="menuitem">Назад</a></li>#}
+                                            <div class="col-sm-12 col-md-2" style="padding: 0">
+                                                <button class="btn btn-primary my-1 nav-buttons disabled w-100"
+                                                        type="button" id="previous">
+                                                    <svg viewBox="0 0 24 24" width="24" height="24"
+                                                         stroke="currentColor" stroke-width="2" fill="none"
+                                                         stroke-linecap="round" stroke-linejoin="round"
+                                                         class="css-i6dzq1">
+                                                        <polyline points="15 18 9 12 15 6"></polyline>
+                                                    </svg>
+                                                </button>
 
+                                            </div>
+                                            <div class="col-sm-12 col-md-2" style="padding: 0">
 
+                                                <button class="btn btn-primary my-1 nav-buttons float-end w-100 disabled"
+                                                        type="button" id="next">
+                                                    <svg viewBox="0 0 24 24" width="24" height="24"
+                                                         stroke="currentColor" stroke-width="2" fill="none"
+                                                         stroke-linecap="round" stroke-linejoin="round"
+                                                         class="css-i6dzq1">
+                                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            {#                                                    <li class="disabled cursor-pointer" aria-hidden="false" aria-disabled="false" id="next"><a class="nav-buttons" role="menuitem">Вперед</a></li>#}
+                                            <li aria-hidden="true" style="display: none;"><a class="nav-buttons"
+                                                                                             href="#finish"
+                                                                                             role="menu  item">Finish</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    {#                                        </div>#}
                                 </div>
+
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
 
-                <!-- Модальное окно комментарии к отчету -->
-        <div class="modal fade" id="input-modal-report-comments">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content modal-content-demo">
-                    <div class="modal-header">
-                        <h6 class="modal-title">Комментарии к отчету</h6>
-                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                          <div class="mb-3">
+    <!-- Модальное окно комментарии к отчету -->
+    <div class="modal fade" id="input-modal-report-comments">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header">
+                    <h6 class="modal-title">Комментарии к отчету</h6>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
                             <label for="message-text" class="col-form-label">Комментарии:</label>
                             <textarea class="form-control" id="report-comments-text"></textarea>
-                          </div>
-                        </form>
-                      </div>
-                    <div>
-                        <div class="row" style="padding: 0px 15px 15px">
-                            <div class="col-lg-12 col-sm-12 mt-3">
-                                <button class="btn ripple btn-primary w-100" type="button" id="modal_save_comments_btn">Сохранить</button>
-                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" type="button" id="modal_save_comments_btn">
+                                Сохранить
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
 
-    {% endblock %}
+{% endblock %}
 
 {% block script %}
 
     <script src="{% static 'login/js/select2.js' %}"></script>
-{#    <script src="{% static 'login/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>#}
-<script>
+    {#    <script src="{% static 'login/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>#}
+    <script>
 
-    let report_tr_id = ''
+        let report_tr_id = ''
 
-    $('#wizard1-tbody-1').on('click', '.report_comments', function () {
-        report_tr_id = $(this).closest('tr').attr('id')
-        $('#report-comments-text').text($(this).closest('tr').find('td').eq(3).text())
-        $('#input-modal-report-comments').modal('show')
-    })
+        $('#wizard1-tbody-1').on('click', '.report_comments', function () {
+            report_tr_id = $(this).closest('tr').attr('id')
+            $('#report-comments-text').text($(this).closest('tr').find('td').eq(3).text())
+            $('#input-modal-report-comments').modal('show')
+        })
 
-    $('#modal_save_comments_btn').on('click', function () {
-        btn_spinner('#modal_save_comments_btn')
-        let comments = $('#report-comments-text').val()
-        $.ajax({
-            headers: { "X-CSRFToken": token },
-            url: "{% url 'save_individual_report_comments' %}",
-            type: 'POST',
+        $('#modal_save_comments_btn').on('click', function () {
+            btn_spinner('#modal_save_comments_btn')
+            let comments = $('#report-comments-text').val()
+            $.ajax({
+                headers: {"X-CSRFToken": token},
+                url: "{% url 'save_individual_report_comments' %}",
+                type: 'POST',
 
-            data: JSON.stringify({
-                        'report_tr_id': report_tr_id.split('_')[2],
-                        'comments': comments
-                    }),
-            processData: false,
-            contentType: false,
-            error: function(data){
-                toastr.error('Ошибка', data)
-            },
-            success:function (data) {
-                console.log(data)
-                $('#' + report_tr_id).find('td').eq(3).text(comments)
-                btn_text($('#modal_save_comments_btn'), 'Сохранить')
-                $('#input-modal-report-comments').modal('hide')
-                toastr.success('Комментарии сохранены')
+                data: JSON.stringify({
+                    'report_tr_id': report_tr_id.split('_')[2],
+                    'comments': comments
+                }),
+                processData: false,
+                contentType: false,
+                error: function (data) {
+                    toastr.error('Ошибка', data)
+                },
+                success: function (data) {
+                    console.log(data)
+                    $('#' + report_tr_id).find('td').eq(3).text(comments)
+                    btn_text($('#modal_save_comments_btn'), 'Сохранить')
+                    $('#input-modal-report-comments').modal('hide')
+                    toastr.success('Комментарии сохранены')
+                }
+            });
+
+        })
+
+        $('#project_participants_table').on('click', '.regenerate_report', function () {
+            let tr_report_id = $(this).closest('tr').attr('id')
+            let report_id = tr_report_id.split('_')[2]
+            show_progressbar_loader()
+            $.ajax({
+                headers: {"X-CSRFToken": token},
+                url: "{% url 'pdf_regenerate_report' %}",
+                type: 'POST',
+
+                data: JSON.stringify({
+                    'report_id': report_id,
+                }),
+                processData: false,
+                contentType: false,
+                error: function (data) {
+                    toastr.error('Ошибка', data)
+                },
+                success: function (data) {
+                    hide_progressbar_loader()
+                    console.log(data)
+                    let company_name = data
+
+                    let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<h3 style="text-align: center">Пересоздание отчета</h3>' +
+                        '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<div style="text-align: center">Отчет успешно пересоздан</div>'
+
+                    Swal.fire({
+                        html: output_html,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ОК'
+                    }).then((result) => {
+                        if (result.value) {
+                            window.location.reload()
+                        }
+                    })
+
+
+                    {#$('responsive-datatable tr').each(function () {#}
+                    {#    let tr_company_name = $(this).text()#}
+                    {#    if (tr_company_name === company_name) {#}
+                    {#        $(this).addClass('project-chosen')#}
+                    {#    }#}
+                    {##}
+                    {#})#}
+                    {#route_handler(1)#}
+                }
+            });
+
+
+        })
+
+
+        function route_menu_handler(route_index, btn_type) {
+            let new_menu_number = 0
+            if (btn_type === 'next') {
+                new_menu_number = route_index + 1
+            } else {
+                new_menu_number = route_index - 1
             }
-        });
-
-    })
-
-    function route_menu_handler(route_index, btn_type) {
-        let new_menu_number = 0
-        if(btn_type === 'next'){
-            new_menu_number = route_index + 1
-        }else {
-            new_menu_number = route_index - 1
-        }
-        console.log('new_menu_number - ' + new_menu_number)
-        {#if (new_menu_number <= 4){#}
+            console.log('new_menu_number - ' + new_menu_number)
+            {#if (new_menu_number <= 4){#}
             $('.route-item').each(function (i, obj) {
-                if(parseInt($(this).find('.number').html()) !== new_menu_number){
+                if (parseInt($(this).find('.number').html()) !== new_menu_number) {
                     $(this).addClass('disabled')
                     $(this).removeClass('current')
 
-                }else {
+                } else {
                     $(this).removeClass('disabled')
                     $(this).addClass('current')
                 }
             })
-            if(new_menu_number === 3){
+            if (new_menu_number === 3) {
                 {#$('#next').addClass('disabled')#}
                 {#$('#next').removeClass('cursor-pointer')#}
-            }else {
+            } else {
                 $('#next').removeClass('disabled')
 
             }
 
-        {#}else {#}
-        {#    toastr.info('Конец')#}
-        {##}
-        {#}#}
-    }
+        }
 
 
-    function route_handler(route_index) {
-    console.log('project - ' + $('.project-chosen').text().trim())
-    {#console.log(route_index)#}
-        console.log('route_index - ' + route_index)
-        btn_spinner($('#next'))
-        switch (route_index) {
-            case 1:
-                let company = $('.project-chosen').text().trim()
-                $.ajax({
-                    headers: { "X-CSRFToken": token },
-                    url: "{% url 'get_individual_reports_list' %}",
-                    type: 'POST',
+        function route_handler(route_index) {
+            console.log('project - ' + $('.project-chosen').text().trim())
+            {#console.log(route_index)#}
+            console.log('route_index - ' + route_index)
+            btn_spinner($('#next'))
+            switch (route_index) {
+                case 1:
+                    let company = $('.project-chosen').text().trim()
+                    $.ajax({
+                        headers: {"X-CSRFToken": token},
+                        url: "{% url 'get_individual_reports_list' %}",
+                        type: 'POST',
 
-                    data: JSON.stringify({
-                                'company': company,
-                            }),
-                    processData: false,
-                    contentType: false,
-                    error: function(data){
-                        toastr.error('Ошибка', data)
-                    },
-                    success:function (data) {
-                        console.log(data)
-                        {#let data_json = $.parseJSON(data);#}
-                        let data_json = data['data'];
-                        let html = ''
-                        for(let i=0; i < data_json.length; i++){
-                            html += '<tr class="" id="report_id_' + data_json[i]['id'] + '">'
-                            html += '<td>' + data_json[i]['name'] + '</td>'
-                            html += '<td>' + data_json[i]['date'] + '</td>'
-                            html += '<td>' + data_json[i]['company'] + '</td>'
-                            {% if not cur_userprofile.role.name == 'Админ заказчика' %}
-                            html += '<td>' + data_json[i]['comments'] + '</td>'//комментарии
-                            {% endif %}
-                            html += '<td>'
-                            html += '<div style="text-align: center;">'
-                            html += '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>'
-                            html += '<ul class="dropdown-menu">'
-                            html += '<li><a class="dropdown-item" href="download_single_report/' + data_json[i]['file_name'] + '">Скачать</a></li>'
-                            {% if not cur_userprofile.role.name == 'Админ заказчика' %}
-                            html += '<li><a class="dropdown-item report_comments cursor-pointer">Комментарий</a></li>'
-                            {% endif %}
-                            html += '</ul>'
-                            html += '</div>'
+                        data: JSON.stringify({
+                            'company': company,
+                        }),
+                        processData: false,
+                        contentType: false,
+                        error: function (data) {
+                            toastr.error('Ошибка', data)
+                        },
+                        success: function (data) {
+                            console.log(data)
+                            {#let data_json = $.parseJSON(data);#}
+                            let data_json = data['data'];
+                            let html = ''
+                            for (let i = 0; i < data_json.length; i++) {
+                                html += '<tr class="" id="report_id_' + data_json[i]['id'] + '">'
+                                html += '<td>' + data_json[i]['name'] + '</td>'
+                                html += '<td><span style="display: none">' + data_json[i]['timestamp'] + '</span> ' + data_json[i]['date'] + '</td>'
+                                html += '<td>' + data_json[i]['company'] + '</td>'
+                                if(data_json[i]['primary'] === true){
+                                    html += '<td>Первичный</td>'
 
-                            html += '</td>'
+                                }else {
+                                    html += '<td>Пересозданный</td>'
+                                }
+                                {% if not cur_userprofile.role.name == 'Админ заказчика' %}
+                                    html += '<td>' + data_json[i]['comments'] + '</td>'//комментарии
+                                {% endif %}
+                                html += '<td>'
+                                html += '<div style="text-align: center;">'
+                                html += '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>'
+                                html += '<ul class="dropdown-menu">'
+                                html += '<li><a class="dropdown-item" href="download_single_report/' + data_json[i]['file_name'] + '">Скачать</a></li>'
+                                html += '<li class="regenerate_report"><a class="dropdown-item cursor-pointer">Пересоздать</a></li>'
+                                {% if not cur_userprofile.role.name == 'Админ заказчика' %}
+                                    html += '<li><a class="dropdown-item report_comments cursor-pointer">Комментарий</a></li>'
+                                {% endif %}
+                                html += '</ul>'
+                                html += '</div>'
 
-                            html += '</tr>'
+                                html += '</td>'
 
+                                html += '</tr>'
+
+
+                            }
+                            {#console.log(html)#}
+                            $('#wizard1-tbody-1').html(html)
+                            {#console.log('wizard1-tbody-1 - ' + $('#wizard1-tbody-1').html())#}
+                            {#process_table('.team-table')#}
+                            process_table('#project_participants_table')
+                            btn_text($('#next'), '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
+
+                            route_menu_handler(route_index, 'next')
+
+                            $('#wizard1-h-1').css('display', 'block')
+                            $('#wizard1-p-1').css('display', 'block')
+                            $('#wizard1-h-0').css('display', 'none')
+                            $('#wizard1-p-0').css('display', 'none')
+                            $('#next').addClass('disabled')
 
                         }
-                        {#console.log(html)#}
-                        $('#wizard1-tbody-1').html(html)
-                        {#console.log('wizard1-tbody-1 - ' + $('#wizard1-tbody-1').html())#}
-                        process_table('.team-table')
-                        btn_text($('#next'), '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
+                    });
 
-                        route_menu_handler(route_index, 'next')
+                    break;
+                default:
+                    break;
+            }
 
-                        $('#wizard1-h-1').css('display', 'block')
-                        $('#wizard1-p-1').css('display', 'block')
-                        $('#wizard1-h-0').css('display', 'none')
-                        $('#wizard1-p-0').css('display', 'none')
-                        $('#next').addClass('disabled')
+        }
+
+        let enabled_route_number = 0
+        // выбор проекта
+        $('#menu_individual_reports_list').closest('.slide').addClass('is-expanded')
+        $('#menu_individual_reports_list').addClass('active')
+        $(".table-row").on('click', function (e) {
+            $(".table-row").css('background-color', '').css('color', '').removeClass('project-chosen')
+            $(this).css('background-color', '#6c5ffc').css('color', 'white').addClass('project-chosen')
+            $('#next').removeClass('disabled')
+        })
+
+        $('#next').on('click', function () {
+            if ($(this).hasClass('disabled')) {
+                if (enabled_route_number === 1) {
+                    toastr.error('Выберите проект')
+                }
+            } else {
+                {#$(this).find('a').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="width: 25px;height: 25px;"></span>')#}
+                $('.route-item').each(function (i, obj) {
+                    if (!$(this).hasClass('disabled')) {
+                        enabled_route_number = parseInt($(this).find('.number').html())
 
                     }
-                });
+                    {#route_menu_handler($(this).find('.number').html())#}
 
-                break;
-            default:
-                break;
+                })
+                $('#previous').removeClass('disabled')
+                route_handler(enabled_route_number)
+
             }
 
-    }
-    let enabled_route_number = 0
-    // выбор проекта
-    $('#menu_individual_reports_list').closest('.slide').addClass('is-expanded')
-    $('#menu_individual_reports_list').addClass('active')
-    $(".table-row").on('click', function (e) {
-        $(".table-row").css('background-color', '').css('color', '').removeClass('project-chosen')
-        $(this).css('background-color', '#6c5ffc').css('color', 'white').addClass('project-chosen')
-        $('#next').removeClass('disabled')
-    })
-
-    $('#next').on('click', function () {
-        if ($(this).hasClass('disabled')){
-            if(enabled_route_number === 1){
-                toastr.error('Выберите проект')
-            }
-        }else {
-            {#$(this).find('a').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="width: 25px;height: 25px;"></span>')#}
+        })
+        $('#previous').on('click', function () {
             $('.route-item').each(function (i, obj) {
-                if(!$(this).hasClass('disabled')){
+                if (!$(this).hasClass('disabled')) {
                     enabled_route_number = parseInt($(this).find('.number').html())
 
                 }
-                    {#route_menu_handler($(this).find('.number').html())#}
-
-            })
-            $('#previous').removeClass('disabled')
-            route_handler(enabled_route_number)
-
-        }
-
-    })
-    $('#previous').on('click', function () {
-        $('.route-item').each(function (i, obj) {
-            if(!$(this).hasClass('disabled')){
-                enabled_route_number = parseInt($(this).find('.number').html())
-
-            }
                 {#route_menu_handler($(this).find('.number').html())#}
 
+            })
+            switch (enabled_route_number) {
+                case 2:
+                {#$('#wizard1-tbody-1').html('')#}
+                {#process_table('.team-table')#}
+                    $('.team-table').DataTable().clear().destroy()
+                    $('#wizard1-h-1').css('display', 'none')
+                    $('#wizard1-p-1').css('display', 'none')
+                    $('#wizard1-h-0').css('display', 'block')
+                    $('#wizard1-p-0').css('display', 'block')
+                    $(this).addClass('disabled')
+                    break;
+                case 3:
+                {#$('#wizard1-tbody-1').html('')#}
+                {#process_table('.team-table')#}
+                    $('.undistributed-table').DataTable().clear().destroy()
+                    $('#wizard1-h-1').css('display', 'block')
+                    $('#wizard1-p-1').css('display', 'block')
+                    $('#wizard1-h-2').css('display', 'none')
+                    $('#wizard1-p-2').css('display', 'none')
+                    $('.list-group-item').each(function () {
+                        $(this).remove()
+                    })
+                    $('#next').removeClass('disabled').html('<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
+                    break;
+                default:
+                    break;
+            }
+            route_menu_handler(enabled_route_number, 'previous')
+
         })
-        switch (enabled_route_number){
-            case 2:
-                {#$('#wizard1-tbody-1').html('')#}
-                {#process_table('.team-table')#}
-                $('.team-table').DataTable().clear().destroy()
-                $('#wizard1-h-1').css('display', 'none')
-                $('#wizard1-p-1').css('display', 'none')
-                $('#wizard1-h-0').css('display', 'block')
-                $('#wizard1-p-0').css('display', 'block')
-                $(this).addClass('disabled')
-                break;
-            case 3:
-                {#$('#wizard1-tbody-1').html('')#}
-                {#process_table('.team-table')#}
-                $('.undistributed-table').DataTable().clear().destroy()
-                $('#wizard1-h-1').css('display', 'block')
-                $('#wizard1-p-1').css('display', 'block')
-                $('#wizard1-h-2').css('display', 'none')
-                $('#wizard1-p-2').css('display', 'none')
-                $('.list-group-item').each(function () {
-                    $(this).remove()
-                })
-                $('#next').removeClass('disabled').html('<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
-                break;
-            default:
-                break;
+
+        let table = ''
+
+        function process_table(element) {
+            $(element).DataTable().destroy()
+            $(element).DataTable({
+                "searching": true,
+                "destroy": true,
+                "paging": false,
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"
+                },
+                "initComplete": function () {
+
+                },
+            })
         }
-        route_menu_handler(enabled_route_number, 'previous')
-
-    })
-
-    let table = ''
-    function process_table(element){
-        $(element).DataTable().destroy()
-       $(element).DataTable({
-           "searching": true,
-          "destroy": true,
-          "paging": false,
-          "language": {
-            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"
-          },
-          "initComplete": function () {
-
-          },
-        })
-    }
 
 
-</script>
+    </script>
 {% endblock %}
