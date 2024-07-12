@@ -138,7 +138,7 @@ $('#save_individual_report_description_filter').on('click', function () {
         toastr.error('Баллы ОТ должны быть меньше Баллов ДО')
     }
 
-    if (categories_ok && name_ok && categories_added) {
+    if (categories_ok && name_ok && categories_added && descriptions_ok) {
         // console.log('save')
         console.log(categories_arr)
         btn_spinner('#save_new_individual_report_description_filter')

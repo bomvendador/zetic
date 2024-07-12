@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 # Create your views here.
-from pdf.models import Questionnaire, QuestionnaireQuestionAnswers, QuestionAnswers, Category, CategoryQuestions, Report
+from pdf.models import Questionnaire, QuestionnaireQuestionAnswers, QuestionAnswers, Category, CategoryQuestions, \
+    Report, ReportDataByCategories
 from django.http import HttpResponse, HttpResponseNotFound, StreamingHttpResponse, JsonResponse, FileResponse
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from . import raw_to_t_point
 
 from django.views.decorators.csrf import csrf_exempt
@@ -55,9 +56,14 @@ def pdf_single_generator(questionnaire_id, report_id):
         questionnaire=questionnaire_inst,
         question__category__for_validity=True)
     employee = questionnaire_inst.participant.employee
-    sum_lie_point = 0
-    for answer in questionnaire_questions_answers_for_validity_inst:
-        sum_lie_point = sum_lie_point + answer.answer.raw_point
+    if not report_id == '':
+        report_inst = Report.objects.get(id=report_id)
+        lie_points = report_inst.lie_points
+    else:
+        sum_lie_point = 0
+        for answer in questionnaire_questions_answers_for_validity_inst:
+            sum_lie_point = sum_lie_point + answer.answer.raw_point
+        lie_points = round(sum_lie_point / 40 * 10)
 
     # appraisal_data = request_json['appraisal_data']
     # appraisal_data_in_request = []
@@ -81,7 +87,6 @@ def pdf_single_generator(questionnaire_id, report_id):
     lang = 'ru'
     # lang = request_json['lang']
     # lie_points = round(request_json['lie_points']/40 * 10)
-    lie_points = round(sum_lie_point / 40 * 10)
 
     title_page(pdf, employee.name, lang)
 
@@ -208,16 +213,22 @@ def category_data(code_prefix, questionnaire_id, employee_id):
         # print(f'cpde2 = {code2}')
         if not int(code2) == 100:
             # print('pass')
-            raw_points = 0
-            for answer in questionnaire_questions_answers:
-                if answer.question.category == category:
-                    raw_points = raw_points + answer.answer.raw_point
-                # print(f'raw_point - {answer.answer.raw_point} categoryname - {answer.question.category.name} answer - {answer.question.text}')
-            # if not raw_points == 0:
+            report_by_categories_inst = ReportDataByCategories.objects.filter(Q(category_code=category.code) & Q(report__participant__employee_id=employee_id))
+            if report_by_categories_inst.exists():
+                points = report_by_categories_inst.latest('created_at').t_points
+            else:
+                raw_points = 0
+                for answer in questionnaire_questions_answers:
+                    if answer.question.category == category:
+                        raw_points = raw_points + answer.answer.raw_point
+                points = raw_to_t_point.filter_raw_points_to_t_points(raw_points, employee_id, category.id)
+                    # print(f'raw_point - {answer.answer.raw_point} categoryname - {answer.question.category.name} answer - {answer.question.text}')
+                # if not raw_points == 0:
             answers.append({
                 "category": category.name,
                 "code": category.code,
-                "points": raw_to_t_point.filter_raw_points_to_t_points(raw_points, employee_id, category.id)
+                "points": points
+                # "points": raw_to_t_point.filter_raw_points_to_t_points(raw_points, employee_id, category.id)
 
             })
                 # print('=== answers_code_1 ===')

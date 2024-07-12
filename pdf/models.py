@@ -426,6 +426,7 @@ class ReportData(models.Model):
 
 
 class ReportDataByCategories(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=False, blank=False)
     report = models.ForeignKey(Report, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Отчет')
     section_name = models.CharField(max_length=50, blank=True, null=True, default=None)
     section_code = models.CharField(max_length=2, blank=True, null=True, default=None)

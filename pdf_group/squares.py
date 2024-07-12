@@ -1,10 +1,12 @@
-from pdf_group.draw import draw_arrow,draw_squares, draw_table
+from pdf_group.draw import draw_arrow, draw_squares, draw_table
 from pdf.draw import insert_page_number
 
 
 def page(pdf, square_results, table_y):
     pdf.set_auto_page_break(False)
 
+    print('square_results')
+    print(square_results)
     x = 12
     y = 12
     pdf.set_xy(x,y)

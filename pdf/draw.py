@@ -46,3 +46,4 @@ def insert_page_number(pdf):
     pdf.set_font("RalewayLight", "", 10)
     pdf.set_xy(200, 290)
     pdf.cell(0, 0, txt=str(pdf.page_no()))
+

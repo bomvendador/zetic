@@ -144,11 +144,17 @@ def save_data_to_db_and_send_report(questionnaire_id, file_name, study_id, lie_p
     report.file = file_name
     report.lang = lang
     report.study = study
+    report.save()
 
     if not report_id == '':
+        cur_report_inst = Report.objects.get(id=report_id)
         report.primary = False
-
-    report.save()
+        report.lie_points = cur_report_inst.lie_points
+        report.save()
+        report_by_categories_inst = ReportDataByCategories.objects.filter(report_id=report_id)
+        for report_by_categories in report_by_categories_inst:
+            report_by_categories.report = report
+            report_by_categories.save()
 
     study_inst = Study.objects.get(id=study_id)
     questionnaire_question_answers = QuestionnaireQuestionAnswers.objects.filter(questionnaire=questionnaire_inst)

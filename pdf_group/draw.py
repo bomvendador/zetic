@@ -735,3 +735,68 @@ def draw_table(square_data, pdf, width, x, y):
         pdf.multi_cell((width - 10) - 7, line_height, '', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
         pdf.multi_cell(10, line_height, '', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
 
+
+def draw_integral_report_squares(pdf, lang, start_x):
+    start_X = start_x
+    start_Y = 25 + 8
+    end_X = 195
+    total_width = end_X - start_X
+    end_Y = start_Y + total_width
+    total_height = end_Y - start_Y
+
+    print(f'total_width - {total_width}')
+    pdf.set_line_width(0.4)
+    pdf.set_draw_color(r=135, g=135, b=135)
+    pdf.rect(start_X, start_Y, total_width, total_height, 'D') #обводка
+
+    pdf.set_line_width(0.2)
+    pdf.line(start_X, start_Y + total_height / 2, start_X + total_width, start_Y + total_height / 2) #центральная горизонтальная линия
+    pdf.line(start_X + total_width / 2, start_Y, start_X + total_width / 2,  start_Y + total_height) #центральная вертикальная линия
+
+    pdf.set_line_width(0.1)
+    pdf.line(start_X, start_Y + total_height / 2 / 2, start_X + total_width, start_Y + total_height / 2 / 2) #горизонтальная линия 1/4
+    pdf.line(start_X, start_Y + total_height * (3/4), start_X + total_width, start_Y + total_height * (3/4)) #горизонтальная линия 3/4
+    pdf.line(start_X + total_width / 2 / 2, start_Y, start_X + total_width / 2 / 2,  start_Y + total_height) #вертикальная линия 1/4
+    pdf.line(start_X + total_width * (3/4), start_Y, start_X + total_width * (3/4), start_Y + total_height) #вертикальная линия 3/4
+
+    pdf.set_font("RalewayLight", "", 8)
+
+    # pdf.set_text_color(r=255, g=255, b=255)
+    # pdf.set_text_color(r=135, g=135, b=135)
+    pdf.set_text_color(118, 134, 146)
+    pdf.set_fill_color(r=230, g=230, b=227)
+    pdf.set_draw_color(r=230, g=230, b=227)
+
+    pdf.set_line_width(0.4)
+
+    # горизонтальная ось
+    pdf.rect(start_X, start_Y + total_height + 0.4, 40, 4, 'FD')
+    pdf.text(start_X + 3, start_Y + total_height + 3, 'Низкая согласованность')
+
+    pdf.rect(start_X + total_width - 40, start_Y + total_height + 0.4, 40, 4, 'FD')
+    pdf.text(start_X + total_width - 37, start_Y + total_height + 3, 'Высокая согласованность')
+
+    pdf.set_text_color(r=135, g=135, b=135)
+    pdf.text(start_X + total_width / 2 / 2 - 2, start_Y + total_height + 3, '25%')
+    pdf.text(start_X + total_width / 2 - 2, start_Y + total_height + 3, '50%')
+    pdf.text(start_X + total_width * (3/4) - 2, start_Y + total_height + 3, '75%')
+
+    # вертикальная ось
+    pdf.rect(start_X + total_width + 0.4, start_Y + total_height, 4, 40, 'FD')
+    with pdf.rotation(90, start_X + total_width, start_Y + total_height * (3 / 4) + 2):
+        pdf.text(start_X + total_width + 3, start_Y + total_height - 3, 'Низкая проявленность')
+
+    pdf.rect(start_X + total_width + 0.4, start_Y + 40, 4, 40, 'FD')
+
+    pdf.text(start_X + total_width - 37, start_Y + total_height + 3, 'Высокая проявленность')
+
+    pdf.set_text_color(r=135, g=135, b=135)
+
+    with pdf.rotation(90, start_X + total_width, start_Y + total_height * (3 / 4) + 2):
+        pdf.text(start_X + total_width + 3, start_Y + total_height * (3 / 4) + 2, '25%')
+    with pdf.rotation(90, start_X + total_width + 3, start_Y + total_height / 2 + 2):
+        pdf.text(start_X + total_width + 3, start_Y + total_height / 2 + 2, '50%')
+    with pdf.rotation(90, start_X + total_width + 3, start_Y + total_height / 2 / 2 + 2):
+        pdf.text(start_X + total_width + 3, start_Y + total_height / 2 / 2 + 2, '75%')
+
+
