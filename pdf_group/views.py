@@ -69,9 +69,9 @@ def pdf_group_generator(request_json):
     pdf.set_text_color(0, 0, 0)
     squares_page(pdf, request_json['square_results'], table_y)
 
-    pdf.add_page()
-    pdf.set_text_color(0, 0, 0)
-    integral_report_page(pdf, 'ru')
+    # pdf.add_page()
+    # pdf.set_text_color(0, 0, 0)
+    # integral_report_page(pdf, 'ru')
 
     pdf.set_line_width(0.1)
     pdf.add_page()
