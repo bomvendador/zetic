@@ -436,7 +436,7 @@ class ReportDataByCategories(models.Model):
     # def __str__(self):
     #     return f'{self.report.participant.employee.name} - {self.report.participant.employee.company.name} - {self.section_name} - {self.category_code} - {self.category_name} - {self.points}'
     def __str__(self):
-        return f'{self.section_name} - {self.category_code} - {self.category_name} - {self.t_points} - {self.report.filename()}'
+        return f'{self.report.participant.employee.name} - {self.section_name} - {self.category_code} - {self.category_name} - {self.t_points}'
 
     class Meta:
         verbose_name_plural = 'Данные индивидуальных отчетов по категориям'
@@ -604,4 +604,31 @@ class IndividualReportPointsDescriptionFilterText(models.Model):
     class Meta:
         verbose_name_plural = 'Тексты описания фильтров описания баллов (личные отчеты)'
         verbose_name = 'Текст описания фильтра описания баллов (личные отчеты)'
+
+
+class IntegralReportFilter(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.name}'
+
+    class Meta:
+        verbose_name_plural = 'Фильтры интегрального отчета'
+        verbose_name = 'Фильтр интегрального отчета'
+
+
+class IntegralReportFilterCategory(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, default=None, blank=True, null=True)
+    filter = models.ForeignKey(IntegralReportFilter, on_delete=models.CASCADE, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.filter.name}'
+
+    class Meta:
+        verbose_name_plural = 'Категории (шкалы) фильтров интегральных отчетов'
+        verbose_name = 'Категория (шкалы) фильтра интегрального отчета'
 
