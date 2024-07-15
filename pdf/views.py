@@ -120,7 +120,7 @@ def pdf_single_generator(questionnaire_id, report_id):
     page2(pdf, lie_points, lang)
 
     pdf.add_page()
-    page_short_conclusions(pdf, questionnaire_id, 'ru')
+    page_short_conclusions(pdf, questionnaire_id, 'ru', report_id)
 
     # if '1' in appraisal_data_in_request:
     #     pdf.add_page()
