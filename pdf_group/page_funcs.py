@@ -65,17 +65,17 @@ def data_by_points(square_results, section_code, category_code):
         bold = square_result[3]
         cnt = cnt + 1
         report = Report.objects.filter(participant__employee__email=email).latest('added')
-        print(f'report_id = {report.id}')
+        # print(f'report_id = {report.id}')
 
-        participant_email = square_result[1]
-        questionnaire_inst = Questionnaire.objects.filter(participant__employee__email=participant_email).latest('created_at')
+        # participant_email = square_result[1]
+        # questionnaire_inst = Questionnaire.objects.filter(participant__employee__email=participant_email).latest('created_at')
         # print(f'questionnaire_inst len = {questionnaire_inst.id}')
 
-        questionnaire_questions_answers = QuestionnaireQuestionAnswers.objects.filter(questionnaire=questionnaire_inst,
-                                                                                      question__category__code=category_code)
-        participant_inst = Participant.objects.get(id=questionnaire_inst.participant.id)
-        print(f'category code = {category_code}')
-        category_inst = Category.objects.get(code=category_code)
+        # questionnaire_questions_answers = QuestionnaireQuestionAnswers.objects.filter(questionnaire=questionnaire_inst,
+        #                                                                               question__category__code=category_code)
+        # participant_inst = Participant.objects.get(id=questionnaire_inst.participant.id)
+        # print(f'category code = {category_code}')
+        # category_inst = Category.objects.get(code=category_code)
 
         # raw_points = 0
         # for answer in questionnaire_questions_answers:
@@ -84,6 +84,7 @@ def data_by_points(square_results, section_code, category_code):
         #         # print(f'raw_points = {raw_points}')
         # t_points = raw_to_t_point.filter_raw_points_to_t_points(raw_points, participant_inst.employee_id, category_inst.id)
 
+        print(f'участник - {report.participant.employee.name}')
         t_points = ReportDataByCategories.objects.get(Q(report=report) & Q(category_code=category_code)).t_points
         # print(f't_points 87 = {t_points}')
         scale_data.append([square_result[2], t_points, cnt, group_color, email, bold])
