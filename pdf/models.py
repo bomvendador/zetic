@@ -208,7 +208,7 @@ class Employee(models.Model):
     sex = models.ForeignKey(EmployeeGender, on_delete=models.PROTECT, default=None, blank=True, null=True, verbose_name='Пол')
     birth_year = models.IntegerField(blank=False, null=False)
     email = models.CharField(max_length=100, blank=True, null=False, default=None)
-    company = models.ForeignKey(Company, on_delete=models.PROTECT, default=None, blank=True, null=True, verbose_name='Компания')
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Компания')
     role = models.ForeignKey(EmployeeRole, on_delete=models.PROTECT, default=1, blank=True, null=True, verbose_name='Роль участника')
     # role = models.CharField(max_length=100, blank=True, null=False, default=None)
     # position = models.CharField(max_length=100, blank=True, null=False, default=None)
