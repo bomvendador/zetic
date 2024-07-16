@@ -279,7 +279,7 @@ class Participant(models.Model):
 
 class Questionnaire(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    participant = models.ForeignKey(Participant, on_delete=models.PROTECT, default=None, blank=True, null=True)
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, blank=True, null=True)
     data_filled_up_by_participant = models.BooleanField(default=False)
 
     def __str__(self):
