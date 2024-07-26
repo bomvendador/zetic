@@ -790,179 +790,179 @@ let rules = [
     rule_4_4
 ]
 
-function route_handler(route_index) {
-    switch (route_index) {
-        case 1:
-            project_name = $('.company-chosen').text().trim()
-            company_id = $('.company-chosen').data('company-id')
-            console.log(company_id)
-            $.ajax({
-                headers: {"X-CSRFToken": token},
-                url: url_get_project_participants,
-                type: 'POST',
-
-                data: JSON.stringify({
-                    'company': $('.company-chosen').text().trim(),
-                    'company_id': company_id
-                }),
-                processData: false,
-                contentType: false,
-                error: function (data) {
-                    toastr.error('Ошибка', data)
-                },
-                success: function (data) {
-                    let participants = data['participants'];
-                    console.log(participants)
-                    let html = ''
-                    for (let i = 0; i < participants.length; i++) {
-                        html += '<tr class="table-row cursor-pointer project-participant-added" id="participant_id_' + participants[i]['id'] + '">'
-                        html += '<td>' + participants[i]['name'] + '</td>'
-                        html += '<td>' + participants[i]['email'] + '</td>'
-                        html += '</tr>'
-                    }
-                    $('#wizard1-tbody-1').html(html)
-                    console.log('wizard1-tbody-1 - ' + $('#wizard1-tbody-1').html())
-                    process_table('.team-table')
-                    btn_text($('#next'), '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
-
-                    route_menu_handler(route_index, 'next')
-
-                    $('#wizard1-h-1').css('display', 'block')
-                    $('#wizard1-p-1').css('display', 'block')
-                    $('#wizard1-h-0').css('display', 'none')
-                    $('#wizard1-p-0').css('display', 'none')
-
-                }
-            });
-
-            break;
-        case 2:
-
-            if ($('.table-row-report')[0]) {
-                console.log(`.table-row-report')[0] -`)
-                console.log($('.table-row-report')[0])
-                btn_spinner($('#next'))
-
-                let report_participants = []
-                $('.table-row-report').each(function () {
-                    report_participants.push($(this).find(':nth-child(2)').text())
-                })
-                $.ajax({
-                    headers: {"X-CSRFToken": token},
-                    url: url_get_report_participants_data,
-                    type: 'POST',
-
-                    data: JSON.stringify({
-                        'report_participants': report_participants,
-                    }),
-                    processData: false,
-                    contentType: false,
-                    error: function (data) {
-                        toastr.error('Ошибка', data)
-                    },
-                    success: function (data) {
-
-                        console.log(data)
-                        let participants_data = data['participants_data']
-                        let squares_data = data['squares_data']
-                        console.log(squares_data)
-                        let html = ''
-                        for (let i = 0; i < participants_data.length; i++) {
-                            let participant_squares = participants_data[i]['participant_squares']
-                            let html = ''
-
-
-                            html += '<tr class="table-row-undistributed-participant" style="">'
-                            html += '<td class="bold-participant" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'
-                            html += '<td class="participant-group" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'
-                            html += '<td class="fio">' + participants_data[i]['fio'] + '</td>'
-                            html += '<td class="email">' + participants_data[i]['email'] + '</td>'
-                            html += '<td class="role_name">' + participants_data[i]['role_name'] + '</td>'
-                            html += '<td class="position">' + participants_data[i]['position'] + '</td>'
-
-                            html += '<td>'
-                            if (participant_squares.length > 0) {
-                                for (let j = 0; j < participant_squares.length; j++) {
-                                    html += '<div>'
-                                    html += `${participant_squares[j]['square_code']} - ${participant_squares[j]['square_name']} (${participant_squares[j]['percentage']}%)`
-                                    html += '</div>'
-                                }
-
-                            } else {
-                                html += 'Отсутствует'
-                            }
-
-
-                            html += '</td>'
-                            html += '<td>'
-                            html += '<select name="category" class="form-control form-select select2 category-selected" data-bs-placeholder="Выберите категорию">'
-                            html += '<option value=""></option>'
-
-                            squares_data.forEach(function (item) {
-                                html += `<option value="${item['square_role_name']}">${item['code']} - ${item['square_name']} - ${item['square_role_name']}</option>`
-                            })
-
-                            html += '</select>'
-                            html += '</td>'
-                            html += '</tr>'
-
-
-                            $('#tbody_undistributed_participants').append(html)
-
-                            $('#wizard1-h-2').css('display', 'block')
-                            $('#wizard1-p-2').css('display', 'block')
-                            $('#wizard1-h-1').css('display', 'none')
-                            $('#wizard1-p-1').css('display', 'none')
-                            if ($('.table-row-undistributed-participant').length > 0) {
-                                $('#next').addClass('disabled')
-                                $('#undistributed-participants-table').removeClass('d-none')
-                                //
-                            } else {
-                                $('#next').removeClass('disabled')
-                                $('#undistributed-participants-table').addClass('d-none')
-                            }
-                            $('#next').text('Создать отчет')
-
-                        }
-
-                    }
-                });
-
-
-                // {#console.log(report_participants)#}
-                console.log('fffffffff')
-                route_menu_handler(route_index, 'next')
-            } else {
-                toastr.error('Участники не выбраны')
-            }
-            break;
-        case 3:
-            Swal.fire({
-                title: 'Комментарии к отчету',
-                text: "Добавить комментарии к отчету?",
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Да',
-                cancelButtonText: 'Нет'
-            }).then((result) => {
-                if (result.value) {
-                    $('#input-modal-report-comments').modal('show')
-                } else {
-                    save_report()
-                }
-            })
-
-            break;
-        case 4:
-
-            break;
-        default:
-            break;
-    }
-
-}
+// function route_handler(route_index) {
+//     switch (route_index) {
+//         case 1:
+//             project_name = $('.company-chosen').text().trim()
+//             company_id = $('.company-chosen').data('company-id')
+//             console.log(company_id)
+//             $.ajax({
+//                 headers: {"X-CSRFToken": token},
+//                 url: url_get_project_participants,
+//                 type: 'POST',
+//
+//                 data: JSON.stringify({
+//                     'company': $('.company-chosen').text().trim(),
+//                     'company_id': company_id
+//                 }),
+//                 processData: false,
+//                 contentType: false,
+//                 error: function (data) {
+//                     toastr.error('Ошибка', data)
+//                 },
+//                 success: function (data) {
+//                     let participants = data['participants'];
+//                     console.log(participants)
+//                     let html = ''
+//                     for (let i = 0; i < participants.length; i++) {
+//                         html += '<tr class="table-row cursor-pointer project-participant-added" id="participant_id_' + participants[i]['id'] + '">'
+//                         html += '<td>' + participants[i]['name'] + '</td>'
+//                         html += '<td>' + participants[i]['email'] + '</td>'
+//                         html += '</tr>'
+//                     }
+//                     $('#wizard1-tbody-1').html(html)
+//                     console.log('wizard1-tbody-1 - ' + $('#wizard1-tbody-1').html())
+//                     process_table('.team-table')
+//                     btn_text($('#next'), '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
+//
+//                     route_menu_handler(route_index, 'next')
+//
+//                     $('#wizard1-h-1').css('display', 'block')
+//                     $('#wizard1-p-1').css('display', 'block')
+//                     $('#wizard1-h-0').css('display', 'none')
+//                     $('#wizard1-p-0').css('display', 'none')
+//
+//                 }
+//             });
+//
+//             break;
+//         case 2:
+//
+//             if ($('.table-row-report')[0]) {
+//                 console.log(`.table-row-report')[0] -`)
+//                 console.log($('.table-row-report')[0])
+//                 btn_spinner($('#next'))
+//
+//                 let report_participants = []
+//                 $('.table-row-report').each(function () {
+//                     report_participants.push($(this).find(':nth-child(2)').text())
+//                 })
+//                 $.ajax({
+//                     headers: {"X-CSRFToken": token},
+//                     url: url_get_report_participants_data,
+//                     type: 'POST',
+//
+//                     data: JSON.stringify({
+//                         'report_participants': report_participants,
+//                     }),
+//                     processData: false,
+//                     contentType: false,
+//                     error: function (data) {
+//                         toastr.error('Ошибка', data)
+//                     },
+//                     success: function (data) {
+//
+//                         console.log(data)
+//                         let participants_data = data['participants_data']
+//                         let squares_data = data['squares_data']
+//                         console.log(squares_data)
+//                         let html = ''
+//                         for (let i = 0; i < participants_data.length; i++) {
+//                             let participant_squares = participants_data[i]['participant_squares']
+//                             let html = ''
+//
+//
+//                             html += '<tr class="table-row-undistributed-participant" style="">'
+//                             html += '<td class="bold-participant" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'
+//                             html += '<td class="participant-group" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'
+//                             html += '<td class="fio">' + participants_data[i]['fio'] + '</td>'
+//                             html += '<td class="email">' + participants_data[i]['email'] + '</td>'
+//                             html += '<td class="role_name">' + participants_data[i]['role_name'] + '</td>'
+//                             html += '<td class="position">' + participants_data[i]['position'] + '</td>'
+//
+//                             html += '<td>'
+//                             if (participant_squares.length > 0) {
+//                                 for (let j = 0; j < participant_squares.length; j++) {
+//                                     html += '<div>'
+//                                     html += `${participant_squares[j]['square_code']} - ${participant_squares[j]['square_name']} (${participant_squares[j]['percentage']}%)`
+//                                     html += '</div>'
+//                                 }
+//
+//                             } else {
+//                                 html += 'Отсутствует'
+//                             }
+//
+//
+//                             html += '</td>'
+//                             html += '<td>'
+//                             html += '<select name="category" class="form-control form-select select2 category-selected" data-bs-placeholder="Выберите категорию">'
+//                             html += '<option value=""></option>'
+//
+//                             squares_data.forEach(function (item) {
+//                                 html += `<option value="${item['square_role_name']}">${item['code']} - ${item['square_name']} - ${item['square_role_name']}</option>`
+//                             })
+//
+//                             html += '</select>'
+//                             html += '</td>'
+//                             html += '</tr>'
+//
+//
+//                             $('#tbody_undistributed_participants').append(html)
+//
+//                             $('#wizard1-h-2').css('display', 'block')
+//                             $('#wizard1-p-2').css('display', 'block')
+//                             $('#wizard1-h-1').css('display', 'none')
+//                             $('#wizard1-p-1').css('display', 'none')
+//                             if ($('.table-row-undistributed-participant').length > 0) {
+//                                 $('#next').addClass('disabled')
+//                                 $('#undistributed-participants-table').removeClass('d-none')
+//                                 //
+//                             } else {
+//                                 $('#next').removeClass('disabled')
+//                                 $('#undistributed-participants-table').addClass('d-none')
+//                             }
+//                             $('#next').text('Создать отчет')
+//
+//                         }
+//
+//                     }
+//                 });
+//
+//
+//                 // {#console.log(report_participants)#}
+//                 console.log('fffffffff')
+//                 route_menu_handler(route_index, 'next')
+//             } else {
+//                 toastr.error('Участники не выбраны')
+//             }
+//             break;
+//         case 3:
+//             Swal.fire({
+//                 title: 'Комментарии к отчету',
+//                 text: "Добавить комментарии к отчету?",
+//                 icon: 'question',
+//                 showCancelButton: true,
+//                 confirmButtonColor: '#3085d6',
+//                 cancelButtonColor: '#d33',
+//                 confirmButtonText: 'Да',
+//                 cancelButtonText: 'Нет'
+//             }).then((result) => {
+//                 if (result.value) {
+//                     $('#input-modal-report-comments').modal('show')
+//                 } else {
+//                     save_report()
+//                 }
+//             })
+//
+//             break;
+//         case 4:
+//
+//             break;
+//         default:
+//             break;
+//     }
+//
+// }
 
 $('#modal_comments_create_report').on('click', function () {
     $('#input-modal-report-comments').modal('hide')
@@ -977,7 +977,7 @@ function  save_report() {
         let square_code = $(this).attr('id').split('_')[1] + '_' + $(this).attr('id').split('_')[2]
         // {#console.log($(this).attr('id'))#}
         $(this).find('li').each(function () {
-            square_results.push([square_name, $(this).attr('id'), $(this).text(), $(this).data('bold'), $(this).data('group-name'), $(this).data('group-color'), square_code, $(this).data('participant-number')])
+            square_results.push([square_name, $(this).attr('id'), $(this).text(), $(this).data('bold'), $(this).data('group-name'), $(this).data('group-color'), square_code, $(this).data('participant-number'), $(this).data('participant-id')])
         })
     })
     console.log(square_results)
@@ -1191,9 +1191,10 @@ $('#distribute-undistributed-participants').on('click', function () {
             let group_name = $(this).find('td:nth-child(2) span').text()
             let group_color = $(this).find('td:nth-child(2)').css('background-color')
             let participant_number = $(this).find('.participant-number span').text()
+            let participant_id = $(this).data('participant-id')
 
             let list_id = get_listgroup_id_by_name(square_name)
-            $('#' + list_id).append('<li class="list-group-item" id="' + email + '" data-participant-number="' + participant_number + '" data-bold="' + bold + '" data-group-name="' + group_name + '" data-group-color="' + group_color + '">' + fio + '</li>')
+            $('#' + list_id).append('<li class="list-group-item" id="' + email + '" data-participant-number="' + participant_number + '" data-participant-id="' + participant_id + '" data-bold="' + bold + '" data-group-name="' + group_name + '" data-group-color="' + group_color + '">' + fio + '</li>')
             $(this).remove()
             distributed_cnt++
         })

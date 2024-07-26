@@ -85,9 +85,12 @@ def data_by_points(square_results, section_code, category_code):
         # t_points = raw_to_t_point.filter_raw_points_to_t_points(raw_points, participant_inst.employee_id, category_inst.id)
 
         print(f'участник - {report.participant.employee.name}')
-        t_points = ReportDataByCategories.objects.get(Q(report=report) & Q(category_code=category_code)).t_points
-        # print(f't_points 87 = {t_points}')
-        scale_data.append([square_result[2], t_points, cnt, group_color, email, bold])
+        print(f'category_code - {category_code}')
+        report_data_by_categories = ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=category_code))
+        if report_data_by_categories.exists():
+            t_points = ReportDataByCategories.objects.get(Q(report=report) & Q(category_code=category_code)).t_points
+            # print(f't_points 87 = {t_points}')
+            scale_data.append([square_result[2], t_points, cnt, group_color, email, bold])
 
 
         # if ReportData.objects.filter(report=report, section_code=section_code, category_code=category_code).exists():

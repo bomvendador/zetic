@@ -289,7 +289,7 @@
                                                             <tbody id="tbody_undistributed_participants">
 
                                                             {% for report in group_reports %}
-                                                                <tr class="table-row-undistributed-participant" style="" data-participant-number="{{ report.report.participant_number }}" data-employee-id="{{ report.participant_data.employee_id }}">
+                                                                <tr class="table-row-undistributed-participant" style="" data-participant-number="{{ report.report.participant_number }}" data-employee-id="{{ report.participant_data.employee_id }}" data-participant-id="{{ report.participant_data.participant_id }}">
                                     <td class="bold-participant" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name=""
                                             {% if report.report.bold %}
                                                value="1" checked
@@ -545,7 +545,8 @@
 
     let url_save_group_report_data = "{% url 'save_group_report_data' %}";
     let url_get_report_participants_data = "{% url 'get_report_participants_data' %}";
-    let url_get_project_participants = "{% url 'get_project_participants' %}";
+    {#let url_get_project_participants = "{% url 'get_report_participants_data' %}";#}
+    {#let url_get_project_participants = "{% url 'get_project_participants' %}";#}
     let url_get_available_participants_for_group_report = "{% url 'get_available_participants_for_group_report' %}";
     let url_delete_participant_from_group_report = "{% url 'delete_participant_from_group_report' %}";
     let company_id = {{ company_id }};

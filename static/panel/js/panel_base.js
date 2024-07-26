@@ -89,6 +89,15 @@ $('.menu_item').on('click', function () {
         case'menu_individual_report_points_description_filters_list':
             window.location.href = url_individual_report_points_description_filters_list;
             break;
+        case'menu_integral_report_filters_list':
+            window.location.href = url_integral_report_filters_list;
+            break;
+        case'menu_settings':
+            window.location.href = url_settings_main;
+            break;
+        case'menu_projects_list':
+            window.location.href = url_projects_list;
+            break;
         default:
             break;
     }

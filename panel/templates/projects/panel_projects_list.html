@@ -1,0 +1,111 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+{% load tz %}
+{% block content %}
+
+    <!-- CONTAINER -->
+    <div class="main-container container-fluid" id="main-container">
+
+        <!-- PAGE-HEADER -->
+        <div class="page-header">
+            <h1 class="page-title">Проекты</h1>
+            <div>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                    {#                        <li class="breadcrumb-item active" aria-current="page">Dashboard 01</li>#}
+                    <li class="breadcrumb-item active" aria-current="page">Проекты</li>
+                </ol>
+            </div>
+        </div>
+        <!-- PAGE-HEADER END -->
+
+        <!-- ROW-1 -->
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
+
+                <div class="row ">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="wizard1" role="application" class="wizard clearfix">
+                                    <div class="content clearfix">
+                                        {#                                                <h3 id="wizard1-h-0" tabindex="-1" class="title current">Выбор проекта</h3>#}
+                                        <section id="wizard1-p-0" role="tabpanel" aria-labelledby="wizard1-h-0"
+                                                 class="body current" aria-hidden="false">
+                                            <div class="row" style="padding: 0px 15px 15px">
+                                                <div class="form-group col-4">
+                                                    <label for="method">Компания</label>
+                                                    <select class="form-control select2-show-search form-select"
+                                                            data-placeholder="Выберите компанию" id="select_company">
+
+                                                        <option label="Choose one"></option>
+                                                        {% for company in companies %}
+                                                            <option id="company_id_{{ company.id }}"
+                                                                    data-company-active="{{ company.active }}"
+                                                                    value="{{ company.id }}">{{ company.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table text-nowrap border-bottom team-table dataTable no-footer"
+                                                       id="table_projects">
+                                                    <thead>
+                                                    {#                                                            <tr class="table-header">#}
+                                                    <tr>
+                                                        <th class="wd-15p border-bottom-0 table-header">Название</th>
+                                                        <th class="wd-15p border-bottom-0 table-header">Компания</th>
+                                                        <th class="wd-15p border-bottom-0 table-header">Дата создания</th>
+                                                        <th class="wd-15p border-bottom-0 table-header">Кем создан</th>
+                                                        <th class="wd-15p border-bottom-0 table-header"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="company_projects_tbody">
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </section>
+
+
+                                    </div>
+
+                                    {#                                        </div>#}
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-primary float-button" id="add_project">
+        <i class="fe fe-plus"></i>
+    </button>
+
+
+
+
+{% endblock %}
+
+{% block script %}
+
+    <script src="{% static 'login/js/select2.js' %}"></script>
+    {#    <script src="{% static 'login/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>#}
+    <script>
+
+        let url_get_company_projects = "{% url 'get_company_projects' %}"
+        let url_add_new_project = "{% url 'add_new_project' %}"
+        {#let url_delete_category = "{% url 'delete_category' %}"#}
+
+
+    </script>
+
+    <script src="{% static 'panel/js/projects/panel_projects_list.js' %}"></script>
+
+{% endblock %}

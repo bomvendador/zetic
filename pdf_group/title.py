@@ -1,6 +1,7 @@
 import datetime
 
-def title_page(pdf, client_name, lang):
+
+def title_page(pdf, request_json, lang):
     pdf.image('media/images/page_img.png', x=0, y=0, w=210)
 
     pdf.set_font("RalewayRegular", "", 18)
@@ -17,6 +18,7 @@ def title_page(pdf, client_name, lang):
     pdf.set_font("RalewayLight", "", 12)
 
     y = y + 16
+
     pdf.set_xy(20, y)
 
     if lang == 'ru':
@@ -31,7 +33,7 @@ def title_page(pdf, client_name, lang):
         pdf.cell(20, 0, 'Project:', ln=0)
         pdf.set_font("RalewayRegular", "", 12)
         pdf.set_xy(42, y)
-        pdf.cell(42, 0, client_name, ln=0)
+        pdf.cell(42, 0, request_json['project_name'], ln=0)
 
     y = y + 10
     pdf.set_xy(20, y)
@@ -39,17 +41,37 @@ def title_page(pdf, client_name, lang):
     pdf.set_font("RalewayLight", "", 12)
 
     if lang == 'ru':
+        pdf.cell(20, 0, 'Компания:', ln=0)
+        pdf.set_font("RalewayRegular", "", 12)
+        pdf.set_xy(42, y)
+        pdf.cell(42, 0, request_json['company_name'], ln=0)
+    else:
+        pdf.cell(20, 0, 'Company:', ln=0)
+        pdf.set_font("RalewayRegular", "", 12)
+        pdf.set_xy(42, y)
+        pdf.cell(42, 0, request_json['company_name'], ln=0)
+
+    y = y + 7
+    pdf.set_xy(20, y)
+
+    pdf.set_font("RalewayLight", "", 12)
+
+    if lang == 'ru':
         pdf.cell(20, 0, 'Проект:', ln=0)
         pdf.set_font("RalewayRegular", "", 12)
-        pdf.set_xy(37, y)
-        pdf.cell(42, 0, client_name, ln=0)
+        pdf.set_xy(42, y)
+        pdf.cell(42, 0, request_json['project_name'], ln=0)
     else:
         pdf.cell(20, 0, 'Project:', ln=0)
         pdf.set_font("RalewayRegular", "", 12)
         pdf.set_xy(42, y)
-        pdf.cell(42, 0, client_name, ln=0)
+        pdf.cell(42, 0, request_json['project_name'], ln=0)
 
-    y = y + 7
+    y = y + 8
+
+    pdf.line(x1=21, y1=y, x2=250, y2=y)
+
+    y = y + 10
 
     pdf.set_xy(20, y)
     if lang == 'ru':

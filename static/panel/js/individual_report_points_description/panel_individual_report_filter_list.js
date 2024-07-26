@@ -1,4 +1,4 @@
-expand_menu_item('#menu_individual_report_points_description_filters_list')
+expand_menu_item('#menu_settings')
 
 // let section_id
 //

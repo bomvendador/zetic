@@ -1,0 +1,196 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+{% block links %}
+
+{% endblock %}
+{% block content %}
+
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">Изменение проекта</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Изменение проекта
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- ROW-1 OPEN -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Параметры проекта</h3>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="row" style="padding: 0px 15px 15px">
+                                <div class="form-group col-lg-6 col-sm-12">
+                                    <label for="method">Название</label>
+                                    <input type="text" class="form-control" id="input_project_name"
+                                           value="{{ project.name }}">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        {#                                    <div class="card-footer text-end">#}
+                        {#                                        <button class="btn btn-primary my-1 nav-buttons" type="button" id="save_company">Сохранить</button>#}
+                        {#                                    </div>#}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-xl-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header row pt-2 pb-2 justify-content-md-center">
+                            <div class="">
+                                <table style="width: 100%">
+                                    <thead></thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <h3 class="card-title">Исследования</h3>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-primary my-1" type="button" id="edit_studies"
+                                                    style="float: right">Изменить состав исследований
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            {#                                        <div class="col col-lg-6 col-sm-6">#}
+                            {#                                        </div>#}
+                            {#                                        <div class="col col-lg-6 col-sm-6 text-end">#}
+                            {#                                        </div>#}
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                {#                                            <table class="table text-nowrap border-bottom team-table dataTable no-footer" id="table_filter_categories">#}
+                                <table class="table text-nowrap border-bottom" id="table_studies">
+                                    <thead class="thead-style">
+                                    <tr>
+                                        <th>Наименование</th>
+                                        <th>Шаблон</th>
+                                        <th>Дата и время создания</th>
+                                        <th>Кем создано</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbody_studies">
+                                    {% include 'projects/panel_company_studies_rows_edit.html' %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        {#                                    <div>#}
+                        {#                                        <div class="row" style="padding: 0px 15px 15px">#}
+                        {#                                            <div class="col-lg-12 col-sm-12 mt-3">#}
+                        {#                                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="save_study">Сохранить исследование</button>#}
+                        {#                                            </div>#}
+                        {#                                        </div>#}
+                        {#                                    </div>#}
+
+                    </div>
+                </div>
+            </div>                        <!-- ROW-1 CLOSED -->
+
+            <div>
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 mb-5">
+                        <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                id="save_project" disabled>
+                            Сохранить проект
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!--CONTAINER CLOSED -->
+
+    </div>
+    <!-- ROW-1 CLOSED -->
+
+
+    <!-- Модальное окно добавление исследований -->
+    <div class="modal fade" id="modal_studies">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title"><b>Исследования</b></h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table text-nowrap border-bottom team-table dataTable no-footer"
+                               id="modal_table_add_studies">
+                            <thead class="thead-style">
+                            <tr>
+                                <th><input id="check_all_studies_for_project" type="checkbox" class=""
+                                           name="example-checkbox1" value="" style="transform: scale(1.1)"></th>
+                                <th>Наименование</th>
+                                <th>Шаблон</th>
+                                <th>Дата и время создания</th>
+                                <th>Кем создано</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody_modal_choose_studies_for_project">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row" style="padding: 0px 15px 15px">
+                    <div class="col-lg-12 col-sm-12 mt-3">
+                        <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                id="add_study_to_project_table">Добавить
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block script %}
+
+    <script>
+
+        let get_company_studies_for_project = "{% url 'get_company_studies_for_project' %}"
+        let url_save_edited_project = "{% url 'save_edited_project' %}"
+        {#let url_get_available_squares = "{% url 'get_available_squares' %}"#}
+        {#let categories = {{ categories|safe }};#}
+        {#let url_get_company_employees = "{% url 'get_company_employees' %}"#}
+        let project_id = {{ project.id }};
+        let company_id = {{ project.company.id }};
+        {#let url_save_participant_questions_groups = "{% url 'save_participant_questions_groups' %}"#}
+        {#let url_get_employees_for_study = "{% url 'get_employees_for_study' %}"#}
+        {#let url_save_study_participants = "{% url 'save_study_participants' %}"#}
+        {#let url_send_invitation_email = "{% url 'send_invitation_email' %}"#}
+
+    </script>
+    <script src="{% static 'login/js/select2.js' %}"></script>
+
+    <script src="{% static 'panel/js/projects/panel_edit_project.js' %}"></script>
+{% endblock %}

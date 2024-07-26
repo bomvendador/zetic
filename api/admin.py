@@ -3,7 +3,8 @@ from pdf.models import Participant, Report, Category, Section, PointDescription,
     ReportGroupSquare, Industry, EmployeeRole, EmployeePosition, Employee, Study, EmailSentToParticipant, \
     RawToTPointsType, RawToTPoints, EmployeeGender, ResearchTemplate, ResearchTemplateSections, CategoryQuestions, QuestionAnswers, \
     AgeGenderGroup, Questionnaire, QuestionnaireQuestionAnswers, MatrixFilter, MatrixFilterCategory, MatrixFilterInclusiveEmployeePosition, \
-    MatrixFilterParticipantNotDistributed, MatrixFilterParticipantNotDistributedEmployeePosition, ReportDataByCategories
+    MatrixFilterParticipantNotDistributed, MatrixFilterParticipantNotDistributedEmployeePosition, ReportDataByCategories, \
+    Project, ProjectStudy, ProjectParticipants
 from login.models import UserRole, UserProfile
 
 
@@ -46,3 +47,6 @@ admin.site.register(MatrixFilterInclusiveEmployeePosition)
 admin.site.register(MatrixFilterParticipantNotDistributed)
 admin.site.register(MatrixFilterParticipantNotDistributedEmployeePosition)
 admin.site.register(ReportDataByCategories)
+admin.site.register(Project)
+admin.site.register(ProjectStudy)
+admin.site.register(ProjectParticipants)

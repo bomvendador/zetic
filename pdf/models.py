@@ -241,8 +241,10 @@ class Study(models.Model):
     public_code = models.CharField(max_length=30, blank=True, null=True)
 
     def __str__(self):
-        # return f'{self.name} - {self.company.name}'
-        return self.name
+        if self.company:
+            return f'{self.name} - {self.company.name}'
+        else:
+            return self.name
 
     class Meta:
         verbose_name_plural = 'Исследования (studies)'
@@ -305,6 +307,35 @@ class QuestionnaireQuestionAnswers(models.Model):
     class Meta:
         verbose_name_plural = 'Опросник респондента_ответы (QuestionnaireQuestionAnswers)'
         verbose_name = 'Опросники респондентов_ответы (QuestionnaireQuestionAnswers)'
+
+
+class Project(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=None, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.id}. {self.name} - {self.company.name}'
+
+    class Meta:
+        verbose_name_plural = 'Проекты'
+        verbose_name = 'Проект'
+
+
+class ProjectStudy(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+    study = models.ForeignKey(Study, on_delete=models.CASCADE, default=None, null=True, blank=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.id}. {self.study.name} - {self.study.company.name}'
+
+    class Meta:
+        verbose_name_plural = 'Исследования (Study) проектов'
+        verbose_name = 'Исследование (Study) проекта'
+
 
 
 # class ParticipantQuestionGroups(models.Model):
@@ -476,6 +507,21 @@ class ReportGroupSquare(models.Model):
     class Meta:
         verbose_name_plural = 'Данные по квадратам групповых отчетов'
         verbose_name = 'Данные по квадрату групповых отчетов'
+
+
+class ProjectParticipants(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, null=True, blank=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None, null=True, blank=True)
+    report_group = models.ForeignKey(ReportGroup, on_delete=models.CASCADE, default=None, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.id}. {self.participant.employee.name} - {self.project.name}'
+
+    class Meta:
+        verbose_name_plural = 'Участники проектов'
+        verbose_name = 'Участник проекта'
 
 
 # class SquareName(models.Model):

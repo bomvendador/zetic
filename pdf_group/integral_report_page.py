@@ -7,7 +7,7 @@ from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B, MIN_SCALE_DELTA_Y, M
 from pdf.models import Report, ReportData, Questionnaire, QuestionnaireQuestionAnswers, Participant, Category, ReportDataByCategories
 
 
-def page(pdf, lang):
+def page(pdf, lang, square_results):
     # questionnaire_inst = Questionnaire.objects.filter(participant__employee__email=participant_email).latest('created_at')
     pdf.set_auto_page_break(False)
 
@@ -25,6 +25,6 @@ def page(pdf, lang):
 
     pdf.line(x + 1, y + 5, x + 220, y + 5)
 
-    draw_integral_report_squares(pdf, lang, x)
+    draw_integral_report_squares(pdf, lang, x, square_results)
 
     insert_page_number(pdf)

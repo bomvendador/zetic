@@ -907,7 +907,8 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
                         category_points_cnt = category_points_cnt + 1
                         category_points_sum = category_points_sum + t_points
                         category_t_points.append(t_points)
-                categories_t_points.append(category_t_points)
+                if len(category_t_points) > 0:
+                    categories_t_points.append(category_t_points)
 
             # average_category_t_point = math.floor((category_points_sum / category_points_cnt) * 10) / 10
 
@@ -920,6 +921,8 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
                 #         category_points_cnt = category_points_cnt + 1
                 #         category_points_sum = category_points_sum + report_data_by_categories[0].t_points
             variance_from_average = []
+            print(f'categories_t_points')
+            print(categories_t_points)
             for category_points in categories_t_points:
                 average_category_t_points = math.floor((sum(category_points) / len(category_points)) * 10) / 10
                 points_variance_from_average_in_category = []
@@ -933,15 +936,17 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
             print(variance_from_average)
             print('----')
             x = 10 - math.floor((sum(variance_from_average) / 3) * 10) / 10
-            integral_report_data.append({
-                'name': integral_report_filter.name,
-                'y': round((category_points_sum / category_points_cnt), 1),
-                'x': x,
-                'category_points_sum': category_points_sum,
-                'category_points_cnt': category_points_cnt,
-            })
+            if category_points_cnt > 0:
+                integral_report_data.append({
+                    'name': integral_report_filter.name,
+                    'y': round((category_points_sum / category_points_cnt), 1),
+                    'x': x,
+                    'category_points_sum': category_points_sum,
+                    'category_points_cnt': category_points_cnt,
+                })
     print(integral_report_data)
     print(categories_t_points)
+    circle_radius = 3
     if len(integral_report_data) > 0:
         pdf.set_fill_color(r=85, g=85, b=200)
         pdf.set_draw_color(r=255, g=255, b=255)
@@ -952,9 +957,9 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
         for data in integral_report_data:
             x = start_x + matrix_interval_width * data['x']
             y = end_y - matrix_interval_height * data['y']
-            pdf.circle(x, y, 3, style="FD")
+            pdf.circle(x - circle_radius / 2, y, circle_radius, style="FD")
             name_length = len(data['name'])
-            pdf.text(x - (name_length * letter_width) / 2, y - 1, data['name'])
+            pdf.text(x - (name_length * letter_width) / 2 - circle_radius / 2, y - 1, data['name'])
 
 
 

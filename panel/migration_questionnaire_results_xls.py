@@ -36,6 +36,7 @@ def migration_home(request):
 def save_report_data_from_xls(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
+        print(json_data)
         questionnaire_results_arr = json_data['questionnaire_results_arr']
         # print(questionnaire_results_arr)
         categories = Category.objects.all()

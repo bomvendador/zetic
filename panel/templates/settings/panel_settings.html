@@ -1,0 +1,167 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">Настройки</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Настройки</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- ROW-1 OPEN -->
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="card mb-0">
+                        <div class="card-header">
+                            <h3 class="card-title">Опросники</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <table class="table border text-nowrap text-md-nowrap table-bordered mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 25%">Настройка</th>
+                                        <th>Описание</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'filters_list' %}">Фильтры баллов</a>
+                                        </td>
+                                        <td>
+                                            Фильтры конвертации сырых баллов в т-баллы
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'filters_matrix_list' %}">Фильтры матрицы</a>
+                                        </td>
+                                        <td>
+                                            Фильтры автоматического распределения респондентов по квдратам в командных отчетах
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="card mb-0">
+                        <div class="card-header">
+                            <h3 class="card-title">Личные отчеты</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <table class="table border text-nowrap text-md-nowrap table-bordered mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 25%">Настройка</th>
+                                        <th>Описание</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'individual_report_points_description_filters_list' %}">Описания баллов</a>
+                                        </td>
+                                        <td>
+                                            Краткие выводы с привязкой к баллам
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="card mb-0">
+                        <div class="card-header">
+                            <h3 class="card-title">Командные отчеты</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <table class="table border text-nowrap text-md-nowrap table-bordered mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 25%">Настройка</th>
+                                        <th>Описание</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'integral_report_filters_list' %}">Фильтры интегрального отчета</a>
+                                        </td>
+                                        <td>
+                                            Фильтры с привязкой к шкалам
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- ROW-1 CLOSED -->
+
+        </div>
+        <!--CONTAINER CLOSED -->
+
+    </div>
+
+    <template id="template_error_block">
+        {#        <div class="row">#}
+        {#            <div class="card mb-0">#}
+        {#                <div class="card-body pb-0">#}
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="btn-close error-message-close-btn" data-bs-dismiss="alert" aria-hidden="true">
+                ×
+            </button>
+            <div class="error_message">
+                message_text
+            </div>
+        </div>
+        {#                </div>#}
+        {#            </div>#}
+        {#        </div>#}
+
+    </template>
+
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
+    <!-- Moment Js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+
+    <script>
+
+        let url_json = "{% url 'json' %}"
+
+
+    </script>
+    <script src="{% static 'panel/js/settings/settings_main.js' %}"></script>
+{% endblock %}

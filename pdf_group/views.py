@@ -50,12 +50,12 @@ def pdf_group_generator(request_json):
     # print(f'line_height = {line_height} total_participant_qnt = {total_participant_qnt} table_height = {table_height} table_y = {table_y}')
 
     pdf.add_page()
-    # print(request_json)
+    print(request_json)
     # lang = request_json['lang']
     lang = 'ru'
-    client_name = request_json['project']
+    # client_name = request_json['project']
 
-    title_page(pdf, client_name, lang)
+    title_page(pdf, request_json, lang)
 
     pdf.add_page()
     pdf.set_text_color(0, 0, 0)
@@ -69,9 +69,14 @@ def pdf_group_generator(request_json):
     pdf.set_text_color(0, 0, 0)
     squares_page(pdf, request_json['square_results'], table_y)
 
-    # pdf.add_page()
-    # pdf.set_text_color(0, 0, 0)
-    # integral_report_page(pdf, 'ru')
+    # if 'group_report_id' in request_json:
+    #     group_report_id = request_json['group_report_id']
+    # else:
+    #     group_report_id = ''
+
+    pdf.add_page()
+    pdf.set_text_color(0, 0, 0)
+    integral_report_page(pdf, 'ru', request_json['square_results'])
 
     pdf.set_line_width(0.1)
     pdf.add_page()
@@ -132,7 +137,7 @@ def pdf_group_generator(request_json):
 
     now = datetime.datetime.now()
 
-    file_name = cyrtranslit.to_latin(client_name, 'ru') + "_" + now.strftime("%d_%m_%Y__%H_%M_%S") + "_" + lang.upper() + '_group.pdf'
+    file_name = cyrtranslit.to_latin(request_json['company_name'], 'ru') + '_' + cyrtranslit.to_latin(request_json['project_name'], 'ru') + "___" + now.strftime("%d_%m_%Y__%H_%M_%S") + "_" + lang.upper() + '_group.pdf'
 
     path = "media/reportsPDF/group/"
 

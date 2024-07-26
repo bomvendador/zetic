@@ -5,7 +5,7 @@ from pdf import views as pdf_views
 from panel import company_parameter as panel_company_parameter
 from panel import employee, study, sections, individual_report_file, company, mail_handler, categories, questions, \
     research_templates, companies_studies, filters, filters_matrix, migration_questionnaire_results_xls, \
-    filters_individual_report_points_description, filters_integral_report
+    filters_individual_report_points_description, filters_integral_report, settings, projects
 # from panel import study
 # from panel import individual_report_file
 # from panel import company
@@ -15,7 +15,9 @@ from sendemail import tasks
 urlpatterns = [
     path('', panel_views.home, name="panel_home"),
     path('team_distribution', panel_views.team_distribution, name='team_distribution'),
-    path('get_project_participants', panel_views.get_company_participants, name='get_project_participants'),
+    path('get_company_projects_for_group_report', panel_views.get_company_projects_for_group_report, name='get_company_projects_for_group_report'),
+    path('get_company_projects_with_group_report', panel_views.get_company_projects_with_group_report, name='get_company_projects_with_group_report'),
+    path('get_participants_by_project_studies', panel_views.get_participants_by_project_studies, name='get_participants_by_project_studies'),
     path('get_report_participants_data', panel_views.get_report_participants_data, name='get_report_participants_data'),
     path('download_file/<str:filename>', pdf_views.download_file, name='download_file'),
     path('logout', panel_views.panel_logout, name='logout'),
@@ -165,6 +167,16 @@ urlpatterns = [
 
     path('migration_questionnaire_results_xls_home', migration_questionnaire_results_xls.migration_home, name='migration_questionnaire_results_xls_home'),
     path('save_report_data_from_xls', migration_questionnaire_results_xls.save_report_data_from_xls, name='save_report_data_from_xls'),
+
+    path('settings_main', settings.settings_main, name='settings_main'),
+
+    path('projects_list', projects.projects_list, name='projects_list'),
+    path('get_company_projects', projects.get_company_projects, name='get_company_projects'),
+    path('get_company_studies_for_project', projects.get_company_studies, name='get_company_studies_for_project'),
+    path('add_new_project', projects.add_new_project, name='add_new_project'),
+    path('save_new_project', projects.save_new_project, name='save_new_project'),
+    path('save_edited_project', projects.save_edited_project, name='save_edited_project'),
+    path('edit_project/<int:project_id>', projects.edit_project, name='edit_project'),
 
 ]
 

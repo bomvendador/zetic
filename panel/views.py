@@ -10,7 +10,7 @@ from pdf.models import Company, Participant, ReportData, Report, Category, Repor
     Section, \
     MatrixFilter, MatrixFilterParticipantNotDistributed, MatrixFilterInclusiveEmployeePosition, MatrixFilterCategory, \
     MatrixFilterParticipantNotDistributedEmployeePosition, QuestionnaireQuestionAnswers, QuestionAnswers, \
-    ReportDataByCategories, Questionnaire
+    ReportDataByCategories, Questionnaire, Project, ProjectStudy, ProjectParticipants
 # from django.contrib.auth.models import User
 
 from login.models import UserRole, UserProfile, User
@@ -238,16 +238,70 @@ def panel_logout(request):
 def team_distribution(request):
     context = info_common(request)
     cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
+    response = []
     if cur_user_role_name == 'Менеджер':
         companies = Company.objects.filter(created_by=request.user)
     else:
         companies = Company.objects.all()
+    for company in companies:
+        projects = Project.objects.filter(company=company)
+        if projects.exists():
+            response.append({
+                'name': company.name,
+                'id': company.id,
+            })
 
     context.update({
-        'companies': companies
+        'companies': response
     })
-
+    print(response)
     return render(request, 'panel_distribution.html', context)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def get_company_projects_for_group_report(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        company_id = json_data['company_id']
+        projects_inst = Project.objects.filter(company_id=company_id)
+        projects = []
+        for project in projects_inst:
+            data = {
+                'id': project.id,
+                'project_name': project.name,
+                'company_name': project.company.name,
+                'created_by': project.created_by.first_name,
+                'created_at': timezone.localtime(project.created_at).strftime("%d.%m.%Y %H:%M:%S")
+            }
+            projects.append(data)
+        response = {
+            'projects': projects
+        }
+        return JsonResponse(response)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def get_company_projects_with_group_report(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        company_id = json_data['company_id']
+        projects_inst = Project.objects.filter(company_id=company_id)
+        projects = []
+        for project in projects_inst:
+            project_participants = ProjectParticipants.objects.filter(project=project)
+            if project_participants.exists():
+                data = {
+                    'id': project.id,
+                    'project_name': project.name,
+                    'company_name': project.company.name,
+                    'created_by': project.created_by.first_name,
+                    'created_at': timezone.localtime(project.created_at).strftime("%d.%m.%Y %H:%M:%S")
+                }
+                projects.append(data)
+        response = {
+            'projects': projects
+        }
+        return JsonResponse(response)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -266,6 +320,29 @@ def get_company_participants(request):
                 'employee_id': participant.employee.id,
             }
             participants.append(data)
+        response = {
+            'participants': participants
+        }
+        return JsonResponse(response)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def get_participants_by_project_studies(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        project_id = json_data['project_id']
+        project_studies = ProjectStudy.objects.filter(project_id=project_id)
+        participants = []
+        for project_study in project_studies:
+            participants_inst = Participant.objects.filter(study=project_study.study, completed_at__isnull=False)
+            for participant in participants_inst:
+                participants.append({
+                    'employee_id': participant.employee_id,
+                    'id': participant.id,
+                    'study_name': participant.study.name,
+                    'name': participant.employee.name,
+                    'email': participant.employee.email,
+                })
         response = {
             'participants': participants
         }
@@ -584,9 +661,9 @@ def get_participants_data_for_group_report(participants_ids):
 def save_group_report_data(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
-        # print('--- 421 ---')
-        # print(json_data)
-        # print('===421===')
+        print('--- 421 ---')
+        print(json_data)
+        print('===421===')
 
         operation = json_data['operation']
         square_results = json_data['square_results']
@@ -613,12 +690,23 @@ def save_group_report_data(request):
                     square_result[7] = biggest_number + 1
             json_data['square_results'] = square_results
             ReportGroupSquare.objects.filter(report_group=group_report_inst).delete()
+            project_participants = ProjectParticipants.objects.filter(report_group=group_report_inst)
+            project = project_participants[0].project
+            json_data['project_name'] = project.name
+            json_data['company_name'] = project.company.name
+
         else:
+            project_id = json_data['project_id']
+            project = Project.objects.get(id=project_id)
+            json_data['project_name'] = project.name
+            json_data['company_name'] = project.company.name
+
             cnt = 0
             for square_result in square_results:
                 cnt = cnt + 1
-                square_result.append(cnt)
-
+                # square_result.append(cnt)
+                square_result[7] = cnt
+                employee_email = square_result[1]
         # print('--- 449 ---')
         # print(json_data)
         # print('===449===')
@@ -701,7 +789,7 @@ def edit_group_report_data(request, report_id):
         'group_report_id': report_id,
         'company_name': group_report_inst.company.name,
     })
-    print(group_reports)
+    # print(group_reports)
 
     return render(request, 'panel_edit_group_report.html', context)
 
@@ -722,9 +810,13 @@ def group_reports_list(request):
             companies = Company.objects.all()
         companies_arr = []
         for company in companies:
-            report_group = ReportGroup.objects.filter(company=company)
-            if report_group.count() > 0:
-                companies_arr.append(company.name)
+            projects = Project.objects.filter(company=company)
+            # report_group = ReportGroup.objects.filter(company=company)
+            if projects.exists():
+                companies_arr.append({
+                    'name': company.name,
+                    'id': company.id,
+                })
         context.update(
             {'companies_arr': companies_arr}
         )
@@ -737,30 +829,40 @@ def get_group_reports_list(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
         company = json_data['company']
-        group_reports = ReportGroup.objects.filter(company__name=company)
-        # participants = Participant.objects.filter(Company__name=Company).values()
-        report = []
-        for group_report in group_reports:
-            report_group_square_arr = []
-            reports_group_square = ReportGroupSquare.objects.filter(report_group=group_report)
-            for report_group_square in reports_group_square:
-                # print(f'report_group_square - {report_group_square.id}')
-                report_group_square_arr.append(report_group_square.report.participant.employee.name)
-            report.append({
-                'company': group_report.company.name,
-                'id': group_report.id,
-                'date': timezone.localtime(group_report.added).strftime("%d.%m.%Y %H:%M:%S"),
-                'timestamp': group_report.added,
-                'participants': report_group_square_arr,
-                'qnt': len(report_group_square_arr),
-                'file_name': group_report.file.name,
-                'comments': group_report.comments
+        project_id = json_data['project_id']
+        project_participants = ProjectParticipants.objects.filter(project_id=project_id)
 
-            })
-        response = {
-            'data': list(report)
-        }
-        return JsonResponse(response)
+        if project_participants.exists():
+            report = []
+            for project_participant in project_participants:
+                group_report = project_participant.report_group
+                report_exists = False
+                for report_item in report:
+                    if report_item['id'] == group_report.id:
+                        report_exists = True
+
+                if not report_exists:
+                    report_group_square_arr = []
+                    reports_group_square = ReportGroupSquare.objects.filter(report_group=group_report)
+                    if reports_group_square.exists():
+                        for report_group_square in reports_group_square:
+                            print(f'report_group_square - {report_group_square.report.id}')
+                            report_group_square_arr.append(report_group_square.report.participant.employee.name)
+                        report.append({
+                            'company': group_report.company.name,
+                            'id': group_report.id,
+                            'date': timezone.localtime(group_report.added).strftime("%d.%m.%Y %H:%M:%S"),
+                            'timestamp': group_report.added,
+                            'participants': report_group_square_arr,
+                            'qnt': len(report_group_square_arr),
+                            'file_name': group_report.file.name,
+                            'comments': group_report.comments
+
+                        })
+            response = {
+                'data': list(report)
+            }
+            return JsonResponse(response)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')

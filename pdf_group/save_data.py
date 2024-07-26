@@ -1,4 +1,5 @@
-from pdf.models import Report, Participant, Company, ReportData, Section, Category, ReportGroup, ReportGroupSquare
+from pdf.models import Report, Participant, Company, ReportData, Section, Category, ReportGroup, ReportGroupSquare, \
+    Project, ProjectStudy, ProjectParticipants
 
 
 def save_data_to_db(request_json, file_name):
@@ -16,12 +17,22 @@ def save_data_to_db(request_json, file_name):
     # participant_number = 0
     for participant_data in request_json['square_results']:
         participant_number = participant_data[7]
+        participant_id = participant_data[8]
         square_name = participant_data[0]
         square_code = participant_data[6]
         bold = participant_data[3]
         group_name = participant_data[4]
         group_color = participant_data[5]
         employee_email = participant_data[1]
+        if operation == 'new':
+            project_inst = Project.objects.get(id=request_json['project_id'])
+            project_participant_inst = ProjectParticipants()
+            project_participant_inst.participant = Participant.objects.get(id=participant_id)
+            project_participant_inst.project = project_inst
+            project_participant_inst.report_group = report_group_inst
+            # project_participant_inst.created_by = request.user
+            project_participant_inst.save()
+
         report_group_square_inst = ReportGroupSquare()
         report_group_square_inst.report_group = report_group_inst
         report_group_square_inst.square_name = square_name

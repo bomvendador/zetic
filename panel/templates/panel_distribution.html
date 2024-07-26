@@ -45,18 +45,24 @@
                                                 <a id="wizard1-t-0" aria-controls="wizard1-p-0">
                                                     <span class="current-info audible">current step: </span>
                                                     <span class="number">1</span>
-                                                    <span class="title">Выбор проекта</span>
+                                                    <span class="title">Выбор компании</span>
                                                 </a>
                                             </li>
                                             <li role="tab" class="disabled route-item" aria-disabled="true">
                                                 <a id="wizard1-t-1" aria-controls="wizard1-p-1">
                                                     <span class="number">2</span>
+                                                    <span class="title">Выбор проекта</span>
+                                                </a>
+                                            </li>
+                                            <li role="tab" class="disabled route-item" aria-disabled="true">
+                                                <a id="wizard1-t-1" aria-controls="wizard1-p-1">
+                                                    <span class="number">3</span>
                                                     <span class="title">Выбор членов команды</span>
                                                 </a>
                                             </li>
                                             <li role="tab" class="disabled route-item" aria-disabled="true">
                                                 <a id="wizard1-t-2" aria-controls="wizard1-p-2">
-                                                    <span class="number">3</span>
+                                                    <span class="number">4</span>
                                                     <span class="title">Распределение
                                                             </span>
                                                 </a>
@@ -74,15 +80,39 @@
                                                     <thead>
                                                     {#                                                            <tr class="table-header">#}
                                                     <tr>
-                                                        <th class="wd-15p border-bottom-0 table-header">Проект</th>
+                                                        <th class="wd-15p border-bottom-0 table-header">Компания</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
                                                     {% for company in companies %}
-                                                        <tr class="table-row cursor-pointer" data-company-id="{{ company.id }}">
+                                                        <tr class="table-row cursor-pointer"
+                                                            data-company-id="{{ company.id }}">
                                                             <td>{{ company.name }}</td>
                                                         </tr>
                                                     {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </section>
+                                        {#                                                <h3 id="wizard1-h-1" tabindex="-1" class="title current">Выбор проекта</h3>#}
+                                        <section id="wizard1-p-3" role="tabpanel" aria-labelledby="wizard1-h-3"
+                                                 class="body current" aria-hidden="true" style="display: none;">
+
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered text-nowrap border-bottom list-table"
+                                                       id="responsive-datatable">
+                                                    <thead>
+                                                    {#                                                            <tr class="table-header">#}
+                                                    <tr>
+                                                        <th class="wd-15p border-bottom-0 table-header">Проект</th>
+                                                        <th class="wd-15p border-bottom-0 table-header">Компания</th>
+                                                        <th class="wd-15p border-bottom-0 table-header">Когда создан
+                                                        </th>
+                                                        <th class="wd-15p border-bottom-0 table-header">Кем создан</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="wizard1-tbody-3">
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -97,7 +127,7 @@
                                                 <div class="col-xl-6 col-md-12 col-sm-12 mt-5">
                                                     <div class="row" style="margin-bottom: 15px">
                                                         <div class="col-xl-6 col-md-12 col-sm-12 mt-5 mb-5">
-                                                            <h2 class="card-title">Участники проекта</h2>
+                                                            <h2 class="card-title">Участники исследований</h2>
                                                         </div>
                                                         <div class="col-xl-6 col-md-12 col-sm-12">
                                                             <div class="row">
@@ -138,7 +168,8 @@
                                                             <tr>
                                                                 <th class="wd-15p border-bottom-0 table-header">ФИО</th>
                                                                 <th class="wd-15p border-bottom-0 table-header">email
-                                                                <th class="wd-15p border-bottom-0 table-header">Исследование
+                                                                <th class="wd-15p border-bottom-0 table-header">
+                                                                    Исследование
                                                                 </th>
                                                             </tr>
                                                             </thead>
@@ -204,7 +235,8 @@
                                                             <tr>
                                                                 <th class="wd-15p border-bottom-0 table-header">ФИО</th>
                                                                 <th class="wd-15p border-bottom-0 table-header">email
-                                                                <th class="wd-15p border-bottom-0 table-header">Исследование
+                                                                <th class="wd-15p border-bottom-0 table-header">
+                                                                    Исследование
                                                                 </th>
                                                             </tr>
                                                             </thead>
@@ -425,7 +457,8 @@
                                                                 <th class="wd-15p border-bottom-0 table-header">
                                                                     Автораспределение
                                                                 </th>
-                                                                <th class="wd-15p border-bottom-0 table-header" style="width: 100px">
+                                                                <th class="wd-15p border-bottom-0 table-header"
+                                                                    style="width: 100px">
                                                                     Распределение
                                                                 </th>
                                                             </tr>
@@ -1082,6 +1115,8 @@
             rule_4_4
         ]
 
+        let project_id
+
         function route_handler(route_index) {
             {#console.log('project - ' + $('.company-chosen').text().trim())#}
             {#console.log(route_index)#}
@@ -1089,12 +1124,10 @@
 
             switch (route_index) {
                 case 1:
-                    project_name = $('.company-chosen').text().trim()
                     company_id = $('.company-chosen').data('company-id')
-                    console.log(company_id)
                     $.ajax({
                         headers: {"X-CSRFToken": token},
-                        url: "{% url 'get_project_participants' %}",
+                        url: "{% url 'get_company_projects_for_group_report' %}",
                         type: 'POST',
 
                         data: JSON.stringify({
@@ -1107,29 +1140,26 @@
                             toastr.error('Ошибка', data)
                         },
                         success: function (data) {
-                            {#console.log(data)#}
-                            {#let data_json = $.parseJSON(data);#}
-                            let participants = data['participants'];
-                            console.log(participants)
+                            let projects = data['projects'];
+                            console.log(projects)
                             let html = ''
-                            for (let i = 0; i < participants.length; i++) {
-                                html += '<tr class="table-row cursor-pointer project-participant-added" data-employee-id="' + participants[i]['employee_id'] + '" id="participant_id_' + participants[i]['id'] + '" title="Исследование - ' + participants[i]['study_name'] + '">'
-                                html += '<td>' + participants[i]['name'] + '</td>'
-                                html += '<td>' + participants[i]['email'] + '</td>'
-                                html += '<td>' + participants[i]['study_name'] + '</td>'
+                            for (let i = 0; i < projects.length; i++) {
+                                html += '<tr class="table-row cursor-pointer company-project-added" data-project-id="' + projects[i]['id'] + '" id="project_id_' + projects[i]['id'] + '">'
+                                html += '<td>' + projects[i]['project_name'] + '</td>'
+                                html += '<td>' + projects[i]['company_name'] + '</td>'
+                                html += '<td>' + projects[i]['created_at'] + '</td>'
+                                html += '<td>' + projects[i]['created_by'] + '</td>'
                                 html += '</tr>'
-                                {#console.log(participants[i]['fio'])#}
                             }
-                            {#console.log(html)#}
-                            $('#wizard1-tbody-1').html(html)
-                            console.log('wizard1-tbody-1 - ' + $('#wizard1-tbody-1').html())
-                            process_table('.team-table')
+                            $('#wizard1-tbody-3').html(html)
+                            {#console.log('wizard1-tbody-1 - ' + $('#wizard1-tbody-1').html())#}
+                            {#process_table('.team-table')#}
                             btn_text($('#next'), '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
 
                             route_menu_handler(route_index, 'next')
 
-                            $('#wizard1-h-1').css('display', 'block')
-                            $('#wizard1-p-1').css('display', 'block')
+                            $('#wizard1-h-3').css('display', 'block')
+                            $('#wizard1-p-3').css('display', 'block')
                             $('#wizard1-h-0').css('display', 'none')
                             $('#wizard1-p-0').css('display', 'none')
 
@@ -1138,6 +1168,57 @@
 
                     break;
                 case 2:
+                    project_id = $('.company-project-chosen').data('project-id')
+                    console.log(project_id)
+                    let project_chosen = $('#main-container .company-project-chosen').length
+                    if (project_chosen > 0) {
+                        $.ajax({
+                            headers: {"X-CSRFToken": token},
+                            url: "{% url 'get_participants_by_project_studies' %}",
+                            type: 'POST',
+
+                            data: JSON.stringify({
+                                'project_id': project_id
+                            }),
+                            processData: false,
+                            contentType: false,
+                            error: function (data) {
+                                toastr.error('Ошибка', data)
+                            },
+                            success: function (data) {
+                                console.log(data)
+
+                                let participants = data['participants'];
+                                let html = ''
+                                for (let i = 0; i < participants.length; i++) {
+                                    html += '<tr class="table-row cursor-pointer project-participant-added" data-employee-id="' + participants[i]['employee_id'] + '" id="participant_id_' + participants[i]['id'] + '" title="Исследование - ' + participants[i]['study_name'] + '">'
+                                    html += '<td>' + participants[i]['name'] + '</td>'
+                                    html += '<td>' + participants[i]['email'] + '</td>'
+                                    html += '<td>' + participants[i]['study_name'] + '</td>'
+                                    html += '</tr>'
+                                }
+                                $('#wizard1-tbody-1').html(html)
+                                console.log('wizard1-tbody-2 - ' + $('#project_participants_table').html())
+                                process_table('.team-table')
+                                btn_text($('#next'), '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
+
+                                route_menu_handler(route_index, 'next')
+
+                                $('#wizard1-h-1').css('display', 'block')
+                                $('#wizard1-p-1').css('display', 'block')
+                                $('#wizard1-h-3').css('display', 'none')
+                                $('#wizard1-p-3').css('display', 'none')
+
+                            }
+                        });
+
+                    }else {
+                        toastr.error('Проект не выбран')
+                    }
+
+                    break;
+
+                case 3:
 
                     if ($('.table-row-report')[0]) {
                         console.log(`.table-row-report')[0] -`)
@@ -1185,7 +1266,7 @@
                                     let html = ''
 
 
-                                    html += '<tr class="table-row-undistributed-participant" style="">'
+                                    html += '<tr class="table-row-undistributed-participant" style="" data-participant-id="' + participants_data[i]['participant_id'] + '">'
                                     html += '<td class="bold-participant" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'
                                     html += '<td class="participant-group" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'
                                     html += '<td class="fio">' + participants_data[i]['fio'] + '</td>'
@@ -1194,15 +1275,15 @@
                                     html += '<td class="position">' + participants_data[i]['position'] + '</td>'
 
                                     html += '<td>'
-                                    if(participant_squares.length > 0){
+                                    if (participant_squares.length > 0) {
                                         for (let j = 0; j < participant_squares.length; j++) {
                                             html += '<div>'
                                             html += `${participant_squares[j]['square_code']} - ${participant_squares[j]['square_name']} (${participant_squares[j]['percentage']}%)`
                                             html += '</div>'
                                         }
 
-                                    }else {
-                                       html += 'Отсутствует'
+                                    } else {
+                                        html += 'Отсутствует'
                                     }
 
 
@@ -1222,31 +1303,27 @@
 
                                     $('#tbody_undistributed_participants').append(html)
 
-                                {#$('.undistributed-table').removeAttr('width').DataTable({#}
-                                {#        'columnDefs': [#}
-                                {#            {'orderable': false, 'targets': [0, 7]},#}
-                                {#            {width: 5, targets: 0}#}
-                                {#        ],#}
-                                {#        autoWidth: false,#}
-                                {#        "info": true,#}
-                                {#        "bFilter": true,#}
-                                {#        order: [1, 'asc'],#}
-                                {#        "searching": true,#}
-                                {#        "destroy": true,#}
-                                {#        "paging": false,#}
-                                {#        "language": {#}
-                                {#            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"#}
-                                {#        },#}
-                                {#        "initComplete": function () {#}
-                                {#        }#}
-                                {#    })#}
-                                {##}
-                                {##}
-                                {#    process_table('.undistributed-table')#}
-
-
-
-
+                                    {#$('.undistributed-table').removeAttr('width').DataTable({#}
+                                    {#        'columnDefs': [#}
+                                    {#            {'orderable': false, 'targets': [0, 7]},#}
+                                    {#            {width: 5, targets: 0}#}
+                                    {#        ],#}
+                                    {#        autoWidth: false,#}
+                                    {#        "info": true,#}
+                                    {#        "bFilter": true,#}
+                                    {#        order: [1, 'asc'],#}
+                                    {#        "searching": true,#}
+                                    {#        "destroy": true,#}
+                                    {#        "paging": false,#}
+                                    {#        "language": {#}
+                                    {#            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"#}
+                                    {#        },#}
+                                    {#        "initComplete": function () {#}
+                                    {#        }#}
+                                    {#    })#}
+                                    {##}
+                                    {##}
+                                    {#    process_table('.undistributed-table')#}
 
 
                                     $('#wizard1-h-2').css('display', 'block')
@@ -1276,7 +1353,7 @@
                         toastr.error('Участники не выбраны')
                     }
                     break;
-                case 3:
+                case 4:
                     let output_html = '<h2 class="mb-0" style="text-align: center">Комментарии к отчету</h2>' +
                         '<br>' +
                         '<hr class="solid mt-0" style="background-color: black;">' +
@@ -1298,9 +1375,6 @@
                             save_report()
                         }
                     })
-
-                    break;
-                case 4:
 
                     break;
                 default:
@@ -1328,7 +1402,7 @@
                 let square_code = $(this).attr('id').split('_')[1] + '_' + $(this).attr('id').split('_')[2]
                 {#console.log($(this).attr('id'))#}
                 $(this).find('li').each(function () {
-                    square_results.push([square_name, $(this).attr('id'), $(this).text(), $(this).data('bold'), $(this).data('group-name'), $(this).data('group-color'), square_code])
+                    square_results.push([square_name, $(this).attr('id'), $(this).text(), $(this).data('bold'), $(this).data('group-name'), $(this).data('group-color'), square_code, '', $(this).data('participant-id')])
                 })
             })
             console.log(square_results)
@@ -1344,7 +1418,8 @@
                     'project': project_name,
                     'company_id': company_id,
                     'comments': $('#report-comments-text').val(),
-                    'operation':'new'
+                    'operation': 'new',
+                    'project_id': project_id,
                 }),
                 processData: false,
                 contentType: false,
@@ -1438,13 +1513,23 @@
                 {#$('#wizard1-tbody-1').html('')#}
                 {#process_table('.team-table')#}
                     $('.team-table').DataTable().clear().destroy()
-                    $('#wizard1-h-1').css('display', 'none')
-                    $('#wizard1-p-1').css('display', 'none')
+                    $('#wizard1-h-3').css('display', 'none')
+                    $('#wizard1-p-3').css('display', 'none')
                     $('#wizard1-h-0').css('display', 'block')
                     $('#wizard1-p-0').css('display', 'block')
                     $(this).addClass('disabled')
                     break;
                 case 3:
+                {#$('#wizard1-tbody-1').html('')#}
+                {#process_table('.team-table')#}
+                    $('.team-table').DataTable().clear().destroy()
+                    $('#wizard1-h-1').css('display', 'none')
+                    $('#wizard1-p-1').css('display', 'none')
+                    $('#wizard1-h-3').css('display', 'block')
+                    $('#wizard1-p-3').css('display', 'block')
+                    $(this).addClass('disabled')
+                    break;
+                case 4:
                 {#$('#wizard1-tbody-1').html('')#}
                 {#process_table('.team-table')#}
                     $('.undistributed-table').DataTable().clear().destroy()
@@ -1474,327 +1559,339 @@
 
         let table = ''
 
-        $('#main-container').on('click', '.project-participant-added', function () {
-            $(this).removeClass('project-participant-added').addClass('project-participant-chosen').css('background-color', '#6c5ffc').css('color', 'white')
+        $('#main-container').on('click', '.company-project-added', function () {
+            $('#main-container .company-project-chosen').addClass('company-project-added').css('background-color', '').css('color', '')
+            $(this).removeClass('company-project-added').addClass('company-project-chosen').css('background-color', '#6c5ffc').css('color', 'white')
 
             console.log($(this).find(':nth-child(1)').text())
         })
-        $('#main-container').on('click', '.project-participant-chosen', function () {
-            $(this).addClass('project-participant-added').removeClass('project-participant-chosen').css('background-color', '').css('color', '')
+        {#$('#main-container').on('click', '.company-project-chosen', function () {#}
+        {#    $(this).removeClass('company-project-chosen').addClass('company-project-added').css('background-color', '').css('color', '')#}
+        {##}
+        {#    console.log($(this).find(':nth-child(1)').text())#}
+        {#})#}
+            $('#main-container').on('click', '.project-participant-added', function () {
+                $(this).removeClass('project-participant-added').addClass('project-participant-chosen').css('background-color', '#6c5ffc').css('color', 'white')
 
-            console.log($(this).find(':nth-child(1)').text())
-        })
-        $('#main-container').on('click', '.report-participant-added', function () {
-            $(this).removeClass('report-participant-added').addClass('report-participant-chosen').css('background-color', '#6c5ffc').css('color', 'white')
-
-            console.log($(this).find(':nth-child(1)').text())
-        })
-        $('#main-container').on('click', '.report-participant-chosen', function () {
-            $(this).addClass('report-participant-added').removeClass('report-participant-chosen').css('background-color', '').css('color', '')
-
-            console.log($(this).find(':nth-child(1)').text())
-        })
-
-        $('#add-all-participant').on('click', function () {
-            let project_participant_chosen = $('.project-participant-chosen')
-            let employees_ids = []
-            let employees_ok = true
-            project_participant_chosen.each(function () {
-                let employee_id = $(this).data('employee-id')
-                console.log(employee_id)
-                if(employees_ids.includes(employee_id)){
-                    employees_ok = false
-                }else {
-                    employees_ids.push(employee_id)
-                }
+                console.log($(this).find(':nth-child(1)').text())
             })
-            $(".project-participant-added").each(function () {
-                let employee_id = $(this).data('employee-id')
-                console.log(employee_id)
-                if(employees_ids.includes(employee_id)){
-                    employees_ok = false
-                }else {
-                    employees_ids.push(employee_id)
-                }
+            $('#main-container').on('click', '.project-participant-chosen', function () {
+                $(this).addClass('project-participant-added').removeClass('project-participant-chosen').css('background-color', '').css('color', '')
+
+                console.log($(this).find(':nth-child(1)').text())
+            })
+            $('#main-container').on('click', '.report-participant-added', function () {
+                $(this).removeClass('report-participant-added').addClass('report-participant-chosen').css('background-color', '#6c5ffc').css('color', 'white')
+
+                console.log($(this).find(':nth-child(1)').text())
+            })
+            $('#main-container').on('click', '.report-participant-chosen', function () {
+                $(this).addClass('report-participant-added').removeClass('report-participant-chosen').css('background-color', '').css('color', '')
+
+                console.log($(this).find(':nth-child(1)').text())
             })
 
-            if(employees_ok){
-                add_participant_to_report('#wizard1-tbody-1 tr')
-            }else {
-                toastr.error('Сотрудник может быть добавлен только олдин раз')
-            }
-
-
-        })
-
-        function check_chosen_employees_() {
-
-        }
-
-
-        $('#add-chosen-participant').on('click', function () {
-            let participant_has_been_chosen = false
-            let project_participant_chosen = $('.project-participant-chosen')
-            if (project_participant_chosen.length) {
-                participant_has_been_chosen = true
-            } else {
-                toastr.error('Участник не выбран')
-            }
-            if(participant_has_been_chosen){
+            $('#add-all-participant').on('click', function () {
+                let project_participant_chosen = $('.project-participant-chosen')
                 let employees_ids = []
                 let employees_ok = true
                 project_participant_chosen.each(function () {
                     let employee_id = $(this).data('employee-id')
                     console.log(employee_id)
-                    if(employees_ids.includes(employee_id)){
+                    if (employees_ids.includes(employee_id)) {
                         employees_ok = false
-                    }else {
+                    } else {
                         employees_ids.push(employee_id)
                     }
                 })
-                if(employees_ok){
-                    add_participant_to_report('.project-participant-chosen')
-                }else {
+                $(".project-participant-added").each(function () {
+                    let employee_id = $(this).data('employee-id')
+                    console.log(employee_id)
+                    if (employees_ids.includes(employee_id)) {
+                        employees_ok = false
+                    } else {
+                        employees_ids.push(employee_id)
+                    }
+                })
+
+                if (employees_ok) {
+                    add_participant_to_report('#wizard1-tbody-1 tr')
+                } else {
                     toastr.error('Сотрудник может быть добавлен только олдин раз')
                 }
-            }
 
-        })
 
-        $('#delete-chosen-participant').on('click', function () {
-            if ($('.report-participant-chosen').length) {
-                delete_participant_from_report('.report-participant-chosen')
-            } else {
-                toastr.error('Участник не выбран')
-            }
-
-        })
-        $('#delete-all-participant').on('click', function () {
-            if ($('.report-participant-chosen').length || $('.report-participant-added').length) {
-                delete_participant_from_report('#wizard1-tbody-report-1 tr')
-            } else {
-                toastr.error('Участники отсутствуют')
-            }
-        })
-
-        function add_participant_to_report(element, title) {
-            let html_report = ''
-            let html_project = ''
-
-            $(element).each(function (i, obj) {
-
-                html_report += '<tr class="table-row-report cursor-pointer report-participant-added odd" id="' + $(this).attr("id") + '" data-emplyee-id="' + $(this).data("employee-id") + '" style="" title="' + $(this).attr("title") +'">'
-                html_report += $(this).html()
-                html_report += '</tr>'
-                $(this).remove()
             })
-            html_project = $('#wizard1-tbody-1').html()
-            html_report = $('#wizard1-tbody-report-1').html().trim() + html_report
 
-            $('.team-table').DataTable().clear().destroy()
-            $('#wizard1-tbody-1').append(html_project)
-            $('#wizard1-tbody-report-1').empty().append(html_report.trim())
-            $('#wizard1-tbody-report-1 tr').each(function () {
-                if ($(this).find('td').hasClass('dataTables_empty')) {
-                    $(this).remove()
+            function check_chosen_employees_() {
+
+            }
+
+
+            $('#add-chosen-participant').on('click', function () {
+                let participant_has_been_chosen = false
+                let project_participant_chosen = $('.project-participant-chosen')
+                if (project_participant_chosen.length) {
+                    participant_has_been_chosen = true
+                } else {
+                    toastr.error('Участник не выбран')
                 }
-            })
-            process_table('.team-table')
-
-        }
-
-        function delete_participant_from_report(element) {
-            let html_report = ''
-            let html_project = ''
-
-            $(element).each(function (i, obj) {
-                html_project += '<tr class="table-row cursor-pointer project-participant-added odd">'
-                html_project += $(this).html()
-                html_project += '</tr>'
-                $(this).remove()
-            })
-            html_project = $('#wizard1-tbody-1').html().trim() + html_project
-            html_report = $('#wizard1-tbody-report-1').html().trim()
-
-            $('.team-table').DataTable().clear().destroy()
-            {#$('#wizard1-tbody-1').append(html_project)#}
-            $('#wizard1-tbody-1').empty().append(html_project)
-
-            $('#wizard1-tbody-report-1').append(html_report.trim())
-            {#$('#wizard1-tbody-report-1').empty().append(html_report.trim())#}
-
-            $('#wizard1-tbody-1 tr').each(function () {
-                if ($(this).find('td').hasClass('dataTables_empty')) {
-                    $(this).remove()
-                }
-            })
-            process_table('.team-table')
-
-        }
-
-        // распределение участников
-        let participants_groups = []
-        $('#distribute-undistributed-participants').on('click', function () {
-            let category_not_selected = false
-            $('.category-selected').each(function () {
-                if ($(this).val() === '') {
-                    category_not_selected = true
+                if (participant_has_been_chosen) {
+                    let employees_ids = []
+                    let employees_ok = true
+                    project_participant_chosen.each(function () {
+                        let employee_id = $(this).data('employee-id')
+                        console.log(employee_id)
+                        if (employees_ids.includes(employee_id)) {
+                            employees_ok = false
+                        } else {
+                            employees_ids.push(employee_id)
+                        }
+                    })
+                    if (employees_ok) {
+                        add_participant_to_report('.project-participant-chosen')
+                    } else {
+                        toastr.error('Сотрудник может быть добавлен только олдин раз')
+                    }
                 }
 
             })
-            if (category_not_selected) {
-                toastr.error('Выберите категорию для всех нераспределенных участников')
-            } else {
-                let distributed_cnt = 0
-                $('.table-row-undistributed-participant').each(function () {
-                    let fio = $(this).find('.fio').text()
-                    let email = $(this).find('.email').text()
-                    let square_name = $(this).find('.category-selected').val()
-                    let bold = $(this).find('td:nth-child(1) input').val()
-                    let group_name = $(this).find('td:nth-child(2) span').text()
-                    let group_color = $(this).find('td:nth-child(2)').css('background-color')
 
-                    {#let #}
-                    {#console.log($(this).find('.fio').text() + ' - ' + $(this).find('.category-selected').val())#}
+            $('#delete-chosen-participant').on('click', function () {
+                if ($('.report-participant-chosen').length) {
+                    delete_participant_from_report('.report-participant-chosen')
+                } else {
+                    toastr.error('Участник не выбран')
+                }
 
-                    let list_id = get_listgroup_id_by_name(square_name)
-                    $('#' + list_id).append('<li class="list-group-item" id="' + email + '" data-bold="' + bold + '" data-group-name="' + group_name + '" data-group-color="' + group_color + '">' + fio + '</li>')
+            })
+            $('#delete-all-participant').on('click', function () {
+                if ($('.report-participant-chosen').length || $('.report-participant-added').length) {
+                    delete_participant_from_report('#wizard1-tbody-report-1 tr')
+                } else {
+                    toastr.error('Участники отсутствуют')
+                }
+            })
+
+            function add_participant_to_report(element, title) {
+                let html_report = ''
+                let html_project = ''
+
+                $(element).each(function (i, obj) {
+
+                    html_report += '<tr class="table-row-report cursor-pointer report-participant-added odd" id="' + $(this).attr("id") + '" data-emplyee-id="' + $(this).data("employee-id") + '" style="" title="' + $(this).attr("title") + '">'
+                    html_report += $(this).html()
+                    html_report += '</tr>'
                     $(this).remove()
-                    distributed_cnt++
                 })
-                let cur_distributed_cnt = parseInt($('#bage_distributed_participants').text())
-                $('#bage_distributed_participants').html(cur_distributed_cnt + distributed_cnt)
-                $('.undistributed-table').DataTable().clear().destroy()
-                $('#undistributed-participants-table').addClass('d-none')
-                toastr.success('Участники распределены (' + distributed_cnt + ' чел.)')
-                $('#next').removeClass('disabled').addClass('cursor-pointer')
+                html_project = $('#wizard1-tbody-1').html()
+                html_report = $('#wizard1-tbody-report-1').html().trim() + html_report
+
+                $('.team-table').DataTable().clear().destroy()
+                $('#wizard1-tbody-1').append(html_project)
+                $('#wizard1-tbody-report-1').empty().append(html_report.trim())
+                $('#wizard1-tbody-report-1 tr').each(function () {
+                    if ($(this).find('td').hasClass('dataTables_empty')) {
+                        $(this).remove()
+                    }
+                })
+                process_table('.team-table')
 
             }
-        })
 
-        function get_listgroup_id_by_name(name) {
-            let listgroup_id = ''
-            switch (name) {
-                case square_names_obj["1_1"]:
-                    listgroup_id = 'list_1_1';
-                    break;
-                case square_names_obj["1_2"]:
-                    listgroup_id = 'list_1_2';
-                    break;
-                case square_names_obj["1_3"]:
-                    listgroup_id = 'list_1_3';
-                    break;
-                case square_names_obj["1_4"]:
-                    listgroup_id = 'list_1_4';
-                    break;
-                case square_names_obj["2_1"]:
-                    listgroup_id = 'list_2_1';
-                    break;
-                case square_names_obj["2_2"]:
-                    listgroup_id = 'list_2_2';
-                    break;
-                case square_names_obj["2_3"]:
-                    listgroup_id = 'list_2_3';
-                    break;
-                case square_names_obj["2_4"]:
-                    listgroup_id = 'list_2_4';
-                    break;
-                case square_names_obj["3_1"]:
-                    listgroup_id = 'list_3_1';
-                    break;
-                case square_names_obj["3_2"]:
-                    listgroup_id = 'list_3_2';
-                    break;
-                case square_names_obj["3_3"]:
-                    listgroup_id = 'list_3_3';
-                    break;
-                case square_names_obj["3_4"]:
-                    listgroup_id = 'list_3_4';
-                    break;
-                case square_names_obj["4_1"]:
-                    listgroup_id = 'list_4_1';
-                    break;
-                case square_names_obj["4_2"]:
-                    listgroup_id = 'list_4_2';
-                    break;
-                case square_names_obj["4_3"]:
-                    listgroup_id = 'list_4_3';
-                    break;
-                case square_names_obj["4_4"]:
-                    listgroup_id = 'list_4_4';
-                    break;
-                default:
-                    break;
+            function delete_participant_from_report(element) {
+                let html_report = ''
+                let html_project = ''
+
+                $(element).each(function (i, obj) {
+                    html_project += '<tr class="table-row cursor-pointer project-participant-added odd">'
+                    html_project += $(this).html()
+                    html_project += '</tr>'
+                    $(this).remove()
+                })
+                html_project = $('#wizard1-tbody-1').html().trim() + html_project
+                html_report = $('#wizard1-tbody-report-1').html().trim()
+
+                $('.team-table').DataTable().clear().destroy()
+                {#$('#wizard1-tbody-1').append(html_project)#}
+                $('#wizard1-tbody-1').empty().append(html_project)
+
+                $('#wizard1-tbody-report-1').append(html_report.trim())
+                {#$('#wizard1-tbody-report-1').empty().append(html_report.trim())#}
+
+                $('#wizard1-tbody-1 tr').each(function () {
+                    if ($(this).find('td').hasClass('dataTables_empty')) {
+                        $(this).remove()
+                    }
+                })
+                process_table('.team-table')
 
             }
-            return listgroup_id
-        }
 
-        function get_square_name_by_listgroup_id(id) {
-            let square_name = ''
-            let square_code = ''
-            switch (id) {
-                case 'list_1_1':
-                    square_name = square_names_obj["1_1"]
-                    square_code = '1_1'
-                    break;
-                case 'list_1_2':
-                    square_name = square_names_obj["1_2"]
-                    square_code = '1_2'
-                    break;
-                case 'list_1_3':
-                    square_name = square_names_obj["1_3"]
-                    square_code = '1_3'
-                    break;
-                case 'list_1_4':
-                    square_name = square_names_obj["1_4"]
-                    square_code = '1_4'
-                    break;
-                case 'list_2_1':
-                    square_name = square_names_obj["2_1"]
-                    square_code = '2_1'
-                    break;
-                case 'list_2_2':
-                    square_name = square_names_obj["2_2"]
-                    square_code = '2_2'
-                    break;
-                case 'list_2_3':
-                    square_name = square_names_obj["2_3"]
-                    square_code = '2_3'
-                    break;
-                case 'list_2_4':
-                    square_name = square_names_obj["2_4"]
-                    break;
-                case 'list_3_1':
-                    square_name = square_names_obj["3_1"]
-                    break;
-                case 'list_3_2':
-                    square_name = square_names_obj["3_2"]
-                    break;
-                case 'list_3_3':
-                    square_name = square_names_obj["3_3"]
-                    break;
-                case 'list_3_4':
-                    square_name = square_names_obj["3_4"]
-                    break;
-                case 'list_4_1':
-                    square_name = square_names_obj["4_1"]
-                    break;
-                case 'list_4_2':
-                    square_name = square_names_obj["4_2"]
-                    break;
-                case 'list_4_3':
-                    square_name = square_names_obj["4_3"]
-                    break;
-                case 'list_4_4':
-                    square_name = square_names_obj["4_4"]
-                    break;
-                default:
-                    break;
+            // распределение участников
+            let participants_groups = []
+            $('#distribute-undistributed-participants').on('click', function () {
+                let category_not_selected = false
+                $('.category-selected').each(function () {
+                    if ($(this).val() === '') {
+                        category_not_selected = true
+                    }
 
+                })
+                if (category_not_selected) {
+                    toastr.error('Выберите категорию для всех нераспределенных участников')
+                } else {
+                    let distributed_cnt = 0
+                    $('.table-row-undistributed-participant').each(function () {
+                        let participant_id = $(this).data('participant-id')
+                        let fio = $(this).find('.fio').text()
+                        let email = $(this).find('.email').text()
+                        let square_name = $(this).find('.category-selected').val()
+                        let bold = $(this).find('td:nth-child(1) input').val()
+                        let group_name = $(this).find('td:nth-child(2) span').text()
+                        let group_color = $(this).find('td:nth-child(2)').css('background-color')
+
+                        {#let #}
+                        {#console.log($(this).find('.fio').text() + ' - ' + $(this).find('.category-selected').val())#}
+
+                        let list_id = get_listgroup_id_by_name(square_name)
+                        $('#' + list_id).append('<li class="list-group-item" id="' + email + '" data-participant-id="' + participant_id + '" data-bold="' + bold + '" data-group-name="' + group_name + '" data-group-color="' + group_color + '">' + fio + '</li>')
+                        $(this).remove()
+                        distributed_cnt++
+                    })
+                    let cur_distributed_cnt = parseInt($('#bage_distributed_participants').text())
+                    $('#bage_distributed_participants').html(cur_distributed_cnt + distributed_cnt)
+                    $('.undistributed-table').DataTable().clear().destroy()
+                    $('#undistributed-participants-table').addClass('d-none')
+                    toastr.success('Участники распределены (' + distributed_cnt + ' чел.)')
+                    $('#next').removeClass('disabled').addClass('cursor-pointer')
+
+                }
+            })
+
+            function get_listgroup_id_by_name(name) {
+                let listgroup_id = ''
+                switch (name) {
+                    case square_names_obj["1_1"]:
+                        listgroup_id = 'list_1_1';
+                        break;
+                    case square_names_obj["1_2"]:
+                        listgroup_id = 'list_1_2';
+                        break;
+                    case square_names_obj["1_3"]:
+                        listgroup_id = 'list_1_3';
+                        break;
+                    case square_names_obj["1_4"]:
+                        listgroup_id = 'list_1_4';
+                        break;
+                    case square_names_obj["2_1"]:
+                        listgroup_id = 'list_2_1';
+                        break;
+                    case square_names_obj["2_2"]:
+                        listgroup_id = 'list_2_2';
+                        break;
+                    case square_names_obj["2_3"]:
+                        listgroup_id = 'list_2_3';
+                        break;
+                    case square_names_obj["2_4"]:
+                        listgroup_id = 'list_2_4';
+                        break;
+                    case square_names_obj["3_1"]:
+                        listgroup_id = 'list_3_1';
+                        break;
+                    case square_names_obj["3_2"]:
+                        listgroup_id = 'list_3_2';
+                        break;
+                    case square_names_obj["3_3"]:
+                        listgroup_id = 'list_3_3';
+                        break;
+                    case square_names_obj["3_4"]:
+                        listgroup_id = 'list_3_4';
+                        break;
+                    case square_names_obj["4_1"]:
+                        listgroup_id = 'list_4_1';
+                        break;
+                    case square_names_obj["4_2"]:
+                        listgroup_id = 'list_4_2';
+                        break;
+                    case square_names_obj["4_3"]:
+                        listgroup_id = 'list_4_3';
+                        break;
+                    case square_names_obj["4_4"]:
+                        listgroup_id = 'list_4_4';
+                        break;
+                    default:
+                        break;
+
+                }
+                return listgroup_id
             }
-            return square_name
-        }
+
+            function get_square_name_by_listgroup_id(id) {
+                let square_name = ''
+                let square_code = ''
+                switch (id) {
+                    case 'list_1_1':
+                        square_name = square_names_obj["1_1"]
+                        square_code = '1_1'
+                        break;
+                    case 'list_1_2':
+                        square_name = square_names_obj["1_2"]
+                        square_code = '1_2'
+                        break;
+                    case 'list_1_3':
+                        square_name = square_names_obj["1_3"]
+                        square_code = '1_3'
+                        break;
+                    case 'list_1_4':
+                        square_name = square_names_obj["1_4"]
+                        square_code = '1_4'
+                        break;
+                    case 'list_2_1':
+                        square_name = square_names_obj["2_1"]
+                        square_code = '2_1'
+                        break;
+                    case 'list_2_2':
+                        square_name = square_names_obj["2_2"]
+                        square_code = '2_2'
+                        break;
+                    case 'list_2_3':
+                        square_name = square_names_obj["2_3"]
+                        square_code = '2_3'
+                        break;
+                    case 'list_2_4':
+                        square_name = square_names_obj["2_4"]
+                        break;
+                    case 'list_3_1':
+                        square_name = square_names_obj["3_1"]
+                        break;
+                    case 'list_3_2':
+                        square_name = square_names_obj["3_2"]
+                        break;
+                    case 'list_3_3':
+                        square_name = square_names_obj["3_3"]
+                        break;
+                    case 'list_3_4':
+                        square_name = square_names_obj["3_4"]
+                        break;
+                    case 'list_4_1':
+                        square_name = square_names_obj["4_1"]
+                        break;
+                    case 'list_4_2':
+                        square_name = square_names_obj["4_2"]
+                        break;
+                    case 'list_4_3':
+                        square_name = square_names_obj["4_3"]
+                        break;
+                    case 'list_4_4':
+                        square_name = square_names_obj["4_4"]
+                        break;
+                    default:
+                        break;
+
+                }
+                return square_name
+            }
 
 
     </script>
