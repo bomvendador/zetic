@@ -74,7 +74,8 @@ $("#parse_questionnaire_results_file").on("click", function () {
     let fileUpload = $("#files")[0];
 
     //Validate whether File is valid Excel file.
-    let regex = /^([а-яА-Яa-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+    // let regex = /^([а-яА-Яa-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+    let regex = /^(.*)+(.xls|.xlsx)$/;
     if (regex.test(fileUpload.value.toLowerCase())) {
         if (typeof (FileReader) != "undefined") {
             let reader = new FileReader();
