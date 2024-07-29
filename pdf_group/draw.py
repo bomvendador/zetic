@@ -944,7 +944,7 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
                     'category_points_sum': category_points_sum,
                     'category_points_cnt': category_points_cnt,
                 })
-    # print(integral_report_data)
+    print(integral_report_data)
     # print(categories_t_points)
     circle_radius = 3
     if len(integral_report_data) > 0:
