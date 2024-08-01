@@ -259,7 +259,7 @@
                                             <div class="row">
                                                 <div class="col-sm-12 col-lg-6 background-color_1">
                                                     <div class="card no-shadow-important">
-                                                        <div class="card-header background-color_1">
+                                                        <div class="card-header background-color_1"  style="border-bottom: 1px solid #a1a1a1;">
                                                             <h3 class="card-title ">Интеграторы</h3>
                                                         </div>
                                                         <div class="card-body background-color_1">
@@ -293,7 +293,7 @@
                                                 <!-- COL END -->
                                                 <div class="col-sm-12 col-lg-6  background-color_2">
                                                     <div class="card no-shadow-important">
-                                                        <div class="card-header background-color_2">
+                                                        <div class="card-header background-color_2" style="border-bottom: 1px solid #a1a1a1;">
                                                             <h3 class="card-title">Предприниматели</h3>
                                                         </div>
                                                         <div class="card-body background-color_2">
@@ -330,7 +330,7 @@
                                             <div class="row">
                                                 <div class="col-sm-12 col-lg-6 background-color_3">
                                                     <div class="card no-shadow-important">
-                                                        <div class="card-header background-color_3">
+                                                        <div class="card-header background-color_3" style="border-bottom: 1px solid #a1a1a1;">
                                                             <h3 class="card-title ">Администраторы</h3>
                                                         </div>
                                                         <div class="card-body background-color_3">
@@ -364,7 +364,7 @@
                                                 <!-- COL END -->
                                                 <div class="col-sm-12 col-lg-6  background-color_4">
                                                     <div class="card no-shadow-important">
-                                                        <div class="card-header background-color_4">
+                                                        <div class="card-header background-color_4" style="border-bottom: 1px solid #a1a1a1;">
                                                             <h3 class="card-title">Достигаторы / Продюссеры</h3>
                                                         </div>
                                                         <div class="card-body background-color_4">
@@ -399,9 +399,9 @@
                                                 <!-- COL END -->
                                             </div>
 
-                                            <h4 class="mt-5">Распределено участников - <span
-                                                    class="badge bg-green text-white ms-2"
-                                                    id="bage_distributed_participants"></span></h4>
+{#                                            <h4 class="mt-5">Распределено участников - <span#}
+{#                                                    class="badge bg-green text-white ms-2"#}
+{#                                                    id="bage_distributed_participants"></span></h4>#}
                                             <hr style="border-top: 1px solid;">
                                             <div class="row mt-7" id="undistributed-participants-table">
                                                 <div class="col-12">
@@ -1451,7 +1451,7 @@
                             a.click();
                             setTimeout(function () {
                                 {#location.href = {% url 'panel_home' %}#}
-
+                                window.location.reload()
                             }, 1500)
                         } else {
                             {#location.href = {% url 'panel_home' %}#}
@@ -1759,8 +1759,8 @@
                         $(this).remove()
                         distributed_cnt++
                     })
-                    let cur_distributed_cnt = parseInt($('#bage_distributed_participants').text())
-                    $('#bage_distributed_participants').html(cur_distributed_cnt + distributed_cnt)
+                    {#let cur_distributed_cnt = parseInt($('#bage_distributed_participants').text())#}
+                    {#$('#bage_distributed_participants').html(cur_distributed_cnt + distributed_cnt)#}
                     $('.undistributed-table').DataTable().clear().destroy()
                     $('#undistributed-participants-table').addClass('d-none')
                     toastr.success('Участники распределены (' + distributed_cnt + ' чел.)')

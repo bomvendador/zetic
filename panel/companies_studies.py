@@ -18,10 +18,38 @@ from django.utils.dateformat import DateFormat
 def companies_studies_list(request):
     context = info_common(request)
 
-    studies_inst = Study.objects.all()
+    cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
+    studies_arr = []
+    if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
+        companies = Company.objects.filter(created_by=request.user)
+
+    if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
+        companies = Company.objects.all()
+
+    for company in companies:
+        studies = Study.objects.filter(company=company)
+        for study in studies:
+            created_at = timezone.localtime(study.created_at).strftime("%d.%m.%Y %H:%M:%S")
+            created_by = study.created_by.first_name
+            name = study.name
+            company_name = company.name
+            research_template_name = study.research_template.name
+            studies_arr.append({
+                'name': name,
+                'created_at': created_at,
+                'created_by': created_by,
+                'company_name': company_name,
+                'research_template_name': research_template_name,
+            })
+        studies_inst = Study.objects.filter(company=Company.objects.get(id=30))
+    # if cur_user_role_name == 'Админ заказчика':
+    #     company = Employee.objects.get(user=request.user).company
+    #     companies = Company.objects.filter(id=company.id)
+    if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
+        studies_inst = Study.objects.all()
     context.update(
         {
-            'studies': studies_inst,
+            'studies': studies_arr,
         }
     )
 
@@ -31,12 +59,20 @@ def companies_studies_list(request):
 @login_required(redirect_field_name=None, login_url='/login/')
 def add_study(request):
     context = info_common(request)
-    companies = Company.objects.all()
-    research_templates = ResearchTemplate.objects.all()
+    cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
+
+    if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
+        companies = Company.objects.filter(created_by=request.user)
+        research_templates = ResearchTemplate.objects.filter(by_default=True)
+
+    if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
+        companies = Company.objects.all()
+        research_templates = ResearchTemplate.objects.all()
     context.update(
         {
             'companies': companies,
             'research_templates': research_templates,
+            'user_role': cur_user_role_name
         }
     )
 

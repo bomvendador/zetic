@@ -33,7 +33,7 @@ def section_view(request, section_id, code):
     # questions_sections_inst_all = CategoryQuestions.objects.filter(Q(category__section_id=section_id) & ~Q(id__in=questions_already_answered_ids))
     # questions_inst = random.sample(questions_sections_inst_all, 5)
     # questions_inst = CategoryQuestions.objects.filter(category__section_id=section_id)
-    questions_limit = 5
+    questions_limit = 15
     cur_questions_cnt = 0
     for question in questions_inst:
         cur_questions_cnt = cur_questions_cnt + 1

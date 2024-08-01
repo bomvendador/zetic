@@ -239,9 +239,10 @@ def team_distribution(request):
     context = info_common(request)
     cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
     response = []
-    if cur_user_role_name == 'Менеджер':
+    if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
         companies = Company.objects.filter(created_by=request.user)
-    else:
+
+    if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
         companies = Company.objects.all()
     for company in companies:
         projects = Project.objects.filter(company=company)
@@ -802,7 +803,7 @@ def group_reports_list(request):
         return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
     else:
         cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
-        if cur_user_role_name == 'Менеджер':
+        if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
             companies = Company.objects.filter(created_by=request.user)
         if cur_user_role_name == 'Админ заказчика':
             companies = Company.objects.filter(id=Employee.objects.get(user=request.user).company.id)
@@ -897,7 +898,7 @@ def individual_reports_list(request):
         return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
     else:
         cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
-        if cur_user_role_name == 'Менеджер':
+        if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
             companies = Company.objects.filter(created_by=request.user)
         if cur_user_role_name == 'Админ заказчика':
             companies = Company.objects.filter(id=Employee.objects.get(user=request.user).company.id)

@@ -1198,8 +1198,8 @@ $('#distribute-undistributed-participants').on('click', function () {
             $(this).remove()
             distributed_cnt++
         })
-        let cur_distributed_cnt = parseInt($('#bage_distributed_participants').text())
-        $('#bage_distributed_participants').html(cur_distributed_cnt + distributed_cnt)
+        // let cur_distributed_cnt = parseInt($('#bage_distributed_participants').text())
+        // $('#bage_distributed_participants').html(cur_distributed_cnt + distributed_cnt)
         $('.undistributed-table').DataTable().clear().destroy()
         $('#undistributed-participants-table').addClass('d-none')
         toastr.success('Участники распределены (' + distributed_cnt + ' чел.)')

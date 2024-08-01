@@ -19,7 +19,7 @@
 
 
     <!-- TITLE -->
-    <title>ZETIC - практическая психолгия</title>
+    <title>ZETIC - практическая психология</title>
 
     <!-- BOOTSTRAP CSS -->
     {#    <link id="style" href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />#}
@@ -209,7 +209,7 @@
                                     class="side-menu__label">Статистика</span>
                             </div>
                         </li>
-                        {% if cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Суперадмин' or cur_userprofile.role.name == 'Менеджер' %}
+                        {% if cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Суперадмин' or cur_userprofile.role.name == 'Менеджер' or cur_userprofile.role.name == 'Партнер' %}
                             <li class="sub-category">
                                 <h3>Заказчики</h3>
                             </li>
@@ -273,24 +273,25 @@
                         </li>
 
 
-                        {% if cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Суперадмин' or cur_userprofile.role.name == 'Менеджер' %}
+                        {% if cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Суперадмин' or cur_userprofile.role.name == 'Менеджер'  or cur_userprofile.role.name == 'Партнер' %}
                             <li class="sub-category">
                                 <h3>Опросники/Отчеты</h3>
                             </li>
-                        {% endif %}
 
-                        <li class="slide">
-                            <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
-                                <i class="side-menu__icon fe fe-book-open"></i>
-                                <span class="side-menu__label">Опросы</span>
-                                <i class="angle fe fe-chevron-right"></i>
-                            </a>
-                            <ul class="slide-menu">
-                                <li>
-                                    <div class="slide-item cursor-pointer menu_item" id="menu_study_list"> Список</div>
-                                </li>
-                            </ul>
-                        </li>
+                            <li class="slide">
+                                <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
+                                    <i class="side-menu__icon fe fe-book-open"></i>
+                                    <span class="side-menu__label">Опросы</span>
+                                    <i class="angle fe fe-chevron-right"></i>
+                                </a>
+                                <ul class="slide-menu">
+                                    <li>
+                                        <div class="slide-item cursor-pointer menu_item" id="menu_study_list"> Список
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        {% endif %}
 
 
                         <li class="slide">
@@ -325,7 +326,7 @@
                                         Список отчетов
                                     </div>
                                 </li>
-                                {% if not cur_userprofile.role.name == 'Админ заказчика' %}
+                                {% if not cur_userprofile.role.name == 'Админ заказчика' and not cur_userprofile.role.name == 'Партнер' %}
                                     <li>
                                         <div class="slide-item cursor-pointer menu_item"
                                              id="menu_individual_reports_add"> Добавить
@@ -382,6 +383,7 @@
                                     </li>
                                 </ul>
                             </li>
+                            {% endif %}
                             <li class="slide">
                                 <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
                                     <i class="side-menu__icon fe fe-layers"></i>
@@ -389,6 +391,7 @@
                                     <i class="angle fe fe-chevron-right"></i>
                                 </a>
                                 <ul class="slide-menu">
+                                    {% if cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Суперадмин' %}
                                     <li>
                                         <div class="slide-item cursor-pointer menu_item" id="menu_sections_list">
                                             Секции
@@ -404,6 +407,7 @@
                                              id="menu_research_templates_list"> Шаблоны
                                         </div>
                                     </li>
+                                    {% endif %}
                                     <li>
                                         <div class="slide-item cursor-pointer menu_item"
                                              id="menu_companies_studies_list"> Исследования
@@ -411,6 +415,7 @@
                                     </li>
                                 </ul>
                             </li>
+                            {% if cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Суперадмин' %}
                             <li class="slide">
                                 <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
                                     <i class="side-menu__icon fe fe-users"></i>
@@ -1180,6 +1185,8 @@
     {#let url_integral_report_filters_list = "{% url 'integral_report_filters_list' %}"#}
     let url_settings_main = "{% url 'settings_main' %}"
     let url_projects_list = "{% url 'projects_list' %}"
+    let url_add_new_project = "{% url 'add_new_project' %}"
+
 
 </script>
 <script src="{% static 'panel/js/panel_base.js' %}"></script>

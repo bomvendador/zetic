@@ -17,7 +17,7 @@ from .custom_funcs import update_attributes
 def add_employee(request):
     context = info_common(request)
     cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
-    if cur_user_role_name == 'Менеджер':
+    if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
         companies = Company.objects.filter(created_by=request.user)
     else:
         if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
@@ -298,7 +298,7 @@ def save_new_employee_html(request):
 def employees_list(request):
     context = info_common(request)
     cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
-    if cur_user_role_name == 'Менеджер':
+    if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
         companies = Company.objects.filter(created_by=request.user)
     if cur_user_role_name == 'Админ заказчика':
         employee = Employee.objects.get(user=request.user)

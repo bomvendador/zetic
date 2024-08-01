@@ -55,10 +55,11 @@
                                             </div>
                                             <div class="col-md-6 col-sm-12">
                                                 <label for="select_company"><h5>Шаблон</h5></label>
-                                                <select class="form-control select2-show-search form-select" data-placeholder="Выберите шаблон" id="select_template">
+                                                <select class="form-control select2-show-search form-select" data-placeholder="Выберите шаблон" id="select_template"
+                                                {% if user_role == 'Партнер' %} disabled {% endif %}>
                                                     <option label="Choose one"></option>
                                                     {% for template in research_templates %}
-                                                    <option value="{{ template.id }}">{{ template.name }}</option>
+                                                    <option value="{{ template.id }}" {% if user_role == 'Партнер' %} selected {% endif %}>{{ template.name }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>

@@ -52,16 +52,16 @@
                                                                         {{ study.name }}
                                                                     </td>
                                                                     <td class="section-name-ru">
-                                                                        {{ study.company.name }}
+                                                                        {{ study.company_name }}
                                                                     </td>
                                                                     <td class="section-name-ru">
-                                                                        {{ study.research_template.name }}
+                                                                        {{ study.research_template_name }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ study.created_at|date:"d.m.Y H:i" }}
+                                                                        {{ study.created_at }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ study.created_by.first_name }}
+                                                                        {{ study.created_by }}
                                                                     </td>
 
 {#                                                                    <td>#}

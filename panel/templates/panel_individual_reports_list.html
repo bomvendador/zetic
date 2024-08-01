@@ -210,7 +210,7 @@
 
         $('#wizard1-tbody-1').on('click', '.report_comments', function () {
             report_tr_id = $(this).closest('tr').attr('id')
-            $('#report-comments-text').text($(this).closest('tr').find('td').eq(3).text())
+            $('#report-comments-text').text($(this).closest('tr').find('td').eq(4).text())
             $('#input-modal-report-comments').modal('show')
         })
 
@@ -233,7 +233,7 @@
                 },
                 success: function (data) {
                     console.log(data)
-                    $('#' + report_tr_id).find('td').eq(3).text(comments)
+                    $('#' + report_tr_id).find('td').eq(4).text(comments)
                     btn_text($('#modal_save_comments_btn'), 'Сохранить')
                     $('#input-modal-report-comments').modal('hide')
                     toastr.success('Комментарии сохранены')
@@ -372,7 +372,9 @@
                                 html += '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>'
                                 html += '<ul class="dropdown-menu">'
                                 html += '<li><a class="dropdown-item" href="download_single_report/' + data_json[i]['file_name'] + '">Скачать</a></li>'
+                                {% if not cur_userprofile.role.name == 'Партнер' %}
                                 html += '<li class="regenerate_report"><a class="dropdown-item cursor-pointer">Пересоздать</a></li>'
+                                {% endif %}
                                 {% if not cur_userprofile.role.name == 'Админ заказчика' %}
                                     html += '<li><a class="dropdown-item report_comments cursor-pointer">Комментарий</a></li>'
                                 {% endif %}

@@ -50,7 +50,7 @@ def save_new_company(request):
 def companies_list(request):
     context = info_common(request)
     cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
-    if cur_user_role_name == 'Менеджер':
+    if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
         companies = Company.objects.filter(created_by=request.user)
     else:
         companies = Company.objects.all()

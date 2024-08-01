@@ -3,11 +3,11 @@ expand_menu_item('#menu_study_list')
 let table = process_table('.team-table')
 
 $('#select_all_participants_for_group_action').on('click', function () {
-    if($(this).prop('checked')){
+    if ($(this).prop('checked')) {
         $('#table_participants .select-participant-for-group-action').prop('checked', true)
         $('#select_group_action').removeAttr('disabled')
         $('#run_group_action').removeAttr('disabled')
-    }else {
+    } else {
         $('#table_participants .select-participant-for-group-action').prop('checked', false)
         $('#select_group_action').attr('disabled', true)
         $('#run_group_action').attr('disabled', true)
@@ -17,13 +17,13 @@ $('#select_all_participants_for_group_action').on('click', function () {
 
 $('.select-participant-for-group-action').on('click', function () {
     let checked_checkboxes_cnt = $('#table_participants .select-participant-for-group-action:checked').length
-    if($(this).prop('checked')){
-        if(checked_checkboxes_cnt === 1){
+    if ($(this).prop('checked')) {
+        if (checked_checkboxes_cnt === 1) {
             $('#select_group_action').removeAttr('disabled')
             $('#run_group_action').removeAttr('disabled')
         }
-    }else {
-        if(checked_checkboxes_cnt === 0){
+    } else {
+        if (checked_checkboxes_cnt === 0) {
             $('#select_group_action').attr('disabled', true)
             $('#run_group_action').attr('disabled', true)
         }
@@ -54,22 +54,22 @@ function getParticipantsWithoutInvitations() {
 $('#run_group_action').on('click', function () {
     participants_ids_to_send_invitation_to = []
     let action_name = $('#select_group_action option:selected').val()
-    if(action_name === 'no_action'){
+    if (action_name === 'no_action') {
         toastr.error('Действие для группы не выбрано')
         $('#select_group_action').addClass('is-invalid')
-    }else {
+    } else {
         switch (action_name) {
             case "send_invitations":
 
                 getParticipantsWithoutInvitations();
 
-                if(participants_ids_to_send_invitation_to.length >= 1){
+                if (participants_ids_to_send_invitation_to.length >= 1) {
                     $('#modal_before_mass_send_invitation').attr('data-invitation-type', 'initial')
                     $('#modal_participants_qnt').text(participants_ids_to_send_invitation_to.length)
                     $('#modal_before_mass_send_invitation_title').text('Отправка приглашения участникам')
                     $('#modal_before_mass_send_invitation').modal('show')
 
-                }else {
+                } else {
                     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
                         '<div>Выбранным участникам приглашение уже отправлено </div>' +
                         '<br>' +
@@ -97,13 +97,13 @@ $('#run_group_action').on('click', function () {
                         })
                     }
                 })
-                if(participants_ids_to_send_invitation_to.length >= 1){
+                if (participants_ids_to_send_invitation_to.length >= 1) {
                     $('#modal_before_mass_send_invitation').attr('data-invitation-type', 'reminder')
                     $('#modal_participants_qnt').text(participants_ids_to_send_invitation_to.length)
                     $('#modal_before_mass_send_invitation_title').text('Отправка напоминания участникам')
                     $('#modal_before_mass_send_invitation').modal('show')
 
-                }else {
+                } else {
                     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
                         '<div>Выбранным участникам еще не отправлено приглашение</div>' +
                         '<br>' +
@@ -121,18 +121,18 @@ $('#run_group_action').on('click', function () {
             case "delete_participants":
                 getParticipantsWithoutInvitations()
 
-                if(participants_ids_to_send_invitation_to.length >= 1){
+                if (participants_ids_to_send_invitation_to.length >= 1) {
                     $('#modal_participants_qnt_to_delete').text(participants_ids_to_send_invitation_to.length)
                     $('#modal_before_delete_participants').modal('show')
 
-                }else {
-                    let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                        '<div style="color: red">Выбранных участников удалить нельзя</div>' +
+                } else {
+
+                    let output_html = '<h2 class="mb-0" style="text-align: center">Участников удалить нельзя</h2>' +
                         '<br>' +
                         '<hr class="solid mt-0" style="background-color: black;">' +
-                        '<div><b>Им уже были отправлены приглашения</b></div>' +
-                        '<br>' +
+                        '<h4 style="text-align: center">Им уже были отправлены приглашения</h4>' +
                         '<hr class="solid mt-0" style="background-color: black;">'
+
                     Swal.fire({
                         html: output_html,
                         icon: 'warning',
@@ -156,7 +156,7 @@ $('#modal_delete_participants_btn').on('click', function () {
     btn_spinner($('#modal_delete_participants_btn'))
 
     $.ajax({
-        headers: { "X-CSRFToken": token },
+        headers: {"X-CSRFToken": token},
         url: url_delete_participants_from_study,
         type: 'POST',
 
@@ -166,19 +166,19 @@ $('#modal_delete_participants_btn').on('click', function () {
         }),
         processData: false,
         contentType: false,
-        error: function(data){
+        error: function (data) {
             toastr.error('Ошибка', data)
         },
-        success:function (data) {
+        success: function (data) {
 
             btn_text($('#modal_delete_participants_btn'), 'Удалить')
             $('#modal_before_delete_participants').modal('hide')
             let role_name = $('#cur_role_name').text()
             console.log(data)
             let data_json = data['response']
-            if(data_json === 'logout'){
+            if (data_json === 'logout') {
                 window.location.href = url_login_home
-            }else {
+            } else {
                 if (data_json === 'company_deactivated' && role_name === 'Админ заказчика') {
                     $('#modal_question_groups').modal('hide')
                     btn_text($('#save_question_groups'), 'Сохранить')
@@ -198,7 +198,7 @@ $('#modal_delete_participants_btn').on('click', function () {
                 } else {
                     if (data['warning']) {
                         toastr.warning(data['warning'])
-                    }else {
+                    } else {
                         let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
                             '<div>Участники удалены из исследования</div>' +
                             '<br>' +
@@ -210,7 +210,7 @@ $('#modal_delete_participants_btn').on('click', function () {
                             cancelButtonColor: '#d33',
                             confirmButtonText: 'ОК'
                         }).then((result) => {
-                            if(result.value){
+                            if (result.value) {
                                 window.location.reload()
                             }
                         })
@@ -234,7 +234,7 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
     let invitation_type = $('#modal_before_mass_send_invitation').attr('data-invitation-type')
 
     $.ajax({
-        headers: { "X-CSRFToken": token },
+        headers: {"X-CSRFToken": token},
         url: url_mass_send_invitation_email,
         type: 'POST',
 
@@ -248,18 +248,18 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
         }),
         processData: false,
         contentType: false,
-        error: function(data){
+        error: function (data) {
             toastr.error('Ошибка', data)
         },
-        success:function (data) {
+        success: function (data) {
             btn_text($('#modal_send_mass_invitation_btn'), 'Отправить')
             $('#modal_before_mass_send_invitation').modal('hide')
             let role_name = $('#cur_role_name').text()
             console.log(data)
             let data_json = data['response']
-            if(data_json === 'logout'){
+            if (data_json === 'logout') {
                 window.location.href = url_login_home
-            }else {
+            } else {
                 if (data_json === 'company_deactivated' && role_name === 'Админ заказчика') {
                     $('#modal_question_groups').modal('hide')
                     btn_text($('#save_question_groups'), 'Сохранить')
@@ -279,7 +279,7 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
                 } else {
                     if (data['warning']) {
                         toastr.warning(data['warning'])
-                    }else {
+                    } else {
                         let output_html = '<h2 class="mb-0" style="text-align: center">Приглашения отправлены</h2>' +
                             '<br>' +
                             '<hr class="solid mt-0" style="background-color: black;">' +
@@ -293,7 +293,7 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
                             cancelButtonColor: '#d33',
                             confirmButtonText: 'ОК'
                         }).then((result) => {
-                            if(result.value){
+                            if (result.value) {
                                 window.location.reload()
                             }
                         })
@@ -319,33 +319,30 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
             }
 
 
-
-
-
         }
     });
 
 })
 
 
-function process_circle_progress(){
-    $('svg.radial-progress').each(function( index, value ) {
+function process_circle_progress() {
+    $('svg.radial-progress').each(function (index, value) {
         // If svg.radial-progress is approximately 25% vertically into the window when scrolling from the top or the bottom
-            // Get percentage of progress
-            let percent = $(value).data('percentage');
-            // Get radius of the svg's circle.complete
-            let radius = $(this).find($('circle.complete')).attr('r');
-            // Get circumference (2πr)
-            let circumference = 2 * Math.PI * radius;
-            // Get stroke-dashoffset value based on the percentage of the circumference
-            let strokeDashOffset = circumference - ((percent * circumference) / 100);
-            // Transition progress for 1.25 seconds
-            $(this).find($('circle.complete')).animate({'stroke-dashoffset': strokeDashOffset}, 1250);
-            // if(percent === 100){
-            //
-            // }
+        // Get percentage of progress
+        let percent = $(value).data('percentage');
+        // Get radius of the svg's circle.complete
+        let radius = $(this).find($('circle.complete')).attr('r');
+        // Get circumference (2πr)
+        let circumference = 2 * Math.PI * radius;
+        // Get stroke-dashoffset value based on the percentage of the circumference
+        let strokeDashOffset = circumference - ((percent * circumference) / 100);
+        // Transition progress for 1.25 seconds
+        $(this).find($('circle.complete')).animate({'stroke-dashoffset': strokeDashOffset}, 1250);
+        // if(percent === 100){
+        //
+        // }
 
-        });
+    });
 }
 
 process_circle_progress()
@@ -361,13 +358,13 @@ $('#tbody_participants_selected').on('click', '.add-question-groups', function (
 
         participant_tr_p.each(function () {
             let questions_group_code_participant_selected = $(this).attr('id').split('_')[5]
-            if(questions_group_code_modal === questions_group_code_participant_selected){
+            if (questions_group_code_modal === questions_group_code_participant_selected) {
                 question_exists = true
             }
         })
-        if(question_exists){
+        if (question_exists) {
             html += '<tr class="question_group_item question_group_selected cursor-pointer" id="modal' + $(this).attr("id") + '">'
-        }else {
+        } else {
             html += '<tr class="question_group_item cursor-pointer" id="modal' + $(this).attr("id") + '">'
         }
 
@@ -384,22 +381,22 @@ $('#tbody_participants_selected').on('click', '.add-question-groups', function (
     $('#modal_question_groups').modal('show')
 })
 
-$('#tbody_modal_questions_groups').on('click', '.question_group_item', function(){
-    if($(this).hasClass('question_group_selected')){
+$('#tbody_modal_questions_groups').on('click', '.question_group_item', function () {
+    if ($(this).hasClass('question_group_selected')) {
         $(this).removeClass('question_group_selected')
-    }else {
+    } else {
         $(this).addClass('question_group_selected')
     }
 })
 
 $('#select_all_question_groups').on('click', function () {
-    if ($(this).attr('checked') === 'checked'){
+    if ($(this).attr('checked') === 'checked') {
         $(this).attr('checked', false)
         $('#tbody_modal_questions_groups').find('.question_group_item').each(function () {
             $(this).removeClass('question_group_selected')
         })
         // active = 0
-    }else {
+    } else {
         $(this).attr('checked', 'checked')
         $('#tbody_modal_questions_groups').find('.question_group_item').each(function () {
             $(this).addClass('question_group_selected')
@@ -419,9 +416,9 @@ $('#save_question_groups').on('click', function () {
             'code': code
         })
     })
-    if(questions_groups_selected.length === 0){
+    if (questions_groups_selected.length === 0) {
         toastr.error('Выберите группу(ы) вопросов')
-    }else {
+    } else {
         let participant_tr_id = $('#tbody_modal_questions_groups').attr('data-participant-tr-id')
         let participant_id = participant_tr_id.split('_')[2]
         let data = {
@@ -430,26 +427,26 @@ $('#save_question_groups').on('click', function () {
         }
         btn_spinner($('#save_question_groups'))
         $.ajax({
-            headers: { "X-CSRFToken": token },
+            headers: {"X-CSRFToken": token},
             url: url_save_participant_questions_groups,
             type: 'POST',
 
             data: JSON.stringify({
-                            'data': data,
-                            'study_id': study_id
-                        }),
+                'data': data,
+                'study_id': study_id
+            }),
             processData: false,
             contentType: false,
-            error: function(data){
+            error: function (data) {
                 toastr.error('Ошибка', data)
             },
-            success:function (data) {
+            success: function (data) {
                 let role_name = $('#cur_role_name').text()
                 console.log(data)
                 let data_json = data['response']
-                if(data_json === 'logout'){
+                if (data_json === 'logout') {
                     window.location.href = url_login_home
-                }else {
+                } else {
                     if (data_json === 'company_deactivated' && role_name === 'Админ заказчика') {
                         $('#modal_question_groups').modal('hide')
                         btn_text($('#save_question_groups'), 'Сохранить')
@@ -490,10 +487,8 @@ $('#save_question_groups').on('click', function () {
                 }
 
 
-
             }
         });
-
 
 
     }
@@ -505,63 +500,62 @@ $('#save_question_groups').on('click', function () {
 $('#add_participant').on('click', function () {
     show_progressbar_loader()
     $.ajax({
-        headers: { "X-CSRFToken": token },
+        headers: {"X-CSRFToken": token},
         url: url_get_employees_for_study,
         type: 'POST',
 
         data: JSON.stringify({
-                            'study_id': study_id
-                        }),
+            'study_id': study_id
+        }),
         processData: false,
         contentType: false,
-        error: function(data){
+        error: function (data) {
             toastr.error('Ошибка', data)
         },
-        success:function (data) {
+        success: function (data) {
             let role_name = $('#cur_role_name').text()
             console.log(data)
             hide_progressbar_loader()
             let data_json = data['response']
-            if(data_json === 'logout'){
+            if (data_json === 'logout') {
                 window.location.href = url_login_home
-            }else {
-                if(data_json === 'None'){
+            } else {
+                if (data_json === 'None') {
 
                     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                                    '<div>Все сотрудники компании уже добавалены' + '</div>' +
-                                    '<br>' +
-                                    '<hr class="solid mt-0" style="background-color: black;">'
+                        '<h4 style="text-align: center">Все сотрудники компании уже добавлены</h4>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
                     Swal.fire({
-                      html: output_html,
-                      icon: 'warning',
-                      confirmButtonColor: '#3085d6',
-                      cancelButtonColor: '#d33',
-                      confirmButtonText: 'ОК'
+                        html: output_html,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ОК'
                     })
-                }else{
-                    if (data_json === 'company_deactivated' && role_name === 'Админ заказчика'){
+                } else {
+                    if (data_json === 'company_deactivated' && role_name === 'Админ заказчика') {
                         let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                                        '<div>Компания деактивирована' + '</div>' +
-                                        '<div>Если Вы не знаете причин - обратитесь к менеджеру' + '</div>' +
-                                        '<br>' +
-                                        '<hr class="solid mt-0" style="background-color: black;">'
+                            '<div>Компания деактивирована' + '</div>' +
+                            '<div>Если Вы не знаете причин - обратитесь к менеджеру' + '</div>' +
+                            '<br>' +
+                            '<hr class="solid mt-0" style="background-color: black;">'
                         Swal.fire({
-                          html: output_html,
-                          icon: 'warning',
-                          confirmButtonColor: '#3085d6',
-                          cancelButtonColor: '#d33',
-                          confirmButtonText: 'ОК'
+                            html: output_html,
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'ОК'
                         })
-                    }else {
-                        if(data['warning']){
+                    } else {
+                        if (data['warning']) {
                             toastr.warning(data['warning'])
                         }
                         let html = ''
-                        for(let i=0; i < data_json.length; i++) {
+                        for (let i = 0; i < data_json.length; i++) {
                             console.log('id - ' + data_json[i]['participant_id'] + 'len - ' + $('#tbody_participants_selected').find('#participant_id_' + data_json[i]['participant_id']).length)
-                            if($('#tbody_participants_selected').find('#participant_id_' + data_json[i]['participant_id']).length > 0){
+                            if ($('#tbody_participants_selected').find('#participant_id_' + data_json[i]['participant_id']).length > 0) {
                                 html += '<tr class="participant_item participant_item_selected cursor-pointer" id="employee_id_' + data_json[i]['employee_id'] + '">'
-                            }else {
+                            } else {
                                 html += '<tr class="participant_item  cursor-pointer" id="employee_id_' + data_json[i]['employee_id'] + '">'
                             }
                             html += '<td class=" employee-name">' + data_json[i]['name'] + '</td>'
@@ -581,13 +575,13 @@ $('#add_participant').on('click', function () {
 })
 
 $('#select_all_participants').on('click', function () {
-    if ($(this).attr('checked') === 'checked'){
+    if ($(this).attr('checked') === 'checked') {
         $(this).attr('checked', false)
         $('#tbody_modal_participants').find('.participant_item').each(function () {
             $(this).removeClass('participant_item_selected')
         })
         // active = 0
-    }else {
+    } else {
         $(this).attr('checked', 'checked')
         $('#tbody_modal_participants').find('.participant_item').each(function () {
             $(this).addClass('participant_item_selected')
@@ -597,17 +591,17 @@ $('#select_all_participants').on('click', function () {
     }
 })
 
-$('#tbody_modal_participants').on('click', '.participant_item', function(){
-    if($(this).hasClass('participant_item_selected')){
+$('#tbody_modal_participants').on('click', '.participant_item', function () {
+    if ($(this).hasClass('participant_item_selected')) {
         $(this).removeClass('participant_item_selected')
-    }else {
+    } else {
         $(this).addClass('participant_item_selected')
     }
 })
 
 $('#save_participants').on('click', function () {
-let employees_ids = []
-let employees_selected = {}
+    let employees_ids = []
+    let employees_selected = {}
 
     $('#tbody_modal_participants').find('.participant_item_selected').each(function () {
         let id = $(this).attr('id').split('_')[2]
@@ -618,43 +612,43 @@ let employees_selected = {}
             'email': $(this).find('.employee-email').text()
         }
     })
-    if(employees_ids.length === 0){
+    if (employees_ids.length === 0) {
         toastr.error('Выберите участников')
-    }else {
+    } else {
         let data = {
             'employees_ids': employees_ids,
             'study_id': study_id
         }
         btn_spinner($('#save_participants'))
         $.ajax({
-            headers: { "X-CSRFToken": token },
+            headers: {"X-CSRFToken": token},
             url: url_save_study_participants,
             type: 'POST',
 
             data: JSON.stringify({
-                            'data': data
-                        }),
+                'data': data
+            }),
             processData: false,
             contentType: false,
-            error: function(data){
+            error: function (data) {
                 toastr.error('Ошибка', data)
             },
-            success:function (data) {
+            success: function (data) {
                 $('.team-table').DataTable().clear().destroy()
                 let data_json = data['response']
                 let html = ''
                 console.log(data_json)
 
                 let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                '<div>Участник/и добавлены в исследование' + '</div>' +
-                '<br>' +
-                '<hr class="solid mt-0" style="background-color: black;">'
+                    '<div>Участник/и добавлены в исследование' + '</div>' +
+                    '<br>' +
+                    '<hr class="solid mt-0" style="background-color: black;">'
                 Swal.fire({
-                  html: output_html,
-                  icon: 'success',
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'ОК'
+                    html: output_html,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ОК'
                 }).then(function (result) {
                     window.location.reload()
                 })
@@ -748,7 +742,6 @@ let employees_selected = {}
         });
 
 
-
     }
 
 
@@ -764,42 +757,42 @@ $('#modal_send_invitation_btn').on('click', function () {
         send_admin_notification_after_filling_up = 1
     }
     $.ajax({
-        headers: { "X-CSRFToken": token },
+        headers: {"X-CSRFToken": token},
         url: url_send_invitation_email,
         type: 'POST',
 
         data: JSON.stringify({
-                            'study_id': study_id,
-                            'participant_id': participant_id,
-                            'type': 'initial',
-                            'send_admin_notification_after_filling_up': send_admin_notification_after_filling_up
-                        }),
+            'study_id': study_id,
+            'participant_id': participant_id,
+            'type': 'initial',
+            'send_admin_notification_after_filling_up': send_admin_notification_after_filling_up
+        }),
         processData: false,
         contentType: false,
-        error: function(data){
+        error: function (data) {
             toastr.error('Ошибка', data)
         },
-        success:function (data) {
+        success: function (data) {
             let json_data = data['response']
-            if('error' in json_data){
+            if ('error' in json_data) {
                 toastr.error(json_data['error'])
-            }else {
-                if('company_error' in json_data){
-                    if(json_data['company_error'] === 'company_deactivated'){
+            } else {
+                if ('company_error' in json_data) {
+                    if (json_data['company_error'] === 'company_deactivated') {
                         let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                                        '<div>Компания деактивирована' + '</div>' +
-                                        '<div>Если Вы не знаете причин - обратитесь к менеджеру' + '</div>' +
-                                        '<br>' +
-                                        '<hr class="solid mt-0" style="background-color: black;">'
+                            '<div>Компания деактивирована' + '</div>' +
+                            '<div>Если Вы не знаете причин - обратитесь к менеджеру' + '</div>' +
+                            '<br>' +
+                            '<hr class="solid mt-0" style="background-color: black;">'
                         Swal.fire({
-                          html: output_html,
-                          icon: 'warning',
-                          confirmButtonColor: '#3085d6',
-                          cancelButtonColor: '#d33',
-                          confirmButtonText: 'ОК'
+                            html: output_html,
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'ОК'
                         })
                     }
-                }else {
+                } else {
                     let datetime_invitation_sent = json_data['datetime_invitation_sent'];
                     let el = $('#participant_id_' + participant_id)
                     el.find('.font-color-danger').removeClass('font-color-danger').addClass('font-color-warning').prop('title', 'Приглашение отправлено')
@@ -844,10 +837,10 @@ $('#tbody_participants_selected').on('click', '.send-email-invitation', function
 })
 
 $('#send_admin_notification_after_filling_up').on('click', function () {
-    if ($(this).attr('checked') === 'checked'){
+    if ($(this).attr('checked') === 'checked') {
         $(this).attr('checked', false)
         // active = 0
-    }else {
+    } else {
         $(this).attr('checked', 'checked')
         // active = 1
     }
@@ -861,27 +854,27 @@ $('#change_study_name_btn').on('click', function () {
 
 $('#modal_save_new_study_name_btn').on('click', function () {
     let new_study_name = $('#input_new_study_name').val()
-    if(new_study_name === ''){
+    if (new_study_name === '') {
         $('#input_new_study_name').addClass('is-invalid state-invalid')
         toastr.error('Имя должно быть заполнено')
-    }else {
+    } else {
 
         btn_spinner($('#modal_save_new_study_name_btn'))
         $.ajax({
-            headers: { "X-CSRFToken": token },
+            headers: {"X-CSRFToken": token},
             url: url_save_study_name,
             type: 'POST',
 
             data: JSON.stringify({
-                            'study_name': new_study_name,
-                            'study_id': study_id
-                        }),
+                'study_name': new_study_name,
+                'study_id': study_id
+            }),
             processData: false,
             contentType: false,
-            error: function(data){
+            error: function (data) {
                 toastr.error('Ошибка', data)
             },
-            success:function (data) {
+            success: function (data) {
                 $('#input_name').val(data['study_name'])
                 btn_text($('#modal_save_new_study_name_btn'), 'Сохранить')
 

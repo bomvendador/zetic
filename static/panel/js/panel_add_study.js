@@ -16,8 +16,13 @@ $('#select_company').on("select2:select", function(e) {
 
 $('#save_study').on('click', function () {
     let employees_ids = []
-    let company_id = $('#select_company :selected').attr('id').split('_')[2]
     let test_ok = true
+
+    let company_val = $('#select_company').val()
+    if(company_val === ''){
+        test_ok = false
+        toastr.error('Компания не выбрана')
+    }
     $('#tbody_participants_selected tr').each(function () {
         employees_ids.push($(this).attr('data-employee-id'))
     })
@@ -39,6 +44,7 @@ $('#save_study').on('click', function () {
     }
 
     if(test_ok){
+        let company_id = $('#select_company :selected').attr('id').split('_')[2]
         btn_spinner('#save_study')
         $.ajax({
             headers: {"X-CSRFToken": token},
@@ -59,6 +65,8 @@ $('#save_study').on('click', function () {
                 btn_text('#save_study', 'Сохранить исследование')
                 // hide_progressbar_loader()
                 // let employees = data['response']['employees']
+
+
                 let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
                     '<br>' +
                     '<hr class="solid mt-0" style="background-color: black;">' +
@@ -72,7 +80,7 @@ $('#save_study').on('click', function () {
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'ОК'
                 }).then((result) => {
-                    if (result.isConfirmed) {
+                    if (result.value) {
                         window.location.href = url_studies_list
                     }
                 })
@@ -150,14 +158,7 @@ $('#add_participants').on('click', function () {
         $('#check_all_employees_for_study').prop('checked', '')
         $('#modal_participants').modal('show')
     }else {
-        Swal.fire({
-          title: 'Данные отсутствуют',
-          text: "Компания должна быть выбрана",
-          icon: 'warning',
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'ОК'
-        })
+        toastr.error('Компания не выбрана')
 
     }
 })

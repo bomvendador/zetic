@@ -79,24 +79,26 @@ $('.menu_item').on('click', function () {
         case'menu_filters_list':
             window.location.href = url_filters_list;
             break;
-        case'menu_matrix_filters_list':
-            console.log('url_filters_matrix_list - ' + url_filters_matrix_list)
-            window.location.href = url_filters_matrix_list;
-            break;
+        // case'menu_matrix_filters_list':
+        //     window.location.href = url_filters_matrix_list;
+        //     break;
         case'menu_add_questionnaire_results_xls':
             window.location.href = url_migration_questionnaire_results_xls_home;
             break;
-        case'menu_individual_report_points_description_filters_list':
-            window.location.href = url_individual_report_points_description_filters_list;
-            break;
-        case'menu_integral_report_filters_list':
-            window.location.href = url_integral_report_filters_list;
-            break;
+        // case'menu_individual_report_points_description_filters_list':
+        //     window.location.href = url_individual_report_points_description_filters_list;
+        //     break;
+        // case'menu_integral_report_filters_list':
+        //     window.location.href = url_integral_report_filters_list;
+        //     break;
         case'menu_settings':
             window.location.href = url_settings_main;
             break;
         case'menu_projects_list':
             window.location.href = url_projects_list;
+            break;
+        case'menu_project_add':
+            window.location.href = url_add_new_project;
             break;
         default:
             break;

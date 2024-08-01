@@ -104,7 +104,10 @@ def save_edited_project(request):
 def projects_list(request):
     context = info_common(request)
     cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
-    companies_inst = Company.objects.all()
+    if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
+        companies_inst = Company.objects.filter(created_by=request.user)
+    else:
+        companies_inst = Company.objects.all()
     companies = []
     for company in companies_inst:
         projects = Project.objects.filter(company=company)
@@ -131,12 +134,15 @@ def projects_list(request):
 @login_required(redirect_field_name=None, login_url='/login/')
 def add_new_project(request):
     context = info_common(request)
-    # cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
-    companies = Company.objects.all()
+    cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
+    if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
+        companies = Company.objects.filter(created_by=request.user)
+
+    if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
+        companies = Company.objects.all()
     companies_for_projects = []
     for company in companies:
         studies = Study.objects.filter(company=company)
-        print(f'company - {company.name} studies = {len(studies)}')
         if studies.exists():
             companies_for_projects.append({
                 'id': company.id,

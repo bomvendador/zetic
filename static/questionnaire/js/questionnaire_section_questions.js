@@ -5,13 +5,13 @@ $(document).ready(function () {
 $('.question-answer-input').on('click', function () {
     let total_questions = $('.section-question').length
     let total_answers = $('.question-answer-input:checked').length
-    console.log(`вопросы - ${total_questions} ответы - ${total_answers}`)
+    // console.log(`вопросы - ${total_questions} ответы - ${total_answers}`)
     if (total_answers === total_questions) {
         $('#save_page_answers').prop('disabled', false)
     }
 })
 
-console.log(questions)
+// console.log(questions)
 
 let section_ended = false
 let save_page_answers_clicked = false
@@ -28,7 +28,7 @@ $('#save_page_answers').on('click', function () {
             'answer_id': answer_id,
         })
     })
-    console.log(answers)
+    // console.log(answers)
     $.ajax({
         headers: {"X-CSRFToken": csrf_token},
         url: url_save_answers,
@@ -51,7 +51,7 @@ $('#save_page_answers').on('click', function () {
             // if(){
             //
             // }
-            console.log(data)
+            // console.log(data)
             let response = data['response']
 
             console.log(`total_questionnaire_questions_qnt = ${response['total_questionnaire_questions_qnt']}`)

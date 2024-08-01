@@ -30,7 +30,7 @@ $('#select_company').on("select2:select", function (e) {
         },
         success: function (data) {
             hide_progressbar_loader()
-            console.log(data)
+            // console.log(data)
             if (data === 'no_projects') {
                 toastr.warning('Проекты для выбранной компании отсутствуют')
             } else {
@@ -153,12 +153,12 @@ $('#add_participants').on('click', function () {
                 $('#tbody_participants_selected tr').each(function () {
                     participants_already_added_ids.push($(this).attr('data-employee-id'))
                 })
-                console.log(participants_already_added_ids)
+                // console.log(participants_already_added_ids)
                 $('#modal_add_participant').DataTable().destroy()
                 $('#tbody_participants_to_choose').html('')
                 employees.forEach(function (employee) {
-                    console.log(employee)
-                    console.log($.inArray(employee['id'], participants_already_added_ids))
+                    // console.log(employee)
+                    // console.log($.inArray(employee['id'], participants_already_added_ids))
                     if ($.inArray(employee['id'].toString(), participants_already_added_ids) === -1) {
                         let html = `<tr id="employee_id_${employee['id']}">` +
                             '         <td>\n' +

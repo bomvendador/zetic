@@ -5,7 +5,7 @@ from pdf import views as pdf_views
 from panel import company_parameter as panel_company_parameter
 from panel import employee, study, sections, individual_report_file, company, mail_handler, categories, questions, \
     research_templates, companies_studies, filters, filters_matrix, migration_questionnaire_results_xls, \
-    filters_individual_report_points_description, filters_integral_report, settings, projects
+    filters_individual_report_points_description, filters_integral_report, settings, projects, filters_traffic_light_report
 # from panel import study
 # from panel import individual_report_file
 # from panel import company
@@ -177,6 +177,9 @@ urlpatterns = [
     path('save_new_project', projects.save_new_project, name='save_new_project'),
     path('save_edited_project', projects.save_edited_project, name='save_edited_project'),
     path('edit_project/<int:project_id>', projects.edit_project, name='edit_project'),
+
+    path('traffic_light_report_filters_list', filters_traffic_light_report.traffic_light_report_filters_list, name='traffic_light_report_filters_list'),
+    path('add_traffic_light_report_filter', filters_traffic_light_report.add_filter, name='add_traffic_light_report_filter'),
 
 ]
 

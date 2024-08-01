@@ -9,6 +9,7 @@ class ResearchTemplate(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
+    by_default = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.id}. {self.name}'
@@ -651,6 +652,39 @@ class IndividualReportPointsDescriptionFilterText(models.Model):
     class Meta:
         verbose_name_plural = 'Тексты описания фильтров описания баллов (личные отчеты)'
         verbose_name = 'Текст описания фильтра описания баллов (личные отчеты)'
+
+
+class TrafficLightReportFilter(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    points_from_red = models.IntegerField(null=False, default=0)
+    points_to_red = models.IntegerField(null=False, default=0)
+    points_from_yellow = models.IntegerField(null=False, default=0)
+    points_to_yellow = models.IntegerField(null=False, default=0)
+    points_from_green = models.IntegerField(null=False, default=0)
+    points_to_green = models.IntegerField(null=False, default=0)
+
+    def __str__(self):
+        return f'{self.name}'
+
+    class Meta:
+        verbose_name_plural = 'Фильтры Светофор (командные отчеты)'
+        verbose_name = 'Фильтр Светофор (командные отчеты)'
+
+
+class TrafficLightReportFilterCategory(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, default=None, blank=True, null=True)
+    filter = models.ForeignKey(IndividualReportPointsDescriptionFilter, on_delete=models.CASCADE, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.filter.name}'
+
+    class Meta:
+        verbose_name_plural = 'Категории (шкалы) фильтров Светофор (командные отчеты)'
+        verbose_name = 'Категория (шкалы) фильтра Светофор (командные отчеты)'
 
 
 class IntegralReportFilter(models.Model):
