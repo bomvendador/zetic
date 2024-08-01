@@ -937,7 +937,10 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
             print('---variance_from_average---')
             print(variance_from_average)
             print('----')
-            x = 10 - math.floor((sum(variance_from_average) / len(variance_from_average)) * 10) / 10
+            if len(variance_from_average) > 0:
+                x = 10 - math.floor((sum(variance_from_average) / len(variance_from_average)) * 10) / 10
+            else:
+                x = 0
             # x = 10 - math.floor((sum(variance_from_average) / 3) * 10) / 10
             if category_points_cnt > 0:
                 integral_report_data.append({

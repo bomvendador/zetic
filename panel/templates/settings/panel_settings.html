@@ -20,11 +20,35 @@
             <!-- PAGE-HEADER END -->
 
             <!-- ROW-1 OPEN -->
+{#            <div class="row mb-4">#}
+{#                <div class="col-lg-12">#}
+{#                    <div class="card mb-0">#}
+{#                        <div class="card-header">#}
+{#                            <h3 class="card-title">Опросники</h3>#}
+{#                        </div>#}
+{#                        <div class="card-body">#}
+{#                            <div class="form-group">#}
+{#                                <table class="table border text-nowrap text-md-nowrap table-bordered mb-0">#}
+{#                                    <thead>#}
+{#                                    <tr>#}
+{#                                        <th style="width: 25%">Настройка</th>#}
+{#                                        <th>Описание</th>#}
+{#                                    </tr>#}
+{#                                    </thead>#}
+{#                                    <tbody>#}
+{#                                    </tbody>#}
+{#                                </table>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#            </div>#}
             <div class="row mb-4">
                 <div class="col-lg-12">
                     <div class="card mb-0">
                         <div class="card-header">
-                            <h3 class="card-title">Опросники</h3>
+                            <h3 class="card-title">Личные отчеты</h3>
                         </div>
                         <div class="card-body">
                             <div class="form-group">
@@ -44,41 +68,11 @@
                                             Фильтры конвертации сырых баллов в т-баллы
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="{% url 'filters_matrix_list' %}">Фильтры матрицы</a>
-                                        </td>
-                                        <td>
-                                            Фильтры автоматического распределения респондентов по квдратам в командных отчетах
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-            </div>
-            <div class="row mb-4">
-                <div class="col-lg-12">
-                    <div class="card mb-0">
-                        <div class="card-header">
-                            <h3 class="card-title">Личные отчеты</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <table class="table border text-nowrap text-md-nowrap table-bordered mb-0">
-                                    <thead>
-                                    <tr>
-                                        <th style="width: 25%">Настройка</th>
-                                        <th>Описание</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
                                     <tr>
                                         <td>
-                                            <a href="{% url 'individual_report_points_description_filters_list' %}">Описания баллов</a>
+                                            <a href="{% url 'individual_report_points_description_filters_list' %}">Описания
+                                                баллов</a>
                                         </td>
                                         <td>
                                             Краткие выводы с привязкой к баллам
@@ -102,6 +96,7 @@
                             <div class="form-group">
                                 <table class="table border text-nowrap text-md-nowrap table-bordered mb-0">
                                     <thead>
+
                                     <tr>
                                         <th style="width: 25%">Настройка</th>
                                         <th>Описание</th>
@@ -110,10 +105,30 @@
                                     <tbody>
                                     <tr>
                                         <td>
-                                            <a href="{% url 'integral_report_filters_list' %}">Фильтры интегрального отчета</a>
+                                            <a href="{% url 'filters_matrix_list' %}">Фильтры матрицы</a>
+                                        </td>
+                                        <td>
+                                            Фильтры автоматического распределения респондентов по квадратам в командных
+                                            отчетах
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'integral_report_filters_list' %}">Фильтры интегрального
+                                                отчета</a>
                                         </td>
                                         <td>
                                             Фильтры с привязкой к шкалам
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'traffic_light_report_filters_list' %}">Фильтры отчета
+                                                "Светофор"</a>
+                                        </td>
+                                        <td>
+                                            Фильтры для отчета "Светофор"
                                         </td>
                                     </tr>
                                     </tbody>
