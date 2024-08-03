@@ -243,7 +243,7 @@ class Study(models.Model):
 
     def __str__(self):
         if self.company:
-            return f'{self.name} - {self.company.name}'
+            return f'{self.name} - {self.company.id}.{self.company.name}'
         else:
             return self.name
 
@@ -677,7 +677,7 @@ class TrafficLightReportFilterCategory(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, default=None, blank=True, null=True)
-    filter = models.ForeignKey(IndividualReportPointsDescriptionFilter, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    filter = models.ForeignKey(TrafficLightReportFilter, on_delete=models.CASCADE, default=None, blank=True, null=True)
 
     def __str__(self):
         return f'{self.filter.name}'
