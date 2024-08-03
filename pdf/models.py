@@ -127,7 +127,7 @@ class Company(models.Model):
     public_code = models.CharField(max_length=10, blank=False, null=False, default='')
 
     def __str__(self):
-        return self.name
+        return f'{self.id}. {self.name}'
 
     class Meta:
         verbose_name_plural = 'Компании'
