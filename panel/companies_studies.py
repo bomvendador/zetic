@@ -33,7 +33,10 @@ def companies_studies_list(request):
             created_by = study.created_by.first_name
             name = study.name
             company_name = company.name
-            research_template_name = study.research_template.name
+            if study.research_template:
+                research_template_name = study.research_template.name
+            else:
+                research_template_name = ''
             studies_arr.append({
                 'name': name,
                 'created_at': created_at,
