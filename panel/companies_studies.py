@@ -41,7 +41,6 @@ def companies_studies_list(request):
                 'company_name': company_name,
                 'research_template_name': research_template_name,
             })
-        studies_inst = Study.objects.filter(company=Company.objects.get(id=30))
     # if cur_user_role_name == 'Админ заказчика':
     #     company = Employee.objects.get(user=request.user).company
     #     companies = Company.objects.filter(id=company.id)
