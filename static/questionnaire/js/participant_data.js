@@ -1,5 +1,3 @@
-
-
 $('#conditions_text').on('click', function () {
     $('#modal_conditions_text').modal('show')
 })
@@ -16,28 +14,61 @@ $('#agree').on('click', function () {
     }
 })
 
+$('.select-field').on('click', function () {
+    $(this).removeClass('wrong-select-value')
+})
+
+$('#gender_group_block').on('click', function () {
+    $(this).removeClass('wrong-select-value')
+})
+
+$('#name').on('click', function () {
+    $(this).removeClass('wrong-select-value')
+})
 
 $('#next_btn').on('click', function (e) {
     e.preventDefault()
     let test_ok = true
+    $('.select-field').each(function () {
+        let field_val = $(this).val()
+        // console.log(field_val)
+        if (field_val === '-- Сделайте выбор --') {
+            $(this).addClass('wrong-select-value')
+            test_ok = false
+        }
+    })
+
+
     let name = $('#name').val()
     let year = $('#year option:selected').val()
     let gender_male = $('#gender-male').prop('checked')
-    let gender
-    if (gender_male) {
-        gender = 'Male'
-    } else {
-        gender = 'Female'
+    let gender_female = $('#gender-female').prop('checked')
+
+    if (name === '') {
+        test_ok = false
+    }
+
+    if (!gender_female && !gender_male) {
+        $('#gender_group_block').addClass('wrong-select-value')
+        test_ok = false
     }
     let role_id = $('#role option:selected').val().split('_')[2]
     let position_id = $('#position option:selected').val().split('_')[2]
     let industry_id = $('#industry option:selected').val().split('_')[2]
     if (name === '') {
-        toastr.error('Поле ИМЯ должно быть заполено')
+        $('#name').addClass('wrong-select-value')
         test_ok = false
     }
-
-    if (test_ok) {
+    if (!test_ok) {
+        toastr.error('Заполните все поля')
+    } else {
+        let gender
+        if (gender_male) {
+            gender = 'Male'
+        }
+        if (gender_female) {
+            gender = 'Female'
+        }
         let data = {
             'name': name,
             'year': year,
@@ -48,7 +79,6 @@ $('#next_btn').on('click', function (e) {
             'code': code
         }
         $('#next_btn').html('<span class="loader"></span>').attr('disabled', true).css('opacity', 0.5)
-        console.log(url_questionnaire_save_participant_data)
         $.ajax({
             headers: {"X-CSRFToken": csrf_token},
             url: url_questionnaire_save_participant_data,

@@ -121,15 +121,36 @@ def get_company_employees(request):
             else:
                 created_by = ''
                 created_by_email = ''
+            if employee.industry:
+                employee_industry = employee.industry.name_ru
+            else:
+                employee_industry = ''
+            if employee.role:
+                employee_role = employee.role.name_ru
+            else:
+                employee_role = ''
+            if employee.position:
+                employee_position = employee.position.name_ru
+            else:
+                employee_position = ''
+            if employee.sex:
+                employee_sex = employee.sex.name_ru
+            else:
+                employee_sex = ''
+            if employee.birth_year:
+                employee_birth_year = employee.birth_year
+            else:
+                employee_birth_year = ''
+
             employees_arr.append({
                 'name': name,
                 'id': employee.id,
                 'email': employee.email,
-                'industry': employee.industry.name_ru,
-                'role': employee.role.name_ru,
-                'position': employee.position.name_ru,
-                'birth_year': employee.birth_year,
-                'sex': employee.sex.name_ru,
+                'industry': employee_industry,
+                'role': employee_role,
+                'position': employee_position,
+                'birth_year': employee_birth_year,
+                'sex': employee_sex,
 
                 'created_by': created_by,
                 'active': employee.company_admin_active,
@@ -262,6 +283,8 @@ def save_new_employee_html(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
         employee_data = json_data['employee_data']
+        print('-----employee data------')
+        print(json_data)
         print(employee_data)
         email = employee_data['email']
         check_passed = True
@@ -281,11 +304,16 @@ def save_new_employee_html(request):
                 employee_inst.created_by = request.user
             employee_inst.name = employee_data['name']
             employee_inst.email = employee_data['email']
-            employee_inst.role = EmployeeRole.objects.get(id=employee_data['role_id'])
-            employee_inst.position = EmployeePosition.objects.get(id=employee_data['position_id'])
-            employee_inst.industry = Industry.objects.get(id=employee_data['industry_id'])
-            employee_inst.sex = EmployeeGender.objects.get(id=employee_data['gender_id'])
-            employee_inst.birth_year = employee_data['employee_birth_year']
+            if 'role_id' in employee_data:
+                employee_inst.role = EmployeeRole.objects.get(id=employee_data['role_id'])
+            if 'position_id' in employee_data:
+                employee_inst.position = EmployeePosition.objects.get(id=employee_data['position_id'])
+            if 'industry_id' in employee_data:
+                employee_inst.industry = Industry.objects.get(id=employee_data['industry_id'])
+            if 'gender_id' in employee_data:
+                employee_inst.sex = EmployeeGender.objects.get(id=employee_data['gender_id'])
+            if not employee_data['employee_birth_year'] == '':
+                employee_inst.birth_year = employee_data['employee_birth_year']
             employee_inst.save()
 
             # sync_add_employee.delay(employee_inst.id)

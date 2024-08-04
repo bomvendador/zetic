@@ -57,62 +57,79 @@ def get_categories_for_filter():
     return categories_arr
 
 
-# @login_required(redirect_field_name=None, login_url='/login/')
-# def save_new_integral_report_filter(request):
-#     if request.method == 'POST':
-#         json_data = json.loads(request.body.decode('utf-8'))
-#         print(json_data)
-#         categories = json_data['categories']
-#         name = json_data['name']
-#         filter_inst = IntegralReportFilter()
-#         filter_inst.created_by = request.user
-#         filter_inst.name = name
-#         filter_inst.save()
-#         for category in categories:
-#             filter_category = IntegralReportFilterCategory()
-#             filter_category.category = Category.objects.get(id=category['category_id'])
-#             filter_category.filter = filter_inst
-#             filter_category.created_by = request.user
-#             filter_category.save()
-#         return HttpResponse(200)
-#
-#
-# @login_required(redirect_field_name=None, login_url='/login/')
-# def save_edited_integral_report_filter(request):
-#     if request.method == 'POST':
-#         json_data = json.loads(request.body.decode('utf-8'))
-#         print(json_data)
-#         categories = json_data['categories']
-#         name = json_data['name']
-#         filter_id = json_data['filter_id']
-#         filter_inst = IntegralReportFilter.objects.get(id=filter_id)
-#         filter_inst.created_by = request.user
-#         filter_inst.name = name
-#         filter_inst.save()
-#         IntegralReportFilterCategory.objects.filter(filter=filter_inst).delete()
-#         for category in categories:
-#             filter_category = IntegralReportFilterCategory()
-#             filter_category.category = Category.objects.get(id=category['category_id'])
-#             filter_category.filter = filter_inst
-#             filter_category.created_by = request.user
-#             filter_category.save()
-#         return HttpResponse(200)
-#
-#
-# @login_required(redirect_field_name=None, login_url='/login/')
-# def edit_integral_report_filter(request, filter_id):
-#     context = info_common(request)
-#     filter_inst = IntegralReportFilter.objects.get(id=filter_id)
-#     filter_categories = IntegralReportFilterCategory.objects.filter(filter=filter_inst)
-#     context.update({
-#         'filter': filter_inst,
-#         'categories': get_categories_for_filter(),
-#         'filter_categories': filter_categories,
-#     })
-#
-#     return render(request, 'integral_report_filter/panel_edit_integral_report_filter.html', context)
-#
-#
+@login_required(redirect_field_name=None, login_url='/login/')
+def save_new_traffic_light_report_filter(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        print(json_data)
+        categories = json_data['categories']
+        name = json_data['name']
+        red = json_data['red']
+        yellow = json_data['yellow']
+        green = json_data['green']
+        filter_inst = TrafficLightReportFilter()
+        filter_inst.created_by = request.user
+        filter_inst.name = name
+        filter_inst.points_from_green = green['points_from']
+        filter_inst.points_to_green = green['points_to']
+        filter_inst.points_from_yellow = yellow['points_from']
+        filter_inst.points_to_yellow = yellow['points_to']
+        filter_inst.points_from_red = 0
+        filter_inst.points_to_red = red['points_to']
+        filter_inst.save()
+        for category in categories:
+            filter_category = TrafficLightReportFilterCategory()
+            filter_category.category = Category.objects.get(id=category['category_id'])
+            filter_category.filter = filter_inst
+            filter_category.created_by = request.user
+            filter_category.save()
+        return HttpResponse(200)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def save_edited_traffic_light_report_filter(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        categories = json_data['categories']
+        name = json_data['name']
+        red = json_data['red']
+        yellow = json_data['yellow']
+        green = json_data['green']
+        filter_id = json_data['filter_id']
+        filter_inst = TrafficLightReportFilter.objects.get(id=filter_id)
+        filter_inst.created_by = request.user
+        filter_inst.name = name
+        filter_inst.points_from_green = green['points_from']
+        filter_inst.points_to_green = green['points_to']
+        filter_inst.points_from_yellow = yellow['points_from']
+        filter_inst.points_to_yellow = yellow['points_to']
+        filter_inst.points_from_red = 0
+        filter_inst.points_to_red = red['points_to']
+        filter_inst.save()
+        TrafficLightReportFilterCategory.objects.filter(filter=filter_inst).delete()
+        for category in categories:
+            filter_category = TrafficLightReportFilterCategory()
+            filter_category.category = Category.objects.get(id=category['category_id'])
+            filter_category.filter = filter_inst
+            filter_category.created_by = request.user
+            filter_category.save()
+        return HttpResponse(200)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def edit_traffic_light_report_filter(request, filter_id):
+    context = info_common(request)
+    filter_inst = TrafficLightReportFilter.objects.get(id=filter_id)
+    filter_categories = TrafficLightReportFilterCategory.objects.filter(filter=filter_inst)
+    context.update({
+        'filter': filter_inst,
+        'categories': get_categories_for_filter(),
+        'filter_categories': filter_categories,
+    })
+
+    return render(request, 'traffic_light_report/panel_edit_traffic_light_report_filter.html', context)
+
+
 # @login_required(redirect_field_name=None, login_url='/login/')
 # def delete_integral_report_filter(request):
 #     json_data = json.loads(request.body.decode('utf-8'))

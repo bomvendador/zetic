@@ -103,11 +103,11 @@
                                         <hr style="border-color: blue; margin-top: 0.3rem">
                                         <div class="row">
                                             <div class="col-md-6 col-sm-12">
-                                                <label for="input_fio">Баллы ОТ</label>
+                                                <label for="points_from_green">Баллы ОТ</label>
                                                 <input type="number" min="0" max="10" class="form-control points_from" id="points_from_green" disabled>
                                             </div>
                                             <div class="col-md-6 col-sm-12">
-                                                <label for="input_fio">Баллы ДО</label>
+                                                <label for="points_to_green">Баллы ДО</label>
                                                 <input type="number" min="0" max="10" class="form-control points_to" id="points_to_green">
                                             </div>
                                         </div>
@@ -215,7 +215,8 @@
     <script>
 
         let url_get_company_employees_for_new_study = "{% url 'get_company_employees_for_new_study' %}"
-        let url_save_new_individual_report_points_description_filter = "{% url 'save_new_individual_report_points_description_filter' %}"
+        let url_save_new_traffic_light_report_filter = "{% url 'save_new_traffic_light_report_filter' %}";
+        let  url_traffic_light_report_filters_list = "{% url 'traffic_light_report_filters_list' %}"
         {#let url_get_available_squares = "{% url 'get_available_squares' %}"#}
         let categories = {{ categories|safe }};
         {#let url_get_company_employees = "{% url 'get_company_employees' %}"#}

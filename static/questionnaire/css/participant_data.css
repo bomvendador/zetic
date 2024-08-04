@@ -309,3 +309,7 @@ select option {
         transform: rotate(360deg);
     }
 }
+
+.wrong-select-value{
+    border: red 1px solid;
+}

@@ -222,6 +222,7 @@ def mass_send_invitation_email(request):
         #     'response': result
         # }
         #
+        print(result)
         return JsonResponse(result)
 
         # return HttpResponse(status=200)

@@ -31,15 +31,15 @@ $('#tbody_filter_categories').on('click', '.delete-category-row', function () {
     $(this).closest('tr').remove()
 })
 
-$('#points_to_red').on('input', function() {
+$('#points_to_red').on('input', function () {
     let value = $(this).val()
-    if(value !== ''){
+    if (value !== '') {
         $('#points_from_yellow').val(Number(value) + 1)
     }
 });
-$('#points_to_yellow').on('input', function() {
+$('#points_to_yellow').on('input', function () {
     let value = $(this).val()
-    if(value !== ''){
+    if (value !== '') {
         $('#points_from_green').val(Number(value) + 1)
     }
 });
@@ -53,11 +53,8 @@ $('#save_traffic_light_report_filter').on('click', function () {
     let categories_repeat_ok = true
     let name_ok = true
     let points_val_ok = true
-    let descriptions_ok = true
-    let points_comparison_ok = true
     let categories_val_arr = []
     let categories_arr = []
-    let description_text_arr = []
 
     let filter_name = $('#input_filter_name').val()
     if (filter_name === '') {
@@ -65,68 +62,40 @@ $('#save_traffic_light_report_filter').on('click', function () {
         name_ok = false
     }
 
-    $('#description_card_body .description-row').each(function (){
-
-        let description_tag = $(this).find('textarea')
-        let description_val = description_tag.val()
-        if(description_val === ''){
-            descriptions_ok = false
-            description_tag.addClass('is-invalid state-invalid')
-        }else {
-            description_text_arr.push(description_val)
-        }
-        console.log(description_val)
-    })
-
-    if(!descriptions_ok){
-        toastr.error('Текст описания отсутствует')
-    }
-
     $('#tbody_filter_categories tr').each(function (row) {
-
         let category_val = $(this).find('.select_category option:selected').val()
         if (category_val === '') {
             $(this).remove()
         } else {
             if (jQuery.inArray(category_val, categories_val_arr) === -1) {
                 // the element is not in the array
-                let points_from = $(this).find('.points_from').eq(0)
-                let points_to = $(this).find('.points_to').eq(0)
-                categories_val_arr.push(category_val)
-                if (points_from.val() === '') {
-                    points_val_ok = false
-                    points_from.css('background-color', 'red').css('color', 'white')
-                }
-                if (points_to.val() === '') {
-                    points_val_ok = false
-                    points_to.css('background-color', 'red').css('color', 'white')
-                }
-
-                if (points_val_ok) {
-                    if (Number(points_from.val()) >= Number(points_to.val())) {
-                        points_comparison_ok = false
-                        points_from.css('background-color', 'red').css('color', 'white')
-                        points_to.css('background-color', 'red').css('color', 'white')
-                    }
-                }
-                if (points_comparison_ok && points_val_ok) {
-                    categories_arr.push({
-                        'category_id': category_val,
-                        'points_from': points_from.val(),
-                        'points_to': points_to.val(),
-                    })
-                } else {
-                    console.log('216')
-                    categories_ok = false
-                }
+                categories_arr.push({
+                    'category_id': category_val,
+                })
             } else {
                 $(this).find('.select_category').css('background-color', 'red').css('color', 'white')
                 categories_repeat_ok = false
                 categories_ok = false
-                console.log('223')
             }
         }
     })
+
+    $('.points_to').each(function () {
+        let points_from = $(this).closest('.row').find('.points_from').val()
+        let points_to = $(this).val()
+        console.log(`points_from - ${points_from} points_to - ${points_to} `)
+        if(Number(points_to) <= Number(points_from) || points_to === ''){
+            $(this).addClass('is-invalid')
+            points_val_ok = false
+        }else {
+            console.log('ok')
+        }
+    })
+
+    $('.points_to').on('click', function () {
+        $(this).removeClass('is-invalid')
+    })
+
     if ($('#tbody_filter_categories tr').length === 0) {
         categories_added = false
         toastr.error('Шкалы не добавлены')
@@ -138,24 +107,34 @@ $('#save_traffic_light_report_filter').on('click', function () {
     }
 
     if (!points_val_ok) {
-        toastr.error('Есть пустые баллы')
-    }
-    if (!points_comparison_ok) {
-        toastr.error('Баллы ОТ должны быть меньше Баллов ДО')
+        toastr.error('Проверьте Баллы ДО')
     }
 
-    if (categories_ok && name_ok && categories_added && descriptions_ok) {
+    if (categories_ok && name_ok && categories_added && points_val_ok) {
         // console.log('save')
         console.log(categories_arr)
-        btn_spinner('#save_new_individual_report_description_filter')
+        let green = {
+            'points_from': $('#points_from_green').val(),
+            'points_to': $('#points_to_green').val(),
+        }
+        let yellow = {
+            'points_from': $('#points_from_yellow').val(),
+            'points_to': $('#points_to_yellow').val(),
+        }
+        let red = {
+            'points_to': $('#points_to_red').val(),
+        }
+        btn_spinner('#save_traffic_light_report_filter')
         $.ajax({
             headers: {"X-CSRFToken": token},
-            url: url_save_new_individual_report_points_description_filter,
+            url: url_save_new_traffic_light_report_filter,
             type: 'POST',
             data: JSON.stringify({
                 'categories': categories_arr,
                 'name': filter_name,
-                'description_text': description_text_arr
+                'red': red,
+                'yellow': yellow,
+                'green': green,
             }),
             processData: false,
             contentType: false,
@@ -163,8 +142,7 @@ $('#save_traffic_light_report_filter').on('click', function () {
                 toastr.error('Ошибка', data)
             },
             success: function (data) {
-                console.log(data)
-                btn_text('#save_new_individual_report_description_filter', 'Сохранить фильтр')
+                btn_text('#save_traffic_light_report_filter', 'Сохранить фильтр')
 
                 let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
                     '<br>' +
@@ -180,7 +158,7 @@ $('#save_traffic_light_report_filter').on('click', function () {
                     confirmButtonText: 'ОК'
                 }).then((result) => {
                     if (result.value) {
-                        window.location.href = url_individual_report_points_description_filters_list
+                        window.location.href = url_traffic_light_report_filters_list
                     }
                 })
 
