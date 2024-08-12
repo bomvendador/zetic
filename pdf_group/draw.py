@@ -924,8 +924,11 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
             # print(f'categories_t_points')
             print(f'++++{integral_report_filter.name}++++')
             print(categories_t_points)
+            average_categories_t_points = []
             for category_points in categories_t_points:
                 average_category_t_points = math.floor((sum(category_points) / len(category_points)) * 10) / 10
+                average_categories_t_points.append(average_category_t_points)
+
                 points_variance_from_average_in_category = []
                 for point in category_points:
                     points_variance_from_average_in_category.append(abs(average_category_t_points - point))
@@ -938,10 +941,15 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
             # print('---variance_from_average---')
             # print(variance_from_average)
             # print('----')
-            if len(variance_from_average) > 0:
-                x = 10 - math.floor((sum(variance_from_average) / len(variance_from_average)) * 10) / 10
+
+            if len(average_categories_t_points) > 0:
+                x = 10 - math.floor((sum(average_categories_t_points) / len(average_categories_t_points)) * 10) / 10
             else:
                 x = 0
+            # if len(variance_from_average) > 0:
+            #     x = 10 - math.floor((sum(variance_from_average) / len(variance_from_average)) * 10) / 10
+            # else:
+            #     x = 0
             # x = 10 - math.floor((sum(variance_from_average) / 3) * 10) / 10
             if category_points_cnt > 0:
                 integral_report_data.append({
