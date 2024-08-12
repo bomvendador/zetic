@@ -249,6 +249,10 @@
             $('#input-modal-report-comments').modal('show')
         })
 
+        $('#project_participants_table').on('click', '.edit_group_report', function () {
+            show_progressbar_loader()
+        })
+
 
         $('#modal_save_comments_btn').on('click', function () {
             btn_spinner('#modal_save_comments_btn')
