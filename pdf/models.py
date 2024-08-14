@@ -664,7 +664,7 @@ class TrafficLightReportFilter(models.Model):
     points_to_yellow = models.IntegerField(null=False, default=0)
     points_from_green = models.IntegerField(null=False, default=0)
     points_to_green = models.IntegerField(null=False, default=0)
-    direction = models.CharField(max_length=30, blank=True, null=True, default="redFromLeft")
+    direction = models.CharField(max_length=30, blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}'
