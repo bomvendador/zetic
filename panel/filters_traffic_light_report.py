@@ -67,6 +67,7 @@ def save_new_traffic_light_report_filter(request):
         red = json_data['red']
         yellow = json_data['yellow']
         green = json_data['green']
+        green_from_left = json_data['green_from_left']
         filter_inst = TrafficLightReportFilter()
         filter_inst.created_by = request.user
         filter_inst.name = name
@@ -74,8 +75,12 @@ def save_new_traffic_light_report_filter(request):
         filter_inst.points_to_green = green['points_to']
         filter_inst.points_from_yellow = yellow['points_from']
         filter_inst.points_to_yellow = yellow['points_to']
-        filter_inst.points_from_red = 0
+        filter_inst.points_from_red = red['points_from']
         filter_inst.points_to_red = red['points_to']
+        if green_from_left:
+            filter_inst.direction = 'green_from_left'
+        else:
+            filter_inst.direction = 'red_from_left'
         filter_inst.save()
         for category in categories:
             filter_category = TrafficLightReportFilterCategory()

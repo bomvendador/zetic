@@ -51,34 +51,59 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Настройки баллов</h3>
+                        <div class="card-header row justify-content-md-center">
+                            <div class="">
+                                <table style="width: 100%">
+                                    <thead></thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <h3 class="card-title">Настройки баллов</h3>
+                                        </td>
+                                        <td style="text-align: right">
+                                            <div class="form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch"
+                                                       id="green_from_left">
+                                                <label class="form-check-label" for="green_from_left">Слева зеленый</label>
+                                            </div>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            {#                                        <div class="col col-lg-6 col-sm-6">#}
+                            {#                                        </div>#}
+                            {#                                        <div class="col col-lg-6 col-sm-6 text-end">#}
+                            {#                                        </div>#}
                         </div>
-                        <div class="card-body">
+
+                        <div class="card-body" id="points_block">
 
                             <div class="row">
-                                <div class="col-md-4 col-sm-12" >
-                                    <div class="form-group mt-2">
-                                        <div style="background-color: #ff000063; padding: 0.5rem">
+                                <div class="col-md-4 col-sm-12">
+                                    <div class="form-group mt-2" id="points_1">
+                                        <div style="background-color: #ff000063; padding: 0.5rem" id="points_label_1">
                                             Слабое проявление (красный)
                                         </div>
-{#                                        <label for="input_fio">Слабое проявление (красный)</label>#}
+                                        {#                                        <label for="input_fio">Слабое проявление (красный)</label>#}
                                         <hr style="border-color: blue; margin-top: 0.3rem">
                                         <div class="row">
                                             <div class="col-md-6 col-sm-12">
                                                 <label for="input_fio">Баллы ОТ</label>
-                                                <input type="number" min="0" max="10" class="form-control points_from" value="0" disabled>
+                                                <input type="number" min="0" max="10" class="form-control points_from"
+                                                       id="points_from_red" value="0" disabled>
                                             </div>
                                             <div class="col-md-6 col-sm-12">
                                                 <label for="input_fio">Баллы ДО</label>
-                                                <input type="number" min="0" max="10" class="form-control points_to" id="points_to_red">
+                                                <input type="number" min="0" max="10" class="form-control points_to"
+                                                       id="points_to_red">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-12">
-                                    <div class="form-group mt-2">
-                                        <div style="background-color: #ffff004f; padding: 0.5rem">
+                                    <div class="form-group mt-2" id="points_2">
+                                        <div style="background-color: #ffff004f; padding: 0.5rem" id="points_label_2">
                                             Проявление с ограничениями (желтый)
                                         </div>
 
@@ -86,29 +111,33 @@
                                         <div class="row">
                                             <div class="col-md-6 col-sm-12">
                                                 <label for="input_fio">Баллы ОТ</label>
-                                                <input type="number" min="0" max="10" class="form-control points_from" id="points_from_yellow" disabled>
+                                                <input type="number" min="0" max="10" class="form-control points_from"
+                                                       id="points_from_yellow" disabled>
                                             </div>
                                             <div class="col-md-6 col-sm-12">
                                                 <label for="input_fio">Баллы ДО</label>
-                                                <input type="number" min="0" max="10" class="form-control points_to" id="points_to_yellow">
+                                                <input type="number" min="0" max="10" class="form-control points_to"
+                                                       id="points_to_yellow">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-12">
-                                    <div class="form-group mt-2">
-                                        <div style="background-color: #00800082; padding: 0.5rem">
+                                    <div class="form-group mt-2"  id="points_3">
+                                        <div style="background-color: #00800082; padding: 0.5rem" id="points_label_3">
                                             Яркое проявление (зеленый)
                                         </div>
                                         <hr style="border-color: blue; margin-top: 0.3rem">
                                         <div class="row">
                                             <div class="col-md-6 col-sm-12">
                                                 <label for="points_from_green">Баллы ОТ</label>
-                                                <input type="number" min="0" max="10" class="form-control points_from" id="points_from_green" disabled>
+                                                <input type="number" min="0" max="10" class="form-control points_from"
+                                                       id="points_from_green" disabled>
                                             </div>
                                             <div class="col-md-6 col-sm-12">
                                                 <label for="points_to_green">Баллы ДО</label>
-                                                <input type="number" min="0" max="10" class="form-control points_to" id="points_to_green">
+                                                <input type="number" min="0" max="10" class="form-control points_to"
+                                                       id="points_to_green">
                                             </div>
                                         </div>
                                     </div>
@@ -134,7 +163,7 @@
                                     <tbody>
                                     <tr>
                                         <td>
-                                            <h3 class="card-title">Шкалы (категории) + баллы</h3>
+                                            <h3 class="card-title">Шкалы (категории)</h3>
                                         </td>
                                         <td>
                                             <button class="btn btn-primary my-1" type="button" id="add_filter_category"
@@ -216,7 +245,7 @@
 
         let url_get_company_employees_for_new_study = "{% url 'get_company_employees_for_new_study' %}"
         let url_save_new_traffic_light_report_filter = "{% url 'save_new_traffic_light_report_filter' %}";
-        let  url_traffic_light_report_filters_list = "{% url 'traffic_light_report_filters_list' %}"
+        let url_traffic_light_report_filters_list = "{% url 'traffic_light_report_filters_list' %}"
         {#let url_get_available_squares = "{% url 'get_available_squares' %}"#}
         let categories = {{ categories|safe }};
         {#let url_get_company_employees = "{% url 'get_company_employees' %}"#}

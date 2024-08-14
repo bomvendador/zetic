@@ -1,3 +1,5 @@
+// console.log(`${window.location.protocol}\\\${window.location.hostname}`)
+
 $('.menu_item').each(function () {
     $(this).removeClass('active')
 })
@@ -76,6 +78,25 @@ $('.menu_item').on('click', function () {
             break;
         case'menu_filters_list':
             window.location.href = url_filters_list;
+            break;
+        case'menu_matrix_filters_list':
+            console.log('url_filters_matrix_list - ' + url_filters_matrix_list)
+            window.location.href = url_filters_matrix_list;
+            break;
+        case'menu_add_questionnaire_results_xls':
+            window.location.href = url_migration_questionnaire_results_xls_home;
+            break;
+        case'menu_individual_report_points_description_filters_list':
+            window.location.href = url_individual_report_points_description_filters_list;
+            break;
+        case'menu_integral_report_filters_list':
+            window.location.href = url_integral_report_filters_list;
+            break;
+        case'menu_settings':
+            window.location.href = url_settings_main;
+            break;
+        case'menu_projects_list':
+            window.location.href = url_projects_list;
             break;
         default:
             break;
@@ -195,4 +216,9 @@ function set_checkbox_unchecked(el) {
     $(el).removeAttr('checked')
     $(el).prop('checked', false)
     $(el).val(0)
+}
+
+function isYear(year) {
+    let regex = /^\d\d\d\d$/g
+    return regex.test(year);
 }

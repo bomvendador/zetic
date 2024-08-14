@@ -1,8 +1,8 @@
 import math
 
 from pdf.draw import insert_page_number
-from pdf_group.draw import draw_table
-from pdf_group.integral_report.draw import draw_integral_report_squares
+from pdf_group.draw import draw_table, draw_integral_report_squares
+from pdf_group.traffic_light_report.draw import draw_integral_report_squares
 from pdf_group.page_funcs import proceed_scale, block_name, data_by_points, get_additional_delta_y, block_name_
 from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B, MIN_SCALE_DELTA_Y, MAX_Y, START_Y
 from pdf.models import Report, ReportData, Questionnaire, QuestionnaireQuestionAnswers, Participant, Category, ReportDataByCategories
@@ -18,7 +18,7 @@ def page(pdf, lang, square_results):
     pdf.set_font("RalewayBold", "", 10)
 
     # if lang == 'ru':
-    pdf.cell(0, 0, 'Интегральные показатели')
+    pdf.cell(0, 0, 'Отчет "Светофор')
     # else:
     #     pdf.cell(0, 0, 'Section K')
     pdf.set_draw_color(0, 0, 0)

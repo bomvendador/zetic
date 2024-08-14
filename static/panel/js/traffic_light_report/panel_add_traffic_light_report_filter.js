@@ -1,5 +1,31 @@
 expand_menu_item('#menu_individual_report_points_description_filters_list')
 
+$('#green_from_left').on('click', function () {
+    console.log($(this).prop('checked'))
+    $('.points_from').val('')
+    $('.points_to').val('')
+    $('.points_from').eq(0).val(0)
+
+    if($(this).prop('checked')){
+        $('#points_label_1').text('Яркое проявление (зеленый)').css('background-color', '#00800082')
+        $('#points_label_3').text('Слабое проявление (красный)').css('background-color', '#ff000063')
+        $('#points_1 input').eq(0).attr('id', 'points_from_green')
+        $('#points_1 input').eq(1).attr('id', 'points_to_green')
+        $('#points_3 input').eq(0).attr('id', 'points_from_red')
+        $('#points_3 input').eq(1).attr('id', 'points_to_red')
+
+        // console.log($('#points_label_1 input').eq(0).attr('id'))
+    }else {
+        $('#points_label_1').text('Слабое проявление (красный)').css('background-color', '#ff000063')
+        $('#points_label_3').text('Яркое проявление (зеленый)').css('background-color', '#00800082')
+        $('#points_1 .points_from').attr('id', 'points_from_red')
+        $('#points_1 .points_to').attr('id', 'points_to_red')
+        $('#points_3 .points_from').attr('id', 'points_from_green')
+        $('#points_3 .points_to').attr('id', 'points_to_green')
+
+    }
+})
+
 $('#add_filter_category').on('click', function () {
     console.log('ssss')
     $('#tbody_filter_categories').append('<tr> \
@@ -32,15 +58,34 @@ $('#tbody_filter_categories').on('click', '.delete-category-row', function () {
 })
 
 $('#points_to_red').on('input', function () {
-    let value = $(this).val()
-    if (value !== '') {
-        $('#points_from_yellow').val(Number(value) + 1)
+    if(!$('#green_from_left').prop('checked')){
+        let value = $(this).val()
+        if (value !== '') {
+            $('#points_from_yellow').val(Number(value) + 1)
+        }
+    }
+});
+$('#points_block').on('input', '#points_to_green', function () {
+    console.log($('#green_from_left').prop('checked'))
+    if($('#green_from_left').prop('checked')){
+        let value = $(this).val()
+        if (value !== '') {
+            $('#points_from_yellow').val(Number(value) + 1)
+        }
     }
 });
 $('#points_to_yellow').on('input', function () {
-    let value = $(this).val()
-    if (value !== '') {
-        $('#points_from_green').val(Number(value) + 1)
+    if(!$('#green_from_left').prop('checked')){
+        let value = $(this).val()
+        if (value !== '') {
+            $('#points_from_green').val(Number(value) + 1)
+        }
+    }else {
+        let value = $(this).val()
+        if (value !== '') {
+            $('#points_from_red').val(Number(value) + 1)
+        }
+
     }
 });
 // $('#description_card_body').on('click', 'textarea', function () {
@@ -122,6 +167,7 @@ $('#save_traffic_light_report_filter').on('click', function () {
             'points_to': $('#points_to_yellow').val(),
         }
         let red = {
+            'points_from': $('#points_from_red').val(),
             'points_to': $('#points_to_red').val(),
         }
         btn_spinner('#save_traffic_light_report_filter')
@@ -135,6 +181,7 @@ $('#save_traffic_light_report_filter').on('click', function () {
                 'red': red,
                 'yellow': yellow,
                 'green': green,
+                'green_from_left': $('#green_from_left').prop('checked')
             }),
             processData: false,
             contentType: false,

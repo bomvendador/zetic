@@ -32,15 +32,34 @@ $('#tbody_filter_categories').on('click', '.delete-category-row', function () {
 })
 
 $('#points_to_red').on('input', function () {
-    let value = $(this).val()
-    if (value !== '') {
-        $('#points_from_yellow').val(Number(value) + 1)
+    if(!$('#green_from_left').prop('checked')){
+        let value = $(this).val()
+        if (value !== '') {
+            $('#points_from_yellow').val(Number(value) + 1)
+        }
+    }
+});
+$('#points_block').on('input', '#points_to_green', function () {
+    console.log($('#green_from_left').prop('checked'))
+    if($('#green_from_left').prop('checked')){
+        let value = $(this).val()
+        if (value !== '') {
+            $('#points_from_yellow').val(Number(value) + 1)
+        }
     }
 });
 $('#points_to_yellow').on('input', function () {
-    let value = $(this).val()
-    if (value !== '') {
-        $('#points_from_green').val(Number(value) + 1)
+    if(!$('#green_from_left').prop('checked')){
+        let value = $(this).val()
+        if (value !== '') {
+            $('#points_from_green').val(Number(value) + 1)
+        }
+    }else {
+        let value = $(this).val()
+        if (value !== '') {
+            $('#points_from_red').val(Number(value) + 1)
+        }
+
     }
 });
 // $('#description_card_body').on('click', 'textarea', function () {

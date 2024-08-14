@@ -573,10 +573,12 @@ $('#save_employee').on('click', function () {
                         })
 
                     } else {
-                        output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                            '<div>Сотрудник добавлен в базу данных' + '</div>' +
+                        let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
                             '<br>' +
+                            '<hr class="solid mt-0" style="background-color: black;">' +
+                            '<h4 style="text-align: center">Cотрудник добавлен в базу данных</h4>' +
                             '<hr class="solid mt-0" style="background-color: black;">'
+
                         Swal.fire({
                             html: output_html,
                             icon: 'success',
@@ -591,7 +593,7 @@ $('#save_employee').on('click', function () {
 
                     }
 
-                    btn_text($('#save_employee'), 'Загрузить')
+                    btn_text($('#save_employee'), 'Сохранить')
                 }
             });
 
