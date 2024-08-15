@@ -478,7 +478,7 @@ class ReportDataByCategories(models.Model):
 
 class ReportGroup(models.Model):
     added = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    file = models.FileField(upload_to='media/reportsPDF/', default=None)
+    file = models.FileField(upload_to='media/reportsPDF/', default=None, max_length=254)
     lang = models.CharField(max_length=2, blank=True, null=True, default='ru')
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Проект групповой отчет')
     comments = models.TextField(default=None, blank=True, null=True, verbose_name='Комментарии групповой отчет')
