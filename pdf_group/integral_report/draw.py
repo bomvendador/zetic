@@ -370,7 +370,10 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
                 for matrix_item in report_data:
                     cnt = cnt + 1
                     square_start_x = matrix_square['start_x']
-                    square_start_y = matrix_square['end_y']
+                    if matrix_square['end_y'] > 10:
+                        square_start_y = 10
+                    else:
+                        square_start_y = matrix_square['end_y']
                     item_x = 0
                     name = matrix_item['name']
                     print(name)
