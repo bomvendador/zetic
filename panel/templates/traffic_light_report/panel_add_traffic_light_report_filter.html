@@ -39,6 +39,21 @@
                                         <input type="text" class="form-control" id="input_filter_name" value="">
                                     </div>
                                 </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="input_tel">Позиция в отчете</label>
+                                        <select name="user_role" class="form-control form-select" id="position">
+                                            {% for position in positions %}
+                                                <option value="{{ position }}"
+                                                        {% if position == new_position %}
+                                                        selected
+                                                        {% endif %}
+                                                >{{ position }}</option>
+                                            {% endfor %}
+                                        </select>
+
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
@@ -64,7 +79,8 @@
                                             <div class="form-switch">
                                                 <input class="form-check-input" type="checkbox" role="switch"
                                                        id="green_from_left">
-                                                <label class="form-check-label" for="green_from_left">Слева зеленый</label>
+                                                <label class="form-check-label" for="green_from_left">Слева
+                                                    зеленый</label>
                                             </div>
                                     </tr>
                                     </tbody>
@@ -89,7 +105,7 @@
                                         <hr style="border-color: blue; margin-top: 0.3rem">
                                         <div class="row">
                                             <div class="col-md-6 col-sm-12">
-                                                <label for="input_fio">Баллы ОТ</label>
+                                                <label for="points_from_red">Баллы ОТ</label>
                                                 <input type="number" min="0" max="10" class="form-control points_from"
                                                        id="points_from_red" value="0" disabled>
                                             </div>
@@ -123,7 +139,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-12">
-                                    <div class="form-group mt-2"  id="points_3">
+                                    <div class="form-group mt-2" id="points_3">
                                         <div style="background-color: #00800082; padding: 0.5rem" id="points_label_3">
                                             Яркое проявление (зеленый)
                                         </div>

@@ -1,5 +1,32 @@
 expand_menu_item('#menu_settings')
 
+$('#green_from_left').on('click', function () {
+    console.log($(this).prop('checked'))
+    $('.points_from').val('')
+    $('.points_to').val('')
+    $('.points_from').eq(0).val(0)
+
+    if ($(this).prop('checked')) {
+        $('#points_label_1').text('Яркое проявление (зеленый)').css('background-color', '#00800082')
+        $('#points_label_3').text('Слабое проявление (красный)').css('background-color', '#ff000063')
+        $('#points_1 input').eq(0).attr('id', 'points_from_green')
+        $('#points_1 input').eq(1).attr('id', 'points_to_green')
+        $('#points_3 input').eq(0).attr('id', 'points_from_red')
+        $('#points_3 input').eq(1).attr('id', 'points_to_red')
+
+        // console.log($('#points_label_1 input').eq(0).attr('id'))
+    } else {
+        $('#points_label_1').text('Слабое проявление (красный)').css('background-color', '#ff000063')
+        $('#points_label_3').text('Яркое проявление (зеленый)').css('background-color', '#00800082')
+        $('#points_1 .points_from').attr('id', 'points_from_red')
+        $('#points_1 .points_to').attr('id', 'points_to_red')
+        $('#points_3 .points_from').attr('id', 'points_from_green')
+        $('#points_3 .points_to').attr('id', 'points_to_green')
+
+    }
+})
+
+
 $('#add_filter_category').on('click', function () {
     console.log('ssss')
     $('#tbody_filter_categories').append('<tr> \
@@ -31,8 +58,8 @@ $('#tbody_filter_categories').on('click', '.delete-category-row', function () {
     $(this).closest('tr').remove()
 })
 
-$('#points_to_red').on('input', function () {
-    if(!$('#green_from_left').prop('checked')){
+$('#points_block').on('input', '#points_to_red', function () {
+    if (!$('#green_from_left').prop('checked')) {
         let value = $(this).val()
         if (value !== '') {
             $('#points_from_yellow').val(Number(value) + 1)
@@ -41,7 +68,7 @@ $('#points_to_red').on('input', function () {
 });
 $('#points_block').on('input', '#points_to_green', function () {
     console.log($('#green_from_left').prop('checked'))
-    if($('#green_from_left').prop('checked')){
+    if ($('#green_from_left').prop('checked')) {
         let value = $(this).val()
         if (value !== '') {
             $('#points_from_yellow').val(Number(value) + 1)
@@ -49,12 +76,12 @@ $('#points_block').on('input', '#points_to_green', function () {
     }
 });
 $('#points_to_yellow').on('input', function () {
-    if(!$('#green_from_left').prop('checked')){
+    if (!$('#green_from_left').prop('checked')) {
         let value = $(this).val()
         if (value !== '') {
             $('#points_from_green').val(Number(value) + 1)
         }
-    }else {
+    } else {
         let value = $(this).val()
         if (value !== '') {
             $('#points_from_red').val(Number(value) + 1)
@@ -103,10 +130,10 @@ $('#save_edited_traffic_light_report_filter').on('click', function () {
         let points_from = $(this).closest('.row').find('.points_from').val()
         let points_to = $(this).val()
         console.log(`points_from - ${points_from} points_to - ${points_to} `)
-        if(Number(points_to) <= Number(points_from) || points_to === ''){
+        if (Number(points_to) <= Number(points_from) || points_to === '') {
             $(this).addClass('is-invalid')
             points_val_ok = false
-        }else {
+        } else {
             console.log('ok')
         }
     })
@@ -131,7 +158,6 @@ $('#save_edited_traffic_light_report_filter').on('click', function () {
 
     if (categories_ok && name_ok && categories_added && points_val_ok) {
         // console.log('save')
-        console.log(categories_arr)
         let green = {
             'points_from': $('#points_from_green').val(),
             'points_to': $('#points_to_green').val(),
@@ -141,9 +167,12 @@ $('#save_edited_traffic_light_report_filter').on('click', function () {
             'points_to': $('#points_to_yellow').val(),
         }
         let red = {
+            'points_from': $('#points_from_red').val(),
             'points_to': $('#points_to_red').val(),
         }
         btn_spinner('#save_edited_traffic_light_report_filter')
+        let filter_position = $('#position').val()
+
         $.ajax({
             headers: {"X-CSRFToken": token},
             url: url_save_edited_traffic_light_report_filter,
@@ -155,6 +184,8 @@ $('#save_edited_traffic_light_report_filter').on('click', function () {
                 'yellow': yellow,
                 'green': green,
                 'filter_id': filter_id,
+                'position': filter_position,
+                'green_from_left': $('#green_from_left').prop('checked')
             }),
             processData: false,
             contentType: false,
@@ -167,7 +198,7 @@ $('#save_edited_traffic_light_report_filter').on('click', function () {
                 let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
                     '<br>' +
                     '<hr class="solid mt-0" style="background-color: black;">' +
-                    '<h4 style="text-align: center">Фильтр добавлен</h4>' +
+                    '<h4 style="text-align: center">Фильтр изменён</h4>' +
                     '<hr class="solid mt-0" style="background-color: black;">'
 
                 Swal.fire({

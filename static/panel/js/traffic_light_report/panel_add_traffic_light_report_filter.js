@@ -170,6 +170,7 @@ $('#save_traffic_light_report_filter').on('click', function () {
             'points_from': $('#points_from_red').val(),
             'points_to': $('#points_to_red').val(),
         }
+        let filter_position = $('#position').val()
         btn_spinner('#save_traffic_light_report_filter')
         $.ajax({
             headers: {"X-CSRFToken": token},
@@ -181,6 +182,7 @@ $('#save_traffic_light_report_filter').on('click', function () {
                 'red': red,
                 'yellow': yellow,
                 'green': green,
+                'position': filter_position,
                 'green_from_left': $('#green_from_left').prop('checked')
             }),
             processData: false,

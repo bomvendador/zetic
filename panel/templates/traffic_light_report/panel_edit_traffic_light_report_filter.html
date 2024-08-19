@@ -36,11 +36,27 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-12">
                                     <div class="form-group">
-                                        <label for="input_fio">Название</label>
+                                        <label for="input_filter_name">Название</label>
                                         <input type="text" class="form-control" id="input_filter_name"
                                                value="{{ filter.name }}">
                                     </div>
                                 </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="input_tel">Позиция в отчете</label>
+                                        <select name="position" class="form-control form-select" id="position">
+                                            {% for position in positions %}
+                                                <option value="{{ position }}"
+                                                        {% if position == filter.position %}
+                                                        selected
+                                                        {% endif %}
+                                                >{{ position }}</option>
+                                            {% endfor %}
+                                        </select>
+
+                                    </div>
+                                </div>
+
                             </div>
 
                         </div>
@@ -65,8 +81,13 @@
                                         <td style="text-align: right">
                                             <div class="form-switch">
                                                 <input class="form-check-input" type="checkbox" role="switch"
-                                                       id="green_from_left">
-                                                <label class="form-check-label" for="green_from_left">Слева зеленый</label>
+                                                       id="green_from_left"
+                                                        {% if filter.direction == 'green_from_left' %}
+                                                       checked
+                                                        {% endif %}
+                                                >
+                                                <label class="form-check-label" for="green_from_left">Слева
+                                                    зеленый</label>
                                             </div>
                                     </tr>
                                     </tbody>
@@ -78,46 +99,74 @@
                             {#                                        <div class="col col-lg-6 col-sm-6 text-end">#}
                             {#                                        </div>#}
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" id="points_block">
 
                             <div class="row">
                                 <div class="col-md-4 col-sm-12">
-                                    <div class="form-group mt-2">
-                                        <div style="background-color: #ff000063; padding: 0.5rem">
-                                            Слабое проявление (красный)
-                                        </div>
-                                        {#                                        <label for="input_fio">Слабое проявление (красный)</label>#}
-                                        <hr style="border-color: blue; margin-top: 0.3rem">
-                                        <div class="row">
-                                            <div class="col-md-6 col-sm-12">
-                                                <label for="input_fio">Баллы ОТ</label>
-                                                <input type="number" min="0" max="10" class="form-control points_from"
-                                                       value="0" disabled>
+                                    <div class="form-group mt-2" id="points_1">
+                                        {% if filter.direction == 'green_from_left' %}
+                                            <div style="background-color: #00800082; padding: 0.5rem"
+                                                 id="points_label_1">
+                                                Яркое проявление (зеленый)
                                             </div>
-                                            <div class="col-md-6 col-sm-12">
-                                                <label for="input_fio">Баллы ДО</label>
-                                                <input type="number" min="0" max="10" class="form-control points_to"
-                                                       id="points_to_red" value="{{ filter.points_to_red }}">
+                                            <hr style="border-color: blue; margin-top: 0.3rem">
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12">
+                                                    <label for="points_from_green">Баллы ОТ</label>
+                                                    <input type="number" min="0" max="10"
+                                                           class="form-control points_from"
+                                                           id="points_from_green" value="{{ filter.points_from_green }}"
+                                                           disabled>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <label for="points_to_green">Баллы ДО</label>
+                                                    <input type="number" min="0" max="10" class="form-control points_to"
+                                                           id="points_to_green" value="{{ filter.points_to_green }}">
+                                                </div>
                                             </div>
-                                        </div>
+
+                                        {% else %}
+                                            <div style="background-color: #ff000063; padding: 0.5rem"
+                                                 id="points_label_1">
+                                                Слабое проявление (красный)
+                                            </div>
+                                            {#                                        <label for="input_fio">Слабое проявление (красный)</label>#}
+                                            <hr style="border-color: blue; margin-top: 0.3rem">
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12">
+                                                    <label for="points_from_red">Баллы ОТ</label>
+                                                    <input type="number" min="0" max="10"
+                                                           class="form-control points_from"
+                                                           id="points_from_red" value="{{ filter.points_from_red }}"
+                                                           disabled>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <label for="points_to_red">Баллы ДО</label>
+                                                    <input type="number" min="0" max="10" class="form-control points_to"
+                                                           id="points_to_red" value="{{ filter.points_to_red }}">
+                                                </div>
+                                            </div>
+
+                                        {% endif %}
+
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-12">
-                                    <div class="form-group mt-2">
-                                        <div style="background-color: #ffff004f; padding: 0.5rem">
+                                    <div class="form-group mt-2" id="points_2">
+                                        <div style="background-color: #ffff004f; padding: 0.5rem" id="points_label_2">
                                             Проявление с ограничениями (желтый)
                                         </div>
 
                                         <hr style="border-color: blue; margin-top: 0.3rem">
                                         <div class="row">
                                             <div class="col-md-6 col-sm-12">
-                                                <label for="input_fio">Баллы ОТ</label>
+                                                <label for="points_from_yellow">Баллы ОТ</label>
                                                 <input type="number" min="0" max="10" class="form-control points_from"
                                                        id="points_from_yellow" value="{{ filter.points_from_yellow }}"
                                                        disabled>
                                             </div>
                                             <div class="col-md-6 col-sm-12">
-                                                <label for="input_fio">Баллы ДО</label>
+                                                <label for="points_to_yellow">Баллы ДО</label>
                                                 <input type="number" min="0" max="10" class="form-control points_to"
                                                        id="points_to_yellow" value="{{ filter.points_to_yellow }}">
                                             </div>
@@ -125,24 +174,53 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-12">
-                                    <div class="form-group mt-2">
-                                        <div style="background-color: #00800082; padding: 0.5rem">
-                                            Яркое проявление (зеленый)
-                                        </div>
-                                        <hr style="border-color: blue; margin-top: 0.3rem">
-                                        <div class="row">
-                                            <div class="col-md-6 col-sm-12">
-                                                <label for="points_from_green">Баллы ОТ</label>
-                                                <input type="number" min="0" max="10" class="form-control points_from"
-                                                       id="points_from_green" value="{{ filter.points_from_green }}"
-                                                       disabled>
+                                    <div class="form-group mt-2" id="points_3">
+                                        {% if filter.direction == 'green_from_left' %}
+                                            <div style="background-color: #ff000063; padding: 0.5rem"
+                                                 id="points_label_3">
+                                                Слабое проявление (красный)
                                             </div>
-                                            <div class="col-md-6 col-sm-12">
-                                                <label for="points_to_green">Баллы ДО</label>
-                                                <input type="number" min="0" max="10" class="form-control points_to"
-                                                       id="points_to_green" value="{{ filter.points_to_green }}">
+                                            {#                                        <label for="input_fio">Слабое проявление (красный)</label>#}
+                                            <hr style="border-color: blue; margin-top: 0.3rem">
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12">
+                                                    <label for="points_from_red">Баллы ОТ</label>
+                                                    <input type="number" min="0" max="10"
+                                                           class="form-control points_from"
+                                                           id="points_from_red" value="{{ filter.points_from_red }}"
+                                                           disabled>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <label for="points_to_red">Баллы ДО</label>
+                                                    <input type="number" min="0" max="10" class="form-control points_to"
+                                                           id="points_to_red" value="{{ filter.points_to_red }}">
+                                                </div>
                                             </div>
-                                        </div>
+
+                                        {% else %}
+                                            <div style="background-color: #00800082; padding: 0.5rem"
+                                                 id="points_label_3">
+                                                Яркое проявление (зеленый)
+                                            </div>
+                                            <hr style="border-color: blue; margin-top: 0.3rem">
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12">
+                                                    <label for="points_from_green">Баллы ОТ</label>
+                                                    <input type="number" min="0" max="10"
+                                                           class="form-control points_from"
+                                                           id="points_from_green" value="{{ filter.points_from_green }}"
+                                                           disabled>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <label for="points_to_green">Баллы ДО</label>
+                                                    <input type="number" min="0" max="10" class="form-control points_to"
+                                                           id="points_to_green" value="{{ filter.points_to_green }}">
+                                                </div>
+                                            </div>
+
+
+                                        {% endif %}
+
                                     </div>
                                 </div>
                             </div>
@@ -205,7 +283,8 @@
                                                                 {% if filter_category.category.id == category.id %}
                                                                 selected
                                                                 {% endif %}
-                                                        >{{ category.code }} - {{ category.section_name }} - {{ category.category_name }}</option>
+                                                        >{{ category.code }} - {{ category.section_name }}
+                                                            - {{ category.category_name }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </td>

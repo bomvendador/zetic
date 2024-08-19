@@ -1,4 +1,5 @@
 from pdf.models import Category, TrafficLightReportFilter, TrafficLightReportFilterCategory
+from django.db.models import Avg, Max, Min, Sum
 from login.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
@@ -21,7 +22,7 @@ from .custom_funcs import squares_data
 def traffic_light_report_filters_list(request):
     context = info_common(request)
 
-    filters_inst = TrafficLightReportFilter.objects.all()
+    filters_inst = TrafficLightReportFilter.objects.all().order_by('position')
     filters_categories = TrafficLightReportFilterCategory.objects.all()
     context.update(
         {
@@ -36,11 +37,25 @@ def traffic_light_report_filters_list(request):
 @login_required(redirect_field_name=None, login_url='/login/')
 def add_filter(request):
     context = info_common(request)
+    positions = get_traffic_light_filters_positions()
+    max_position = TrafficLightReportFilter.objects.all().aggregate(Max('position'))['position__max']
     context.update({
-        'categories': get_categories_for_filter()
+        'categories': get_categories_for_filter(),
+        'positions': positions,
+        'new_position': int(max_position) + 1,
     })
 
     return render(request, 'traffic_light_report/panel_add_traffic_light_report_filter.html', context)
+
+
+def get_traffic_light_filters_positions():
+    positions = []
+    traffic_light_report_inst = TrafficLightReportFilter.objects.all().order_by('position')
+    max_position = TrafficLightReportFilter.objects.all().aggregate(Max('position'))['position__max']
+    for filter_item in traffic_light_report_inst:
+        positions.append(filter_item.position)
+    positions.append(int(max_position) + 1)
+    return positions
 
 
 def get_categories_for_filter():
@@ -68,7 +83,23 @@ def save_new_traffic_light_report_filter(request):
         yellow = json_data['yellow']
         green = json_data['green']
         green_from_left = json_data['green_from_left']
+        position = json_data['position']
+        max_position = TrafficLightReportFilter.objects.all().aggregate(Max('position'))['position__max']
         filter_inst = TrafficLightReportFilter()
+
+        # position_gap_for_existing_filter = 0
+        # all_existing_filters_inst = TrafficLightReportFilter.objects.all().order_by('position')
+        # cnt = 0
+        # for existing_filter in all_existing_filters_inst:
+        #     cnt = cnt + 1
+        #     if int(existing_filter.position) == int(position):
+        #         position_gap_for_existing_filter = 1
+        #     existing_filter.position = cnt + position_gap_for_existing_filter
+        #     existing_filter.save()
+        #     print(f'{existing_filter.name} - {existing_filter.position} - {cnt} - {position_gap_for_existing_filter}')
+
+        update_traffic_light_filters_positions(position)
+        filter_inst.position = position
         filter_inst.created_by = request.user
         filter_inst.name = name
         filter_inst.points_from_green = green['points_from']
@@ -91,25 +122,56 @@ def save_new_traffic_light_report_filter(request):
         return HttpResponse(200)
 
 
+def update_traffic_light_filters_positions(position):
+    position_gap_for_existing_filter = 0
+    all_existing_filters_inst = TrafficLightReportFilter.objects.all().order_by('position')
+    cnt = 0
+    for existing_filter in all_existing_filters_inst:
+        cnt = cnt + 1
+        if int(existing_filter.position) == int(position):
+            position_gap_for_existing_filter = 1
+        existing_filter.position = cnt + position_gap_for_existing_filter
+        existing_filter.save()
+        print(f'{existing_filter.name} - {existing_filter.position} - {cnt} - {position_gap_for_existing_filter}')
+
+
 @login_required(redirect_field_name=None, login_url='/login/')
 def save_edited_traffic_light_report_filter(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
+        print(json_data)
         categories = json_data['categories']
         name = json_data['name']
         red = json_data['red']
         yellow = json_data['yellow']
         green = json_data['green']
         filter_id = json_data['filter_id']
+        green_from_left = json_data['green_from_left']
+        position = json_data['position']
+
+        max_position = TrafficLightReportFilter.objects.all().aggregate(Max('position'))['position__max']
+        print(max_position)
+
         filter_inst = TrafficLightReportFilter.objects.get(id=filter_id)
+
+        all_existing_filters_inst = TrafficLightReportFilter.objects.all().order_by('position')
+        for existing_filter in all_existing_filters_inst:
+            if int(existing_filter.position) >= int(position) and existing_filter.position < filter_inst.position:
+                existing_filter.position = existing_filter.position + 1
+                existing_filter.save()
         filter_inst.created_by = request.user
         filter_inst.name = name
         filter_inst.points_from_green = green['points_from']
         filter_inst.points_to_green = green['points_to']
         filter_inst.points_from_yellow = yellow['points_from']
         filter_inst.points_to_yellow = yellow['points_to']
-        filter_inst.points_from_red = 0
+        filter_inst.points_from_red = red['points_from']
         filter_inst.points_to_red = red['points_to']
+        filter_inst.position = position
+        if green_from_left:
+            filter_inst.direction = 'green_from_left'
+        else:
+            filter_inst.direction = 'red_from_left'
         filter_inst.save()
         TrafficLightReportFilterCategory.objects.filter(filter=filter_inst).delete()
         for category in categories:
@@ -126,19 +188,31 @@ def edit_traffic_light_report_filter(request, filter_id):
     context = info_common(request)
     filter_inst = TrafficLightReportFilter.objects.get(id=filter_id)
     filter_categories = TrafficLightReportFilterCategory.objects.filter(filter=filter_inst)
+    positions = get_traffic_light_filters_positions()
     context.update({
         'filter': filter_inst,
         'categories': get_categories_for_filter(),
         'filter_categories': filter_categories,
+        'positions': positions
     })
 
     return render(request, 'traffic_light_report/panel_edit_traffic_light_report_filter.html', context)
 
 
-# @login_required(redirect_field_name=None, login_url='/login/')
-# def delete_integral_report_filter(request):
-#     json_data = json.loads(request.body.decode('utf-8'))
-#     filter_id = json_data['filter_id']
-#     filter_inst = IntegralReportFilter.objects.get(id=filter_id)
-#     filter_inst.delete()
-#     return HttpResponse(200)
+@login_required(redirect_field_name=None, login_url='/login/')
+def delete_traffic_light_report_filter(request):
+    json_data = json.loads(request.body.decode('utf-8'))
+    filter_id = json_data['filter_id']
+    filter_inst = TrafficLightReportFilter.objects.get(id=filter_id)
+    filter_inst.delete()
+    update_filters_positions()
+    return HttpResponse(200)
+
+
+def update_filters_positions():
+    filters_inst = TrafficLightReportFilter.objects.all().order_by('position')
+    cnt = 0
+    for traffic_light_filter in filters_inst:
+        cnt = cnt + 1
+        traffic_light_filter.position = cnt
+        traffic_light_filter.save()

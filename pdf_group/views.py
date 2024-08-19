@@ -24,6 +24,7 @@ from pdf_group.section_4 import page as section_4_page
 from pdf_group.description import page as description_page
 from pdf_group.participants_list import page as participants_page
 from pdf_group.integral_report_page import page as integral_report_page
+from pdf_group.traffic_light_report.traffic_light_report_page import page as traffic_light_report_page
 from pdf.views import save_serve_file
 from pdf_group.save_data import save_data_to_db as save_data_group
 
@@ -77,6 +78,11 @@ def pdf_group_generator(request_json):
     pdf.add_page()
     pdf.set_text_color(0, 0, 0)
     integral_report_page(pdf, 'ru', request_json['square_results'])
+
+    pdf.add_page()
+    pdf.set_text_color(0, 0, 0)
+    traffic_light_report_page(pdf, 'ru', request_json['square_results'])
+
 
     pdf.set_line_width(0.1)
     pdf.add_page()

@@ -183,6 +183,8 @@ urlpatterns = [
     path('save_new_traffic_light_report_filter', filters_traffic_light_report.save_new_traffic_light_report_filter, name='save_new_traffic_light_report_filter'),
     path('save_edited_traffic_light_report_filter', filters_traffic_light_report.save_edited_traffic_light_report_filter, name='save_edited_traffic_light_report_filter'),
     path('edit_traffic_light_report_filter/<int:filter_id>', filters_traffic_light_report.edit_traffic_light_report_filter, name='edit_traffic_light_report_filter'),
+    path('delete_traffic_light_report_filter', filters_traffic_light_report.delete_traffic_light_report_filter,
+         name='delete_traffic_light_report_filter'),
 
 ]
 
