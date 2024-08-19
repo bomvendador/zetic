@@ -193,7 +193,7 @@ def edit_traffic_light_report_filter(request, filter_id):
         'filter': filter_inst,
         'categories': get_categories_for_filter(),
         'filter_categories': filter_categories,
-        'positions': positions
+        'positions': positions[:-1]
     })
 
     return render(request, 'traffic_light_report/panel_edit_traffic_light_report_filter.html', context)
