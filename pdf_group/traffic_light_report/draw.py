@@ -274,6 +274,7 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results)
         participant_number = data[7]
         category_code = data[6]
         participant_inst = Participant.objects.get(id=participant_id)
+        print(f'277 - participant_name - {participant_inst.employee.name} participant_email - {participant_inst.employee.email}')
         report_inst = Report.objects.get(participant=participant_inst)
         name = participant_inst.employee.name
         name_with_number = str(participant_number) + '. ' + name
