@@ -289,7 +289,7 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results)
             total_t_points = 0
             traffic_light_report_categories_inst = TrafficLightReportFilterCategory.objects.filter(filter=traffic_light_report)
             for traffic_light_report_category in traffic_light_report_categories_inst:
-                print(f'participant_name - {participant_inst.employee.name} participant_email - {participant_inst.employee.email} traffic_light_report_categories_code = {traffic_light_report_category.category.code}')
+                # print(f'participant_name - {participant_inst.employee.name} participant_email - {participant_inst.employee.email} traffic_light_report_categories_code = {traffic_light_report_category.category.code}')
 
                 report_data_by_categories_inst = ReportDataByCategories.objects.get(Q(report=report_inst) & Q(category_code=traffic_light_report_category.category.code))
                 t_point = report_data_by_categories_inst.t_points
