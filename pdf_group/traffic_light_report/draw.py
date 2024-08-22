@@ -275,7 +275,7 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results)
         category_code = data[6]
         participant_inst = Participant.objects.get(id=participant_id)
         print(f'277 - participant_name - {participant_inst.employee.name} participant_email - {participant_inst.employee.email}')
-        report_inst = Report.objects.get(Q(participant=participant_inst) & Q(primary=False))
+        report_inst = Report.objects.filter(Q(participant=participant_inst)).latest('added')
         name = participant_inst.employee.name
         name_with_number = str(participant_number) + '. ' + name
         participant_name_length = len(name_with_number)
