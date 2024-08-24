@@ -30,7 +30,8 @@ SECRET_KEY = 'django-insecure--lfbjn3qgosinvh0ls*wb*#72ckmd4-9ozyt*^=6=_w+ah1&qg
 # SECRET_KEY = os.environ.get("SECRET_KEY")
 
 CSRF_TRUSTED_ORIGINS = [
-    # 'http://51.250.113.32',
+    'http://51.250.113.32',
+    'http://51.250.45.169',
     # 'http://zetictest.ru',
     'http://zetictest.com',
     'https://zetictest.ru',
@@ -53,6 +54,7 @@ ALLOWED_HOSTS = ['*']
 
 CORS_ORIGIN_WHITELIST = [
     'http://51.250.113.32',
+    'http://51.250.45.169',
     # 'http://zetictest.ru',
     'http://zetictest.com',
     'https://zetictest.ru',
@@ -137,7 +139,7 @@ WSGI_APPLICATION = 'reports.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-#
+
 
 # Celery Broker - Redis
 CELERY_BROKER_URL = 'redis://localhost:6379'
