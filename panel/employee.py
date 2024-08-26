@@ -1,4 +1,5 @@
-from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, User, Participant, EmployeeGender
+from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, User, Participant, EmployeeGender, \
+    Project, ProjectParticipants, Questionnaire, Report
 from login.models import UserProfile
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -11,7 +12,9 @@ import requests
 from .views import info_common
 from api.outcoming import Attributes, sync_add_employee
 from .custom_funcs import update_attributes
+from django.db.models import Sum, Q
 
+from django.template.loader import render_to_string
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def add_employee(request):
@@ -99,7 +102,7 @@ def add_employee(request):
         'genders': sex
     })
 
-    return render(request, 'panel_add_employee.html', context)
+    return render(request, 'employee/panel_add_employee.html', context)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -405,7 +408,66 @@ def employees_list(request):
         }
     )
 
-    return render(request, 'panel_employees_list.html', context)
+    return render(request, 'employee/panel_employees_list.html', context)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def employees_search(request):
+    context = info_common(request)
+
+    context.update(
+        {
+        }
+    )
+
+    return render(request, 'employee/panel_employees_search.html', context)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def search_for_employees(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        fio = json_data['fio']
+        email = json_data['email']
+        if not fio == '' and not email == '':
+            employees_inst = Employee.objects.filter(Q(name=fio) & Q(email=email))
+        elif not fio == '':
+            employees_inst = Employee.objects.filter(Q(name=fio))
+        else:
+            employees_inst = Employee.objects.filter(Q(email=email))
+        data = []
+        for employee in employees_inst:
+            employee_data = {
+                'name': employee.name,
+                'email': employee.email,
+                'company_name': employee.company.name,
+            }
+            participants = Participant.objects.filter(employee=employee)
+            projects = []
+            questionnaires = []
+            reports_dates = []
+            reports_files = []
+            for participant in participants:
+                project_participants_inst = ProjectParticipants.objects.filter(participant=participant)
+                for project_participant in project_participants_inst:
+                    projects.append(project_participant.project.name)
+                questionnaires_inst = Questionnaire.objects.filter(participant=participant)
+                for questionnaire in questionnaires_inst:
+                    questionnaires.append(timezone.localtime(questionnaire.created_at).strftime("%d.%m.%Y %H:%M:%S"))
+                reports_inst = Report.objects.filter(participant=participant)
+                for report in reports_inst:
+                    reports_dates.append(timezone.localtime(report.added).strftime("%d.%m.%Y %H:%M:%S"))
+                    reports_files.append(report.file.name)
+
+            employee_data.update({
+                'projects': projects,
+                'questionnaires': questionnaires,
+                'reports_dates': reports_dates,
+                'reports_files': reports_files
+            })
+            data.append(employee_data)
+        rows = render_to_string('employee/tr_employee_search.html', {'data': data}).rstrip()
+        return JsonResponse({'rows': rows})
 
 
 @login_required(redirect_field_name=None, login_url='/login/')

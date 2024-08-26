@@ -65,6 +65,7 @@ urlpatterns = [
     path('save_new_employee_position', panel_company_parameter.save_new_employee_position, name='save_new_employee_position'),
     path('edit_employee_position', panel_company_parameter.edit_employee_position, name='edit_employee_position'),
     path('delete_employee_position', panel_company_parameter.delete_employee_position, name='delete_employee_position'),
+
     path('get_company_employees', employee.get_company_employees, name='get_company_employees'),
     path('add_employee', employee.add_employee, name='add_employee'),
     path('delete_employee', employee.delete_employee, name='delete_employee'),
@@ -75,6 +76,9 @@ urlpatterns = [
     path('get_company_no_admins', employee.get_company_no_admins, name='get_company_no_admins'),
     path('deactivate_company_admin', employee.deactivate_company_admin, name='deactivate_company_admin'),
     path('delete_company_admin', employee.delete_company_admin, name='delete_company_admin'),
+    path('employees_search', employee.employees_search, name='employees_search'),
+    path('search_for_employees', employee.search_for_employees, name='search_for_employees'),
+
     path('delete_company', company.delete_company, name='delete_company'),
 
     path('studies_list', study.studies_list, name='studies_list'),

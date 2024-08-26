@@ -1,0 +1,28 @@
+{% for item in data %}
+    <tr>
+        <td class="wd-15p border-bottom-0">{{ item.name }}</td>
+        <td class="wd-15p border-bottom-0">{{ item.email }}</td>
+        <td class="wd-15p border-bottom-0">{{ item.company_name }}</td>
+        <td class="wd-15p border-bottom-0">
+            {% for project in item.projects %}
+                {{ project }}
+            {% endfor %}
+        </td>
+        <td class="wd-15p border-bottom-0">
+            {% for questionnaire in item.questionnaires %}
+                {{ questionnaire }}
+            {% endfor %}
+        </td>
+        <td class="wd-15p border-bottom-0">
+            {% for report_date in item.reports_dates %}
+                {{ report_date }}
+            {% endfor %}
+
+        </td>
+        <td class="wd-15p border-bottom-0">
+            {% for report_file in item.reports_files %}
+                <a class="dropdown-item" href="download_single_report/{{ report_file }}">Скачать</a>
+            {% endfor %}
+        </td>
+    </tr>
+{% endfor %}
