@@ -1,5 +1,5 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, User, Participant, EmployeeGender, \
-    Project, ProjectParticipants, Questionnaire, Report
+    Project, ProjectParticipants, Questionnaire, Report, QuestionnaireVisits
 from login.models import UserProfile
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -447,13 +447,23 @@ def search_for_employees(request):
             questionnaires = []
             reports_dates = []
             reports_files = []
+            questionnaires_visits = []
+
             for participant in participants:
                 project_participants_inst = ProjectParticipants.objects.filter(participant=participant)
                 for project_participant in project_participants_inst:
                     projects.append(project_participant.project.name)
                 questionnaires_inst = Questionnaire.objects.filter(participant=participant)
                 for questionnaire in questionnaires_inst:
-                    questionnaires.append(timezone.localtime(questionnaire.created_at).strftime("%d.%m.%Y %H:%M:%S"))
+                    questionnaires_visits_inst = QuestionnaireVisits.objects.filter(questionnaire=questionnaire)
+                    questionnaire_visits = []
+                    for questionnaire_visit in questionnaires_visits_inst:
+                        questionnaire_visits.append(timezone.localtime(questionnaire_visit.created_at).strftime("%d.%m.%Y %H:%M:%S"))
+                    questionnaires.append({
+                        'created_at': timezone.localtime(questionnaire.created_at).strftime("%d.%m.%Y %H:%M:%S"),
+                        'questionnaire_visits': questionnaire_visits
+                    })
+
                 reports_inst = Report.objects.filter(participant=participant)
                 for report in reports_inst:
                     reports_dates.append(timezone.localtime(report.added).strftime("%d.%m.%Y %H:%M:%S"))

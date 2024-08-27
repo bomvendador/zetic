@@ -310,6 +310,18 @@ class QuestionnaireQuestionAnswers(models.Model):
         verbose_name = 'Опросники респондентов_ответы (QuestionnaireQuestionAnswers)'
 
 
+class QuestionnaireVisits(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.questionnaire.participant.employee.name}'
+
+    class Meta:
+        verbose_name_plural = 'Опросник время посещения (QuestionnaireVisits)'
+        verbose_name = 'Опросники время посещения (QuestionnaireVisits)'
+
+
 class Project(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)

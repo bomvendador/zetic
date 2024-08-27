@@ -145,6 +145,7 @@
                                                         <th>Группы вопросов</th>
                                                         <th>Отправка приглашения</th>
                                                         <th>Напоминания</th>
+                                                        <th>Посещения опросника</th>
 {#                                                        <th data-orderable="false"></th>#}
                                                     </tr>
                                                 </thead>
@@ -202,6 +203,13 @@
                                                             {% if email_sent.participant == participant %}
                                                                 <p class="mb-0">{{ email_sent.created_at|date:"d.m.Y H:i" }}</p>
 
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </td>
+                                                    <td>
+                                                        {% for questionnaire_visit in questionnaires_visits %}
+                                                            {% if questionnaire_visit.questionnaire.participant == participant %}
+                                                                <p class="mb-0">{{ questionnaire_visit.created_at|date:"d.m.Y H:i:s" }}</p>
                                                             {% endif %}
                                                         {% endfor %}
                                                     </td>

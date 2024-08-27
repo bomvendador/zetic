@@ -1,5 +1,6 @@
 from pdf.models import Category, Section, CategoryQuestions, QuestionAnswers, Participant, Employee, EmployeeGender, \
-    EmployeePosition, EmployeeRole, Industry, Questionnaire, ResearchTemplateSections, QuestionnaireQuestionAnswers
+    EmployeePosition, EmployeeRole, Industry, Questionnaire, ResearchTemplateSections, QuestionnaireQuestionAnswers, \
+    QuestionnaireVisits
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
 import json
@@ -32,6 +33,9 @@ def get_participant_data(request, code):
         }
         return render(request, 'questionnaire_participant_data.html', context)
     else:
+        questionnaire_visit_inst = QuestionnaireVisits()
+        questionnaire_visit_inst.questionnaire = questionnaire_inst
+        questionnaire_visit_inst.save()
         research_template_inst = participant_inst.study.research_template
         research_template_sections_inst = ResearchTemplateSections.objects.filter(
             research_template=research_template_inst)

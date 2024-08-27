@@ -60,9 +60,7 @@ $('#run_group_action').on('click', function () {
     }else {
         switch (action_name) {
             case "send_invitations":
-
                 getParticipantsWithoutInvitations();
-
                 if(participants_ids_to_send_invitation_to.length >= 1){
                     $('#modal_before_mass_send_invitation').attr('data-invitation-type', 'initial')
                     $('#modal_participants_qnt').text(participants_ids_to_send_invitation_to.length)

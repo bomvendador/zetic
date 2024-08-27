@@ -1,5 +1,5 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, Participant, \
-    EmailSentToParticipant, Report, ResearchTemplate, ResearchTemplateSections
+    EmailSentToParticipant, Report, ResearchTemplate, ResearchTemplateSections, Questionnaire, QuestionnaireVisits
 from login.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
@@ -55,6 +55,7 @@ def study_details(request, study_id):
             context.update({
                 'sections': sections,
             })
+        questionnaires_visits_inst = QuestionnaireVisits.objects.filter(questionnaire__participant__study=study)
         context.update(
             {
                 'study': study,
@@ -62,7 +63,8 @@ def study_details(request, study_id):
                 # 'study_question_groups': study_question_groups,
                 'participants': Participant.objects.filter(study=study),
                 'emails_sent': EmailSentToParticipant.objects.filter(participant__study=study, type='reminder'),
-                'reports': reports
+                'reports': reports,
+                'questionnaires_visits': questionnaires_visits_inst
             }
         )
 
