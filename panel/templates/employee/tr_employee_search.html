@@ -11,10 +11,12 @@
         <td class="wd-15p border-bottom-0">
             {% for questionnaire in item.questionnaires %}
                 <div>{{ questionnaire.created_at }}</div>
-                <div>Посещения:</div>
-                {% for questionnaire_visit in questionnaire.questionnaire_visits %}
-                    <div>{{ questionnaire_visit }}</div>
-                {% endfor %}
+                {% if questionnaire.questionnaire_visits %}
+                    <div>Посещения:</div>
+                    {% for questionnaire_visit in questionnaire.questionnaire_visits %}
+                        <div>{{ questionnaire_visit }}</div>
+                    {% endfor %}
+                {% endif %}
             {% endfor %}
         </td>
         <td class="wd-15p border-bottom-0">
