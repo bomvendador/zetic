@@ -173,6 +173,7 @@
                         <div class="form-group">
                             <label for="user_role">Роль</label>
                                 <select name="employee_role" class="form-control form-select" id="employee_role">
+                                    <option>-- Не выбрано --</option>
                                     {% for employee_role in employee_roles %}
                                     <option id="{{ employee_role.id }}">{{ employee_role.name_ru }}</option>
                                     {% endfor %}
@@ -181,6 +182,7 @@
                         <div class="form-group">
                             <label for="employee_position">Должность</label>
                                 <select name="user_role" class="form-control form-select" id="employee_position">
+                                    <option>-- Не выбрано --</option>
                                     {% for employee_position in employee_positions %}
                                     <option id="{{ employee_position.id }}">{{ employee_position.name_ru }}</option>
                                     {% endfor %}
@@ -189,6 +191,7 @@
                         <div class="form-group">
                             <label for="employee_position">Индустрия</label>
                                 <select name="user_role" class="form-control form-select" id="employee_industry">
+                                    <option>-- Не выбрано --</option>
                                     {% for industry in industries %}
                                     <option id="{{ industry.id }}">{{ industry.name_ru }}</option>
                                     {% endfor %}
@@ -197,6 +200,7 @@
                         <div class="form-group">
                             <label for="employee_gender">Пол</label>
                                 <select name="user_role" class="form-control form-select" id="employee_gender">
+                                    <option>-- Не выбрано --</option>
                                     {% for gender in genders %}
                                     <option id="{{ gender.id }}">{{ gender.name_ru }}</option>
                                     {% endfor %}

@@ -2,11 +2,11 @@ expand_menu_item('#menu_companies_list')
 
 $('#new_password_hide').on('click', function () {
     let attr = $('#new_password').attr('type')
-    if(typeof attr !== 'undefined'){
+    if (typeof attr !== 'undefined') {
         $('#new_password').removeAttr('type')
         $(this).removeClass('zmdi-eye').addClass('zmdi-eye-off')
 
-    }else {
+    } else {
         $('#new_password').attr('type', 'password')
         $(this).removeClass('zmdi-eye-off').addClass('zmdi-eye')
     }
@@ -14,35 +14,101 @@ $('#new_password_hide').on('click', function () {
 
 $('#new_password_confirm_hide').on('click', function () {
     let attr = $('#new_password_confirm').attr('type')
-    if(typeof attr !== 'undefined'){
+    if (typeof attr !== 'undefined') {
         $('#new_password_confirm').removeAttr('type')
         $(this).removeClass('zmdi-eye').addClass('zmdi-eye-off')
-    }else {
+    } else {
         $('#new_password_confirm').attr('type', 'password')
         $(this).removeClass('zmdi-eye-off').addClass('zmdi-eye')
     }
 })
 
+$('#select_link_template_btn').on('click', function () {
+    $('#select_template option').attr('selected', false)
+    $('#select_template option').eq(0).attr('selected', true)
+    $('#input_modal_select_link_template').modal('show')
+})
 
+$('#generate_link').on('click', function () {
+    let option_val = $('#select_template option:selected').val()
+    if (option_val == 0) {
+        toastr.error('Выберите шаблон')
+    } else {
+        btn_spinner('#generate_link')
+        $.ajax({
+            headers: {"X-CSRFToken": token},
+            url: url_generate_new_self_questionnaire_link,
+            type: 'POST',
+            data: JSON.stringify({
+                'company_id': company_id,
+                'template_id': option_val
+            }),
+            processData: false,
+            contentType: false,
+            error: function (data) {
+                toastr.error('Ошибка', data)
+            },
+            success: function (data) {
+                let code = data['code']
+                console.log(code)
+                console.log(window.location.hostname)
+                console.log(window.location.protocol)
+                // let link = `${window.location.protocol}//${window.location.hostname}/company_questionnaire/${code}`
+                let link = `${window.location.origin}/panel/company_questionnaire/${code}`
+                console.log(link)
+                let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
+                    '<br>' +
+                    '<hr class="solid mt-0" style="background-color: black;">' +
+                    '<h4 style="text-align: center">Ссылка успешно добавлена</h4>' +
+                    '<hr class="solid mt-0" style="background-color: black;">'
+
+                Swal.fire({
+                    html: output_html,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ОК'
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.reload()
+                    }
+                })
+
+
+                // $('#company_admin_select').html(html)
+                // console.log(data_json)
+                // $('#input_modal_add_admin').modal('show')
+                btn_text($('#generate_link'), 'Создать ссылку')
+
+            }
+        });
+    }
+})
+
+$('#tbody_self_questionnaire_link input').each(function () {
+    let val = $(this).val()
+    let full_link = `${window.location.origin}${val}`
+    $(this).val(full_link)
+})
 
 $('#add_admin').on('click', function () {
     btn_spinner($('#add_admin'))
     $.ajax({
-        headers: { "X-CSRFToken": token },
+        headers: {"X-CSRFToken": token},
         url: url_get_company_no_admins,
         type: 'POST',
         data: JSON.stringify({
-                'company_id': company_id
-            }),
+            'company_id': company_id
+        }),
         processData: false,
         contentType: false,
-        error: function(data){
+        error: function (data) {
             toastr.error('Ошибка', data)
         },
-        success:function (data) {
+        success: function (data) {
             let data_json = data['data']
             let html = ''
-            for(let i = 0; i < data_json.length; i++){
+            for (let i = 0; i < data_json.length; i++) {
                 console.log(data_json[i]["name"])
                 html += '<option id="employee_id_' + data_json[i]["id"] + '">' + data_json[i]["name"] + '</option>>'
                 // html += '<option>' + data_json[i]["email"] + '</option>'
@@ -67,31 +133,31 @@ $('#appoint_company_admin').on('click', function () {
     let pwd = $('#new_password').val()
     let pwd_confirm = $('#new_password_confirm').val()
     let employee_id = $('#company_admin_select option:selected').attr('id').split('_')[2]
-    if(pwd === '' || pwd_confirm === ''){
+    if (pwd === '' || pwd_confirm === '') {
         toastr.error('Поля паролей должны быть заполнены')
         test_ok = false
-    }else {
-        if(pwd !== pwd_confirm){
+    } else {
+        if (pwd !== pwd_confirm) {
             toastr.error('Пароли не совпадают')
             test_ok = false
         }
     }
-    if(test_ok){
+    if (test_ok) {
         btn_spinner($('#appoint_company_admin'))
         $.ajax({
-            headers: { "X-CSRFToken": token },
+            headers: {"X-CSRFToken": token},
             url: url_appoint_company_admin,
             type: 'POST',
             data: JSON.stringify({
-                    'employee_id': employee_id,
-                    'password': pwd
-                }),
+                'employee_id': employee_id,
+                'password': pwd
+            }),
             processData: false,
             contentType: false,
-            error: function(data){
+            error: function (data) {
                 toastr.error('Ошибка', data)
             },
-            success:function (data) {
+            success: function (data) {
                 let data_json = data['data']
                 let html = ''
                 html += '<tr id="employee_id_' + data["id"] + '">'
@@ -99,13 +165,13 @@ $('#appoint_company_admin').on('click', function () {
                 html += '<td>' + data['email'] + '</td>'
                 html += '<td><span class="dot-label bg-success" title="Админ активен"></span></td>'
                 html += '<td><div style="text-align: center;">' +
-                        '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>' +
-                        '<ul class="dropdown-menu">' +
-                        '<li><a class="dropdown-item deactivate-company-admin cursor-pointer">Деактивировать</a></li>' +
-                        '<li><a class="dropdown-item delete-company-admin cursor-pointer">Удалить</a></li>' +
-                        '</ul>' +
-                        '</div>' +
-                        '</td>'
+                    '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>' +
+                    '<ul class="dropdown-menu">' +
+                    '<li><a class="dropdown-item deactivate-company-admin cursor-pointer">Деактивировать</a></li>' +
+                    '<li><a class="dropdown-item delete-company-admin cursor-pointer">Удалить</a></li>' +
+                    '</ul>' +
+                    '</div>' +
+                    '</td>'
                 html += '</tr>'
                 $('#tbody_company_admins').find('.no-data-text').each(function (index, el) {
                     $(el).closest('tr').remove()
@@ -129,7 +195,7 @@ $('#tbody_company_admins').on('click', '.deactivate-company-admin', function () 
     let btn_text = ''
     let icon_add_class = ''
     let icon_remove_class = ''
-    if(operation_name === 'Деактивировать'){
+    if (operation_name === 'Деактивировать') {
         console.log('Деактивировать')
         question_text = 'Деактивировать админа?'
         resul_text = 'Админ деактивирован'
@@ -137,7 +203,7 @@ $('#tbody_company_admins').on('click', '.deactivate-company-admin', function () 
         icon_add_class = 'bg-danger'
         icon_remove_class = 'bg-success'
         operation_type = 'deactivate'
-    }else {
+    } else {
         console.log('Активировать')
         question_text = 'Активировать админа?'
         operation_type = 'activate'
@@ -151,49 +217,47 @@ $('#tbody_company_admins').on('click', '.deactivate-company-admin', function () 
     let employee_id = $(this).closest('tr').attr('id').split('_')[2]
     let employee_name = $(this).closest('tr td:first-child').text()
     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                    '<div>' + question_text + '</div>' +
-                    '<br>' +
-                    '<hr class="solid mt-0" style="background-color: black;">'
+        '<div>' + question_text + '</div>' +
+        '<br>' +
+        '<hr class="solid mt-0" style="background-color: black;">'
     Swal.fire({
-      html: output_html,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Да',
-      cancelButtonText: 'Нет'
+        html: output_html,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет'
     }).then((result) => {
-      if (result.isConfirmed) {
-          show_progressbar_loader()
-        $.ajax({
-            headers: { "X-CSRFToken": token },
-            url: url_deactivate_company_admin,
-            type: 'POST',
-            data: JSON.stringify({
+        if (result.isConfirmed) {
+            show_progressbar_loader()
+            $.ajax({
+                headers: {"X-CSRFToken": token},
+                url: url_deactivate_company_admin,
+                type: 'POST',
+                data: JSON.stringify({
                     'employee_id': employee_id,
-                    'operation_type' : operation_type
+                    'operation_type': operation_type
                 }),
-            processData: false,
-            contentType: false,
-            error: function(data){
-                toastr.error('Ошибка', data)
-            },
-            success:function (data) {
-                // let el = $('#' + tr_id).find('.dot-label')
-                let el = $('#' + tr_id)
-                el.find('.dot-label').removeClass(icon_remove_class).addClass(icon_add_class)
-                console.log('btn_text = ' + btn_text)
-                el.find('.deactivate-company-admin').text(btn_text)
+                processData: false,
+                contentType: false,
+                error: function (data) {
+                    toastr.error('Ошибка', data)
+                },
+                success: function (data) {
+                    // let el = $('#' + tr_id).find('.dot-label')
+                    let el = $('#' + tr_id)
+                    el.find('.dot-label').removeClass(icon_remove_class).addClass(icon_add_class)
+                    console.log('btn_text = ' + btn_text)
+                    el.find('.deactivate-company-admin').text(btn_text)
 
-                toastr.success(resul_text)
-                hide_progressbar_loader()
-            }
-        });
-
-
+                    toastr.success(resul_text)
+                    hide_progressbar_loader()
+                }
+            });
 
 
-      }
+        }
     })
 
     console.log(employee_id)
@@ -204,128 +268,123 @@ $('#tbody_company_admins').on('click', '.delete-company-admin', function () {
     let tr = $(this).closest('tr')
     let employee_id = $(this).closest('tr').attr('id').split('_')[2]
     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                    '<div>Удалить админа?</div>' +
-                    '<br>' +
-                    '<hr class="solid mt-0" style="background-color: black;">'
+        '<div>Удалить админа?</div>' +
+        '<br>' +
+        '<hr class="solid mt-0" style="background-color: black;">'
     Swal.fire({
-      html: output_html,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Да',
-      cancelButtonText: 'Нет'
+        html: output_html,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет'
     }).then((result) => {
-      if (result.isConfirmed) {
-          show_progressbar_loader()
-        $.ajax({
-            headers: { "X-CSRFToken": token },
-            url: url_delete_company_admin,
-            type: 'POST',
-            data: JSON.stringify({
+        if (result.isConfirmed) {
+            show_progressbar_loader()
+            $.ajax({
+                headers: {"X-CSRFToken": token},
+                url: url_delete_company_admin,
+                type: 'POST',
+                data: JSON.stringify({
                     'employee_id': employee_id,
                 }),
-            processData: false,
-            contentType: false,
-            error: function(data){
-                toastr.error('Ошибка', data)
-            },
-            success:function (data) {
-                tr.remove()
-                console.log($('#tbody_company_admins tr').length)
-                if ($('#tbody_company_admins tr').length === 0){
-                    $('#tbody_company_admins').html('<tr><td class="no-data-text" colspan="4">Админы не назначены</td></tr>')
+                processData: false,
+                contentType: false,
+                error: function (data) {
+                    toastr.error('Ошибка', data)
+                },
+                success: function (data) {
+                    tr.remove()
+                    console.log($('#tbody_company_admins tr').length)
+                    if ($('#tbody_company_admins tr').length === 0) {
+                        $('#tbody_company_admins').html('<tr><td class="no-data-text" colspan="4">Админы не назначены</td></tr>')
+                    }
+
+                    toastr.success("Админ удален")
+                    hide_progressbar_loader()
                 }
-
-                toastr.success("Админ удален")
-                hide_progressbar_loader()
-            }
-        });
+            });
 
 
-
-
-      }
+        }
     })
 
 
 })
 
 
-    $('#company_active').on('click', function () {
-        if ($(this).attr('checked') === 'checked'){
-            $(this).attr('checked', false)
-            active = 0
-        }else {
-            $(this).attr('checked', 'checked')
-            active = 1
-        }
-    })
+$('#company_active').on('click', function () {
+    if ($(this).attr('checked') === 'checked') {
+        $(this).attr('checked', false)
+        active = 0
+    } else {
+        $(this).attr('checked', 'checked')
+        active = 1
+    }
+})
 
 $('#save_company').on('click', function () {
     let company_name = $('#input_company_name').val()
 
 
-
-    if(company_name === ''){
-            toastr.error('Название компании не заполнено')
-        }else {
-            btn_spinner($('#save_company'))
-            $.ajax({
-                headers: { "X-CSRFToken": token },
-                url: url_update_company,
-                type: 'POST',
-                data: JSON.stringify({
-                            'company_name': company_name,
-                            'company_id': company_id,
-                            'active': active
-                        }),
-                processData: false,
-                contentType: false,
-                error: function(data){
-                    toastr.error('Ошибка', data)
-                },
-                success:function (data) {
-                    toastr.success('Данные сохранены')
-                    btn_text($('#save_company'), 'Сохранить')
-                }
-            });
-        }
-
-
+    if (company_name === '') {
+        toastr.error('Название компании не заполнено')
+    } else {
+        btn_spinner($('#save_company'))
+        $.ajax({
+            headers: {"X-CSRFToken": token},
+            url: url_update_company,
+            type: 'POST',
+            data: JSON.stringify({
+                'company_name': company_name,
+                'company_id': company_id,
+                'active': active
+            }),
+            processData: false,
+            contentType: false,
+            error: function (data) {
+                toastr.error('Ошибка', data)
+            },
+            success: function (data) {
+                toastr.success('Данные сохранены')
+                btn_text($('#save_company'), 'Сохранить')
+            }
+        });
+    }
 
 
 })
 
 $('#delete_company').on('click', function () {
     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                    '<div>Удалить компанию?</div>' +
-                    '<br>' +
-                    '<hr class="solid mt-0" style="background-color: black;">'
+        '<div>Удалить компанию?</div>' +
+        '<br>' +
+        '<hr class="solid mt-0" style="background-color: black;">'
     Swal.fire({
-      html: output_html,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Да',
-      cancelButtonText: 'Нет'
+        html: output_html,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет'
     }).then((result) => {
         if (result.isConfirmed) {
             show_progressbar_loader()
             $.ajax({
-                headers: { "X-CSRFToken": token },
+                headers: {"X-CSRFToken": token},
                 url: url_delete_company,
                 type: 'POST',
                 data: JSON.stringify({
-                            'company_id': company_id,
-                        }),
+                    'company_id': company_id,
+                }),
                 processData: false,
                 contentType: false,
-                error: function(data){
+                error: function (data) {
                     toastr.error('Ошибка', data)
                 },
-                success:function (data) {
+                success: function (data) {
                     window.location.href = url_companies_list
                 }
             });

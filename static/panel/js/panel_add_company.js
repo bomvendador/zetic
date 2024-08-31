@@ -33,24 +33,30 @@ $('#save_company').on('click', function () {
             },
             success: function (data) {
                 console.log(data)
+                btn_text($('#save_company'), 'Сохранить')
+                if (data['error']) {
+                    toastr.error(data['error'])
+                } else {
+                    let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<h4 style="text-align: center">Kомпания успешно создана</h4>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
 
-                let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
-                    '<br>' +
-                    '<hr class="solid mt-0" style="background-color: black;">' +
-                    '<h4 style="text-align: center">Kомпания успешно создана</h4>' +
-                    '<hr class="solid mt-0" style="background-color: black;">'
+                    Swal.fire({
+                        html: output_html,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ОК'
+                    }).then((result) => {
+                        if (result.value) {
+                            window.location.href = url_companies_list
+                        }
+                    })
 
-                Swal.fire({
-                    html: output_html,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'ОК'
-                }).then((result) => {
-                    if (result.value) {
-                        window.location.href = url_companies_list
-                    }
-                })
+                }
+
             }
         });
     }

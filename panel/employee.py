@@ -16,6 +16,7 @@ from django.db.models import Sum, Q
 
 from django.template.loader import render_to_string
 
+
 @login_required(redirect_field_name=None, login_url='/login/')
 def add_employee(request):
     context = info_common(request)
@@ -89,9 +90,6 @@ def add_employee(request):
             'name_ru': item.name_ru
         })
 
-    print(positions)
-    print(industries)
-    print(roles)
     # for role in roles:
 
     context.update({
@@ -102,7 +100,9 @@ def add_employee(request):
         'genders': sex
     })
 
-    return render(request, 'employee/panel_add_employee.html', context)
+    response = render(request, 'employee/panel_add_employee.html', context)
+    response['Cache-Control'] = 'no-cache'
+    return response
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -176,28 +176,50 @@ def get_employee_data(request):
             name = employee.name
         else:
             name = ''
+        if employee.sex:
+            gender = {
+                'name_ru': employee.sex.name_ru,
+                'id': 'gender_id_' + str(employee.sex.id),
+            }
+        else:
+            gender = ''
+        if not employee.birth_year is None:
+            birth_year = employee.birth_year
+        else:
+            birth_year = ''
+
+        if employee.role:
+            role = {
+                'name_ru': employee.role.name_ru,
+                'id': 'role_id_' + str(employee.role.id),
+            }
+        else:
+            role = ''
+        if employee.position:
+            position = {
+                'name_ru': employee.position.name_ru,
+                'id': 'position_id_' + str(employee.position.id),
+            }
+        else:
+            position = ''
+        if employee.industry:
+            industry = {
+                'name_ru': employee.industry.name_ru,
+                'id': 'industry_id_' + str(employee.industry.id),
+            }
+        else:
+            industry = ''
 
         response = {
             'name': name,
             'email': employee.email,
-            'gender': {
-                'name_ru': employee.sex.name_ru,
-                'id': 'gender_id_' + str(employee.sex.id),
-                       },
-            'birth_year': employee.birth_year,
-            'role': {
-                'name_ru': employee.role.name_ru,
-                'id': 'role_id_' + str(employee.role.id),
-                       },
-            'position': {
-                'name_ru': employee.position.name_ru,
-                'id': 'position_id_' + str(employee.position.id),
-                       },
-            'industry': {
-                'name_ru': employee.industry.name_ru,
-                'id': 'industry_id_' + str(employee.industry.id),
-                       }
+            'gender': gender,
+            'birth_year': birth_year,
+            'role': role,
+            'position': position,
+            'industry': industry
         }
+        print(response)
         return JsonResponse(response)
 
 
@@ -286,9 +308,9 @@ def save_new_employee_html(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
         employee_data = json_data['employee_data']
-        print('-----employee data------')
-        print(json_data)
-        print(employee_data)
+        # print('-----employee data------')
+        # print(json_data)
+        # print(employee_data)
         email = employee_data['email']
         check_passed = True
         if 'employee_id' in employee_data:
@@ -458,7 +480,8 @@ def search_for_employees(request):
                     questionnaires_visits_inst = QuestionnaireVisits.objects.filter(questionnaire=questionnaire)
                     questionnaire_visits = []
                     for questionnaire_visit in questionnaires_visits_inst:
-                        questionnaire_visits.append(timezone.localtime(questionnaire_visit.created_at).strftime("%d.%m.%Y %H:%M:%S"))
+                        questionnaire_visits.append(
+                            timezone.localtime(questionnaire_visit.created_at).strftime("%d.%m.%Y %H:%M:%S"))
                     questionnaires.append({
                         'created_at': timezone.localtime(questionnaire.created_at).strftime("%d.%m.%Y %H:%M:%S"),
                         'questionnaire_visits': questionnaire_visits
@@ -539,5 +562,3 @@ def delete_company_admin(request):
         employee.save()
 
         return HttpResponse(status=200)
-
-

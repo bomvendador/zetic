@@ -125,6 +125,7 @@ class Company(models.Model):
     active = models.BooleanField(default=True, null=False)
     email = models.CharField(max_length=100, blank=True, null=True, default=None)
     public_code = models.CharField(max_length=10, blank=False, null=False, default='')
+    # self_make_questionnaire_code = models.CharField(max_length=12, blank=True, null=True, default='')
 
     def __str__(self):
         return f'{self.id}. {self.name}'
@@ -132,6 +133,21 @@ class Company(models.Model):
     class Meta:
         verbose_name_plural = 'Компании'
         verbose_name = 'Компания'
+
+
+class CompanySelfQuestionnaireLink(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
+    company = models.ForeignKey(Company, default=None, null=True, on_delete=models.PROTECT)
+    research_template = models.ForeignKey(ResearchTemplate, default=None, null=True, on_delete=models.PROTECT)
+    code = models.CharField(max_length=20, blank=False, null=False, default='')
+
+    def __str__(self):
+        return f'{self.id}. {self.company.name}'
+
+    class Meta:
+        verbose_name_plural = 'Ссылки компаний для создания опросников'
+        verbose_name = 'Ссылка компании для создания опросников'
 
 
 class Industry(models.Model):

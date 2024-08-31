@@ -1,221 +1,330 @@
 {% extends 'panel_base.html' %}
 {% load static %}
-    {% block content %}
+{% block content %}
 
-                <div class="side-app">
+    <div class="side-app">
 
-                    <!-- CONTAINER -->
-                    <div class="main-container container-fluid">
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
 
-                        <!-- PAGE-HEADER -->
-                        <div class="page-header">
-                            <h1 class="page-title">Редактирование компании</h1>
-                            <div>
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Редактирование Компании</li>
-                                </ol>
-                            </div>
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">Редактирование компании</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Редактирование Компании</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- ROW-1 OPEN -->
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Данные компании</h3>
                         </div>
-                        <!-- PAGE-HEADER END -->
+                        <div class="card-body">
+                            {#                                        <div class="text-center chat-image mb-5">#}
+                            {#                                            <div class="avatar avatar-xxl chat-profile mb-3 brround">#}
+                            {#                                                <img alt="avatar" src="{% static 'images/company_avatar.png' %}" class="brround">#}
+                            {#                                            </div>#}
+                            {#                                        </div>#}
 
-                        <!-- ROW-1 OPEN -->
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Данные компании</h3>
-                                    </div>
-                                    <div class="card-body">
-{#                                        <div class="text-center chat-image mb-5">#}
-{#                                            <div class="avatar avatar-xxl chat-profile mb-3 brround">#}
-{#                                                <img alt="avatar" src="{% static 'images/company_avatar.png' %}" class="brround">#}
-{#                                            </div>#}
-{#                                        </div>#}
-
-                                        <div class="row">
-                                            <div class="col-lg-12 col-md-12">
-                                                <div class="form-group">
-                                                    <label for="input_fio">Название</label>
-                                                    <input type="text" class="form-control" id="input_company_name" value="{{ company.name }}">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-lg-12 col-md-12">
-                                                <div class="form-switch">
-                                                  <input class="form-check-input" type="checkbox" role="switch" id="company_active" {% if company.active %}checked="checked"{% endif %}>
-                                                  <label class="form-check-label" for="company_active">Компания активна</label>
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-
-                                   </div>
-                                    <div class="card-footer text-end">
-                                        <button class="btn btn-primary my-1 nav-buttons" type="button" id="save_company">Сохранить</button>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="form-group">
+                                        <label for="input_fio">Название</label>
+                                        <input type="text" class="form-control" id="input_company_name"
+                                               value="{{ company.name }}">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Администраторы</h3>
-                                    </div>
-                                    <div class="card-body">
-{#                                        <div class="text-center chat-image mb-5">#}
-{#                                            <div class="avatar avatar-xxl chat-profile mb-3 brround">#}
-{#                                                <img alt="avatar" src="{% static 'images/company_avatar.png' %}" class="brround">#}
-{#                                            </div>#}
-{#                                        </div>#}
-                                        <div style="display: block; overflow-x: auto; white-space: nowrap;">
-                                        <table class="table text-nowrap text-md-nowrap mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Имя</th>
-                                                    <th>Email</th>
-                                                    <th>Активен</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tbody_company_admins">
-                                            {% if admins %}
-                                             {% for admin in admins %}
-                                                <tr id="employee_id_{{ admin.id }}">
 
-                                                    <td>{{ admin.name }}</td>
-                                                    <td>{{ admin.email }}</td>
-                                                    <td>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                               id="company_active" {% if company.active %}checked="checked"{% endif %}>
+                                        <label class="form-check-label" for="company_active">Компания активна</label>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="card-footer text-end">
+                            <button class="btn btn-primary my-1 nav-buttons" type="button" id="save_company">Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Администраторы</h3>
+                        </div>
+                        <div class="card-body">
+                            {#                                        <div class="text-center chat-image mb-5">#}
+                            {#                                            <div class="avatar avatar-xxl chat-profile mb-3 brround">#}
+                            {#                                                <img alt="avatar" src="{% static 'images/company_avatar.png' %}" class="brround">#}
+                            {#                                            </div>#}
+                            {#                                        </div>#}
+                            <div style="display: block; overflow-x: auto; white-space: nowrap;">
+                                <table class="table text-nowrap text-md-nowrap mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th>Имя</th>
+                                        <th>Email</th>
+                                        <th>Активен</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbody_company_admins">
+                                    {% if admins %}
+                                        {% for admin in admins %}
+                                            <tr id="employee_id_{{ admin.id }}">
+
+                                                <td>{{ admin.name }}</td>
+                                                <td>{{ admin.email }}</td>
+                                                <td>
                                                     {% if admin.company_admin_active %}
                                                         <span class="dot-label bg-success" title="Админ активен"></span>
                                                     {% else %}
-                                                        <span class="dot-label bg-danger" title="Админ деактивирован"></span>
+                                                        <span class="dot-label bg-danger"
+                                                              title="Админ деактивирован"></span>
                                                     {% endif %}
-                                                    </td>
-                                                    <td>
-                                                        <div style="text-align: center;">
-                                                            <i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>
-                                                            <ul class="dropdown-menu" id="employee_id_{{ admin.id }}">
-                                                                <li><a class="dropdown-item deactivate-company-admin cursor-pointer">
+                                                </td>
+                                                <td>
+                                                    <div style="text-align: center;">
+                                                        <i class="fe fe-more-vertical cursor-pointer"
+                                                           data-bs-toggle="dropdown" aria-expanded="false"
+                                                           style="font-size: 20px"></i>
+                                                        <ul class="dropdown-menu" id="employee_id_{{ admin.id }}">
+                                                            <li>
+                                                                <a class="dropdown-item deactivate-company-admin cursor-pointer">
                                                                     {% if admin.company_admin_active %}
-                                                                    Деактивировать
+                                                                        Деактивировать
                                                                     {% else %}
-                                                                    Активировать
+                                                                        Активировать
                                                                     {% endif %}
-                                                                    </a>
-                                                                </li>
-                                                                <li><a class="dropdown-item delete-company-admin cursor-pointer">Удалить</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item delete-company-admin cursor-pointer">Удалить</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
 
-                                                </tr>
-                                                {% endfor %}
-                                            {% else %}
-                                                <tr>
-                                                    <td class="no-data-text" colspan="4">
-                                                        Админы не назначены
-                                                    </td>
-                                                </tr>
-
-
-                                            {% endif %}
-
-                                            </tbody>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td class="no-data-text" colspan="4">
+                                                Админы не назначены
+                                            </td>
+                                        </tr>
 
 
-                                        </table>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer text-end">
-                                        <button class="btn btn-primary my-1 nav-buttons" type="button" id="add_admin">Назначить</button>
-                                    </div>
+                                    {% endif %}
 
-                                </div>
+                                    </tbody>
+
+
+                                </table>
                             </div>
-                            <!-- ROW-1 CLOSED -->
-
                         </div>
-                        <div class="row">
-
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Удаление компании</h3>
-                                    </div>
-                                    <div class="card-body">
-
-                                        <div class="row">
-                                            <p class="text-danger">Внимание!</p>
-                                            <spa>При удалении компании также будут удалены все связанные данные: сотрудники, опросники, участники опросов, данные анкет</spa>
-
-                                        </div>
-                                   </div>
-                                    <div class="card-footer text-end">
-                                        <button class="btn btn-danger my-1 nav-buttons" type="button" id="delete_company">Удалить компанию</button>
-                                    </div>
-                                </div>
-                            </div>
-
+                        <div class="card-footer text-end">
+                            <button class="btn btn-primary my-1 nav-buttons" type="button" id="add_admin">Назначить
+                            </button>
                         </div>
-                        <!--CONTAINER CLOSED -->
 
                     </div>
                 </div>
-        <!-- Модальное окно добавление админа -->
-        <div class="modal fade" id="input_modal_add_admin">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content modal-content-demo">
-                    <div class="modal-header modal-header-style">
-                        <h6 class="modal-title">Добавление админа</h6>
-                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
+                <!-- ROW-1 CLOSED -->
+
+            </div>
+            <div class="row">
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Удаление компании</h3>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="row">
+                                <p class="text-danger">Внимание!</p>
+                                <span>При удалении компании также будут удалены все связанные данные: сотрудники,
+                                    опросники, участники опросов, данные анкет
+                                </span>
+
+                            </div>
+                        </div>
+                        <div class="card-footer text-end">
+                            <button class="btn btn-danger my-1 nav-buttons" type="button" id="delete_company">Удалить
+                                компанию
+                            </button>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <form>
-                          <div class="mb-3">
+                </div>
+
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Ссылки для самостоятельного создания опросника</h3>
+                        </div>
+                        <div class="card-body">
+                            <div style="display: block; overflow-x: auto; white-space: nowrap;">
+                                <table class="table text-nowrap text-md-nowrap mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th>Ссылка</th>
+                                        <th>Шаблон</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbody_self_questionnaire_link">
+                                    {% if links %}
+                                        {% for link in links %}
+                                            <tr data-link-id="{{ link.id }}">
+                                                <td><input type="text" class="form-control" value="{% url 'company_questionnaire' link.code %}" disabled/></td>
+                                                <td style="vertical-align: middle">{{ link.research_template.name }}</td>
+                                                <td>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td class="no-data-text" colspan="4">
+                                                Ссылки отсутствуют
+                                            </td>
+                                        </tr>
+
+
+                                    {% endif %}
+
+                                    </tbody>
+
+
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer text-end">
+                            <button class="btn btn-primary my-1 nav-buttons" type="button" id="select_link_template_btn"
+                            {% if not templates %}
+                            disabled
+                            {% endif %}
+                            >Добавить шаблон</button>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <!--CONTAINER CLOSED -->
+
+        </div>
+    </div>
+    <!-- Модальное окно добавление админа -->
+    <div class="modal fade" id="input_modal_add_admin">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header modal-header-style">
+                    <h6 class="modal-title">Добавление админа</h6>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
                             <label for="input_position_ru_name" class="col-form-label">Выберите сотрудника</label>
-                                <select name="user_role" class="form-control form-select" id="company_admin_select">
-                                    <option></option>
+                            <select name="user_role" class="form-control form-select" id="company_admin_select">
+                                <option></option>
 
-                                </select>
-                          </div>
+                            </select>
+                        </div>
 
 
-                            <div class="form-group">
-                                <label class="form-label">Новый пароль</label>
-                                <div class="wrap-input100 validate-input input-group" id="Password-toggle1">
-                                    <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
-                                        <i class="zmdi zmdi-eye text-muted" aria-hidden="true" id="new_password_hide"></i>
-                                    </a>
-                                    <input class="input100 form-control" type="password" autocomplete="new-password" id="new_password">
-                                </div>
+                        <div class="form-group">
+                            <label class="form-label">Новый пароль</label>
+                            <div class="wrap-input100 validate-input input-group" id="Password-toggle1">
+                                <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                                    <i class="zmdi zmdi-eye text-muted" aria-hidden="true" id="new_password_hide"></i>
+                                </a>
+                                <input class="input100 form-control" type="password" autocomplete="new-password"
+                                       id="new_password">
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Подтверждение пароля</label>
-                                <div class="wrap-input100 validate-input input-group" id="Password-toggle2">
-                                    <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
-                                        <i class="zmdi zmdi-eye text-muted" aria-hidden="true" id="new_password_confirm_hide"></i>
-                                    </a>
-                                    <input class="input100 form-control" type="password" autocomplete="new-password" id="new_password_confirm">
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Подтверждение пароля</label>
+                            <div class="wrap-input100 validate-input input-group" id="Password-toggle2">
+                                <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                                    <i class="zmdi zmdi-eye text-muted" aria-hidden="true"
+                                       id="new_password_confirm_hide"></i>
+                                </a>
+                                <input class="input100 form-control" type="password" autocomplete="new-password"
+                                       id="new_password_confirm">
                             </div>
+                        </div>
 
-                        </form>
-                      </div>
-                    <div>
-                        <div class="row" style="padding: 0px 15px 15px">
-                            <div class="col-lg-12 col-sm-12 mt-3">
-                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="appoint_company_admin">Сохранить</button>
-                            </div>
+                    </form>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="appoint_company_admin">Сохранить
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Модальное окно добавления ссылки -->
+    <div class="modal fade" id="input_modal_select_link_template">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header modal-header-style">
+                    <h6 class="modal-title">Выбор шаблона</h6>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="select_template" class="col-form-label">Шаблон</label>
+                            <select name="select_template" class="form-control form-select" id="select_template">
+                                <option value="0">-- Сдлайте выбор --</option>
+                                {% for template in templates %}
+                                <option value="{{ template.id }}">{{ template.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="generate_link">Создать ссылку
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -223,24 +332,26 @@
 
 {% block script %}
 
-<script>
+    <script>
 
-    let url_get_company_no_admins = "{% url 'get_company_no_admins' %}"
-    let url_appoint_company_admin = "{% url 'appoint_company_admin' %}"
-    let url_deactivate_company_admin = "{% url 'deactivate_company_admin' %}"
-    let url_delete_company_admin = "{% url 'delete_company_admin' %}"
-    let url_delete_company = "{% url 'delete_company' %}"
-    let url_update_company = "{% url 'update_company' %}"
-    let active;
-    let company_id = {{ company.id }}
+        let url_get_company_no_admins = "{% url 'get_company_no_admins' %}"
+        let url_appoint_company_admin = "{% url 'appoint_company_admin' %}"
+        let url_deactivate_company_admin = "{% url 'deactivate_company_admin' %}"
+        let url_delete_company_admin = "{% url 'delete_company_admin' %}"
+        let url_delete_company = "{% url 'delete_company' %}"
+        let url_update_company = "{% url 'update_company' %}"
+        let url_generate_new_self_questionnaire_link = "{% url 'generate_new_self_questionnaire_link' %}"
+        let active;
+        let company_id = {{ company.id }};
+        let location_origin = window.location.origin
 
-    {% if company.active %}
-        active = 1
-    {% else %}
-        active = 0
-    {% endif %}
+            {% if company.active %}
+                active = 1
+            {% else %}
+                active = 0
+            {% endif %}
 
 
-</script>
-<script src="{% static 'panel/js/panel_edit_company.js' %}"></script>
+    </script>
+    <script src="{% static 'panel/js/panel_edit_company.js' %}"></script>
 {% endblock %}

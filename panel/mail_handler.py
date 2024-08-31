@@ -24,6 +24,106 @@ def generate_participant_link_code(string_length):
     return random[0:string_length] # Return the random string.
 
 
+def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, email_type, send_admin_notification_after_filling_up_mass, send_report_to_participant_after_filling_up_mass):
+    wrong_emails = []
+    participant_total_questions = 0
+    research_template_sections = ResearchTemplateSections.objects.filter(research_template__study=Study.objects.get(id=study_id))
+    for research_template_section in research_template_sections:
+
+        categories = Category.objects.filter(section_id=research_template_section.section_id)
+        # print(f'categories = {len(categories)}')
+
+        for category in categories:
+            category_question = CategoryQuestions.objects.filter(category=category)
+            # print(f'category_question = {len(category_question)}')
+
+            participant_total_questions = participant_total_questions + len(category_question)
+
+    for participant in participants_ids_to_send_invitation_to:
+        # participant_id = participant['id']
+        # print(f'id - {participant["id"]}')
+        participant_inst = Participant.objects.get(id=participant['id'])
+        participant_email = participant_inst.employee.email
+
+        if email_type == 'initial':
+            code_for_participant = generate_participant_link_code(20)
+            participant_inst.invitation_code = code_for_participant
+            participant_inst.save()
+
+            questionnaire_inst = Questionnaire()
+            questionnaire_inst.participant = participant_inst
+            questionnaire_inst.save()
+
+            context = {
+                'code_for_participant': code_for_participant,
+            }
+
+            html_message = render_to_string('invitation_message.html', context)
+        elif email_type == 'reminder':
+            context = {
+                'code_for_participant': participant_inst.invitation_code,
+            }
+            html_message = render_to_string('invitation_message_reminder.html', context)
+        elif email_type == 'self_questionnaire':
+            context = {
+                'code_for_participant': participant_inst.invitation_code,
+            }
+            html_message = render_to_string('invitation_message.html', context)
+
+        plain_text = strip_tags(html_message)
+        from_email = 'ZETIC <info@zetic.ru>'
+        to_email = participant_email
+        subject = 'Опросник ZETIC'
+        success_sent_qnt = 0
+        try:
+            send_mail(
+                subject,
+                plain_text,
+                from_email,
+                [to_email],
+                html_message=html_message,
+                fail_silently=False,
+            )
+            participant_inst.invitation_sent = True
+            participant_inst.invitation_sent_datetime = timezone.now()
+            # participant_inst.invitation_code = code_for_participant
+            if send_admin_notification_after_filling_up_mass == 1:
+                participant_inst.send_admin_notification_after_filling_up = True
+            if send_report_to_participant_after_filling_up_mass == 1:
+                participant_inst.send_report_to_participant_after_filling_up = True
+            participant_inst.total_questions_qnt = participant_total_questions
+            participant_inst.save()
+
+            email_sent_to_participant_inst = EmailSentToParticipant()
+            email_sent_to_participant_inst.participant = participant_inst
+            email_sent_to_participant_inst.type = email_type
+            email_sent_to_participant_inst.save()
+
+            # result.update({
+            #     'datetime_invitation_sent': timezone.localtime(participant_inst.invitation_sent_datetime).strftime("%d.%m.%Y %H:%M"),
+            #     'questions_count': participant_total_questions
+            # })
+
+        except SMTPRecipientsRefused as e:
+            print(f'wrong email - {participant_email}')
+            wrong_emails.append(participant_email)
+            # result.update({
+            #     'wrong_emails': wrong_emails,
+            #     'error': 'Указан некорректный Email участника'
+            # })
+        except SMTPException as e:
+            print('There was an error sending an email: ', e)
+        except:
+            print("Mail Sending Failed!")
+
+        response = {
+            'participant_total_questions': participant_total_questions,
+            'wrong_emails': wrong_emails
+        }
+
+        return response
+
+
 def mass_send_invitation_email(request):
     if request.method == 'POST':
         json_request = json.loads(request.body.decode('utf-8'))
@@ -47,96 +147,103 @@ def mass_send_invitation_email(request):
                 check_passed = False
         if check_passed:
 
-            wrong_emails = []
-            participant_total_questions = 0
-            research_template_sections = ResearchTemplateSections.objects.filter(research_template__study=study_inst)
-            for research_template_section in research_template_sections:
+            # wrong_emails = []
+            # participant_total_questions = 0
+            # research_template_sections = ResearchTemplateSections.objects.filter(research_template__study=study_inst)
+            # for research_template_section in research_template_sections:
+            #
+            #     categories = Category.objects.filter(section_id=research_template_section.section_id)
+            #     # print(f'categories = {len(categories)}')
+            #
+            #     for category in categories:
+            #         category_question = CategoryQuestions.objects.filter(category=category)
+            #         # print(f'category_question = {len(category_question)}')
+            #
+            #         participant_total_questions = participant_total_questions + len(category_question)
+            #
+            # for participant in participants_ids_to_send_invitation_to:
+            #     # participant_id = participant['id']
+            #     print(f'id - {participant["id"]}')
+            #     participant_inst = Participant.objects.get(id=participant['id'])
+            #     participant_email = participant_inst.employee.email
+            #
+            #     if email_type == 'initial':
+            #         code_for_participant = generate_participant_link_code(20)
+            #         participant_inst.invitation_code = code_for_participant
+            #         participant_inst.save()
+            #
+            #         questionnaire_inst = Questionnaire()
+            #         questionnaire_inst.participant = participant_inst
+            #         questionnaire_inst.save()
+            #
+            #         context = {
+            #             'code_for_participant': code_for_participant,
+            #         }
+            #
+            #         html_message = render_to_string('invitation_message.html', context)
+            #     else:
+            #         context = {
+            #             'code_for_participant': participant_inst.invitation_code,
+            #         }
+            #         html_message = render_to_string('invitation_message_reminder.html', context)
+            #     plain_text = strip_tags(html_message)
+            #     from_email = 'ZETIC <info@zetic.ru>'
+            #     to_email = participant_email
+            #     subject = 'Опросник ZETIC'
+            #     success_sent_qnt = 0
+            #     try:
+            #         send_mail(
+            #             subject,
+            #             plain_text,
+            #             from_email,
+            #             [to_email],
+            #             html_message=html_message,
+            #             fail_silently=False,
+            #         )
+            #         participant_inst.invitation_sent = True
+            #         participant_inst.invitation_sent_datetime = timezone.now()
+            #         # participant_inst.invitation_code = code_for_participant
+            #         if send_admin_notification_after_filling_up_mass == 1:
+            #             participant_inst.send_admin_notification_after_filling_up = True
+            #         if send_report_to_participant_after_filling_up_mass == 1:
+            #             participant_inst.send_report_to_participant_after_filling_up = True
+            #         participant_inst.total_questions_qnt = participant_total_questions
+            #         participant_inst.save()
+            #
+            #         email_sent_to_participant_inst = EmailSentToParticipant()
+            #         email_sent_to_participant_inst.participant = participant_inst
+            #         email_sent_to_participant_inst.type = email_type
+            #         email_sent_to_participant_inst.save()
+            #
+            #         # result.update({
+            #         #     'datetime_invitation_sent': timezone.localtime(participant_inst.invitation_sent_datetime).strftime("%d.%m.%Y %H:%M"),
+            #         #     'questions_count': participant_total_questions
+            #         # })
+            #
+            #     except SMTPRecipientsRefused as e:
+            #         print(f'wrong email - {participant_email}')
+            #         wrong_emails.append(participant_email)
+            #         # result.update({
+            #         #     'wrong_emails': wrong_emails,
+            #         #     'error': 'Указан некорректный Email участника'
+            #         # })
+            #     except SMTPException as e:
+            #         print('There was an error sending an email: ', e)
+            #     except:
+            #         print("Mail Sending Failed!")
+            send_email_by_email_type_var = send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, email_type, send_admin_notification_after_filling_up_mass, send_report_to_participant_after_filling_up_mass)
 
-                categories = Category.objects.filter(section_id=research_template_section.section_id)
-                # print(f'categories = {len(categories)}')
-
-                for category in categories:
-                    category_question = CategoryQuestions.objects.filter(category=category)
-                    # print(f'category_question = {len(category_question)}')
-
-                    participant_total_questions = participant_total_questions + len(category_question)
-
-            for participant in participants_ids_to_send_invitation_to:
-                # participant_id = participant['id']
-                print(f'id - {participant["id"]}')
-                participant_inst = Participant.objects.get(id=participant['id'])
-                participant_email = participant_inst.employee.email
-
-                if email_type == 'initial':
-                    code_for_participant = generate_participant_link_code(20)
-                    participant_inst.invitation_code = code_for_participant
-                    participant_inst.save()
-
-                    questionnaire_inst = Questionnaire()
-                    questionnaire_inst.participant = participant_inst
-                    questionnaire_inst.save()
-
-                    context = {
-                        'code_for_participant': code_for_participant,
-                    }
-
-                    html_message = render_to_string('invitation_message.html', context)
-                else:
-                    context = {
-                        'code_for_participant': participant_inst.invitation_code,
-                    }
-                    html_message = render_to_string('invitation_message_reminder.html', context)
-                plain_text = strip_tags(html_message)
-                from_email = 'ZETIC <info@zetic.ru>'
-                to_email = participant_email
-                subject = 'Опросник ZETIC'
-                success_sent_qnt = 0
-                try:
-                    send_mail(
-                        subject,
-                        plain_text,
-                        from_email,
-                        [to_email],
-                        html_message=html_message,
-                        fail_silently=False,
-                    )
-                    participant_inst.invitation_sent = True
-                    participant_inst.invitation_sent_datetime = timezone.now()
-                    # participant_inst.invitation_code = code_for_participant
-                    if send_admin_notification_after_filling_up_mass == 1:
-                        participant_inst.send_admin_notification_after_filling_up = True
-                    if send_report_to_participant_after_filling_up_mass == 1:
-                        participant_inst.send_report_to_participant_after_filling_up = True
-                    participant_inst.total_questions_qnt = participant_total_questions
-                    participant_inst.save()
-
-                    email_sent_to_participant_inst = EmailSentToParticipant()
-                    email_sent_to_participant_inst.participant = participant_inst
-                    email_sent_to_participant_inst.type = email_type
-                    email_sent_to_participant_inst.save()
-
-                    # result.update({
-                    #     'datetime_invitation_sent': timezone.localtime(participant_inst.invitation_sent_datetime).strftime("%d.%m.%Y %H:%M"),
-                    #     'questions_count': participant_total_questions
-                    # })
-
-                except SMTPRecipientsRefused as e:
-                    print(f'wrong email - {participant_email}')
-                    wrong_emails.append(participant_email)
-                    # result.update({
-                    #     'wrong_emails': wrong_emails,
-                    #     'error': 'Указан некорректный Email участника'
-                    # })
-                except SMTPException as e:
-                    print('There was an error sending an email: ', e)
-                except:
-                    print("Mail Sending Failed!")
 
             result.update({
-                'questions_count': participant_total_questions,
-                'wrong_emails': wrong_emails,
+                'questions_count': send_email_by_email_type_var['participant_total_questions'],
+                'wrong_emails': send_email_by_email_type_var['wrong_emails'],
 
             })
+            # result.update({
+            #     'questions_count': participant_total_questions,
+            #     'wrong_emails': wrong_emails,
+            #
+            # })
 
 
 
@@ -226,6 +333,7 @@ def mass_send_invitation_email(request):
         return JsonResponse(result)
 
         # return HttpResponse(status=200)
+
 
 def send_invitation_email(request):
     if request.method == 'POST':

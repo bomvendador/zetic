@@ -48,9 +48,12 @@ urlpatterns = [
     path('add_company', company.add_company_init, name='add_company_init'),
     path('save_new_company', company.save_new_company, name='save_new_company'),
     path('update_company', company.update_company, name='update_company'),
+    path('generate_new_self_questionnaire_link', company.generate_new_self_questionnaire_link, name='generate_new_self_questionnaire_link'),
     path('companies_list', company.companies_list, name='companies_list'),
     path('company/<int:company_id>', company.edit_company, name='edit_company'),
+    path('company_questionnaire/<str:code>', company.company_questionnaire, name='company_questionnaire'),
     path('appoint_company_admin', company.appoint_company_admin, name='appoint_company_admin'),
+    path('create_self_questionnaire', company.create_self_questionnaire, name='create_self_questionnaire'),
 
     path('industries_list', panel_company_parameter.industries_list, name='industries_list'),
     path('save_new_industry', panel_company_parameter.save_new_industry, name='save_new_industry'),
