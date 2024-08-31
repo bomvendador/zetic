@@ -59,8 +59,9 @@ def page(pdf, questionnaire_id, lang, report_id):
                 print(f'report_exists - {report_exists}')
                 questionnaire_question_answers = QuestionnaireQuestionAnswers.objects.filter(
                     Q(questionnaire=questionnaire_inst) & Q(question__category=filter_category.category))
+                print(f'questionnaire_question_answers = {len(questionnaire_question_answers)}')
 
-                if len(questionnaire_question_answers) > 0:
+                if questionnaire_question_answers.exists():
                     raw_points = 0
                     for answer in questionnaire_question_answers:
                         raw_points = raw_points + answer.answer.raw_point
