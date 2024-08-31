@@ -141,8 +141,8 @@ select:active {
 }
 
 select option {
-    background-color: #f0a500;
-    color: #fff;
+    background-color: #ffffff;
+    color: #3d3d3d;
 }
 
 .input-group {
