@@ -303,7 +303,7 @@ class Questionnaire(models.Model):
 
     def __str__(self):
         # return f'{self.name} - {self.company.name}'
-        return self.participant.employee.name
+        return f'{self.id}. {self.participant.employee.name}'
 
     class Meta:
         verbose_name_plural = 'Опросник респондента (questionnnaire)'
