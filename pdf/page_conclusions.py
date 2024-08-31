@@ -50,11 +50,13 @@ def page(pdf, questionnaire_id, lang, report_id):
         filter_categories_qnt = len(filter_categories)
         questionnaire_categories_fits_filter_qnt = 0
         for filter_category in filter_categories:
+            t_points_exists = False
             if report_exists:
                 print(f'report_id = {report_id} report id = {report.id} filter_category.category.code = {filter_category.category.code}')
                 if ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).exists():
                     print(f'report_exists - {report_exists}')
                     t_points = ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).latest('created_at').t_points
+                    t_points_exists = True
             else:
                 print(f'report_exists - {report_exists}')
                 questionnaire_question_answers = QuestionnaireQuestionAnswers.objects.filter(
@@ -69,9 +71,11 @@ def page(pdf, questionnaire_id, lang, report_id):
                     for answer in questionnaire_question_answers:
                         raw_points = raw_points + answer.answer.raw_point
                     t_points = raw_to_t_point.filter_raw_points_to_t_points(raw_points, questionnaire_inst.participant.employee_id, filter_category.category.id)
+                    t_points_exists = True
             # print(f't_point = {t_points}')
-            if filter_category.points_from <= t_points <= filter_category.points_to:
-                questionnaire_categories_fits_filter_qnt = questionnaire_categories_fits_filter_qnt + 1
+            if t_points_exists:
+                if filter_category.points_from <= t_points <= filter_category.points_to:
+                    questionnaire_categories_fits_filter_qnt = questionnaire_categories_fits_filter_qnt + 1
         if filter_categories_qnt == questionnaire_categories_fits_filter_qnt:
             filter_texts = IndividualReportPointsDescriptionFilterText.objects.filter(filter=description_filter)
             texts = []
