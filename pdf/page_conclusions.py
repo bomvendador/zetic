@@ -51,11 +51,12 @@ def page(pdf, questionnaire_id, lang, report_id):
         questionnaire_categories_fits_filter_qnt = 0
         for filter_category in filter_categories:
             if report_exists:
-                # print(f'report_id = {report_id} report id = {report.id} filter_category.category.code = {filter_category.category.code}')
+                print(f'report_id = {report_id} report id = {report.id} filter_category.category.code = {filter_category.category.code}')
                 if ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).exists():
                     print(f'report_exists - {report_exists}')
                     t_points = ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).latest('created_at').t_points
             else:
+                print(f'report_exists - {report_exists}')
                 questionnaire_question_answers = QuestionnaireQuestionAnswers.objects.filter(
                     Q(questionnaire=questionnaire_inst) & Q(question__category=filter_category.category))
 
