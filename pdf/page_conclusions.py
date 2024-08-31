@@ -59,6 +59,9 @@ def page(pdf, questionnaire_id, lang, report_id):
                 print(f'report_exists - {report_exists}')
                 questionnaire_question_answers = QuestionnaireQuestionAnswers.objects.filter(
                     Q(questionnaire=questionnaire_inst) & Q(question__category=filter_category.category))
+                print(f'questionnaire_id = {questionnaire_inst.id}')
+                print(f'participant = {questionnaire_inst.participant.employee.name}')
+                print(f'filter_category = {filter_category.category.code}. {filter_category.category.name}')
                 print(f'questionnaire_question_answers = {len(questionnaire_question_answers)}')
 
                 if questionnaire_question_answers.exists():
