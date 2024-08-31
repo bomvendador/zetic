@@ -508,7 +508,17 @@ def send_notification_report_made(data, report_id):
         subject, html_message, from_email, [to_email])
     email.attach_file(settings.MEDIA_ROOT + '/reportsPDF/single/' + report.file.name, 'application/pdf')
     email.content_subtype = "html"
-    email.send()
+    try:
+        email.send()
+        result = {
+            'result': 200
+        }
+
+    except SMTPRecipientsRefused as e:
+        result = {
+            'error': 'Указан некорректный Email'
+        }
+    return result
 
 
 def send_notification_to_participant_report_made(data, report_id):
@@ -527,7 +537,17 @@ def send_notification_to_participant_report_made(data, report_id):
         subject, html_message, from_email, [to_email])
     email.attach_file(settings.MEDIA_ROOT + '/reportsPDF/single/' + report.file.name, 'application/pdf')
     email.content_subtype = "html"
-    email.send()
+    try:
+        email.send()
+        result = {
+            'result': 200
+        }
+
+    except SMTPRecipientsRefused as e:
+        result = {
+            'error': 'Указан некорректный Email'
+        }
+    return result
 
 
     # try:
