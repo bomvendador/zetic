@@ -227,7 +227,7 @@ def save_data_to_db_and_send_report(questionnaire_id, file_name, study_id, lie_p
             send_email_result_to_participant = mail_handler.send_notification_to_participant_report_made(data_for_mail, report.id)
         send_email_result_to_zetic_admin = mail_handler.send_notification_report_made(data_for_mail, report.id)
 
-    if send_email_result_to_participant['error'] or send_email_result_to_zetic_admin['error']:
+    if 'error' in send_email_result_to_participant or 'error' in send_email_result_to_zetic_admin:
         return {'error': 'Указан некорректный Email'}
     else:
         return {'result': 200}
