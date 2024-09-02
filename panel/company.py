@@ -129,7 +129,6 @@ def edit_company(request, company_id):
     return render(request, 'panel_edit_company.html', context)
 
 
-@login_required(redirect_field_name=None, login_url='/login/')
 def company_questionnaire(request, code):
     context = info_common(request)
     company_self_questionnaire_link_inst = CompanySelfQuestionnaireLink.objects.get(code=code)
