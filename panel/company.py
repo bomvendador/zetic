@@ -130,13 +130,12 @@ def edit_company(request, company_id):
 
 
 def company_questionnaire(request, code):
-    context = info_common(request)
     company_self_questionnaire_link_inst = CompanySelfQuestionnaireLink.objects.get(code=code)
     years = []
     current_year = datetime.now().year
     for i in range(1960, current_year - 18 + 1):
         years.append(i)
-    context.update({
+    context = {
         'gender': EmployeeGender.objects.all(),
         'roles': EmployeeRole.objects.all(),
         'industries': Industry.objects.all(),
@@ -144,7 +143,7 @@ def company_questionnaire(request, code):
         'years': years,
         'company': company_self_questionnaire_link_inst.company,
         'code': code,
-    })
+    }
     return render(request, 'panel_company_questionnaire_participant_data.html', context)
 
 
