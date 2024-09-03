@@ -26,7 +26,7 @@ def participant_reminder():
 
 
 @shared_task(name='send_monthly_report')
-def monthly_report(request):
+def monthly_report():
     companies = Company.objects.all()
     now_aware = timezone.now()
     today = datetime.today()
