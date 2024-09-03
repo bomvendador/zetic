@@ -5,8 +5,43 @@ from datetime import datetime
 from django.utils import timezone
 from django.db.models.functions import ExtractDay
 from panel.mail_handler import send_invitation_email, send_reminder, send_month_report
-from pdf.models import Participant, EmailSentToParticipant, Company
+from pdf.models import Participant, EmailSentToParticipant, Company, Questionnaire, QuestionnaireVisits, Participant
 from calendar import monthrange, isleap
+from django.db.models import Sum, Q
+
+
+def diff_month(start_date, end_date):
+    qty_month = ((end_date.year - start_date.year) * 12) + (end_date.month - start_date.month)
+    d_days = end_date.day - start_date.day
+    if d_days >= 0:
+        adjust = 0
+    else:
+        adjust = -1
+    qty_month += adjust
+    return qty_month
+
+
+@shared_task(name='auto_block_questionnaire')
+def auto_block_questionnaire():
+    now_aware = timezone.now()
+    participants_inst = Participant.objects.filter(completed_at=None)
+    questionnaires_inst = Questionnaire.objects.filter(Q(participant__completed_at=None) & Q(participant__invitation_sent=True))
+    for questionnaire in questionnaires_inst:
+        if QuestionnaireVisits.objects.filter(questionnaire=questionnaire).exists():
+            questionnaire_visits_inst = QuestionnaireVisits.objects.filter(questionnaire=questionnaire).latest('created_at')
+            start_date = questionnaire_visits_inst.created_at
+        else:
+            start_date = questionnaire.created_at
+        diff = diff_month(start_date, now_aware)
+        if diff >= 3:
+            # questionnaire.active = False
+            # questionnaire.save()
+            print('================')
+            print(f'questionnaire = {questionnaire.id}')
+            print(f'participant = {questionnaire.participant.employee.email}')
+            print(f'{start_date} - {now_aware}')
+            print(f'разница = {diff}')
+            print('================')
 
 
 @shared_task(name='send_participant_reminder')
