@@ -33,15 +33,15 @@ def auto_block_questionnaire():
         else:
             start_date = questionnaire.created_at
         diff = diff_month(start_date, now_aware)
-        # if diff >= 1:
-            # questionnaire.active = False
-            # questionnaire.save()
-        print('================')
-        print(f'questionnaire = {questionnaire.id}')
-        print(f'participant = {questionnaire.participant.employee.email}')
-        print(f'{start_date} - {now_aware}')
-        print(f'разница = {diff}')
-        print('================')
+        if diff >= 3:
+            questionnaire.active = False
+            questionnaire.save()
+        # print('================')
+        # print(f'questionnaire = {questionnaire.id}')
+        # print(f'participant = {questionnaire.participant.employee.email}')
+        # print(f'{start_date} - {now_aware}')
+        # print(f'разница = {diff}')
+        # print('================')
 
 
 @shared_task(name='send_participant_reminder')

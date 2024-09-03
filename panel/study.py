@@ -11,8 +11,6 @@ from django.utils import timezone
 from .views import info_common
 from api import outcoming
 
-from sendemail.tasks import auto_block_questionnaire
-
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def studies_list(request):
@@ -43,7 +41,6 @@ def studies_list(request):
 @login_required(redirect_field_name=None, login_url='/login/')
 def study_details(request, study_id):
     context = info_common(request)
-    auto_block_questionnaire()
     if context == 'logout':
         return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
     else:
