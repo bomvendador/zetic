@@ -469,6 +469,7 @@ def send_month_report(data):
     context = {
         'reports': data,
     }
+    print('++++++++ report sent +++++++++++')
     subject = 'Ежемесячный отчет'
     html_message = render_to_string('month_report.html', context)
 
