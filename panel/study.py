@@ -11,6 +11,8 @@ from django.utils import timezone
 from .views import info_common
 from api import outcoming
 
+from sendemail.tasks import auto_block_questionnaire
+
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def studies_list(request):
@@ -41,7 +43,7 @@ def studies_list(request):
 @login_required(redirect_field_name=None, login_url='/login/')
 def study_details(request, study_id):
     context = info_common(request)
-
+    auto_block_questionnaire()
     if context == 'logout':
         return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
     else:
@@ -55,6 +57,7 @@ def study_details(request, study_id):
             context.update({
                 'sections': sections,
             })
+        questionnaires_inst = Questionnaire.objects.filter(participant__study=study)
         questionnaires_visits_inst = QuestionnaireVisits.objects.filter(questionnaire__participant__study=study)
         context.update(
             {
@@ -64,11 +67,27 @@ def study_details(request, study_id):
                 'participants': Participant.objects.filter(study=study),
                 'emails_sent': EmailSentToParticipant.objects.filter(participant__study=study, type='reminder'),
                 'reports': reports,
-                'questionnaires_visits': questionnaires_visits_inst
+                'questionnaires_visits': questionnaires_visits_inst,
+                'questionnaires': questionnaires_inst
             }
         )
 
         return render(request, 'panel_study_details.html', context)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def change_questionnaire_status(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        questionnaire_id = json_data['questionnaire_id']
+        operation = json_data['operation']
+        questionnaire_inst = Questionnaire.objects.get(id=questionnaire_id)
+        if operation == 'block':
+            questionnaire_inst.active = False
+        else:
+            questionnaire_inst.active = True
+        questionnaire_inst.save()
+    return HttpResponse(200)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
