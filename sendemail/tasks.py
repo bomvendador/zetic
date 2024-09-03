@@ -33,7 +33,7 @@ def auto_block_questionnaire():
         else:
             start_date = questionnaire.created_at
         diff = diff_month(start_date, now_aware)
-        if diff >= 3:
+        if diff >= 1:
             # questionnaire.active = False
             # questionnaire.save()
             print('================')
