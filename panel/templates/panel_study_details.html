@@ -1,543 +1,627 @@
 {% extends 'panel_base.html' %}
 {% load static %}
-    {% block links %}
-     <link href="{% static 'panel/plugins/circle_progress_bar/css/circle.css' %}" rel="stylesheet" />
-    {% endblock %}
-    {% block content %}
+{% block links %}
+    <link href="{% static 'panel/plugins/circle_progress_bar/css/circle.css' %}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
 
-                <div class="side-app">
+    <div class="side-app">
 
-                    <!-- CONTAINER -->
-                    <div class="main-container container-fluid">
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
 
-                        <!-- PAGE-HEADER -->
-                        <div class="page-header">
-                            <h1 class="page-title">Опросник: №{{ study.id }}</h1>
-                            <div>
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Детали опросника</li>
-                                </ol>
-                            </div>
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">Опросник: №{{ study.id }}</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Детали опросника</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- ROW-1 OPEN -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Параметры опросника</h3>
                         </div>
-                        <!-- PAGE-HEADER END -->
-
-                        <!-- ROW-1 OPEN -->
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Параметры опросника</h3>
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-5 col-sm-11">
+                                    <div class="">
+                                        <label for="input_name">Название</label>
+                                        <input type="text" class="form-control" id="input_name" value="{{ study.name }}"
+                                               disabled>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="row mb-4">
-                                            <div class="col-lg-5 col-sm-11">
-                                                <div class="">
-                                                    <label for="input_name">Название</label>
-                                                    <input type="text" class="form-control" id="input_name" value="{{ study.name }}" disabled>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-1 col-md-1" style="width: 100%">
-                                                <div class="" style="position: absolute; left: 0; bottom: 0; width: 100%">
-                                                    <button id="change_study_name_btn" class="btn btn-default"  style="width: 100%"><i class="fa fa-pencil" style="transform: scale(1.1)"></i></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-6 col-sm-12" style="padding-right: 0">
-                                                <div class="form-group">
-                                                    <label for="input_fio">Компания</label>
-                                                    <input type="text" class="form-control" id="input_company_name" value="{{ study.company.name }}" disabled>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-lg-6 col-sm-12" style="padding-right: 0">
-                                                <div class="form-switch">
-                                                  <input class="form-check-input" type="checkbox" role="switch" id="company_active"{% if study.company.active %} checked="checked"{% endif %} disabled>
-                                                  <label class="form-check-label" for="company_active">Компания активна</label>
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-
-                                   </div>
-{#                                    <div class="card-footer text-end">#}
-{#                                        <button class="btn btn-primary my-1 nav-buttons" type="button" id="save_company">Сохранить</button>#}
-{#                                    </div>#}
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-12 col-sm-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Секции</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table text-wrap mb-0">
-                                                <thead class="thead-style">
-                                                    <tr>
-                                                        <th>Наименование</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="">
-                                                {% for section in sections %}
-                                                    <tr id="section_id_{{ section.id }}">
-                                                        <td>{{ section.section.name }}</td>
-                                                    </tr>
-                                                {% endfor %}
-
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                <div class="col-lg-1 col-md-1" style="width: 100%">
+                                    <div class="" style="position: absolute; left: 0; bottom: 0; width: 100%">
+                                        <button id="change_study_name_btn" class="btn btn-default" style="width: 100%">
+                                            <i class="fa fa-pencil" style="transform: scale(1.1)"></i></button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-12 col-sm-12">
-                                <div class="card">
-                                    <div class="card-header row pt-2 pb-2 justify-content-md-center">
-                                        <div class="col col-lg-6 col-sm-12">
-                                            <h3 class="card-title">Участники</h3>
-                                        </div>
-                                        <div class="col col-lg-4 col-sm-12 text-end">
-                                            <div>
-                                                <div style="display: inline-block">
-                                                    <select name="country" class="form-control form-select" data-bs-placeholder="Действие" id="select_group_action" disabled>
-                                                        <option value="no_action">-- Выберите действие --</option>
-                                                        <option value="send_invitations"><span><i class="fa fa-user-plus button-icon"></i>Отправить приглашение</span></option>
-                                                        <option value="send_reminder">Отправить напоминание</option>
-                                                        <option value="delete_participants" style="color: red">Удалить участников</option>
-                                                    </select>
-                                                </div>
-                                                <div style="display: inline-block">
-                                                    <button class="btn btn-primary my-1" type="button" id="run_group_action" disabled><i class="fa fa-play button-icon"></i>Выполнить</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col col-lg-2 col-sm-12 text-end">
-                                            <button class="btn btn-primary my-1" type="button" id="add_participant"><i class="fa fa-user-plus button-icon"></i>Добавить участника</button>
-                                        </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-12" style="padding-right: 0">
+                                    <div class="form-group">
+                                        <label for="input_fio">Компания</label>
+                                        <input type="text" class="form-control" id="input_company_name"
+                                               value="{{ study.company.name }}" disabled>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table text-nowrap border-bottom team-table dataTable no-footer" id="table_participants">
-                                                <thead class="thead-style">
-                                                    <tr>
-                                                        <th data-orderable="false"><input id="select_all_participants_for_group_action" type="checkbox" class="" style="transform: scale(1.1)"></th>
-                                                        <th data-orderable="false"></th>
-                                                        <th>Ответы</th>
-                                                        <th>Имя/псевдоним</th>
-                                                        <th>Email</th>
-                                                        <th>Индустрия</th>
-                                                        <th>Роль</th>
-                                                        <th>Должность</th>
-                                                        <th>Год рождения</th>
-                                                        <th>Пол</th>
-                                                        <th>Когда создан</th>
-                                                        <th>Кем создан</th>
-                                                        <th>Дата окончания заполнения</th>
-                                                        <th>Группы вопросов</th>
-                                                        <th>Отправка приглашения</th>
-                                                        <th>Напоминания</th>
-                                                        <th>Посещения опросника</th>
-{#                                                        <th data-orderable="false"></th>#}
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="tbody_participants_selected">
-                                                {% if participants %}
-                                                {% for participant in participants %}
-                                                    <tr id="participant_id_{{ participant.id }}" class="">
-                                                        <td>
-                                                            <input type="checkbox" class="select-participant-for-group-action" style="transform: scale(1.1)">
-                                                        </td>
-                                                        <td>
-                                                            {% if participant.invitation_sent %}
-                                                                {% if participant.completed_at %}
-                                                                    <i class="fa fa-circle font-color-success" aria-hidden="true" title="Опросник заполнен"><span style="color: transparent">3</span></i>
-                                                                {% else %}
-                                                                    <i class="fa fa-circle font-color-warning" aria-hidden="true" title="Приглашение отправлено"><span style="color: transparent">2</span></i>
+                                </div>
+                            </div>
 
-                                                                {% endif %}
-                                                                {% if participant.started_at %}
-                                                                <span title="{{ participant.current_percentage }}%">
-                                                                    <svg class="radial-progress" data-percentage="{{ participant.current_percentage }}" viewBox="0 0 80 80">
-                                                                        <circle class="incomplete" cx="40" cy="40" r="35"></circle>
-                                                                        <circle class="complete" cx="40" cy="40" r="35" style="stroke-dashoffset: 39.58406743523136;"></circle>
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-12" style="padding-right: 0">
+                                    <div class="form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                               id="company_active"{% if study.company.active %}
+                                               checked="checked"{% endif %} disabled>
+                                        <label class="form-check-label" for="company_active">Компания активна</label>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        {#                                    <div class="card-footer text-end">#}
+                        {#                                        <button class="btn btn-primary my-1 nav-buttons" type="button" id="save_company">Сохранить</button>#}
+                        {#                                    </div>#}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Секции</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table text-wrap mb-0">
+                                    <thead class="thead-style">
+                                    <tr>
+                                        <th>Наименование</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="">
+                                    {% for section in sections %}
+                                        <tr id="section_id_{{ section.id }}">
+                                            <td>{{ section.section.name }}</td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header row pt-2 pb-2 justify-content-md-center">
+                            <div class="col col-lg-6 col-sm-12">
+                                <h3 class="card-title">Участники</h3>
+                            </div>
+                            <div class="col col-lg-4 col-sm-12 text-end">
+                                <div>
+                                    <div style="display: inline-block">
+                                        <select name="country" class="form-control form-select"
+                                                data-bs-placeholder="Действие" id="select_group_action" disabled>
+                                            <option value="no_action">-- Выберите действие --</option>
+                                            <option value="send_invitations"><span><i
+                                                    class="fa fa-user-plus button-icon"></i>Отправить приглашение</span>
+                                            </option>
+                                            <option value="send_reminder">Отправить напоминание</option>
+                                            <option value="delete_participants" style="color: red">Удалить участников
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div style="display: inline-block">
+                                        <button class="btn btn-primary my-1" type="button" id="run_group_action"
+                                                disabled><i class="fa fa-play button-icon"></i>Выполнить
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col col-lg-2 col-sm-12 text-end">
+                                <button class="btn btn-primary my-1" type="button" id="add_participant"><i
+                                        class="fa fa-user-plus button-icon"></i>Добавить участника
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table text-nowrap border-bottom team-table dataTable no-footer"
+                                       id="table_participants">
+                                    <thead class="thead-style">
+                                    <tr>
+                                        <th data-orderable="false">
+                                            <input id="select_all_participants_for_group_action" type="checkbox"
+                                                   class="" style="transform: scale(1.1)">
+                                        </th>
+                                        <th data-orderable="false"></th>
+                                        <th data-orderable="false"></th>
+                                        <th data-orderable="false">Ответы</th>
+                                        <th>Имя/псевдоним</th>
+                                        <th>Email</th>
+                                        <th>Индустрия</th>
+                                        <th>Роль</th>
+                                        <th>Должность</th>
+                                        <th>Год рождения</th>
+                                        <th>Пол</th>
+                                        <th>Когда создан</th>
+                                        <th>Кем создан</th>
+                                        <th>Дата окончания заполнения</th>
+                                        <th>Группы вопросов</th>
+                                        <th>Отправка приглашения</th>
+                                        <th>Напоминания</th>
+                                        <th>Посещения опросника</th>
+                                        {#                                                        <th data-orderable="false"></th>#}
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbody_participants_selected">
+                                    {% if participants %}
+                                        {% for participant in participants %}
+                                            <tr id="participant_id_{{ participant.id }}" class="">
+                                                <td>
+                                                    <input type="checkbox" class="select-participant-for-group-action"
+                                                           style="transform: scale(1.1)">
+                                                </td>
+                                                <td>
+                                                    {% for questionnaire in questionnaires %}
+                                                        {% if questionnaire.participant == participant %}
+                                                            {% if questionnaire.active == True %}
+                                                                <span class="questionnaire_status"
+                                                                      data-questionnaire-id="{{ questionnaire.id }}" data-operation="block">
+                                                                    <i class="fe fe-unlock"
+                                                                       style="color: #48be00; cursor: pointer;"
+                                                                       data-bs-toggle="tooltip"
+                                                                       title=""
+                                                                       data-bs-original-title="Опросник активен. Нажмите для блокировки"
+                                                                    ></i>
+                                                                    </span>
+                                                            {% else %}
+                                                                <span class="questionnaire_status" data-questionnaire-id="{{ questionnaire.id }}" data-operation="unblock">
+                                                                    <i class="fe fe-lock"
+                                                                       style="color: red; cursor: pointer;"
+                                                                       data-bs-toggle="tooltip"
+                                                                       data-bs-original-title="Опросник заблокирован. Нажмите для разблокировки"
+                                                                       aria-label="fe fe-lock"></i>
+                                                                </span>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </td>
+                                                <td>
+                                                    {% if participant.invitation_sent %}
+                                                        {% if participant.completed_at %}
+                                                            <i class="fa fa-circle font-color-success"
+                                                               aria-hidden="true" data-bs-toggle="tooltip"
+                                                               title="" data-bs-original-title="Опросник заполнен"><span
+                                                                    style="color: transparent">3</span></i>
+                                                        {% else %}
+                                                            <i class="fa fa-circle font-color-warning"
+                                                               aria-hidden="true" data-bs-toggle="tooltip"
+                                                               title="" data-bs-original-title="Приглашение отправлено"><span
+                                                                    style="color: transparent">2</span></i>
+
+                                                        {% endif %}
+                                                        {% if participant.started_at %}
+                                                            <span title="{{ participant.current_percentage }}%">
+                                                                    <svg class="radial-progress"
+                                                                         data-percentage="{{ participant.current_percentage }}"
+                                                                         viewBox="0 0 80 80">
+                                                                        <circle class="incomplete" cx="40" cy="40"
+                                                                                r="35"></circle>
+                                                                        <circle class="complete" cx="40" cy="40" r="35"
+                                                                                style="stroke-dashoffset: 39.58406743523136;"></circle>
                                                                     </svg>
 
                                                                 </span>
-                                                                {% endif %}
+                                                        {% endif %}
 
-                                                            {% else %}
-                                                                    <i class="fa fa-circle font-color-danger" aria-hidden="true" title="Приглашение не отправлено"><span style="color: transparent">1</span></i>
-                                                            {% endif %}
+                                                    {% else %}
+                                                        <i class="fa fa-circle font-color-danger" aria-hidden="true"
+                                                           title="Приглашение не отправлено"><span
+                                                                style="color: transparent">1</span></i>
+                                                    {% endif %}
 
-                                                        </td>
-                                                        <td>{{ participant.answered_questions_qnt }}/{{ participant.total_questions_qnt }}</td>
-                                                        <td class="participant-name">{% if participant.employee.name %}{{ participant.employee.name }}{% endif %}</td>
-                                                        <td>{{ participant.employee.email }}</td>
-                                                        <td>{{ participant.employee.industry.name_ru }}</td>
-                                                        <td>{{ participant.employee.role.name_ru }}</td>
-                                                        <td>{{ participant.employee.position.name_ru }}</td>
-                                                        <td>{{ participant.employee.birth_year }}</td>
-                                                        <td>{{ participant.employee.sex }}</td>
-                                                        <td>{{ participant.employee.created_at|date:"d.m.Y H:i" }}</td>
-                                                        <td>{{ participant.employee.created_by.first_name }}</td>
-                                                        <td>{{ participant.completed_at|date:"d.m.Y H:i" }}</td>
-                                                        <td class="participant_selected_questions_groups_td">
-                                                            {% for participant_questions_group in participant_questions_groups %}
-                                                                {% if participant_questions_group.participant == participant %}
-                                                                <p class="mb-0 participant-selected-question-group" id="participant_selected_question_group_id_{{ participant_questions_group.question_group_code }}">{{ participant_questions_group.question_group_name }}</p>
-                                                                {% endif %}
-                                                            {% endfor %}
-                                                        </td>
-                                                        <td class="invitation-datetime">{{ participant.invitation_sent_datetime|date:"d.m.Y H:i" }}</td>
-                                                    <td>
-                                                        {% for email_sent in emails_sent %}
-                                                            {% if email_sent.participant == participant %}
-                                                                <p class="mb-0">{{ email_sent.created_at|date:"d.m.Y H:i" }}</p>
+                                                </td>
+                                                <td>{{ participant.answered_questions_qnt }}/{{ participant.total_questions_qnt }}</td>
+                                                <td class="participant-name">{% if participant.employee.name %}
+                                                    {{ participant.employee.name }}{% endif %}</td>
+                                                <td>{{ participant.employee.email }}</td>
+                                                <td>{{ participant.employee.industry.name_ru }}</td>
+                                                <td>{{ participant.employee.role.name_ru }}</td>
+                                                <td>{{ participant.employee.position.name_ru }}</td>
+                                                <td>{{ participant.employee.birth_year }}</td>
+                                                <td>{{ participant.employee.sex }}</td>
+                                                <td>{{ participant.employee.created_at|date:"d.m.Y H:i" }}</td>
+                                                <td>{{ participant.employee.created_by.first_name }}</td>
+                                                <td>{{ participant.completed_at|date:"d.m.Y H:i" }}</td>
+                                                <td class="participant_selected_questions_groups_td">
+                                                    {% for participant_questions_group in participant_questions_groups %}
+                                                        {% if participant_questions_group.participant == participant %}
+                                                            <p class="mb-0 participant-selected-question-group"
+                                                               id="participant_selected_question_group_id_{{ participant_questions_group.question_group_code }}">{{ participant_questions_group.question_group_name }}</p>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </td>
+                                                <td class="invitation-datetime">
+                                                    {{ participant.invitation_sent_datetime|date:"d.m.Y H:i" }}</td>
+                                                <td>
+                                                    {% for email_sent in emails_sent %}
+                                                        {% if email_sent.participant == participant %}
+                                                            <p class="mb-0">
+                                                                {{ email_sent.created_at|date:"d.m.Y H:i" }}</p>
 
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    </td>
-                                                    <td>
-                                                        {% for questionnaire_visit in questionnaires_visits %}
-                                                            {% if questionnaire_visit.questionnaire.participant == participant %}
-                                                                <p class="mb-0">{{ questionnaire_visit.created_at|date:"d.m.Y H:i:s" }}</p>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    </td>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </td>
+                                                <td>
+                                                    {% for questionnaire_visit in questionnaires_visits %}
+                                                        {% if questionnaire_visit.questionnaire.participant == participant %}
+                                                            <p class="mb-0">
+                                                                {{ questionnaire_visit.created_at|date:"d.m.Y H:i:s" }}</p>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </td>
 
-{#                                                        <td>#}
-{#                                                            <div style="text-align: center;" >#}
-{#                                                                <i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>#}
-{#                                                                <ul class="dropdown-menu">#}
-{#                                                                     <li><a class="dropdown-item {% if not participant.completed_at %}{% if not participant.started_at %} send-email-invitation cursor-pointer{% endif %}{% endif %}"#}
-{#                                                                     {% for report in reports %}#}
-{#                                                                         {% if report.participant == participant  %}#}
-{#                                                                            href="{% url 'download_single_report' filename=report.filename %}"#}
-{#                                                                         {% endif %}#}
-{#                                                                     {% endfor %}#}
-{#                                                                     >#}
-{#                                                                         {% if participant.invitation_sent %}#}
-{#                                                                             {% if participant.completed_at %}#}
-{#                                                                                Скачать#}
-{#                                                                             {% else %}#}
-{#                                                                                 {% if participant.started_at %}#}
-{#                                                                                     Действия отсутствуют#}
-{#                                                                                 {% else %}#}
-{#                                                                                    Повторно отправить приглашение#}
-{#                                                                                 {% endif %}#}
-{##}
-{#                                                                             {% endif %}#}
-{##}
-{#                                                                         {% else %}#}
-{#                                                                         <span style="color: green"><i class="fe fe-send" style="transform: scale(1.1); margin-right: 5px"></i>  Отправить приглашение</span>#}
-{#                                                                         {% endif %}#}
-{##}
-{#                                                                         </a>#}
-{#                                                                     </li>#}
-{#                                                                    {% if not participant.invitation_sent %}#}
-{#                                                                     <li><a class="dropdown-item add-question-groups cursor-pointer">#}
-{#                                                                          Добавить группы вопросов#}
-{#                                                                        </a>#}
-{#                                                                     </li>#}
-{#                                                                    {% endif %}#}
-{##}
-{#                                                                </ul>#}
-{#                                                            </div>#}
-{##}
-{#                                                        </td>#}
+                                                {#                                                        <td>#}
+                                                {#                                                            <div style="text-align: center;" >#}
+                                                {#                                                                <i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>#}
+                                                {#                                                                <ul class="dropdown-menu">#}
+                                                {#                                                                     <li><a class="dropdown-item {% if not participant.completed_at %}{% if not participant.started_at %} send-email-invitation cursor-pointer{% endif %}{% endif %}"#}
+                                                {#                                                                     {% for report in reports %}#}
+                                                {#                                                                         {% if report.participant == participant  %}#}
+                                                {#                                                                            href="{% url 'download_single_report' filename=report.filename %}"#}
+                                                {#                                                                         {% endif %}#}
+                                                {#                                                                     {% endfor %}#}
+                                                {#                                                                     >#}
+                                                {#                                                                         {% if participant.invitation_sent %}#}
+                                                {#                                                                             {% if participant.completed_at %}#}
+                                                {#                                                                                Скачать#}
+                                                {#                                                                             {% else %}#}
+                                                {#                                                                                 {% if participant.started_at %}#}
+                                                {#                                                                                     Действия отсутствуют#}
+                                                {#                                                                                 {% else %}#}
+                                                {#                                                                                    Повторно отправить приглашение#}
+                                                {#                                                                                 {% endif %}#}
+                                                {##}
+                                                {#                                                                             {% endif %}#}
+                                                {##}
+                                                {#                                                                         {% else %}#}
+                                                {#                                                                         <span style="color: green"><i class="fe fe-send" style="transform: scale(1.1); margin-right: 5px"></i>  Отправить приглашение</span>#}
+                                                {#                                                                         {% endif %}#}
+                                                {##}
+                                                {#                                                                         </a>#}
+                                                {#                                                                     </li>#}
+                                                {#                                                                    {% if not participant.invitation_sent %}#}
+                                                {#                                                                     <li><a class="dropdown-item add-question-groups cursor-pointer">#}
+                                                {#                                                                          Добавить группы вопросов#}
+                                                {#                                                                        </a>#}
+                                                {#                                                                     </li>#}
+                                                {#                                                                    {% endif %}#}
+                                                {##}
+                                                {#                                                                </ul>#}
+                                                {#                                                            </div>#}
+                                                {##}
+                                                {#                                                        </td>#}
 
 
-                                                    </tr>
-                                                {% endfor %}
-                                                {% else %}
-{#                                                    <tr>#}
-{#                                                        <td class="no-data-text" colspan="7">Данные отсутствуют</td>#}
-{##}
-{#                                                    </tr>#}
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        {#                                                    <tr>#}
+                                        {#                                                        <td class="no-data-text" colspan="7">Данные отсутствуют</td>#}
+                                        {##}
+                                        {#                                                    </tr>#}
 
-                                                {% endif %}
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                    {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>                        <!-- ROW-1 CLOSED -->
+
+        </div>
+        <!--CONTAINER CLOSED -->
+
+    </div>
+
+    <!-- Модальное окно добавление группы вопросов -->
+    <div class="modal fade" id="modal_question_groups">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title">Группа вопросов</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table text-wrap mb-0">
+                            <thead>
+                            <tr>
+                                <th>Наименование</th>
+                                <th>
+                                    <div class="form-switch text-end">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                               id="select_all_question_groups">
+                                        <label class="form-check-label" for="select_all_question_groups"></label>
                                     </div>
-                                </div>
-                            </div>
-                        </div>                        <!-- ROW-1 CLOSED -->
 
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody_modal_questions_groups">
+
+                            </tbody>
+                        </table>
                     </div>
-                    <!--CONTAINER CLOSED -->
-
                 </div>
-
-        <!-- Модальное окно добавление группы вопросов -->
-        <div class="modal fade" id="modal_question_groups">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                <div class="modal-content modal-content-demo">
-                    <div class="modal-header" style="background-color: #dbdbdb">
-                        <h5 class="modal-title">Группа вопросов</h5>
-                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="table-responsive">
-                            <table class="table text-wrap mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Наименование</th>
-                                        <th>
-                                            <div class="form-switch text-end">
-                                              <input class="form-check-input" type="checkbox" role="switch" id="select_all_question_groups">
-                                              <label class="form-check-label" for="select_all_question_groups"></label>
-                                            </div>
-
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbody_modal_questions_groups">
-
-                                </tbody>
-                            </table>
-                        </div>
-                      </div>
-                    <div>
-                        <div class="row" style="padding: 0px 15px 15px">
-                            <div class="col-lg-12 col-sm-12 mt-3">
-                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="save_question_groups">Сохранить</button>
-                            </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="save_question_groups">Сохранить
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Модальное окно добавление участника -->
-        <div class="modal fade" id="modal_participants">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                <div class="modal-content modal-content-demo">
-                    <div class="modal-header" style="background-color: #dbdbdb">
-                        <h5 class="modal-title">Сотрудники</h5>
-                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
+    </div>
+    <!-- Модальное окно добавление участника -->
+    <div class="modal fade" id="modal_participants">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title">Сотрудники</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table text-wrap mb-0">
+                            <thead>
+                            <tr>
+                                <th>Имя/псевдоним</th>
+                                <th>
+                                    <div class="form-switch text-end">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                               id="select_all_participants">
+                                        <label class="form-check-label" for="select_all_participants"></label>
+                                    </div>
+
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody_modal_participants">
+
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="modal-body">
-                        <div class="table-responsive">
-                            <table class="table text-wrap mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Имя/псевдоним</th>
-                                        <th>
-                                            <div class="form-switch text-end">
-                                              <input class="form-check-input" type="checkbox" role="switch" id="select_all_participants">
-                                              <label class="form-check-label" for="select_all_participants"></label>
-                                            </div>
-
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbody_modal_participants">
-
-                                </tbody>
-                            </table>
-                        </div>
-                      </div>
-                    <div>
-                        <div class="row" style="padding: 0px 15px 15px">
-                            <div class="col-lg-12 col-sm-12 mt-3">
-                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="save_participants">Сохранить</button>
-                            </div>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="save_participants">Сохранить
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Модальное окно отправки приглашения одному участнику-->
-        <div class="modal fade" id="modal_before_send_invitation">
-            <div class="modal-dialog " role="document">
-                <div class="modal-content modal-content-demo">
-                    <div class="modal-header" style="background-color: #dbdbdb">
-                        <h5 class="modal-title">Отправка приглашения участнику</h5>
-                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <b>Участник</b>
-                            </div>
-                            <div class="col-lg-9" id="modal_participant_name" data-tr-id="">
-
-
-                            </div>
+    </div>
+    <!-- Модальное окно отправки приглашения одному участнику-->
+    <div class="modal fade" id="modal_before_send_invitation">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title">Отправка приглашения участнику</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <b>Участник</b>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <b>Email</b>
-                            </div>
-
-                            <div class="col-lg-9" id="modal_participant_email" data-email="">
+                        <div class="col-lg-9" id="modal_participant_name" data-tr-id="">
 
 
-                            </div>
-                        </div>
-                        <div class="row mt-5">
-                            <div class="col-12">
-                                <div class="form-switch">
-                                  <input class="form-check-input" type="checkbox" role="switch" id="send_admin_notification_after_filling_up">
-                                  <label class="form-check-label" for="send_admin_notification_after_filling_up">Отправить уведомление админу после заполнения</label>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="row mt-5">
-                            <div class="col-12">
-                                <div class="form-switch">
-                                  <input class="form-check-input" type="checkbox" role="switch" id="send_report_to_participant_after_filling_up">
-                                  <label class="form-check-label" for="send_report_to_participant_after_filling_up">Отправить отчет участнику после заполнения</label>
-                                </div>
-
-                            </div>
                         </div>
                     </div>
-                    <div>
-                        <div class="row" style="padding: 0px 15px 15px">
-                            <div class="col-lg-12 col-sm-12 mt-3">
-                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="modal_send_invitation_btn">Отправить</button>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <b>Email</b>
+                        </div>
+
+                        <div class="col-lg-9" id="modal_participant_email" data-email="">
+
+
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       id="send_admin_notification_after_filling_up">
+                                <label class="form-check-label" for="send_admin_notification_after_filling_up">Отправить
+                                    уведомление админу после заполнения</label>
                             </div>
+
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       id="send_report_to_participant_after_filling_up">
+                                <label class="form-check-label" for="send_report_to_participant_after_filling_up">Отправить
+                                    отчет участнику после заполнения</label>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="modal_send_invitation_btn">Отправить
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Модальное окно отправки приглашения массово-->
-        <div class="modal fade" id="modal_before_mass_send_invitation" data-invitation-type="">
-            <div class="modal-dialog " role="document">
-                <div class="modal-content modal-content-demo">
-                    <div class="modal-header" style="background-color: #dbdbdb">
-                        <h5 class="modal-title" id="modal_before_mass_send_invitation_title"></h5>
-                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <b>Кол-во участников для отправки приглашения: <span id="modal_participants_qnt"></span></b>
-                            </div>
+    </div>
+    <!-- Модальное окно отправки приглашения массово-->
+    <div class="modal fade" id="modal_before_mass_send_invitation" data-invitation-type="">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title" id="modal_before_mass_send_invitation_title"></h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <b>Кол-во участников для отправки приглашения: <span id="modal_participants_qnt"></span></b>
                         </div>
-                        <div class="row mt-5">
-                            <div class="col-12">
-                                <div class="form-switch">
-                                  <input class="form-check-input" type="checkbox" role="switch" id="send_admin_notification_after_filling_up_mass" checked>
-                                  <label class="form-check-label" for="send_admin_notification_after_filling_up_mass">Отправить уведомление админу после заполнения</label>
-                                </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       id="send_admin_notification_after_filling_up_mass" checked>
+                                <label class="form-check-label" for="send_admin_notification_after_filling_up_mass">Отправить
+                                    уведомление админу после заполнения</label>
+                            </div>
 
-                            </div>
                         </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-switch">
-                                  <input class="form-check-input" type="checkbox" role="switch" id="send_report_to_participant_after_filling_up_mass" checked>
-                                  <label class="form-check-label" for="send_report_to_participant_after_filling_up">Отправить отчеты участникам после заполнения</label>
-                                </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       id="send_report_to_participant_after_filling_up_mass" checked>
+                                <label class="form-check-label" for="send_report_to_participant_after_filling_up">Отправить
+                                    отчеты участникам после заполнения</label>
+                            </div>
 
-                            </div>
                         </div>
                     </div>
-                    <div>
-                        <div class="row" style="padding: 0px 15px 15px">
-                            <div class="col-lg-12 col-sm-12 mt-3">
-                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="modal_send_mass_invitation_btn">Отправить</button>
-                            </div>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="modal_send_mass_invitation_btn">Отправить
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Модальное окно удаление участников-->
-        <div class="modal fade" id="modal_before_delete_participants">
-            <div class="modal-dialog " role="document">
-                <div class="modal-content modal-content-demo">
-                    <div class="modal-header" style="background-color: orangered">
-                        <h5 class="modal-title" style="color: white">Удаление пользователей</h5>
-                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="color: white">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-12">
-                                Кол-во участников для удаления: <b><span id="modal_participants_qnt_to_delete"></span></b>
-                            </div>
+    </div>
+    <!-- Модальное окно удаление участников-->
+    <div class="modal fade" id="modal_before_delete_participants">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: orangered">
+                    <h5 class="modal-title" style="color: white">Удаление пользователей</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="color: white">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            Кол-во участников для удаления: <b><span id="modal_participants_qnt_to_delete"></span></b>
                         </div>
                     </div>
-                    <div>
-                        <div class="row" style="padding: 0px 15px 15px">
-                            <div class="col-lg-12 col-sm-12 mt-3">
-                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="modal_delete_participants_btn">Удалить</button>
-                            </div>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="modal_delete_participants_btn">Удалить
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Модальное окно изменения названия исследования -->
-        <div class="modal fade" id="modal_change_study_name">
-            <div class="modal-dialog " role="document">
-                <div class="modal-content modal-content-demo">
-                    <div class="modal-header" style="background-color: #dbdbdb">
-                        <h5 class="modal-title">Название исследования</h5>
-                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-12">
-                                  <label class="form-check-label" for="input_new_study_name">Название</label>
-                                  <input class="form-control" type="text" role="switch" id="input_new_study_name">
-                            </div>
+    </div>
+    <!-- Модальное окно изменения названия исследования -->
+    <div class="modal fade" id="modal_change_study_name">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title">Название исследования</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <label class="form-check-label" for="input_new_study_name">Название</label>
+                            <input class="form-control" type="text" role="switch" id="input_new_study_name">
                         </div>
                     </div>
-                    <div>
-                        <div class="row" style="padding: 0px 15px 15px">
-                            <div class="col-lg-12 col-sm-12 mt-3">
-                                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button" id="modal_save_new_study_name_btn">Сохранить</button>
-                            </div>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="modal_save_new_study_name_btn">Сохранить
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
 {% endblock %}
 
 {% block script %}
 
-<script>
+    <script>
 
-    let url_save_new_company = "{% url 'save_new_company' %}"
-    let url_get_company_employees = "{% url 'get_company_employees' %}"
-    {#let url_get_question_groups = "{% url 'get_question_groups' %}"#}
-    let study_id = {{ study.id }};
-    {#let url_save_participant_questions_groups = "{% url 'save_participant_questions_groups' %}"#}
-    let url_get_employees_for_study = "{% url 'get_employees_for_study' %}"
-    let url_save_study_participants = "{% url 'save_study_participants' %}"
-    let url_send_invitation_email = "{% url 'send_invitation_email' %}"
-    let url_mass_send_invitation_email = "{% url 'mass_send_invitation_email' %}"
-    let url_save_study_name = "{% url 'save_study_name' %}"
-    let url_delete_participants_from_study = "{% url 'delete_participants_from_study' %}"
+        let url_save_new_company = "{% url 'save_new_company' %}"
+        let url_get_company_employees = "{% url 'get_company_employees' %}"
+        {#let url_get_question_groups = "{% url 'get_question_groups' %}"#}
+        let study_id = {{ study.id }};
+        {#let url_save_participant_questions_groups = "{% url 'save_participant_questions_groups' %}"#}
+        let url_get_employees_for_study = "{% url 'get_employees_for_study' %}"
+        let url_save_study_participants = "{% url 'save_study_participants' %}"
+        let url_send_invitation_email = "{% url 'send_invitation_email' %}"
+        let url_mass_send_invitation_email = "{% url 'mass_send_invitation_email' %}"
+        let url_save_study_name = "{% url 'save_study_name' %}"
+        let url_delete_participants_from_study = "{% url 'delete_participants_from_study' %}"
+        let url_change_questionnaire_status = "{% url 'change_questionnaire_status' %}"
 
-</script>
-<script src="{% static 'panel/js/panel_study_details.js' %}"></script>
+    </script>
+    <script src="{% static 'panel/js/panel_study_details.js' %}"></script>
 {% endblock %}

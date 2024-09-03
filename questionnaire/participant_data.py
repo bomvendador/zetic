@@ -33,45 +33,55 @@ def get_participant_data(request, code):
         }
         return render(request, 'questionnaire_participant_data.html', context)
     else:
-        questionnaire_visit_inst = QuestionnaireVisits()
-        questionnaire_visit_inst.questionnaire = questionnaire_inst
-        questionnaire_visit_inst.save()
-        research_template_inst = participant_inst.study.research_template
-        research_template_sections_inst = ResearchTemplateSections.objects.filter(
-            research_template=research_template_inst)
-        sections = []
-        for research_template_section in research_template_sections_inst:
-            questions_inst = CategoryQuestions.objects.filter(category__section=research_template_section.section)
-            # questions_answered = 0
-            questions_answered = len(
-                QuestionnaireQuestionAnswers.objects.filter(section=research_template_section.section,
-                                                            questionnaire=questionnaire_inst))
+        if not questionnaire_inst.active:
+            context = {
+                'employee': participant_inst.employee,
+                # 'research_template_sections': research_template_sections_inst,
+                # 'sections': sections,
+                # 'code': code,
+                # 'show_back_to_sections': False
+            }
+            return render(request, 'questionnaire_blocked.html', context)
+        else:
+            questionnaire_visit_inst = QuestionnaireVisits()
+            questionnaire_visit_inst.questionnaire = questionnaire_inst
+            questionnaire_visit_inst.save()
+            research_template_inst = participant_inst.study.research_template
+            research_template_sections_inst = ResearchTemplateSections.objects.filter(
+                research_template=research_template_inst)
+            sections = []
+            for research_template_section in research_template_sections_inst:
+                questions_inst = CategoryQuestions.objects.filter(category__section=research_template_section.section)
+                # questions_answered = 0
+                questions_answered = len(
+                    QuestionnaireQuestionAnswers.objects.filter(section=research_template_section.section,
+                                                                questionnaire=questionnaire_inst))
 
-            # for question in questions_inst:
-            #     questions_answered = len(QuestionnaireQuestionAnswers.objects.filter(section=research_template_section.section,
-            #                                                                          questionnaire=questionnaire_inst))
-            if not len(questions_inst) == 0:
-                percentage = int((questions_answered * 100) / len(questions_inst))
-            else:
-                percentage = 0
+                # for question in questions_inst:
+                #     questions_answered = len(QuestionnaireQuestionAnswers.objects.filter(section=research_template_section.section,
+                #                                                                          questionnaire=questionnaire_inst))
+                if not len(questions_inst) == 0:
+                    percentage = int((questions_answered * 100) / len(questions_inst))
+                else:
+                    percentage = 0
 
-            print(f'{questions_answered} * 100 / {len(questions_inst)}')
-            sections.append({
-                'name': research_template_section.section.name,
-                'id': research_template_section.section.id,
-                'total_questions': len(questions_inst),
-                'questions_answered': questions_answered,
-                'percentage':  percentage,
-            })
-        print(sections)
-        context = {
-            'employee': participant_inst.employee,
-            'research_template_sections': research_template_sections_inst,
-            'sections': sections,
-            'code': code,
-            'show_back_to_sections': False
-        }
-        return render(request, 'questionnaire_sections.html', context)
+                print(f'{questions_answered} * 100 / {len(questions_inst)}')
+                sections.append({
+                    'name': research_template_section.section.name,
+                    'id': research_template_section.section.id,
+                    'total_questions': len(questions_inst),
+                    'questions_answered': questions_answered,
+                    'percentage':  percentage,
+                })
+            print(sections)
+            context = {
+                'employee': participant_inst.employee,
+                'research_template_sections': research_template_sections_inst,
+                'sections': sections,
+                'code': code,
+                'show_back_to_sections': False
+            }
+            return render(request, 'questionnaire_sections.html', context)
 
 
 def save_participant_data(request):

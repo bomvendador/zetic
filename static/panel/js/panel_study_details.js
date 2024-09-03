@@ -1,6 +1,94 @@
 expand_menu_item('#menu_study_list')
 
-let table = process_table('.team-table')
+// let table = process_table('.team-table')
+
+$('.team-table').DataTable().destroy()
+$('.team-table').DataTable({
+    // fixedHeader: true,
+    "order": [[4, 'asc']],
+    "searching": true,
+    "destroy": true,
+    "paging": false,
+    "language": {
+        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"
+    },
+    "initComplete": function () {
+
+    },
+})
+$('.team-table').find('td').css('white-space', 'initial')
+
+$('.questionnaire_status').on('click', function () {
+    let questionnaire_id = $(this).data('questionnaire-id')
+    let operation = $(this).data('operation')
+    // console.log($(this))
+    let question_text = ''
+    let result_text = ''
+    let question_title = ''
+    if(operation === 'block'){
+        question_text = 'Заблокировать опросник?'
+        question_title = 'Блокировка опросника'
+        result_text = 'Опросник заблокирован'
+    }else {
+        question_text = 'Разблокировать опросник?'
+        result_text = 'Опросник разблокирован'
+        question_title = 'Разблокировка опросника'
+    }
+    let output_html = '<h2 class="mb-0" style="text-align: center">' + question_title + '</h2>' +
+        '<br>' +
+        '<hr class="solid mt-0" style="background-color: black;">' +
+        '<h4 style="text-align: center">' + question_text + '</h4>' +
+        '<hr class="solid mt-0" style="background-color: black;">'
+    Swal.fire({
+        html: output_html,
+        icon: 'question',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет',
+        showCancelButton: true
+    }).then((result) => {
+        if (result.value) {
+            show_progressbar_loader()
+            $.ajax({
+                headers: {"X-CSRFToken": token},
+                url: url_change_questionnaire_status,
+                type: 'POST',
+
+                data: JSON.stringify({
+                    'questionnaire_id': questionnaire_id,
+                    'operation': operation,
+                    // 'study_id': study_id,
+                }),
+                processData: false,
+                contentType: false,
+                error: function (data) {
+                    toastr.error('Ошибка', data)
+                },
+                success: function (data) {
+                    hide_progressbar_loader()
+                    let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<h4 style="text-align: center">' + result_text + '</h4>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
+                    Swal.fire({
+                        html: output_html,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ОК'
+                    }).then((result) => {
+                        if (result.value) {
+                            window.location.reload()
+                        }
+                    })
+
+                }
+            });
+
+        }
+    })
+})
+
 
 $('#select_all_participants_for_group_action').on('click', function () {
     if ($(this).prop('checked')) {
@@ -292,7 +380,7 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
                             emails_list_html +
                             '</ul>' +
                             '<br>'
-                            // '<hr class="solid mt-0" style="background-color: black;">'
+                        // '<hr class="solid mt-0" style="background-color: black;">'
 
                         Swal.fire({
                             html: output_html,

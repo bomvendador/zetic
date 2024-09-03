@@ -300,6 +300,7 @@ class Questionnaire(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, blank=True, null=True)
     data_filled_up_by_participant = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         # return f'{self.name} - {self.company.name}'
