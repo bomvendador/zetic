@@ -1,5 +1,13 @@
 $(document).ready(function () {
     $('html, body').animate({scrollTop: '0px'}, 300);
+
+    document.addEventListener("copy", evt => {
+        // (B1) CHANGE THE COPIED TEXT IF YOU WANT
+        evt.clipboardData.setData("text/plain", "Копирование текста вопросов запрещено");
+
+        // (B2) PREVENT THE DEFAULT COPY ACTION
+        evt.preventDefault();
+    }, false);
 })
 
 $('.question-answer-input').on('click', function () {

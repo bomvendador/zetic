@@ -118,16 +118,6 @@ $(".list-table").DataTable({
     "initComplete": function () {
 
     },
-    // dom: 'Bfrtip',
-    // buttons: [
-    //   {
-    //     extend: 'excelHtml5',
-    //     title: "Экспорт EXCEL - "
-    //   },
-    //   {
-    //     extend: 'pdfHtml5',
-    //     title: "Экспорт PDF - "
-    //   }]
 })
 
 $('#logout').on('click', function () {
