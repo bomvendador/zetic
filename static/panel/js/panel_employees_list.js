@@ -47,7 +47,7 @@ $('#save_edited_employee').on('click', function () {
                     toastr.error('Ошибка', data)
                 },
                 success: function (data) {
-                    console.log(data)
+                    // console.log(data)
                     let output_html
                     if (data === 'email exists') {
                         output_html = '<hr class="solid mt-0" style="background-color: black;">' +
