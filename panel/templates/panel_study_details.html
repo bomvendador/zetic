@@ -276,7 +276,7 @@
                                                     {% endfor %}
                                                 </td>
                                                 <td>
-                                                    <input type="text" class="form-control" value="{{ url_origin }}{% url 'participant_data' participant.invitation_code %}" disabled/>
+                                                    <input type="text" class="form-control" value="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'participant_data' participant.invitation_code %}" disabled/>
                                                 </td>
 
                                                 {#                                                        <td>#}

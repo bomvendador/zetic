@@ -501,7 +501,7 @@ def search_for_employees(request):
                 'reports_dates': reports_dates,
                 'reports_files': reports_files,
                 'invitation_code': invitation_code,
-                'url_origin': request._current_scheme_host
+                'url_origin': f'{request._current_scheme_host}'
             })
             data.append(employee_data)
         rows = render_to_string('employee/tr_employee_search.html', {'data': data}).rstrip()
