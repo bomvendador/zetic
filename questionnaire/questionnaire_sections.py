@@ -23,56 +23,68 @@ def section_view(request, section_id, code):
     categories_inst = Category.objects.filter(section=section_inst)
     questions = []
     questionnaire_inst = Questionnaire.objects.get(participant__invitation_code=code)
-    questionnaire_question_answers_inst = QuestionnaireQuestionAnswers.objects.filter(questionnaire=questionnaire_inst, section_id=section_id)
-    questions_already_answered_ids = []
-    for questionnaire_question_answer in questionnaire_question_answers_inst:
-        questions_already_answered_ids.append(questionnaire_question_answer.question.id)
-    # questions_inst = sorted(CategoryQuestions.objects.filter(category__section_id=section_id).exclude()[:5], key=lambda x: random.random())
-    CategoryQuestions.objects.filter(Q(category__section_id=section_id) & ~Q(id__in=questions_already_answered_ids))
-    questions_inst = sorted(CategoryQuestions.objects.filter(Q(category__section_id=section_id) & ~Q(id__in=questions_already_answered_ids)), key=lambda x: random.random())
-    # questions_sections_inst_all = CategoryQuestions.objects.filter(Q(category__section_id=section_id) & ~Q(id__in=questions_already_answered_ids))
-    # questions_inst = random.sample(questions_sections_inst_all, 5)
-    # questions_inst = CategoryQuestions.objects.filter(category__section_id=section_id)
-    questions_limit = 15
-    cur_questions_cnt = 0
-    for question in questions_inst:
-        cur_questions_cnt = cur_questions_cnt + 1
-        if cur_questions_cnt <= questions_limit:
-            answers_inst = QuestionAnswers.objects.filter(question=question)
-            answers = []
-            for answer in answers_inst:
-                answers.append({
-                    'text': answer.text,
-                    'id': answer.id,
-                })
-            questions.append({
-                'text': question.text,
-                'id': question.id,
-                'answers': answers,
-            })
-    print(questions)
-    section_questions = CategoryQuestions.objects.filter(Q(category__section_id=section_id))
-    questions_answered_qnt = len(
-        QuestionnaireQuestionAnswers.objects.filter(questionnaire=questionnaire_inst, section_id=section_id))
-    progress = 0
-    if len(section_questions) > 0:
-        progress = int(questions_answered_qnt * 100 / len(section_questions))
-    # print(len(questions_inst))
-    # print(random.shuffle(questions_inst))
-    # for question in questions_inst:
-    context = {
-        'employee': participant_inst.employee,
-        'section': section_inst,
-        'code': code,
-        'questions': questions,
-        'questions_qnt': len(questions),
-        'progress': progress,
-        'show_back_to_sections': True,
-        'participant_id': participant_inst.id
-        # 'questionnaire': participant_inst.qu,
-    }
 
-    return render(request, 'questionnaire_section_questions.html', context)
+    if not questionnaire_inst.active:
+        context = {
+            'employee': participant_inst.employee,
+            # 'research_template_sections': research_template_sections_inst,
+            # 'sections': sections,
+            # 'code': code,
+            # 'show_back_to_sections': False
+        }
+        return render(request, 'questionnaire_blocked.html', context)
+    else:
+
+        questionnaire_question_answers_inst = QuestionnaireQuestionAnswers.objects.filter(questionnaire=questionnaire_inst, section_id=section_id)
+        questions_already_answered_ids = []
+        for questionnaire_question_answer in questionnaire_question_answers_inst:
+            questions_already_answered_ids.append(questionnaire_question_answer.question.id)
+        # questions_inst = sorted(CategoryQuestions.objects.filter(category__section_id=section_id).exclude()[:5], key=lambda x: random.random())
+        CategoryQuestions.objects.filter(Q(category__section_id=section_id) & ~Q(id__in=questions_already_answered_ids))
+        questions_inst = sorted(CategoryQuestions.objects.filter(Q(category__section_id=section_id) & ~Q(id__in=questions_already_answered_ids)), key=lambda x: random.random())
+        # questions_sections_inst_all = CategoryQuestions.objects.filter(Q(category__section_id=section_id) & ~Q(id__in=questions_already_answered_ids))
+        # questions_inst = random.sample(questions_sections_inst_all, 5)
+        # questions_inst = CategoryQuestions.objects.filter(category__section_id=section_id)
+        questions_limit = 15
+        cur_questions_cnt = 0
+        for question in questions_inst:
+            cur_questions_cnt = cur_questions_cnt + 1
+            if cur_questions_cnt <= questions_limit:
+                answers_inst = QuestionAnswers.objects.filter(question=question)
+                answers = []
+                for answer in answers_inst:
+                    answers.append({
+                        'text': answer.text,
+                        'id': answer.id,
+                    })
+                questions.append({
+                    'text': question.text,
+                    'id': question.id,
+                    'answers': answers,
+                })
+        # print(questions)
+        section_questions = CategoryQuestions.objects.filter(Q(category__section_id=section_id))
+        questions_answered_qnt = len(
+            QuestionnaireQuestionAnswers.objects.filter(questionnaire=questionnaire_inst, section_id=section_id))
+        progress = 0
+        if len(section_questions) > 0:
+            progress = int(questions_answered_qnt * 100 / len(section_questions))
+        # print(len(questions_inst))
+        # print(random.shuffle(questions_inst))
+        # for question in questions_inst:
+        context = {
+            'employee': participant_inst.employee,
+            'section': section_inst,
+            'code': code,
+            'questions': questions,
+            'questions_qnt': len(questions),
+            'progress': progress,
+            'show_back_to_sections': True,
+            'participant_id': participant_inst.id
+            # 'questionnaire': participant_inst.qu,
+        }
+
+        return render(request, 'questionnaire_section_questions.html', context)
 
 
 def save_answers(request):

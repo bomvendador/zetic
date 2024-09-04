@@ -160,6 +160,8 @@ function process_table(element) {
     $(element).DataTable().destroy()
     let table = $(element).DataTable({
         // fixedHeader: true,
+        // aaSorting: [[0, 'desc']],
+        // "order": [[0, 'asc'], [1, 'desc']],
         "searching": true,
         "destroy": true,
         "paging": false,

@@ -517,8 +517,8 @@ $('#save_employee').on('click', function () {
     let industry = $('#employee_industry').val()
     let gender = $('#employee_gender').val()
     let employee_birth_year = $('#employee_birth_year').val()
-    if (email === '' || role === '' || position === '' || industry === ' ' || gender === '' || employee_birth_year === '') {
-        toastr.error('Все поля, кроме имени, должны быть заполнены')
+    if (email === '' || name === '') {
+        toastr.error('Имя и Email должны быть заполнены')
     } else {
         if (!isEmail(email)) {
             toastr.error('Указан некорректный email')
