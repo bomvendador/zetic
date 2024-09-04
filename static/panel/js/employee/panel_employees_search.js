@@ -16,6 +16,7 @@ $('#start_employees_search').on('click', function () {
             data: JSON.stringify({
                 'fio': fio,
                 'email': email,
+                'url_origin': window.location.origin
             }),
             processData: false,
             contentType: false,

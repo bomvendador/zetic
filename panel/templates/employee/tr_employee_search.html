@@ -20,6 +20,9 @@
             {% endfor %}
         </td>
         <td class="wd-15p border-bottom-0">
+            <input type="text" class="form-control" value="{{ item.url_origin }}{% url 'participant_data' item.invitation_code %}" disabled>
+        </td>
+        <td class="wd-15p border-bottom-0">
             {% for report_date in item.reports_dates %}
                 <div>{{ report_date }}</div>
             {% endfor %}

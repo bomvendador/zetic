@@ -449,7 +449,9 @@ def employees_search(request):
 def search_for_employees(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
+        print(json_data)
         fio = json_data['fio']
+        url_origin = json_data['url_origin']
         email = json_data['email']
         if not fio == '' and not email == '':
             employees_inst = Employee.objects.filter(Q(name=fio) & Q(email=email))
@@ -470,9 +472,11 @@ def search_for_employees(request):
             reports_dates = []
             reports_files = []
             questionnaires_visits = []
+            invitation_code = ''
 
             for participant in participants:
                 project_participants_inst = ProjectParticipants.objects.filter(participant=participant)
+                invitation_code = participant.invitation_code
                 for project_participant in project_participants_inst:
                     projects.append(project_participant.project.name)
                 questionnaires_inst = Questionnaire.objects.filter(participant=participant)
@@ -496,7 +500,9 @@ def search_for_employees(request):
                 'projects': projects,
                 'questionnaires': questionnaires,
                 'reports_dates': reports_dates,
-                'reports_files': reports_files
+                'reports_files': reports_files,
+                'invitation_code': invitation_code,
+                'url_origin': url_origin
             })
             data.append(employee_data)
         rows = render_to_string('employee/tr_employee_search.html', {'data': data}).rstrip()

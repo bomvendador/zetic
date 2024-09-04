@@ -41,6 +41,7 @@ def studies_list(request):
 @login_required(redirect_field_name=None, login_url='/login/')
 def study_details(request, study_id):
     context = info_common(request)
+    url_origin = request._current_scheme_host
     if context == 'logout':
         return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
     else:
@@ -65,7 +66,8 @@ def study_details(request, study_id):
                 'emails_sent': EmailSentToParticipant.objects.filter(participant__study=study, type='reminder'),
                 'reports': reports,
                 'questionnaires_visits': questionnaires_visits_inst,
-                'questionnaires': questionnaires_inst
+                'questionnaires': questionnaires_inst,
+                'url_origin': url_origin
             }
         )
 

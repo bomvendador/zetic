@@ -164,6 +164,7 @@
                                         <th>Отправка приглашения</th>
                                         <th>Напоминания</th>
                                         <th>Посещения опросника</th>
+                                        <th>Ссылка на опросник</th>
                                         {#                                                        <th data-orderable="false"></th>#}
                                     </tr>
                                     </thead>
@@ -273,6 +274,9 @@
                                                                 {{ questionnaire_visit.created_at|date:"d.m.Y H:i:s" }}</p>
                                                         {% endif %}
                                                     {% endfor %}
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" value="{{ url_origin }}{% url 'participant_data' participant.invitation_code %}" disabled/>
                                                 </td>
 
                                                 {#                                                        <td>#}
