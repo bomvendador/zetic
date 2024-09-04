@@ -58,7 +58,6 @@ $('.questionnaire_status').on('click', function () {
                 data: JSON.stringify({
                     'questionnaire_id': questionnaire_id,
                     'operation': operation,
-                    // 'study_id': study_id,
                 }),
                 processData: false,
                 contentType: false,
