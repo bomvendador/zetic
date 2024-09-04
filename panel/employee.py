@@ -449,9 +449,8 @@ def employees_search(request):
 def search_for_employees(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
-        print(json_data)
+        # print(json_data)
         fio = json_data['fio']
-        url_origin = json_data['url_origin']
         email = json_data['email']
         if not fio == '' and not email == '':
             employees_inst = Employee.objects.filter(Q(name=fio) & Q(email=email))
@@ -502,7 +501,7 @@ def search_for_employees(request):
                 'reports_dates': reports_dates,
                 'reports_files': reports_files,
                 'invitation_code': invitation_code,
-                'url_origin': url_origin
+                'url_origin': request._current_scheme_host
             })
             data.append(employee_data)
         rows = render_to_string('employee/tr_employee_search.html', {'data': data}).rstrip()
