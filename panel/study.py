@@ -68,7 +68,7 @@ def study_details(request, study_id):
                 'reports': reports,
                 'questionnaires_visits': questionnaires_visits_inst,
                 'questionnaires': questionnaires_inst,
-                'url_origin': request.META['HTTP_HOST']
+                'url_origin': f'{request._current_scheme_host}'
             }
         )
 
