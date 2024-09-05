@@ -3,8 +3,14 @@ expand_menu_item('#menu_companies_list')
 $('.copy-company-questionnaire-link').on('click', function (e) {
   e.preventDefault();
   let text = window.location.origin + $(this).closest('div').find('a').attr('href');
-    navigator.clipboard.writeText(text)
-    toastr.success('Ссылка скопирована')
+  try {
+    navigator.clipboard.writeText(text).then(r => {
+        toastr.success('Ссылка скопирована')
+    })
+
+  }catch (e) {
+    console.log(e)
+  }
 })
 
 
