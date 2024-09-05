@@ -194,7 +194,7 @@
                                         {% for link in links %}
                                             <tr data-link-id="{{ link.id }}">
 {#                                                <td><input type="text" class="form-control" value="{% url 'company_questionnaire' link.code %}" disabled/></td>#}
-                                                <td><a type="text" class="form-control" href="{% url 'company_questionnaire' link.code %}">{% url 'company_questionnaire' link.code %}</a></td>
+                                                <td><a type="text" class="form-control" href="{% url 'company_questionnaire' link.code %}">Ссылка</a></td>
                                                 <td style="vertical-align: middle">{{ link.research_template.name }}</td>
                                                 <td>
                                                 </td>
