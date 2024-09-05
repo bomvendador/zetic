@@ -284,7 +284,7 @@
                                                     {#                                                                   {{ request.META.HTTP_HOST }}{% url 'participant_data' participant.invitation_code %}"#}
                                                     {#                                                           disabled/>#}
                                                     <input type="text" class="form-control"
-                                                           value="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'participant_data' participant.invitation_code %}" disabled/>
+                                                           value="{{ request.scheme }}://{{ request.META.SERVER_NAME }}{% url 'participant_data' participant.invitation_code %}" disabled/>
                                                 </td>
 
                                                 {#                                                        <td>#}
@@ -633,8 +633,7 @@
         let url_save_study_name = "{% url 'save_study_name' %}"
         let url_delete_participants_from_study = "{% url 'delete_participants_from_study' %}"
         let url_change_questionnaire_status = "{% url 'change_questionnaire_status' %}"
-
-        console.log(window.location.origin)
+        let url_origin = window.location.origin
 
     </script>
     <script src="{% static 'panel/js/panel_study_details.js' %}"></script>
