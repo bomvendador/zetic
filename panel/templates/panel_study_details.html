@@ -283,8 +283,9 @@
                                                     {#                                                           value="{{ request.scheme }}://#}
                                                     {#                                                                   {{ request.META.HTTP_HOST }}{% url 'participant_data' participant.invitation_code %}"#}
                                                     {#                                                           disabled/>#}
-                                                    <input type="text" class="form-control"
-                                                           value="{{ request.scheme }}://{{ request.META.SERVER_NAME }}{% url 'participant_data' participant.invitation_code %}" disabled/>
+{#                                                    <input type="text" class="form-control"#}
+{#                                                           value="{{ request.scheme }}://{{ request.META.SERVER_NAME }}{% url 'participant_data' participant.invitation_code %}" disabled/>#}
+                                                    <a type="text" class="form-control" href="{% url 'participant_data' participant.invitation_code %}">Ссылка</a>
                                                 </td>
 
                                                 {#                                                        <td>#}
