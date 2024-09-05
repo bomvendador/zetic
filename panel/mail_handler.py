@@ -499,6 +499,7 @@ def send_notification_report_made(data, report_id):
     to_email = 'info@zetic.ru'
     context = {
         'data': data,
+        'employee': report.participant.employee
     }
     subject = participant_name + ' окончил(а) заполнение опросника'
     html_message = render_to_string('notification_report_made.html', context)
