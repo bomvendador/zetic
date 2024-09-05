@@ -9,7 +9,8 @@ $('.copy-company-questionnaire-link').on('click', function (e) {
     })
 
   }catch (e) {
-    console.log(e)
+      toastr.warning('Копирование возможно при наличии SSL')
+    // console.log(e)
   }
 })
 

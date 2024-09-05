@@ -12,9 +12,18 @@ function copyText(e) {
 $('.copy-questionnaire-link').on('click', function (e) {
   e.preventDefault();
   let text = window.location.origin + $(this).closest('div').find('a').attr('href');
-    navigator.clipboard.writeText(text)
-    toastr.success('Ссылка скопирована')
+  try {
+    navigator.clipboard.writeText(text).then(r => {
+        toastr.success('Ссылка скопирована')
+    })
+
+  }catch (e) {
+      toastr.warning('Копирование возможно при наличии SSL')
+    // console.log(e)
+  }
 })
+
+
 
 $('.team-table').DataTable().destroy()
 $('.team-table').DataTable({
