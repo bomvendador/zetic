@@ -287,53 +287,13 @@
                                                     {#                                                           value="{{ request.scheme }}://{{ request.META.SERVER_NAME }}{% url 'participant_data' participant.invitation_code %}" disabled/>#}
 
                                                     <div class="input-group">
-                                                        <a type="text" class="form-control"
-                                                           href="{% url 'participant_data' participant.invitation_code %}">Ссылка</a>
-                                                        <span style="cursor: pointer" title="Скопировать ссылку" class="input-group-text copy-questionnaire-link"><i class="fe fe-copy" data-bs-toggle="tooltip" title="" data-bs-original-title="Скопировать ссылку" aria-label="fe fe-copy"></i></span>
+                                                        <a type="text" class="form-control" style="padding: 5px 10px"
+                                                           href="{% url 'participant_data' participant.invitation_code %}" target="_blank">Ссылка</a>
+                                                        <span style="cursor: pointer" title="Скопировать ссылку" class="input-group-text copy-questionnaire-link"><i style="font-size: 12px" class="fe fe-copy" data-bs-toggle="tooltip" title="" data-bs-original-title="Скопировать ссылку" aria-label="fe fe-copy"></i></span>
                                                     </div>
 
                                                 </td>
 
-                                                {#                                                        <td>#}
-                                                {#                                                            <div style="text-align: center;" >#}
-                                                {#                                                                <i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>#}
-                                                {#                                                                <ul class="dropdown-menu">#}
-                                                {#                                                                     <li><a class="dropdown-item {% if not participant.completed_at %}{% if not participant.started_at %} send-email-invitation cursor-pointer{% endif %}{% endif %}"#}
-                                                {#                                                                     {% for report in reports %}#}
-                                                {#                                                                         {% if report.participant == participant  %}#}
-                                                {#                                                                            href="{% url 'download_single_report' filename=report.filename %}"#}
-                                                {#                                                                         {% endif %}#}
-                                                {#                                                                     {% endfor %}#}
-                                                {#                                                                     >#}
-                                                {#                                                                         {% if participant.invitation_sent %}#}
-                                                {#                                                                             {% if participant.completed_at %}#}
-                                                {#                                                                                Скачать#}
-                                                {#                                                                             {% else %}#}
-                                                {#                                                                                 {% if participant.started_at %}#}
-                                                {#                                                                                     Действия отсутствуют#}
-                                                {#                                                                                 {% else %}#}
-                                                {#                                                                                    Повторно отправить приглашение#}
-                                                {#                                                                                 {% endif %}#}
-                                                {##}
-                                                {#                                                                             {% endif %}#}
-                                                {##}
-                                                {#                                                                         {% else %}#}
-                                                {#                                                                         <span style="color: green"><i class="fe fe-send" style="transform: scale(1.1); margin-right: 5px"></i>  Отправить приглашение</span>#}
-                                                {#                                                                         {% endif %}#}
-                                                {##}
-                                                {#                                                                         </a>#}
-                                                {#                                                                     </li>#}
-                                                {#                                                                    {% if not participant.invitation_sent %}#}
-                                                {#                                                                     <li><a class="dropdown-item add-question-groups cursor-pointer">#}
-                                                {#                                                                          Добавить группы вопросов#}
-                                                {#                                                                        </a>#}
-                                                {#                                                                     </li>#}
-                                                {#                                                                    {% endif %}#}
-                                                {##}
-                                                {#                                                                </ul>#}
-                                                {#                                                            </div>#}
-                                                {##}
-                                                {#                                                        </td>#}
 
 
                                             </tr>
