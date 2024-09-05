@@ -10,9 +10,10 @@
         </td>
         <td class="wd-15p border-bottom-0">
             {% for questionnaire in item.questionnaires %}
+                <div><b>Дата создания:</b></div>
                 <div>{{ questionnaire.created_at }}</div>
                 {% if questionnaire.questionnaire_visits %}
-                    <div>Посещения:</div>
+                    <div><b>Посещения:</b></div>
                     {% for questionnaire_visit in questionnaire.questionnaire_visits %}
                         <div>{{ questionnaire_visit }}</div>
                     {% endfor %}
@@ -20,7 +21,16 @@
             {% endfor %}
         </td>
         <td class="wd-15p border-bottom-0">
-            <input type="text" class="form-control" value="{{ item.url_origin }}{% url 'participant_data' item.invitation_code %}" disabled>
+
+            <div class="input-group">
+                <a type="text" class="form-control"
+                   href="{% url 'participant_data' item.invitation_code %}">Ссылка</a>
+                <span style="cursor: pointer" title="Скопировать ссылку"
+                      class="input-group-text copy-questionnaire-link"><i
+                        class="fe fe-copy" data-bs-toggle="tooltip" title="Скопировать ссылку"
+                        data-bs-original-title="Скопировать ссылку"
+                        aria-label="fe fe-copy"></i></span>
+            </div>
         </td>
         <td class="wd-15p border-bottom-0">
             {% for report_date in item.reports_dates %}

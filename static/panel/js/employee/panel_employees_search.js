@@ -2,6 +2,14 @@ expand_menu_item('#menu_employee_search')
 
 process_table_clear('#table_employees_search')
 
+$('body').on('click', '.copy-questionnaire-link', function (e) {
+  e.preventDefault();
+  let text = window.location.origin + $(this).closest('div').find('a').attr('href');
+    navigator.clipboard.writeText(text)
+    toastr.success('Ссылка скопирована')
+})
+
+
 $('#start_employees_search').on('click', function () {
     let fio = $('#input_fio').val()
     let email = $('#input_email').val()

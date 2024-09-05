@@ -2,6 +2,20 @@ expand_menu_item('#menu_study_list')
 
 // let table = process_table('.team-table')
 
+function copyText(e) {
+  e.preventDefault();
+  const text = document.getElementById("text");
+  text.select();
+  document.execCommand("copy");
+}
+
+$('.copy-questionnaire-link').on('click', function (e) {
+  e.preventDefault();
+  let text = window.location.origin + $(this).closest('div').find('a').attr('href');
+    navigator.clipboard.writeText(text)
+    toastr.success('Ссылка скопирована')
+})
+
 $('.team-table').DataTable().destroy()
 $('.team-table').DataTable({
     // fixedHeader: true,

@@ -283,9 +283,15 @@
                                                     {#                                                           value="{{ request.scheme }}://#}
                                                     {#                                                                   {{ request.META.HTTP_HOST }}{% url 'participant_data' participant.invitation_code %}"#}
                                                     {#                                                           disabled/>#}
-{#                                                    <input type="text" class="form-control"#}
-{#                                                           value="{{ request.scheme }}://{{ request.META.SERVER_NAME }}{% url 'participant_data' participant.invitation_code %}" disabled/>#}
-                                                    <a type="text" class="form-control" href="{% url 'participant_data' participant.invitation_code %}">Ссылка</a>
+                                                    {#                                                    <input type="text" class="form-control"#}
+                                                    {#                                                           value="{{ request.scheme }}://{{ request.META.SERVER_NAME }}{% url 'participant_data' participant.invitation_code %}" disabled/>#}
+
+                                                    <div class="input-group">
+                                                        <a type="text" class="form-control"
+                                                           href="{% url 'participant_data' participant.invitation_code %}">Ссылка</a>
+                                                        <span style="cursor: pointer" title="Скопировать ссылку" class="input-group-text copy-questionnaire-link"><i class="fe fe-copy" data-bs-toggle="tooltip" title="" data-bs-original-title="Скопировать ссылку" aria-label="fe fe-copy"></i></span>
+                                                    </div>
+
                                                 </td>
 
                                                 {#                                                        <td>#}

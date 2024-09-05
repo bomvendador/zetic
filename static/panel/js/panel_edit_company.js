@@ -1,5 +1,13 @@
 expand_menu_item('#menu_companies_list')
 
+$('.copy-company-questionnaire-link').on('click', function (e) {
+  e.preventDefault();
+  let text = window.location.origin + $(this).closest('div').find('a').attr('href');
+    navigator.clipboard.writeText(text)
+    toastr.success('Ссылка скопирована')
+})
+
+
 $('#new_password_hide').on('click', function () {
     let attr = $('#new_password').attr('type')
     if (typeof attr !== 'undefined') {

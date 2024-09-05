@@ -193,8 +193,22 @@
                                     {% if links %}
                                         {% for link in links %}
                                             <tr data-link-id="{{ link.id }}">
-{#                                                <td><input type="text" class="form-control" value="{% url 'company_questionnaire' link.code %}" disabled/></td>#}
-                                                <td><a type="text" class="form-control" href="{% url 'company_questionnaire' link.code %}">Ссылка</a></td>
+                                                {#                                                <td><input type="text" class="form-control" value="{% url 'company_questionnaire' link.code %}" disabled/></td>#}
+                                                <td>
+                                                    <div class="input-group">
+                                                        <a type="text" class="form-control"
+                                                           href="{% url 'company_questionnaire' link.code %}">Ссылка</a>
+                                                        <span style="cursor: pointer" title="Скопировать ссылку"
+                                                              class="input-group-text copy-company-questionnaire-link"><i
+                                                                class="fe fe-copy" data-bs-toggle="tooltip" title=""
+                                                                data-bs-original-title="Скопировать ссылку"
+                                                                aria-label="fe fe-copy"></i></span>
+                                                    </div>
+
+
+{#                                                    <a type="text" class="form-control"#}
+{#                                                       href="{% url 'company_questionnaire' link.code %}">Ссылка</a>#}
+                                                </td>
                                                 <td style="vertical-align: middle">{{ link.research_template.name }}</td>
                                                 <td>
                                                 </td>
@@ -218,10 +232,11 @@
                         </div>
                         <div class="card-footer text-end">
                             <button class="btn btn-primary my-1 nav-buttons" type="button" id="select_link_template_btn"
-                            {% if not templates %}
-                            disabled
-                            {% endif %}
-                            >Добавить шаблон</button>
+                                    {% if not templates %}
+                                    disabled
+                                    {% endif %}
+                            >Добавить шаблон
+                            </button>
                         </div>
 
                     </div>
@@ -308,7 +323,7 @@
                             <select name="select_template" class="form-control form-select" id="select_template">
                                 <option value="0">-- Сдлайте выбор --</option>
                                 {% for template in templates %}
-                                <option value="{{ template.id }}">{{ template.name }}</option>
+                                    <option value="{{ template.id }}">{{ template.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -346,11 +361,11 @@
         let company_id = {{ company.id }};
         let location_origin = window.location.origin
 
-            {% if company.active %}
-                active = 1
-            {% else %}
-                active = 0
-            {% endif %}
+        {% if company.active %}
+            active = 1
+        {% else %}
+            active = 0
+        {% endif %}
 
 
     </script>
