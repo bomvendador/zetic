@@ -43,7 +43,9 @@ def study_details(request, study_id):
     context = info_common(request)
     # url_origin = request._current_scheme_host
     # current_url = request._current_scheme_host + request.path
-    print()
+    print(f'HTTP_HOST - {request.META.HTTP_HOST}')
+    print(f'REMOTE_HOST - {request.META.REMOTE_HOST}')
+    print(f'SERVER_NAME - {request.META.SERVER_NAME}')
     if context == 'logout':
         return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
     else:
