@@ -181,7 +181,8 @@
                                                         {% if questionnaire.participant == participant %}
                                                             {% if questionnaire.active == True %}
                                                                 <span class="questionnaire_status"
-                                                                      data-questionnaire-id="{{ questionnaire.id }}" data-operation="block">
+                                                                      data-questionnaire-id="{{ questionnaire.id }}"
+                                                                      data-operation="block">
                                                                     <i class="fe fe-unlock"
                                                                        style="color: #48be00; cursor: pointer;"
                                                                        data-bs-toggle="tooltip"
@@ -190,7 +191,9 @@
                                                                     ></i>
                                                                     </span>
                                                             {% else %}
-                                                                <span class="questionnaire_status" data-questionnaire-id="{{ questionnaire.id }}" data-operation="unblock">
+                                                                <span class="questionnaire_status"
+                                                                      data-questionnaire-id="{{ questionnaire.id }}"
+                                                                      data-operation="unblock">
                                                                     <i class="fe fe-lock"
                                                                        style="color: red; cursor: pointer;"
                                                                        data-bs-toggle="tooltip"
@@ -276,7 +279,12 @@
                                                     {% endfor %}
                                                 </td>
                                                 <td>
-                                                    <input type="text" class="form-control" value="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'participant_data' participant.invitation_code %}" disabled/>
+                                                    {#                                                    <input type="text" class="form-control"#}
+                                                    {#                                                           value="{{ request.scheme }}://#}
+                                                    {#                                                                   {{ request.META.HTTP_HOST }}{% url 'participant_data' participant.invitation_code %}"#}
+                                                    {#                                                           disabled/>#}
+                                                    <input type="text" class="form-control"
+                                                           value="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'participant_data' participant.invitation_code %}" disabled/>
                                                 </td>
 
                                                 {#                                                        <td>#}
