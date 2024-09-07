@@ -47,7 +47,7 @@
                                                                     {% for company in companies %}
                                                                         <tr>
                                                                             <td>
-                                                                                {{ company.name }}
+                                                                                {{ company.id }}. {{ company.name }}
                                                                             </td>
                                                                             <td>
                                                                                 {{ company.created_at|date:"d.m.Y H:i" }}
