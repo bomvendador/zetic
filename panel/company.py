@@ -158,7 +158,7 @@ def create_self_questionnaire(request):
         employees_inst = Employee.objects.filter(Q(email=email))
         if employees_inst.exists():
             response = {
-                'error': 'Сотрудник с таким Email  уже существует',
+                'error': 'Сотрудник с таким Email уже существует',
             }
             return JsonResponse(response)
         else:

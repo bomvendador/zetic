@@ -1,0 +1,43 @@
+{% for questionnaire in data %}
+    <tr>
+        <td class="wd-15p border-bottom-0">{{ questionnaire.fio }}</td>
+        <td class="wd-15p border-bottom-0">{{ questionnaire.email }}</td>
+        <td class="wd-15p border-bottom-0">{{ questionnaire.company }}</td>
+        <td class="wd-15p border-bottom-0">
+            {{ questionnaire.answers }}
+        </td>
+        <td class="wd-15p border-bottom-0">
+            <div><b>Дата создания:</b></div>
+            <div>{{ questionnaire.created_at }}</div>
+            {% if questionnaire.questionnaire_visits %}
+                <div><b>Посещения:</b></div>
+                {% for questionnaire_visit in questionnaire.questionnaire_visits %}
+                    <div>{{ questionnaire_visit }}</div>
+                {% endfor %}
+            {% endif %}
+        </td>
+        <td class="wd-15p border-bottom-0">
+            {{ questionnaire.last_answer_date|date:"d.m.Y H:i" }}
+        </td>
+        <td class="wd-15p border-bottom-0" style="text-align: center">
+            {% if questionnaire.active %}
+                <span class="questionnaire_status">
+                    <i class="fe fe-unlock"
+                       style="color: #48be00"
+                       data-bs-toggle="tooltip"
+                       title="Опросник активен"
+                       data-bs-original-title="Опросник активен"
+                    ></i>
+                </span>
+            {% else %}
+                <span class="questionnaire_status">
+                    <i class="fe fe-lock"
+                       style="color: red"
+                       data-bs-toggle="tooltip"
+                       data-bs-original-title="Опросник заблокирован"
+                       aria-label="fe fe-lock"></i>
+                </span>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}

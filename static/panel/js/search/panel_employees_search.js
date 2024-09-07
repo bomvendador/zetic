@@ -1,5 +1,3 @@
-expand_menu_item('#menu_employee_search')
-
 process_table_clear('#table_employees_search')
 
 $('body').on('click', '.copy-questionnaire-link', function (e) {

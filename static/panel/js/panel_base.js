@@ -52,8 +52,8 @@ $('.menu_item').on('click', function () {
         case'menu_employees_list':
             window.location.href = url_employees_list;
             break;
-        case'menu_employee_search':
-            window.location.href = url_employees_search;
+        case'menu_search':
+            window.location.href = url_search_employees;
             break;
         case'menu_study_list':
             window.location.href = url_studies_list;

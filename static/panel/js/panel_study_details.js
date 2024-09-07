@@ -149,7 +149,7 @@ let participants_ids_to_send_invitation_to = []
 
 function getParticipantsWithoutInvitations() {
     $('#tbody_participants_selected .select-participant-for-group-action:checked').each(function () {
-        let invitation_datetime = $(this).closest('tr').find('.invitation-datetime').text()
+        let invitation_datetime = $(this).closest('tr').find('.invitation-datetime').text().trim()
         if (invitation_datetime === '') {
             let participant_id = $(this).closest('tr').attr('id').split('_')[2]
             let participant_name = $(this).closest('tr').find('.participant-name').text()

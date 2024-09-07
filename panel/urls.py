@@ -5,7 +5,8 @@ from pdf import views as pdf_views
 from panel import company_parameter as panel_company_parameter
 from panel import employee, study, sections, individual_report_file, company, mail_handler, categories, questions, \
     research_templates, companies_studies, filters, filters_matrix, migration_questionnaire_results_xls, \
-    filters_individual_report_points_description, filters_integral_report, settings, projects, filters_traffic_light_report
+    filters_individual_report_points_description, filters_integral_report, settings, projects, \
+    filters_traffic_light_report, search
 # from panel import study
 # from panel import individual_report_file
 # from panel import company
@@ -79,8 +80,11 @@ urlpatterns = [
     path('get_company_no_admins', employee.get_company_no_admins, name='get_company_no_admins'),
     path('deactivate_company_admin', employee.deactivate_company_admin, name='deactivate_company_admin'),
     path('delete_company_admin', employee.delete_company_admin, name='delete_company_admin'),
-    path('employees_search', employee.employees_search, name='employees_search'),
-    path('search_for_employees', employee.search_for_employees, name='search_for_employees'),
+
+    path('search_employees', search.search_employees, name='search_employees'),
+    path('search_questionnaire_status', search.search_questionnaire_status, name='search_questionnaire_status'),
+    path('search_for_employees', search.search_for_employees, name='search_for_employees'),
+    path('search_for_questionnaire_status', search.search_for_questionnaire_status, name='search_for_questionnaire_status'),
 
     path('delete_company', company.delete_company, name='delete_company'),
 

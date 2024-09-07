@@ -139,7 +139,7 @@ def add_new_project(request):
         companies = Company.objects.filter(created_by=request.user)
 
     if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
-        companies = Company.objects.all()
+        companies = Company.objects.all().order_by('name')
     companies_for_projects = []
     for company in companies:
         studies = Study.objects.filter(company=company)
