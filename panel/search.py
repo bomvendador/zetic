@@ -143,7 +143,7 @@ def search_for_questionnaire_status(request):
                 'created_at': timezone.localtime(questionnaire.created_at).strftime("%d.%m.%Y %H:%M:%S"),
                 'active': questionnaire.active
             }
-            if not all_companies:
+            if questionnaire.participant.employee.company:
                 data.update({
                     'company': f'{questionnaire.participant.employee.company.id}. {questionnaire.participant.employee.company.name}',
                 })
