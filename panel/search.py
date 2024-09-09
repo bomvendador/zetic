@@ -1,5 +1,5 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, User, Participant, EmployeeGender, \
-    Project, ProjectParticipants, Questionnaire, Report, QuestionnaireVisits, QuestionnaireQuestionAnswers
+    Project, ProjectParticipants, Questionnaire, Report, QuestionnaireVisits, QuestionnaireQuestionAnswers, Study
 from login.models import UserProfile
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -69,38 +69,44 @@ def search_for_employees(request):
             reports_dates = []
             reports_files = []
             questionnaires_visits = []
+            studies = []
             invitation_code = ''
-
-            for participant in participants:
-                project_participants_inst = ProjectParticipants.objects.filter(participant=participant)
-                invitation_code = participant.invitation_code
-                for project_participant in project_participants_inst:
-                    projects.append(project_participant.project.name)
-                questionnaires_inst = Questionnaire.objects.filter(participant=participant)
-                for questionnaire in questionnaires_inst:
-                    questionnaires_visits_inst = QuestionnaireVisits.objects.filter(questionnaire=questionnaire)
-                    questionnaire_visits = []
-                    for questionnaire_visit in questionnaires_visits_inst:
-                        questionnaire_visits.append(
-                            timezone.localtime(questionnaire_visit.created_at).strftime("%d.%m.%Y %H:%M:%S"))
-                    questionnaires.append({
-                        'created_at': timezone.localtime(questionnaire.created_at).strftime("%d.%m.%Y %H:%M:%S"),
-                        'questionnaire_visits': questionnaire_visits
+            if participants.exists():
+                for participant in participants:
+                    studies.append({
+                        'name': participant.study.name
                     })
+                    project_participants_inst = ProjectParticipants.objects.filter(participant=participant)
+                    invitation_code = participant.invitation_code
+                    for project_participant in project_participants_inst:
+                        projects.append(project_participant.project.name)
+                    questionnaires_inst = Questionnaire.objects.filter(participant=participant)
+                    for questionnaire in questionnaires_inst:
+                        questionnaires_visits_inst = QuestionnaireVisits.objects.filter(questionnaire=questionnaire)
+                        questionnaire_visits = []
+                        for questionnaire_visit in questionnaires_visits_inst:
+                            questionnaire_visits.append(
+                                timezone.localtime(questionnaire_visit.created_at).strftime("%d.%m.%Y %H:%M:%S"))
+                        questionnaires.append({
+                            'created_at': timezone.localtime(questionnaire.created_at).strftime("%d.%m.%Y %H:%M:%S"),
+                            'questionnaire_visits': questionnaire_visits
+                        })
 
-                reports_inst = Report.objects.filter(participant=participant)
-                for report in reports_inst:
-                    reports_dates.append(timezone.localtime(report.added).strftime("%d.%m.%Y %H:%M:%S"))
-                    reports_files.append(report.file.name)
+                    reports_inst = Report.objects.filter(participant=participant)
+                    for report in reports_inst:
+                        reports_dates.append(timezone.localtime(report.added).strftime("%d.%m.%Y %H:%M:%S"))
+                        reports_files.append(report.file.name)
 
-            employee_data.update({
-                'projects': projects,
-                'questionnaires': questionnaires,
-                'reports_dates': reports_dates,
-                'reports_files': reports_files,
-                'invitation_code': invitation_code,
-                'url_origin': f'{request._current_scheme_host}'
-            })
+                employee_data.update({
+                    'projects': projects,
+                    'questionnaires': questionnaires,
+                    'reports_dates': reports_dates,
+                    'reports_files': reports_files,
+                    'invitation_code': invitation_code,
+                    'url_origin': f'{request._current_scheme_host}',
+                    'studies': studies
+                })
+
             data.append(employee_data)
         rows = render_to_string('search/tr_employee_search.html', {'data': data}).rstrip()
         return JsonResponse({'rows': rows})
