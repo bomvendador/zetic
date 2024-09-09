@@ -116,12 +116,12 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
         except:
             print("Mail Sending Failed!")
 
-        response = {
-            'participant_total_questions': participant_total_questions,
-            'wrong_emails': wrong_emails
-        }
+    response = {
+        'participant_total_questions': participant_total_questions,
+        'wrong_emails': wrong_emails
+    }
 
-        return response
+    return response
 
 
 def mass_send_invitation_email(request):
