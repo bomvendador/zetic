@@ -50,12 +50,22 @@ def search_for_employees(request):
         # print(json_data)
         fio = json_data['fio']
         email = json_data['email']
+        employee_role_name = UserProfile.objects.get(user=request.user).role.name
         if not fio == '' and not email == '':
-            employees_inst = Employee.objects.filter(Q(name=fio) & Q(email=email))
+            if employee_role_name == 'Партнер':
+                employees_inst = Employee.objects.filter(Q(name=fio) & Q(email=email) & Q(created_by=request.user))
+            else:
+                employees_inst = Employee.objects.filter(Q(name=fio) & Q(email=email))
         elif not fio == '':
-            employees_inst = Employee.objects.filter(Q(name=fio))
+            if employee_role_name == 'Партнер':
+                employees_inst = Employee.objects.filter(Q(name=fio) & Q(created_by=request.user))
+            else:
+                employees_inst = Employee.objects.filter(Q(name=fio))
         else:
-            employees_inst = Employee.objects.filter(Q(email=email))
+            if employee_role_name == 'Партнер':
+                employees_inst = Employee.objects.filter(Q(email=email) & Q(created_by=request.user))
+            else:
+                employees_inst = Employee.objects.filter(Q(email=email))
         data = []
         for employee in employees_inst:
             employee_data = {
