@@ -139,7 +139,7 @@ def mass_send_invitation_email(request):
         check_passed = True
         result = {}
 
-        if user_profile.role.name == 'Админ заказчика':
+        if user_profile.role.name == 'Админ заказчика' or user_profile.role.name == 'Партнер':
             if not company.active:
                 result = {
                     'company_error': 'company_deactivated'
