@@ -637,6 +637,7 @@
         let url_change_questionnaire_status = "{% url 'change_questionnaire_status' %}"
         let url_origin = window.location.origin;
         let questionnaires_left = {{ questionnaires_left }};
+        let company_demo_status = '{{ company.demo_status }}';
 
     </script>
     <script src="{% static 'panel/js/panel_study_details.js' %}"></script>

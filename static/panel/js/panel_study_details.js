@@ -176,8 +176,7 @@ $('#run_group_action').on('click', function () {
                 getParticipantsWithoutInvitations();
 
                 if (participants_ids_to_send_invitation_to.length >= 1) {
-                    let send_invitations = true
-                    if (participants_ids_to_send_invitation_to.length > questionnaires_left) {
+                    if (participants_ids_to_send_invitation_to.length > questionnaires_left && company_demo_status === 'True') {
                         let user_role_name = $('#cur_role_name').text()
                         let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
                             '<h4 style="text-align: center"><b>Количество выбранных участников превышает допустимое</b></h4>' +
