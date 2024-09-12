@@ -41,7 +41,7 @@ CSRF_TRUSTED_ORIGINS = [
 # DEBUG = 1
 # DEBUG = True
 DEBUG = int(env('DEBUG'))
-
+print(int(env('DEBUG')))
 API_BEARER = env('API_BEARER')
 if DEBUG == 0:
     API_LINK = 'https://console.zetic.ru/api/'
@@ -49,7 +49,7 @@ else:
     API_LINK = 'https://demo-admin.zetic.borsky.dev/api/'
 
 
-ALLOWED_HOSTS = ['51.250.113.32', '51.250.45.169', 'zetictest.ru', 'zetictest.com', '127.0.0.1']
+ALLOWED_HOSTS = ['51.250.113.32', '51.250.45.169', 'zetictest.ru', 'zetictest.com', '127.0.0.1', '0.0.0.0']
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 CORS_ORIGIN_WHITELIST = [
