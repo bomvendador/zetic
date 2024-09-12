@@ -126,6 +126,8 @@ class Company(models.Model):
     email = models.CharField(max_length=100, blank=True, null=True, default=None)
     public_code = models.CharField(max_length=10, blank=False, null=False, default='')
     # self_make_questionnaire_code = models.CharField(max_length=12, blank=True, null=True, default='')
+    demo_status = models.BooleanField(default=True, null=False)
+    demo_status_questionnaires_limit = models.IntegerField(null=True, default=3)
 
     def __str__(self):
         return f'{self.id}. {self.name}'

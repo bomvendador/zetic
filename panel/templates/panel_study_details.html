@@ -103,6 +103,34 @@
                     </div>
                 </div>
             </div>
+            {% if company.demo_status %}
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                    <div class="card  {% if questionnaires_left == 0 %}bg-danger {% else %}bg-success{% endif %} img-card box-success-shadow">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="text-white">
+                                    <h2 class="mb-0 number-font">
+                                        {{ questionnaires_left }}
+                                    </h2>
+                                    <p class="text-white mb-0">Доступные опросники</p>
+                                </div>
+                                <div class="ms-auto"><i class="fe fe-file-text text-white fs-30 me-2 mt-2"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                    <div class="card text-danger bg-danger-transparent card-transparent">
+                        <div class="card-body">
+                            <h4 class="card-title" style="margin-bottom: 1rem">Демо режим</h4>
+                            <p class="card-text">Для компании включен демо-режим. Количество приглашений ограничено</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
             <div class="row">
                 <div class="col-xl-12 col-sm-12">
                     <div class="card">
@@ -285,16 +313,22 @@
                                                     {#                                                           disabled/>#}
                                                     {#                                                    <input type="text" class="form-control"#}
                                                     {#                                                           value="{{ request.scheme }}://{{ request.META.SERVER_NAME }}{% url 'participant_data' participant.invitation_code %}" disabled/>#}
-                                                     {% if participant.invitation_code %}
-                                                    <div class="input-group">
-                                                        <a type="text" class="form-control" style="padding: 5px 10px"
-                                                           href="{% url 'participant_data' participant.invitation_code %}" target="_blank">Ссылка</a>
-                                                        <span style="cursor: pointer" title="Скопировать ссылку" class="input-group-text copy-questionnaire-link"><i style="font-size: 12px" class="fe fe-copy" data-bs-toggle="tooltip" title="" data-bs-original-title="Скопировать ссылку" aria-label="fe fe-copy"></i></span>
-                                                    </div>
+                                                    {% if participant.invitation_code %}
+                                                        <div class="input-group">
+                                                            <a type="text" class="form-control"
+                                                               style="padding: 5px 10px"
+                                                               href="{% url 'participant_data' participant.invitation_code %}"
+                                                               target="_blank">Ссылка</a>
+                                                            <span style="cursor: pointer" title="Скопировать ссылку"
+                                                                  class="input-group-text copy-questionnaire-link"><i
+                                                                    style="font-size: 12px" class="fe fe-copy"
+                                                                    data-bs-toggle="tooltip" title=""
+                                                                    data-bs-original-title="Скопировать ссылку"
+                                                                    aria-label="fe fe-copy"></i></span>
+                                                        </div>
                                                     {% endif %}
 
                                                 </td>
-
 
 
                                             </tr>
@@ -601,7 +635,8 @@
         let url_save_study_name = "{% url 'save_study_name' %}"
         let url_delete_participants_from_study = "{% url 'delete_participants_from_study' %}"
         let url_change_questionnaire_status = "{% url 'change_questionnaire_status' %}"
-        let url_origin = window.location.origin
+        let url_origin = window.location.origin;
+        let questionnaires_left = {{ questionnaires_left }};
 
     </script>
     <script src="{% static 'panel/js/panel_study_details.js' %}"></script>

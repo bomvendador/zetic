@@ -17,6 +17,10 @@ from django.db.models import Sum, Q
 from datetime import datetime
 
 from .mail_handler import generate_participant_link_code, send_email_by_email_type
+from django.core.mail import send_mail
+from smtplib import SMTPException, SMTPRecipientsRefused
+from django.utils.html import strip_tags
+from django.template.loader import render_to_string
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -33,9 +37,12 @@ def add_company_init(request):
 def save_new_company(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
-        name = json_data['name']
+        name = json_data['name'].strip()
+        demo_limit = json_data['demo_limit']
         active = json_data['active']
-        # print(json_data)
+        print(json_data)
+
+        # demo_status = json_data['demo_status']
         companies_existing = Company.objects.filter(name=name)
         if companies_existing.exists():
             response = {
@@ -45,6 +52,8 @@ def save_new_company(request):
         else:
             company_inst = Company()
             company_inst.name = name
+            if not demo_limit == '':
+                company_inst.demo_status_questionnaires_limit = demo_limit
             company_inst.created_by = request.user
             public_code = generate_code(8)
             company_inst.public_code = public_code
@@ -52,7 +61,8 @@ def save_new_company(request):
                 company_inst.active = True
             else:
                 company_inst.active = False
-
+            if 'demo_status' in json_data:
+                company_inst.demo_status = json_data['demo_status']
             company_inst.save()
 
             # response = sync_add_company.delay(name, public_code)
@@ -131,26 +141,56 @@ def edit_company(request, company_id):
 
 def company_questionnaire(request, code):
     company_self_questionnaire_link_inst = CompanySelfQuestionnaireLink.objects.get(code=code)
-    years = []
-    current_year = datetime.now().year
-    for i in range(1960, current_year - 18 + 1):
-        years.append(i)
-    context = {
-        'gender': EmployeeGender.objects.all(),
-        'roles': EmployeeRole.objects.all(),
-        'industries': Industry.objects.all(),
-        'positions': EmployeePosition.objects.all(),
-        'years': years,
-        'company': company_self_questionnaire_link_inst.company,
-        'code': code,
-    }
-    return render(request, 'panel_company_questionnaire_participant_data.html', context)
+    company_inst = company_self_questionnaire_link_inst.company
+    company_questionnaires_qnt = len(Questionnaire.objects.filter(participant__employee__company=company_inst))
+    if company_inst.demo_status_questionnaires_limit <= company_questionnaires_qnt:
+        questionnaires_left = 0
+    else:
+        questionnaires_left = company_inst.demo_status_questionnaires_limit - company_questionnaires_qnt
+    if questionnaires_left == 0:
+        if not request.user.is_authenticated:
+            subject = f'Превышение лимита для ссылки (компания - {company_inst.id}. {company_inst.name}'
+            context = {
+                'company': company_inst,
+                'company_questionnaires_qnt': company_questionnaires_qnt,
+            }
+            html_message = render_to_string('notification_company_questionnaire_limit_error_.html', context)
+            # print(f'company_questionnaires_qnt = {company_questionnaires_qnt}')
+            plain_text = strip_tags(html_message)
+            from_email = 'ZETIC <info@zetic.ru>'
+            to_email = 'info@zetic.ru'
+
+            try:
+                send_mail(
+                    subject,
+                    plain_text,
+                    from_email,
+                    [to_email],
+                    html_message=html_message
+                )
+            except SMTPRecipientsRefused as e:
+                print(e)
+        return render(request, 'panel_company_questionnaire_participant_data_limit_error.html')
+    else:
+        years = []
+        current_year = datetime.now().year
+        for i in range(1960, current_year - 18 + 1):
+            years.append(i)
+        context = {
+            'gender': EmployeeGender.objects.all(),
+            'roles': EmployeeRole.objects.all(),
+            'industries': Industry.objects.all(),
+            'positions': EmployeePosition.objects.all(),
+            'years': years,
+            'company': company_self_questionnaire_link_inst.company,
+            'code': code,
+        }
+        return render(request, 'panel_company_questionnaire_participant_data.html', context)
 
 
 def create_self_questionnaire(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
-        print(json_data)
         data = json_data['data']
         email = data['email']
         company_id = data['company_id']
@@ -268,13 +308,17 @@ def update_company(request):
         company_id = json_data['company_id']
         company_name = json_data['company_name']
         active = json_data['active']
-        company_inst = Company(id=company_id)
+        demo_limit = json_data['demo_limit']
+        company_inst = Company.objects.get(id=company_id)
         company_inst.name = company_name
         if active == 1:
             company_inst.active = True
         else:
             company_inst.active = False
-
+        if 'demo_status' in json_data:
+            company_inst.demo_status = json_data['demo_status']
+        if not demo_limit == '':
+            company_inst.demo_status_questionnaires_limit = demo_limit
         company_inst.save()
 
         return HttpResponse(status=200)

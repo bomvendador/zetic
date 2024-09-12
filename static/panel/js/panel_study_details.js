@@ -3,26 +3,25 @@ expand_menu_item('#menu_study_list')
 // let table = process_table('.team-table')
 
 function copyText(e) {
-  e.preventDefault();
-  const text = document.getElementById("text");
-  text.select();
-  document.execCommand("copy");
+    e.preventDefault();
+    const text = document.getElementById("text");
+    text.select();
+    document.execCommand("copy");
 }
 
 $('.copy-questionnaire-link').on('click', function (e) {
-  e.preventDefault();
-  let text = window.location.origin + $(this).closest('div').find('a').attr('href');
-  try {
-    navigator.clipboard.writeText(text).then(r => {
-        toastr.success('Ссылка скопирована')
-    })
+    e.preventDefault();
+    let text = window.location.origin + $(this).closest('div').find('a').attr('href');
+    try {
+        navigator.clipboard.writeText(text).then(r => {
+            toastr.success('Ссылка скопирована')
+        })
 
-  }catch (e) {
-      toastr.warning('Копирование возможно при наличии SSL')
-    // console.log(e)
-  }
+    } catch (e) {
+        toastr.warning('Копирование возможно при наличии SSL')
+        // console.log(e)
+    }
 })
-
 
 
 $('.team-table').DataTable().destroy()
@@ -48,11 +47,11 @@ $('.questionnaire_status').on('click', function () {
     let question_text = ''
     let result_text = ''
     let question_title = ''
-    if(operation === 'block'){
+    if (operation === 'block') {
         question_text = 'Заблокировать опросник?'
         question_title = 'Блокировка опросника'
         result_text = 'Опросник заблокирован'
-    }else {
+    } else {
         question_text = 'Разблокировать опросник?'
         result_text = 'Опросник разблокирован'
         question_title = 'Разблокировка опросника'
@@ -149,14 +148,17 @@ let participants_ids_to_send_invitation_to = []
 
 function getParticipantsWithoutInvitations() {
     $('#tbody_participants_selected .select-participant-for-group-action:checked').each(function () {
-        let invitation_datetime = $(this).closest('tr').find('.invitation-datetime').text().trim()
-        if (invitation_datetime === '') {
+        let invitation_datetime = $(this).closest('tr').find('.copy-questionnaire-link')
+        if (!invitation_datetime.length) {
             let participant_id = $(this).closest('tr').attr('id').split('_')[2]
             let participant_name = $(this).closest('tr').find('.participant-name').text()
             participants_ids_to_send_invitation_to.push({
                 'id': participant_id,
                 'name': participant_name,
             })
+        } else {
+            $(this).prop('checked', false)
+            $('#select_all_participants_for_group_action').prop('checked', false)
         }
     })
 }
@@ -174,10 +176,59 @@ $('#run_group_action').on('click', function () {
                 getParticipantsWithoutInvitations();
 
                 if (participants_ids_to_send_invitation_to.length >= 1) {
-                    $('#modal_before_mass_send_invitation').attr('data-invitation-type', 'initial')
-                    $('#modal_participants_qnt').text(participants_ids_to_send_invitation_to.length)
-                    $('#modal_before_mass_send_invitation_title').text('Отправка приглашения участникам')
-                    $('#modal_before_mass_send_invitation').modal('show')
+                    let send_invitations = true
+                    if (participants_ids_to_send_invitation_to.length > questionnaires_left) {
+                        let user_role_name = $('#cur_role_name').text()
+                        let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                            '<h4 style="text-align: center"><b>Количество выбранных участников превышает допустимое</b></h4>' +
+                            '<hr class="solid" style="background-color: black;">' +
+                            '<div><table class="table">' +
+                            '<thead><tr><th></th><th></th></tr></thead>' +
+                            '<tbody>' +
+                            '<tr><td>Выбрано</td><td>' + participants_ids_to_send_invitation_to.length + '</td></tr>' +
+                            '<tr><td>Доступно</td><td>' + questionnaires_left + '</td></tr>' +
+                            '</tbody>' +
+                            '</table>' +
+                            '</div>' +
+                            '<hr class="solid" style="background-color: black;">'
+
+                        if (user_role_name === 'Суперадмин') {
+                            output_html = output_html +
+                                '<div style="text-align: center"><b>Отправить приглашения?</b></div>'
+                            Swal.fire({
+                                html: output_html,
+                                icon: 'question',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Да',
+                                cancelButtonText: 'Нет'
+                            }).then((result) => {
+                                if (result.value === true) {
+                                    $('#modal_before_mass_send_invitation').attr('data-invitation-type', 'initial')
+                                    $('#modal_participants_qnt').text(participants_ids_to_send_invitation_to.length)
+                                    $('#modal_before_mass_send_invitation_title').text('Отправка приглашения участникам')
+                                    $('#modal_before_mass_send_invitation').modal('show')
+                                }
+                            })
+
+                        } else {
+                            Swal.fire({
+                                html: output_html,
+                                icon: 'error',
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'ОК'
+                            })
+
+                        }
+                    } else {
+                        $('#modal_before_mass_send_invitation').attr('data-invitation-type', 'initial')
+                        $('#modal_participants_qnt').text(participants_ids_to_send_invitation_to.length)
+                        $('#modal_before_mass_send_invitation_title').text('Отправка приглашения участникам')
+                        $('#modal_before_mass_send_invitation').modal('show')
+
+                    }
 
                 } else {
                     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +

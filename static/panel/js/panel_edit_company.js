@@ -1,17 +1,17 @@
 expand_menu_item('#menu_companies_list')
 
 $('.copy-company-questionnaire-link').on('click', function (e) {
-  e.preventDefault();
-  let text = window.location.origin + $(this).closest('div').find('a').attr('href');
-  try {
-    navigator.clipboard.writeText(text).then(r => {
-        toastr.success('Ссылка скопирована')
-    })
+    e.preventDefault();
+    let text = window.location.origin + $(this).closest('div').find('a').attr('href');
+    try {
+        navigator.clipboard.writeText(text).then(r => {
+            toastr.success('Ссылка скопирована')
+        })
 
-  }catch (e) {
-      toastr.warning('Копирование возможно при наличии SSL')
-    // console.log(e)
-  }
+    } catch (e) {
+        toastr.warning('Копирование возможно при наличии SSL')
+        // console.log(e)
+    }
 })
 
 
@@ -339,13 +339,25 @@ $('#company_active').on('click', function () {
     }
 })
 
-$('#save_company').on('click', function () {
+$('#update_company').on('click', function () {
     let company_name = $('#input_company_name').val()
-
+    let demo_limit = ''
+    let test_ok = true
 
     if (company_name === '') {
         toastr.error('Название компании не заполнено')
-    } else {
+        test_ok = false
+    }
+    if ($('#company_demo_status_limit').length) {
+        if ($('#company_demo_status_limit').val() === '') {
+            toastr.error('Ограничение по кол-ву опросников не заполнено')
+            test_ok = false
+        } else {
+            demo_limit = $('#company_demo_status_limit').val()
+        }
+    }
+
+    if (test_ok) {
         btn_spinner($('#save_company'))
         $.ajax({
             headers: {"X-CSRFToken": token},
@@ -354,7 +366,9 @@ $('#save_company').on('click', function () {
             data: JSON.stringify({
                 'company_name': company_name,
                 'company_id': company_id,
-                'active': active
+                'active': active,
+                'demo_status': $('#company_demo_status').prop('checked'),
+                'demo_limit': demo_limit
             }),
             processData: false,
             contentType: false,

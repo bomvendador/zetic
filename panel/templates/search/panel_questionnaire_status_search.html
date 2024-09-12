@@ -2,6 +2,10 @@
 {% load static %}
 {% load tz %}
 
+{% block links %}
+{#<link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">#}
+{% endblock %}
+
 <!-- CONTAINER -->
 {% block search_content %}
     <!-- ROW-1 -->
@@ -57,7 +61,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table text-nowrap border-bottom team-table dataTable no-footer"
+                                <table class="table text-nowrap border-bottom no-footer key-buttons"
                                        id="table_questionnaire_status_search">
                                     <thead>
                                     {#                                                            <tr class="table-header">#}
@@ -98,6 +102,8 @@
 
 
     </script>
+
+
     <script src="{% static 'panel/js/search/panel_questionnaire_status_search.js' %}"></script>
 
 

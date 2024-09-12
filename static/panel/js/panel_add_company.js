@@ -2,6 +2,7 @@ expand_menu_item('#menu_company_add')
 
 let active = 1
 
+
 $('#company_active').on('click', function () {
     console.log($(this).attr('checked'))
     if ($(this).attr('checked') === 'checked') {
@@ -14,9 +15,22 @@ $('#company_active').on('click', function () {
 })
 
 $('#save_company').on('click', function () {
+    let test_ok = true
+    let demo_limit = ''
     if ($('#input_company_name').val() === '') {
         toastr.error('Название компании не заполнено')
-    } else {
+        test_ok = false
+    }
+    if ($('#company_demo_status_limit').length) {
+        if ($('#company_demo_status_limit').val() === '') {
+            toastr.error('Ограничение по кол-ву опросников не заполнено')
+            test_ok = false
+        } else {
+            demo_limit = $('#company_demo_status_limit').val()
+        }
+    }
+
+    if (test_ok) {
         btn_spinner($('#save_company'))
         $.ajax({
             headers: {"X-CSRFToken": token},
@@ -24,7 +38,9 @@ $('#save_company').on('click', function () {
             type: 'POST',
             data: JSON.stringify({
                 'name': $('#input_company_name').val(),
-                'active': active
+                'demo_limit': demo_limit,
+                'active': active,
+                'demo_status': $('#company_demo_status').prop('checked')
             }),
             processData: false,
             contentType: false,

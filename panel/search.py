@@ -129,26 +129,55 @@ def search_for_questionnaire_status(request):
         company_id = json_data['company_id']
         status = json_data['status']
         all_companies = False
+        employee_role_name = UserProfile.objects.get(user=request.user).role.name
+
         if company_id == '' or company_id == 'all':
             all_companies = True
         if status == 'not_started':
             if all_companies:
-                questionnaires_inst = Questionnaire.objects.filter(Q(participant__invitation_sent=True) &
-                                                                   Q(participant__answered_questions_qnt=0))
+                if employee_role_name == 'Партнер':
+                    questionnaires_inst = Questionnaire.objects.filter(Q(participant__invitation_sent=True) &
+                                                                       Q(participant__answered_questions_qnt=0) &
+                                                                       Q(participant__employee__created_by=request.user))
+                else:
+                    questionnaires_inst = Questionnaire.objects.filter(Q(participant__invitation_sent=True) &
+                                                                       Q(participant__answered_questions_qnt=0))
             else:
-                questionnaires_inst = Questionnaire.objects.filter(Q(participant__invitation_sent=True) &
-                                                                   Q(participant__answered_questions_qnt=0) &
-                                                                   Q(participant__employee__company_id=company_id))
+                if employee_role_name == 'Партнер':
+                    questionnaires_inst = Questionnaire.objects.filter(Q(participant__invitation_sent=True) &
+                                                                       Q(participant__answered_questions_qnt=0) &
+                                                                       Q(participant__employee__company_id=company_id) &
+                                                                       Q(participant__employee__created_by=request.user))
+
+                else:
+                    questionnaires_inst = Questionnaire.objects.filter(Q(participant__invitation_sent=True) &
+                                                                       Q(participant__answered_questions_qnt=0) &
+                                                                       Q(participant__employee__company_id=company_id))
         elif status == 'not_finished':
             if all_companies:
-                questionnaires_inst = Questionnaire.objects.filter(Q(participant__invitation_sent=True) &
-                                                                   ~Q(participant__answered_questions_qnt=0) &
-                                                                   Q(participant__completed_at=None))
+                if employee_role_name == 'Партнер':
+                    questionnaires_inst = Questionnaire.objects.filter(Q(participant__invitation_sent=True) &
+                                                                       ~Q(participant__answered_questions_qnt=0) &
+                                                                       Q(participant__completed_at=None) &
+                                                                       Q(participant__employee__created_by=request.user))
+
+                else:
+                    questionnaires_inst = Questionnaire.objects.filter(Q(participant__invitation_sent=True) &
+                                                                       ~Q(participant__answered_questions_qnt=0) &
+                                                                       Q(participant__completed_at=None))
             else:
-                questionnaires_inst = Questionnaire.objects.filter(Q(participant__invitation_sent=True) &
-                                                                   ~Q(participant__answered_questions_qnt=0) &
-                                                                   Q(participant__completed_at=None) &
-                                                                   Q(participant__employee__company_id=company_id))
+                if employee_role_name == 'Партнер':
+                    questionnaires_inst = Questionnaire.objects.filter(Q(participant__invitation_sent=True) &
+                                                                       ~Q(participant__answered_questions_qnt=0) &
+                                                                       Q(participant__completed_at=None) &
+                                                                       Q(participant__employee__company_id=company_id) &
+                                                                       Q(participant__employee__created_by=request.user))
+
+                else:
+                    questionnaires_inst = Questionnaire.objects.filter(Q(participant__invitation_sent=True) &
+                                                                       ~Q(participant__answered_questions_qnt=0) &
+                                                                       Q(participant__completed_at=None) &
+                                                                       Q(participant__employee__company_id=company_id))
 
         result = []
         for questionnaire in questionnaires_inst:

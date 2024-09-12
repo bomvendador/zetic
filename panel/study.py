@@ -43,7 +43,7 @@ def study_details(request, study_id):
     context = info_common(request)
     # url_origin = request._current_scheme_host
     # current_url = request._current_scheme_host + request.path
-    print(f'HTTP_HOST - {request.get_host()}')
+    # print(f'HTTP_HOST - {request.get_host()}')
     # print(f'REMOTE_HOST - {request.META["REMOTE_HOST"]}')
     # print(f'SERVER_NAME - {request.META["SERVER_NAME"]}')
     if context == 'logout':
@@ -61,9 +61,19 @@ def study_details(request, study_id):
             })
         questionnaires_inst = Questionnaire.objects.filter(participant__study=study)
         questionnaires_visits_inst = QuestionnaireVisits.objects.filter(questionnaire__participant__study=study)
+
+        company_inst = study.company
+        company_questionnaires_qnt = len(Questionnaire.objects.filter(participant__employee__company=company_inst))
+        if company_inst.demo_status_questionnaires_limit <= company_questionnaires_qnt:
+            questionnaires_left = 0
+        else:
+            questionnaires_left = company_inst.demo_status_questionnaires_limit - company_questionnaires_qnt
         context.update(
             {
                 'study': study,
+                'company_questionnaires_qnt': company_questionnaires_qnt,
+                'company': company_inst,
+                'questionnaires_left': questionnaires_left,
                 # 'participant_questions_groups': participant_questions_groups,
                 # 'study_question_groups': study_question_groups,
                 'participants': Participant.objects.filter(study=study),

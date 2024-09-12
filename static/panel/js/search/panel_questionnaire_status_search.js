@@ -1,5 +1,18 @@
+// process_table_clear('#table_questionnaire_status_search')
 
-process_table_clear('#table_questionnaire_status_search')
+
+let table = $('#table_questionnaire_status_search').DataTable({
+    buttons: ['excelHtml5', 'pdf'],
+    language: {
+        // searchPlaceholder: 'Поиск...',
+        dom: 'Blfrtip',
+        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json",
+        scrollX: "100%",
+        sSearch: '',
+    }
+});
+// table.buttons().container().appendTo('#table_questionnaire_status_search_wrapper .col-md-6:eq(0)');
+
 
 $('#start_questionnaire_status_search').on('click', function () {
     let company_id = $('#select_company').val()

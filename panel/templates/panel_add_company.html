@@ -51,6 +51,27 @@
 
                                             </div>
                                         </div>
+                                        {% if cur_userprofile.role.name == 'Суперадмин' %}
+                                        <hr style="border-top: 1px solid #646464;">
+                                        <div class="row mt-2">
+                                            <div class="col-lg-12 col-md-12">
+                                                <div class="form-switch">
+                                                  <input class="form-check-input" type="checkbox" role="switch" id="company_demo_status" checked="checked">
+                                                  <label class="form-check-label" for="company_demo_status">Демо статус</label>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4">
+                                            <div class="col-lg-3 col-sm-12">
+                                                <div class="form-group">
+                                                    <label for="company_demo_status_limit">Ограничение по кол-ву опросников в Демо-режиме</label>
+                                                    <input type="number" class="form-control" id="company_demo_status_limit" value="3">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {% endif %}
 
 
                                    </div>
