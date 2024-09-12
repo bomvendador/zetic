@@ -15,12 +15,12 @@ import os
 
 import environ
 
-env = environ.Env()
-environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env()
+environ.Env.read_env(os.path.join(Path(__file__).resolve().parent, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -38,9 +38,9 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 1
+# DEBUG = 1
 # DEBUG = True
-# DEBUG = int(os.getenv('DEBUG'))
+DEBUG = int(env('DEBUG'))
 
 API_BEARER = env('API_BEARER')
 if DEBUG == 0:
@@ -49,7 +49,7 @@ else:
     API_LINK = 'https://demo-admin.zetic.borsky.dev/api/'
 
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['51.250.113.32', '51.250.45.169', 'zetictest.ru', 'zetictest.com', '127.0.0.1']
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 CORS_ORIGIN_WHITELIST = [
