@@ -1169,3 +1169,20 @@ def save_migration(request):
         print(f'time - {finished_time - start_time}')
         # print(f'reports_qnt - {reports_qnt} employee_qnt - {employee_qnt}')
         return HttpResponse('ok')
+
+
+# def page_not_found(request):
+#     return render(request, 'error_pages/error_404.html')
+
+
+from django.http import HttpResponseBadRequest, HttpResponseNotFound
+from django.template import Context, Engine, TemplateDoesNotExist, loader
+
+
+def page_not_found(request, exception, template_name='error_pages/error_404.html'):
+    template = loader.get_template(template_name)
+    return HttpResponseNotFound(template.render())
+
+
+def custom_404(request, exception):
+    return render(request, 'error_pages/error_404.html', status=404)

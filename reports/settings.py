@@ -37,11 +37,15 @@ CSRF_TRUSTED_ORIGINS = [
     'https://zetictest.ru',
 ]
 
+ADMINS = [('Alexey Rodin', 'bomvendador@yandex.ru')]
+SERVER_EMAIL = 'info@zetic.ru'
+
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = 1
 # DEBUG = True
 DEBUG = int(env('DEBUG'))
-print(int(env('DEBUG')))
 API_BEARER = env('API_BEARER')
 if DEBUG == 0:
     API_LINK = 'https://console.zetic.ru/api/'

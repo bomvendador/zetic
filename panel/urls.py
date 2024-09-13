@@ -13,6 +13,8 @@ from panel import employee, study, sections, individual_report_file, company, ma
 # from panel import mail_handler
 from sendemail import tasks
 
+
+
 urlpatterns = [
     path('', panel_views.home, name="panel_home"),
     path('team_distribution', panel_views.team_distribution, name='team_distribution'),

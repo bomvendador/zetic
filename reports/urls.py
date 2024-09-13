@@ -17,6 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from api import views
 
+from django.conf.urls import handler400, handler403, handler404, handler500
+
+
+handler404 = 'panel.views.page_not_found'
+# handler400 = 'reports.panel_views.page_not_found'
+
+
 urlpatterns = [
     path('', views.home, name='home'),
     path('json_request/', views.json_request, name='json_request'),
