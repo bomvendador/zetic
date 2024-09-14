@@ -39,7 +39,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 ADMINS = [('Alexey Rodin', 'bomvendador@yandex.ru')]
 SERVER_EMAIL = 'info@zetic.ru'
-
+EMAIL_SUBJECT_PREFIX = env('EMAIL_SUBJECT_PREFIX')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
