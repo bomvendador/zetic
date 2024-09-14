@@ -1,4 +1,4 @@
-from pdf.models import Category, Section, CategoryQuestions
+from pdf.models import Category, Section, CategoryQuestions, CommonBooleanSettings
 from login.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
@@ -17,10 +17,26 @@ from django.utils.dateformat import DateFormat
 @login_required(redirect_field_name=None, login_url='/login/')
 def settings_main(request):
     context = info_common(request)
+    boolean_settings = CommonBooleanSettings.objects.all()
+    context.update({
+        'boolean_settings': boolean_settings
+    })
     if context == 'logout':
         return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
     else:
         return render(request, 'settings/panel_settings.html', context)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def save_boolean_setting(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        setting_id = json_data['setting_id']
+        setting_value = json_data['setting_value']
+        setting_inst = CommonBooleanSettings.objects.get(id=setting_id)
+        setting_inst.value = setting_value
+        setting_inst.save()
+        return HttpResponse(status=200)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')

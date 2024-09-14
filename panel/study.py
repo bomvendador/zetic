@@ -1,5 +1,6 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, Participant, \
-    EmailSentToParticipant, Report, ResearchTemplate, ResearchTemplateSections, Questionnaire, QuestionnaireVisits
+    EmailSentToParticipant, Report, ResearchTemplate, ResearchTemplateSections, Questionnaire, QuestionnaireVisits, \
+    CommonBooleanSettings
 from login.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
@@ -71,6 +72,7 @@ def study_details(request, study_id):
         context.update(
             {
                 'study': study,
+                'demo_status_setting': CommonBooleanSettings.objects.get(name='Демо-режимы для компаний').value,
                 'company_questionnaires_qnt': company_questionnaires_qnt,
                 'company': company_inst,
                 'questionnaires_left': questionnaires_left,

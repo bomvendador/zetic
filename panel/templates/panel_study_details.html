@@ -103,8 +103,8 @@
                     </div>
                 </div>
             </div>
-            {% if company.demo_status %}
-            <div class="row">
+            {% if company.demo_status and demo_status_setting %}
+            <div class="row" id="questionnaires_left_div">
                 <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3">
                     <div class="card  {% if questionnaires_left == 0 %}bg-danger {% else %}bg-success{% endif %} img-card box-success-shadow">
                         <div class="card-body">

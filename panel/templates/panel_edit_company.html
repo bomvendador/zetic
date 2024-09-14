@@ -69,12 +69,12 @@
                                     </div>
                                 </div>
 
-                                        <div class="form-group mt-4">
-                                            <label for="company_demo_status_limit">Ограничение по кол-ву опросников в
-                                                Демо-режиме</label>
-                                            <input type="number" class="form-control" id="company_demo_status_limit"
-                                                   value="{{ company.demo_status_questionnaires_limit }}">
-                                        </div>
+                                <div class="form-group mt-4">
+                                    <label for="company_demo_status_limit">Ограничение по кол-ву опросников в
+                                        Демо-режиме</label>
+                                    <input type="number" class="form-control" id="company_demo_status_limit"
+                                           value="{{ company.demo_status_questionnaires_limit }}">
+                                </div>
 
 
                             {% endif %}
@@ -87,7 +87,37 @@
                         </div>
                     </div>
                 </div>
+
+
                 <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Удаление компании</h3>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="row">
+                                <p class="text-danger">Внимание!</p>
+                                <span>При удалении компании также будут удалены все связанные данные: сотрудники,
+                                    опросники, участники опросов, данные анкет
+                                </span>
+
+                            </div>
+                        </div>
+                        <div class="card-footer text-end">
+                            <button class="btn btn-danger my-1 nav-buttons" type="button" id="delete_company">Удалить
+                                компанию
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- ROW-1 CLOSED -->
+
+            </div>
+            <div class="row">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Администраторы</h3>
@@ -170,36 +200,13 @@
 
                     </div>
                 </div>
-                <!-- ROW-1 CLOSED -->
+
 
             </div>
             <div class="row">
 
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Удаление компании</h3>
-                        </div>
-                        <div class="card-body">
 
-                            <div class="row">
-                                <p class="text-danger">Внимание!</p>
-                                <span>При удалении компании также будут удалены все связанные данные: сотрудники,
-                                    опросники, участники опросов, данные анкет
-                                </span>
-
-                            </div>
-                        </div>
-                        <div class="card-footer text-end">
-                            <button class="btn btn-danger my-1 nav-buttons" type="button" id="delete_company">Удалить
-                                компанию
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Ссылки для самостоятельного создания опросника</h3>
@@ -270,9 +277,96 @@
 
 
             </div>
-            <!--CONTAINER CLOSED -->
+
+{#            <div class="row">#}
+{#                <div class="col-12">#}
+{#                    <div class="card">#}
+{#                        <div class="card-header">#}
+{#                            <h3 class="card-title">Получатели уведомления о заполении опросника</h3>#}
+{#                        </div>#}
+{#                        <div class="card-body">#}
+{#                            <div style="display: block; overflow-x: auto; white-space: nowrap;">#}
+{#                                <table class="table text-nowrap text-md-nowrap mb-0">#}
+{#                                    <thead>#}
+{#                                    <tr>#}
+{#                                        <th>Имя</th>#}
+{#                                        <th>Email</th>#}
+{#                                        <th>Активен</th>#}
+{#                                        <th></th>#}
+{#                                    </tr>#}
+{#                                    </thead>#}
+{#                                    <tbody id="tbody_company_admins">#}
+{#                                    {% if admins %}#}
+{#                                        {% for admin in admins %}#}
+{#                                            <tr id="employee_id_{{ admin.id }}">#}
+{##}
+{#                                                <td>{{ admin.name }}</td>#}
+{#                                                <td>{{ admin.email }}</td>#}
+{#                                                <td>#}
+{#                                                    {% if admin.company_admin_active %}#}
+{#                                                        <span class="dot-label bg-success" title="Админ активен"></span>#}
+{#                                                    {% else %}#}
+{#                                                        <span class="dot-label bg-danger"#}
+{#                                                              title="Админ деактивирован"></span>#}
+{#                                                    {% endif %}#}
+{#                                                </td>#}
+{#                                                <td>#}
+{#                                                    <div style="text-align: center;">#}
+{#                                                        <i class="fe fe-more-vertical cursor-pointer"#}
+{#                                                           data-bs-toggle="dropdown" aria-expanded="false"#}
+{#                                                           style="font-size: 20px"></i>#}
+{#                                                        <ul class="dropdown-menu" id="employee_id_{{ admin.id }}">#}
+{#                                                            <li>#}
+{#                                                                <a class="dropdown-item deactivate-company-admin cursor-pointer">#}
+{#                                                                    {% if admin.company_admin_active %}#}
+{#                                                                        Деактивировать#}
+{#                                                                    {% else %}#}
+{#                                                                        Активировать#}
+{#                                                                    {% endif %}#}
+{#                                                                </a>#}
+{#                                                            </li>#}
+{#                                                            <li>#}
+{#                                                                <a class="dropdown-item delete-company-admin cursor-pointer">Удалить</a>#}
+{#                                                            </li>#}
+{#                                                        </ul>#}
+{#                                                    </div>#}
+{#                                                </td>#}
+{##}
+{#                                            </tr>#}
+{#                                        {% endfor %}#}
+{#                                    {% else %}#}
+{#                                        <tr>#}
+{#                                            <td class="no-data-text" colspan="4">#}
+{#                                                Админы не назначены#}
+{#                                            </td>#}
+{#                                        </tr>#}
+{##}
+{##}
+{#                                    {% endif %}#}
+{##}
+{#                                    </tbody>#}
+{##}
+{##}
+{#                                </table>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="card-footer text-end">#}
+{#                            <button class="btn btn-primary my-1 nav-buttons" type="button" id="add_admin">Назначить#}
+{#                            </button>#}
+{#                        </div>#}
+{##}
+{#                    </div>#}
+{#                </div>#}
+{#                <!-- ROW-1 CLOSED -->#}
+{##}
+{#            </div>#}
+
 
         </div>
+
+        <!--CONTAINER CLOSED -->
+
+    </div>
     </div>
     <!-- Модальное окно добавление админа -->
     <div class="modal fade" id="input_modal_add_admin">

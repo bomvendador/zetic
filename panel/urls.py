@@ -183,6 +183,7 @@ urlpatterns = [
     path('save_report_data_from_xls', migration_questionnaire_results_xls.save_report_data_from_xls, name='save_report_data_from_xls'),
 
     path('settings_main', settings.settings_main, name='settings_main'),
+    path('save_boolean_setting', settings.save_boolean_setting, name='save_boolean_setting'),
 
     path('projects_list', projects.projects_list, name='projects_list'),
     path('get_company_projects', projects.get_company_projects, name='get_company_projects'),

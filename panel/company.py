@@ -1,5 +1,5 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, ResearchTemplate, \
-    CompanySelfQuestionnaireLink, EmployeeGender, Questionnaire, Study, Participant
+    CompanySelfQuestionnaireLink, EmployeeGender, Questionnaire, Study, Participant, CommonBooleanSettings
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
@@ -143,11 +143,12 @@ def company_questionnaire(request, code):
     company_self_questionnaire_link_inst = CompanySelfQuestionnaireLink.objects.get(code=code)
     company_inst = company_self_questionnaire_link_inst.company
     company_questionnaires_qnt = len(Questionnaire.objects.filter(participant__employee__company=company_inst))
+    demo_status_for_companies_setting = CommonBooleanSettings.objects.get(name='Демо-режимы для компаний').value
     if company_inst.demo_status_questionnaires_limit <= company_questionnaires_qnt:
         questionnaires_left = 0
     else:
         questionnaires_left = company_inst.demo_status_questionnaires_limit - company_questionnaires_qnt
-    if questionnaires_left == 0:
+    if questionnaires_left == 0 and company_inst.demo_status and demo_status_for_companies_setting:
         if not request.user.is_authenticated:
             subject = f'Превышение лимита для ссылки (компания - {company_inst.id}. {company_inst.name}'
             context = {

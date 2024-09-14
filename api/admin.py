@@ -4,7 +4,8 @@ from pdf.models import Participant, Report, Category, Section, PointDescription,
     RawToTPointsType, RawToTPoints, EmployeeGender, ResearchTemplate, ResearchTemplateSections, CategoryQuestions, QuestionAnswers, \
     AgeGenderGroup, Questionnaire, QuestionnaireQuestionAnswers, MatrixFilter, MatrixFilterCategory, MatrixFilterInclusiveEmployeePosition, \
     MatrixFilterParticipantNotDistributed, MatrixFilterParticipantNotDistributedEmployeePosition, ReportDataByCategories, \
-    Project, ProjectStudy, ProjectParticipants, TrafficLightReportFilter, TrafficLightReportFilterCategory
+    Project, ProjectStudy, ProjectParticipants, TrafficLightReportFilter, TrafficLightReportFilterCategory, \
+    CommonBooleanSettings
 from login.models import UserRole, UserProfile
 
 
@@ -52,3 +53,4 @@ admin.site.register(ProjectStudy)
 admin.site.register(ProjectParticipants)
 admin.site.register(TrafficLightReportFilter)
 admin.site.register(TrafficLightReportFilterCategory)
+admin.site.register(CommonBooleanSettings)

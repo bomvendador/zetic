@@ -20,30 +20,30 @@
             <!-- PAGE-HEADER END -->
 
             <!-- ROW-1 OPEN -->
-{#            <div class="row mb-4">#}
-{#                <div class="col-lg-12">#}
-{#                    <div class="card mb-0">#}
-{#                        <div class="card-header">#}
-{#                            <h3 class="card-title">Опросники</h3>#}
-{#                        </div>#}
-{#                        <div class="card-body">#}
-{#                            <div class="form-group">#}
-{#                                <table class="table border text-nowrap text-md-nowrap table-bordered mb-0">#}
-{#                                    <thead>#}
-{#                                    <tr>#}
-{#                                        <th style="width: 25%">Настройка</th>#}
-{#                                        <th>Описание</th>#}
-{#                                    </tr>#}
-{#                                    </thead>#}
-{#                                    <tbody>#}
-{#                                    </tbody>#}
-{#                                </table>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{##}
-{#            </div>#}
+            {#            <div class="row mb-4">#}
+            {#                <div class="col-lg-12">#}
+            {#                    <div class="card mb-0">#}
+            {#                        <div class="card-header">#}
+            {#                            <h3 class="card-title">Опросники</h3>#}
+            {#                        </div>#}
+            {#                        <div class="card-body">#}
+            {#                            <div class="form-group">#}
+            {#                                <table class="table border text-nowrap text-md-nowrap table-bordered mb-0">#}
+            {#                                    <thead>#}
+            {#                                    <tr>#}
+            {#                                        <th style="width: 25%">Настройка</th>#}
+            {#                                        <th>Описание</th>#}
+            {#                                    </tr>#}
+            {#                                    </thead>#}
+            {#                                    <tbody>#}
+            {#                                    </tbody>#}
+            {#                                </table>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                </div>#}
+            {##}
+            {#            </div>#}
             <div class="row mb-4">
                 <div class="col-lg-12">
                     <div class="card mb-0">
@@ -131,6 +131,54 @@
                                             Фильтры для отчета "Светофор"
                                         </td>
                                     </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="card mb-0">
+                        <div class="card-header">
+                            <h3 class="card-title">Общие настройки</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <table class="table border text-nowrap text-md-nowrap table-bordered mb-0">
+                                    {#                                    <thead>#}
+                                    {##}
+                                    {#                                    <tr>#}
+                                    {#                                        <th style="width: 25%">Настройка</th>#}
+                                    {#                                        <th>Описание</th>#}
+                                    {#                                    </tr>#}
+                                    {#                                    </thead>#}
+                                    <tbody>
+                                    {% for boolean_setting in boolean_settings %}
+                                    <tr id="" data-setting-id="{{ boolean_setting.id }}">
+                                        <td style="width: 25%">
+                                            {{ boolean_setting.name }}
+                                        </td>
+                                        <td style="padding-top: 10px; padding-bottom: 10px">
+                                            <div class="row">
+                                                <div class="form-switch col-3">
+                                                    <input class="form-check-input boolean-setting-checkbox" type="checkbox" role="switch"
+                                                           style="margin-left: 0"
+
+                                                            {% if boolean_setting.value %}
+                                                           checked="checked"{% endif %}>
+                                                </div>
+                                                <div class="col-9 d-none save-boolean-setting-div">
+                                                    <i class="fe fe-save save-boolean-setting" data-bs-toggle="tooltip" title=""
+                                                       data-bs-original-title="Сохранить настройку" aria-label="fe fe-save" style="cursor: pointer;float: right; font-size: 1.4em"></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+
                                     </tbody>
                                 </table>
                             </div>

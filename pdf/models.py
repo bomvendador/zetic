@@ -746,3 +746,15 @@ class IntegralReportFilterCategory(models.Model):
         verbose_name_plural = 'Категории (шкалы) фильтров интегральных отчетов'
         verbose_name = 'Категория (шкалы) фильтра интегрального отчета'
 
+
+class CommonBooleanSettings(models.Model):
+    value = models.BooleanField(default=False)
+    name = models.CharField(max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.name}'
+
+    class Meta:
+        verbose_name_plural = 'Булевые настройки'
+        verbose_name = 'Булевая настройка'
+
