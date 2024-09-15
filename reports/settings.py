@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure--lfbjn3qgosinvh0ls*wb*#72ckmd4-9ozyt*^=6=_w+ah1&qg
 # SECRET_KEY = os.environ.get("SECRET_KEY")
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://51.250.115.32',
+    'http://51.250.113.32',
     'http://51.250.45.169',
     # 'http://zetictest.ru',
     'http://zetictest.com',
@@ -53,11 +53,12 @@ else:
     API_LINK = 'https://demo-admin.zetic.borsky.dev/api/'
 
 
-ALLOWED_HOSTS = ['51.250.115.32', '51.250.45.169', 'zetictest.ru', 'zetictest.com', '127.0.0.1', '0.0.0.0']
+# ALLOWED_HOSTS = ['51.250.113.32', '51.250.45.169', 'zetictest.ru', 'zetictest.com', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['51.250.45.169', 'zetictest.ru', 'zetictest.com', '127.0.0.1', '0.0.0.0']
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 CORS_ORIGIN_WHITELIST = [
-    'http://51.250.115.32',
+    'http://51.250.113.32',
     'http://51.250.45.169',
     # 'http://zetictest.ru',
     'http://zetictest.com',
@@ -137,13 +138,27 @@ WSGI_APPLICATION = 'reports.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+if DEBUG == 0:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'reports',
+            'USER': 'db_user',
+            'PASSWORD': 'Jiu8yGtyf-=-=',
+            'HOST': 'localhost',
+            'PORT': '',
+            'CHARSET': 'utf8',
+            'COLLATION': 'utf8_general_ci',
 
+        }
+    }
 
 # Celery Broker - Redis
 CELERY_BROKER_URL = 'redis://localhost:6379'
@@ -154,19 +169,6 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = "Europe/Moscow"
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'reports',
-        'USER': 'db_user',
-        'PASSWORD': 'Jiu8yGtyf-=-=',
-        'HOST': 'localhost',
-        'PORT': '',
-        'CHARSET': 'utf8',
-        'COLLATION': 'utf8_general_ci',
-
-    }
-}
 
 
 # print(os.environ.get('SQL_NAME', BASE_DIR / 'db.sqlite3'))
