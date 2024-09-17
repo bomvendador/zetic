@@ -8,7 +8,7 @@ import json
 from django.utils import timezone
 from django.core import serializers
 
-from .views import info_common
+from panel.views import info_common
 from api import outcoming
 
 from django.utils.dateformat import DateFormat

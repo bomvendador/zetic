@@ -2,7 +2,8 @@ from django.conf import settings
 from django.core.mail import send_mail
 from login.models import UserProfile
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, Participant, EmailSentToParticipant, \
-    CategoryQuestions, ResearchTemplate, ResearchTemplateSections, Category, Questionnaire, Report
+    CategoryQuestions, ResearchTemplate, ResearchTemplateSections, Category, Questionnaire, Report, \
+    CompanyReportMadeNotificationReceivers, UsersReportMadeNotificationReceivers
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -496,7 +497,20 @@ def send_month_report(data):
 def send_notification_report_made(data, report_id):
     report = Report.objects.get(id=report_id)
     participant_name = data['participant_name']
-    to_email = 'info@zetic.ru'
+    to_email = []
+    to_email.append('info@zetic.ru')
+    company = report.participant.employee.company
+    company_receivers = CompanyReportMadeNotificationReceivers.objects.filter(company=company)
+    common_receivers = UsersReportMadeNotificationReceivers.objects.all()
+    for receiver in common_receivers:
+        user_profile = UserProfile.objects.get(user=receiver.user)
+        if user_profile.role.name == 'Партнер':
+            if company.created_by == receiver.user:
+                to_email.append(receiver.user.email)
+        else:
+            to_email.append(receiver.user.email)
+    for receiver in company_receivers:
+        to_email.append(receiver.employee.email)
     context = {
         'data': data,
         'employee': report.participant.employee
@@ -507,7 +521,7 @@ def send_notification_report_made(data, report_id):
     from_email = 'ZETIC <info@zetic.ru>'
 
     email = EmailMessage(
-        subject, html_message, from_email, [to_email])
+        subject, html_message, from_email, to_email)
     email.attach_file(settings.MEDIA_ROOT + '/reportsPDF/single/' + report.file.name, 'application/pdf')
     email.content_subtype = "html"
     try:

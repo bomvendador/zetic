@@ -1,170 +1,28 @@
-expand_menu_item('#menu_companies_list')
+expand_menu_item('#menu_settings')
 
-$('.copy-company-questionnaire-link').on('click', function (e) {
-    e.preventDefault();
-    let text = window.location.origin + $(this).closest('div').find('a').attr('href');
-    try {
-        navigator.clipboard.writeText(text).then(r => {
-            toastr.success('Ссылка скопирована')
-        })
-
-    } catch (e) {
-        toastr.warning('Копирование возможно при наличии SSL')
-        // console.log(e)
-    }
-})
-
-
-$('#new_password_hide').on('click', function () {
-    let attr = $('#new_password').attr('type')
-    if (typeof attr !== 'undefined') {
-        $('#new_password').removeAttr('type')
-        $(this).removeClass('zmdi-eye').addClass('zmdi-eye-off')
-
-    } else {
-        $('#new_password').attr('type', 'password')
-        $(this).removeClass('zmdi-eye-off').addClass('zmdi-eye')
-    }
-})
-
-$('#new_password_confirm_hide').on('click', function () {
-    let attr = $('#new_password_confirm').attr('type')
-    if (typeof attr !== 'undefined') {
-        $('#new_password_confirm').removeAttr('type')
-        $(this).removeClass('zmdi-eye').addClass('zmdi-eye-off')
-    } else {
-        $('#new_password_confirm').attr('type', 'password')
-        $(this).removeClass('zmdi-eye-off').addClass('zmdi-eye')
-    }
-})
-
-$('#select_link_template_btn').on('click', function () {
-    $('#select_template option').attr('selected', false)
-    $('#select_template option').eq(0).attr('selected', true)
-    $('#input_modal_select_link_template').modal('show')
-})
-
-$('#generate_link').on('click', function () {
-    let option_val = $('#select_template option:selected').val()
-    if (option_val == 0) {
-        toastr.error('Выберите шаблон')
-    } else {
-        btn_spinner('#generate_link')
-        $.ajax({
-            headers: {"X-CSRFToken": token},
-            url: url_generate_new_self_questionnaire_link,
-            type: 'POST',
-            data: JSON.stringify({
-                'company_id': company_id,
-                'template_id': option_val
-            }),
-            processData: false,
-            contentType: false,
-            error: function (data) {
-                toastr.error('Ошибка', data)
-            },
-            success: function (data) {
-                let code = data['code']
-                console.log(code)
-                console.log(window.location.hostname)
-                console.log(window.location.protocol)
-                // let link = `${window.location.protocol}//${window.location.hostname}/company_questionnaire/${code}`
-                let link = `${window.location.origin}/panel/company_questionnaire/${code}`
-                console.log(link)
-                let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
-                    '<br>' +
-                    '<hr class="solid mt-0" style="background-color: black;">' +
-                    '<h4 style="text-align: center">Ссылка успешно добавлена</h4>' +
-                    '<hr class="solid mt-0" style="background-color: black;">'
-
-                Swal.fire({
-                    html: output_html,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'ОК'
-                }).then((result) => {
-                    if (result.value) {
-                        window.location.reload()
-                    }
-                })
-
-
-                // $('#company_admin_select').html(html)
-                // console.log(data_json)
-                // $('#input_modal_add_admin').modal('show')
-                btn_text($('#generate_link'), 'Создать ссылку')
-
-            }
-        });
-    }
-})
-
-$('#tbody_self_questionnaire_link input').each(function () {
-    let val = $(this).val()
-    let full_link = `${window.location.origin}${val}`
-    $(this).val(full_link)
-})
-
-$('#add_admin').on('click', function () {
-    btn_spinner($('#add_admin'))
-    $.ajax({
-        headers: {"X-CSRFToken": token},
-        url: url_get_company_no_admins,
-        type: 'POST',
-        data: JSON.stringify({
-            'company_id': company_id
-        }),
-        processData: false,
-        contentType: false,
-        error: function (data) {
-            toastr.error('Ошибка', data)
-        },
-        success: function (data) {
-            let data_json = data['data']
-            let html = ''
-            for (let i = 0; i < data_json.length; i++) {
-                console.log(data_json[i]["name"])
-                html += '<option id="employee_id_' + data_json[i]["id"] + '">' + data_json[i]["name"] + '</option>>'
-                // html += '<option>' + data_json[i]["email"] + '</option>'
-                // if(data_json[i]["active"]){
-                //     html += '<option><span class="dot-label bg-success" title="Админ активен"></span></option>'
-                // }else {
-                //     html += '<option><span class="dot-label bg-danger" title="Админ активен"></span></option>'
-                //
-                // }
-            }
-            $('#company_admin_select').html(html)
-            $('#input_modal_add_admin').modal('show')
-            btn_text($('#add_admin'), 'Назначить')
-
-        }
-    });
-})
-
-$('#add_report_made_notification_receiver').on('click', function () {
-    let available_receivers_qnt = $('#company_report_made_notification_receiver_select option').length
+$('#add_common_report_made_notification_receiver').on('click', function () {
+    let available_receivers_qnt = $('#common_report_made_notification_receiver_select option').length
     if (available_receivers_qnt > 1) {
-        $('#input_modal_report_made_notification_receiver').modal('show')
+        $('#input_modal_common_report_made_notification_receiver').modal('show')
         // $("#company_report_made_notification_receiver_select").select2("destroy").select2();
     } else {
         toastr.warning('Все сотрудники уже были добавлены')
     }
 })
 
-$('#save_report_made_notification_receiver_btn').on('click', function () {
-    let value = $('#company_report_made_notification_receiver_select option:selected').val()
+$('#save_common_report_made_notification_receiver_btn').on('click', function () {
+    let value = $('#common_report_made_notification_receiver_select option:selected').val()
     console.log(value)
     if (value === '0') {
         toastr.error('Выберите получателя')
     } else {
-        btn_spinner($('#save_report_made_notification_receiver_btn'))
+        btn_spinner($('#save_common_report_made_notification_receiver_btn'))
         $.ajax({
             headers: {"X-CSRFToken": token},
-            url: url_add_report_made_notification_receiver,
+            url: url_add_common_report_made_notification_receiver,
             type: 'POST',
             data: JSON.stringify({
-                'employee_id': value,
+                'user_id': value,
             }),
             processData: false,
             contentType: false,
@@ -172,8 +30,8 @@ $('#save_report_made_notification_receiver_btn').on('click', function () {
                 toastr.error('Ошибка', data)
             },
             success: function (data) {
-                btn_text($('#save_report_made_notification_receiver_btn'), 'Сохранить')
-                $('#input_modal_report_made_notification_receiver').modal('hide')
+                btn_text($('#save_common_report_made_notification_receiver_btn'), 'Сохранить')
+                $('#input_modal_common_report_made_notification_receiver').modal('hide')
                 let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
                     '<h3 style="text-align: center">Получатель добавлен</h3>' +
                     '<hr class="solid mt-0" style="background-color: black;">'
@@ -216,7 +74,7 @@ $('.delete-notification-receiver').on('click', function () {
             show_progressbar_loader()
             $.ajax({
                 headers: {"X-CSRFToken": token},
-                url: url_delete_report_made_notification_receiver,
+                url: url_delete_common_report_made_notification_receiver,
                 type: 'POST',
                 data: JSON.stringify({
                     'receiver_id': receiver_id,

@@ -828,8 +828,7 @@ $('#save_participants').on('click', function () {
                 console.log(data_json)
 
                 let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                    '<div>Участник/и добавлены в исследование' + '</div>' +
-                    '<br>' +
+                    '<h3 style="text-align: center">Участник/и добавлены в исследование' + '</h3>' +
                     '<hr class="solid mt-0" style="background-color: black;">'
                 Swal.fire({
                     html: output_html,

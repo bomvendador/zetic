@@ -250,6 +250,33 @@ class Employee(models.Model):
         verbose_name = 'Сотрудник (employee)'
 
 
+class CompanyReportMadeNotificationReceivers(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
+    company = models.ForeignKey(Company, default=None, null=True, on_delete=models.PROTECT)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Employee_notification_receivers')
+
+    def __str__(self):
+        return f'{self.id}. {self.company.name} - {self.employee.name}'
+
+    class Meta:
+        verbose_name_plural = 'Сотрудники-получатели уведомления о созданном отчете'
+        verbose_name = 'Сотрудник-получатель уведомления о созданном отчете'
+
+
+class UsersReportMadeNotificationReceivers(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT, related_name='Created_by')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='User_notification_receivers')
+
+    def __str__(self):
+        return f'{self.id}. {self.user.username} - {self.user.first_name}'
+
+    class Meta:
+        verbose_name_plural = 'Пользователи-получатели уведомления о созданном отчете'
+        verbose_name = 'Пользователь-получатель уведомления о созданном отчете'
+
+
 class Study(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)

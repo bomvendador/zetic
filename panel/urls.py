@@ -5,8 +5,9 @@ from pdf import views as pdf_views
 from panel import company_parameter as panel_company_parameter
 from panel import employee, study, sections, individual_report_file, company, mail_handler, categories, questions, \
     research_templates, companies_studies, filters, filters_matrix, migration_questionnaire_results_xls, \
-    filters_individual_report_points_description, filters_integral_report, settings, projects, \
+    filters_individual_report_points_description, filters_integral_report, projects, \
     filters_traffic_light_report, search
+from panel.common_settings import settings, notification_report_made_receivers
 # from panel import study
 # from panel import individual_report_file
 # from panel import company
@@ -57,6 +58,8 @@ urlpatterns = [
     path('company_questionnaire/<str:code>', company.company_questionnaire, name='company_questionnaire'),
     path('appoint_company_admin', company.appoint_company_admin, name='appoint_company_admin'),
     path('create_self_questionnaire', company.create_self_questionnaire, name='create_self_questionnaire'),
+    path('add_report_made_notification_receiver', company.add_report_made_notification_receiver, name='add_report_made_notification_receiver'),
+    path('delete_report_made_notification_receiver', company.delete_report_made_notification_receiver, name='delete_report_made_notification_receiver'),
 
     path('industries_list', panel_company_parameter.industries_list, name='industries_list'),
     path('save_new_industry', panel_company_parameter.save_new_industry, name='save_new_industry'),
@@ -184,6 +187,9 @@ urlpatterns = [
 
     path('settings_main', settings.settings_main, name='settings_main'),
     path('save_boolean_setting', settings.save_boolean_setting, name='save_boolean_setting'),
+    path('notification_report_made_receivers_home', notification_report_made_receivers.notification_report_made_receivers_home, name='notification_report_made_receivers_home'),
+    path('add_common_report_made_notification_receiver', notification_report_made_receivers.add_common_report_made_notification_receiver, name='add_common_report_made_notification_receiver'),
+    path('delete_common_report_made_notification_receiver', notification_report_made_receivers.delete_common_report_made_notification_receiver, name='delete_common_report_made_notification_receiver'),
 
     path('projects_list', projects.projects_list, name='projects_list'),
     path('get_company_projects', projects.get_company_projects, name='get_company_projects'),

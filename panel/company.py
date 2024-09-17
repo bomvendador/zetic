@@ -1,5 +1,6 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, ResearchTemplate, \
-    CompanySelfQuestionnaireLink, EmployeeGender, Questionnaire, Study, Participant, CommonBooleanSettings
+    CompanySelfQuestionnaireLink, EmployeeGender, Questionnaire, Study, Participant, CommonBooleanSettings, \
+    CompanyReportMadeNotificationReceivers
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
@@ -93,6 +94,29 @@ def generate_new_self_questionnaire_link(request):
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
+def add_report_made_notification_receiver(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        employee_id = json_data['employee_id']
+        employee_inst = Employee.objects.get(id=employee_id)
+        receiver_inst = CompanyReportMadeNotificationReceivers()
+        receiver_inst.created_by = request.user
+        receiver_inst.employee = employee_inst
+        receiver_inst.company = employee_inst.company
+        receiver_inst.save()
+        return HttpResponse(status=200)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def delete_report_made_notification_receiver(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        receiver_id = json_data['receiver_id']
+        CompanyReportMadeNotificationReceivers.objects.get(id=receiver_id).delete()
+        return HttpResponse(status=200)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
 def companies_list(request):
     context = info_common(request)
     cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
@@ -126,13 +150,26 @@ def edit_company(request, company_id):
                 'id': template.id,
                 'name': template.name,
             })
+    employees_available_report_made_notification_receivers = []
+    employees = Employee.objects.filter(company=company_inst)
+    for employee in employees:
+        receiver = CompanyReportMadeNotificationReceivers.objects.filter(employee=employee)
+        if not receiver.exists():
+            employees_available_report_made_notification_receivers.append({
+                'id': employee.id,
+                'name': employee.name,
+                'email': employee.email,
+            })
 
     context.update(
         {
             'company': company_inst,
+            'employees': Employee.objects.filter(company=company_inst),
             'admins': Employee.objects.filter(company=company_inst, company_admin=True),
             'templates': templates,
             'links': company_self_questionnaire_links_inst,
+            'report_made_notification_receivers': CompanyReportMadeNotificationReceivers.objects.filter(company=company_inst),
+            'employees_available_report_made_notification_receivers': employees_available_report_made_notification_receivers
         }
     )
 
