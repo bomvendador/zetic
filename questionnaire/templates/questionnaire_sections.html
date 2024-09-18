@@ -2,13 +2,42 @@
 {% load static %}
 {% block links %}
     <link href="{% static 'panel/plugins/circle_progress_bar/css/circle.css' %}" rel="stylesheet"/>
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function (m, e, t, r, i, k, a) {
+            m[i] = m[i] || function () {
+                (m[i].a = m[i].a || []).push(arguments)
+            };
+            m[i].l = 1 * new Date();
+            for (var j = 0; j < document.scripts.length; j++) {
+                if (document.scripts[j].src === r) {
+                    return;
+                }
+            }
+            k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+        })
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+        ym(98374743, "init", {
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true
+        });
+    </script>
+    <noscript>
+        <div><img src="https://mc.yandex.ru/watch/98374743" style="position:absolute; left:-9999px;" alt=""/></div>
+    </noscript>
+    <!-- /Yandex.Metrika counter -->
+
+
 {% endblock %}
 {% block content %}
 
     <div class="side-app">
 
         <!-- CONTAINER -->
-{#        <div class="main-container container-fluid" style="width: 50%">#}
+        {#        <div class="main-container container-fluid" style="width: 50%">#}
         <div class="main-container container">
 
             <!-- PAGE-HEADER -->
@@ -86,15 +115,22 @@
             <div class="row" style="">
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card" style="background-color: #0071AD; color: white">
-{#                        <div class="card-header">#}
-{#                            <h3 class="card-title">Выбор секции вопросов</h3>#}
-{#                        </div>#}
+                        {#                        <div class="card-header">#}
+                        {#                            <h3 class="card-title">Выбор секции вопросов</h3>#}
+                        {#                        </div>#}
                         <div class="card-body">
-Вам будет предложено ответить на ряд вопросов, отражающих фундаментальные черты личности. Все сведения, полученные от Вас являются конфиденциальными и будут сохранены в соответствии с российскими и международными стандартами работы с личными данными.
+                            Вам будет предложено ответить на ряд вопросов, отражающих фундаментальные черты личности.
+                            Все сведения, полученные от Вас являются конфиденциальными и будут сохранены в соответствии
+                            с российскими и международными стандартами работы с личными данными.
 
-Приготовьтесь к тому, что вопросов будет достаточно много. При переходе со страницу на страницу Ваши данные сохраняются, Вы можете взять перерыв и вернуться к заполнению опросника позже.
+                            Приготовьтесь к тому, что вопросов будет достаточно много. При переходе со страницу на
+                            страницу Ваши данные сохраняются, Вы можете взять перерыв и вернуться к заполнению опросника
+                            позже.
 
-Прочтите вопрос и варианты ответов и выберите один из предложенных вариантов ответа, отражающих в большей степени ваше мнение.  Старайтесь не прибегать слишком часто к промежуточному ответу типа «Не уверен», «Нечто среднее». Выбирайте его только тогда, когда не можете ответить иначе.
+                            Прочтите вопрос и варианты ответов и выберите один из предложенных вариантов ответа,
+                            отражающих в большей степени ваше мнение. Старайтесь не прибегать слишком часто к
+                            промежуточному ответу типа «Не уверен», «Нечто среднее». Выбирайте его только тогда, когда
+                            не можете ответить иначе.
 
                         </div>
                     </div>
