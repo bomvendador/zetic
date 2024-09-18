@@ -21,13 +21,15 @@ from django.contrib.auth.decorators import login_required, wraps
 from login import urls as login_urls
 from django.utils import timezone
 import time
-from pdf.views import pdf_single_generator
+# from pdf.views import pdf_single_generator
 from datetime import datetime, timedelta
 from django.db.models import ProtectedError
 
 from django.db.models import Q
 
 from .custom_funcs import squares_data
+
+from sendemail.tasks import pdf_single_generator_task as pdf_single_generator
 
 from django.db.models import Sum
 

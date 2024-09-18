@@ -47,7 +47,7 @@
                                         {% for company in companies %}
                                             <option id="company_id_{{ company.id }}"
                                                     data-company-active="{{ company.active }}"
-                                                    value="{{ company.id }}">{{ company.name }}</option>
+                                                    value="{{ company.id }}">{{ company.id }}. {{ company.name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>

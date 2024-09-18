@@ -9,7 +9,7 @@ from rest_framework.parsers import JSONParser
 from pdf.models import Participant, Company, Employee
 import json
 import ast
-from pdf.views import pdf_single_generator
+# from pdf.views import pdf_single_generator
 from pdf_group.views import pdf_group_generator
 from django.utils import timezone
 from datetime import datetime
@@ -45,25 +45,25 @@ def participant_started(request):
     return HttpResponse(status=200)
 
 
-@api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-@parser_classes([JSONParser])
-def data_for_report(request):
-    if request.method == 'POST':
-        try:
-            request_json = json.loads(request.body.decode('utf-8'))
-        except KeyError:
-            HttpResponseServerError('JSON request error')
-    else:
-        file = 'media/json/single-report-example.json'
-        with open(file, encoding="utf8") as f:
-            request_json = json.load(f)
-    # print(request_json['type'])
-    if 'type' in request_json:
-        return pdf_group_generator(request_json)
-    else:
-        return pdf_single_generator(request_json)
+# @api_view(['POST'])
+# @authentication_classes([TokenAuthentication])
+# @permission_classes([IsAuthenticated])
+# @parser_classes([JSONParser])
+# def data_for_report(request):
+#     if request.method == 'POST':
+#         try:
+#             request_json = json.loads(request.body.decode('utf-8'))
+#         except KeyError:
+#             HttpResponseServerError('JSON request error')
+#     else:
+#         file = 'media/json/single-report-example.json'
+#         with open(file, encoding="utf8") as f:
+#             request_json = json.load(f)
+#     # print(request_json['type'])
+#     if 'type' in request_json:
+#         return pdf_group_generator(request_json)
+#     else:
+#         return pdf_single_generator(request_json)
 
 
 @api_view(['POST'])

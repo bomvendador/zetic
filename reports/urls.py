@@ -26,7 +26,7 @@ handler404 = 'panel.views.page_not_found'
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('json_request/', views.json_request, name='json_request'),
+    # path('json_request/', views.json_request, name='json_request'),
     path('admin/', admin.site.urls),
     path('pdf/', include('pdf.urls'), name='pdf'),
     path('api/', include('api.urls'), name='api'),

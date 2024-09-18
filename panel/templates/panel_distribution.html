@@ -87,7 +87,7 @@
                                                     {% for company in companies %}
                                                         <tr class="table-row cursor-pointer"
                                                             data-company-id="{{ company.id }}">
-                                                            <td>{{ company.name }}</td>
+                                                            <td>{{ company.id }}. {{ company.name }}</td>
                                                         </tr>
                                                     {% endfor %}
                                                     </tbody>
@@ -259,7 +259,8 @@
                                             <div class="row">
                                                 <div class="col-sm-12 col-lg-6 background-color_1">
                                                     <div class="card no-shadow-important">
-                                                        <div class="card-header background-color_1"  style="border-bottom: 1px solid #a1a1a1;">
+                                                        <div class="card-header background-color_1"
+                                                             style="border-bottom: 1px solid #a1a1a1;">
                                                             <h3 class="card-title ">Интеграторы</h3>
                                                         </div>
                                                         <div class="card-body background-color_1">
@@ -293,7 +294,8 @@
                                                 <!-- COL END -->
                                                 <div class="col-sm-12 col-lg-6  background-color_2">
                                                     <div class="card no-shadow-important">
-                                                        <div class="card-header background-color_2" style="border-bottom: 1px solid #a1a1a1;">
+                                                        <div class="card-header background-color_2"
+                                                             style="border-bottom: 1px solid #a1a1a1;">
                                                             <h3 class="card-title">Предприниматели</h3>
                                                         </div>
                                                         <div class="card-body background-color_2">
@@ -330,7 +332,8 @@
                                             <div class="row">
                                                 <div class="col-sm-12 col-lg-6 background-color_3">
                                                     <div class="card no-shadow-important">
-                                                        <div class="card-header background-color_3" style="border-bottom: 1px solid #a1a1a1;">
+                                                        <div class="card-header background-color_3"
+                                                             style="border-bottom: 1px solid #a1a1a1;">
                                                             <h3 class="card-title ">Администраторы</h3>
                                                         </div>
                                                         <div class="card-body background-color_3">
@@ -364,7 +367,8 @@
                                                 <!-- COL END -->
                                                 <div class="col-sm-12 col-lg-6  background-color_4">
                                                     <div class="card no-shadow-important">
-                                                        <div class="card-header background-color_4" style="border-bottom: 1px solid #a1a1a1;">
+                                                        <div class="card-header background-color_4"
+                                                             style="border-bottom: 1px solid #a1a1a1;">
                                                             <h3 class="card-title">Достигаторы / Продюссеры</h3>
                                                         </div>
                                                         <div class="card-body background-color_4">
@@ -399,9 +403,9 @@
                                                 <!-- COL END -->
                                             </div>
 
-{#                                            <h4 class="mt-5">Распределено участников - <span#}
-{#                                                    class="badge bg-green text-white ms-2"#}
-{#                                                    id="bage_distributed_participants"></span></h4>#}
+                                            {#                                            <h4 class="mt-5">Распределено участников - <span#}
+                                            {#                                                    class="badge bg-green text-white ms-2"#}
+                                            {#                                                    id="bage_distributed_participants"></span></h4>#}
                                             <hr style="border-top: 1px solid;">
                                             <div class="row mt-7" id="undistributed-participants-table">
                                                 <div class="col-12">
@@ -444,7 +448,13 @@
                                                                 <th class="wd-15p border-bottom-0 table-header">
                                                                     Выделить
                                                                 </th>
-                                                                <th class="wd-15p border-bottom-0 table-header">Группа
+                                                                <th class="wd-15p border-bottom-0 table-header">
+                                                                    <span style="margin-right: 5px">Группа</span>
+                                                                    <span><input id="select_all_for_group"
+                                                                                 class="checkbox-custom"
+                                                                                 style="width: 16px; height: 16px"
+                                                                                 type="checkbox" name=""
+                                                                                 value="0"></span>
                                                                 </th>
                                                                 <th class="wd-15p border-bottom-0 table-header">ФИО</th>
                                                                 <th class="wd-15p border-bottom-0 table-header">email
@@ -668,6 +678,20 @@
             }
         })
 
+        $('#select_all_for_group').on('click', function () {
+            console.log($(this).is(':checked'))
+            let is_checked = $(this).is(':checked')
+            $('#main-container .select-for-group-checkbox').each(function () {
+                if (is_checked) {
+                    set_checkbox_checked(this)
+
+                }else {
+                    set_checkbox_unchecked(this)
+                }
+            })
+        })
+
+
         $('#distribution_participants_groups_modal').on('click', '.radio-custom', function () {
             $('#distribution_participants_groups_modal').find('.radio-custom').each(function () {
                 set_checkbox_unchecked(this)
@@ -748,7 +772,7 @@
         })
 
         $('#undistributed-participants-table').on('click', '.delete-participant-group', function () {
-            $(this).closest('td').css('background-color', 'white').html('<input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0">')
+            $(this).closest('td').css('background-color', 'white').html('<input class="checkbox-custom select-for-group-checkbox" style="width: 16px; height: 16px" type="checkbox" name="" value="0">')
         })
 
 
@@ -1212,7 +1236,7 @@
                             }
                         });
 
-                    }else {
+                    } else {
                         toastr.error('Проект не выбран')
                     }
 
@@ -1268,7 +1292,7 @@
 
                                     html += '<tr class="table-row-undistributed-participant" style="" data-participant-id="' + participants_data[i]['participant_id'] + '">'
                                     html += '<td class="bold-participant" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'
-                                    html += '<td class="participant-group" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'
+                                    html += '<td class="participant-group" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom select-for-group-checkbox" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'
                                     html += '<td class="fio">' + participants_data[i]['fio'] + '</td>'
                                     html += '<td class="email">' + participants_data[i]['email'] + '</td>'
                                     html += '<td class="role_name">' + participants_data[i]['role_name'] + '</td>'

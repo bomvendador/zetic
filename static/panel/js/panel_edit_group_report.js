@@ -23,10 +23,9 @@ function coloris(element) {
 }
 
 $(document).ready(function () {
-    console.log('ready');
+    // console.log('ready');
 
     $('#tbody_undistributed_participants .category-selected').each(function () {
-        console.log($(this).find('option:selected').text())
         $(this).attr('title', $(this).find('option:selected').text())
     })
 })
@@ -37,17 +36,17 @@ let participant_email_for_number = ''
 $('#tbody_undistributed_participants').on('click', '.add-participant-number', function () {
     participants_numbers_used = []
     participant_email_for_number = $(this).closest('tr').find('.email').eq(0).text()
-    console.log(participant_email_for_number)
+    // console.log(participant_email_for_number)
     let numbers_user_str = ''
     let cnt = 0
     $('#tbody_undistributed_participants .participant-number').each(function () {
-        if($(this).closest('tr').find('.email').eq(0).text() !== participant_email_for_number){
+        if ($(this).closest('tr').find('.email').eq(0).text() !== participant_email_for_number) {
             let participant_number = $(this).find('span').text()
             participants_numbers_used.push(participant_number)
-            if(participant_number !== ""){
-                if(cnt === 0){
+            if (participant_number !== "") {
+                if (cnt === 0) {
                     numbers_user_str = $(this).find('span').text()
-                }else {
+                } else {
                     numbers_user_str += ', ' + $(this).find('span').text()
                 }
                 cnt += 1
@@ -65,16 +64,16 @@ $('#modal_save_participant_number').on('click', function () {
     let participant_number_entered = $('#modal_input_participant_number').val()
     let entered_used_number = false;
     participants_numbers_used.forEach(function (num) {
-        if(num === participant_number_entered){
+        if (num === participant_number_entered) {
             entered_used_number = true
         }
     })
-    if(participant_number_entered === '' || isNaN(participant_number_entered) || entered_used_number){
+    if (participant_number_entered === '' || isNaN(participant_number_entered) || entered_used_number) {
         toastr.error('Введено некорректное число')
-    }else {
+    } else {
         $('#tbody_undistributed_participants tr').each(function () {
-             let email = $(this).find('td').eq(3).text()
-            if(email === participant_email_for_number){
+            let email = $(this).find('td').eq(3).text()
+            if (email === participant_email_for_number) {
                 $(this).find('.participant-number').eq(0).html(`<span>${participant_number_entered}</span>`)
                 $(this).find('.participant-number').css('background-color', '#bdbdbd').css('cursor', 'pointer')
                 $(this).find('.participant-number').addClass('add-participant-number')
@@ -85,22 +84,21 @@ $('#modal_save_participant_number').on('click', function () {
 })
 
 
-
-$('#tbody_undistributed_participants').on('change', '.category-selected',function () {
+$('#tbody_undistributed_participants').on('change', '.category-selected', function () {
     $(this).attr('title', $(this).find('option:selected').text())
 })
 
-$('#tbody_undistributed_participants').on('click', '.add-participant-number',function () {
+$('#tbody_undistributed_participants').on('click', '.add-participant-number', function () {
     $(this).attr('title', $(this).find('option:selected').text())
 })
 
-$('#tbody_undistributed_participants').on('click', '.delete-participant-from-group-report',function () {
+$('#tbody_undistributed_participants').on('click', '.delete-participant-from-group-report', function () {
 
     let output_html = '<h2 class="mb-0" style="text-align: center">Удаление сотрудника из отчета</h2>' +
-                        '<br>' +
-                        '<hr class="solid mt-0" style="background-color: black;">' +
-                        '<h4 style="text-align: center">Удалить сотрудника?</h4>' +
-                        '<hr class="solid mt-0" style="background-color: black;">'
+        '<br>' +
+        '<hr class="solid mt-0" style="background-color: black;">' +
+        '<h4 style="text-align: center">Удалить сотрудника?</h4>' +
+        '<hr class="solid mt-0" style="background-color: black;">'
 
     Swal.fire({
         html: output_html,
@@ -114,7 +112,7 @@ $('#tbody_undistributed_participants').on('click', '.delete-participant-from-gro
         if (result.value) {
             let tr = $(this).closest('tr')
             let data_participant_number = tr.data('participant-number')
-            if(data_participant_number !== ''){
+            if (data_participant_number !== '') {
                 let employee_id = $(this).closest('tr').data('employee-id')
                 show_progressbar_loader()
                 $.ajax({
@@ -138,26 +136,21 @@ $('#tbody_undistributed_participants').on('click', '.delete-participant-from-gro
                 });
 
 
-
-            }else {
+            } else {
                 $(this).closest('tr').remove()
             }
         }
     })
 
 
-
-
-
-
 })
 
 $('#create_group_report').on('click', function () {
     let output_html = '<h2 class="mb-0" style="text-align: center">Комментарии к отчету</h2>' +
-                        '<br>' +
-                        '<hr class="solid mt-0" style="background-color: black;">' +
-                        '<h4 style="text-align: center">Добавить комментарии к отчету?</h4>' +
-                        '<hr class="solid mt-0" style="background-color: black;">'
+        '<br>' +
+        '<hr class="solid mt-0" style="background-color: black;">' +
+        '<h4 style="text-align: center">Добавить комментарии к отчету?</h4>' +
+        '<hr class="solid mt-0" style="background-color: black;">'
 
     Swal.fire({
         html: output_html,
@@ -247,8 +240,6 @@ $('#add_participants_from_modal').on('click', function () {
 })
 
 
-
-
 $('#open_modal_for_adding_participants').on('click', function () {
     show_progressbar_loader()
     participants_with_report_array = []
@@ -287,7 +278,8 @@ $('#open_modal_for_adding_participants').on('click', function () {
                 if (!participant_already_is_in_table) {
                     participants_could_be_added_cnt += 1
                     html = html + '<tr class="table-row-participant-to-add-to-group-report" style = "" data-participant-number = "">' +
-                        '<td class="" style = "text-align: center;vertical-align: middle;" >' +
+                        '<td class="" style = "" >' +
+                        // '<td class="" style = "text-align: center;vertical-align: middle;" >' +
                         '<input class="checkbox-custom participant-chosen" style = "width: 16px; height: 16px" type = "checkbox" name = "" value = "0">' +
                         '</td>' +
                         '<td class="fio" style="vertical-align: middle">' + participant_data["fio"] + '</td>' +
@@ -300,7 +292,10 @@ $('#open_modal_for_adding_participants').on('click', function () {
 
             })
             if (participants_could_be_added_cnt > 0) {
+                $('#participants_to_add_table').DataTable().clear().destroy()
                 $('#participants_to_add_table tbody').html(html)
+                process_table('#participants_to_add_table')
+
                 $('#edit_group_report_add_participants_modal').modal('show')
 
             } else {
@@ -314,9 +309,9 @@ $('#open_modal_for_adding_participants').on('click', function () {
 })
 
 $('#check_all_participants_for_group_report').on('click', function () {
-    console.log($('#check_all_participants_for_group_report').prop('checked'))
+    // console.log($('#check_all_participants_for_group_report').prop('checked'))
     $('#participants_to_add_table .participant-chosen').each(function () {
-        console.log('ddd')
+        // console.log('ddd')
         if ($('#check_all_participants_for_group_report').prop('checked')) {
             $(this).prop('checked', true)
         } else {
@@ -369,7 +364,7 @@ $('#add_participants_group').on('click', function () {
         '</tr>'
     if (groups_qnt === 0) {
         let element = $('#participants_groups_table tbody').append(tr_html)
-        console.log(element)
+        // console.log(element)
         coloris(element)
     } else {
         if (last_group_val !== '') {
@@ -393,13 +388,13 @@ $('#distribution_participants_groups_modal').on('click', '.delete-group', functi
 
 $('#participants_groups').on('click', function () {
     let participants_chosen_for_group = $('#tbody_undistributed_participants tr td:nth-child(2) input[value=1]').length
-    console.log('participants_chosen_for_group - ' + participants_chosen_for_group)
+    // console.log('participants_chosen_for_group - ' + participants_chosen_for_group)
     if (participants_chosen_for_group == 0) {
         $('#set_groups_to_participants').hide()
-        console.log('hide')
+        // console.log('hide')
     } else {
         $('#set_groups_to_participants').show()
-        console.log('show')
+        // console.log('show')
     }
     $('#distribution_participants_groups_modal').modal('show')
 })
@@ -422,8 +417,23 @@ $('#set_groups_to_participants').on('click', function () {
     }
 })
 
+
+$('#select_all_for_group').on('click', function () {
+    // console.log($(this).is(':checked'))
+    let is_checked = $(this).is(':checked')
+    $('#main-container .select-for-group-checkbox').each(function () {
+        if (is_checked) {
+            set_checkbox_checked(this)
+
+        } else {
+            set_checkbox_unchecked(this)
+        }
+    })
+})
+
+
 $('#undistributed-participants-table').on('click', '.delete-participant-group', function () {
-    $(this).closest('td').css('background-color', 'white').html('<input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0">')
+    $(this).closest('td').css('background-color', 'white').html('<input class="checkbox-custom select-for-group-checkbox" style="width: 16px; height: 16px" type="checkbox" name="" value="0">')
 })
 
 
@@ -442,7 +452,7 @@ $('#slider2_val').ionRangeSlider({
     from: 6,
     onFinish: function (data) {
         kernel1 = data.from
-        console.log(kernel1)
+        // console.log(kernel1)
     }
 });
 $('#slider3_val').ionRangeSlider({
@@ -452,7 +462,7 @@ $('#slider3_val').ionRangeSlider({
     from: 8,
     onFinish: function (data) {
         kernel2 = data.from
-        console.log(kernel2)
+        // console.log(kernel2)
     }
 });
 
@@ -969,7 +979,7 @@ $('#modal_comments_create_report').on('click', function () {
     save_report()
 })
 
-function  save_report() {
+function save_report() {
     btn_spinner($('#create_group_report'))
     let square_results = []
     $('.list-group-square').each(function () {
@@ -980,7 +990,7 @@ function  save_report() {
             square_results.push([square_name, $(this).attr('id'), $(this).text(), $(this).data('bold'), $(this).data('group-name'), $(this).data('group-color'), square_code, $(this).data('participant-number'), $(this).data('participant-id')])
         })
     })
-    console.log(square_results)
+    // console.log(square_results)
 
     $.ajax({
         headers: {"X-CSRFToken": token},
@@ -999,16 +1009,16 @@ function  save_report() {
         contentType: false,
         error: function (data) {
             toastr.error('Ошибка', data)
-            console.log(data)
+            // console.log(data)
         },
         success: function (data) {
-            console.log('succes - ' + data['file_name'])
+            // console.log('succes - ' + data['file_name'])
 
             let output_html = '<h2 class="mb-0" style="text-align: center">Отчет успешно создан</h2>' +
-                                '<br>' +
-                                '<hr class="solid mt-0" style="background-color: black;">' +
-                                '<h4 style="text-align: center">Скачать файл отчета?</h4>' +
-                                '<hr class="solid mt-0" style="background-color: black;">'
+                '<br>' +
+                '<hr class="solid mt-0" style="background-color: black;">' +
+                '<h4 style="text-align: center">Скачать файл отчета?</h4>' +
+                '<hr class="solid mt-0" style="background-color: black;">'
 
             Swal.fire({
                 html: output_html,
@@ -1068,22 +1078,22 @@ let table = ''
 $('#main-container').on('click', '.project-participant-added', function () {
     $(this).removeClass('project-participant-added').addClass('project-participant-chosen').css('background-color', '#6c5ffc').css('color', 'white')
 
-    console.log($(this).find(':nth-child(1)').text())
+    // console.log($(this).find(':nth-child(1)').text())
 })
 $('#main-container').on('click', '.project-participant-chosen', function () {
     $(this).addClass('project-participant-added').removeClass('project-participant-chosen').css('background-color', '').css('color', '')
 
-    console.log($(this).find(':nth-child(1)').text())
+    // console.log($(this).find(':nth-child(1)').text())
 })
 $('#main-container').on('click', '.report-participant-added', function () {
     $(this).removeClass('report-participant-added').addClass('report-participant-chosen').css('background-color', '#6c5ffc').css('color', 'white')
 
-    console.log($(this).find(':nth-child(1)').text())
+    // console.log($(this).find(':nth-child(1)').text())
 })
 $('#main-container').on('click', '.report-participant-chosen', function () {
     $(this).addClass('report-participant-added').removeClass('report-participant-chosen').css('background-color', '').css('color', '')
 
-    console.log($(this).find(':nth-child(1)').text())
+    // console.log($(this).find(':nth-child(1)').text())
 })
 
 $('#add-all-participant').on('click', function () {
