@@ -17,6 +17,8 @@ import random
 
 from django.db.models import Q
 
+from reports.settings import DEBUG
+
 
 def section_view(request, section_id, code):
     print(request)
@@ -126,8 +128,10 @@ def save_answers(request):
         participant_inst.save()
 
         if total_questionnaire_questions_qnt == total_questionnaire_answers_qnt:
-            pdf_single_generator.delay(questionnaire_inst.id, '')
-
+            if DEBUG == 0:
+                pdf_single_generator.delay(questionnaire_inst.id, '')
+            else:
+                pdf_single_generator(questionnaire_inst.id, '')
         response = {
             'total_section_questions_qnt': total_section_questions_qnt,
             'questions_answered_qnt': questions_answered_qnt,

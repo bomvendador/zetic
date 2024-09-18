@@ -61,7 +61,7 @@ $('#save_page_answers').on('click', function () {
             // }
             // console.log(data)
             let response = data['response']
-
+            console.log(data)
             console.log(`total_questionnaire_questions_qnt = ${response['total_questionnaire_questions_qnt']}`)
 
             // if(){
@@ -73,7 +73,7 @@ $('#save_page_answers').on('click', function () {
                     '<h4 style="text-align: center" class="mb-0"><b>Вы ответили на все вопросы опросника</b></h4>' +
                     '<br>' +
                     '<hr class="solid mt-0" style="background-color: black;">' +
-                    '<div style="text-align: center">Отчет отправлен на Вашу почту</div>' +
+                    '<div style="text-align: center">Отчет будет автоматически отправлен на Вашу почту</div>' +
                     '<div style="text-align: center"><b>' + response['email'] + '</b></div>' +
                     '<br>' +
                     '<hr class="solid mt-0" style="background-color: black;">'

@@ -718,6 +718,7 @@ def save_group_report_data(request):
         # for item in json_data['square_results']:
         #     print(item)
         response = pdf_group_generator(json_data)
+        print(response)
         return response
 
 

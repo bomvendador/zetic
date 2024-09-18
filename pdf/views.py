@@ -251,8 +251,13 @@ def save_serve_file(pdf, path, file_name):
     response = {
         'file_name': file_name
     }
+
+    print('---filename---')
     print(response)
-    return JsonResponse(response, safe=False)
+    print('---------------')
+
+    # return JsonResponse(response, safe=False)
+    return response
 
 
 @csrf_exempt
