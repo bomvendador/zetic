@@ -10,56 +10,89 @@
         <!-- CONTAINER -->
         <div class="main-container container">
 
-            <!-- PAGE-HEADER -->
-            <div class="page-header" style="margin-top: 1em; margin-bottom: 1em">
-                <h1 class="page-title">{{ section.name }}</h1>
-                <div>
-{#                    <ol class="breadcrumb">#}
-{#                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>#}
-{#                        <li class="breadcrumb-item active" aria-current="page">Изменение исследования</li>#}
-{#                    </ol>#}
-                    <span>Прогресс в секции:</span><span style="color: blue"> {{ progress }}%</span>
-                </div>
-            </div>
-            <!-- PAGE-HEADER END -->
+            {% if questions %}
 
-            <!-- ROW-1 OPEN -->
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="card">
-                        {#                        <div class="card-header">#}
-                        {#                            <h3 class="card-title">Вопросы</h3>#}
-                        {#                        </div>#}
-                        <div class="card-body">
-                            {% for question in questions %}
-                                <div class="form-group section-question" style="margin-bottom: 3em" id="question_id_{{ question.id }}">
-                                    <div class="form-label">{{ question.text }}</div>
-                                    <hr style="background-color: blue">
-                                    <div class="custom-controls-stacked">
-                                        {% for answer in question.answers %}
-                                            <label class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input question-answer-input" name="answer_{{ question.id }}"
-                                                       value="{{ answer.id }}" id="ww_{{ answer.id }}">
-                                                <span class="custom-control-label">{{ answer.text }}</span>
-                                            </label>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            {% endfor %}
-
-                            <button class="btn ripple btn-primary w-100" style="height: 40px; cursor: pointer" type="button"
-                                    id="save_page_answers" disabled>Далее
-                            </button>
-
-                        </div>
-                        {#                                    <div class="card-footer text-end">#}
-                        {#                                        <button class="btn btn-primary my-1 nav-buttons" type="button" id="save_company">Сохранить</button>#}
-                        {#                                    </div>#}
+                <!-- PAGE-HEADER -->
+                <div class="page-header" style="margin-top: 1em; margin-bottom: 1em">
+                    <h1 class="page-title">{{ section.name }}</h1>
+                    <div>
+                        {#                    <ol class="breadcrumb">#}
+                        {#                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>#}
+                        {#                        <li class="breadcrumb-item active" aria-current="page">Изменение исследования</li>#}
+                        {#                    </ol>#}
+                        <span>Прогресс в секции:</span><span style="color: blue"> {{ progress }}%</span>
                     </div>
                 </div>
-            </div>
+                <!-- PAGE-HEADER END -->
 
-        </div>
+                <!-- ROW-1 OPEN -->
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="card">
+                            {#                        <div class="card-header">#}
+                            {#                            <h3 class="card-title">Вопросы</h3>#}
+                            {#                        </div>#}
+                            <div class="card-body">
+                                {% for question in questions %}
+                                    <div class="form-group section-question" style="margin-bottom: 3em"
+                                         id="question_id_{{ question.id }}">
+                                        <div class="form-label">{{ question.text }}</div>
+                                        <hr style="background-color: blue">
+                                        <div class="custom-controls-stacked">
+                                            {% for answer in question.answers %}
+                                                <label class="custom-control custom-radio">
+                                                    <input type="radio"
+                                                           class="custom-control-input question-answer-input"
+                                                           name="answer_{{ question.id }}"
+                                                           value="{{ answer.id }}" id="ww_{{ answer.id }}">
+                                                    <span class="custom-control-label">{{ answer.text }}</span>
+                                                </label>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                                <button class="btn ripple btn-primary w-100" style="height: 40px; cursor: pointer"
+                                        type="button"
+                                        id="save_page_answers" disabled>Далее
+                                </button>
+
+                            </div>
+                            {#                                    <div class="card-footer text-end">#}
+                            {#                                        <button class="btn btn-primary my-1 nav-buttons" type="button" id="save_company">Сохранить</button>#}
+                            {#                                    </div>#}
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+            {% else %}
+
+                <div class="row" style="margin-top: 3em">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                            </div>
+                            <div class="card-body">
+                                <div class="research-template-section-card card text-white"
+                                     style="background-color: rgba(0,169,4,0.72)">
+                                    <div class="card-body" style="padding: 40px 25px">
+                                        <div style="text-align: center; font-size: 2em">
+                                        <span>
+                                            <i style="font-size: 22px" class="fe fe-thumbs-up" data-bs-toggle="tooltip"
+                                               title="" ></i>
+                                        </span>
+                                            <span>Вы уже ответили на все вопросы секции</span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            {% endif %}
         <!--CONTAINER CLOSED -->
 
     </div>
@@ -228,6 +261,6 @@
     </script>
     <script src="{% static 'login/js/select2.js' %}"></script>
 
-{#    <script src="{% static 'panel/js/panel_add_study.js' %}"></script>#}
+    {#    <script src="{% static 'panel/js/panel_add_study.js' %}"></script>#}
     <script src="{% static 'questionnaire/js/questionnaire_section_questions.js' %}"></script>
 {% endblock %}

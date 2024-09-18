@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="ZETIC - практическая психолгия">
+    <meta name="description" content="ZETIC - практическая психология">
     <meta name="author" content="ZETIC">
     <meta name="keywords"
           content="">
@@ -95,7 +95,14 @@
                     {#                            <button class="btn px-0 pt-2"><i class="fe fe-search" aria-hidden="true"></i></button>#}
                     {#                        </div>#}
 
-                    <div class="d-flex order-lg-2 ms-auto header-right-icons">
+                    <div class="d-flex order-lg-2 ms-auto header-right-icons align-items-center">
+                        <button class="navbar-toggler navresponsive-toggler d-lg-none ms-auto" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent-4"
+                                aria-controls="navbarSupportedContent-4" aria-expanded="false"
+                                aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon fe fe-menu"></span>
+                        </button>
+
                         <!-- SEARCH -->
                         <div class="navbar navbar-collapse responsive-navbar p-0">
                             {#                            <div class="text-center">#}
@@ -107,15 +114,15 @@
                                 <div class="d-flex order-lg-2 flex-row justify-content-center align-items-center">
                                     {% if show_back_to_sections %}
                                         <div class="dropdown d-flex">
-                                            <a id="back_to_sections_link" href="{% url 'participant_data' code %}"
-                                               class="nav-link icon">
-                                                <i class="fe fe-corner-up-left" style="margin-right: 5px; font-size: 18px"></i><span
-                                                    style="font-size: 16px">Назад к секциям</span>
+                                            <a id="back_to_sections_link" href="{% url 'participant_data' code %}" style="padding: 5px 10px; margin-right: 10px; margin-bottom: 5px;" class="btn btn-info">
+                                                <i class="fe fe-chevron-left"
+                                                   style="margin-right: 5px; font-size: 18px"></i><span
+                                                    style="font-size: 16px">К секциям</span>
                                             </a>
                                         </div>
-                                        <div class="dropdown d-flex" style="margin-right: 10px">
-                                            |
-                                        </div>
+{#                                        <div class="dropdown d-flex" style="margin-right: 10px">#}
+{#                                            |#}
+{#                                        </div>#}
                                     {% endif %}
                                     <!-- Theme-Layout -->
                                     <!-- CART -->
@@ -133,14 +140,16 @@
                                     <div class="dropdown d-flex profile-1">
 
                                         <div class="text-center">
-{#                                            <i class="fe fe-user" style="font-size: 17px; margin-right: 7px"></i>#}
+                                            {#                                            <i class="fe fe-user" style="font-size: 17px; margin-right: 7px"></i>#}
                                             <span style="margin-right: 8px">
                                                 <svg width="25px" height="25px" viewBox="0 0 25 27" fill="none"
                                                      xmlns="http://www.w3.org/2000/svg">
-                                                    <circle opacity="0.5" cx="12" cy="9" r="3" stroke="#1C274C" stroke-width="1.5"/>
+                                                    <circle opacity="0.5" cx="12" cy="9" r="3" stroke="#1C274C"
+                                                            stroke-width="1.5"/>
                                                     <circle cx="12" cy="12" r="10" stroke="#1C274C" stroke-width="1.5"/>
-                                                    <path opacity="0.5" d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15C7.07521 15 6.18991 17.1085 6.03076 20"
-                                                      stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+                                                    <path opacity="0.5"
+                                                          d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15C7.07521 15 6.18991 17.1085 6.03076 20"
+                                                          stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
                                                 </svg>
                                             </span>
                                             <span class="mb-0" style="font-size: 17px">{{ employee.name }}</span>
