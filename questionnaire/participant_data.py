@@ -7,6 +7,7 @@ import json
 from django.utils import timezone
 from django.core import serializers
 
+from reports.settings import EMAIL_SUBJECT_PREFIX
 from datetime import datetime
 import math
 
@@ -16,6 +17,7 @@ def get_participant_data(request, code):
 
     participant_inst = Participant.objects.get(invitation_code=code)
     questionnaire_inst = Questionnaire.objects.get(participant=participant_inst)
+    email_subject_prefix = EMAIL_SUBJECT_PREFIX
     if not questionnaire_inst.data_filled_up_by_participant:
         years = []
         current_year = datetime.now().year
@@ -29,13 +31,15 @@ def get_participant_data(request, code):
             'industries': Industry.objects.all(),
             'positions': EmployeePosition.objects.all(),
             'years': years,
-            'code': code
+            'code': code,
+            'email_subject_prefix': email_subject_prefix
         }
         return render(request, 'questionnaire_participant_data.html', context)
     else:
         if not questionnaire_inst.active:
             context = {
                 'employee': participant_inst.employee,
+                'email_subject_prefix': email_subject_prefix
                 # 'research_template_sections': research_template_sections_inst,
                 # 'sections': sections,
                 # 'code': code,
@@ -67,6 +71,7 @@ def get_participant_data(request, code):
 
                 print(f'{questions_answered} * 100 / {len(questions_inst)}')
                 sections.append({
+                    'email_subject_prefix': email_subject_prefix,
                     'name': research_template_section.section.name,
                     'id': research_template_section.section.id,
                     'total_questions': len(questions_inst),
@@ -75,6 +80,7 @@ def get_participant_data(request, code):
                 })
             print(sections)
             context = {
+                'email_subject_prefix': email_subject_prefix,
                 'employee': participant_inst.employee,
                 'research_template_sections': research_template_sections_inst,
                 'sections': sections,
