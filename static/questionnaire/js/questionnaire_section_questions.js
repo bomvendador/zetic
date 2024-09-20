@@ -61,8 +61,8 @@ $('#save_page_answers').on('click', function () {
             // }
             // console.log(data)
             let response = data['response']
-            console.log(data)
-            console.log(`total_questionnaire_questions_qnt = ${response['total_questionnaire_questions_qnt']}`)
+            // console.log(data)
+            // console.log(`total_questionnaire_questions_qnt = ${response['total_questionnaire_questions_qnt']}`)
 
             // if(){
             //

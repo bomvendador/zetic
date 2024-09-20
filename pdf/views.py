@@ -252,10 +252,6 @@ def save_serve_file(pdf, path, file_name):
         'file_name': file_name
     }
 
-    print('---filename---')
-    print(response)
-    print('---------------')
-
     # return JsonResponse(response, safe=False)
     return response
 

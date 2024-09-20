@@ -138,7 +138,7 @@ WSGI_APPLICATION = 'reports.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-if DEBUG == 1:
+if EMAIL_SUBJECT_PREFIX == 'ZeticTestLocal':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
