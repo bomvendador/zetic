@@ -1471,7 +1471,7 @@
                         if (result.value) {
                             let a = document.createElement("a");
                             a.setAttribute('target', '_blank')
-                            a.href = 'download_group_report/' + data['file_name'];
+                            a.href = 'download_group_report/' + data['response']['file_name'];
                             a.click();
                             setTimeout(function () {
                                 {#location.href = {% url 'panel_home' %}#}

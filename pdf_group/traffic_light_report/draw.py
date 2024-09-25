@@ -270,6 +270,8 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results)
     data_items = []
 
     for data in square_results:
+        print('---data---')
+        print(data)
         participant_id = int(data[8])
         participant_number = data[7]
         category_code = data[6]

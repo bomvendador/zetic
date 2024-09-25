@@ -5,7 +5,8 @@ from pdf.models import Participant, Report, Category, Section, PointDescription,
     AgeGenderGroup, Questionnaire, QuestionnaireQuestionAnswers, MatrixFilter, MatrixFilterCategory, MatrixFilterInclusiveEmployeePosition, \
     MatrixFilterParticipantNotDistributed, MatrixFilterParticipantNotDistributedEmployeePosition, ReportDataByCategories, \
     Project, ProjectStudy, ProjectParticipants, TrafficLightReportFilter, TrafficLightReportFilterCategory, \
-    CommonBooleanSettings
+    CommonBooleanSettings, IndividualReportPointsDescriptionFilter, IndividualReportPointsDescriptionFilterText, \
+    IndividualReportPointsDescriptionFilterTextRecommendations, IndividualReportPointsDescriptionFilterCategory
 from login.models import UserRole, UserProfile
 
 
@@ -54,3 +55,7 @@ admin.site.register(ProjectParticipants)
 admin.site.register(TrafficLightReportFilter)
 admin.site.register(TrafficLightReportFilterCategory)
 admin.site.register(CommonBooleanSettings)
+admin.site.register(IndividualReportPointsDescriptionFilter)
+admin.site.register(IndividualReportPointsDescriptionFilterText)
+admin.site.register(IndividualReportPointsDescriptionFilterCategory)
+admin.site.register(IndividualReportPointsDescriptionFilterTextRecommendations)

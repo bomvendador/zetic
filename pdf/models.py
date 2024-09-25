@@ -694,8 +694,8 @@ class IndividualReportPointsDescriptionFilterCategory(models.Model):
         return f'{self.filter.name}'
 
     class Meta:
-        verbose_name_plural = 'Категории (шкалы) фильтров описания баллов (личные отчеты)'
-        verbose_name = 'Категория (шкалы) фильтра описания баллов (личные отчеты)'
+        verbose_name_plural = 'Фильтры описания баллов: Категории (шкалы)  (личные отчеты)'
+        verbose_name = 'Фильтр описания баллов: Категория (шкалы) (личные отчеты)'
 
 
 class IndividualReportPointsDescriptionFilterText(models.Model):
@@ -708,8 +708,22 @@ class IndividualReportPointsDescriptionFilterText(models.Model):
         return f'{self.filter.name}'
 
     class Meta:
-        verbose_name_plural = 'Тексты описания фильтров описания баллов (личные отчеты)'
-        verbose_name = 'Текст описания фильтра описания баллов (личные отчеты)'
+        verbose_name_plural = 'Фильтры описания баллов: Тексты описания (личные отчеты)'
+        verbose_name = 'Фильтр описания баллов: Текст описания (личные отчеты)'
+
+
+class IndividualReportPointsDescriptionFilterTextRecommendations(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    filter_text = models.ForeignKey(IndividualReportPointsDescriptionFilterText, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    text = models.TextField(default=None, blank=True, null=True, verbose_name='Текст рекомендации')
+
+    def __str__(self):
+        return f'{self.id} {self.filter_text.filter.name}'
+
+    class Meta:
+        verbose_name_plural = 'Фильтры описания баллов: Тексты рекомендаций (личные отчеты)'
+        verbose_name = 'Фильтр описания баллов: Текст рекомендации (личные отчеты)'
 
 
 class TrafficLightReportFilter(models.Model):

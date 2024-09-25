@@ -719,7 +719,8 @@ def save_group_report_data(request):
         #     print(item)
         response = pdf_group_generator(json_data)
         print(response)
-        return response
+
+        return JsonResponse({'response': response})
 
 
 @login_required(redirect_field_name=None, login_url='/login/')

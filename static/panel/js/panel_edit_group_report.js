@@ -176,7 +176,10 @@ $('#add_participants_from_modal').on('click', function () {
     $('#participants_to_add_table .participant-chosen').each(function () {
         if ($(this).prop('checked')) {
             participants_chosen_cnt = participants_chosen_cnt + 1
-            let email_from_modal = $(this).closest('tr').find('td').eq(2).text()
+            let tr = $(this).closest('tr')
+            let email_from_modal = tr.find('td').eq(2).text()
+            let employee_id = tr.data('employee-id')
+            let participant_id = tr.data('participant-id')
             // console.log(participants_with_report_array)
             participants_with_report_array.forEach(function (item) {
                 let participant_data = item['participant_data'][0]
@@ -189,7 +192,8 @@ $('#add_participants_from_modal').on('click', function () {
                     // console.log(participant_data['participant_squares'])
                     let html = ''
 
-                    html = '<tr class="table-row-undistributed-participant" style = "" data-participant-number="">' +
+                    html = '<tr class="table-row-undistributed-participant" style = "" data-participant-number="" ' +
+                        'data-employee-id="'+ employee_id + '" data-participant-id="'+ participant_id + '" >' +
                         '<td class="bold-participant" style="text-align: center;vertical-align: middle;" >' +
                         '<input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0">' +
                         '</td>' +
@@ -277,7 +281,10 @@ $('#open_modal_for_adding_participants').on('click', function () {
 
                 if (!participant_already_is_in_table) {
                     participants_could_be_added_cnt += 1
-                    html = html + '<tr class="table-row-participant-to-add-to-group-report" style = "" data-participant-number = "">' +
+                    let employee_id = participant_data["employee_id"]
+                    let participant_id = participant_data["participant_id"]
+                    html = html + '<tr class="table-row-participant-to-add-to-group-report" style = "" data-participant-number = "" ' +
+                        'data-employee-id="' + employee_id + '" data-participant-id="' + participant_id + '" >' +
                         '<td class="" style = "" >' +
                         // '<td class="" style = "text-align: center;vertical-align: middle;" >' +
                         '<input class="checkbox-custom participant-chosen" style = "width: 16px; height: 16px" type = "checkbox" name = "" value = "0">' +
@@ -990,7 +997,7 @@ function save_report() {
             square_results.push([square_name, $(this).attr('id'), $(this).text(), $(this).data('bold'), $(this).data('group-name'), $(this).data('group-color'), square_code, $(this).data('participant-number'), $(this).data('participant-id')])
         })
     })
-    // console.log(square_results)
+    console.log(square_results)
 
     $.ajax({
         headers: {"X-CSRFToken": token},
@@ -1012,8 +1019,7 @@ function save_report() {
             // console.log(data)
         },
         success: function (data) {
-            // console.log('succes - ' + data['file_name'])
-
+            // console.log(data)
             let output_html = '<h2 class="mb-0" style="text-align: center">Отчет успешно создан</h2>' +
                 '<br>' +
                 '<hr class="solid mt-0" style="background-color: black;">' +
@@ -1032,7 +1038,7 @@ function save_report() {
                 if (result.value) {
                     let a = document.createElement("a");
                     a.setAttribute('target', '_blank')
-                    a.href = '/panel/download_group_report/' + data['file_name'];
+                    a.href = '/panel/download_group_report/' + data['response']['file_name'];
                     a.click();
                     setTimeout(function () {
                         // {#location.href = {% url 'panel_home' %}#}
