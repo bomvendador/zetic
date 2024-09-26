@@ -108,7 +108,7 @@ def page3(pdf, answers_code_1, lang, participant_info):
     # points_with_description = extract_categories(answers_code_1, 'Шкала O', lang)
     if points_with_description:
         draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
-    print(points_with_description)
+    # print(points_with_description)
 
     y += 17
     if lang == 'ru':

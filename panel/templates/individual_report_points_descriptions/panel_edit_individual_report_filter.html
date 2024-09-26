@@ -35,7 +35,8 @@
                                 <div class="col-md-6 col-sm-12">
                                     <div class="form-group">
                                         <label for="input_fio">Название</label>
-                                        <input type="text" class="form-control" id="input_filter_name" value="{{ filter.name }}">
+                                        <input type="text" class="form-control" id="input_filter_name"
+                                               value="{{ filter.name }}">
                                     </div>
                                 </div>
                             </div>
@@ -97,21 +98,24 @@
                                                     <option label="--Выберите шкалу--"></option>
 
                                                     {% for category in categories %}
-                                                    <option value="{{ category.id }}"
-                                                        {% if filter_category.category.id == category.id %}
-                                                        selected
-                                                        {% endif %}
-                                                    >{{ category.code }} - {{ category.section_name }} - {{ category.category_name }}
-                                                    </option>
+                                                        <option value="{{ category.id }}"
+                                                                {% if filter_category.category.id == category.id %}
+                                                                selected
+                                                                {% endif %}
+                                                        >{{ category.code }} - {{ category.section_name }}
+                                                            - {{ category.category_name }}
+                                                        </option>
                                                     {% endfor %}
 
                                                 </select>
                                             </td>
                                             <td class="point_from">
-                                                <input type="number" min="0" max="10" class="form-control points_from" value="{{ filter_category.points_from }}">
+                                                <input type="number" min="0" max="10" class="form-control points_from"
+                                                       value="{{ filter_category.points_from }}">
                                             </td>
                                             <td>
-                                                <input type="number" min="0" max="10" class="form-control points_to" value="{{ filter_category.points_to }}">
+                                                <input type="number" min="0" max="10" class="form-control points_to"
+                                                       value="{{ filter_category.points_to }}">
                                             </td>
                                             <td style="text-align: center; vertical-align: middle;">
                                                 <div style="float: right">
@@ -151,7 +155,7 @@
                                     <tbody>
                                     <tr>
                                         <td>
-                                            <h3 class="card-title">Описание</h3>
+                                            <h3 class="card-title">Описания баллов</h3>
                                         </td>
                                         <td>
                                             <button class="btn btn-primary my-1" type="button"
@@ -170,22 +174,9 @@
                             {#                                        </div>#}
                         </div>
                         <div class="card-body" id="description_card_body">
-                        {% for text in filter_description_texts %}
-                            <div class="row description-row">
-                                <div class="col col-lg-11 col-sm-12" style="">
-                                    <textarea class="form-control mb-4"
-                                              placeholder="Пункт описания" required="" rows="3">{{ text.text }}</textarea>
-                                </div>
-                                <div class="col col-lg-1 col-sm-12" style="">
-                                    <div style="text-align: center; vertical-align: middle;">
-                                        <div style="float: right; padding-right: 0.73rem" class="delete-description">
-                                            <i class="fe fe-x delete-category-row"
-                                               style="font-size: 20px; cursor: pointer"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
+                            {% for text in filter_descriptions %}
+                                {% include 'individual_report_points_descriptions/panel_description_tr.html' %}
+                            {% endfor %}
 
                         </div>
                         {#                                    <div>#}
@@ -199,6 +190,10 @@
                     </div>
                 </div>
             </div>
+            <button class="btn ripple btn-primary w-100 mb-4" style="height: 40px" type="button"
+                    id="save_edited_individual_report_description_filter">
+                Сохранить фильтр
+            </button>
 
         </div>
         <!--CONTAINER CLOSED -->
@@ -209,22 +204,13 @@
     <!-- ROW-1 CLOSED -->
 
 
-    <div>
-        <div class="row">
-            <div class="col-lg-12 col-sm-12 mb-5">
-                <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
-                        id="save_edited_individual_report_description_filter">
-                    Сохранить фильтр
-                </button>
-            </div>
-        </div>
-    </div>
-
-
-    </div>
     <!--CONTAINER CLOSED -->
-
-    </div>
+    <template id="description_tr_template">
+        {% include 'individual_report_points_descriptions/panel_description_tr.html' %}
+    </template>
+    <template id="recommendation_tr_template">
+        {% include 'individual_report_points_descriptions/panel_recommendation_tr.html' %}
+    </template>
 
 
 {% endblock %}

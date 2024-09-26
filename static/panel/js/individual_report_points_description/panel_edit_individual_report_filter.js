@@ -33,8 +33,12 @@ $('#add_filter_category').on('click', function () {
     })
 })
 
-$('#tbody_filter_categories').on('click', '.delete-category-row', function () {
-    $(this).closest('tr').remove()
+$('#description_block').on('click', '.delete-category-row', function () {
+    $(this).closest('.description-card').remove()
+})
+
+$('#description_block').on('click', '.delete-recommendation', function () {
+    $(this).closest('.recommendation-card-body').remove()
 })
 
 $('#description_card_body').on('click', 'textarea', function () {
@@ -49,6 +53,7 @@ $('#save_edited_individual_report_description_filter').on('click', function () {
     let points_val_ok = true
     let descriptions_ok = true
     let points_comparison_ok = true
+    let recommendations_ok = true
     let categories_val_arr = []
     let categories_arr = []
     let description_text_arr = []
@@ -59,21 +64,45 @@ $('#save_edited_individual_report_description_filter').on('click', function () {
         name_ok = false
     }
 
-    $('#description_card_body .description-row').each(function (){
-
-        let description_tag = $(this).find('textarea')
+    // $('#description_card_body .description-row').each(function (){
+    $('#description_card_body .description-card').each(function (){
+        let text_ok = true
+        let recommendations_row_ok = true
+        let recommendations_rows = $(this).find('.recommendation-row')
+        let description_text_row = $(this).find('.description-row')
+        let description_tag = description_text_row.find('textarea')
         let description_val = description_tag.val()
+        let recommendations_arr = []
+        recommendations_rows.each(function () {
+            let textarea = $(this).find('textarea')
+            if(textarea.val() === ''){
+                recommendations_row_ok = false
+                textarea.addClass('is-invalid state-invalid')
+                recommendations_ok = false
+            }else {
+                recommendations_arr.push(textarea.val())
+            }
+
+        })
+
         if(description_val === ''){
             descriptions_ok = false
+            text_ok = false
             description_tag.addClass('is-invalid state-invalid')
         }else {
-            description_text_arr.push(description_val)
+            if(recommendations_row_ok){
+                description_text_arr.push({
+                    'description_text': description_val,
+                    'recommendations': recommendations_arr
+                })
+            }
+
         }
-        console.log(description_val)
+        console.log(description_text_arr)
     })
 
-    if(!descriptions_ok){
-        toastr.error('Текст описания отсутствует')
+    if(!descriptions_ok || !recommendations_ok){
+        toastr.error('Заполните поля текста описания')
     }
 
     $('#tbody_filter_categories tr').each(function (row) {
@@ -138,7 +167,7 @@ $('#save_edited_individual_report_description_filter').on('click', function () {
         toastr.error('Баллы ОТ должны быть меньше Баллов ДО')
     }
 
-    if (categories_ok && name_ok && categories_added) {
+    if (categories_ok && name_ok && categories_added && recommendations_ok && descriptions_ok) {
         // console.log('save')
         console.log(categories_arr)
         btn_spinner('#save_edited_individual_report_description_filter')
@@ -149,7 +178,7 @@ $('#save_edited_individual_report_description_filter').on('click', function () {
             data: JSON.stringify({
                 'categories': categories_arr,
                 'name': filter_name,
-                'description_text': description_text_arr,
+                'descriptions': description_text_arr,
                 'filter_id': filter_id,
             }),
             processData: false,
@@ -158,13 +187,18 @@ $('#save_edited_individual_report_description_filter').on('click', function () {
                 toastr.error('Ошибка', data)
             },
             success: function (data) {
-                console.log(data)
+                // console.log(data)
                 btn_text('#save_edited_individual_report_description_filter', 'Сохранить фильтр')
-
+                let name_type = ''
+                if(filter_id === ''){
+                    name_type = 'создан'
+                }else {
+                    name_type = 'обновлен'
+                }
                 let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
                     '<br>' +
                     '<hr class="solid mt-0" style="background-color: black;">' +
-                    '<h4 style="text-align: center">Фильтр обновлен</h4>' +
+                    '<h4 style="text-align: center">Фильтр ' + name_type + '</h4>' +
                     '<hr class="solid mt-0" style="background-color: black;">'
 
                 Swal.fire({
@@ -204,23 +238,28 @@ $('#description_block').on('click', '.delete-description', function () {
 })
 
 $('#add_filter_description').on('click', function () {
-    let html = '                     <div class="row description-row">\n' +
-        '                                <div class="col col-lg-11 col-sm-12" style="">\n' +
-        '                                    <textarea class="form-control mb-4"\n' +
-        '                                              placeholder="Пункт описания" required="" rows="3"></textarea>\n' +
-        '                                </div>\n' +
-        '                                <div class="col col-lg-1 col-sm-12" style="">\n' +
-        '                                    <div style="text-align: center; vertical-align: middle;">\n' +
-        '                                        <div style="float: right; padding-right: 0.73rem" class="delete-description">\n' +
-        '                                            <i class="fe fe-x delete-category-row"\n' +
-        '                                               style="font-size: 20px; cursor: pointer"></i>\n' +
-        '                                        </div>\n' +
-        '                                    </div>\n' +
-        '                                </div>\n' +
-        '                            </div>\n'
+    let html = $('#description_tr_template').html()
+    // let html = '                     <div class="row description-row">\n' +
+    //     '                                <div class="col col-lg-11 col-sm-12" style="">\n' +
+    //     '                                    <textarea class="form-control mb-4"\n' +
+    //     '                                              placeholder="Пункт описания" required="" rows="3"></textarea>\n' +
+    //     '                                </div>\n' +
+    //     '                                <div class="col col-lg-1 col-sm-12" style="">\n' +
+    //     '                                    <div style="text-align: center; vertical-align: middle;">\n' +
+    //     '                                        <div style="float: right; padding-right: 0.73rem" class="delete-description">\n' +
+    //     '                                            <i class="fe fe-x delete-category-row"\n' +
+    //     '                                               style="font-size: 20px; cursor: pointer"></i>\n' +
+    //     '                                        </div>\n' +
+    //     '                                    </div>\n' +
+    //     '                                </div>\n' +
+    //     '                            </div>\n'
 
     $('#description_card_body').append(html)
 })
 
+$('#description_card_body').on('click', '.add-recommendation', function () {
+    let html = $('#recommendation_tr_template').html()
+    $(this).closest('.recommendation_block').find('.recommendation_block_texts').append(html)
+})
 
 

@@ -1,6 +1,7 @@
 from pdf.models import Category, Section, ResearchTemplate, ResearchTemplateSections, Study, Company, Employee, \
     Industry, EmployeePosition, EmployeeRole, AgeGenderGroup, RawToTPointsType, RawToTPoints, \
-    IndividualReportPointsDescriptionFilter, IndividualReportPointsDescriptionFilterCategory, IndividualReportPointsDescriptionFilterText
+    IndividualReportPointsDescriptionFilter, IndividualReportPointsDescriptionFilterCategory, \
+    IndividualReportPointsDescriptionFilterText, IndividualReportPointsDescriptionFilterTextRecommendations
 from login.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
@@ -128,13 +129,20 @@ def save_edited_individual_report_points_description_filter(request):
         print(json_data)
         categories = json_data['categories']
         name = json_data['name']
+        description_texts = json_data['descriptions']
         filter_id = json_data['filter_id']
-        description_texts = json_data['description_text']
-        filter_inst = IndividualReportPointsDescriptionFilter.objects.get(id=filter_id)
+        if not filter_id == '':
+            filter_id = json_data['filter_id']
+            filter_inst = IndividualReportPointsDescriptionFilter.objects.get(id=filter_id)
+            IndividualReportPointsDescriptionFilterCategory.objects.filter(filter=filter_inst).delete()
+
+            IndividualReportPointsDescriptionFilterText.objects.filter(filter=filter_inst).delete()
+            IndividualReportPointsDescriptionFilterTextRecommendations.objects.filter(filter_text__filter=filter_inst).delete()
+        else:
+            filter_inst = IndividualReportPointsDescriptionFilter()
         filter_inst.created_by = request.user
         filter_inst.name = name
         filter_inst.save()
-        IndividualReportPointsDescriptionFilterCategory.objects.filter(filter=filter_inst).delete()
         for category in categories:
             filter_category = IndividualReportPointsDescriptionFilterCategory()
             filter_category.category = Category.objects.get(id=category['category_id'])
@@ -143,13 +151,18 @@ def save_edited_individual_report_points_description_filter(request):
             filter_category.points_from = category['points_from']
             filter_category.created_by = request.user
             filter_category.save()
-        IndividualReportPointsDescriptionFilterText.objects.filter(filter=filter_inst).delete()
         for text in description_texts:
             text_inst = IndividualReportPointsDescriptionFilterText()
             text_inst.filter = filter_inst
-            text_inst.text = text
+            text_inst.text = text['description_text']
             text_inst.created_by = request.user
             text_inst.save()
+            for recommendation_text in text['recommendations']:
+                recommendation_inst = IndividualReportPointsDescriptionFilterTextRecommendations()
+                recommendation_inst.filter_text = text_inst
+                recommendation_inst.text = recommendation_text
+                recommendation_inst.created_by = request.user
+                recommendation_inst.save()
         return HttpResponse(200)
 
 
@@ -158,61 +171,19 @@ def edit_individual_report_points_description_filter(request, filter_id):
     context = info_common(request)
     filter_inst = IndividualReportPointsDescriptionFilter.objects.get(id=filter_id)
     filter_categories = IndividualReportPointsDescriptionFilterCategory.objects.filter(filter=filter_inst)
-    filter_description_texts = IndividualReportPointsDescriptionFilterText.objects.filter(filter=filter_inst)
+    filter_description_texts_inst = IndividualReportPointsDescriptionFilterText.objects.filter(filter=filter_inst)
+    filter_descriptions = []
+    for description_text in filter_description_texts_inst:
+        filter_descriptions.append({
+            'text': description_text.text,
+            'recommendations': IndividualReportPointsDescriptionFilterTextRecommendations.objects.filter(filter_text=description_text)
+        })
     context.update({
         'filter': filter_inst,
         'categories': get_categories_for_filter(),
         'filter_categories': filter_categories,
-        'filter_description_texts': filter_description_texts
+        'filter_descriptions': filter_descriptions
     })
-
-    # filter_categories = MatrixFilterCategory.objects.filter(matrix_filter=matrix_filter)
-    # filter_positions = MatrixFilterInclusiveEmployeePosition.objects.filter(matrix_filter=matrix_filter)
-    #
-    # categories_arr = []
-    # categories = Category.objects.all()
-    # for category in categories:
-    #     if not category.for_validity:
-    #         categories_arr.append({
-    #             'id': category.id,
-    #             'code': category.code,
-    #             'category_name': category.name,
-    #             'section_name': category.section.name
-    #         })
-    # positions_arr = []
-    # positions = EmployeePosition.objects.all()
-    # for position in positions:
-    #     positions_arr.append({
-    #         'name': position.name_ru,
-    #         'id': position.id,
-    #     })
-    #
-    # all_matrix_filters = MatrixFilter.objects.all()
-    # squares_available = []
-    # for square in squares_data:
-    #     square_is_in_filter = False
-    #     if all_matrix_filters:
-    #         for matrix_filter_from_all in all_matrix_filters:
-    #             if matrix_filter_from_all.square_code == square['code']:
-    #                 square_is_in_filter = True
-    #     if square_is_in_filter is False or matrix_filter.square_code == square['code']:
-    #         squares_available.append(square)
-    # if len(squares_available) > 0:
-    #     context.update(
-    #         {
-    #             'squares_available': squares_available,
-    #             'positions': positions_arr,
-    #             'categories': categories_arr,
-    #         }
-    #     )
-    #
-    # context.update(
-    #     {
-    #         'matrix_filter': matrix_filter,
-    #         'filter_categories': filter_categories,
-    #         'filter_positions': filter_positions,
-    #     }
-    # )
     return render(request, 'individual_report_points_descriptions/panel_edit_individual_report_filter.html', context)
 #
 #

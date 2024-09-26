@@ -1,7 +1,7 @@
 from pdf.draw import insert_page_number
 from pdf.models import Questionnaire, QuestionnaireQuestionAnswers, QuestionAnswers, Employee, RawToTPointsType, \
     Category, IndividualReportPointsDescriptionFilter, IndividualReportPointsDescriptionFilterCategory, Report, \
-    ReportDataByCategories, IndividualReportPointsDescriptionFilterText
+    ReportDataByCategories, IndividualReportPointsDescriptionFilterText, IndividualReportPointsDescriptionFilterTextRecommendations
 from . import raw_to_t_point
 from django.db.models import Q
 
@@ -52,19 +52,19 @@ def page(pdf, questionnaire_id, lang, report_id):
         for filter_category in filter_categories:
             t_points_exists = False
             if report_exists:
-                print(f'report_id = {report_id} report id = {report.id} filter_category.category.code = {filter_category.category.code}')
+                # print(f'report_id = {report_id} report id = {report.id} filter_category.category.code = {filter_category.category.code}')
                 if ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).exists():
-                    print(f'report_exists - {report_exists}')
+                    # print(f'report_exists - {report_exists}')
                     t_points = ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).latest('created_at').t_points
                     t_points_exists = True
             else:
-                print(f'report_exists - {report_exists}')
+                # print(f'report_exists - {report_exists}')
                 questionnaire_question_answers = QuestionnaireQuestionAnswers.objects.filter(
                     Q(questionnaire=questionnaire_inst) & Q(question__category=filter_category.category))
-                print(f'questionnaire_id = {questionnaire_inst.id}')
-                print(f'participant = {questionnaire_inst.participant.employee.name}')
-                print(f'filter_category = {filter_category.category.code}. {filter_category.category.name}')
-                print(f'questionnaire_question_answers = {len(questionnaire_question_answers)}')
+                # print(f'questionnaire_id = {questionnaire_inst.id}')
+                # print(f'participant = {questionnaire_inst.participant.employee.name}')
+                # print(f'filter_category = {filter_category.category.code}. {filter_category.category.name}')
+                # print(f'questionnaire_question_answers = {len(questionnaire_question_answers)}')
 
                 if questionnaire_question_answers.exists():
                     raw_points = 0
@@ -76,16 +76,24 @@ def page(pdf, questionnaire_id, lang, report_id):
             if t_points_exists:
                 if filter_category.points_from <= t_points <= filter_category.points_to:
                     questionnaire_categories_fits_filter_qnt = questionnaire_categories_fits_filter_qnt + 1
-        if filter_categories_qnt == questionnaire_categories_fits_filter_qnt:
+        if filter_categories_qnt == questionnaire_categories_fits_filter_qnt and not filter_categories_qnt == 0:
             filter_texts = IndividualReportPointsDescriptionFilterText.objects.filter(filter=description_filter)
             texts = []
             for text in filter_texts:
-                texts.append(text.text)
+                recommendations = []
+                recommendations_inst = IndividualReportPointsDescriptionFilterTextRecommendations.objects.filter(filter_text=text)
+                for recommendation in recommendations_inst:
+                    recommendations.append(recommendation.text)
+                texts.append({
+                    'text': text.text,
+                    'recommendations': recommendations,
+                })
             conclusions_arr.append({
                 'title': description_filter.name,
                 'texts': texts,
             })
     cnt = 0
+    # print(conclusions_arr)
     for conclusion in conclusions_arr:
         cnt = cnt + 1
         if cnt == 1:
@@ -109,10 +117,56 @@ def page(pdf, questionnaire_id, lang, report_id):
 
             pdf.set_font("Cambria", "", 10)
             pdf.set_xy(x, y)
-            pdf.multi_cell(0, 4, conclusion_text)
+            pdf.multi_cell(0, 4, conclusion_text['text'])
             y = pdf.get_y()
-            y = y + 2
+            print(conclusion_text['text'])
+            print(f'y = {y}')
+            if y > 250:
+                insert_page_number(pdf)
+                pdf.add_page()
+                y = 12
+            if conclusion_text['recommendations']:
+                start_y_recommendation_block = y + 2
+                # отрисовка шапки Рекомендаций
+                y = draw_recommendations_table_header(pdf, x, y, start_y_recommendation_block)
+                # -------------------------------
+                y = y + 2
+                pdf.set_font("Cambria", "", 10)
+                cnt = 0
+                for recommendation_text in conclusion_text['recommendations']:
+                    if y > 250:
+                        pdf.rect(x - 7, start_y_recommendation_block, x + 176, y - start_y_recommendation_block, 'D')
+                        insert_page_number(pdf)
+                        pdf.add_page()
+                        y = 14
+                        start_y_recommendation_block = 12
+
+                    cnt = cnt + 1
+                    pdf.set_xy(x - 5, y)
+                    # pdf.set_font("Cambria", "", 20)
+                    pdf.multi_cell(0, 4, str(cnt) + '.')
+
+                    pdf.set_font("Cambria", "", 10)
+                    pdf.set_xy(x, y)
+                    pdf.multi_cell(0, 4, recommendation_text)
+                    y = pdf.get_y()
+                    y = y + 2
+                    pdf.set_xy(x, y)
+                pdf.rect(x - 7, start_y_recommendation_block, x + 176, y - start_y_recommendation_block, 'D')
+
+            y = y + 4
             pdf.set_xy(x, y)
 
     insert_page_number(pdf)
 
+
+def draw_recommendations_table_header(pdf, x, y, start_y_recommendation_block):
+    pdf.set_draw_color(192, 192, 195)
+    y = y + 4
+    pdf.set_xy(x, y)
+    pdf.set_font("Cambria-Bold", "", 10)
+    pdf.multi_cell(0, 4, 'Рекомендации')
+    y = pdf.get_y()
+    y = y + 2
+    pdf.rect(x - 7, start_y_recommendation_block, x + 176, y - start_y_recommendation_block, 'D')
+    return y

@@ -1,0 +1,55 @@
+
+    <div class="card description-card" style="border: 1px #0d6efd solid !important;">
+        <h4 style="padding: 25px 25px 0px 25px;">Описание</h4>
+        <div class="card-body" style="padding-top: 5px; padding-bottom: 5px">
+            <div class="row description-row">
+                <div class="col col-lg-11 col-sm-12" style="">
+                <textarea class="form-control mb-4"
+                          placeholder="Пункт описания" required=""
+                          rows="3">{{ text.text }}</textarea>
+                </div>
+                <div class="col col-lg-1 col-sm-12" style="">
+                    <div style="text-align: center; vertical-align: middle;">
+                        <div style="float: right; padding-right: 0.73rem"
+                             class="delete-description">
+                            <i class="fe fe-x delete-category-row"
+                               style="font-size: 20px; cursor: pointer"
+                               data-bs-toggle="tooltip" title=""
+                               data-bs-original-title="Удалить описание"
+                            ></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recommendation_block">
+            <div class="" style="padding: 0px 25px;">
+                <div class="row">
+                    <div class="col col-lg-11 col-sm-12 col-xs-12">
+                        <div class="row" style="display: flex; align-items: center; margin-bottom: 10px">
+                            <div class="col-10">
+                                <h4 style="padding: 0px 25px 0px 0px;">Рекомендации</h4>
+                                {#                                                        <h3 class="card-title">Рекомендации</h3>#}
+                            </div>
+                            <div class="col-2 pull-right">
+                                <button class="btn btn-primary my-1 add-recommendation" type="button"
+                                        style="float: right"
+                                        title="">
+                                    <i class="fe fe-plus"></i>
+                                </button>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="recommendation_block_texts">
+            {% for recommendation in text.recommendations %}
+                {% include 'individual_report_points_descriptions/panel_recommendation_tr.html' %}
+            {% endfor %}
+
+            </div>
+        </div>
+    </div>
