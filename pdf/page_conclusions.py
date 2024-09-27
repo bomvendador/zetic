@@ -109,6 +109,7 @@ def page(pdf, questionnaire_id, lang, report_id):
         y = y + 10
         x = 17
         pdf.set_xy(x, y)
+        pdf.set_draw_color(192, 192, 195)
 
         for conclusion_text in conclusion['texts']:
             pdf.set_xy(x - 5, y)
@@ -140,6 +141,8 @@ def page(pdf, questionnaire_id, lang, report_id):
                         pdf.add_page()
                         y = 14
                         start_y_recommendation_block = 12
+                        pdf.set_font("Cambria", "", 10)
+                        pdf.set_draw_color(192, 192, 195)
 
                     cnt = cnt + 1
                     pdf.set_xy(x - 5, y)
@@ -161,7 +164,6 @@ def page(pdf, questionnaire_id, lang, report_id):
 
 
 def draw_recommendations_table_header(pdf, x, y, start_y_recommendation_block):
-    pdf.set_draw_color(192, 192, 195)
     y = y + 4
     pdf.set_xy(x, y)
     pdf.set_font("Cambria-Bold", "", 10)
