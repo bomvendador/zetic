@@ -1,7 +1,7 @@
 import random
 
 # from pdf.views import pdf_single_generator
-from sendemail.tasks import pdf_single_generator_task as pdf_single_generator
+from sendemail.tasks import pdf_single_generator_task
 
 from pdf.models import Category, Section, CategoryQuestions, QuestionAnswers, Participant, Employee, EmployeeGender, \
     EmployeePosition, EmployeeRole, Industry, Questionnaire, ResearchTemplateSections, QuestionnaireQuestionAnswers
@@ -129,10 +129,10 @@ def save_answers(request):
 
         if total_questionnaire_questions_qnt == total_questionnaire_answers_qnt:
             if DEBUG == 0:
-                pdf_single_generator.delay(questionnaire_inst.id, '')
+                pdf_single_generator_task.delay(questionnaire_inst.id, '')
                 # pdf_single_generator(questionnaire_inst.id, '')
             else:
-                pdf_single_generator(questionnaire_inst.id, '')
+                pdf_single_generator_task(questionnaire_inst.id, '')
         response = {
             'total_section_questions_qnt': total_section_questions_qnt,
             'questions_answered_qnt': questions_answered_qnt,
