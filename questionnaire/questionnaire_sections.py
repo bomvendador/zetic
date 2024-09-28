@@ -129,7 +129,8 @@ def save_answers(request):
 
         if total_questionnaire_questions_qnt == total_questionnaire_answers_qnt:
             if DEBUG == 0:
-                pdf_single_generator.delay(questionnaire_inst.id, '')
+                # pdf_single_generator.delay(questionnaire_inst.id, '')
+                pdf_single_generator(questionnaire_inst.id, '')
             else:
                 pdf_single_generator(questionnaire_inst.id, '')
         response = {

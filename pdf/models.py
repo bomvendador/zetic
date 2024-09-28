@@ -665,8 +665,8 @@ class MatrixFilterParticipantNotDistributedEmployeePosition(models.Model):
         return f'{self.matrix_filter.id}-{self.matrix_filter.created_at} -- {self.employee_position.name_ru}'
 
     class Meta:
-        verbose_name_plural = 'Должности, включенные в фильтры матриц'
-        verbose_name = 'Должность, включенная в фильтр матрицы'
+        verbose_name_plural = 'Должности, для нераспределенных в фильтры матриц'
+        verbose_name = 'Должность, для нераспределенных в фильтр матрицы'
 
 
 class IndividualReportPointsDescriptionFilter(models.Model):
