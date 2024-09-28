@@ -93,7 +93,9 @@ def page(pdf, questionnaire_id, lang, report_id):
                 'texts': texts,
             })
     cnt = 0
+    print('---conclusions_arr---')
     print(conclusions_arr)
+    print('-------------------')
     for conclusion in conclusions_arr:
         cnt = cnt + 1
         if cnt == 1:
