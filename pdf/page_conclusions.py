@@ -97,10 +97,10 @@ def page(pdf, questionnaire_id, lang, report_id):
                 'texts': texts,
             })
     cnt = 0
-    print('---conclusions_arr---')
-    print(conclusions_arr)
-    logger.info(conclusions_arr)
-    print('-------------------')
+    # print('---conclusions_arr---')
+    # print(conclusions_arr)
+    # logger.info(conclusions_arr)
+    # print('-------------------')
     for conclusion in conclusions_arr:
         cnt = cnt + 1
         if cnt == 1:
@@ -127,8 +127,8 @@ def page(pdf, questionnaire_id, lang, report_id):
             pdf.set_xy(x, y)
             pdf.multi_cell(0, 4, conclusion_text['text'])
             y = pdf.get_y()
-            print(conclusion_text['text'])
-            print(f'y = {y}')
+            # print(conclusion_text['text'])
+            # print(f'y = {y}')
             if y > 250:
                 insert_page_number(pdf)
                 pdf.add_page()
@@ -168,7 +168,6 @@ def page(pdf, questionnaire_id, lang, report_id):
             pdf.set_xy(x, y)
 
     insert_page_number(pdf)
-    return conclusions_arr
 
 
 def draw_recommendations_table_header(pdf, x, y, start_y_recommendation_block):

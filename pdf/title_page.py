@@ -8,7 +8,7 @@ def title_page(pdf, participant, lang):
     y = 150
     pdf.set_xy(20, y)
     if lang == 'ru':
-        pdf.cell(0, 0, 'Индивидуальный отчетдддд')
+        pdf.cell(0, 0, 'Индивидуальный отчет')
     else:
         pdf.cell(0, 0, 'Personal report')
     pdf.line(x1=21, y1=y+6, x2=250, y2=y+6)
