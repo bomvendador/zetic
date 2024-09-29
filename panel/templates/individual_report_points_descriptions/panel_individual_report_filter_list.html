@@ -59,6 +59,7 @@
                                                                 <tr>
                                                                     <th class="wd-15p border-bottom-0 table-header">Название</th>
                                                                     <th class="wd-15p border-bottom-0 table-header">Шкалы</th>
+                                                                    <th class="wd-15p border-bottom-0 table-header" style="text-align: center">Диапазон</th>
                                                                     <th class="wd-15p border-bottom-0 table-header">Дата создания</th>
                                                                     <th class="wd-15p border-bottom-0 table-header">Кем создан</th>
                                                                     <th class="wd-15p border-bottom-0 table-header"></th>
@@ -75,6 +76,15 @@
                                                                             {% if filter_category.filter == filter %}
                                                                         <div>
                                                                             {{ filter_category.category.code }}. {{ filter_category.category.name }}
+                                                                        </div>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    </td>
+                                                                    <td class="" style="text-align: center">
+                                                                        {% for filter_category in filters_categories %}
+                                                                            {% if filter_category.filter == filter %}
+                                                                        <div>
+                                                                            {{ filter_category.points_from }} - {{ filter_category.points_to }}
                                                                         </div>
                                                                             {% endif %}
                                                                         {% endfor %}
