@@ -403,7 +403,7 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
             'participants_ids_to_send_invitation_to': participants_ids_to_send_invitation_to,
             'study_id': study_id,
             'send_report_to_participant_after_filling_up_mass': send_report_to_participant_after_filling_up_mass,
-            'send_admin_notification_after_filling_up_mass': send_admin_notification_after_filling_up_mass,
+            // 'send_admin_notification_after_filling_up_mass': send_admin_notification_after_filling_up_mass,
             'type': invitation_type,
             'protocol': window.location.protocol,
             'hostname': window.location.host,
