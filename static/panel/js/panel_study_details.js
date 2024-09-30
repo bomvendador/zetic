@@ -151,7 +151,7 @@ function getParticipantsWithoutInvitations() {
         let invitation_datetime = $(this).closest('tr').find('.copy-questionnaire-link')
         if (!invitation_datetime.length) {
             let participant_id = $(this).closest('tr').attr('id').split('_')[2]
-            let participant_name = $(this).closest('tr').find('.participant-name').text()
+            let participant_name = $(this).closest('tr').find('.participant-name').text().trim()
             participants_ids_to_send_invitation_to.push({
                 'id': participant_id,
                 'name': participant_name,
@@ -251,7 +251,7 @@ $('#run_group_action').on('click', function () {
                     let invitation_datetime = $(this).closest('tr').find('.invitation-datetime').text()
                     if (invitation_datetime !== '') {
                         let participant_id = $(this).closest('tr').attr('id').split('_')[2]
-                        let participant_name = $(this).closest('tr').find('.participant-name').text()
+                        let participant_name = $(this).closest('tr').find('.participant-name').text().trim()
                         participants_ids_to_send_invitation_to.push({
                             'id': participant_id,
                             'name': participant_name,
@@ -404,7 +404,9 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
             'study_id': study_id,
             'send_report_to_participant_after_filling_up_mass': send_report_to_participant_after_filling_up_mass,
             'send_admin_notification_after_filling_up_mass': send_admin_notification_after_filling_up_mass,
-            'type': invitation_type
+            'type': invitation_type,
+            'protocol': window.location.protocol,
+            'hostname': window.location.host,
 
         }),
         processData: false,

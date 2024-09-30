@@ -25,7 +25,7 @@ def generate_participant_link_code(string_length):
     return random[0:string_length] # Return the random string.
 
 
-def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, email_type, send_admin_notification_after_filling_up_mass, send_report_to_participant_after_filling_up_mass):
+def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, email_type, send_admin_notification_after_filling_up_mass, send_report_to_participant_after_filling_up_mass, protocol, hostname):
     wrong_emails = []
     participant_total_questions = 0
     research_template_sections = ResearchTemplateSections.objects.filter(research_template__study=Study.objects.get(id=study_id))
@@ -57,12 +57,16 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
 
             context = {
                 'code_for_participant': code_for_participant,
+                'protocol': protocol,
+                'hostname': hostname,
             }
 
             html_message = render_to_string('invitation_message.html', context)
         elif email_type == 'reminder':
             context = {
                 'code_for_participant': participant_inst.invitation_code,
+                'protocol': protocol,
+                'hostname': hostname,
             }
             html_message = render_to_string('invitation_message_reminder.html', context)
         elif email_type == 'self_questionnaire':
@@ -76,6 +80,7 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
         to_email = participant_email
         subject = 'Опросник ZETIC'
         success_sent_qnt = 0
+
         try:
             send_mail(
                 subject,
@@ -88,9 +93,9 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
             participant_inst.invitation_sent = True
             participant_inst.invitation_sent_datetime = timezone.now()
             # participant_inst.invitation_code = code_for_participant
-            if send_admin_notification_after_filling_up_mass == 1:
+            if send_admin_notification_after_filling_up_mass:
                 participant_inst.send_admin_notification_after_filling_up = True
-            if send_report_to_participant_after_filling_up_mass == 1:
+            if send_report_to_participant_after_filling_up_mass:
                 participant_inst.send_report_to_participant_after_filling_up = True
             participant_inst.total_questions_qnt = participant_total_questions
             participant_inst.save()
@@ -135,6 +140,8 @@ def mass_send_invitation_email(request):
         participants_ids_to_send_invitation_to = json_request['participants_ids_to_send_invitation_to']
         send_report_to_participant_after_filling_up_mass = json_request['send_report_to_participant_after_filling_up_mass']
         send_admin_notification_after_filling_up_mass = json_request['send_admin_notification_after_filling_up_mass']
+        protocol = json_request['protocol']
+        hostname = json_request['hostname']
         email_type = json_request['type']
         user_profile = UserProfile.objects.get(user=request.user)
         check_passed = True
@@ -232,7 +239,7 @@ def mass_send_invitation_email(request):
             #         print('There was an error sending an email: ', e)
             #     except:
             #         print("Mail Sending Failed!")
-            send_email_by_email_type_var = send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, email_type, send_admin_notification_after_filling_up_mass, send_report_to_participant_after_filling_up_mass)
+            send_email_by_email_type_var = send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, email_type, send_admin_notification_after_filling_up_mass, send_report_to_participant_after_filling_up_mass, protocol, hostname)
 
 
             result.update({
