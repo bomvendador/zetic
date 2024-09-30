@@ -1,4 +1,4 @@
-from pdf_group.draw import draw_arrow, draw_table
+from pdf_group.draw import draw_arrow, draw_participants_table
 from pdf.models import Report, ReportData, Questionnaire, QuestionnaireQuestionAnswers, Participant, Category, ReportDataByCategories
 import math
 from pdf import raw_to_t_point

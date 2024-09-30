@@ -1,7 +1,7 @@
 import math
 
 from pdf.draw import insert_page_number
-from pdf_group.draw import draw_table
+# from pdf_group.draw import draw_table
 from pdf_group.page_funcs import proceed_scale, block_name, data_by_points, get_additional_delta_y, block_name_
 from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B, MIN_SCALE_DELTA_Y, MAX_Y, START_Y
 
