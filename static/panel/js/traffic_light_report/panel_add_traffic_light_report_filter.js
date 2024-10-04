@@ -102,7 +102,12 @@ $('#save_traffic_light_report_filter').on('click', function () {
     let categories_arr = []
 
     let filter_name = $('#input_filter_name').val()
+    $('#input_filter_name').on('click', function () {
+        $('#input_filter_name').removeClass('is-invalid')
+    })
+
     if (filter_name === '') {
+        $('#input_filter_name').addClass('is-invalid')
         toastr.error('Название фильтра не заполнено')
         name_ok = false
     }
@@ -183,6 +188,7 @@ $('#save_traffic_light_report_filter').on('click', function () {
                 'yellow': yellow,
                 'green': green,
                 'position': filter_position,
+                'project_id': project_id,
                 'green_from_left': $('#green_from_left').prop('checked')
             }),
             processData: false,
@@ -207,7 +213,11 @@ $('#save_traffic_light_report_filter').on('click', function () {
                     confirmButtonText: 'ОК'
                 }).then((result) => {
                     if (result.value) {
-                        window.location.href = url_traffic_light_report_filters_list
+                        if(project_id === ''){
+                            window.location.href = url_traffic_light_report_filters_list
+                        }else {
+                            window.location.href = url_edit_project
+                        }
                     }
                 })
 

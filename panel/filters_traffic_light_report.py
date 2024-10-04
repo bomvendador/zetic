@@ -1,8 +1,8 @@
-from pdf.models import Category, TrafficLightReportFilter, TrafficLightReportFilterCategory
+from pdf.models import Category, TrafficLightReportFilter, TrafficLightReportFilterCategory, Project
 from django.db.models import Avg, Max, Min, Sum
 from login.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
 import json
@@ -21,9 +21,8 @@ from .custom_funcs import squares_data
 @login_required(redirect_field_name=None, login_url='/login/')
 def traffic_light_report_filters_list(request):
     context = info_common(request)
-
-    filters_inst = TrafficLightReportFilter.objects.all().order_by('position')
-    filters_categories = TrafficLightReportFilterCategory.objects.all()
+    filters_inst = TrafficLightReportFilter.objects.filter(project=None).order_by('position')
+    filters_categories = TrafficLightReportFilterCategory.objects.filter(filter__project=None)
     context.update(
         {
             'filters': filters_inst,
@@ -37,30 +36,59 @@ def traffic_light_report_filters_list(request):
 @login_required(redirect_field_name=None, login_url='/login/')
 def add_filter(request):
     context = info_common(request)
-    positions = get_traffic_light_filters_positions()
-    max_position = TrafficLightReportFilter.objects.all().aggregate(Max('position'))['position__max']
+    positions = get_traffic_light_filters_positions('')
+    max_position = TrafficLightReportFilter.objects.filter(project=None).aggregate(Max('position'))['position__max']
     context.update({
         'categories': get_categories_for_filter(),
         'positions': positions,
         'new_position': int(max_position) + 1,
+
     })
+    return render(request, 'traffic_light_report/panel_add_traffic_light_report_filter.html', context)
+
+
+def add_traffic_light_report_filter_to_project(request, project_id):
+    context = info_common(request)
+    project_inst = Project.objects.get(id=project_id)
+    positions = get_traffic_light_filters_positions(project_id)
+    max_position = TrafficLightReportFilter.objects.filter(project_id=project_id).aggregate(Max('position'))['position__max']
+    print(f'max pos = {max_position}')
+    if max_position:
+        new_position = int(max_position) + 1
+    else:
+        new_position = 1
+    print(new_position)
+    print(positions)
+    context.update({
+        'categories': get_categories_for_filter(),
+        # 'positions': positions[:-1],
+        'positions': positions,
+        'project': project_inst,
+        'new_position': new_position
+    })
+    print(context)
 
     return render(request, 'traffic_light_report/panel_add_traffic_light_report_filter.html', context)
 
 
-def get_traffic_light_filters_positions():
+def get_traffic_light_filters_positions(project_id):
     positions = []
-    traffic_light_report_inst = TrafficLightReportFilter.objects.all().order_by('position')
-    max_position = TrafficLightReportFilter.objects.all().aggregate(Max('position'))['position__max']
+    if not project_id == '':
+        traffic_light_report_inst = TrafficLightReportFilter.objects.filter(project_id=project_id).order_by('position')
+        max_position = TrafficLightReportFilter.objects.filter(project_id=project_id).aggregate(Max('position'))['position__max']
+    else:
+        traffic_light_report_inst = TrafficLightReportFilter.objects.filter(project=None).order_by('position')
+        max_position = TrafficLightReportFilter.objects.filter(project=None).aggregate(Max('position'))['position__max']
     for filter_item in traffic_light_report_inst:
         positions.append(filter_item.position)
-    positions.append(int(max_position) + 1)
+    if max_position is not None:
+        positions.append(int(max_position) + 1)
     return positions
 
 
 def get_categories_for_filter():
     categories_arr = []
-    categories = Category.objects.all()
+    categories = Category.objects.all().order_by('code')
     for category in categories:
         if not category.for_validity:
             categories_arr.append({
@@ -82,10 +110,19 @@ def save_new_traffic_light_report_filter(request):
         red = json_data['red']
         yellow = json_data['yellow']
         green = json_data['green']
+        project_id = json_data['project_id']
         green_from_left = json_data['green_from_left']
         position = json_data['position']
-        max_position = TrafficLightReportFilter.objects.all().aggregate(Max('position'))['position__max']
         filter_inst = TrafficLightReportFilter()
+
+        if not project_id == '':
+            # max_position = TrafficLightReportFilter.objects.filter(project_id=project_id).aggregate(Max('position'))['position__max']
+            update_traffic_light_filters_positions(position, json_data['project_id'])
+            filter_inst.project_id = project_id
+        else:
+            # max_position = TrafficLightReportFilter.objects.filter(project=None).aggregate(Max('position'))['position__max']
+            update_traffic_light_filters_positions(position, '')
+
 
         # position_gap_for_existing_filter = 0
         # all_existing_filters_inst = TrafficLightReportFilter.objects.all().order_by('position')
@@ -98,7 +135,6 @@ def save_new_traffic_light_report_filter(request):
         #     existing_filter.save()
         #     print(f'{existing_filter.name} - {existing_filter.position} - {cnt} - {position_gap_for_existing_filter}')
 
-        update_traffic_light_filters_positions(position)
         filter_inst.position = position
         filter_inst.created_by = request.user
         filter_inst.name = name
@@ -122,9 +158,12 @@ def save_new_traffic_light_report_filter(request):
         return HttpResponse(200)
 
 
-def update_traffic_light_filters_positions(position):
+def update_traffic_light_filters_positions(position, project_id):
     position_gap_for_existing_filter = 0
-    all_existing_filters_inst = TrafficLightReportFilter.objects.all().order_by('position')
+    if project_id == '':
+        all_existing_filters_inst = TrafficLightReportFilter.objects.all().order_by('position')
+    else:
+        all_existing_filters_inst = TrafficLightReportFilter.objects.filter(project_id=project_id).order_by('position')
     cnt = 0
     for existing_filter in all_existing_filters_inst:
         cnt = cnt + 1
@@ -148,15 +187,17 @@ def save_edited_traffic_light_report_filter(request):
         filter_id = json_data['filter_id']
         green_from_left = json_data['green_from_left']
         position = json_data['position']
-
-        max_position = TrafficLightReportFilter.objects.all().aggregate(Max('position'))['position__max']
+        filter_inst = TrafficLightReportFilter.objects.get(id=filter_id)
+        if filter_inst.project:
+            max_position = TrafficLightReportFilter.objects.filter(project=filter_inst.project).aggregate(Max('position'))['position__max']
+            all_existing_filters_inst = TrafficLightReportFilter.objects.filter(project=filter_inst.project).order_by('position')
+        else:
+            max_position = TrafficLightReportFilter.objects.filter(project=None).aggregate(Max('position'))['position__max']
+            all_existing_filters_inst = TrafficLightReportFilter.objects.filter(project=None).order_by('position')
         print(max_position)
 
-        filter_inst = TrafficLightReportFilter.objects.get(id=filter_id)
-
-        all_existing_filters_inst = TrafficLightReportFilter.objects.all().order_by('position')
         for existing_filter in all_existing_filters_inst:
-            if int(existing_filter.position) >= int(position) and existing_filter.position < filter_inst.position:
+            if int(existing_filter.position) >= int(position) and existing_filter.position < filter_inst.position and not existing_filter == filter_inst:
                 existing_filter.position = existing_filter.position + 1
                 existing_filter.save()
         filter_inst.created_by = request.user
@@ -180,7 +221,13 @@ def save_edited_traffic_light_report_filter(request):
             filter_category.filter = filter_inst
             filter_category.created_by = request.user
             filter_category.save()
-        return HttpResponse(200)
+        if filter_inst.project:
+            project_id = filter_inst.project_id
+        else:
+            project_id = ''
+        return JsonResponse({"project_id": project_id})
+
+        # return HttpResponse(200)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -188,7 +235,10 @@ def edit_traffic_light_report_filter(request, filter_id):
     context = info_common(request)
     filter_inst = TrafficLightReportFilter.objects.get(id=filter_id)
     filter_categories = TrafficLightReportFilterCategory.objects.filter(filter=filter_inst)
-    positions = get_traffic_light_filters_positions()
+    if filter_inst.project:
+        positions = get_traffic_light_filters_positions(filter_inst.project.id)
+    else:
+        positions = get_traffic_light_filters_positions('')
     context.update({
         'filter': filter_inst,
         'categories': get_categories_for_filter(),
@@ -204,13 +254,20 @@ def delete_traffic_light_report_filter(request):
     json_data = json.loads(request.body.decode('utf-8'))
     filter_id = json_data['filter_id']
     filter_inst = TrafficLightReportFilter.objects.get(id=filter_id)
+    if filter_inst.project:
+        project_id = filter_inst.project.id
+    else:
+        project_id = ''
     filter_inst.delete()
-    update_filters_positions()
+    update_filters_positions(project_id)
     return HttpResponse(200)
 
 
-def update_filters_positions():
-    filters_inst = TrafficLightReportFilter.objects.all().order_by('position')
+def update_filters_positions(project_id):
+    if project_id == '':
+        filters_inst = TrafficLightReportFilter.objects.all().order_by('position')
+    else:
+        filters_inst = TrafficLightReportFilter.objects.filter(project_id=project_id).order_by('position')
     cnt = 0
     for traffic_light_filter in filters_inst:
         cnt = cnt + 1

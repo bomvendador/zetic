@@ -738,6 +738,7 @@ class TrafficLightReportFilter(models.Model):
     points_to_green = models.IntegerField(null=False, default=0)
     direction = models.CharField(max_length=30, blank=True, null=True)
     position = models.IntegerField(null=False, default=0)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None, blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}'

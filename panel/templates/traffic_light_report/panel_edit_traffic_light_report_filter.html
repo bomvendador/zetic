@@ -32,6 +32,24 @@
                             <h3 class="card-title">Параметры фильтра</h3>
                         </div>
                         <div class="card-body">
+                            {% if filter.project %}
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="company">Компания</label>
+                                            <input type="text" class="form-control" id="company"
+                                                   value="{{ filter.project.company.id }}. {{ filter.project.company.name }}" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="project">Проект</label>
+                                            <input type="text" class="form-control" id="project"
+                                                   value="{{ filter.project.id }}. {{ filter.project.name }}" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
 
                             <div class="row">
                                 <div class="col-md-6 col-sm-12">

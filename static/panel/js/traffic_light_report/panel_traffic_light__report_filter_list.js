@@ -1,9 +1,15 @@
-expand_menu_item('#menu_settings')
+if (project_id === '') {
+    expand_menu_item('#menu_settings')
+}
 
 // let section_id
 //
 $('#add_traffic_light_report_filter').on('click', function () {
-    window.location.href = url_add_traffic_light_report_filter
+    if (project_id === '') {
+        window.location.href = url_add_traffic_light_report_filter
+    } else {
+        window.location.href = url_add_traffic_light_report_filter_to_project
+    }
 })
 
 $('.delete-filter').on('click', function () {

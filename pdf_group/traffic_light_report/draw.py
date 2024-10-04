@@ -205,7 +205,7 @@ def draw_traffic_light_report_border(pdf, lang, start_x, start_y, end_x, end_y):
     pdf.rect(start_X_items_table, start_Y_items_table, end_x - start_X_items_table, end_y - start_Y_items_table, 'D') #обводка
 
 
-def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results):
+def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results, project_id):
     color = {
         'red': {
             'r': 250,
@@ -245,11 +245,15 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results)
     text_size_for_filters = 8
     interval_between_description_and_filters_name = 4
 
-    # print('-- square results ---')
-    # print(square_results)
-    # print('-------')
+    print('-- square results ---')
+    print(square_results)
+    print('-------')
 
-    traffic_light_report_inst = TrafficLightReportFilter.objects.all().order_by('position')
+    # participant_id = int(square_results[0][8])
+    if TrafficLightReportFilter.objects.filter(project_id=project_id).exists():
+        traffic_light_report_inst = TrafficLightReportFilter.objects.filter(project_id=project_id).order_by('position')
+    else:
+        traffic_light_report_inst = TrafficLightReportFilter.objects.all().order_by('position')
 
     max_name_length = 0
     for report in traffic_light_report_inst:
@@ -268,7 +272,6 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results)
     # for data in square_results:
     # items_colors_arr = []
     data_items = []
-
     for data in square_results:
         print('---data---')
         print(data)

@@ -752,10 +752,7 @@ def draw_groups_table(square_data, pdf, width, x, y):
     pdf.set_line_width(0.1)
     pdf.set_draw_color(230, 230, 227)
     line_height = pdf.font_size * 2
-    # start_y = y
     cnt = 1
-    # new_column_added = False
-    # all_participants_qnt = len(square_data)
 
     pdf.multi_cell(7, line_height, '#', border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
     pdf.multi_cell((width - 10) - 7, line_height, 'Название группы', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
@@ -770,9 +767,6 @@ def draw_groups_table(square_data, pdf, width, x, y):
     for square_data_item in square_data:
         group_color = square_data_item[5]
         group_name = square_data_item[4]
-        bold = square_data_item[3]
-
-        # pdf.multi_cell(7, line_height, str(cnt), border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
 
         if not group_color == 'rgba(0, 0, 0, 0)' and group_color not in groups_added:
             groups_added.append(group_color)
@@ -788,12 +782,6 @@ def draw_groups_table(square_data, pdf, width, x, y):
             pdf.set_fill_color(color_r, color_g, color_b)
             pdf.set_draw_color(color_r, color_g, color_b)
 
-            # if bold == 1:
-            #     pdf.set_draw_color(r=0, g=0, b=0)
-            #     pdf.set_line_width(0.6)
-            # else:
-            #     pdf.set_draw_color(r=255, g=255, b=255)
-
             pdf.circle(x=x + width - line_height / 2 - 4, y=y + line_height / 2 - 2, r=4, style="FD")
 
             pdf.set_line_width(0.1)
@@ -803,25 +791,8 @@ def draw_groups_table(square_data, pdf, width, x, y):
             cnt = cnt + 1
             y = y + line_height
 
-            # new_line_cnt = all_participants_qnt // 2
-            # if all_participants_qnt / 2 == new_line_cnt:
-            #     new_line_cnt = all_participants_qnt / 2
-            # else:
-            #     new_line_cnt = new_line_cnt + 1
-            # if cnt > new_line_cnt:
-            #     if not new_column_added:
-            #         new_column_added = True
-            #         y = start_y + line_height
-            #         x = x + width
-
             pdf.set_xy(x, y)
 
-    # if all_participants_qnt // 2 != all_participants_qnt / 2:
-    #     # y = y + line_height
-    #     pdf.multi_cell(7, line_height, '', border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
-    #     pdf.multi_cell((width - 10) - 7, line_height, '', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
-    #     pdf.multi_cell(10, line_height, '', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
-    # return show_groups_table
 
 
 

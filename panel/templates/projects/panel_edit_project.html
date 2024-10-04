@@ -109,6 +109,160 @@
                 </div>
             </div>                        <!-- ROW-1 CLOSED -->
 
+
+            <div class="row ">
+                <div class="col-md-12">
+                    <div class="card">
+
+                        <div class="card-header row pt-2 pb-2 justify-content-md-center">
+                            <div class="">
+                                <table style="width: 100%">
+                                    <thead></thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <h3 class="card-title">Натройки отчета "Светофор"</h3>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-primary my-1" type="button" id="add_traffic_light_report_filter"
+                                                    style="float: right">Добавить фмльтр
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            {#                                        <div class="col col-lg-6 col-sm-6">#}
+                            {#                                        </div>#}
+                            {#                                        <div class="col col-lg-6 col-sm-6 text-end">#}
+                            {#                                        </div>#}
+                        </div>
+
+                        <div class="card-body">
+                            <div id="wizard1" role="application" class="wizard clearfix">
+                                <div class="content clearfix">
+                                    {#                                                <h3 id="wizard1-h-0" tabindex="-1" class="title current">Выбор проекта</h3>#}
+                                    <section id="wizard1-p-0" role="tabpanel" aria-labelledby="wizard1-h-0"
+                                             class="body current" aria-hidden="false">
+
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered text-nowrap border-bottom list-table dataTable no-footer"
+                                                   id="">
+                                                <thead>
+                                                {#                                                            <tr class="table-header">#}
+                                                <tr>
+                                                    <th class="wd-15p border-bottom-0 table-header">Название</th>
+                                                    <th class="wd-15p border-bottom-0 table-header">Шкалы</th>
+                                                    <th class="wd-15p border-bottom-0 table-header">Позиция</th>
+                                                    <th class="wd-15p border-bottom-0 table-header">Дата создания</th>
+                                                    <th class="wd-15p border-bottom-0 table-header">Кем создан</th>
+                                                    <th class="wd-15p border-bottom-0 table-header"></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="wizard1-tbody-1">
+                                                {% for filter in filters %}
+                                                    <tr data-filter-id="{{ filter.id }}">
+                                                        <td class="" style="border-left-color:
+                                                                {% if filter.direction == "red_from_left" %}
+                                                                    red
+                                                                {% else %}
+                                                                    green
+                                                                {% endif %}
+                                                                !important; border-left-style: solid; border-left-width: 7px;">
+                                                            {{ filter.name }}
+                                                        </td>
+                                                        <td class="">
+                                                            {% for filter_category in filters_categories %}
+                                                                {% if filter_category.filter == filter %}
+                                                                    <div>
+                                                                        {{ filter_category.category.code }}. {{ filter_category.category.name }}
+                                                                    </div>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </td>
+                                                        <td style="text-align: center">
+                                                            {{ filter.position }}
+                                                        </td>
+
+                                                        <td>
+                                                            {{ filter.created_at|date:"d.m.Y H:i" }}
+                                                        </td>
+                                                        <td>
+                                                            {{ filter.created_by.first_name }}
+                                                        </td>
+
+                                                        <td>
+                                                            <div style="text-align: center;">
+                                                                <i class="fe fe-more-vertical cursor-pointer"
+                                                                   data-bs-toggle="dropdown" aria-expanded="false"
+                                                                   style="font-size: 20px"></i>
+                                                                <ul class="dropdown-menu"
+                                                                    data-filter-id="{{ filter.id }}">
+                                                                    <li>
+                                                                        {#                                                                                    <a class="dropdown-item edit-company-study cursor-pointer" data-study-id="{{ study.id }}" href="{% url 'edit_company_study' study.id %}">#}
+                                                                        <a class="dropdown-item edit-filter cursor-pointer"
+                                                                           href="{% url 'edit_traffic_light_report_filter' filter.id %}">
+                                                                            <svg style="margin-right: 5px"
+                                                                                 xmlns="http://www.w3.org/2000/svg"
+                                                                                 width="15" height="15"
+                                                                                 viewBox="0 0 24 24" fill="none"
+                                                                                 stroke="currentColor" stroke-width="2"
+                                                                                 stroke-linecap="round"
+                                                                                 stroke-linejoin="round"
+                                                                                 class="feather feather-edit-2">
+                                                                                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                                                            </svg>
+                                                                            Изменить
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item delete-filter cursor-pointer font-color-danger">
+                                                                            <svg style="margin-right: 5px"
+                                                                                 xmlns="http://www.w3.org/2000/svg"
+                                                                                 width="15" height="15"
+                                                                                 viewBox="0 0 24 24" fill="none"
+                                                                                 stroke="currentColor" stroke-width="2"
+                                                                                 stroke-linecap="round"
+                                                                                 stroke-linejoin="round"
+                                                                                 class="feather feather-trash-2">
+                                                                                <polyline
+                                                                                        points="3 6 5 6 21 6"></polyline>
+                                                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                                                <line x1="10" y1="11" x2="10"
+                                                                                      y2="17"></line>
+                                                                                <line x1="14" y1="11" x2="14"
+                                                                                      y2="17"></line>
+                                                                            </svg>
+                                                                            Удалить
+                                                                        </a>
+                                                                    </li>
+
+                                                                    {#                                                                                <li><a class="dropdown-item delete-industry cursor-pointer">Удалить</a></li>#}
+                                                                </ul>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </section>
+
+
+                                </div>
+
+                                {#                                        </div>#}
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <div>
                 <div class="row">
                     <div class="col-lg-12 col-sm-12 mb-5">
@@ -179,6 +333,10 @@
 
         let get_company_studies_for_project = "{% url 'get_company_studies_for_project' %}"
         let url_save_edited_project = "{% url 'save_edited_project' %}"
+        let url_delete_traffic_light_filter = "{% url 'delete_traffic_light_report_filter' %}"
+
+        let url_add_traffic_light_report_filter_to_project = "{% url 'add_traffic_light_report_filter_to_project' project.id %}";
+
         {#let url_get_available_squares = "{% url 'get_available_squares' %}"#}
         {#let categories = {{ categories|safe }};#}
         {#let url_get_company_employees = "{% url 'get_company_employees' %}"#}
@@ -193,4 +351,6 @@
     <script src="{% static 'login/js/select2.js' %}"></script>
 
     <script src="{% static 'panel/js/projects/panel_edit_project.js' %}"></script>
+    <script src="{% static 'panel/js/traffic_light_report/panel_traffic_light__report_filter_list.js' %}"></script>
+
 {% endblock %}

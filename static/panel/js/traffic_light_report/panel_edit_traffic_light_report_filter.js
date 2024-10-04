@@ -103,7 +103,13 @@ $('#save_edited_traffic_light_report_filter').on('click', function () {
     let categories_arr = []
 
     let filter_name = $('#input_filter_name').val()
+
+    $('#input_filter_name').on('click', function () {
+        $('#input_filter_name').removeClass('is-invalid')
+    })
+
     if (filter_name === '') {
+        $('#input_filter_name').addClass('is-invalid')
         toastr.error('Название фильтра не заполнено')
         name_ok = false
     }
@@ -194,6 +200,7 @@ $('#save_edited_traffic_light_report_filter').on('click', function () {
             },
             success: function (data) {
                 btn_text('#save_edited_traffic_light_report_filter', 'Сохранить фильтр')
+                console.log(data)
 
                 let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
                     '<br>' +
@@ -209,7 +216,12 @@ $('#save_edited_traffic_light_report_filter').on('click', function () {
                     confirmButtonText: 'ОК'
                 }).then((result) => {
                     if (result.value) {
-                        window.location.href = url_traffic_light_report_filters_list
+                        let project_id = data['project_id']
+                        if (project_id === '') {
+                            window.location.href = url_traffic_light_report_filters_list
+                        } else {
+                            window.location.href = '/panel/edit_project/' + project_id
+                        }
                     }
                 })
 

@@ -1,5 +1,5 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, User, Participant, EmployeeGender, \
-    Project, Study, ProjectStudy
+    Project, Study, ProjectStudy, TrafficLightReportFilter, TrafficLightReportFilterCategory
 from login.models import UserProfile
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -164,10 +164,15 @@ def edit_project(request, project_id):
     # cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
     project = Project.objects.get(id=project_id)
     studies = ProjectStudy.objects.filter(project=project)
+    filters_inst = TrafficLightReportFilter.objects.filter(project=project).order_by('position')
+    filters_categories = TrafficLightReportFilterCategory.objects.filter(filter__project=project)
+
     context.update(
         {
             'project': project,
             'studies': studies,
+            'filters': filters_inst,
+            'filters_categories': filters_categories
         }
     )
     return render(request, 'projects/panel_edit_project.html', context)

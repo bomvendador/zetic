@@ -669,6 +669,7 @@ def save_group_report_data(request):
         print('===421===')
 
         operation = json_data['operation']
+        project_id = json_data['project_id']
         square_results = json_data['square_results']
 
         if operation == 'edit':

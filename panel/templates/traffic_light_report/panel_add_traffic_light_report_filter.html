@@ -31,7 +31,24 @@
                             <h3 class="card-title">Параметры фильтра</h3>
                         </div>
                         <div class="card-body">
-
+                            {% if project %}
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="company">Компания</label>
+                                            <input type="text" class="form-control" id="company"
+                                                   value="{{ project.company.id }}. {{ project.company.name }}" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="project">Проект</label>
+                                            <input type="text" class="form-control" id="project"
+                                                   value="{{ project.id }}. {{ project.name }}" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
                             <div class="row">
                                 <div class="col-md-6 col-sm-12">
                                     <div class="form-group">
@@ -43,13 +60,18 @@
                                     <div class="form-group">
                                         <label for="input_tel">Позиция в отчете</label>
                                         <select name="user_role" class="form-control form-select" id="position">
-                                            {% for position in positions %}
-                                                <option value="{{ position }}"
-                                                        {% if position == new_position %}
-                                                        selected
-                                                        {% endif %}
-                                                >{{ position }}</option>
-                                            {% endfor %}
+                                            {% if new_position == 1 %}
+                                                <option value="1">1</option>
+                                            {% else %}
+                                                {% for position in positions %}
+                                                    <option value="{{ position }}"
+                                                            {% if position == new_position %}
+                                                            selected
+                                                            {% endif %}
+                                                    >{{ position }}</option>
+                                                {% endfor %}
+
+                                            {% endif %}
                                         </select>
 
                                     </div>
@@ -264,6 +286,12 @@
         let url_traffic_light_report_filters_list = "{% url 'traffic_light_report_filters_list' %}"
         {#let url_get_available_squares = "{% url 'get_available_squares' %}"#}
         let categories = {{ categories|safe }};
+        {% if project %}
+        let project_id = {{ project.id }};
+        let url_edit_project = "{% url 'edit_project' project.id %}"
+        {% else %}
+        let project_id = '';
+        {% endif %}
         {#let url_get_company_employees = "{% url 'get_company_employees' %}"#}
         {#let study_id = {{ study.id }};#}
         {#let url_save_participant_questions_groups = "{% url 'save_participant_questions_groups' %}"#}

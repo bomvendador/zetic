@@ -83,7 +83,7 @@ def pdf_group_generator(request_json):
 
     pdf.add_page()
     pdf.set_text_color(0, 0, 0)
-    traffic_light_report_page(pdf, 'ru', request_json['square_results'])
+    traffic_light_report_page(pdf, 'ru', request_json)
 
     pdf.set_line_width(0.1)
     pdf.add_page()

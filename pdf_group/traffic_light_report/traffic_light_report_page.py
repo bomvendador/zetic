@@ -4,7 +4,8 @@ from pdf.draw import insert_page_number
 from pdf_group.traffic_light_report.draw import draw_traffic_light_report_table
 
 
-def page(pdf, lang, square_results):
+def page(pdf, lang, json):
+    square_results = json['square_results']
     # questionnaire_inst = Questionnaire.objects.filter(participant__employee__email=participant_email).latest('created_at')
     pdf.set_auto_page_break(False)
 
@@ -35,6 +36,6 @@ def page(pdf, lang, square_results):
 
     pdf.line(x + 1, pdf.get_y() + 4, x + 220,  pdf.get_y() + 4)
 
-    draw_traffic_light_report_table(pdf, lang, x, y, square_results)
+    draw_traffic_light_report_table(pdf, lang, x, y, square_results, json['project_id'])
 
     insert_page_number(pdf)

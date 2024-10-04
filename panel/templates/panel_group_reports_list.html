@@ -318,6 +318,7 @@
 
 
         let company_id
+        let project_id
 
         function route_handler(route_index) {
             {#console.log('project - ' + $('.company-chosen').text().trim())#}
@@ -372,7 +373,7 @@
 
                 case 2:
 
-                    let project_id = $('.company-project-chosen').data('project-id')
+                    project_id = $('.company-project-chosen').data('project-id')
                     let project_chosen = $('#main-container .company-project-chosen').length
                     console.log(project_id)
                     if (project_chosen > 0) {

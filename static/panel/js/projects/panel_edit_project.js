@@ -1,6 +1,7 @@
 expand_menu_item('#menu_projects_list')
 
 
+
 $('#edit_studies').on("click", function (e) {
     show_progressbar_loader()
     $.ajax({
