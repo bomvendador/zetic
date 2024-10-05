@@ -32,7 +32,7 @@ import fitz
 import json
 
 # from sendemail.tasks import pdf_single_generator_task
-from sendemail.tasks import pdf_single_generator_task
+# from sendemail.tasks import pdf_single_generator_task
 #
 #
 # def pdf_single_generator(questionnaire_id, report_id):
