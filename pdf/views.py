@@ -32,6 +32,7 @@ import fitz
 import json
 
 # from sendemail.tasks import pdf_single_generator_task
+from sendemail.tasks import pdf_single_generator_task
 #
 #
 # def pdf_single_generator(questionnaire_id, report_id):
@@ -200,7 +201,7 @@ def regenerate_report(request):
         report_id = json_data['report_id']
         report = Report.objects.get(id=report_id)
         questionnaire = Questionnaire.objects.get(participant=report.participant)
-        pdf_single_generator(questionnaire.id, report_id)
+        pdf_single_generator_task(questionnaire.id, report_id)
         return HttpResponse(report.participant.employee.company.name)
 
 
