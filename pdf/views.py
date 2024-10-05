@@ -31,14 +31,6 @@ import time
 import fitz
 import json
 
-# from sendemail.tasks import pdf_single_generator_task
-# from sendemail.tasks import pdf_single_generator_task
-#
-#
-# def pdf_single_generator(questionnaire_id, report_id):
-#     response = pdf_single_generator_task.delay(questionnaire_id, report_id)
-#     return response
-
 
 def pdf_single_generator(questionnaire_id, report_id):
     time_start = time.perf_counter()
@@ -73,18 +65,6 @@ def pdf_single_generator(questionnaire_id, report_id):
             sum_lie_point = sum_lie_point + answer.answer.raw_point
         lie_points = round(sum_lie_point / 40 * 10)
 
-    # appraisal_data = request_json['appraisal_data']
-    # appraisal_data_in_request = []
-    # for item in appraisal_data:
-    #     appraisal_data_in_request.append(item['code'])
-
-    # participant_info = request_json['participant_info']
-    # participant_info = {
-    #         "name": "Дваркович Владимир",
-    #         "sex": "женский",
-    #         "birth_year": "1987",
-    #         "email": "dvarkovich@email.com"
-    #       }
     participant_info = {
         "name": employee.name,
         "sex": employee.sex.name_ru,
@@ -97,32 +77,6 @@ def pdf_single_generator(questionnaire_id, report_id):
     # lie_points = round(request_json['lie_points']/40 * 10)
 
     title_page(pdf, employee.name, lang)
-
-    # questionnaire_questions_answers_code_1 = QuestionnaireQuestionAnswers.objects.filter(questionnaire=questionnaire_inst,
-    #                                                                                      question__category__code__startswith='1_')
-    # if questionnaire_questions_answers_code_1.exists():
-    #     answers_category_code_1 = questionnaire_questions_answers_code_1.first().question.category
-    # categories = Category.objects.filter(code__startswith='1_')
-    # answers_code_1 = []
-    #
-    # for category in categories:
-    #     code2 = category.code.split('_')[1]
-    #     print(f'cpde2 = {code2}')
-    #     if not int(code2) == 100:
-    #         print('pass')
-    #         raw_points = 0
-    #         for answer in questionnaire_questions_answers_code_1:
-    #             if answer.question.category == category:
-    #                 raw_points = raw_points + answer.answer.raw_point
-    #             # print(f'raw_point - {answer.answer.raw_point} categoryname - {answer.question.category.name} answer - {answer.question.text}')
-    #         if not raw_points == 0:
-    #             answers_code_1.append({
-    #                 "category": category.name,
-    #                 "code": category.code,
-    #                 "points": raw_to_t_point.filter_raw_points_to_t_points(raw_points, employee.id, category.id)
-    #
-    #             })
-    # print(answers_code_1)
 
     pdf.add_page()
     page2(pdf, lie_points, lang)
@@ -159,24 +113,6 @@ def pdf_single_generator(questionnaire_id, report_id):
         # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
         page6(pdf, answer_code_4, lang, participant_info)
 
-
-
-    #
-    # if '2' in appraisal_data_in_request:
-    #     pdf.add_page()
-    #     # page4(pdf, extract_section(request_json, 'Копинги'), lang)
-    #     page4(pdf, extract_section(request_json, '2'), lang, participant_info)
-    #
-    # if '3' in appraisal_data_in_request:
-    #     pdf.add_page()
-    #     page5(pdf, extract_section(request_json, '3'), lang, participant_info)
-    #     # page5(pdf, extract_section(request_json, 'Выгорание Бойко'), lang)
-    #
-    # if '4' in appraisal_data_in_request:
-    #     pdf.add_page()
-    #     page6(pdf, extract_section(request_json, '4'), lang, participant_info)
-    #     # page6(pdf, extract_section(request_json, 'Ценности'), lang)
-    #
     now = datetime.datetime.now()
 
     file_name = cyrtranslit.to_latin(questionnaire_inst.participant.employee.name.strip(), 'ru') + "_" + now.strftime(
