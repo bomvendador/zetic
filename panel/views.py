@@ -582,8 +582,8 @@ def get_participants_data_for_group_report(participants_ids):
                 for filter_category in filter_categories:
                     report_data_by_categories_inst = ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code))
                     if report_data_by_categories_inst:
-                        report_data_by_categories_inst = ReportDataByCategories.objects.get(
-                            Q(report=report) & Q(category_code=filter_category.category.code))
+                        report_data_by_categories_inst = ReportDataByCategories.objects.filter(
+                            Q(report=report) & Q(category_code=filter_category.category.code)).latest('created_at')
 
                         t_points = report_data_by_categories_inst.t_points
                         # report_data_categories_points_sum = ReportData.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).aggregate(Sum('points'))
