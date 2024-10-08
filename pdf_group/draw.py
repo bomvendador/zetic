@@ -772,7 +772,7 @@ def draw_groups_table(square_data, pdf, width, x, y):
             groups_added.append(group_color)
             pdf.multi_cell(7, line_height, str(cnt), border=1, align='C', new_x='RIGHT', new_y='TOP',
                            max_line_height=pdf.font_size)
-            pdf.multi_cell((width - 10) - 7, line_height, group_name, border=1, new_x='RIGHT', new_y='TOP',
+            pdf.multi_cell((width - 10) - 7, line_height, str(group_name), border=1, new_x='RIGHT', new_y='TOP',
                            max_line_height=pdf.font_size)
             pdf.multi_cell(10, line_height, '', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
 

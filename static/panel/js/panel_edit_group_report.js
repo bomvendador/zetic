@@ -1010,7 +1010,8 @@ function save_report() {
             'company_id': company_id,
             'comments': $('#report-comments-text').val(),
             'group_report_id': group_report_id,
-            'operation': 'edit'
+            'operation': 'edit',
+            'project_id': project_id
         }),
         processData: false,
         contentType: false,

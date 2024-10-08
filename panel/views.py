@@ -764,7 +764,7 @@ def get_available_participants_for_group_report(request):
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
-def edit_group_report_data(request, report_id):
+def edit_group_report_data(request, report_id,  project_id):
     context = info_common(request)
     group_report_inst = ReportGroup.objects.get(id=report_id)
     group_report_squares_inst = ReportGroupSquare.objects.filter(report_group=group_report_inst)
@@ -794,6 +794,7 @@ def edit_group_report_data(request, report_id):
         'company_id': group_report_inst.company.id,
         'group_report_id': report_id,
         'company_name': group_report_inst.company.name,
+        'project_id': project_id
     })
     # print(group_reports)
 

@@ -47,7 +47,7 @@ urlpatterns = [
     path('save_group_report_comments', panel_views.save_group_report_comments, name='save_group_report_comments'),
     path('delete_participant_from_group_report', panel_views.delete_participant_from_group_report, name='delete_participant_from_group_report'),
     path('get_available_participants_for_group_report', panel_views.get_available_participants_for_group_report, name='get_available_participants_for_group_report'),
-    path('edit_group_report_data/<int:report_id>', panel_views.edit_group_report_data, name='edit_group_report_data'),
+    path('edit_group_report_data/<int:report_id>/<int:project_id>', panel_views.edit_group_report_data, name='edit_group_report_data'),
 
     path('add_company', company.add_company_init, name='add_company_init'),
     path('save_new_company', company.save_new_company, name='save_new_company'),
