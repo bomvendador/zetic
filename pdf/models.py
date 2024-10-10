@@ -3,6 +3,7 @@ import os.path
 from django.db import models
 from django.contrib.auth.models import User
 import datetime
+from django.utils import timezone
 
 
 class ResearchTemplate(models.Model):
@@ -349,7 +350,7 @@ class QuestionnaireQuestionAnswers(models.Model):
     participant = models.ForeignKey(Participant, on_delete=models.PROTECT, default=None, blank=True, null=True)
 
     def __str__(self):
-        return f'[{self.created_at}] ({self.questionnaire.participant.total_questions_qnt}/{self.questionnaire.participant.answered_questions_qnt}){self.questionnaire.participant.employee.name} - {self.question.category.section.name} -  {self.question.category.code}. {self.question.category.name} - очки = {self.answer.raw_point}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] ({self.questionnaire.participant.total_questions_qnt}/{self.questionnaire.participant.answered_questions_qnt}){self.questionnaire.participant.employee.name} - {self.question.category.section.name} -  {self.question.category.code}. {self.question.category.name} - очки = {self.answer.raw_point}'
 
     class Meta:
         verbose_name_plural = 'Опросник респондента_ответы (QuestionnaireQuestionAnswers)'
