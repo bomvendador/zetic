@@ -349,7 +349,7 @@ class QuestionnaireQuestionAnswers(models.Model):
     participant = models.ForeignKey(Participant, on_delete=models.PROTECT, default=None, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.questionnaire.participant.employee.name} - {self.question.category.section.name} -  {self.question.category.code}. {self.question.category.name} - очки = {self.answer.raw_point}'
+        return f'[{self.created_at}] ({self.participant.total_questions_qnt}/{self.participant.answered_questions_qnt}){self.questionnaire.participant.employee.name} - {self.question.category.section.name} -  {self.question.category.code}. {self.question.category.name} - очки = {self.answer.raw_point}'
 
     class Meta:
         verbose_name_plural = 'Опросник респондента_ответы (QuestionnaireQuestionAnswers)'
