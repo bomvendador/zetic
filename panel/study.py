@@ -1,6 +1,6 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, Participant, \
     EmailSentToParticipant, Report, ResearchTemplate, ResearchTemplateSections, Questionnaire, QuestionnaireVisits, \
-    CommonBooleanSettings
+    CommonBooleanSettings, Category, CategoryQuestions, QuestionnaireQuestionAnswers
 from login.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
@@ -11,6 +11,7 @@ from django.utils import timezone
 
 from .views import info_common
 from api import outcoming
+from django.db.models import Sum, Q
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -140,12 +141,12 @@ def get_company_studies(request):
             #     study_inst = Study.objects.get(public_code=study['public_code'])
 
             # for section in study['sections']:
-                # study_question_group_qnt = StudyQuestionGroup.objects.filter(study=study_inst, section__code=section['public_code']).count()
-                # if study_question_group_qnt == 0:
-                #     study_question_group_inst = StudyQuestionGroup()
-                #     study_question_group_inst.study = study_inst
-                #     study_question_group_inst.section = Section.objects.get(code=section['public_code'])
-                #     study_question_group_inst.save()
+            # study_question_group_qnt = StudyQuestionGroup.objects.filter(study=study_inst, section__code=section['public_code']).count()
+            # if study_question_group_qnt == 0:
+            #     study_question_group_inst = StudyQuestionGroup()
+            #     study_question_group_inst.study = study_inst
+            #     study_question_group_inst.section = Section.objects.get(code=section['public_code'])
+            #     study_question_group_inst.save()
 
         response = {
             'data': list(studies_arr)
@@ -182,6 +183,38 @@ def delete_participants_from_study(request):
         participants_ids_to_send_invitation_to = json_request['participants_ids_to_send_invitation_to']
         for participant_id in participants_ids_to_send_invitation_to:
             Participant.objects.get(id=participant_id['id']).delete()
+    return HttpResponse(status=200)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def get_participants_raw_points(request):
+    if request.method == 'POST':
+        json_request = json.loads(request.body.decode('utf-8'))
+        participants_ids_to_send_invitation_to = json_request['participants_ids_to_send_invitation_to']
+        print(f'participants_ids_to_send_invitation_to============')
+        print(participants_ids_to_send_invitation_to)
+        categories = Category.objects.all().order_by('code')
+        data = []
+        for participant_id in participants_ids_to_send_invitation_to:
+            categories_data = []
+            for category in categories:
+                code_split = category.code.split('_')
+                if not code_split[1] == '100':
+                    raw_points = 0
+                    question_answers = QuestionnaireQuestionAnswers.objects.filter(
+                        Q(questionnaire__participant_id=participant_id) &
+                        Q(question__category=category))
+                    for question_answer in question_answers:
+                        raw_points = raw_points + question_answer.answer.raw_point
+                    categories_data.append({
+                        'code': category.code,
+                        'raw_points': raw_points
+                    })
+            data.append({
+                'participant_name': Participant.objects.get(id=participant_id).employee.name,
+                'categories_data': categories_data
+            })
+        print(data)
     return HttpResponse(status=200)
 
 
@@ -324,7 +357,8 @@ def save_study_participants(request):
             else:
                 name = ''
             if participant.invitation_sent_datetime:
-                invitation_sent_datetime = timezone.localtime(participant.invitation_sent_datetime).strftime("%d.%m.%Y %H:%M:%S")
+                invitation_sent_datetime = timezone.localtime(participant.invitation_sent_datetime).strftime(
+                    "%d.%m.%Y %H:%M:%S")
             else:
                 invitation_sent_datetime = ''
             if participant.completed_at:
@@ -383,7 +417,3 @@ def save_study_name(request):
             'study_name': study_name,
         }
         return JsonResponse(response)
-
-
-
-

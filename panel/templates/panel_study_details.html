@@ -141,13 +141,11 @@
                             <div class="col col-lg-4 col-sm-12 text-end">
                                 <div>
                                     <div style="display: inline-block">
-                                        <select name="country" class="form-control form-select"
-                                                data-bs-placeholder="Действие" id="select_group_action" disabled>
+                                        <select name="country" class="form-control form-select" id="select_group_action" disabled>
                                             <option value="no_action">-- Выберите действие --</option>
-                                            <option value="send_invitations"><span><i
-                                                    class="fa fa-user-plus button-icon"></i>Отправить приглашение</span>
-                                            </option>
+                                            <option value="send_invitations">Отправить приглашение</option>
                                             <option value="send_reminder">Отправить напоминание</option>
+                                            <option value="download_raw_points">Скачать сырые баллы</option>
                                             <option value="delete_participants" style="color: red">Удалить участников
                                             </option>
                                         </select>
@@ -636,6 +634,7 @@
         let url_save_study_name = "{% url 'save_study_name' %}"
         let url_delete_participants_from_study = "{% url 'delete_participants_from_study' %}"
         let url_change_questionnaire_status = "{% url 'change_questionnaire_status' %}"
+        let url_get_participants_raw_points = "{% url 'get_participants_raw_points' %}"
         let url_origin = window.location.origin;
         let questionnaires_left = {{ questionnaires_left }};
         let company_demo_status = '{{ company.demo_status }}';

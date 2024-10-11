@@ -103,6 +103,7 @@ urlpatterns = [
     path('save_study_name', study.save_study_name, name='save_study_name'),
     path('delete_participants_from_study', study.delete_participants_from_study, name='delete_participants_from_study'),
     path('change_questionnaire_status', study.change_questionnaire_status, name='change_questionnaire_status'),
+    path('get_participants_raw_points', study.get_participants_raw_points, name='get_participants_raw_points'),
 
     path('individual_report_file_index', individual_report_file.individual_report_file_index, name='individual_report_file_index'),
 

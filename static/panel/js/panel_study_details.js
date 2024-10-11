@@ -304,6 +304,53 @@ $('#run_group_action').on('click', function () {
 
                 }
                 break;
+            case "download_raw_points":
+                participants_ids_to_send_invitation_to = []
+                $('#tbody_participants_selected .select-participant-for-group-action:checked').each(function () {
+                    let participant_id = $(this).closest('tr').attr('id').split('_')[2]
+                    let participant_name = $(this).closest('tr').find('.participant-name').text().trim()
+                    participants_ids_to_send_invitation_to.push(participant_id)
+                })
+                show_progressbar_loader()
+                $.ajax({
+                    headers: {"X-CSRFToken": token},
+                    url: url_get_participants_raw_points,
+                    type: 'POST',
+
+                    data: JSON.stringify({
+                        'participants_ids_to_send_invitation_to': participants_ids_to_send_invitation_to
+                    }),
+                    processData: false,
+                    contentType: false,
+                    error: function (data) {
+                        toastr.error('Ошибка', data)
+                    },
+                    success: function (data) {
+                        hide_progressbar_loader()
+                        // $('.team-table').DataTable().clear().destroy()
+                        // let data_json = data['response']
+                        // let html = ''
+                        // console.log(data_json)
+                        //
+                        // let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                        //     '<h3 style="text-align: center">Участник/и добавлены в исследование' + '</h3>' +
+                        //     '<hr class="solid mt-0" style="background-color: black;">'
+                        // Swal.fire({
+                        //     html: output_html,
+                        //     icon: 'success',
+                        //     confirmButtonColor: '#3085d6',
+                        //     cancelButtonColor: '#d33',
+                        //     confirmButtonText: 'ОК'
+                        // }).then(function (result) {
+                        //     window.location.reload()
+                        // })
+
+                    }
+                });
+
+
+                break;
+
             default:
                 break;
         }
@@ -841,91 +888,6 @@ $('#save_participants').on('click', function () {
                 }).then(function (result) {
                     window.location.reload()
                 })
-
-
-                // $.each(data_json, function (key, val) {
-                //     let employee_invitation = val['invitation']
-                //     let employee_email = val['email']
-                //     let employee_name = val['name']
-                //     let id = val['id']
-                //
-                //     let employee_invitation_sent_datetime = val['invitation_sent_datetime']
-                //     let completed_at_datetime = val['completed_at_datetime']
-                //     let reminder = val['reminder']
-                //     let questions_groups_arr = val['questions_groups_arr']
-                //     let current_percentage = val['current_percentage']
-                //     let total_questions_qnt = val['total_questions_qnt']
-                //     let answered_questions_qnt = val['answered_questions_qnt']
-                //     let filename = val['filename']
-                //     html += '<tr class="" id="participant_id_' + id + '">'
-                //     html += '<td>'
-                //     if(answered_questions_qnt > 0){
-                //
-                //         if(completed_at_datetime){
-                //             html += '<i class="fa fa-circle font-color-success" aria-hidden="true" title="Опросник заполнен"><span style="color: transparent">3</span></i>'
-                //         }else {
-                //             html += '<i class="fa fa-circle font-color-warning" aria-hidden="true" title="Приглашение отправлено"><span style="color: transparent">2</span></i>'
-                //         }
-                //         html += '<span title="' + current_percentage + '%">'
-                //         html += '<svg class="radial-progress" data-percentage="' + current_percentage + '" viewBox="0 0 80 80">'
-                //         html += '<circle class="incomplete" cx="40" cy="40" r="35"></circle>'
-                //         html += '<circle class="complete" cx="40" cy="40" r="35" style="stroke-dashoffset: 39.58406743523136;"></circle>'
-                //         html += '</svg>'
-                //         html += '</span>'
-                //
-                //     }else {
-                //         html += '<i class="fa fa-circle font-color-danger" aria-hidden="true" title="Приглашение не отправлено"><span style="color: transparent">1</span></i>'
-                //     }
-                //     html += '</td>'
-                //     html += '<td>' + answered_questions_qnt + '/' + total_questions_qnt + '</td>'
-                //     html += '<td>' + employee_name + '</td>'
-                //     html += '<td>' + employee_email + '</td>'
-                //
-                //     html += '<td class="participant_selected_questions_groups_td">'
-                //     for(let i = 0; i < questions_groups_arr.length; i++){
-                //         html += '<p class="mb-0 participant-selected-question-group" id="participant_selected_question_group_id_' + questions_groups_arr[i]['code'] +
-                //             '">' + questions_groups_arr[i]['name'] + '</p>'
-                //     }
-                //     html += '</td>'
-                //
-                //     html += '<td>' + employee_invitation_sent_datetime + '</td>'
-                //     if(reminder !== ''){
-                //         html += '<td>'
-                //         for(let i=0; i < reminder.length; i++){
-                //             html += reminder[i] + '<br>'
-                //         }
-                //         html += '</td>'
-                //     }else {
-                //         html += '<td></td>'
-                //     }
-                //
-                //     html += '<td>' +
-                //         '<div style="text-align: center;" >' +
-                //             '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>' +
-                //             '<ul class="dropdown-menu">'
-                //     if(employee_invitation){
-                //         if(completed_at_datetime){
-                //             html += '<li><a class="dropdown-item" href="/panel/download_single_report/' + filename + '">Скачать</a></li>'
-                //         }else {
-                //             html += '<li><a class="dropdown-item send-email-invitation cursor-pointer">Повторно отправить приглашение</a></li>'
-                //         }
-                //     }else {
-                //         html += '<li><a class="dropdown-item send-email-invitation cursor-pointer">Отправить приглашение</a></li>'
-                //         html += '<li> <a class = "dropdown-item add-question-groups cursor-pointer">Добавить группы вопросов</a></li>'
-                //     }
-                //     html += '</ul>' +
-                //         '</div>' +
-                //         '</td>'
-                //     html += '</tr>'
-                //
-                // })
-                // $('#tbody_participants_selected').html(html)
-                // process_circle_progress()
-                // $('#modal_participants').modal('hide')
-                // btn_text($('#save_participants'), 'Сохранить')
-                // toastr.success('Участники обновлены')
-                // process_table_clear('.team-table')
-                // // $('.team-table').DataTable().raw(html).add()
 
             }
         });
