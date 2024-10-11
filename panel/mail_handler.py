@@ -63,7 +63,6 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
 
             html_message = render_to_string('invitation_message.html', context)
         elif email_type == 'reminder':
-            code_for_participant = participant_inst.invitation_code
             context.update({
                 'code_for_participant': participant_inst.invitation_code,
                 'protocol': protocol,
@@ -71,26 +70,20 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
             })
             html_message = render_to_string('invitation_message_reminder.html', context)
         elif email_type == 'self_questionnaire':
-            code_for_participant = participant_inst.invitation_code
             context.update({
                 'code_for_participant': participant_inst.invitation_code,
             })
             html_message = render_to_string('invitation_message.html', context)
-
-        participant_link = protocol + '//' + hostname + '/questionnaire/' + code_for_participant
-        context.update({
-            'participant_link': participant_link
-        })
 
         plain_text = strip_tags(html_message)
         from_email = 'ZETIC <info@zetic.ru>'
         to_email = participant_email
         subject = 'Опросник ZETIC'
         success_sent_qnt = 0
-        print(f'-------html_message--------')
-        print(html_message)
-        print(f'---------------------')
-
+        # print(f'-------html_message--------')
+        # print(html_message)
+        # print(f'---------------------')
+        #
         try:
             send_mail(
                 subject,
