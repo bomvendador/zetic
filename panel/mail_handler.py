@@ -45,7 +45,7 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
         # print(f'id - {participant["id"]}')
         participant_inst = Participant.objects.get(id=participant['id'])
         participant_email = participant_inst.employee.email
-
+        context = {}
         if email_type == 'initial':
             code_for_participant = generate_participant_link_code(20)
             participant_inst.invitation_code = code_for_participant
@@ -55,25 +55,32 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
             questionnaire_inst.participant = participant_inst
             questionnaire_inst.save()
 
-            context = {
+            context.update({
                 'code_for_participant': code_for_participant,
                 'protocol': protocol,
                 'hostname': hostname,
-            }
+            })
 
             html_message = render_to_string('invitation_message.html', context)
         elif email_type == 'reminder':
-            context = {
+            code_for_participant = participant_inst.invitation_code
+            context.update({
                 'code_for_participant': participant_inst.invitation_code,
                 'protocol': protocol,
                 'hostname': hostname,
-            }
+            })
             html_message = render_to_string('invitation_message_reminder.html', context)
         elif email_type == 'self_questionnaire':
-            context = {
+            code_for_participant = participant_inst.invitation_code
+            context.update({
                 'code_for_participant': participant_inst.invitation_code,
-            }
+            })
             html_message = render_to_string('invitation_message.html', context)
+
+        participant_link = protocol + '://' + hostname + '/questionnaire/' + code_for_participant
+        context.update({
+            'participant_link': participant_link
+        })
 
         plain_text = strip_tags(html_message)
         from_email = 'ZETIC <info@zetic.ru>'
