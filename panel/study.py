@@ -206,6 +206,8 @@ def get_participants_raw_points(request):
                         Q(question__category=category))
                     for question_answer in question_answers:
                         raw_points = raw_points + question_answer.answer.raw_point
+                    if not question_answers.exists():
+                        raw_points = ''
                     categories_data.append({
                         'code': category.code,
                         'raw_points': raw_points
