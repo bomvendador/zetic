@@ -80,6 +80,9 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
         to_email = participant_email
         subject = 'Опросник ZETIC'
         success_sent_qnt = 0
+        print(f'-------html_message--------')
+        print(html_message)
+        print(f'---------------------')
 
         try:
             send_mail(
