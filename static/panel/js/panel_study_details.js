@@ -318,7 +318,8 @@ $('#run_group_action').on('click', function () {
                     type: 'POST',
 
                     data: JSON.stringify({
-                        'participants_ids_to_send_invitation_to': participants_ids_to_send_invitation_to
+                        'participants_ids_to_send_invitation_to': participants_ids_to_send_invitation_to,
+                        'study_id': study_id
                     }),
                     processData: false,
                     contentType: false,
@@ -327,23 +328,42 @@ $('#run_group_action').on('click', function () {
                     },
                     success: function (data) {
                         hide_progressbar_loader()
-                        // $('.team-table').DataTable().clear().destroy()
-                        // let data_json = data['response']
-                        // let html = ''
-                        // console.log(data_json)
-                        //
-                        // let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                        //     '<h3 style="text-align: center">Участник/и добавлены в исследование' + '</h3>' +
-                        //     '<hr class="solid mt-0" style="background-color: black;">'
-                        // Swal.fire({
-                        //     html: output_html,
-                        //     icon: 'success',
-                        //     confirmButtonColor: '#3085d6',
-                        //     cancelButtonColor: '#d33',
-                        //     confirmButtonText: 'ОК'
-                        // }).then(function (result) {
-                        //     window.location.reload()
-                        // })
+                        console.log(data)
+                        let categories_codes = data['categories_codes']
+                        let participants_data = data['participants_data']
+                        let study_name = data['study_name']
+                        let company_name = data['company_name']
+                        let sheet_data = []
+                        let row_categories_codes = []
+                        let row_participants_data = []
+                        row_categories_codes.push('')
+                        categories_codes.forEach(function (val) {
+                            row_categories_codes.push(val)
+                        })
+                        sheet_data.push(row_categories_codes)
+                        participants_data.forEach(function (item) {
+                            row_participants_data = []
+                            let name = item['name']
+                            let categories_data = item['categories_data']
+                            row_participants_data.push(name)
+                            categories_data.forEach(function (category_item) {
+                                row_participants_data.push(category_item['raw_points'])
+                            })
+                            sheet_data.push(row_participants_data)
+                        })
+                        // console.log(sheet_data)
+                        let workbook = XLSX.utils.book_new(), worksheet = XLSX.utils.aoa_to_sheet(sheet_data);
+                        workbook.SheetNames.push("First");
+                        workbook.Sheets["First"] = worksheet;
+                        let currentdate = new Date();
+                        let datetime_string = company_name + '_' + study_name + '__'
+                            + currentdate.getDate() + '_'
+                            + (currentdate.getMonth() + 1).toString() + '_'
+                            + currentdate.getFullYear() + " @ "
+                            + currentdate.getHours() + ":"
+                            + currentdate.getMinutes() + ":"
+                            + currentdate.getSeconds();
+                        XLSX.writeFile(workbook, '[Сырые баллы] ' + datetime_string + ".xlsx");
 
                     }
                 });

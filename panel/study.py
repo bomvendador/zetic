@@ -191,16 +191,18 @@ def get_participants_raw_points(request):
     if request.method == 'POST':
         json_request = json.loads(request.body.decode('utf-8'))
         participants_ids_to_send_invitation_to = json_request['participants_ids_to_send_invitation_to']
-        print(f'participants_ids_to_send_invitation_to============')
-        print(participants_ids_to_send_invitation_to)
+        study_id = json_request['study_id']
+        study_inst = Study.objects.get(id=study_id)
         categories = Category.objects.all().order_by('code')
         data = []
+        categories_codes = []
         for participant_id in participants_ids_to_send_invitation_to:
             categories_data = []
             for category in categories:
                 code_split = category.code.split('_')
                 if not code_split[1] == '100':
                     raw_points = 0
+                    categories_codes.append(category.code)
                     question_answers = QuestionnaireQuestionAnswers.objects.filter(
                         Q(questionnaire__participant_id=participant_id) &
                         Q(question__category=category))
@@ -213,11 +215,17 @@ def get_participants_raw_points(request):
                         'raw_points': raw_points
                     })
             data.append({
-                'participant_name': Participant.objects.get(id=participant_id).employee.name,
-                'categories_data': categories_data
+                'name': Participant.objects.get(id=participant_id).employee.name,
+                'categories_data': categories_data,
             })
-        print(data)
-    return HttpResponse(status=200)
+        results = {
+            'categories_codes': categories_codes,
+            'participants_data': data,
+            'study_name': study_inst.name,
+            'company_name': study_inst.company.name,
+        }
+        print(results)
+    return JsonResponse(results)
 
 
 # @login_required(redirect_field_name=None, login_url='/login/')
