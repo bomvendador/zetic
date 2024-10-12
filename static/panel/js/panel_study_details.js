@@ -306,10 +306,16 @@ $('#run_group_action').on('click', function () {
                 break;
             case "download_raw_points":
                 participants_ids_to_send_invitation_to = []
+                let participants_not_completed = []
                 $('#tbody_participants_selected .select-participant-for-group-action:checked').each(function () {
                     let participant_id = $(this).closest('tr').attr('id').split('_')[2]
                     let participant_name = $(this).closest('tr').find('.participant-name').text().trim()
-                    participants_ids_to_send_invitation_to.push(participant_id)
+                    let completed_at = $(this).closest('tr').find('.completed-at').text().trim()
+                    if (completed_at === '') {
+                        participants_not_completed.push(participant_name)
+                    } else {
+                        participants_ids_to_send_invitation_to.push(participant_id)
+                    }
                 })
                 show_progressbar_loader()
                 $.ajax({
@@ -364,6 +370,26 @@ $('#run_group_action').on('click', function () {
                             + currentdate.getMinutes() + ":"
                             + currentdate.getSeconds();
                         XLSX.writeFile(workbook, '[Сырые баллы] ' + datetime_string + ".xlsx");
+
+                        if (participants_not_completed.length > 0) {
+                            let output_html = '<h2 class="mb-0" style="text-align: center">Сотрудники не окончившие заполнение</h2>' +
+                                '<br>' +
+                                '<hr class="solid mt-0" style="background-color: black;">' +
+                                '<h4 style="text-align: center">Данные сотрудники не были исключены из спика:</h4>' +
+                                '<hr class="solid mt-0" style="background-color: black;">'
+                            participants_not_completed.forEach(function (name) {
+                                output_html += '<div><b>' + name + '</b></div>'
+                            })
+                            output_html += '<hr class="solid" style="background-color: black;">'
+                            Swal.fire({
+                                html: output_html,
+                                icon: 'warning',
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'ОК'
+                            })
+
+                        }
 
                     }
                 });

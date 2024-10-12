@@ -227,7 +227,6 @@ def get_participants_raw_points(request):
             'study_name': study_inst.name,
             'company_name': study_inst.company.name,
         }
-        print(results)
     return JsonResponse(results)
 
 
