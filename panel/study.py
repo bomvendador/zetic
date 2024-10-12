@@ -196,14 +196,16 @@ def get_participants_raw_points(request):
         categories = Category.objects.all().order_by('code')
         data = []
         categories_codes = []
+        for category in categories:
+            code_split = category.code.split('_')
+            if not code_split[1] == '100':
+                categories_codes.append(category.code)
         for participant_id in participants_ids_to_send_invitation_to:
             categories_data = []
             for category in categories:
                 code_split = category.code.split('_')
                 if not code_split[1] == '100':
                     raw_points = 0
-                    if not len(categories_codes) == len(categories):
-                        categories_codes.append(category.code)
                     question_answers = QuestionnaireQuestionAnswers.objects.filter(
                         Q(questionnaire__participant_id=participant_id) &
                         Q(question__category=category))
