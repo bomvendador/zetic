@@ -356,7 +356,7 @@ $('#run_group_action').on('click', function () {
                         workbook.SheetNames.push("First");
                         workbook.Sheets["First"] = worksheet;
                         let currentdate = new Date();
-                        let datetime_string = company_name + '_' + study_name + '__'
+                        let datetime_string = company_name + '__' + study_name + '__'
                             + currentdate.getDate() + '_'
                             + (currentdate.getMonth() + 1).toString() + '_'
                             + currentdate.getFullYear() + " @ "
