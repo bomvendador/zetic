@@ -375,7 +375,7 @@ $('#run_group_action').on('click', function () {
                             let output_html = '<h2 class="mb-0" style="text-align: center">Сотрудники не окончившие заполнение</h2>' +
                                 '<br>' +
                                 '<hr class="solid mt-0" style="background-color: black;">' +
-                                '<h4 style="text-align: center">Данные сотрудники не были исключены из спика:</h4>' +
+                                '<h4 style="text-align: center">Данные сотрудники были исключены из спиcка:</h4>' +
                                 '<hr class="solid mt-0" style="background-color: black;">'
                             participants_not_completed.forEach(function (name) {
                                 output_html += '<div><b>' + name + '</b></div>'
