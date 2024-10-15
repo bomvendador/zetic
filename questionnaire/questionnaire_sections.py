@@ -94,7 +94,6 @@ def section_view(request, section_id, code):
 def save_answers(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
-        print(json_data)
         answers = json_data['answers']
         code = json_data['code']
         section_id = json_data['section_id']

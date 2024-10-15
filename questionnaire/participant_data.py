@@ -113,7 +113,4 @@ def save_participant_data(request):
         employee_inst.role = EmployeeRole.objects.get(id=role_id)
         employee_inst.sex = EmployeeGender.objects.get(name_en=gender)
         employee_inst.save()
-
-        print(data)
-
         return HttpResponse(status=200)
