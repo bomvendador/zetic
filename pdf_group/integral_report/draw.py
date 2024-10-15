@@ -171,7 +171,7 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
                 for square_result in square_results:
                     report = Report.objects.filter(participant__employee__email=square_result[1]).latest('added')
                     if ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=category_code)).exists():
-                        t_points = ReportDataByCategories.objects.get(Q(report=report) & Q(category_code=category_code)).t_points
+                        t_points = ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=category_code)).latest('created_at').t_points
                         category_points_cnt = category_points_cnt + 1
                         category_points_sum = category_points_sum + t_points
                         category_t_points.append(t_points)
