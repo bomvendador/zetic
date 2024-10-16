@@ -296,7 +296,7 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results,
             for traffic_light_report_category in traffic_light_report_categories_inst:
                 # print(f'participant_name - {participant_inst.employee.name} participant_email - {participant_inst.employee.email} traffic_light_report_categories_code = {traffic_light_report_category.category.code}')
 
-                report_data_by_categories_inst = ReportDataByCategories.objects.get(Q(report=report_inst) & Q(category_code=traffic_light_report_category.category.code))
+                report_data_by_categories_inst = ReportDataByCategories.objects.filter(Q(report=report_inst) & Q(category_code=traffic_light_report_category.category.code)).latest('created_at')
                 t_point = report_data_by_categories_inst.t_points
                 total_t_points = total_t_points + t_point
                 # print(f'traffic_light_report - {traffic_light_report.name} code - {report_data_by_categories_inst.category_code} t_points - {t_point}')
