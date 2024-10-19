@@ -320,4 +320,5 @@ def send_report_to_participant_with_consultant_text(request):
             response = send_report_to_participant_with_consultant_text_task.delay(forms_ids_to_send)
         else:
             response = send_report_to_participant_with_consultant_text_task(forms_ids_to_send)
-    return JsonResponse({'response': response})
+    # return JsonResponse({'response': response})
+    return HttpResponse(status=200)
