@@ -81,8 +81,8 @@ def send_report_to_participant_with_consultant_text_task(forms_ids):
 
         from_email = 'ZETIC <info@zetic.ru>'
 
-        if settings.DEBUG == 0:
-            to_email = ['bomvendador@yandex.ru']
+        if settings.DEBUG == 1:
+            to_email = 'bomvendador@yandex.ru'
         email = EmailMessage(subject, html_message, from_email, [to_email])
         email.content_subtype = "html"
         try:

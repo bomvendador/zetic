@@ -564,7 +564,7 @@ def send_notification_to_participant_report_made(data, report_id, request_type):
     from_email = 'ZETIC <info@zetic.ru>'
 
     if settings.DEBUG == 1:
-        to_email = ['bomvendador@yandex.ru']
+        to_email = 'bomvendador@yandex.ru'
     email = EmailMessage(
         subject, html_message, from_email, [to_email])
     email.attach_file(settings.MEDIA_ROOT + '/reportsPDF/single/' + report.file.name, 'application/pdf')
