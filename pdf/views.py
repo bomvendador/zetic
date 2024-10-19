@@ -23,6 +23,7 @@ from pdf.page3_file import page3
 from pdf.page4_file import page4
 from pdf.page5_file import page5
 from pdf.page6_file import page6
+from pdf.consultant_text_page import page as consultant_page
 
 from pdf.save_data import save_data_to_db_and_send_report
 import cyrtranslit
@@ -32,7 +33,10 @@ import fitz
 import json
 
 
-def pdf_single_generator(questionnaire_id, report_id):
+def pdf_single_generator(data):
+# def pdf_single_generator(questionnaire_id, report_id):
+    questionnaire_id = data['questionnaire_id']
+    report_id = data['report_id']
     time_start = time.perf_counter()
     pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
     pdf.add_font("Cambria", style="",
@@ -113,17 +117,49 @@ def pdf_single_generator(questionnaire_id, report_id):
         # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
         page6(pdf, answer_code_4, lang, participant_info)
 
-    now = datetime.datetime.now()
+    if 'consultant_form_id' in data:
+        pdf.add_page()
+        consultant_page(pdf, lang, data['consultant_form_id'])
 
-    file_name = cyrtranslit.to_latin(questionnaire_inst.participant.employee.name.strip(), 'ru') + "_" + now.strftime(
-        "%d_%m_%Y__%H_%M_%S") + "_" + lang.upper() + '_single.pdf'
+    now = datetime.datetime.now()
+    request_type = ''
+    if 'type' in data:
+        if data['type'] == 'consultant_form':
+            request_type = 'consultant_form'
+
+    if request_type == 'consultant_form':
+        file_name = cyrtranslit.to_latin(questionnaire_inst.participant.employee.name.strip(), 'ru') + "_" + now.strftime(
+            "%d_%m_%Y__%H_%M_%S") + "_" + lang.upper() + '_single_expert_conclusions.pdf'
+    else:
+        file_name = cyrtranslit.to_latin(questionnaire_inst.participant.employee.name.strip(), 'ru') + "_" + now.strftime(
+            "%d_%m_%Y__%H_%M_%S") + "_" + lang.upper() + '_single.pdf'
 
     path = "media/reportsPDF/single/"
 
     # save_data_to_db(request_json, file_name)
-    response = save_serve_file(pdf, path, file_name)
 
-    send_email_result = save_data_to_db_and_send_report(questionnaire_inst.id, file_name, questionnaire_inst.participant.study.id, lie_points, lang, report_id)
+    response_file_name = save_serve_file(pdf, path, file_name)
+    # send_email_result = save_data_to_db_and_send_report(questionnaire_inst.id, file_name, questionnaire_inst.participant.study.id, lie_points, lang, report_id)
+
+    save_data_to_db_and_send_report_context = {
+        'questionnaire_id': questionnaire_inst.id,
+        'file_name': file_name,
+        'study_id': questionnaire_inst.participant.study.id,
+        'lie_points': lie_points,
+        'lang': lang,
+        'report_id': report_id,
+        'request_type': request_type,
+    }
+    if 'consultant_form_id' in data:
+        save_data_to_db_and_send_report_context.update({
+            'consultant_form_id': data['consultant_form_id']
+        })
+    send_email_result = save_data_to_db_and_send_report(save_data_to_db_and_send_report_context)
+
+    if request_type == 'consultant_form':
+        response = send_email_result
+    else:
+        response = response_file_name
 
     time_finish = time.perf_counter()
     # print(round(time_finish-time_start, 2))

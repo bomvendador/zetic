@@ -8,6 +8,7 @@ from panel import employee, study, sections, individual_report_file, company, ma
     filters_individual_report_points_description, filters_integral_report, projects, \
     filters_traffic_light_report, search
 from panel.common_settings import settings, notification_report_made_receivers
+from panel.consultant_form import panel_consultant_form
 # from panel import study
 # from panel import individual_report_file
 # from panel import company
@@ -210,6 +211,23 @@ urlpatterns = [
     path('edit_traffic_light_report_filter/<int:filter_id>', filters_traffic_light_report.edit_traffic_light_report_filter, name='edit_traffic_light_report_filter'),
     path('delete_traffic_light_report_filter', filters_traffic_light_report.delete_traffic_light_report_filter,
          name='delete_traffic_light_report_filter'),
+
+    path('add_consultant_form', panel_consultant_form.add_consultant_form, name='add_consultant_form'),
+    path('get_available_consultants', company.get_available_consultants, name='get_available_consultants'),
+    path('add_consultant_for_company', company.add_consultant_for_company, name='add_consultant_for_company'),
+    path('delete_consultant_fromm_company', company.delete_consultant_fromm_company, name='delete_consultant_fromm_company'),
+    path('delete_consultant_study_from_company', company.delete_consultant_study_from_company, name='delete_consultant_study_from_company'),
+    path('get_available_consultant_company_studies', company.get_available_consultant_company_studies, name='get_available_consultant_company_studies'),
+    path('add_consultant_study_for_company', company.add_consultant_study_for_company, name='add_consultant_study_for_company'),
+    path('get_consultant_company_studies', panel_consultant_form.get_consultant_company_studies, name='get_consultant_company_studies'),
+    path('get_study_participants', panel_consultant_form.get_study_participants, name='get_study_participants'),
+    path('save_consultant_form', panel_consultant_form.save_consultant_form, name='save_consultant_form'),
+    path('edit_consultant_form_list', panel_consultant_form.edit_consultant_form_list, name='edit_consultant_form_list'),
+    path('get_consultant_forms', panel_consultant_form.get_consultant_forms, name='get_consultant_forms'),
+    path('delete_consultant_form', panel_consultant_form.delete_consultant_form, name='delete_consultant_form'),
+    path('send_report_to_participant_with_consultant_text', panel_consultant_form.send_report_to_participant_with_consultant_text, name='send_report_to_participant_with_consultant_text'),
+    path('add_consultant_form_template/<int:participant_id>', panel_consultant_form.add_consultant_form_template, name='add_consultant_form_template'),
+    path('edit_consultant_form/<int:form_id>', panel_consultant_form.edit_consultant_form, name='edit_consultant_form'),
 
 ]
 

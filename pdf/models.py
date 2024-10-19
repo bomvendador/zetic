@@ -326,6 +326,139 @@ class Participant(models.Model):
         verbose_name = 'Участник опроса'
 
 
+# class Consultant(models.Model):
+#     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+#     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+#     user = models.ForeignKey(User, on_delete=models.PROTECT, default=None, blank=True, null=True, related_name='Консультант')
+#
+#     def __str__(self):
+#         return f'{self.id}. {self.user.first_name}'
+#
+#     class Meta:
+#         verbose_name_plural = 'Консультант (Consultant)'
+#         verbose_name = 'Консультанты (Consultan)'
+#
+
+class ConsultantCompany(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, default=None, blank=True, null=True, related_name='UserConsultantCompany')
+    company = models.ForeignKey(Company, on_delete=models.PROTECT, default=None, blank=True, null=True)
+
+    def __str__(self):
+        # return f'{self.name} - {self.company.name}'
+        return f'{self.id}. {self.user.first_name} - {self.company.name}'
+
+    class Meta:
+        verbose_name_plural = 'Компания консультанта (ConsultantCompany)'
+        verbose_name = 'Компании консультантов (ConsultantCompany)'
+
+
+class ConsultantStudy(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+    study = models.ForeignKey(Study, on_delete=models.PROTECT, default=None, blank=True, null=True)
+    consultant_company = models.ForeignKey(ConsultantCompany, on_delete=models.CASCADE, default=None, blank=True, null=True)
+
+    def __str__(self):
+        # return f'{self.name} - {self.company.name}'
+        return f'{self.id}. {self.user.first_name} - {self.study.name}'
+
+    class Meta:
+        verbose_name_plural = 'Исследование консультанта (ConsultantStudy)'
+        verbose_name = 'Исследования консультантов (ConsultantStudy)'
+
+
+class ConsultantForm(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, default=None, blank=True, null=True, related_name='UserConsultantForm')
+    special_comments = models.TextField(default=None, blank=True, null=True, verbose_name='Специальные комментарии')
+    risks = models.TextField(default=None, blank=True, null=True, verbose_name='Риски')
+    career_track = models.TextField(default=None, blank=True, null=True, verbose_name='Карьерный трек')
+
+    def __str__(self):
+        # return f'{self.name} - {self.company.name}'
+        return f'{self.id}. {self.user.first_name} - {self.participant.employee.name}'
+
+    class Meta:
+        verbose_name_plural = 'Анкета консультанта (ConsultantForm)'
+        verbose_name = 'Анкеты консультантов (ConsultantForm)'
+
+
+class ConsultantFormResources(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    consultant_form = models.ForeignKey(ConsultantForm, on_delete=models.CASCADE, default=None, null=True)
+
+    def __str__(self):
+        # return f'{self.name} - {self.company.name}'
+        return f'{self.id}. {self.name} - {self.consultant_form.participant.employee.name}'
+
+    class Meta:
+        verbose_name_plural = 'Анкета консультанта - Ресурс (ConsultantFormResources)'
+        verbose_name = 'Анкеты консультантов - Ресурсы (ConsultantFormResources)'
+
+
+class ConsultantFormResourcesComments(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+    consultant_form_resource = models.ForeignKey(ConsultantFormResources, on_delete=models.CASCADE, default=None, null=True)
+    text = models.TextField(default=None, blank=True, null=True, verbose_name='Ресурс_текст_коммента')
+
+    def __str__(self):
+        # return f'{self.name} - {self.company.name}'
+        return f'{self.id}. {self.consultant_form_resource.name}'
+
+    class Meta:
+        verbose_name_plural = 'Анкета консультанта - Ресурс_коммент (ConsultantFormResourcesComments)'
+        verbose_name = 'Анкеты консультантов - Ресурсы_комменты (ConsultantFormResourcesComments)'
+
+
+class ConsultantFormGrowthZone(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    consultant_form = models.ForeignKey(ConsultantForm, on_delete=models.CASCADE, default=None, null=True)
+
+    def __str__(self):
+        # return f'{self.name} - {self.company.name}'
+        return f'{self.id}. {self.name} - {self.consultant_form.participant.employee.name}'
+
+    class Meta:
+        verbose_name_plural = 'Анкета консультанта - Ресурс (ConsultantFormResources)'
+        verbose_name = 'Анкеты консультантов - Ресурсы (ConsultantFormResources)'
+
+
+class ConsultantFormGrowthZoneComments(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
+    consultant_form_growth_zone = models.ForeignKey(ConsultantFormGrowthZone, on_delete=models.CASCADE, default=None, null=True)
+    text = models.TextField(default=None, blank=True, null=True, verbose_name='Зона роста_текст_коммента')
+
+    def __str__(self):
+        # return f'{self.name} - {self.company.name}'
+        return f'{self.id}. {self.consultant_form_growth_zone.name}'
+
+    class Meta:
+        verbose_name_plural = 'Анкета консультанта - Зона роста_коммент (ConsultantFormGrowthZoneComments)'
+        verbose_name = 'Анкеты консультантов - Зона роста_комменты (ConsultantFormGrowthZoneComments)'
+
+
+class ConsultantFormEmailSentToParticipant(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    consultant_form = models.ForeignKey(ConsultantForm, on_delete=models.CASCADE, default=None, null=True)
+
+    def __str__(self):
+        return f'{self.consultant_form.participant.employee.name} - {self.created_at}'
+
+    class Meta:
+        verbose_name_plural = 'Анкеты консультанта Отправления респонденту (ConsultantFormEmailSentToParticipant)'
+        verbose_name = 'Анкета консультанта Отправление респонденту (ConsultantFormEmailSentToParticipant)'
+
+
 class Questionnaire(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, blank=True, null=True)
@@ -486,6 +619,7 @@ class Report(models.Model):
     study = models.ForeignKey(Study, on_delete=models.CASCADE, default=None, null=True, blank=True)
     comments = models.TextField(default=None, blank=True, null=True, verbose_name='Комментарии индивидуальный отчет')
     primary = models.BooleanField(default=True)
+    type = models.CharField(max_length=30, blank=True, null=True)
 
     def __str__(self):
         return f'{self.participant} - {self.file.name}'

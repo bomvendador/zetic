@@ -38,6 +38,8 @@ def add_filter(request):
     context = info_common(request)
     positions = get_traffic_light_filters_positions('')
     max_position = TrafficLightReportFilter.objects.filter(project=None).aggregate(Max('position'))['position__max']
+    if not max_position:
+        max_position = 0
     context.update({
         'categories': get_categories_for_filter(),
         'positions': positions,

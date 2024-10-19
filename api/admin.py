@@ -6,7 +6,8 @@ from pdf.models import Participant, Report, Category, Section, PointDescription,
     MatrixFilterParticipantNotDistributed, MatrixFilterParticipantNotDistributedEmployeePosition, ReportDataByCategories, \
     Project, ProjectStudy, ProjectParticipants, TrafficLightReportFilter, TrafficLightReportFilterCategory, \
     CommonBooleanSettings, IndividualReportPointsDescriptionFilter, IndividualReportPointsDescriptionFilterText, \
-    IndividualReportPointsDescriptionFilterTextRecommendations, IndividualReportPointsDescriptionFilterCategory
+    IndividualReportPointsDescriptionFilterTextRecommendations, IndividualReportPointsDescriptionFilterCategory, \
+    ConsultantCompany, ConsultantStudy, ConsultantForm
 from login.models import UserRole, UserProfile
 
 
@@ -59,3 +60,6 @@ admin.site.register(IndividualReportPointsDescriptionFilter)
 admin.site.register(IndividualReportPointsDescriptionFilterText)
 admin.site.register(IndividualReportPointsDescriptionFilterCategory)
 admin.site.register(IndividualReportPointsDescriptionFilterTextRecommendations)
+admin.site.register(ConsultantCompany)
+admin.site.register(ConsultantStudy)
+admin.site.register(ConsultantForm)

@@ -1,0 +1,242 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- CONTAINER -->
+    <div class="main-container container-fluid" id="main-container">
+
+        <!-- PAGE-HEADER -->
+        <div class="page-header">
+            <h1 class="page-title">Создание анкеты респондента</h1>
+            <div>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                    {#                        <li class="breadcrumb-item active" aria-current="page">Dashboard 01</li>#}
+                    <li class="breadcrumb-item active" aria-current="page">Анкеты респондента</li>
+                </ol>
+            </div>
+        </div>
+        <!-- PAGE-HEADER END -->
+
+        <!-- ROW-1 -->
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
+
+                <div class="row ">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header border-bottom-0">
+                                <div class="card-title">
+                                    Определение параметров анкеты
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="wizard1" role="application" class="wizard clearfix">
+                                    <div class="steps clearfix">
+                                        <ul role="tablist">
+                                            <li role="tab" class="current route-item" aria-disabled="false">
+                                                <a id="wizard1-t-0" aria-controls="wizard1-p-0">
+                                                    <span class="current-info audible">current step: </span>
+                                                    <span class="number">1</span>
+                                                    <span class="title">Выбор компании</span>
+                                                </a>
+                                            </li>
+                                            <li role="tab" class="disabled route-item" aria-disabled="true">
+                                                <a id="wizard1-t-1" aria-controls="wizard1-p-1">
+                                                    <span class="number">2</span>
+                                                    <span class="title">Выбоор исследования</span>
+                                                </a>
+                                            </li>
+                                            <li role="tab" class="disabled route-item" aria-disabled="true">
+                                                <a id="wizard1-t-2" aria-controls="wizard1-p-2">
+                                                    <span class="number">3</span>
+                                                    <span class="title">Выбоор респондента</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="content clearfix" id="content_div">
+                                        {#                                                <h3 id="wizard1-h-0" tabindex="-1" class="title current">Выбор проекта</h3>#}
+                                        <section id="wizard1-p-0" role="tabpanel" aria-labelledby="wizard1-h-0"
+                                                 class="body current" aria-hidden="false">
+
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered text-nowrap border-bottom list-table"
+                                                       id="responsive-datatable">
+                                                    <thead>
+                                                    {#                                                            <tr class="table-header">#}
+                                                    <tr>
+                                                        <th class="wd-15p border-bottom-0 table-header">Компания</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for company in companies %}
+                                                        {% if user_role_name == 'Консультант' %}
+                                                        <tr class="table-row company cursor-pointer" data-company-id="{{ company.company.id }}">
+                                                            <td>{{ company.company.id }}. {{ company.company.name }}</td>
+                                                        </tr>
+                                                        {% else %}
+                                                        <tr class="table-row company cursor-pointer" data-company-id="{{ company.id }}">
+                                                            <td>{{ company.id }}. {{ company.name }}</td>
+                                                        </tr>
+
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </section>
+
+                                        {#                                                <h3 id="wizard1-h-1" tabindex="-1" class="title">Выбор членов команды</h3>#}
+                                        <section id="wizard1-p-1" role="tabpanel" aria-labelledby="wizard1-h-1"
+                                                 class="body" aria-hidden="true" style="display: none;">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered text-nowrap border-bottom team-table"
+                                                               id="company_studies_table">
+                                                            <thead>
+                                                            {#                                                            <tr class="table-header">#}
+                                                            <tr>
+                                                                <th class="wd-15p border-bottom-0 table-header">
+                                                                    Исследование
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody id="wizard1-tbody-1">
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </section>
+
+                                        <section id="wizard1-p-2" role="tabpanel" aria-labelledby="wizard1-h-2"
+                                                 class="body" aria-hidden="true" style="display: none;">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered text-nowrap border-bottom team-table"
+                                                               id="participants_table">
+                                                            <thead>
+                                                            {#                                                            <tr class="table-header">#}
+                                                            <tr>
+                                                                <th class="wd-15p border-bottom-0 table-header">
+                                                                    Респондент
+                                                                </th>
+                                                                <th class="wd-15p border-bottom-0 table-header">
+                                                                    Email
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody id="wizard1-tbody-2">
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </section>
+
+                                    </div>
+
+                                    <div class="actions clearfix">
+                                        <ul role="menu" aria-label="Pagination" class="row">
+                                            {#                                                    <li class="disabled cursor-pointer" aria-disabled="true" id="previous"><a class="nav-buttons" role="menuitem">Назад</a></li>#}
+                                            <div class="col-sm-12 col-md-2" style="padding: 0">
+                                                <button class="btn btn-primary my-1 nav-buttons disabled w-100"
+                                                        type="button" id="previous">
+                                                    <svg viewBox="0 0 24 24" width="24" height="24"
+                                                         stroke="currentColor" stroke-width="2" fill="none"
+                                                         stroke-linecap="round" stroke-linejoin="round"
+                                                         class="css-i6dzq1">
+                                                        <polyline points="15 18 9 12 15 6"></polyline>
+                                                    </svg>
+                                                </button>
+
+                                            </div>
+                                            <div class="col-sm-12 col-md-2" style="padding: 0">
+
+                                                <button class="btn btn-primary my-1 nav-buttons float-end w-100 disabled"
+                                                        type="button" id="next">
+                                                    <svg viewBox="0 0 24 24" width="24" height="24"
+                                                         stroke="currentColor" stroke-width="2" fill="none"
+                                                         stroke-linecap="round" stroke-linejoin="round"
+                                                         class="css-i6dzq1">
+                                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            {#                                                    <li class="disabled cursor-pointer" aria-hidden="false" aria-disabled="false" id="next"><a class="nav-buttons" role="menuitem">Вперед</a></li>#}
+                                            <li aria-hidden="true" style="display: none;"><a class="nav-buttons"
+                                                                                             href="#finish"
+                                                                                             role="menu  item">Finish</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    {#                                        </div>#}
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Модальное окно комментарии к отчету -->
+    <div class="modal fade" id="input-modal-report-comments">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header">
+                    <h6 class="modal-title">Комментарии к отчету</h6>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Комментарии:</label>
+                            <textarea class="form-control" id="report-comments-text"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" type="button" id="modal_save_comments_btn">
+                                Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block script %}
+
+    <script src="{% static 'login/js/select2.js' %}"></script>
+    {#    <script src="{% static 'login/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>#}
+    <script src="{% static 'panel/js/consultant_form/panel_add_consultant_form.js' %}"></script>
+
+    <script>
+
+        let url_get_consultant_company_studies = "{% url 'get_consultant_company_studies' %}";
+        let url_get_study_participants = "{% url 'get_study_participants' %}";
+
+    </script>
+{% endblock %}

@@ -1,5 +1,6 @@
 from pdf.models import Report, Participant, Company, ReportData, Section, Category, Employee, Study, EmployeeRole, \
-    EmployeeGender, QuestionnaireQuestionAnswers, Questionnaire, RawToTPointsType, RawToTPoints, ReportDataByCategories
+    EmployeeGender, QuestionnaireQuestionAnswers, Questionnaire, RawToTPointsType, RawToTPoints, ReportDataByCategories, \
+    ConsultantForm, ConsultantFormEmailSentToParticipant
 from login.models import UserProfile
 from . import raw_to_t_point
 from panel import mail_handler
@@ -102,7 +103,16 @@ from django.utils import timezone
 #         mail_handler.send_notification_to_participant_report_made(data_for_mail)
 
 
-def save_data_to_db_and_send_report(questionnaire_id, file_name, study_id, lie_points, lang, report_id):
+# def save_data_to_db_and_send_report(questionnaire_id, file_name, study_id, lie_points, lang, report_id):
+def save_data_to_db_and_send_report(data):
+    questionnaire_id = data['questionnaire_id']
+    file_name = data['file_name']
+    study_id = data['study_id']
+    lie_points = data['lie_points']
+    lang = data['lang']
+    report_id = data['report_id']
+    request_type = data['request_type']
+
     # print(request_json)
 
     # if 'company_name' in request_json:
@@ -144,6 +154,8 @@ def save_data_to_db_and_send_report(questionnaire_id, file_name, study_id, lie_p
     report.file = file_name
     report.lang = lang
     report.study = study
+    if request_type == 'consultant_form':
+        report.type = request_type
     report.save()
 
     if not report_id == '':
@@ -223,9 +235,19 @@ def save_data_to_db_and_send_report(questionnaire_id, file_name, study_id, lie_p
     send_email_result_to_participant = {}
     send_email_result_to_zetic_admin = {}
     if report_id == '':
-        if participant.send_report_to_participant_after_filling_up:
-            send_email_result_to_participant = mail_handler.send_notification_to_participant_report_made(data_for_mail, report.id)
-        send_email_result_to_zetic_admin = mail_handler.send_notification_report_made(data_for_mail, report.id)
+        if request_type == 'consultant_form':
+            send_email_result_to_participant = mail_handler.send_notification_to_participant_report_made(data_for_mail, report.id, request_type)
+        else:
+            if participant.send_report_to_participant_after_filling_up:
+                send_email_result_to_participant = mail_handler.send_notification_to_participant_report_made(data_for_mail, report.id, request_type)
+            send_email_result_to_zetic_admin = mail_handler.send_notification_report_made(data_for_mail, report.id)
+
+    # сохраняем инфо об отправке письма респонденту с выводами ээкперта
+    if 'consultant_form_id' in data:
+        consultant_form = ConsultantForm.objects.get(id=data['consultant_form_id'])
+        consultant_form_email_sent_to_participant = ConsultantFormEmailSentToParticipant()
+        consultant_form_email_sent_to_participant.consultant_form = consultant_form
+        consultant_form_email_sent_to_participant.save()
 
     if 'error' in send_email_result_to_participant or 'error' in send_email_result_to_zetic_admin:
         return {'error': 'Указан некорректный Email'}

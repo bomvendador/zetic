@@ -1,0 +1,193 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+
+            <!-- ROW-1 OPEN -->
+
+            <div class="jumbotron d-flex align-items-center">
+                <div class="container">
+                    <div class="page-header">
+                        <h1 class="page-title"></h1>
+                        <div>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'panel_home' %}">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    {#                        <div class="col-xl-12">#}
+                    <div class="card">
+                        <div class="card-header">
+                            <h1 class="card-title" style="font-size: 20px">{{ title }}</h1>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="form-group">
+                                        <label><b>ФИО</b></label>
+                                        <input type="text" class="form-control"
+                                               value="{{ participant.employee.name }}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Email</b></label>
+                                <input type="email" class="form-control" id="input_email"
+                                       value="{{ participant.employee.email }}" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Компания</b></label>
+                                <input class="form-control" value="{{ participant.study.company.name }}"
+                                       disabled>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Исследование</b></label>
+                                <input class="form-control" value="{{ participant.study.name }}" disabled>
+                            </div>
+                            <hr style="border-top: 1px solid #8b5dff; margin: 30px 0px;">
+                            <div class="form-group">
+                                <label><b>Специальные комментарии</b></label>
+                                <textarea id="special_comments" class="form-control mb-4" placeholder="Текст..."
+                                          rows="4">{{ form.special_comments }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Риски</b></label>
+                                <textarea id="risks" class="form-control mb-4" placeholder="Текст..."
+                                          rows="4">{{ form.risks }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Карьерный трек</b></label>
+                                <textarea id="career_track" class="form-control mb-4" placeholder="Текст..."
+                                          rows="4">{{ form.career_track }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+
+                        <div class="card-header row pt-2 pb-2 justify-content-md-center">
+                            <div class="">
+                                <table style="width: 100%">
+                                    <thead></thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <h3 class="card-title">Ресурсы</h3>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-primary my-1" type="button"
+                                                    id="add_resource"
+                                                    style="float: right">Добавить ресурс
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+
+                        {#                        <div class="card-header">#}
+                        {#                            <h3 class="card-title">Ресурсы</h3>#}
+                        {#                        </div>#}
+                        <div class="card-body" id="resource_card_body" style="margin: 0px 10px">
+                            {% if resources %}
+                                {% for resource in resources %}
+                                    {% include 'consultant_form/resource_row_template.html' %}
+                                {% endfor %}
+                            {% else %}
+                                {% include 'consultant_form/resource_row_template.html' %}
+
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header row pt-2 pb-2 justify-content-md-center">
+                            <div class="">
+                                <table style="width: 100%">
+                                    <thead></thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <h3 class="card-title">Зоны роста</h3>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-primary my-1" type="button"
+                                                    id="add_growth_zone"
+                                                    style="float: right">Добавить зону роста
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+
+
+{#                        <div class="card-header">#}
+{#                            <h3 class="card-title">Зоны роста</h3>#}
+{#                        </div>#}
+                        <div class="card-body" id="growth_zone_card_body" style="margin: 0px 10px">
+                            {% if growth_zones %}
+                                {% for growth_zone in growth_zones %}
+                                    {% include 'consultant_form/growth_zone_row_template.html' %}
+                                {% endfor %}
+                            {% else %}
+                                {% include 'consultant_form/growth_zone_row_template.html' %}
+
+                            {% endif %}
+
+
+
+                        </div>
+                    </div>
+                    <!-- ROW-1 CLOSED -->
+                    <button class="btn btn-primary nav-buttons w-100 mb-5" type="button" id="save_new_consultant_form">
+                        Сохранить
+                    </button>
+
+                </div>
+            </div>
+
+        </div>
+        <!--CONTAINER CLOSED -->
+
+    </div>
+
+    <template id="resource_row_template">
+        {% include 'consultant_form/resource_row_template.html' %}
+    </template>
+
+    <template id="resource_comment_row_template">
+        {% include 'consultant_form/resource_comment_row_template.html' %}
+    </template>
+
+    <template id="growth_zone_row_template">
+        {% include 'consultant_form/growth_zone_row_template.html' %}
+    </template>
+
+    <template id="growth_zone_comment_row_template">
+        {% include 'consultant_form/growth_zone_comment_row_template.html' %}
+    </template>
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        let url_save_consultant_form = "{% url 'save_consultant_form' %}";
+        let participant_id = "{{ participant.id }}";
+        let form_type = "{{ form_type }}";
+        let form_id = "{{ form.id }}"
+
+    </script>
+
+    <script src="{% static 'panel/js/consultant_form/panel_add_consultant_form_template.js' %}"></script>
+{% endblock %}

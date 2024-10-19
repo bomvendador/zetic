@@ -103,6 +103,12 @@ $('.menu_item').on('click', function () {
         case'menu_project_add':
             window.location.href = url_add_new_project;
             break;
+        case'menu_consultant_form_add':
+            window.location.href = url_add_consultant_form;
+            break;
+        case'menu_consultant_form_list':
+            window.location.href = url_edit_consultant_form_list;
+            break;
         default:
             break;
     }

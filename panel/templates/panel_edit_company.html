@@ -303,10 +303,14 @@
                                                 <td>{{ receiver.employee.email }}</td>
                                                 <td>
                                                     <div style="text-align: center;">
-{#                                                        <i class="fe fe-more-vertical cursor-pointer"#}
-{#                                                           data-bs-toggle="dropdown" aria-expanded="false"#}
-{#                                                           style="font-size: 20px"></i>#}
-                                                    <i style="cursor: pointer; font-size: 17px" class="fe fe-trash-2 delete-notification-receiver" data-bs-toggle="tooltip" title="" data-bs-original-title="Удалить" aria-label="fe fe-trash-2"></i>
+                                                        {#                                                        <i class="fe fe-more-vertical cursor-pointer"#}
+                                                        {#                                                           data-bs-toggle="dropdown" aria-expanded="false"#}
+                                                        {#                                                           style="font-size: 20px"></i>#}
+                                                        <i style="cursor: pointer; font-size: 17px"
+                                                           class="fe fe-trash-2 delete-notification-receiver"
+                                                           data-bs-toggle="tooltip" title=""
+                                                           data-bs-original-title="Удалить"
+                                                           aria-label="fe fe-trash-2"></i>
                                                     </div>
                                                 </td>
 
@@ -329,7 +333,110 @@
                             </div>
                         </div>
                         <div class="card-footer text-end">
-                            <button class="btn btn-primary my-1 nav-buttons" type="button" id="add_report_made_notification_receiver">Добавить
+                            <button class="btn btn-primary my-1 nav-buttons" type="button"
+                                    id="add_report_made_notification_receiver">Добавить
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- ROW-1 CLOSED -->
+
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Консультанты</h3>
+                        </div>
+                        <div class="card-body">
+                            <div style="display: block; overflow-x: auto; white-space: nowrap;">
+                                <table class="table text-nowrap text-md-nowrap mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th>Имя</th>
+                                        <th>Email</th>
+                                        <th>Исследования</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbody_company_admins">
+                                    {% if consultants %}
+                                        {% for consultant in consultants %}
+                                            <tr data-user-id="{{ consultant.user.id }}"
+                                                data-consultant-company-id="{{ consultant.id }}">
+
+                                                <td>{{ consultant.user.first_name }}</td>
+                                                <td>{{ consultant.user.email }}</td>
+                                                <td>
+                                                    {% for consultant_study in consultants_studies %}
+                                                        {% if consultant_study.consultant_company == consultant %}
+                                                            <div class="form-group" style="margin-bottom: 5px">
+                                                                <div class="input-group">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder=""
+                                                                           aria-label="Example text with button addon"
+                                                                           aria-describedby="button-addon1"
+                                                                           value="{{ consultant_study.study.id }}. {{ consultant_study.study.name }}" disabled>
+                                                                    <button class="btn btn-light delete-consultant-study" data-consultant-study-id="{{ consultant_study.id }}" type="button"
+                                                                            id=""><i
+                                                                        class="fa fa-trash-o"
+                                                                        style="transform: scale(1.1);" title="Удалить исследование"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+
+                                                </td>
+                                                <td>
+
+                                                    <div style="text-align: center;">
+                                                        <i class="fe fe-more-vertical cursor-pointer"
+                                                           data-bs-toggle="dropdown" aria-expanded="false"
+                                                           style="font-size: 20px"></i>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <a class="dropdown-item add-consultant-study cursor-pointer"><i
+                                                                        class="fa fa-plus"
+                                                                        style="transform: scale(1.1); margin-right: 10px; margin-bottom: 2px"></i>Добавить
+                                                                    исследование</a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item delete-consultant cursor-pointer"
+                                                                   style=" color: red"><i
+                                                                        class="fa fa-trash-o"
+                                                                        style="transform: scale(1.1); margin-right: 10px; margin-bottom: 2px;"></i>Удалить
+                                                                    консультанта</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td class="no-data-text" colspan="4">
+                                                Консульнты отсутствуют
+                                            </td>
+                                        </tr>
+
+
+                                    {% endif %}
+
+                                    </tbody>
+
+
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer text-end">
+                            <button class="btn btn-primary my-1 nav-buttons" type="button"
+                                    id="add_consultant">Добавить
                             </button>
                         </div>
 
@@ -365,8 +472,6 @@
 
                             </select>
                         </div>
-
-
                         <div class="form-group">
                             <label class="form-label">Новый пароль</label>
                             <div class="wrap-input100 validate-input input-group" id="Password-toggle1">
@@ -417,10 +522,11 @@
                     <form>
                         <div class="mb-3 form-group">
                             <label for="input_position_ru_name" class="col-form-label">Выберите сотрудника</label>
-                            <select class="form-control form-select" id="company_report_made_notification_receiver_select">
+                            <select class="form-control form-select"
+                                    id="company_report_made_notification_receiver_select">
                                 <option value="0">-- Сделайте выбор --</option>
                                 {% for employee in employees_available_report_made_notification_receivers %}
-                                <option value="{{ employee.id }}">{{ employee.name }}</option>
+                                    <option value="{{ employee.id }}">{{ employee.name }}</option>
                                 {% endfor %}
 
                             </select>
@@ -432,6 +538,75 @@
                         <div class="col-lg-12 col-sm-12 mt-3">
                             <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
                                     id="save_report_made_notification_receiver_btn">Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно добавление консультанта -->
+    <div class="modal fade" id="input_modal_consultants">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header modal-header-style">
+                    <h6 class="modal-title">Добавление консультанта</h6>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3 form-group">
+                            <label for="" class="col-form-label">Выберите консультанта</label>
+                            <select class="form-control form-select"
+                                    id="consultant_select">
+                                <option value="0">-- Сделайте выбор --</option>
+
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="save_consultant_for_company_btn">Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Модальное окно добавление исследования консультанту -->
+    <div class="modal fade" id="input_modal_consultant_study">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header modal-header-style">
+                    <h6 class="modal-title">Добавление ислледования</h6>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3 form-group">
+                            <label for="" class="col-form-label">Выберите исследование</label>
+                            <select class="form-control form-select" data-consultant-company-id=""
+                                    id="consultant_study_select">
+                                <option value="0">-- Сделайте выбор --</option>
+
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="save_consultant_study_for_company_btn">Сохранить
                             </button>
                         </div>
                     </div>
@@ -493,6 +668,12 @@
         let url_generate_new_self_questionnaire_link = "{% url 'generate_new_self_questionnaire_link' %}"
         let url_add_report_made_notification_receiver = "{% url 'add_report_made_notification_receiver' %}"
         let url_delete_report_made_notification_receiver = "{% url 'delete_report_made_notification_receiver' %}"
+        let url_get_available_consultants = "{% url 'get_available_consultants' %}"
+        let url_add_consultant_for_company = "{% url 'add_consultant_for_company' %}"
+        let url_delete_consultant_fromm_company = "{% url 'delete_consultant_fromm_company' %}"
+        let url_get_available_consultant_company_studies = "{% url 'get_available_consultant_company_studies' %}"
+        let url_add_consultant_study_for_company = "{% url 'add_consultant_study_for_company' %}"
+        let url_delete_consultant_study_from_company = "{% url 'delete_consultant_study_from_company' %}"
         let active;
         let company_id = {{ company.id }};
         let location_origin = window.location.origin

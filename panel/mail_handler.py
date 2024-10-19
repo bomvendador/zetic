@@ -547,18 +547,24 @@ def send_notification_report_made(data, report_id):
     return result
 
 
-def send_notification_to_participant_report_made(data, report_id):
+def send_notification_to_participant_report_made(data, report_id, request_type):
     report = Report.objects.get(id=report_id)
     participant_name = data['participant_name']
     to_email = data['email']
     context = {
         'data': data,
     }
-    subject = 'Опросник ZETIC'
-    html_message = render_to_string('notification_report_to_participant_made.html', context)
+    if request_type == 'consultant_form':
+        subject = 'Опросник ZETIC дополнен выводами'
+        html_message = render_to_string('notification_report_to_participant_made_consultant_text.html', context)
+    else:
+        subject = 'Опросник ZETIC'
+        html_message = render_to_string('notification_report_to_participant_made.html', context)
 
     from_email = 'ZETIC <info@zetic.ru>'
 
+    if settings.DEBUG == 0:
+        to_email = ['bomvendador@yandex.ru']
     email = EmailMessage(
         subject, html_message, from_email, [to_email])
     email.attach_file(settings.MEDIA_ROOT + '/reportsPDF/single/' + report.file.name, 'application/pdf')

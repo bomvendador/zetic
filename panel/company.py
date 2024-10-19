@@ -1,6 +1,6 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, ResearchTemplate, \
     CompanySelfQuestionnaireLink, EmployeeGender, Questionnaire, Study, Participant, CommonBooleanSettings, \
-    CompanyReportMadeNotificationReceivers
+    CompanyReportMadeNotificationReceivers, ConsultantCompany, ConsultantStudy
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
@@ -160,7 +160,8 @@ def edit_company(request, company_id):
                 'name': employee.name,
                 'email': employee.email,
             })
-
+    consultants = ConsultantCompany.objects.filter(company=company_inst)
+    consultants_studies = ConsultantStudy.objects.filter(consultant_company__company=company_inst)
     context.update(
         {
             'company': company_inst,
@@ -169,11 +170,118 @@ def edit_company(request, company_id):
             'templates': templates,
             'links': company_self_questionnaire_links_inst,
             'report_made_notification_receivers': CompanyReportMadeNotificationReceivers.objects.filter(company=company_inst),
-            'employees_available_report_made_notification_receivers': employees_available_report_made_notification_receivers
+            'employees_available_report_made_notification_receivers': employees_available_report_made_notification_receivers,
+            'consultants': consultants,
+            'consultants_studies': consultants_studies
         }
     )
 
     return render(request, 'panel_edit_company.html', context)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def get_available_consultants(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        company_id = json_data['company_id']
+        consultants_all = UserProfile.objects.filter(role__name='Консультант')
+        consultants_available = ConsultantCompany.objects.filter(~Q(company_id=company_id))
+
+        consultants = []
+        for consultant in consultants_all:
+            if not ConsultantCompany.objects.filter(Q(user=consultant.user) & Q(company_id=company_id)).exists():
+                consultants.append({
+                    'user_id': consultant.user.id,
+                    'name': consultant.user.first_name,
+                    'email': consultant.user.email
+                })
+        print(consultants)
+        result = {
+            'consultants': consultants
+        }
+        return JsonResponse(result)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def get_available_consultant_company_studies(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        consultant_company_id = json_data['consultant_company_id']
+        consultant_company_inst = ConsultantCompany.objects.get(id=consultant_company_id)
+        company_studies = Study.objects.filter(company=consultant_company_inst.company)
+        studies = []
+        for company_study in company_studies:
+            if not ConsultantStudy.objects.filter(Q(study=company_study) & Q(consultant_company=consultant_company_inst)).exists():
+                studies.append({
+                    'id': company_study.id,
+                    'name': company_study.name,
+                })
+        result = {
+            'studies': studies,
+            'consultant_company_id': consultant_company_id
+        }
+        return JsonResponse(result)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def add_consultant_study_for_company(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        study_id = json_data['study_id']
+        consultant_company_id = json_data['consultant_company_id']
+        consultant_study = ConsultantStudy()
+        consultant_study.created_by = request.user
+        consultant_study.study = Study.objects.get(id=study_id)
+        consultant_study.consultant_company = ConsultantCompany.objects.get(id=consultant_company_id)
+        consultant_study.save()
+        return HttpResponse(status=200)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def delete_consultant_study_from_company(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        consultant_study_id = json_data['consultant_study_id']
+        ConsultantStudy.objects.get(id=consultant_study_id).delete()
+        return HttpResponse(status=200)
+
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def add_consultant_for_company(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        company_id = json_data['company_id']
+        user_id = json_data['user_id']
+        consultant_company = ConsultantCompany()
+        consultant_company.created_by = request.user
+        consultant_company.user = User.objects.get(id=user_id)
+        consultant_company.company = Company.objects.get(id=company_id)
+        consultant_company.save()
+        return HttpResponse(status=200)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def delete_consultant_fromm_company(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        consultant_company_id = json_data['consultant_company_id']
+        ConsultantCompany.objects.get(id=consultant_company_id).delete()
+        return HttpResponse(status=200)
+
+
+# @login_required(redirect_field_name=None, login_url='/login/')
+# def add_consultant_study_for_company(request):
+#     if request.method == 'POST':
+#         json_data = json.loads(request.body.decode('utf-8'))
+#         company_id = json_data['company_id']
+#         user_id = json_data['user_id']
+#         consultant_company = ConsultantCompany()
+#         consultant_company.created_by = request.user
+#         consultant_company.user = User.objects.get(id=user_id)
+#         consultant_company.company = Company.objects.get(id=company_id)
+#         consultant_company.save()
+#         return HttpResponse(status=200)
 
 
 def company_questionnaire(request, code):

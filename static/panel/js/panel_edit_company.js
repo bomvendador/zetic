@@ -15,6 +15,289 @@ $('.copy-company-questionnaire-link').on('click', function (e) {
 })
 
 
+$('.add-consultant-study').on('click', function () {
+    show_progressbar_loader()
+    let consultant_company_id = $(this).closest('tr').data('consultant-company-id')
+
+    $.ajax({
+        headers: {"X-CSRFToken": token},
+        url: url_get_available_consultant_company_studies,
+        type: 'POST',
+        data: JSON.stringify({
+            'consultant_company_id': consultant_company_id,
+        }),
+        processData: false,
+        contentType: false,
+        error: function (data) {
+            toastr.error('Ошибка', data)
+        },
+        success: function (data) {
+            hide_progressbar_loader()
+            let studies = data['studies']
+            console.log(data)
+            if (studies.length > 0) {
+                studies.forEach(function (study) {
+                    $('#consultant_study_select').append('<option value="' + study['id'] + '">' + study['id'] + '. ' + study['name'] + '</option>')
+                })
+                $('#consultant_study_select').attr('data-consultant-company-id', data['consultant_company_id'])
+                $('#input_modal_consultant_study').modal('show')
+
+            } else {
+                toastr.warning('Доступные исследования отсутствуют')
+            }
+
+        }
+    });
+
+})
+
+
+$('#save_consultant_study_for_company_btn').on('click', function () {
+    let study_id = $('#consultant_study_select').val()
+    let consultant_company_id = $('#consultant_study_select').data('consultant-company-id')
+    if (study_id === '0') {
+        toastr.error('Выберите исследование')
+    } else {
+        btn_spinner('#save_consultant_study_for_company_btn')
+        $.ajax({
+            headers: {"X-CSRFToken": token},
+            url: url_add_consultant_study_for_company,
+            type: 'POST',
+            data: JSON.stringify({
+                'study_id': study_id,
+                'consultant_company_id': consultant_company_id,
+            }),
+            processData: false,
+            contentType: false,
+            error: function (data) {
+                toastr.error('Ошибка', data)
+            },
+            success: function (data) {
+                btn_text('#save_consultant_for_company_btn', 'Сохранить')
+
+                let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
+                    '<br>' +
+                    '<hr class="solid mt-0" style="background-color: black;">' +
+                    '<h4 style="text-align: center">Исследование успешно добавлено</h4>' +
+                    '<hr class="solid mt-0" style="background-color: black;">'
+
+                Swal.fire({
+                    html: output_html,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ОК'
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.reload()
+                    }
+                })
+
+
+            }
+        });
+
+    }
+})
+
+$('.delete-consultant-study').on('click', function () {
+    let output_html = '<h2 class="mb-0" style="text-align: center">Удаление исследование консультанта</h2>' +
+        '<br>' +
+        '<hr class="solid mt-0" style="background-color: black;">' +
+        '<h4 style="text-align: center">Удалить исследование?</h4>' +
+        '<hr class="solid mt-0" style="background-color: black;">'
+    Swal.fire({
+        html: output_html,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет'
+    }).then((result) => {
+        if (result.value) {
+            show_progressbar_loader()
+            let consultant_study_id = $(this).data('consultant-study-id')
+            $.ajax({
+                headers: {"X-CSRFToken": token},
+                url: url_delete_consultant_study_from_company,
+                type: 'POST',
+                data: JSON.stringify({
+                    'consultant_study_id': consultant_study_id,
+                }),
+                processData: false,
+                contentType: false,
+                error: function (data) {
+                    toastr.error('Ошибка', data)
+                },
+                success: function (data) {
+                    hide_progressbar_loader()
+
+                    let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<h4 style="text-align: center">Исследование успешно удалено</h4>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
+
+                    Swal.fire({
+                        html: output_html,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ОК'
+                    }).then((result) => {
+                        if (result.value) {
+                            window.location.reload()
+                        }
+                    })
+
+
+                }
+            });
+
+        }
+    })
+})
+
+$('#add_consultant').on('click', function () {
+    show_progressbar_loader()
+    $.ajax({
+        headers: {"X-CSRFToken": token},
+        url: url_get_available_consultants,
+        type: 'POST',
+        data: JSON.stringify({
+            'company_id': company_id,
+        }),
+        processData: false,
+        contentType: false,
+        error: function (data) {
+            toastr.error('Ошибка', data)
+        },
+        success: function (data) {
+            hide_progressbar_loader()
+            let consultants = data['consultants']
+            console.log(data)
+            if (consultants.length > 0) {
+                consultants.forEach(function (consultant) {
+                    $('#consultant_select').append('<option value="' + consultant['user_id'] + '">' + consultant['name'] + ' - ' + consultant['email'] + '</option>')
+                })
+                $('#input_modal_consultants').modal('show')
+
+            } else {
+                toastr.warning('Доступные консультанты отсутствуют')
+            }
+
+        }
+    });
+
+})
+
+$('.delete-consultant').on('click', function () {
+    let output_html = '<h2 class="mb-0" style="text-align: center">Удаление консультанта</h2>' +
+        '<br>' +
+        '<hr class="solid mt-0" style="background-color: black;">' +
+        '<h4 style="text-align: center">Удалить консультанта?</h4>' +
+        '<hr class="solid mt-0" style="background-color: black;">'
+    Swal.fire({
+        html: output_html,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет'
+    }).then((result) => {
+        if (result.value) {
+            show_progressbar_loader()
+            let consultant_company_id = $(this).closest('tr').data('consultant-company-id')
+            $.ajax({
+                headers: {"X-CSRFToken": token},
+                url: url_delete_consultant_fromm_company,
+                type: 'POST',
+                data: JSON.stringify({
+                    'consultant_company_id': consultant_company_id,
+                }),
+                processData: false,
+                contentType: false,
+                error: function (data) {
+                    toastr.error('Ошибка', data)
+                },
+                success: function (data) {
+                    hide_progressbar_loader()
+
+                    let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<h4 style="text-align: center">Консультант успешно удалён</h4>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
+
+                    Swal.fire({
+                        html: output_html,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ОК'
+                    }).then((result) => {
+                        if (result.value) {
+                            window.location.reload()
+                        }
+                    })
+
+
+                }
+            });
+
+        }
+    })
+})
+
+$('#save_consultant_for_company_btn').on('click', function () {
+    let user_id = $('#consultant_select').val()
+    if (user_id === '0') {
+        toastr.error('Выберите консультанта')
+    } else {
+        btn_spinner('#save_consultant_for_company_btn')
+        $.ajax({
+            headers: {"X-CSRFToken": token},
+            url: url_add_consultant_for_company,
+            type: 'POST',
+            data: JSON.stringify({
+                'company_id': company_id,
+                'user_id': user_id,
+            }),
+            processData: false,
+            contentType: false,
+            error: function (data) {
+                toastr.error('Ошибка', data)
+            },
+            success: function (data) {
+                btn_text('#save_consultant_for_company_btn', 'Сохранить')
+
+                let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
+                    '<br>' +
+                    '<hr class="solid mt-0" style="background-color: black;">' +
+                    '<h4 style="text-align: center">Консультант успешно добавлен</h4>' +
+                    '<hr class="solid mt-0" style="background-color: black;">'
+
+                Swal.fire({
+                    html: output_html,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ОК'
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.reload()
+                    }
+                })
+
+
+            }
+        });
+
+    }
+})
+
 $('#new_password_hide').on('click', function () {
     let attr = $('#new_password').attr('type')
     if (typeof attr !== 'undefined') {

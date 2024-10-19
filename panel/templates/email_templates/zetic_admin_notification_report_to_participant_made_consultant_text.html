@@ -1,0 +1,29 @@
+<div>
+Дополненные выводами эксперта отчеты были отправелны респондентам:
+</div>
+<br>
+<div>
+    <b>Успешная отправка:</b>
+    {% for success in email_success %}
+    <div>
+        {{ success.participant_name }} - {{ success.participant_email }}
+    </div>
+    {% endfor %}
+
+</div>
+<br>
+<div>
+    <b>Ошибки при отправке:</b>
+    {% for error in email_errors %}
+    <div>
+        {{ error.participant_name }} - {{ error.participant_email }}
+    </div>
+    {% endfor %}
+
+</div>
+<br>
+Команда Zetic<br>
+    <a>www.zetic.ru</a><br>
+    <a href="mailto:info@zetic.ru">info@zetic.ru</a><br>
+    +7 495 127 03 89
+</p>

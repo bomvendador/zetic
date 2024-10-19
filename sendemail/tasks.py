@@ -8,9 +8,14 @@ from django.utils import timezone
 from django.db.models.functions import ExtractDay
 from panel.mail_handler import send_invitation_email, send_reminder, send_month_report
 from pdf.models import Participant, EmailSentToParticipant, Company, Questionnaire, QuestionnaireVisits, Participant, \
-    QuestionnaireQuestionAnswers, Report, Category, ReportDataByCategories
+    QuestionnaireQuestionAnswers, Report, Category, ReportDataByCategories, ConsultantForm
 from calendar import monthrange, isleap
 from django.db.models import Sum, Q
+
+from django.http import HttpResponse, HttpResponseServerError, JsonResponse
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from smtplib import SMTPException, SMTPRecipientsRefused
 
 
 import fpdf
@@ -34,96 +39,65 @@ import cyrtranslit
 
 @shared_task(name='pdf_single_generator')
 def pdf_single_generator_task(questionnaire_id, report_id):
-    pdf_single_generator(questionnaire_id, report_id)
+    # pdf_single_generator(questionnaire_id, report_id)
+    pdf_single_generator({
+        'questionnaire_id': questionnaire_id,
+        'report_id': report_id
+    })
 
-    # time_start = time.perf_counter()
-    # pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
-    # pdf.add_font("Cambria", style="",
-    #              fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Cambria.ttf", uni=True)
-    # pdf.add_font("Cambria-Bold", style="",
-    #              fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Cambria-Bold.ttf", uni=True)
-    # pdf.add_font("RalewayMedium", style="",
-    #              fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Medium.ttf", uni=True)
-    # pdf.add_font("RalewayRegular", style="",
-    #              fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Regular.ttf", uni=True)
-    # pdf.add_font("RalewayLight", style="",
-    #              fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Light.ttf", uni=True)
-    # pdf.add_font("RalewayBold", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Bold.ttf",
-    #              uni=True)
-    # pdf.add_font("NotoSansDisplayMedium", style="",
-    #              fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/NotoSansDisplay-Medium.ttf", uni=True)
-    # pdf.add_page()
-    #
-    # questionnaire_inst = Questionnaire.objects.get(id=questionnaire_id)
-    # questionnaire_questions_answers_for_validity_inst = QuestionnaireQuestionAnswers.objects.filter(
-    #     questionnaire=questionnaire_inst,
-    #     question__category__for_validity=True)
-    # employee = questionnaire_inst.participant.employee
-    # if not report_id == '':
-    #     report_inst = Report.objects.get(id=report_id)
-    #     lie_points = report_inst.lie_points
-    # else:
-    #     sum_lie_point = 0
-    #     for answer in questionnaire_questions_answers_for_validity_inst:
-    #         sum_lie_point = sum_lie_point + answer.answer.raw_point
-    #     lie_points = round(sum_lie_point / 40 * 10)
-    # participant_info = {
-    #     "name": employee.name,
-    #     "sex": employee.sex.name_ru,
-    #     "birth_year": employee.birth_year,
-    #     "email": employee.email
-    # }
-    # # participant_name = participant_info['name']
-    # lang = 'ru'
-    # # lang = request_json['lang']
-    # # lie_points = round(request_json['lie_points']/40 * 10)
-    #
-    # title_page(pdf, employee.name, lang)
-    #
-    # pdf.add_page()
-    # page2(pdf, lie_points, lang)
-    #
-    # pdf.add_page()
-    # page_short_conclusions(pdf, questionnaire_id, 'ru', report_id)
-    #
-    # answer_code_1 = category_data('1_', questionnaire_id, employee.id)
-    # if answer_code_1:
-    #     pdf.add_page()
-    #     # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
-    #     page3(pdf, answer_code_1, lang, participant_info)
-    #
-    # answer_code_2 = category_data('2_', questionnaire_id, employee.id)
-    # if answer_code_2:
-    #     pdf.add_page()
-    #     # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
-    #     page4(pdf, answer_code_2, lang, participant_info)
-    #
-    # answer_code_3 = category_data('3_', questionnaire_id, employee.id)
-    # if answer_code_3:
-    #     pdf.add_page()
-    #     # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
-    #     page5(pdf, answer_code_3, lang, participant_info)
-    #
-    # answer_code_4 = category_data('4_', questionnaire_id, employee.id)
-    # if answer_code_4:
-    #     pdf.add_page()
-    #     # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
-    #     page6(pdf, answer_code_4, lang, participant_info)
-    # now = datetime.now()
-    #
-    # file_name = cyrtranslit.to_latin(questionnaire_inst.participant.employee.name.strip(), 'ru') + "_" + now.strftime(
-    #     "%d_%m_%Y__%H_%M_%S") + "_" + lang.upper() + '_single.pdf'
-    #
-    # path = "media/reportsPDF/single/"
-    #
-    # # save_data_to_db(request_json, file_name)
-    # response = save_serve_file(pdf, path, file_name)
-    #
-    # send_email_result = save_data_to_db_and_send_report(questionnaire_inst.id, file_name, questionnaire_inst.participant.study.id, lie_points, lang, report_id)
-    #
-    # time_finish = time.perf_counter()
-    # # print(round(time_finish-time_start, 2))
-    # return response
+
+@shared_task(name='send_report_to_participant_with_consultant_text_task')
+def send_report_to_participant_with_consultant_text_task(forms_ids):
+    email_errors = []
+    email_success = []
+    for form_id in forms_ids:
+        consultant_form = ConsultantForm.objects.get(id=form_id)
+        questionnaire = Questionnaire.objects.filter(participant=consultant_form.participant).latest('created_at')
+        result = pdf_single_generator({
+            'questionnaire_id': questionnaire.id,
+            'report_id': '',
+            'type': 'consultant_form',
+            'consultant_form_id': consultant_form.id
+        })
+        if 'error' in result:
+            email_errors.append({
+                'participant_name': consultant_form.participant.employee.name,
+                'participant_email': consultant_form.participant.employee.email,
+            })
+        else:
+            email_success.append({
+                'participant_name': consultant_form.participant.employee.name,
+                'participant_email': consultant_form.participant.employee.email,
+            })
+    if settings.DEBUG == 0:
+        # to_email = ['info@zetic.ru', 'bomvendador@yandex.ru']
+        to_email = ['bomvendador@yandex.ru']
+        context = {
+            'email_errors': email_errors,
+            'email_success': email_success,
+        }
+        subject = 'Отправка дополненного отчета респондентам ZETIC'
+        html_message = render_to_string('email_templates/zetic_admin_notification_report_to_participant_made_consultant_text.html', context)
+
+        from_email = 'ZETIC <info@zetic.ru>'
+
+        if settings.DEBUG == 0:
+            to_email = ['bomvendador@yandex.ru']
+        email = EmailMessage(subject, html_message, from_email, [to_email])
+        email.content_subtype = "html"
+        try:
+            email.send()
+            result = {
+                'result': 200
+            }
+
+        except SMTPRecipientsRefused as e:
+            result = {
+                'error': 'Указан некорректный Email'
+            }
+
+    else:
+        return {'email_errors': email_errors, 'email_success': email_success}
 
 
 def diff_month(start_date, end_date):
@@ -141,10 +115,12 @@ def diff_month(start_date, end_date):
 def auto_block_questionnaire():
     now_aware = timezone.now()
     participants_inst = Participant.objects.filter(completed_at=None)
-    questionnaires_inst = Questionnaire.objects.filter(Q(participant__completed_at=None) & Q(participant__invitation_sent=True))
+    questionnaires_inst = Questionnaire.objects.filter(
+        Q(participant__completed_at=None) & Q(participant__invitation_sent=True))
     for questionnaire in questionnaires_inst:
         if QuestionnaireVisits.objects.filter(questionnaire=questionnaire).exists():
-            questionnaire_visits_inst = QuestionnaireVisits.objects.filter(questionnaire=questionnaire).latest('created_at')
+            questionnaire_visits_inst = QuestionnaireVisits.objects.filter(questionnaire=questionnaire).latest(
+                'created_at')
             start_date = questionnaire_visits_inst.created_at
         else:
             start_date = questionnaire.created_at
@@ -211,5 +187,3 @@ def monthly_report(request):
             monthly_report_arr.append(company_dict)
     send_month_report(monthly_report_arr)
     return HttpResponse(status=200)
-
-

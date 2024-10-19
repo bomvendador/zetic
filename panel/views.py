@@ -664,9 +664,9 @@ def get_participants_data_for_group_report(participants_ids):
 def save_group_report_data(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
-        print('--- 421 ---')
-        print(json_data)
-        print('===421===')
+        # print('--- 421 ---')
+        # print(json_data)
+        # print('===421===')
 
         operation = json_data['operation']
         project_id = json_data['project_id']
@@ -719,7 +719,7 @@ def save_group_report_data(request):
         # for item in json_data['square_results']:
         #     print(item)
         response = pdf_group_generator(json_data)
-        print(response)
+        # print(response)
 
         return JsonResponse({'response': response})
 
@@ -774,7 +774,7 @@ def edit_group_report_data(request, report_id,  project_id):
 
         # participants_emails.append(group_report.report.participant.employee.email)
         participant_data = get_participants_data_for_group_report([group_report.report.participant.id])
-        print(participant_data)
+        # print(participant_data)
         group_reports.append({
             'participant_data': participant_data[0],
             'report': {
@@ -944,6 +944,7 @@ def get_individual_reports_list(request):
                 'comments': comments,
                 'timestamp': report.added,
                 'primary': report.primary,
+                'type': report.type,
             })
         response = {
             'data': list(report_arr)
@@ -1044,7 +1045,6 @@ def save_new_user(request):
         user_profile_inst.tel = tel
         user_profile_inst.role = UserRole.objects.get(name=role)
         user_profile_inst.save()
-
         return HttpResponse('ok')
 
 
