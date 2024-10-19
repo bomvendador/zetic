@@ -7,7 +7,7 @@ from pdf.models import Participant, Report, Category, Section, PointDescription,
     Project, ProjectStudy, ProjectParticipants, TrafficLightReportFilter, TrafficLightReportFilterCategory, \
     CommonBooleanSettings, IndividualReportPointsDescriptionFilter, IndividualReportPointsDescriptionFilterText, \
     IndividualReportPointsDescriptionFilterTextRecommendations, IndividualReportPointsDescriptionFilterCategory, \
-    ConsultantCompany, ConsultantStudy, ConsultantForm
+    ConsultantCompany, ConsultantStudy, ConsultantForm, ConsultantFormEmailSentToParticipant
 from login.models import UserRole, UserProfile
 
 
@@ -63,3 +63,4 @@ admin.site.register(IndividualReportPointsDescriptionFilterTextRecommendations)
 admin.site.register(ConsultantCompany)
 admin.site.register(ConsultantStudy)
 admin.site.register(ConsultantForm)
+admin.site.register(ConsultantFormEmailSentToParticipant)
