@@ -71,7 +71,7 @@ def send_report_to_participant_with_consultant_text_task(forms_ids):
             })
     if settings.DEBUG == 0:
         # to_email = ['info@zetic.ru', 'bomvendador@yandex.ru']
-        to_email = 'bomvendador@yandex.ru'
+        to_email = ['bomvendador@yandex.ru', 'info@zetic.ru']
         context = {
             'email_errors': email_errors,
             'email_success': email_success,
@@ -81,7 +81,7 @@ def send_report_to_participant_with_consultant_text_task(forms_ids):
 
         from_email = 'ZETIC <info@zetic.ru>'
 
-        email = EmailMessage(subject, html_message, from_email, [to_email])
+        email = EmailMessage(subject, html_message, from_email, to_email)
         email.content_subtype = "html"
         try:
             email.send()
