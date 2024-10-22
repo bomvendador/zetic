@@ -88,7 +88,7 @@ def data_by_points(square_results, section_code, category_code):
         # print(f'category_code - {category_code}')
         report_data_by_categories = ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=category_code))
         if report_data_by_categories.exists():
-            t_points = ReportDataByCategories.objects.get(Q(report=report) & Q(category_code=category_code)).t_points
+            t_points = ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=category_code)).latest('created_at').t_points
             # print(f't_points 87 = {t_points}')
             scale_data.append([square_result[2], t_points, cnt, group_color, email, bold])
 
