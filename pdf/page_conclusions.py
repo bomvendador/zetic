@@ -129,7 +129,7 @@ def page(pdf, questionnaire_id, lang, report_id):
             y = pdf.get_y()
             # print(conclusion_text['text'])
             # print(f'y = {y}')
-            if y > 250:
+            if y > 250 and conclusion_text['recommendations']:
                 insert_page_number(pdf)
                 pdf.add_page()
                 y = 12
