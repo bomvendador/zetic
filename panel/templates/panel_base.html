@@ -55,6 +55,11 @@
 
     <!-- COLOR SKIN CSS -->
     {#    <link id="theme" rel="stylesheet" type="text/css" media="all" href="../assets/colors/color1.css" />#}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="{% static 'login/js/jquery.min.js' %}"></script>
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
     {% block links %}
 
     {% endblock %}
@@ -323,6 +328,8 @@
                                     </li>
                                 </ul>
                             </li>
+                        {% endif %}
+
                             <li class="slide">
                                 <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)"><i
                                         class="side-menu__icon fe fe-file-text"></i><span
@@ -336,17 +343,16 @@
                                             Список отчетов
                                         </div>
                                     </li>
-                                    {% if not cur_userprofile.role.name == 'Админ заказчика' and not cur_userprofile.role.name == 'Партнер' %}
-                                        <li>
-                                            <div class="slide-item cursor-pointer menu_item"
-                                                 id="menu_individual_reports_add"> Добавить
-                                            </div>
-                                        </li>
-                                    {% endif %}
+{#                                    {% if not cur_userprofile.role.name == 'Админ заказчика' and not cur_userprofile.role.name == 'Партнер' %}#}
+{#                                        <li>#}
+{#                                            <div class="slide-item cursor-pointer menu_item"#}
+{#                                                 id="menu_individual_reports_add"> Добавить#}
+{#                                            </div>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
 
                                 </ul>
                             </li>
-                        {% endif %}
                         <li class="slide">
                             <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)"><i
                                     class="side-menu__icon fe fe-file-text"></i><span
@@ -1065,7 +1071,7 @@
 
 <!-- JQUERY JS -->
 {#    <script src="../assets/js/jquery.min.js"></script>#}
-<script src="{% static 'login/js/jquery.min.js' %}"></script>
+{#<script src="{% static 'login/js/jquery.min.js' %}"></script>#}
 
 <!-- BOOTSTRAP JS -->
 {#    <script src="../assets/plugins/bootstrap/js/popper.min.js"></script>#}

@@ -10,7 +10,7 @@ from pdf.models import Company, Participant, ReportData, Report, Category, Repor
     Section, \
     MatrixFilter, MatrixFilterParticipantNotDistributed, MatrixFilterInclusiveEmployeePosition, MatrixFilterCategory, \
     MatrixFilterParticipantNotDistributedEmployeePosition, QuestionnaireQuestionAnswers, QuestionAnswers, \
-    ReportDataByCategories, Questionnaire, Project, ProjectStudy, ProjectParticipants
+    ReportDataByCategories, Questionnaire, Project, ProjectStudy, ProjectParticipants, ConsultantCompany
 # from django.contrib.auth.models import User
 
 from login.models import UserRole, UserProfile, User
@@ -904,6 +904,12 @@ def individual_reports_list(request):
         return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
     else:
         cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
+        if cur_user_role_name == 'Консультант':
+            consultant_companies = ConsultantCompany.objects.filter(user=request.user)
+            companies = []
+            if consultant_companies.exists():
+                for consultant_company in consultant_companies:
+                    companies.append(consultant_company.company)
         if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
             companies = Company.objects.filter(created_by=request.user)
         if cur_user_role_name == 'Админ заказчика':
@@ -914,7 +920,7 @@ def individual_reports_list(request):
         companies_arr = []
         for company in companies:
             reports = Report.objects.filter(participant__employee__company=company)
-            if reports.count() > 0:
+            if reports.exists():
                 companies_arr.append(company.name)
         context.update(
             {'companies_arr': companies_arr}
