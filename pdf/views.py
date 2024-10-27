@@ -141,9 +141,6 @@ def pdf_single_generator(data):
         page6(pdf, answer_code_4, lang, participant_info)
 
     individual_report_allowed_options = IndividualReportAllowedOptions.objects.get(name='Выводы эксперта')
-    participant_consultant_page_options = ParticipantIndividualReportAllowedOptions.objects.get(Q(participant=questionnaire_inst.participant) &
-                                                                                                  Q(option=individual_report_allowed_options))
-
     show_consultant_page = True
     participant_consultant_page_options_filter = ParticipantIndividualReportAllowedOptions.objects.filter(Q(participant=questionnaire_inst.participant) &
                                                                                                   Q(option=individual_report_allowed_options))
