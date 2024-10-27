@@ -143,7 +143,26 @@ def pdf_single_generator(data):
     individual_report_allowed_options = IndividualReportAllowedOptions.objects.get(name='Выводы эксперта')
     participant_consultant_page_options = ParticipantIndividualReportAllowedOptions.objects.get(Q(participant=questionnaire_inst.participant) &
                                                                                                   Q(option=individual_report_allowed_options))
-    if 'consultant_form_id' in data and participant_consultant_page_options.value:
+
+    show_consultant_page = True
+    participant_consultant_page_options_filter = ParticipantIndividualReportAllowedOptions.objects.filter(Q(participant=questionnaire_inst.participant) &
+                                                                                                  Q(option=individual_report_allowed_options))
+    if participant_consultant_page_options_filter.exists():
+        participant_consultant_page_options = ParticipantIndividualReportAllowedOptions.objects.get(Q(participant=questionnaire_inst.participant) &
+                                                                                                    Q(option=individual_report_allowed_options))
+        if not participant_consultant_page_options.value:
+            show_consultant_page = False
+    else:
+        company_consultant_page_options_filter = CompanyIndividualReportAllowedOptions.objects.filter(Q(option=individual_report_allowed_options) &
+                                                                                                      Q(company=questionnaire_inst.participant.employee.company))
+        if company_consultant_page_options_filter:
+            company_consultant_page_options = CompanyIndividualReportAllowedOptions.objects.get(Q(option=individual_report_allowed_options) &
+                                                                                                Q(company=questionnaire_inst.participant.employee.company))
+
+            if not company_consultant_page_options.value:
+                show_consultant_page = False
+
+    if 'consultant_form_id' in data and show_consultant_page:
         pdf.add_page()
         consultant_page(pdf, lang, data['consultant_form_id'])
 
