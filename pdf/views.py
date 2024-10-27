@@ -2,7 +2,8 @@
 
 # Create your views here.
 from pdf.models import Questionnaire, QuestionnaireQuestionAnswers, QuestionAnswers, Category, CategoryQuestions, \
-    Report, ReportDataByCategories, ParticipantIndividualReportAllowedOptions, IndividualReportAllowedOptions
+    Report, ReportDataByCategories, ParticipantIndividualReportAllowedOptions, IndividualReportAllowedOptions, \
+    CompanyIndividualReportAllowedOptions
 from django.http import HttpResponse, HttpResponseNotFound, StreamingHttpResponse, JsonResponse, FileResponse
 from django.db.models import Sum, Q
 from . import raw_to_t_point
@@ -87,9 +88,25 @@ def pdf_single_generator(data):
     page2(pdf, lie_points, lang)
 
     individual_report_allowed_options = IndividualReportAllowedOptions.objects.get(name='Краткие выводы')
-    participant_short_conclusions_options = ParticipantIndividualReportAllowedOptions.objects.get(Q(participant=questionnaire_inst.participant) &
+
+    show_short_conclusions = True
+    participant_short_conclusions_options_filter = ParticipantIndividualReportAllowedOptions.objects.filter(Q(participant=questionnaire_inst.participant) &
                                                                                                   Q(option=individual_report_allowed_options))
-    if participant_short_conclusions_options.value:
+    if participant_short_conclusions_options_filter.exists():
+        participant_short_conclusions_options = ParticipantIndividualReportAllowedOptions.objects.get(Q(participant=questionnaire_inst.participant) &
+                                                                                                  Q(option=individual_report_allowed_options))
+        if not participant_short_conclusions_options.value:
+            show_short_conclusions = False
+    else:
+        company_short_conclusions_options_filter = CompanyIndividualReportAllowedOptions.objects.filter(Q(option=individual_report_allowed_options) &
+                                                                                                 Q(company=questionnaire_inst.participant.employee.company))
+        if company_short_conclusions_options_filter:
+            company_short_conclusions_options = CompanyIndividualReportAllowedOptions.objects.get(Q(option=individual_report_allowed_options) &
+                                                                                                  Q(company=questionnaire_inst.participant.employee.company))
+
+            if not company_short_conclusions_options.value:
+                show_short_conclusions = False
+    if show_short_conclusions:
         pdf.add_page()
         page_short_conclusions(pdf, questionnaire_id, 'ru', report_id)
 
