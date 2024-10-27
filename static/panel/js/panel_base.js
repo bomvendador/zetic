@@ -109,6 +109,9 @@ $('.menu_item').on('click', function () {
         case'menu_consultant_form_list':
             window.location.href = url_edit_consultant_form_list;
             break;
+        case'menu_processing':
+            window.location.href = url_processing_main;
+            break;
         default:
             break;
     }

@@ -6,7 +6,7 @@ from panel import company_parameter as panel_company_parameter
 from panel import employee, study, sections, individual_report_file, company, mail_handler, categories, questions, \
     research_templates, companies_studies, filters, filters_matrix, migration_questionnaire_results_xls, \
     filters_individual_report_points_description, filters_integral_report, projects, \
-    filters_traffic_light_report, search
+    filters_traffic_light_report, search, processing
 from panel.common_settings import settings, notification_report_made_receivers
 from panel.consultant_form import panel_consultant_form
 # from panel import study
@@ -232,6 +232,9 @@ urlpatterns = [
     path('download_consultant_forms', panel_consultant_form.download_consultant_forms, name='download_consultant_forms'),
     path('add_consultant_form_template/<int:participant_id>', panel_consultant_form.add_consultant_form_template, name='add_consultant_form_template'),
     path('edit_consultant_form/<int:form_id>', panel_consultant_form.edit_consultant_form, name='edit_consultant_form'),
+
+    path('processing_main', processing.processing_main, name='processing_main'),
+    path('run_processing', processing.run_processing, name='run_processing'),
 
 ]
 

@@ -131,7 +131,7 @@ def page(pdf, questionnaire_id, lang, report_id):
             print(conclusion_text['text'])
             print(f'y = {y}')
             print('=======================')
-            if y > 250 and conclusion_text['recommendations']:
+            if y > MAX_Y and conclusion_text['recommendations']:
                 insert_page_number(pdf)
                 pdf.add_page()
                 y = 12
@@ -144,7 +144,7 @@ def page(pdf, questionnaire_id, lang, report_id):
                 pdf.set_font("Cambria", "", 10)
                 cnt = 0
                 for recommendation_text in conclusion_text['recommendations']:
-                    if y > 250:
+                    if y > MAX_Y:
                         pdf.rect(x - 7, start_y_recommendation_block, x + 176, y - start_y_recommendation_block, 'D')
                         insert_page_number(pdf)
                         pdf.add_page()
