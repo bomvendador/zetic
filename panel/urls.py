@@ -61,6 +61,7 @@ urlpatterns = [
     path('create_self_questionnaire', company.create_self_questionnaire, name='create_self_questionnaire'),
     path('add_report_made_notification_receiver', company.add_report_made_notification_receiver, name='add_report_made_notification_receiver'),
     path('delete_report_made_notification_receiver', company.delete_report_made_notification_receiver, name='delete_report_made_notification_receiver'),
+    path('update_company_report_options_allowed', company.update_company_report_options_allowed, name='update_company_report_options_allowed'),
 
     path('industries_list', panel_company_parameter.industries_list, name='industries_list'),
     path('save_new_industry', panel_company_parameter.save_new_industry, name='save_new_industry'),
@@ -105,6 +106,7 @@ urlpatterns = [
     path('delete_participants_from_study', study.delete_participants_from_study, name='delete_participants_from_study'),
     path('change_questionnaire_status', study.change_questionnaire_status, name='change_questionnaire_status'),
     path('get_participants_raw_points', study.get_participants_raw_points, name='get_participants_raw_points'),
+    path('save_participants_individual_report_options', study.save_participants_individual_report_options, name='save_participants_individual_report_options'),
 
     path('individual_report_file_index', individual_report_file.individual_report_file_index, name='individual_report_file_index'),
 
@@ -148,6 +150,7 @@ urlpatterns = [
     path('add_study', companies_studies.add_study, name='add_study'),
     path('get_company_employees_for_new_study', companies_studies.get_company_employees, name='get_company_employees_for_new_study'),
     path('add_new_study', companies_studies.add_new_study, name='add_new_study'),
+    path('get_company_options_allowed', companies_studies.get_company_options_allowed, name='get_company_options_allowed'),
     # path('edit_company_study/<int:study_id>', companies_studies.edit_company_study, name='edit_company_study'),
 
     path('filters_list', filters.filters_list, name='filters_list'),
@@ -226,6 +229,7 @@ urlpatterns = [
     path('get_consultant_forms', panel_consultant_form.get_consultant_forms, name='get_consultant_forms'),
     path('delete_consultant_form', panel_consultant_form.delete_consultant_form, name='delete_consultant_form'),
     path('send_report_to_participant_with_consultant_text', panel_consultant_form.send_report_to_participant_with_consultant_text, name='send_report_to_participant_with_consultant_text'),
+    path('download_consultant_forms', panel_consultant_form.download_consultant_forms, name='download_consultant_forms'),
     path('add_consultant_form_template/<int:participant_id>', panel_consultant_form.add_consultant_form_template, name='add_consultant_form_template'),
     path('edit_consultant_form/<int:form_id>', panel_consultant_form.edit_consultant_form, name='edit_consultant_form'),
 

@@ -2,7 +2,7 @@
 
 # Create your views here.
 from pdf.models import Questionnaire, QuestionnaireQuestionAnswers, QuestionAnswers, Category, CategoryQuestions, \
-    Report, ReportDataByCategories
+    Report, ReportDataByCategories, ParticipantIndividualReportAllowedOptions, IndividualReportAllowedOptions
 from django.http import HttpResponse, HttpResponseNotFound, StreamingHttpResponse, JsonResponse, FileResponse
 from django.db.models import Sum, Q
 from . import raw_to_t_point
@@ -69,6 +69,7 @@ def pdf_single_generator(data):
             sum_lie_point = sum_lie_point + answer.answer.raw_point
         lie_points = round(sum_lie_point / 40 * 10)
 
+
     participant_info = {
         "name": employee.name,
         "sex": employee.sex.name_ru,
@@ -85,12 +86,17 @@ def pdf_single_generator(data):
     pdf.add_page()
     page2(pdf, lie_points, lang)
 
-    pdf.add_page()
-    page_short_conclusions(pdf, questionnaire_id, 'ru', report_id)
+    individual_report_allowed_options = IndividualReportAllowedOptions.objects.get(name='Краткие выводы')
+    participant_short_conclusions_options = ParticipantIndividualReportAllowedOptions.objects.get(Q(participant=questionnaire_inst.participant) &
+                                                                                                  Q(option=individual_report_allowed_options))
+    if participant_short_conclusions_options.value:
+        pdf.add_page()
+        page_short_conclusions(pdf, questionnaire_id, 'ru', report_id)
 
     # if '1' in appraisal_data_in_request:
     #     pdf.add_page()
     #     # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
+
     #     page3(pdf, extract_section(request_json, '1'), lang, participant_info)
 
     answer_code_1 = category_data('1_', questionnaire_id, employee.id)
@@ -117,7 +123,10 @@ def pdf_single_generator(data):
         # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
         page6(pdf, answer_code_4, lang, participant_info)
 
-    if 'consultant_form_id' in data:
+    individual_report_allowed_options = IndividualReportAllowedOptions.objects.get(name='Выводы эксперта')
+    participant_consultant_page_options = ParticipantIndividualReportAllowedOptions.objects.get(Q(participant=questionnaire_inst.participant) &
+                                                                                                  Q(option=individual_report_allowed_options))
+    if 'consultant_form_id' in data and participant_consultant_page_options.value:
         pdf.add_page()
         consultant_page(pdf, lang, data['consultant_form_id'])
 

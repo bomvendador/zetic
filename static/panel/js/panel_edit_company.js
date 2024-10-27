@@ -1,5 +1,42 @@
 expand_menu_item('#menu_companies_list')
 
+$('.update_company_report_options_allowed_btn').on('click', function () {
+    let options_vals = []
+    $(this).closest('.card').find('.option-switch').each(function () {
+        console.log(`${$(this).data("option-id")} ${$(this).prop('checked')}`)
+        options_vals.push({
+            'type': $(this).data("type"),
+            'id': $(this).data("option-id"),
+            'value': $(this).prop('checked'),
+        })
+    })
+    console.log(options_vals)
+    btn_spinner('#update_company_individual_report_options_allowed')
+
+    $.ajax({
+        headers: {"X-CSRFToken": token},
+        url: url_update_company_report_options_allowed,
+        type: 'PUT',
+        data: JSON.stringify({
+            'options_vals': options_vals,
+            'company_id': company_id,
+        }),
+        processData: false,
+        contentType: false,
+        error: function (data) {
+            toastr.error('Ошибка', data)
+        },
+        success: function (data) {
+            btn_text('#update_company_individual_report_options_allowed', 'Сохранить')
+            toastr.success('Данные сохранены')
+
+        }
+    });
+
+
+
+})
+
 $('.copy-company-questionnaire-link').on('click', function (e) {
     e.preventDefault();
     let text = window.location.origin + $(this).closest('div').find('a').attr('href');

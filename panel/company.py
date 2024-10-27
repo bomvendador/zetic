@@ -1,6 +1,7 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, ResearchTemplate, \
     CompanySelfQuestionnaireLink, EmployeeGender, Questionnaire, Study, Participant, CommonBooleanSettings, \
-    CompanyReportMadeNotificationReceivers, ConsultantCompany, ConsultantStudy
+    CompanyReportMadeNotificationReceivers, ConsultantCompany, ConsultantStudy, IndividualReportAllowedOptions, \
+    CompanyIndividualReportAllowedOptions, GroupReportAllowedOptions, CompanyGroupReportAllowedOptions
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
@@ -65,6 +66,20 @@ def save_new_company(request):
             if 'demo_status' in json_data:
                 company_inst.demo_status = json_data['demo_status']
             company_inst.save()
+            individual_report_options_allowed = IndividualReportAllowedOptions.objects.all()
+            for option in individual_report_options_allowed:
+                company_individual_report_options_allowed = CompanyIndividualReportAllowedOptions()
+                company_individual_report_options_allowed.company = company_inst
+                company_individual_report_options_allowed.option = option
+                company_individual_report_options_allowed.created_by = request.user
+                company_individual_report_options_allowed.save()
+            group_report_options_allowed = GroupReportAllowedOptions.objects.all()
+            for option in group_report_options_allowed:
+                company_group_report_options_allowed = CompanyGroupReportAllowedOptions()
+                company_group_report_options_allowed.company = company_inst
+                company_group_report_options_allowed.option = option
+                company_group_report_options_allowed.created_by = request.user
+                company_group_report_options_allowed.save()
 
             # response = sync_add_company.delay(name, public_code)
 
@@ -162,8 +177,29 @@ def edit_company(request, company_id):
             })
     consultants = ConsultantCompany.objects.filter(company=company_inst)
     consultants_studies = ConsultantStudy.objects.filter(consultant_company__company=company_inst)
+    company_individual_report_options_allowed = CompanyIndividualReportAllowedOptions.objects.filter(company=company_inst)
+    individual_report_options_allowed = IndividualReportAllowedOptions.objects.all()
+    if individual_report_options_allowed.exists() and not company_individual_report_options_allowed.exists():
+        for option in individual_report_options_allowed:
+            company_individual_report_options_allowed = CompanyIndividualReportAllowedOptions()
+            company_individual_report_options_allowed.company = company_inst
+            company_individual_report_options_allowed.option = option
+            company_individual_report_options_allowed.created_by = request.user
+            company_individual_report_options_allowed.save()
+
+    company_group_report_options_allowed = CompanyGroupReportAllowedOptions.objects.filter(company=company_inst)
+    group_report_options_allowed = GroupReportAllowedOptions.objects.all()
+    if group_report_options_allowed.exists() and not company_group_report_options_allowed.exists():
+        for option in group_report_options_allowed:
+            company_group_report_options_allowed = CompanyGroupReportAllowedOptions()
+            company_group_report_options_allowed.company = company_inst
+            company_group_report_options_allowed.option = option
+            company_group_report_options_allowed.created_by = request.user
+            company_group_report_options_allowed.save()
     context.update(
         {
+            'company_group_report_options_allowed': CompanyGroupReportAllowedOptions.objects.filter(company=company_inst),
+            'company_individual_report_options_allowed': CompanyIndividualReportAllowedOptions.objects.filter(company=company_inst),
             'company': company_inst,
             'employees': Employee.objects.filter(company=company_inst),
             'admins': Employee.objects.filter(company=company_inst, company_admin=True),
@@ -477,6 +513,27 @@ def delete_company(request):
         company_id = json_data['company_id']
         company_inst = Company(id=company_id)
         company_inst.delete()
+        return HttpResponse(status=200)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def update_company_report_options_allowed(request):
+    if request.method == 'PUT':
+        json_data = json.loads(request.body.decode('utf-8'))
+        options_vals = json_data['options_vals']
+        company_id = json_data['company_id']
+        for option in options_vals:
+            option_type = option['type']
+            option_id = option['id']
+            option_val = option['value']
+            if option_type == 'individual':
+                company_option = CompanyIndividualReportAllowedOptions.objects.get(Q(company_id=company_id) &
+                                                                                   Q(option_id=option_id))
+            else:
+                company_option = CompanyGroupReportAllowedOptions.objects.get(Q(company_id=company_id) &
+                                                                                   Q(option_id=option_id))
+            company_option.value = option_val
+            company_option.save()
         return HttpResponse(status=200)
 
 

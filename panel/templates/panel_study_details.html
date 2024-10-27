@@ -104,31 +104,33 @@
                 </div>
             </div>
             {% if company.demo_status and demo_status_setting %}
-            <div class="row" id="questionnaires_left_div">
-                <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3">
-                    <div class="card  {% if questionnaires_left == 0 %}bg-danger {% else %}bg-success{% endif %} img-card box-success-shadow">
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <div class="text-white">
-                                    <h2 class="mb-0 number-font">
-                                        {{ questionnaires_left }}
-                                    </h2>
-                                    <p class="text-white mb-0">Доступные опросники</p>
+                <div class="row" id="questionnaires_left_div">
+                    <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                        <div class="card  {% if questionnaires_left == 0 %}bg-danger {% else %}bg-success{% endif %} img-card box-success-shadow">
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <div class="text-white">
+                                        <h2 class="mb-0 number-font">
+                                            {{ questionnaires_left }}
+                                        </h2>
+                                        <p class="text-white mb-0">Доступные опросники</p>
+                                    </div>
+                                    <div class="ms-auto"><i class="fe fe-file-text text-white fs-30 me-2 mt-2"></i>
+                                    </div>
                                 </div>
-                                <div class="ms-auto"><i class="fe fe-file-text text-white fs-30 me-2 mt-2"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                        <div class="card text-danger bg-danger-transparent card-transparent">
+                            <div class="card-body">
+                                <h4 class="card-title" style="margin-bottom: 1rem">Демо режим</h4>
+                                <p class="card-text">Для компании включен демо-режим. Количество приглашений
+                                    ограничено</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                    <div class="card text-danger bg-danger-transparent card-transparent">
-                        <div class="card-body">
-                            <h4 class="card-title" style="margin-bottom: 1rem">Демо режим</h4>
-                            <p class="card-text">Для компании включен демо-режим. Количество приглашений ограничено</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
             {% endif %}
 
             <div class="row">
@@ -141,12 +143,14 @@
                             <div class="col col-lg-4 col-sm-12 text-end">
                                 <div>
                                     <div style="display: inline-block">
-                                        <select name="country" class="form-control form-select" id="select_group_action" disabled>
+                                        <select name="country" class="form-control form-select" id="select_group_action"
+                                                disabled>
                                             <option value="no_action">-- Выберите действие --</option>
                                             <option value="send_invitations">Отправить приглашение</option>
                                             <option value="send_reminder">Отправить напоминание</option>
+                                            <option value="change_report_options">Изменить разделы отчета</option>
                                             {% if cur_userprofile.role.name == 'Суперадмин' %}
-                                            <option value="download_raw_points">Скачать сырые баллы</option>
+                                                <option value="download_raw_points">Скачать сырые баллы</option>
                                             {% endif %}
                                             <option value="delete_participants" style="color: red">Удалить участников
                                             </option>
@@ -178,6 +182,7 @@
                                         <th data-orderable="false"></th>
                                         <th data-orderable="false"></th>
                                         <th data-orderable="false">Ответы</th>
+                                        <th data-orderable="false" style="width: 200px">Разделы отчета</th>
                                         <th>Имя/псевдоним</th>
                                         <th>Email</th>
                                         <th>Индустрия</th>
@@ -268,6 +273,25 @@
 
                                                 </td>
                                                 <td>{{ participant.answered_questions_qnt }}/{{ participant.total_questions_qnt }}</td>
+                                                <td>
+                                                    {% for option in participant_individual_report_allowed_options %}
+                                                        {% if option.participant == participant %}
+                                                            <div>
+                                                                <div style="white-space: nowrap">
+                                                                    {% if option.value %}
+                                                                        <i style="color: green" class="fe fe-check"></i>
+                                                                        {{ option.option.name }}
+
+                                                                    {% else %}
+                                                                        <i style="color: red" class="fe fe-x"></i>
+                                                                        {{ option.option.name }}
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </td>
                                                 <td class="participant-name">{% if participant.employee.name %}
                                                     {{ participant.employee.name }}{% endif %}</td>
                                                 <td>{{ participant.employee.email }}</td>
@@ -278,7 +302,8 @@
                                                 <td>{{ participant.employee.sex }}</td>
                                                 <td>{{ participant.employee.created_at|date:"d.m.Y H:i" }}</td>
                                                 <td>{{ participant.employee.created_by.first_name }}</td>
-                                                <td class="completed-at">{{ participant.completed_at|date:"d.m.Y H:i" }}</td>
+                                                <td class="completed-at">
+                                                    {{ participant.completed_at|date:"d.m.Y H:i" }}</td>
                                                 <td class="participant_selected_questions_groups_td">
                                                     {% for participant_questions_group in participant_questions_groups %}
                                                         {% if participant_questions_group.participant == participant %}
@@ -533,24 +558,68 @@
 
                         </div>
                     </div>
-{#                    <div class="row">#}
-{#                        <div class="col-12">#}
-{#                            <div class="form-switch">#}
-{#                                <input class="form-check-input" type="checkbox" role="switch"#}
-{#                                       id="send_admin_notification_after_filling_up_mass" checked>#}
-{#                                <label class="form-check-label" for="send_admin_notification_after_filling_up_mass">Отправить#}
-{#                                    уведомление админу после заполнения</label>#}
-{#                            </div>#}
-{##}
-{#                        </div>#}
-{#                    </div>#}
-
                 </div>
                 <div>
                     <div class="row" style="padding: 0px 15px 15px">
                         <div class="col-lg-12 col-sm-12 mt-3">
                             <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
                                     id="modal_send_mass_invitation_btn">Отправить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Модальное изменения разделов отчета-->
+    <div class="modal fade" id="modal_change_report_options">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header" style="background-color: #dbdbdb">
+                    <h5 class="modal-title">Изменение разделов отчета</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-none mb-5" id="modal_change_report_options_participants_completed_block">
+                        <h5 style="margin-bottom: 0;"><b>Сотрудники получившие отчет:</b></h5>
+                        <small>для них невозможно изменить разделы отчета</small>
+                        <hr style="color: black; border-top: 1px solid #0e63f7; margin-top: 5px; margin-bottom: 5px;">
+                        <div id="modal_change_report_options_participants_completed_list">
+
+                        </div>
+                        <hr style="color: black; border-top: 1px solid #0e63f7; margin-top: 5px; margin-bottom: 5px;">
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <h5 style="margin-bottom: 0;"><b>Разделы личного отчета</b></h5>
+                            <small>разделы будут включены в личный отчет и отправлены респонденту </small>
+                            <hr style="color: black; border-top: 1px solid #0e63f7; margin-top: 5px; margin-bottom: 5px;">
+
+                            {% for option in study_individual_report_allowed_options %}
+                                <div class="form-switch">
+
+                                    <input class="form-check-input option-for-individual-report" type="checkbox" role="switch"
+                                           data-option-id="{{ option.option.id }}"
+                                            {% if option.value %}
+                                           checked
+                                            {% endif %}>
+                                    <label class="form-check-label"
+                                           for="change_report_options_switch">{{ option.option.name }}</label>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="change_report_options_save">Сохранить
                             </button>
                         </div>
                     </div>
@@ -637,6 +706,7 @@
         let url_delete_participants_from_study = "{% url 'delete_participants_from_study' %}"
         let url_change_questionnaire_status = "{% url 'change_questionnaire_status' %}"
         let url_get_participants_raw_points = "{% url 'get_participants_raw_points' %}"
+        let url_save_participants_individual_report_options = "{% url 'save_participants_individual_report_options' %}"
         let url_origin = window.location.origin;
         let questionnaires_left = {{ questionnaires_left }};
         let company_demo_status = '{{ company.demo_status }}';

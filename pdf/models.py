@@ -138,6 +138,62 @@ class Company(models.Model):
         verbose_name = 'Компания'
 
 
+class IndividualReportAllowedOptions(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
+    name = models.CharField(max_length=100, blank=False, null=False, default='')
+
+    def __str__(self):
+        return f'{self.id}. {self.name}'
+
+    class Meta:
+        verbose_name_plural = 'Опции в личных отчетах (IndividualReportAllowedOptions)'
+        verbose_name = 'Опция в личных отчетах (IndividualReportAllowedOptions)'
+
+
+class CompanyIndividualReportAllowedOptions(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
+    company = models.ForeignKey(Company, default=None, null=True, on_delete=models.CASCADE)
+    option = models.ForeignKey(IndividualReportAllowedOptions, default=None, null=True, on_delete=models.CASCADE)
+    value = models.BooleanField(default=True, null=False)
+
+    def __str__(self):
+        return f'{self.id}. {self.company.name} - {self.option.name}'
+
+    class Meta:
+        verbose_name_plural = 'Опции компании в личных отчетах (CompanyIndividualReportAllowedOptions)'
+        verbose_name = 'Опция компании в личных отчетах (CompanyIndividualReportAllowedOptions)'
+
+
+class GroupReportAllowedOptions(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
+    name = models.CharField(max_length=100, blank=False, null=False, default='')
+
+    def __str__(self):
+        return f'{self.id}. {self.name}'
+
+    class Meta:
+        verbose_name_plural = 'Опции в группоовых отчетах (GroupReportAllowedOptions)'
+        verbose_name = 'Опция в группоовых отчетах (GroupReportAllowedOptions)'
+
+
+class CompanyGroupReportAllowedOptions(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
+    company = models.ForeignKey(Company, default=None, null=True, on_delete=models.CASCADE)
+    option = models.ForeignKey(GroupReportAllowedOptions, default=None, null=True, on_delete=models.CASCADE)
+    value = models.BooleanField(default=True, null=False)
+
+    def __str__(self):
+        return f'{self.id}. {self.company.name} - {self.option.name}'
+
+    class Meta:
+        verbose_name_plural = 'Опции компании в группоовых отчетах (CompanyGroupReportAllowedOptions)'
+        verbose_name = 'Опция компании в группоовых отчетах (CompanyGroupReportAllowedOptions)'
+
+
 class CompanySelfQuestionnaireLink(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
@@ -298,6 +354,21 @@ class Study(models.Model):
         verbose_name = 'Исследование (study)'
 
 
+class StudyIndividualReportAllowedOptions(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
+    study = models.ForeignKey(Study, default=None, null=True, on_delete=models.CASCADE)
+    option = models.ForeignKey(IndividualReportAllowedOptions, default=None, null=True, on_delete=models.CASCADE)
+    value = models.BooleanField(default=True, null=False)
+
+    def __str__(self):
+        return f'{self.id}. {self.study.name} - {self.option.name}'
+
+    class Meta:
+        verbose_name_plural = 'Опции исследований в личных отчетах (StudyIndividualReportAllowedOptions)'
+        verbose_name = 'Опция исследования в личном отчетах (StudyIndividualReportAllowedOptions)'
+
+
 class Participant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
@@ -324,6 +395,21 @@ class Participant(models.Model):
     class Meta:
         verbose_name_plural = 'Участники опроса'
         verbose_name = 'Участник опроса'
+
+
+class ParticipantIndividualReportAllowedOptions(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
+    participant = models.ForeignKey(Participant, default=None, null=True, on_delete=models.CASCADE)
+    option = models.ForeignKey(IndividualReportAllowedOptions, default=None, null=True, on_delete=models.CASCADE)
+    value = models.BooleanField(default=True, null=False)
+
+    def __str__(self):
+        return f'{self.id}. {self.participant.employee.name} - {self.option.name}'
+
+    class Meta:
+        verbose_name_plural = 'Опции участников в личных отчетах (ParticipantIndividualReportAllowedOptions)'
+        verbose_name = 'Опция участника в личном отчетах (ParticipantIndividualReportAllowedOptions)'
 
 
 # class Consultant(models.Model):

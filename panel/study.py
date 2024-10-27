@@ -1,6 +1,7 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, Participant, \
     EmailSentToParticipant, Report, ResearchTemplate, ResearchTemplateSections, Questionnaire, QuestionnaireVisits, \
-    CommonBooleanSettings, Category, CategoryQuestions, QuestionnaireQuestionAnswers
+    CommonBooleanSettings, Category, CategoryQuestions, QuestionnaireQuestionAnswers, \
+    ParticipantIndividualReportAllowedOptions, StudyIndividualReportAllowedOptions
 from login.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
@@ -70,9 +71,13 @@ def study_details(request, study_id):
             questionnaires_left = 0
         else:
             questionnaires_left = company_inst.demo_status_questionnaires_limit - company_questionnaires_qnt
+        participant_individual_report_allowed_options = ParticipantIndividualReportAllowedOptions.objects.filter(participant__study=study)
+        study_individual_report_allowed_options = StudyIndividualReportAllowedOptions.objects.filter(study=study)
         context.update(
             {
                 'study': study,
+                'participant_individual_report_allowed_options': participant_individual_report_allowed_options,
+                'study_individual_report_allowed_options': study_individual_report_allowed_options,
                 'demo_status_setting': CommonBooleanSettings.objects.get(name='Демо-режимы для компаний').value,
                 'company_questionnaires_qnt': company_questionnaires_qnt,
                 'company': company_inst,
@@ -361,6 +366,14 @@ def save_study_participants(request):
                 participant.employee = employee
                 participant.created_by = request.user
                 participant.save()
+                study_individual_report_allowed_options = StudyIndividualReportAllowedOptions.objects.filter(study_id=study_id)
+                for study_individual_report_allowed_option in study_individual_report_allowed_options:
+                    participant_individual_report_allowed_options = ParticipantIndividualReportAllowedOptions()
+                    participant_individual_report_allowed_options.participant = participant
+                    participant_individual_report_allowed_options.option = study_individual_report_allowed_option.option
+                    participant_individual_report_allowed_options.value = study_individual_report_allowed_option.value
+                    participant_individual_report_allowed_options.created_by = request.user
+                    participant_individual_report_allowed_options.save()
         participants = Participant.objects.filter(study=study_inst)
         result = []
         for participant in participants:
@@ -429,3 +442,20 @@ def save_study_name(request):
             'study_name': study_name,
         }
         return JsonResponse(response)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def save_participants_individual_report_options(request):
+    if request.method == 'POST':
+        json_request = json.loads(request.body.decode('utf-8'))
+        participants_ids_to_change_report_options = json_request['participants_ids_to_change_report_options']
+        options_data = json_request['options_data']
+        print(json_request)
+        for participant_id in participants_ids_to_change_report_options:
+            for option in options_data:
+                participant_individual_report_allowed_options = ParticipantIndividualReportAllowedOptions.objects.get(Q(participant_id=participant_id) &
+                                                                                                                  Q(option_id=option['id']))
+                participant_individual_report_allowed_options.value = option['value']
+                participant_individual_report_allowed_options.save()
+
+        return HttpResponse(status=200)

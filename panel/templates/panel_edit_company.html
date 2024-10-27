@@ -378,11 +378,15 @@
                                                                            placeholder=""
                                                                            aria-label="Example text with button addon"
                                                                            aria-describedby="button-addon1"
-                                                                           value="{{ consultant_study.study.id }}. {{ consultant_study.study.name }}" disabled>
-                                                                    <button class="btn btn-light delete-consultant-study" data-consultant-study-id="{{ consultant_study.id }}" type="button"
+                                                                           value="{{ consultant_study.study.id }}. {{ consultant_study.study.name }}"
+                                                                           disabled>
+                                                                    <button class="btn btn-light delete-consultant-study"
+                                                                            data-consultant-study-id="{{ consultant_study.id }}"
+                                                                            type="button"
                                                                             id=""><i
-                                                                        class="fa fa-trash-o"
-                                                                        style="transform: scale(1.1);" title="Удалить исследование"></i>
+                                                                            class="fa fa-trash-o"
+                                                                            style="transform: scale(1.1);"
+                                                                            title="Удалить исследование"></i>
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -447,11 +451,67 @@
             </div>
 
 
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Опции индивидуальных отчетов</h3>
+                        </div>
+                        <div class="card-body">
+                            {% for option in company_individual_report_options_allowed %}
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="form-switch">
+                                            <input class="form-check-input option-switch" type="checkbox" role="switch"
+                                                   id="company_active"
+                                                   {% if option.value %}checked="checked"{% endif %} data-option-id="{{ option.id }}" data-type="individual">
+                                            <label class="form-check-label" for="company_active">{{ option.option.name }}</label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="card-footer text-end">
+                            <button class="btn btn-primary my-1 nav-buttons update_company_report_options_allowed_btn" type="button">Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Опции групповых отчетов</h3>
+                        </div>
+                        <div class="card-body">
+                            {% for option in company_group_report_options_allowed %}
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="form-switch">
+                                            <input class="form-check-input option-switch" type="checkbox" role="switch"
+                                                   id="company_active"
+                                                   {% if option.value %}checked="checked"{% endif %} data-option-id="{{ option.id }}" data-type="group">
+                                            <label class="form-check-label" for="company_active">{{ option.option.name }}</label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="card-footer text-end">
+                            <button class="btn btn-primary my-1 nav-buttons update_company_report_options_allowed_btn" type="button">Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
 
         <!--CONTAINER CLOSED -->
 
-    </div>
     </div>
     <!-- Модальное окно добавление админа -->
     <div class="modal fade" id="input_modal_add_admin">
@@ -674,6 +734,7 @@
         let url_get_available_consultant_company_studies = "{% url 'get_available_consultant_company_studies' %}"
         let url_add_consultant_study_for_company = "{% url 'add_consultant_study_for_company' %}"
         let url_delete_consultant_study_from_company = "{% url 'delete_consultant_study_from_company' %}"
+        let url_update_company_report_options_allowed = "{% url 'update_company_report_options_allowed' %}"
         let active;
         let company_id = {{ company.id }};
         let location_origin = window.location.origin

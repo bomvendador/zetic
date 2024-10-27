@@ -55,10 +55,10 @@
 
     <!-- COLOR SKIN CSS -->
     {#    <link id="theme" rel="stylesheet" type="text/css" media="all" href="../assets/colors/color1.css" />#}
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="{% static 'login/js/jquery.min.js' %}"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="{% static 'login/js/jquery.min.js' %}"></script>
 
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     {% block links %}
 
@@ -330,29 +330,29 @@
                             </li>
                         {% endif %}
 
-                            <li class="slide">
-                                <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)"><i
-                                        class="side-menu__icon fe fe-file-text"></i><span
-                                        class="side-menu__label">Личные отчеты</span><i
-                                        class="angle fe fe-chevron-right"></i></a>
-                                <ul class="slide-menu">
-                                    <li class="side-menu-label1"><a href="javascript:void(0)">Apps</a></li>
-                                    <li>
-                                        <div class="slide-item cursor-pointer menu_item"
-                                             id="menu_individual_reports_list">
-                                            Список отчетов
-                                        </div>
-                                    </li>
-{#                                    {% if not cur_userprofile.role.name == 'Админ заказчика' and not cur_userprofile.role.name == 'Партнер' %}#}
-{#                                        <li>#}
-{#                                            <div class="slide-item cursor-pointer menu_item"#}
-{#                                                 id="menu_individual_reports_add"> Добавить#}
-{#                                            </div>#}
-{#                                        </li>#}
-{#                                    {% endif %}#}
+                        <li class="slide">
+                            <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)"><i
+                                    class="side-menu__icon fe fe-file-text"></i><span
+                                    class="side-menu__label">Личные отчеты</span><i
+                                    class="angle fe fe-chevron-right"></i></a>
+                            <ul class="slide-menu">
+                                <li class="side-menu-label1"><a href="javascript:void(0)">Apps</a></li>
+                                <li>
+                                    <div class="slide-item cursor-pointer menu_item"
+                                         id="menu_individual_reports_list">
+                                        Список отчетов
+                                    </div>
+                                </li>
+                                {#                                    {% if not cur_userprofile.role.name == 'Админ заказчика' and not cur_userprofile.role.name == 'Партнер' %}#}
+                                {#                                        <li>#}
+                                {#                                            <div class="slide-item cursor-pointer menu_item"#}
+                                {#                                                 id="menu_individual_reports_add"> Добавить#}
+                                {#                                            </div>#}
+                                {#                                        </li>#}
+                                {#                                    {% endif %}#}
 
-                                </ul>
-                            </li>
+                            </ul>
+                        </li>
                         <li class="slide">
                             <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)"><i
                                     class="side-menu__icon fe fe-file-text"></i><span

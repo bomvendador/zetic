@@ -1,4 +1,6 @@
-from pdf.models import Category, Section, ResearchTemplate, ResearchTemplateSections, Study, Company, Employee, Participant
+from pdf.models import Category, Section, ResearchTemplate, ResearchTemplateSections, Study, Company, Employee, \
+    Participant, IndividualReportAllowedOptions, GroupReportAllowedOptions, CompanyIndividualReportAllowedOptions, \
+    CompanyGroupReportAllowedOptions, ParticipantIndividualReportAllowedOptions, StudyIndividualReportAllowedOptions
 from login.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
@@ -73,8 +75,10 @@ def add_study(request):
     if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
         companies = Company.objects.all()
         research_templates = ResearchTemplate.objects.all()
+    individual_report_allowed_options = IndividualReportAllowedOptions.objects.all()
     context.update(
         {
+            'individual_report_allowed_options': individual_report_allowed_options,
             'companies': companies,
             'research_templates': research_templates,
             'user_role': cur_user_role_name
@@ -107,6 +111,36 @@ def add_study(request):
 #         return HttpResponse(status=200)
 #
 #
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def get_company_options_allowed(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        company_id = json_data['company_id']
+        company_individual_report_allowed_options = CompanyIndividualReportAllowedOptions.objects.filter(company_id=company_id)
+        company_group_report_allowed_options = CompanyGroupReportAllowedOptions.objects.filter(company_id=company_id)
+        company_individual_report_options = []
+        company_group_report_options = []
+        for option in company_individual_report_allowed_options:
+            company_individual_report_options.append({
+                'id': option.option.id,
+                'name': option.option.name,
+                'value': option.value,
+            })
+        for option in company_group_report_allowed_options:
+            company_group_report_options.append({
+                'id': option.option.id,
+                'name': option.option.name,
+                'value': option.value,
+            })
+        response = {
+            'company_individual_report_options': company_individual_report_options,
+            'company_group_report_options': company_group_report_options,
+
+        }
+        return JsonResponse({'response': response})
+
+
 @login_required(redirect_field_name=None, login_url='/login/')
 def get_company_employees(request):
     if request.method == 'POST':
@@ -175,10 +209,11 @@ def get_company_employees(request):
             #     'industry': employee.industry.name_ru,
             #     'role': employee.role.name_ru,
             # })
+
         response = {
             'employees': employees,
+
         }
-        print(response)
         return JsonResponse({'response': response})
 
 
@@ -186,10 +221,12 @@ def get_company_employees(request):
 def add_new_study(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
+        print(json_data)
         template_id = json_data['template_id']
         employees_ids = json_data['employees_ids']
         input_study_name = json_data['input_study_name']
         company_id = json_data['company_id']
+        individual_report_allowed_options = json_data['individual_report_allowed_options']
         study_inst = Study()
         study_inst.created_by = request.user
         study_inst.name = input_study_name
@@ -202,6 +239,21 @@ def add_new_study(request):
             participant_inst.employee = Employee.objects.get(id=employees_id)
             participant_inst.study = study_inst
             participant_inst.save()
+            for option in individual_report_allowed_options:
+                participant_individual_report_allowed_options = ParticipantIndividualReportAllowedOptions()
+                participant_individual_report_allowed_options.created_by = request.user
+                participant_individual_report_allowed_options.participant = participant_inst
+                participant_individual_report_allowed_options.option = IndividualReportAllowedOptions.objects.get(id=option['id'])
+                participant_individual_report_allowed_options.value = option['value']
+                participant_individual_report_allowed_options.save()
+        for option in individual_report_allowed_options:
+            study_individual_report_allowed_options = StudyIndividualReportAllowedOptions()
+            study_individual_report_allowed_options.created_by = request.user
+            study_individual_report_allowed_options.study = study_inst
+            study_individual_report_allowed_options.option = IndividualReportAllowedOptions.objects.get(id=option['id'])
+            study_individual_report_allowed_options.value = option['value']
+            study_individual_report_allowed_options.save()
+
         response = {
             'status': 200,
         }

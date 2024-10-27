@@ -3,6 +3,10 @@
 {% load tz %}
 
 {% block links %}
+    {#    <link href="{% static 'panel/plugins/datetimepicker/jquery.datetimepicker.min.css' %}" rel="stylesheet" />#}
+    {#        <script src="{% static 'panel/plugins/datetimepicker/jquery.datetimepicker.full.min.js' %}"></script>#}
+
+
     {#<link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">#}
 {% endblock %}
 
@@ -49,6 +53,7 @@
                                                     value="{{ company.id }}">{{ company.id }}. {{ company.name }}</option>
                                         {% endfor %}
                                     </select>
+
                                 </div>
                                 {#                                <div class="form-group col-lg-6 col-sm-12">#}
                                 {#                                    <label for="method">Статус заполнения опросника</label>#}
@@ -73,28 +78,57 @@
                     </div>
                     <div class="card">
                         <div class="card-header row pt-0 pb-0">
-                            <div class="col col-lg-6 col-sm-12" style="padding: 1.2rem 1.5rem;">
+                            <div class="col col-lg-4 col-sm-12" style="padding: 1.2rem 1.5rem;">
                                 <h3 class="card-title">Результат поиска</h3>
                             </div>
                             {% if cur_userprofile.role.name == 'Суперадмин' %}
-                                <div class="col col-lg-6 col-sm-12 text-end">
-                                    <div>
-                                        <div style="display: inline-block">
-                                            <select name="country" class="form-control form-select"
-                                                    id="select_group_action_consultant_form"
-                                                    disabled>
-                                                <option value="no_action">-- Выберите действие --</option>
-                                                <option value="send_report_with_consultant_form">Отправить отчет
-                                                    респонденту
-                                                </option>
-                                            </select>
+
+                                <div class="col col-lg-8 col-sm-12 text-end">
+                                    <div class="row">
+                                        <div class="col col-lg-6 text-end">
+                                            <div class="row d-none" id="dates_block">
+                                                <div class="col col-lg-4">
+                                                    <span><h3 style="padding: 10px"
+                                                              class="card-title">Период (с - по)</h3></span>
+                                                </div>
+                                                <div class="col col-lg-4">
+                                                    <div class="input-group">
+                                                        <input style="margin-right: 10px; display: block; box-shadow: none"
+                                                               class="form-control datepicker" placeholder="ДД.ММ.ГГГГ" type="text" id="date_from">
+                                                    </div>
+                                                </div>
+                                                <div class="col col-lg-4">
+                                                    <div class="input-group">
+                                                        <input  id="date_to" style="display: block; box-shadow: none" class="form-control datepicker" placeholder="ДД.ММ.ГГГГ" type="text">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            {#                                            <div class="input-group">#}
+                                            {##}
+                                            {#                                            </div>#}
+
                                         </div>
-                                        <div style="display: inline-block">
-                                            <button class="btn btn-primary my-1" type="button"
-                                                    id="run_group_action_consultant_forms"
-                                                    disabled><i class="fa fa-play button-icon"></i>Выполнить
-                                            </button>
+                                        <div class="col col-lg-6">
+                                            <div>
+                                                <div style="display: inline-block">
+                                                    <select name="country" class="form-control form-select" id="select_group_action_consultant_form" disabled>
+                                                        <option value="no_action">-- Выберите действие --</option>
+                                                        <option value="send_report_with_consultant_form">Отправить отчет респонденту</option>
+                                                        <option value="download_consultant_forms">Скачать анкеты в Ecxel</option>
+                                                    </select>
+                                                </div>
+                                                <div style="display: inline-block">
+                                                    <button class="btn btn-primary my-1" type="button"
+                                                            id="run_group_action_consultant_forms"
+                                                            disabled><i class="fa fa-play button-icon"></i>Выполнить
+                                                    </button>
+                                                </div>
+                                            </div>
+
                                         </div>
+
+
                                     </div>
                                 </div>
                             {% endif %}
@@ -153,10 +187,12 @@
         let url_get_consultant_forms = "{% url 'get_consultant_forms' %}"
         let url_delete_consultant_form = "{% url 'delete_consultant_form' %}"
         let url_send_report_to_participant_with_consultant_text = "{% url 'send_report_to_participant_with_consultant_text' %}"
+        let url_download_consultant_forms = "{% url 'download_consultant_forms' %}"
 
 
     </script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <script src="{% static 'panel/js/consultant_form/panel_edit_consultant_form_list.js' %}"></script>
 

@@ -27,7 +27,7 @@ $('.copy-questionnaire-link').on('click', function (e) {
 $('.team-table').DataTable().destroy()
 $('.team-table').DataTable({
     // fixedHeader: true,
-    "order": [[4, 'asc']],
+    "order": [[5, 'asc']],
     "searching": true,
     "destroy": true,
     "paging": false,
@@ -162,6 +162,8 @@ function getParticipantsWithoutInvitations() {
         }
     })
 }
+
+let participants_to_change_report_options = []
 
 $('#run_group_action').on('click', function () {
     participants_ids_to_send_invitation_to = []
@@ -396,11 +398,93 @@ $('#run_group_action').on('click', function () {
 
 
                 break;
+            case 'change_report_options':
+                let participants_completed = []
+                participants_to_change_report_options = []
+                $('#tbody_participants_selected .select-participant-for-group-action:checked').each(function () {
+                    let participant_id = $(this).closest('tr').attr('id').split('_')[2]
+                    let participant_name = $(this).closest('tr').find('.participant-name').text().trim()
+                    let completed_at = $(this).closest('tr').find('.completed-at').text().trim()
+                    if (completed_at !== '') {
+                        participants_completed.push(participant_name)
+                    } else {
+                        participants_to_change_report_options.push(participant_id)
+                    }
+                })
+                console.log('participants_completed')
+                console.log(participants_completed)
+                console.log('participants_to_change_report_options')
+                console.log(participants_to_change_report_options)
+                if (participants_to_change_report_options.length === 0) {
+                    toastr.warning('Все выбранные сотрудники уже получили отчет')
+                } else {
+                    if (participants_completed.length > 0) {
+                        let html = ''
+                        participants_completed.forEach(function (participant) {
+                            html += `<div><b>${participant}</b></div>`
+
+                        })
+                        $('#modal_change_report_options_participants_completed_list').html(html)
+                        $('#modal_change_report_options_participants_completed_block').removeClass('d-none')
+
+                    }
+
+                    $('#modal_change_report_options').modal('show')
+                }
+                break;
 
             default:
                 break;
         }
     }
+
+})
+
+$("#modal_change_report_options").on("hidden.bs.modal", function () {
+    $('#modal_change_report_options_participants_completed_block').addClass('d-none')
+});
+
+$('#change_report_options_save').on('click', function () {
+    btn_spinner($('#change_report_options_save'))
+    let options_data = []
+    $('.option-for-individual-report').each(function () {
+        options_data.push({
+            'id': $(this).data('option-id'),
+            'value': $(this).prop('checked')
+        })
+    })
+    let data = {
+        'participants_ids_to_change_report_options': participants_to_change_report_options,
+        'options_data': options_data
+    }
+    console.log(data)
+
+    $.ajax({
+        headers: {"X-CSRFToken": token},
+        url: url_save_participants_individual_report_options,
+        type: 'POST',
+        data: JSON.stringify(data),
+        processData: false,
+        contentType: false,
+        error: function (data) {
+            toastr.error('Ошибка', data)
+        },
+        success: function (data) {
+            let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                '<h3 style="text-align: center">Данные сохранены' + '</h3>' +
+                '<hr class="solid mt-0" style="background-color: black;">'
+            Swal.fire({
+                html: output_html,
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ОК'
+            }).then(function (result) {
+                window.location.reload()
+            })
+
+        }
+    });
 
 })
 

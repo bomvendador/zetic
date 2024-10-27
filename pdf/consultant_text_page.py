@@ -26,10 +26,11 @@ def page(pdf, lang, consultant_form_id):
 
     consultant_form = ConsultantForm.objects.get(id=consultant_form_id)
     # карьерный трек
-    y = y + 10
-    pdf.set_xy(x, y)
-    block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, x, str('Карьерный трек').upper())
-    pdf.set_text_color(0, 0, 0)
+    if consultant_form.career_track != '':
+        y = y + 10
+        pdf.set_xy(x, y)
+        block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, x, str('Карьерный трек').upper())
+        pdf.set_text_color(0, 0, 0)
 
     y = y + 10
     pdf.set_xy(x, y)

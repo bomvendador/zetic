@@ -1,3 +1,5 @@
+import datetime
+
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, ConsultantCompany, \
     ConsultantStudy, Participant, TrafficLightReportFilter, \
     ConsultantForm, ConsultantFormGrowthZone, ConsultantFormResources, ConsultantFormResourcesComments, \
@@ -322,3 +324,111 @@ def send_report_to_participant_with_consultant_text(request):
             response = send_report_to_participant_with_consultant_text_task(forms_ids_to_send)
     # return JsonResponse({'response': response})
     return HttpResponse(status=200)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def download_consultant_forms(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        date_from = json_data['date_from']
+        date_to = json_data['date_to']
+        forms_ids = json_data['forms_ids']
+        forms_arr = []
+        for form_id in forms_ids:
+            if date_from != '' and date_to != '':
+                date_from_date = datetime.datetime(int(date_from.split('.')[2]), int(date_from.split('.')[1]), int(date_from.split('.')[0]))
+                date_to_date = datetime.datetime(int(date_to.split('.')[2]), int(date_to.split('.')[1]), int(date_to.split('.')[0]), 23, 59, 59)
+                form = ConsultantForm.objects.filter(Q(id=form_id) &
+                                                      (Q(created_at__lt=date_to_date) | Q(created_at=date_to_date)) &
+                                                      (Q(created_at__gt=date_from_date) | Q(created_at__gt=date_from_date)))
+                if form.exists():
+                    form = ConsultantForm.objects.get(id=form_id)
+                    forms_arr.append({
+                        'id': form.id
+                    })
+            if date_from == '' and date_to != '':
+                date_to_date = datetime.datetime(int(date_to.split('.')[2]), int(date_to.split('.')[1]), int(date_to.split('.')[0]), 23, 59, 59)
+                form = ConsultantForm.objects.filter(Q(id=form_id) &
+                                                      (Q(created_at__lt=date_to_date) | Q(created_at=date_to_date)))
+                if form.exists():
+                    form = ConsultantForm.objects.get(id=form_id)
+                    forms_arr.append({
+                        'id': form.id
+                    })
+
+            if date_from != '' and date_to == '':
+                date_from_date = datetime.datetime(int(date_from.split('.')[2]), int(date_from.split('.')[1]), int(date_from.split('.')[0]))
+                form = ConsultantForm.objects.filter(Q(id=form_id) &
+                                                      (Q(created_at__gt=date_from_date) | Q(created_at=date_from_date)))
+                if form.exists():
+                    form = ConsultantForm.objects.get(id=form_id)
+                    forms_arr.append({
+                        'id': form.id
+                    })
+
+            if date_from == '' and date_to == '':
+                form = ConsultantForm.objects.get(id=form_id)
+                forms_arr.append({
+                    'id': form.id
+                })
+        # print(datetime.datetime(int(date_from[2]), int(date_from[1]), int(date_from[0])))
+        print(json_data)
+        print(forms_arr)
+        forms_for_response = []
+
+        for form_id_selected in forms_arr:
+            data = {}
+            row = []
+            consultant_form = ConsultantForm.objects.get(id=form_id_selected['id'])
+            form_data = {
+                'created_at': timezone.localtime(consultant_form.created_at).strftime("%d.%m.%Y %H:%M:%S"),
+                'special_comments': consultant_form.special_comments,
+                'risks': consultant_form.risks,
+                'career_track': consultant_form.career_track,
+            }
+            participant = consultant_form.participant
+            participant_data = {
+                'fio': participant.employee.name,
+                'company_name': participant.employee.company.name,
+                'birth_year': participant.employee.birth_year,
+                'role_name': participant.employee.role.name_ru,
+                'position': participant.employee.position.name_ru,
+                'industry': participant.employee.industry.name_ru,
+                'gender': participant.employee.sex.name_ru,
+                'email': participant.employee.email,
+            }
+            form_resources = ConsultantFormResources.objects.filter(consultant_form=consultant_form)
+            consultant_texts = []
+            if form_resources.exists():
+                for resource in form_resources:
+                    comments_data = []
+                    comments = ConsultantFormResourcesComments.objects.filter(consultant_form_resource=resource)
+                    if comments.exists():
+                        for comment in comments:
+                            comments_data.append(comment.text)
+                    consultant_texts.append({
+                        'type': 'Ресурс',
+                        'name': resource.name,
+                        'comments_data': comments_data
+                    })
+            form_growth_zones = ConsultantFormGrowthZone.objects.filter(consultant_form=consultant_form)
+            if form_growth_zones.exists():
+                for growth_zone in form_growth_zones:
+                    comments_data = []
+                    comments = ConsultantFormGrowthZoneComments.objects.filter(consultant_form_growth_zone=growth_zone)
+                    if comments.exists():
+                        for comment in comments:
+                            comments_data.append(comment.text)
+                    consultant_texts.append({
+                        'type': 'Зона роста',
+                        'name': growth_zone.name,
+                        'comments_data': comments_data
+                    })
+
+            forms_for_response.append({
+                'participant': participant_data,
+                'consultant_texts': consultant_texts,
+                'form_data': form_data,
+            })
+        print(forms_for_response)
+        return JsonResponse({'response': forms_for_response})

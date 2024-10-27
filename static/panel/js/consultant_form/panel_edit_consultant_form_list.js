@@ -1,5 +1,30 @@
 expand_menu_item('#menu_consultant_form_list')
 
+let date = new Date();
+date.setDate(date.getDate());
+
+$.datepicker.regional['ru'] = {
+    maxDate: date,
+    closeText: 'Закрыть',
+    prevText: 'Предыдущий',
+    nextText: 'Следующий',
+    currentText: 'Сегодня',
+    monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+    monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+    dayNames: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],
+    dayNamesShort: ['вск', 'пнд', 'втр', 'срд', 'чтв', 'птн', 'сбт'],
+    dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+    weekHeader: 'Не',
+    dateFormat: 'dd.mm.yy',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix: ''
+};
+$.datepicker.setDefaults($.datepicker.regional['ru']);
+
+$('.datepicker').datepicker();
+
 let table = $('#table_consultant_forms').DataTable({
     buttons: ['excelHtml5', 'pdf'],
     language: {
@@ -14,6 +39,14 @@ let table = $('#table_consultant_forms').DataTable({
     ]
 });
 // table.buttons().container().appendTo('#table_questionnaire_status_search_wrapper .col-md-6:eq(0)');
+
+$('#select_group_action_consultant_form').on('change', function () {
+    if ($(this).val() === 'download_consultant_forms') {
+        $('#dates_block').removeClass('d-none')
+    } else {
+        $('#dates_block').addClass('d-none')
+    }
+})
 
 
 $('#start_consultant_forms_search').on('click', function () {
@@ -200,6 +233,89 @@ $('#run_group_action_consultant_forms').on('click', function () {
             }
             break;
 
+        case 'download_consultant_forms':
+            let date_from = $('#date_from').datepicker("getDate")
+            let date_to = $('#date_to').datepicker("getDate")
+            let test_ok = true
+            if (date_to !== null && date_from !== null) {
+                if (date_from > date_to) {
+                    toastr.error("Дата С должна быть больше даты ПО")
+                    test_ok = false
+                }
+
+            }
+            if (test_ok) {
+                let forms_ids = []
+                $('.select-consultant-form-for-group-action:checked').each(function () {
+                    forms_ids.push($(this).closest('tr').data('form-id'))
+                })
+
+                $.ajax({
+                    headers: {"X-CSRFToken": token},
+                    url: url_download_consultant_forms,
+                    type: 'POST',
+                    data: JSON.stringify({
+                        'date_from': $('#date_from').val(),
+                        'date_to': $('#date_to').val(),
+                        'forms_ids': forms_ids
+                    }),
+                    processData: false,
+                    contentType: false,
+                    error: function (data) {
+                        toastr.error('Ошибка', data)
+                    },
+                    success: function (data) {
+                        // console.log(data)
+                        hide_progressbar_loader()
+                        let response = data['response']
+                        let header = ['ФИО', 'Email', 'Компания', 'Год рождения', 'Роль', 'Позиция', 'Индустрия', 'Пол', 'Дата создания анкеты', 'Специальные комментарии', 'Риски', 'Карьерный трек', 'Тип светофора', 'Светофор', 'Комментарии']
+                        let rows = []
+                        rows.push(header)
+                        response.forEach(function (form) {
+                            // console.log(form)
+                            let participant = form['participant']
+                            let form_data = form['form_data']
+                            let participant_for_row = [participant['fio'], participant['email'], participant['company_name'], participant['birth_year'], participant['role_name'], participant['position'], participant['industry'], participant['gender']]
+                            let form_data_for_row = [form_data['created_at'], form_data['special_comments'], form_data['risks'], form_data['career_track']]
+
+
+                            let consultant_texts = form['consultant_texts']
+                            consultant_texts.forEach(function (text) {
+                                let row = []
+                                row.push(...participant_for_row)
+                                row.push(...form_data_for_row)
+
+                                let comments_data = text['comments_data']
+                                let comments_string = ''
+                                comments_data.forEach(function (comment) {
+                                    comments_string += '[' + comment + ']'
+                                })
+                                row.push(text['type'], text['name'], comments_string)
+                                rows.push(row)
+                            })
+
+
+                        })
+
+                        let workbook = XLSX.utils.book_new(), worksheet = XLSX.utils.aoa_to_sheet(rows);
+                        workbook.SheetNames.push("Анкеты");
+                        workbook.Sheets["Анкеты"] = worksheet;
+                        let currentdate = new Date();
+                        let datetime_string = currentdate.getDate() + '_'
+                            + (currentdate.getMonth() + 1).toString() + '_'
+                            + currentdate.getFullYear() + " @ "
+                            + currentdate.getHours() + ":"
+                            + currentdate.getMinutes() + ":"
+                            + currentdate.getSeconds();
+                        XLSX.writeFile(workbook, '[Анкеты] ' + datetime_string + ".xlsx");
+
+                    }
+                });
+
+
+            }
+
+            break;
         default:
             break;
     }

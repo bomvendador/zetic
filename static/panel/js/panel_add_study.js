@@ -2,16 +2,58 @@ expand_menu_item('#menu_companies_studies_list')
 
 process_table_clear('#table_participants_for_study')
 
-$('#select_company').on("select2:select", function(e) {
+$('#select_company').on("select2:select", function (e) {
     let company_active = $('#select_company :selected').attr('data-company-active')
-    if(company_active === 'True'){
+    if (company_active === 'True') {
         $('#company_active').prop('checked', 'checked')
-    }else {
+    } else {
         $('#company_active').prop('checked', '')
     }
     $('#table_participants_for_study').DataTable().destroy()
     $('#tbody_participants_selected').html('')
-     process_table_clear('#table_participants_for_study')
+    process_table_clear('#table_participants_for_study')
+    let company_id = $(this).val()
+    console.log(company_id)
+    show_progressbar_loader()
+    $.ajax({
+        headers: {"X-CSRFToken": token},
+        url: url_get_company_options_allowed,
+        type: 'POST',
+        data: JSON.stringify({
+            'company_id': company_id,
+        }),
+        processData: false,
+        contentType: false,
+        error: function (data) {
+            toastr.error('Ошибка', data)
+        },
+        success: function (data) {
+            hide_progressbar_loader()
+            console.log(data)
+            let response = data['response']
+            let company_individual_report_options = response['company_individual_report_options']
+
+            $('[data-type="individual"]').each(function () {
+                // console.log($(this).data('option-id'))
+                let cur_switch = $(this)
+                let study_option_id = $(this).data('option-id')
+                if (company_individual_report_options.length > 0) {
+                    company_individual_report_options.forEach(function (option) {
+                        let option_id = option['id']
+                        if(option_id === study_option_id){
+                            cur_switch.prop('checked', option['value'])
+
+                        }
+                    })
+                }else {
+                    cur_switch.prop('checked', true)
+                }
+
+            })
+        }
+    })
+
+
 });
 
 $('#save_study').on('click', function () {
@@ -19,32 +61,40 @@ $('#save_study').on('click', function () {
     let test_ok = true
 
     let company_val = $('#select_company').val()
-    if(company_val === ''){
+    if (company_val === '') {
         test_ok = false
         toastr.error('Компания не выбрана')
     }
     $('#tbody_participants_selected tr').each(function () {
         employees_ids.push($(this).attr('data-employee-id'))
     })
-    if(employees_ids.length === 0 || $('#tbody_participants_selected tr .dataTables_empty').length === 1){
+    if (employees_ids.length === 0 || $('#tbody_participants_selected tr .dataTables_empty').length === 1) {
         test_ok = false
         toastr.error('Список участников исследования пуст')
     }
     let template_id = $('#select_template :selected').val()
-    if(template_id === ''){
+    if (template_id === '') {
         test_ok = false
         toastr.error('Необходимо выбрать шаблон')
 
     }
     let input_study_name = $('#input_study_name').val()
-    if(input_study_name === ''){
+    if (input_study_name === '') {
         test_ok = false
         toastr.error('Название должно быть заполнено')
 
     }
 
-    if(test_ok){
+    if (test_ok) {
         let company_id = $('#select_company :selected').attr('id').split('_')[2]
+        let individual_report_allowed_options = []
+        $('.option-switch').each(function () {
+            let id = $(this).data('option-id')
+            individual_report_allowed_options.push({
+                'id': id,
+                'value': $(this).prop('checked'),
+            })
+        })
         btn_spinner('#save_study')
         $.ajax({
             headers: {"X-CSRFToken": token},
@@ -52,6 +102,7 @@ $('#save_study').on('click', function () {
             type: 'POST',
             data: JSON.stringify({
                 'template_id': template_id,
+                'individual_report_allowed_options': individual_report_allowed_options,
                 'employees_ids': employees_ids,
                 'input_study_name': input_study_name,
                 'company_id': company_id,
@@ -92,23 +143,22 @@ $('#save_study').on('click', function () {
     }
 
 
-
 })
 
 
 $('#add_participants').on('click', function () {
     let company_id = $('#select_company').val()
     let company_id_is_empty = false
-    if(company_id === ''){
+    if (company_id === '') {
         company_id_is_empty = true
     }
 
-    if(!company_id_is_empty){
+    if (!company_id_is_empty) {
         // $('#modal_add_participant')
         // $('#tbody_participants_to_choose').html('')
         show_progressbar_loader()
         $.ajax({
-            headers: { "X-CSRFToken": token },
+            headers: {"X-CSRFToken": token},
             url: url_get_company_employees_for_new_study,
             type: 'POST',
             data: JSON.stringify({
@@ -116,11 +166,12 @@ $('#add_participants').on('click', function () {
             }),
             processData: false,
             contentType: false,
-            error: function(data){
+            error: function (data) {
                 toastr.error('Ошибка', data)
             },
-            success:function (data) {
+            success: function (data) {
                 hide_progressbar_loader()
+                console.log(data)
                 let employees = data['response']['employees']
                 // console.log(employees)
                 // process_table('.team-table')
@@ -134,7 +185,7 @@ $('#add_participants').on('click', function () {
                 employees.forEach(function (employee) {
                     console.log(employee)
                     console.log($.inArray(employee['id'], participants_already_added_ids))
-                    if($.inArray(employee['id'].toString(), participants_already_added_ids) === -1){
+                    if ($.inArray(employee['id'].toString(), participants_already_added_ids) === -1) {
                         let html = `<tr id="employee_id_${employee['id']}">` +
                             '         <td>\n' +
                             '            <input type="checkbox" class="" name="example-checkbox1" value="option1" style="transform: scale(1.1)">\n' +
@@ -157,7 +208,7 @@ $('#add_participants').on('click', function () {
 
         $('#check_all_employees_for_study').prop('checked', '')
         $('#modal_participants').modal('show')
-    }else {
+    } else {
         toastr.error('Компания не выбрана')
 
     }
@@ -165,16 +216,16 @@ $('#add_participants').on('click', function () {
 
 $('#check_all_employees_for_study').on('click', function () {
     console.log($(this).prop('checked'))
-        if($(this).prop('checked') === true){
-            $('#tbody_participants_to_choose input').each(function (index) {
-                $(this).prop('checked', 'checked')
-            })
-        }else {
-            $('#tbody_participants_to_choose input').each(function (index) {
-                $(this).prop('checked', '')
-            })
+    if ($(this).prop('checked') === true) {
+        $('#tbody_participants_to_choose input').each(function (index) {
+            $(this).prop('checked', 'checked')
+        })
+    } else {
+        $('#tbody_participants_to_choose input').each(function (index) {
+            $(this).prop('checked', '')
+        })
 
-        }
+    }
 
 })
 
@@ -182,7 +233,7 @@ $('#add_participants_to_study').on('click', function () {
     let html_for_study_list
     let row_html
     $('#tbody_participants_to_choose tr').each(function (index) {
-        if($(this).find('input').prop('checked') === true){
+        if ($(this).find('input').prop('checked') === true) {
             let id = $(this).attr('id').split('_')[2]
             let name = $(this).find('td').eq(1).text()
             let email = $(this).find('td').eq(2).text()
@@ -192,21 +243,21 @@ $('#add_participants_to_study').on('click', function () {
             let birth_year = $(this).find('td').eq(6).text()
             let sex = $(this).find('td').eq(7).text()
             row_html = `<tr data-employee-id="${id}">` +
-                        `<td>${name}</td>` +
-                        `<td>${email}</td>` +
-                        `<td>${industry}</td>` +
-                        `<td>${role}</td>` +
-                        `<td>${position}</td>` +
-                        `<td>${birth_year}</td>` +
-                        `<td>${sex}</td>` +
-                        `<td><i class="fe fe-x remove-participant-from-study" style="font-size: 18px; cursor: pointer" title="Удалить"></i></td>` +
-                        `</tr>`
+                `<td>${name}</td>` +
+                `<td>${email}</td>` +
+                `<td>${industry}</td>` +
+                `<td>${role}</td>` +
+                `<td>${position}</td>` +
+                `<td>${birth_year}</td>` +
+                `<td>${sex}</td>` +
+                `<td><i class="fe fe-x remove-participant-from-study" style="font-size: 18px; cursor: pointer" title="Удалить"></i></td>` +
+                `</tr>`
             html_for_study_list = html_for_study_list + row_html
         }
     })
     $('#table_participants_for_study').DataTable().destroy()
     $('#tbody_participants_selected').append(html_for_study_list)
-     process_table_clear('#table_participants_for_study')
+    process_table_clear('#table_participants_for_study')
     $('#modal_participants').modal('hide')
 })
 

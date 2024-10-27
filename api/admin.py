@@ -7,7 +7,9 @@ from pdf.models import Participant, Report, Category, Section, PointDescription,
     Project, ProjectStudy, ProjectParticipants, TrafficLightReportFilter, TrafficLightReportFilterCategory, \
     CommonBooleanSettings, IndividualReportPointsDescriptionFilter, IndividualReportPointsDescriptionFilterText, \
     IndividualReportPointsDescriptionFilterTextRecommendations, IndividualReportPointsDescriptionFilterCategory, \
-    ConsultantCompany, ConsultantStudy, ConsultantForm, ConsultantFormEmailSentToParticipant
+    ConsultantCompany, ConsultantStudy, ConsultantForm, ConsultantFormEmailSentToParticipant, \
+    CompanyIndividualReportAllowedOptions, CompanyGroupReportAllowedOptions, IndividualReportAllowedOptions, \
+    GroupReportAllowedOptions, StudyIndividualReportAllowedOptions, ParticipantIndividualReportAllowedOptions
 from login.models import UserRole, UserProfile
 
 
@@ -64,3 +66,9 @@ admin.site.register(ConsultantCompany)
 admin.site.register(ConsultantStudy)
 admin.site.register(ConsultantForm)
 admin.site.register(ConsultantFormEmailSentToParticipant)
+admin.site.register(CompanyIndividualReportAllowedOptions)
+admin.site.register(IndividualReportAllowedOptions)
+admin.site.register(CompanyGroupReportAllowedOptions)
+admin.site.register(GroupReportAllowedOptions)
+admin.site.register(StudyIndividualReportAllowedOptions)
+admin.site.register(ParticipantIndividualReportAllowedOptions)
