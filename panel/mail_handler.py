@@ -45,7 +45,10 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
         # print(f'id - {participant["id"]}')
         participant_inst = Participant.objects.get(id=participant['id'])
         participant_email = participant_inst.employee.email
-        context = {}
+        context = {
+            'protocol': protocol,
+            'hostname': hostname,
+        }
         if email_type == 'initial':
             code_for_participant = generate_participant_link_code(20)
             participant_inst.invitation_code = code_for_participant
@@ -57,16 +60,12 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
 
             context.update({
                 'code_for_participant': code_for_participant,
-                'protocol': protocol,
-                'hostname': hostname,
             })
 
             html_message = render_to_string('invitation_message.html', context)
         elif email_type == 'reminder':
             context.update({
                 'code_for_participant': participant_inst.invitation_code,
-                'protocol': protocol,
-                'hostname': hostname,
             })
             html_message = render_to_string('invitation_message_reminder.html', context)
         elif email_type == 'self_questionnaire':
@@ -114,7 +113,7 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
             # })
 
         except SMTPRecipientsRefused as e:
-            print(f'wrong email - {participant_email}')
+            # print(f'wrong email - {participant_email}')
             wrong_emails.append(participant_email)
             # result.update({
             #     'wrong_emails': wrong_emails,

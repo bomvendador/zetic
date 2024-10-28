@@ -376,8 +376,11 @@ def create_self_questionnaire(request):
         data = json_data['data']
         email = data['email']
         company_id = data['company_id']
+        hostname = data['hostname']
+        protocol = data['protocol']
         company = Company.objects.get(id=company_id)
         employees_inst = Employee.objects.filter(Q(email=email))
+        # print(json_data)
         if employees_inst.exists():
             response = {
                 'error': 'Сотрудник с таким Email уже существует',
@@ -429,11 +432,7 @@ def create_self_questionnaire(request):
             new_questionnaire_inst.data_filled_up_by_participant = True
             new_questionnaire_inst.participant = new_participant
             new_questionnaire_inst.save()
-
-            # print(data)
-            send_email_by_email_type_var = send_email_by_email_type(new_study.id, [{'id': new_participant.id}], 'self_questionnaire', 1, 1)
-            print(send_email_by_email_type_var)
-
+            send_email_by_email_type_var = send_email_by_email_type(new_study.id, [{'id': new_participant.id}], 'self_questionnaire', 1, protocol, hostname)
             new_participant.total_questions_qnt = send_email_by_email_type_var['participant_total_questions']
             new_participant.save()
 

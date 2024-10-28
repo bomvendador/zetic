@@ -85,7 +85,9 @@ $('#create_questionnaire_btn').on('click', function (e) {
             'position_id': position_id,
             'industry_id': industry_id,
             'company_id': company_id,
-            'code': code
+            'code': code,
+            'protocol': window.location.protocol,
+            'hostname': window.location.host,
         }
         $('#create_questionnaire_btn').html('<span class="loader"></span>').attr('disabled', true).css('opacity', 0.5)
         $.ajax({
