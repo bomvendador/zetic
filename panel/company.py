@@ -1,7 +1,8 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, ResearchTemplate, \
     CompanySelfQuestionnaireLink, EmployeeGender, Questionnaire, Study, Participant, CommonBooleanSettings, \
     CompanyReportMadeNotificationReceivers, ConsultantCompany, ConsultantStudy, IndividualReportAllowedOptions, \
-    CompanyIndividualReportAllowedOptions, GroupReportAllowedOptions, CompanyGroupReportAllowedOptions
+    CompanyIndividualReportAllowedOptions, GroupReportAllowedOptions, CompanyGroupReportAllowedOptions, \
+    StudyIndividualReportAllowedOptions, ParticipantIndividualReportAllowedOptions
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
@@ -415,6 +416,13 @@ def create_self_questionnaire(request):
             new_study.name = f'Создано сотрудником {name} ({email})'
             new_study.save()
 
+            individual_report_allowed_options = IndividualReportAllowedOptions.objects.all()
+            for option in individual_report_allowed_options:
+                study_individual_report_allowed_options = StudyIndividualReportAllowedOptions()
+                study_individual_report_allowed_options.study = new_study
+                study_individual_report_allowed_options.option = option
+                study_individual_report_allowed_options.save()
+
             new_participant = Participant()
             new_participant.employee = new_employee_inst
             new_participant.tos_accepted = True
@@ -427,6 +435,12 @@ def create_self_questionnaire(request):
             participant_code = generate_participant_link_code(20)
             new_participant.invitation_code = participant_code
             new_participant.save()
+
+            for option in individual_report_allowed_options:
+                participant_individual_report_allowed_options = ParticipantIndividualReportAllowedOptions()
+                participant_individual_report_allowed_options.participant = new_participant
+                participant_individual_report_allowed_options.option = option
+                participant_individual_report_allowed_options.save()
 
             new_questionnaire_inst = Questionnaire()
             new_questionnaire_inst.data_filled_up_by_participant = True
