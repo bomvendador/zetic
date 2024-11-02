@@ -16,7 +16,7 @@ from bokeh import sampledata
 import pandas as pd
 import chromedriver_binary
 import time
-from .raw_to_t_point import get_t_point
+from .raw_to_t_point import get_t_point, filter_raw_points_to_t_points
 from .page2_file import draw_lie_scale
 
 
@@ -59,7 +59,8 @@ def page_circle_diagram(pdf, questionnaire_id, report_id, lang):
 
                 for questionnaire_question_answer in questionnaire_question_answers:
                     raw_points = raw_points + questionnaire_question_answer.answer.raw_point
-                t_point = get_t_point(raw_points, filter_category.category.code, questionnaire.participant.employee.sex.name_ru, questionnaire.participant.employee.birth_year)
+                t_point = filter_raw_points_to_t_points(raw_points, questionnaire.participant.employee.id, filter_category.category.id)
+                # t_point = get_t_point(raw_points, filter_category.category.code, questionnaire.participant.employee.sex.name_ru, questionnaire.participant.employee.birth_year)
                 total_t_points = total_t_points + int(t_point)
         average_t_points = round(total_t_points / len(traffic_light_report_filter_categories))
         if traffic_light_filter.for_circle_diagram:
