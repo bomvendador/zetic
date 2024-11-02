@@ -24,7 +24,7 @@ import os
 from reports.settings import DEBUG
 
 if DEBUG == 0:
-    driver_path = ChromeDriverManager().install()
+    # driver_path = ChromeDriverManager().install()
     # os.environ["BOKEH_CHROMEDRIVER_PATH"] = driver_path
     os.environ["BOKEH_CHROMEDRIVER_PATH"] = '/usr/bin/chromedriver'
 
