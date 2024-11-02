@@ -60,7 +60,7 @@ def page_circle_diagram(pdf, questionnaire_id, report_id, lang):
                 for questionnaire_question_answer in questionnaire_question_answers:
                     raw_points = raw_points + questionnaire_question_answer.answer.raw_point
                 t_point = get_t_point(raw_points, filter_category.category.code, questionnaire.participant.employee.sex.name_ru, questionnaire.participant.employee.birth_year)
-                total_t_points = total_t_points + t_point
+                total_t_points = total_t_points + int(t_point)
         average_t_points = round(total_t_points / len(traffic_light_report_filter_categories))
         if traffic_light_filter.for_circle_diagram:
             potencial_indicator = average_t_points
