@@ -40,7 +40,9 @@ from pdf import raw_to_t_point
 def info_common(request):
     userprofile = UserProfile.objects.get(user=request.user)
     context = {
-        'cur_userprofile': userprofile
+        'cur_userprofile': userprofile,
+        'timestamp': time.time()
+
     }
     if userprofile.role.name == 'Админ заказчика':
 

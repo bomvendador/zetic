@@ -156,7 +156,7 @@ let url_delete_integral_report_filter = "{% url 'delete_integral_report_filter' 
 
 </script>
 
-<script src="{% static 'panel/js/integral_report_filter/panel_integral_report_filter_list.js' %}"></script>
+<script src="{% static 'panel/js/integral_report_filter/panel_integral_report_filter_list.js' %}?{{ timestamp }}"></script>
 {#<script src="{% static 'panel/js/panel_study_details.js' %}"></script>#}
 
 {% endblock %}

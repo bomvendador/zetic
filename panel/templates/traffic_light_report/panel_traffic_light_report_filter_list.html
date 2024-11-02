@@ -44,6 +44,7 @@
                                                     <thead>
                                                     {#                                                            <tr class="table-header">#}
                                                     <tr>
+                                                        <th class="wd-15p border-bottom-0 table-header"></th>
                                                         <th class="wd-15p border-bottom-0 table-header">Название</th>
                                                         <th class="wd-15p border-bottom-0 table-header">Шкалы</th>
                                                         <th class="wd-15p border-bottom-0 table-header">Позиция</th>
@@ -56,13 +57,18 @@
                                                     <tbody id="wizard1-tbody-1">
                                                     {% for filter in filters %}
                                                         <tr data-filter-id="{{ filter.id }}">
-                                                            <td class="" style="border-left-color:
+                                                            <td style="text-align: center; border-left-color:
                                                                     {% if filter.direction == "red_from_left" %}
                                                                         red
                                                                     {% else %}
                                                                         green
                                                                     {% endif %}
                                                                     !important; border-left-style: solid; border-left-width: 7px;">
+                                                                {% if filter.for_circle_diagram %}
+                                                                    <i class="fa fa-circle" style="color: green" title="Фильтр для круговой диаграммы"></i>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td class="">
                                                                 {{ filter.name }}
                                                             </td>
                                                             <td class="">
@@ -184,7 +190,7 @@
 
     </script>
 
-    <script src="{% static 'panel/js/traffic_light_report/panel_traffic_light__report_filter_list.js' %}"></script>
+    <script src="{% static 'panel/js/traffic_light_report/panel_traffic_light__report_filter_list.js' %}?{{ timestamp }}"></script>
     {#<script src="{% static 'panel/js/panel_study_details.js' %}"></script>#}
 
 {% endblock %}

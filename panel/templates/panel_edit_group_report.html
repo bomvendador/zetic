@@ -591,6 +591,6 @@
         let group_report_id = {{ group_report_id }};
         let project_id = {{ project_id }};
     </script>
-    <script src="{% static 'panel/js/panel_edit_group_report.js' %}"></script>
+    <script src="{% static 'panel/js/panel_edit_group_report.js' %}?{{ timestamp }}"></script>
 
 {% endblock %}

@@ -187,8 +187,8 @@ let url_delete_employee_position = "{% url 'delete_employee_position' %}"
 
 </script>
 
-<script src="{% static 'panel/js/panel_company_parameters_handler.js' %}"></script>
-<script src="{% static 'panel/js/panel_employees_positions_list.js' %}"></script>
+<script src="{% static 'panel/js/panel_company_parameters_handler.js' %}?{{ timestamp }}"></script>
+<script src="{% static 'panel/js/panel_employees_positions_list.js' %}?{{ timestamp }}"></script>
 
 
 {% endblock %}

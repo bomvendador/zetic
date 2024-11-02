@@ -190,7 +190,7 @@ let url_delete_industry = "{% url 'delete_industry' %}"
 
 </script>
 
-<script src="{% static 'panel/js/panel_company_parameters_handler.js' %}"></script>
-<script src="{% static 'panel/js/panel_industries_list.js' %}"></script>
+<script src="{% static 'panel/js/panel_company_parameters_handler.js' %}?{{ timestamp }}"></script>
+<script src="{% static 'panel/js/panel_industries_list.js' %}?{{ timestamp }}"></script>
 
 {% endblock %}

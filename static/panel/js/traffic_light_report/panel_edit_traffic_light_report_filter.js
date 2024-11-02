@@ -7,8 +7,8 @@ $('#green_from_left').on('click', function () {
     $('.points_from').eq(0).val(0)
 
     if ($(this).prop('checked')) {
-        $('#points_label_1').text('Яркое проявление (зеленый)').css('background-color', '#00800082')
-        $('#points_label_3').text('Слабое проявление (красный)').css('background-color', '#ff000063')
+        $('#points_label_1').text('Яркое проявление (зеленый)').css('background-color', 'rgb(125,190,125)')
+        $('#points_label_3').text('Слабое проявление (красный)').css('background-color', 'rgba(241,131,131,0.99)')
         $('#points_1 input').eq(0).attr('id', 'points_from_green')
         $('#points_1 input').eq(1).attr('id', 'points_to_green')
         $('#points_3 input').eq(0).attr('id', 'points_from_red')
@@ -16,8 +16,8 @@ $('#green_from_left').on('click', function () {
 
         // console.log($('#points_label_1 input').eq(0).attr('id'))
     } else {
-        $('#points_label_1').text('Слабое проявление (красный)').css('background-color', '#ff000063')
-        $('#points_label_3').text('Яркое проявление (зеленый)').css('background-color', '#00800082')
+        $('#points_label_1').text('Слабое проявление (красный)').css('background-color', 'rgba(241,131,131,0.99)')
+        $('#points_label_3').text('Яркое проявление (зеленый)').css('background-color', 'rgb(125,190,125)')
         $('#points_1 .points_from').attr('id', 'points_from_red')
         $('#points_1 .points_to').attr('id', 'points_to_red')
         $('#points_3 .points_from').attr('id', 'points_from_green')
@@ -26,6 +26,14 @@ $('#green_from_left').on('click', function () {
     }
 })
 
+$('#for_circle_diagram').on('click', function () {
+    if ($(this).prop('checked')) {
+        $('.circle_diagram_description_block').removeClass('d-none')
+    } else {
+        $('.circle_diagram_description_block').addClass('d-none')
+    }
+
+})
 
 $('#add_filter_category').on('click', function () {
     console.log('ssss')
@@ -101,6 +109,7 @@ $('#save_edited_traffic_light_report_filter').on('click', function () {
     let points_val_ok = true
     let categories_val_arr = []
     let categories_arr = []
+    let circle_diagrams_descriptions_ok = true
 
     let filter_name = $('#input_filter_name').val()
 
@@ -162,19 +171,33 @@ $('#save_edited_traffic_light_report_filter').on('click', function () {
         toastr.error('Проверьте Баллы ДО')
     }
 
-    if (categories_ok && name_ok && categories_added && points_val_ok) {
+    if ($('#for_circle_diagram').prop('checked')) {
+        $('.circle_diagram_description_block').each(function () {
+            if ($(this).find('textarea').val() === '') {
+                circle_diagrams_descriptions_ok = false
+            }
+        })
+        if (!circle_diagrams_descriptions_ok) {
+            toastr.error('Все поля описаний индикатора потенциала должны быть заполнены')
+
+        }
+    }
+    if (categories_ok && name_ok && categories_added && points_val_ok && circle_diagrams_descriptions_ok) {
         // console.log('save')
         let green = {
             'points_from': $('#points_from_green').val(),
             'points_to': $('#points_to_green').val(),
+            'circle_diagram_description': $('#circle_diagram_description_green_block').find('textarea').val(),
         }
         let yellow = {
             'points_from': $('#points_from_yellow').val(),
             'points_to': $('#points_to_yellow').val(),
+            'circle_diagram_description': $('#circle_diagram_description_yellow_block').find('textarea').val(),
         }
         let red = {
             'points_from': $('#points_from_red').val(),
             'points_to': $('#points_to_red').val(),
+            'circle_diagram_description': $('#circle_diagram_description_red_block').find('textarea').val(),
         }
         btn_spinner('#save_edited_traffic_light_report_filter')
         let filter_position = $('#position').val()
@@ -191,7 +214,8 @@ $('#save_edited_traffic_light_report_filter').on('click', function () {
                 'green': green,
                 'filter_id': filter_id,
                 'position': filter_position,
-                'green_from_left': $('#green_from_left').prop('checked')
+                'green_from_left': $('#green_from_left').prop('checked'),
+                'for_circle_diagram': $('#for_circle_diagram').prop('checked'),
             }),
             processData: false,
             contentType: false,

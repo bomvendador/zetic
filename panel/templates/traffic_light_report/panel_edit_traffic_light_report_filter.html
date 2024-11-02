@@ -38,7 +38,8 @@
                                         <div class="form-group">
                                             <label for="company">Компания</label>
                                             <input type="text" class="form-control" id="company"
-                                                   value="{{ filter.project.company.id }}. {{ filter.project.company.name }}" disabled>
+                                                   value="{{ filter.project.company.id }}. {{ filter.project.company.name }}"
+                                                   disabled>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-sm-12">
@@ -96,16 +97,29 @@
                                         <td>
                                             <h3 class="card-title">Настройки баллов</h3>
                                         </td>
+
                                         <td style="text-align: right">
                                             <div class="form-switch">
+                                                <label style="margin-right: 3em" class="form-check-label"
+                                                       for="green_from_left">Для круговой диаграммы</label>
+                                                <input class="form-check-input" type="checkbox" role="switch"
+                                                       id="for_circle_diagram"
+                                                        {% if filter.for_circle_diagram %}
+                                                       checked
+                                                        {% endif %}
+                                                        {% if not for_circle_diagram_allowed %} disabled{% endif %}>
+
+                                            </div>
+                                            <div class="form-switch">
+                                                <label style="margin-right: 3em" class="form-check-label"
+                                                       for="green_from_left">Слева
+                                                    зеленый</label>
+
                                                 <input class="form-check-input" type="checkbox" role="switch"
                                                        id="green_from_left"
                                                         {% if filter.direction == 'green_from_left' %}
                                                        checked
-                                                        {% endif %}
-                                                >
-                                                <label class="form-check-label" for="green_from_left">Слева
-                                                    зеленый</label>
+                                                        {% endif %}>
                                             </div>
                                     </tr>
                                     </tbody>
@@ -142,9 +156,36 @@
                                                            id="points_to_green" value="{{ filter.points_to_green }}">
                                                 </div>
                                             </div>
+                                            <div class="form-group mt-2" id="points_1">
+                                                {#                                        {% if filter.direction == 'green_from_left' %}#}
+                                                <div style="background-color: #00800082; padding: 0.5rem"
+                                                     id="points_label_1">
+                                                    Яркое проявление (зеленый)
+                                                </div>
+                                                <div>
+                                                    <textarea class="form-control mb-4" placeholder="Textarea"
+                                                              rows="4"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div id="circle_diagram_description_green_block"
+                                                 class="circle_diagram_description_block {% if filter.circle_diagram_description_green == None %} d-none {% endif %}">
+                                                <hr style="border-color: blue; margin-top: 1.3rem; margin-bottom: 0.5em">
+                                                <div class="form-group mt-2">
+                                                    {#                                        {% if filter.direction == 'green_from_left' %}#}
+                                                    <div style="padding: 0.5rem">
+                                                        Описание индикатора потенциала
+                                                    </div>
+                                                    <div>
+                                                        <textarea class="form-control mb-4" placeholder="Текст описания..." rows="4">{% if filter.circle_diagram_description_green != None %}{{ filter.circle_diagram_description_green }}{% endif %}</textarea>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
 
                                         {% else %}
-                                            <div style="background-color: #ff000063; padding: 0.5rem"
+                                            <div style="background-color: rgba(241,131,131,0.99); padding: 0.5rem"
                                                  id="points_label_1">
                                                 Слабое проявление (красный)
                                             </div>
@@ -164,10 +205,27 @@
                                                            id="points_to_red" value="{{ filter.points_to_red }}">
                                                 </div>
                                             </div>
+                                            <div id="circle_diagram_description_red_block"
+                                                 class="circle_diagram_description_block {% if filter.circle_diagram_description_red == None %} d-none {% endif %}">
+                                                <hr style="border-color: blue; margin-top: 1.3rem; margin-bottom: 0.5em">
+                                                <div class="form-group mt-2">
+                                                    {#                                        {% if filter.direction == 'green_from_left' %}#}
+                                                    <div style="padding: 0.5rem">
+                                                        Описание индикатора потенциала
+                                                    </div>
+                                                    <div>
+                                                        <textarea class="form-control mb-4" placeholder="Текст описания..." rows="4">{% if filter.circle_diagram_description_red != None %}{{ filter.circle_diagram_description_red }}{% endif %}</textarea>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
 
                                         {% endif %}
 
                                     </div>
+
+
                                 </div>
                                 <div class="col-md-4 col-sm-12">
                                     <div class="form-group mt-2" id="points_2">
@@ -189,6 +247,23 @@
                                                        id="points_to_yellow" value="{{ filter.points_to_yellow }}">
                                             </div>
                                         </div>
+
+                                        <div id="circle_diagram_description_yellow_block"
+                                             class="circle_diagram_description_block {% if filter.circle_diagram_description_yellow == None %} d-none {% endif %}">
+                                            <hr style="border-color: blue; margin-top: 1.3rem; margin-bottom: 0.5em">
+                                            <div class="form-group mt-2">
+                                                {#                                        {% if filter.direction == 'green_from_left' %}#}
+                                                <div style="padding: 0.5rem">
+                                                    Описание индикатора потенциала
+                                                </div>
+                                                <div>
+                                                    <textarea class="form-control mb-4" placeholder="Текст описания..." rows="4">{% if filter.circle_diagram_description_yellow != None %}{{ filter.circle_diagram_description_yellow }}{% endif %}</textarea>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-12">
@@ -215,6 +290,22 @@
                                                 </div>
                                             </div>
 
+                                            <div id="circle_diagram_description_red_block"
+                                                 class="circle_diagram_description_block {% if filter.circle_diagram_description_red == None %} d-none {% endif %}">
+                                                <hr style="border-color: blue; margin-top: 1.3rem; margin-bottom: 0.5em">
+                                                <div class="form-group mt-2">
+                                                    {#                                        {% if filter.direction == 'green_from_left' %}#}
+                                                    <div style="padding: 0.5rem">
+                                                        Описание индикатора потенциала
+                                                    </div>
+                                                    <div>
+                                                        <textarea class="form-control mb-4" placeholder="Текст описания..." rows="4">{% if filter.circle_diagram_description_red != None %}{{ filter.circle_diagram_description_red }}{% endif %}</textarea>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
                                         {% else %}
                                             <div style="background-color: #00800082; padding: 0.5rem"
                                                  id="points_label_3">
@@ -235,6 +326,22 @@
                                                            id="points_to_green" value="{{ filter.points_to_green }}">
                                                 </div>
                                             </div>
+
+                                            <div id="circle_diagram_description_green_block"
+                                                 class="circle_diagram_description_block {% if filter.circle_diagram_description_green == None %} d-none {% endif %}">
+                                                <hr style="border-color: blue; margin-top: 1.3rem; margin-bottom: 0.5em">
+                                                <div class="form-group mt-2">
+                                                    {#                                        {% if filter.direction == 'green_from_left' %}#}
+                                                    <div style="padding: 0.5rem">
+                                                        Описание индикатора потенциала
+                                                    </div>
+                                                    <div>
+                                                        <textarea class="form-control mb-4" placeholder="Текст описания..." rows="4">{% if filter.circle_diagram_description_green != None %}{{ filter.circle_diagram_description_green }}{% endif %}</textarea>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
 
 
                                         {% endif %}
@@ -382,5 +489,5 @@
     </script>
     <script src="{% static 'login/js/select2.js' %}"></script>
 
-    <script src="{% static 'panel/js/traffic_light_report/panel_edit_traffic_light_report_filter.js' %}"></script>
+    <script src="{% static 'panel/js/traffic_light_report/panel_edit_traffic_light_report_filter.js' %}?{{ timestamp }}"></script>
 {% endblock %}

@@ -318,7 +318,7 @@ let no_available_positions = {{ no_available_positions }};
 
 </script>
 
-<script src="{% static 'panel/js/panel_filters_matrix_list.js' %}"></script>
+<script src="{% static 'panel/js/panel_filters_matrix_list.js' %}?{{ timestamp }}"></script>
 {#<script src="{% static 'panel/js/panel_study_details.js' %}"></script>#}
 
 {% endblock %}

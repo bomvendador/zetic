@@ -15,6 +15,7 @@ from datetime import datetime
 import math
 import random
 
+from .views import questionnaire_context
 from django.db.models import Q
 
 from reports.settings import DEBUG
@@ -22,6 +23,7 @@ from reports.settings import DEBUG
 
 def section_view(request, section_id, code):
     print(request)
+    context = questionnaire_context()
     participant_inst = Participant.objects.get(invitation_code=code)
     section_inst = Section.objects.get(id=section_id)
     categories_inst = Category.objects.filter(section=section_inst)
@@ -29,13 +31,13 @@ def section_view(request, section_id, code):
     questionnaire_inst = Questionnaire.objects.get(participant__invitation_code=code)
 
     if not questionnaire_inst.active:
-        context = {
+        context.update({
             'employee': participant_inst.employee,
             # 'research_template_sections': research_template_sections_inst,
             # 'sections': sections,
             # 'code': code,
             # 'show_back_to_sections': False
-        }
+        })
         return render(request, 'questionnaire_blocked.html', context)
     else:
 
@@ -76,7 +78,7 @@ def section_view(request, section_id, code):
         # print(len(questions_inst))
         # print(random.shuffle(questions_inst))
         # for question in questions_inst:
-        context = {
+        context.update({
             'employee': participant_inst.employee,
             'section': section_inst,
             'code': code,
@@ -86,7 +88,7 @@ def section_view(request, section_id, code):
             'show_back_to_sections': True,
             'participant_id': participant_inst.id
             # 'questionnaire': participant_inst.qu,
-        }
+        })
 
         return render(request, 'questionnaire_section_questions.html', context)
 

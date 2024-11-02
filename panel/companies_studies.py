@@ -1,3 +1,5 @@
+import time
+
 from pdf.models import Category, Section, ResearchTemplate, ResearchTemplateSections, Study, Company, Employee, \
     Participant, IndividualReportAllowedOptions, GroupReportAllowedOptions, CompanyIndividualReportAllowedOptions, \
     CompanyGroupReportAllowedOptions, ParticipantIndividualReportAllowedOptions, StudyIndividualReportAllowedOptions
@@ -81,7 +83,7 @@ def add_study(request):
             'individual_report_allowed_options': individual_report_allowed_options,
             'companies': companies,
             'research_templates': research_templates,
-            'user_role': cur_user_role_name
+            'user_role': cur_user_role_name,
         }
     )
 

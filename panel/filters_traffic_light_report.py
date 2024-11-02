@@ -189,6 +189,7 @@ def save_edited_traffic_light_report_filter(request):
         filter_id = json_data['filter_id']
         green_from_left = json_data['green_from_left']
         position = json_data['position']
+        for_circle_diagram = json_data['for_circle_diagram']
         filter_inst = TrafficLightReportFilter.objects.get(id=filter_id)
         if filter_inst.project:
             max_position = TrafficLightReportFilter.objects.filter(project=filter_inst.project).aggregate(Max('position'))['position__max']
@@ -215,6 +216,16 @@ def save_edited_traffic_light_report_filter(request):
             filter_inst.direction = 'green_from_left'
         else:
             filter_inst.direction = 'red_from_left'
+        if for_circle_diagram:
+            filter_inst.for_circle_diagram = True
+            filter_inst.circle_diagram_description_red = red['circle_diagram_description']
+            filter_inst.circle_diagram_description_yellow = yellow['circle_diagram_description']
+            filter_inst.circle_diagram_description_green = green['circle_diagram_description']
+        else:
+            filter_inst.for_circle_diagram = False
+            filter_inst.circle_diagram_description_red = None
+            filter_inst.circle_diagram_description_yellow = None
+            filter_inst.circle_diagram_description_green = None
         filter_inst.save()
         TrafficLightReportFilterCategory.objects.filter(filter=filter_inst).delete()
         for category in categories:
@@ -237,6 +248,11 @@ def edit_traffic_light_report_filter(request, filter_id):
     context = info_common(request)
     filter_inst = TrafficLightReportFilter.objects.get(id=filter_id)
     filter_categories = TrafficLightReportFilterCategory.objects.filter(filter=filter_inst)
+    for_circle_diagram_allowed = True
+    if not filter_inst.for_circle_diagram:
+        for_circle_diagram_inst = TrafficLightReportFilter.objects.filter(for_circle_diagram=True)
+        if for_circle_diagram_inst.exists():
+            for_circle_diagram_allowed = False
     if filter_inst.project:
         positions = get_traffic_light_filters_positions(filter_inst.project.id)
     else:
@@ -245,8 +261,10 @@ def edit_traffic_light_report_filter(request, filter_id):
         'filter': filter_inst,
         'categories': get_categories_for_filter(),
         'filter_categories': filter_categories,
-        'positions': positions[:-1]
+        'positions': positions[:-1],
+        'for_circle_diagram_allowed': for_circle_diagram_allowed
     })
+    print(context)
 
     return render(request, 'traffic_light_report/panel_edit_traffic_light_report_filter.html', context)
 

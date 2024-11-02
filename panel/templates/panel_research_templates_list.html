@@ -335,6 +335,6 @@ let url_delete_template = "{% url 'delete_template' %}"
 
 </script>
 
-<script src="{% static 'panel/js/panel_research_template_list.js' %}"></script>
+<script src="{% static 'panel/js/panel_research_template_list.js' %}?{{ timestamp }}"></script>
 
 {% endblock %}

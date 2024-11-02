@@ -953,13 +953,17 @@ class TrafficLightReportFilter(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
     points_from_red = models.IntegerField(null=False, default=0)
     points_to_red = models.IntegerField(null=False, default=0)
+    circle_diagram_description_red = models.TextField(default=None, blank=True, null=True)
     points_from_yellow = models.IntegerField(null=False, default=0)
     points_to_yellow = models.IntegerField(null=False, default=0)
+    circle_diagram_description_yellow = models.TextField(default=None, blank=True, null=True)
     points_from_green = models.IntegerField(null=False, default=0)
     points_to_green = models.IntegerField(null=False, default=0)
+    circle_diagram_description_green = models.TextField(default=None, blank=True, null=True)
     direction = models.CharField(max_length=30, blank=True, null=True)
     position = models.IntegerField(null=False, default=0)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    for_circle_diagram = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.name}'

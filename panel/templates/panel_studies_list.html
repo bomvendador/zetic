@@ -224,6 +224,6 @@
     {#let url_save_new_employee_html = "{% url 'save_new_employee_html' %}"#}
 
 </script>
-    <script src="{% static 'panel/js/panel_studies_list.js' %}"></script>
+    <script src="{% static 'panel/js/panel_studies_list.js' %}?{{ timestamp }}"></script>
 
 {% endblock %}

@@ -229,6 +229,7 @@ Cекция «Черты личности» построена исходя из
 
 
 def draw_lie_scale(pdf, x, y, w, h, lie_points, img_link):
+    print(f'lie_points = {lie_points}')
     pdf.set_line_width(0.3)
     pdf.set_fill_color(230, 230, 230)
 

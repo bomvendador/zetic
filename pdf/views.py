@@ -25,6 +25,7 @@ from pdf.page4_file import page4
 from pdf.page5_file import page5
 from pdf.page6_file import page6
 from pdf.consultant_text_page import page as consultant_page
+from .circle_diagram import page_circle_diagram
 
 from pdf.save_data import save_data_to_db_and_send_report
 import cyrtranslit
@@ -108,13 +109,17 @@ def pdf_single_generator(data):
                 show_short_conclusions = False
     if show_short_conclusions:
         pdf.add_page()
-        page_short_conclusions(pdf, questionnaire_id, 'ru', report_id)
+        page_short_conclusions(pdf, questionnaire_id, lang, report_id)
 
     # if '1' in appraisal_data_in_request:
     #     pdf.add_page()
     #     # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
 
     #     page3(pdf, extract_section(request_json, '1'), lang, participant_info)
+
+    pdf.add_page()
+    page_circle_diagram(pdf, questionnaire_id, report_id, lang)
+
 
     answer_code_1 = category_data('1_', questionnaire_id, employee.id)
     if answer_code_1:

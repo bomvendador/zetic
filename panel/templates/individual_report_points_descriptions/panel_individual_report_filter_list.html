@@ -165,7 +165,7 @@ let url_add_individual_report_points_description_filter = "{% url 'add_individua
 
 </script>
 
-<script src="{% static 'panel/js/individual_report_points_description/panel_individual_report_filter_list.js' %}"></script>
+<script src="{% static 'panel/js/individual_report_points_description/panel_individual_report_filter_list.js' %}?{{ timestamp }}"></script>
 {#<script src="{% static 'panel/js/panel_study_details.js' %}"></script>#}
 
 {% endblock %}

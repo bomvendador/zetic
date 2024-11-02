@@ -178,6 +178,6 @@ let url_delete_section = "{% url 'delete_section' %}"
 
 </script>
 
-<script src="{% static 'panel/js/panel_sections_list.js' %}"></script>
+<script src="{% static 'panel/js/panel_sections_list.js' %}?{{ timestamp }}"></script>
 
 {% endblock %}

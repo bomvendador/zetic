@@ -7,6 +7,8 @@ import json
 from django.utils import timezone
 from django.core import serializers
 
+from .views import questionnaire_context
+
 from reports.settings import EMAIL_SUBJECT_PREFIX
 from datetime import datetime
 import math
@@ -14,7 +16,7 @@ import math
 
 def get_participant_data(request, code):
     print(request)
-
+    context = questionnaire_context()
     participant_inst = Participant.objects.get(invitation_code=code)
     questionnaire_inst = Questionnaire.objects.get(participant=participant_inst)
     email_subject_prefix = EMAIL_SUBJECT_PREFIX
@@ -23,7 +25,7 @@ def get_participant_data(request, code):
         current_year = datetime.now().year
         for i in range(1960, current_year - 18 + 1):
             years.append(i)
-        context = {
+        context.update({
 
             'employee': participant_inst.employee,
             'gender': EmployeeGender.objects.all(),
@@ -33,7 +35,7 @@ def get_participant_data(request, code):
             'years': years,
             'code': code,
             'email_subject_prefix': email_subject_prefix
-        }
+        })
         return render(request, 'questionnaire_participant_data.html', context)
     else:
         if not questionnaire_inst.active:

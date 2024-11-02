@@ -197,7 +197,7 @@ let url_delete_filter = "{% url 'delete_filter' %}"
 
 </script>
 
-<script src="{% static 'panel/js/panel_filters_list.js' %}"></script>
+<script src="{% static 'panel/js/panel_filters_list.js' %}?{{ timestamp }}"></script>
 {#<script src="{% static 'panel/js/panel_study_details.js' %}"></script>#}
 
 {% endblock %}
