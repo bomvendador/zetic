@@ -44,12 +44,12 @@ def get_t_point(raw_point, category_code, gender, birth_year):
                 try:
                     tpoint = KETTEL_1_MEN_1994_2022[category_code][str(raw_point)]
                 except KeyError:
-                    return 'raw point error'
+                    return 'raw point error KETTEL_1_MEN_1994_2022'
             else:
                 try:
                     tpoint = KETTEL_1_MEN_1950_1993[category_code][str(raw_point)]
                 except KeyError:
-                    return 'raw point error'
+                    return 'raw point error KETTEL_1_MEN_1950_1993'
         if gender == 'Женский' or gender == 'mujer':
             if birth_year >= 1994:
                 try:
@@ -60,18 +60,18 @@ def get_t_point(raw_point, category_code, gender, birth_year):
                 try:
                     tpoint = KETTEL_1_WOMEN_1950_1993[category_code][str(raw_point)]
                 except KeyError:
-                    return 'raw point error'
+                    return 'raw point error KETTEL_1_WOMEN_1950_1993'
 
     if section_code == str(2):
         try:
             tpoint = KOPPINGI_DEFAULT[category_code][str(raw_point)]
         except KeyError:
-            return 'raw point error'
+            return 'raw point error KOPPINGI_DEFAULT'
     if section_code == str(3):
         try:
             tpoint = BOYKO_DEFAULT[category_code][str(raw_point)]
         except KeyError:
-            return 'raw point error'
+            return 'raw point error BOYKO_DEFAULT'
     if section_code == str(4):
         max_point = VALUES_DEFAULT[category_code]
         tpoint = round(raw_point / max_point * 10)
