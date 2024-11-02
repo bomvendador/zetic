@@ -19,6 +19,15 @@ import time
 from .raw_to_t_point import get_t_point, filter_raw_points_to_t_points
 from .page2_file import draw_lie_scale
 
+from webdriver_manager.chrome import ChromeDriverManager
+import os
+from reports.settings import DEBUG
+
+if DEBUG == 0:
+    driver_path = ChromeDriverManager().install()
+    os.environ["BOKEH_CHROMEDRIVER_PATH"] = driver_path
+    # os.environ["BOKEH_CHROMEDRIVER_PATH"] = '/usr/bin/chromedriver'
+
 
 def page_circle_diagram(pdf, questionnaire_id, report_id, lang):
     pdf.set_auto_page_break(False)
