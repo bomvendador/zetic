@@ -25,8 +25,8 @@ from reports.settings import DEBUG
 
 if DEBUG == 0:
     driver_path = ChromeDriverManager().install()
-    os.environ["BOKEH_CHROMEDRIVER_PATH"] = driver_path
-    # os.environ["BOKEH_CHROMEDRIVER_PATH"] = '/usr/bin/chromedriver'
+    # os.environ["BOKEH_CHROMEDRIVER_PATH"] = driver_path
+    os.environ["BOKEH_CHROMEDRIVER_PATH"] = '/usr/bin/chromedriver'
 
 
 def page_circle_diagram(pdf, questionnaire_id, report_id, lang):
