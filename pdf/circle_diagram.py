@@ -37,18 +37,18 @@ from reports.settings import DEBUG
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-chrome_options = Options()
-chrome_options.add_argument('--headless')
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--disable-dev-shm-usage')
-web_driver = webdriver.Chrome('/usr/bin/chromedriver', chrome_options=chrome_options)
 
 
 
-# if DEBUG == 0:
+if DEBUG == 0:
 #     # driver_path = ChromeDriverManager().install()
 #     # os.environ["BOKEH_CHROMEDRIVER_PATH"] = driver_path
 #     os.environ["BOKEH_CHROMEDRIVER_PATH"] = '/usr/bin/chromedriver'
+    chrome_options = Options()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    web_driver = webdriver.Chrome('/usr/bin/chromedriver', chrome_options=chrome_options)
 
 
 def page_circle_diagram(pdf, questionnaire_id, report_id, lang):
