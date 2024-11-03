@@ -31,7 +31,8 @@ SECRET_KEY = 'django-insecure--lfbjn3qgosinvh0ls*wb*#72ckmd4-9ozyt*^=6=_w+ah1&qg
 
 CSRF_TRUSTED_ORIGINS = [
     'http://51.250.113.32',
-    'http://51.250.45.169',
+    # 'http://51.250.45.169',
+    'http://51.250.47.137',
     # 'http://zetictest.ru',
     'http://zetictest.com',
     'https://zetictest.ru',
@@ -53,13 +54,14 @@ else:
     API_LINK = 'https://demo-admin.zetic.borsky.dev/api/'
 
 
-ALLOWED_HOSTS = ['51.250.113.32', '51.250.45.169', 'zetictest.ru', 'zetictest.com', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['51.250.113.32', '51.250.47.137', 'zetictest.ru', 'zetictest.com', '127.0.0.1', '0.0.0.0']
 # ALLOWED_HOSTS = ['51.250.45.169', 'https://zetictest.ru', 'zetictest.com', '127.0.0.1', '0.0.0.0']
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 CORS_ORIGIN_WHITELIST = [
     'http://51.250.113.32',
-    'http://51.250.45.169',
+    'http://51.250.47.137',
+    # 'http://51.250.45.169',
     # 'http://zetictest.ru',
     'http://zetictest.com',
     'https://zetictest.ru',
