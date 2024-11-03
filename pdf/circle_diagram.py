@@ -23,15 +23,25 @@ from webdriver_manager.chrome import ChromeDriverManager
 import os
 from reports.settings import DEBUG
 
-from selenium.webdriver import Chrome, ChromeOptions
+# from selenium.webdriver import Chrome, ChromeOptions
+#
+# options = ChromeOptions()
+#
+# options.add_argument('--headless')
+# options.add_argument("--window-size=2000x2000")
+# metrics = { "deviceMetrics": { "pixelRatio": 1.0 } }
+# options.add_experimental_option("mobileEmulation", metrics)
+# web_driver = Chrome(chrome_options=options)
 
-options = ChromeOptions()
 
-options.add_argument('--headless')
-options.add_argument("--window-size=2000x2000")
-metrics = { "deviceMetrics": { "pixelRatio": 1.0 } }
-options.add_experimental_option("mobileEmulation", metrics)
-web_driver = Chrome(chrome_options=options)
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
+chrome_options = Options()
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--disable-dev-shm-usage')
+web_driver = webdriver.Chrome('/usr/bin/chromedriver', chrome_options=chrome_options)
 
 
 
