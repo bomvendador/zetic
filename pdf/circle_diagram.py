@@ -23,6 +23,18 @@ from webdriver_manager.chrome import ChromeDriverManager
 import os
 from reports.settings import DEBUG
 
+from selenium.webdriver import Chrome, ChromeOptions
+
+options = ChromeOptions()
+
+options.add_argument('--headless')
+options.add_argument("--window-size=2000x2000")
+metrics = { "deviceMetrics": { "pixelRatio": 1.0 } }
+options.add_experimental_option("mobileEmulation", metrics)
+web_driver = Chrome(chrome_options=options)
+
+
+
 # if DEBUG == 0:
 #     # driver_path = ChromeDriverManager().install()
 #     # os.environ["BOKEH_CHROMEDRIVER_PATH"] = driver_path
@@ -286,6 +298,6 @@ def draw_circle_diagram(pdf, data_for_circle):
     # save(p, '2/eeeee.html')
     name = 'pdf/images/plot' + str(time.time()) + '.png'
     # export_png(p, filename=name, scale_factor=1, width=500, height=500)
-    export_png(p, filename=name)
+    export_png(p, filename=name, webdriver=web_driver)
 
     pdf.image(name, x=20, y=18, h=pdf.epw*0.9)
