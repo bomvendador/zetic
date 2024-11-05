@@ -68,8 +68,8 @@ def page_circle_diagram(pdf, questionnaire_id, report_id, lang):
     pdf.line(x + 1, y + 5, x + 220, y + 5)
     questionnaire = Questionnaire.objects.get(id=questionnaire_id)
     traffic_light_report_filter = TrafficLightReportFilter.objects.all().order_by('position')
-    potencial_indicator = 0
-    potencial_text = 0
+    potential_indicator = 0
+    potential_text = 0
     data_for_circle = []
     for traffic_light_filter in traffic_light_report_filter:
         total_t_points = 0
@@ -95,13 +95,13 @@ def page_circle_diagram(pdf, questionnaire_id, report_id, lang):
                 total_t_points = total_t_points + int(t_point)
         average_t_points = round(total_t_points / len(traffic_light_report_filter_categories))
         if traffic_light_filter.for_circle_diagram:
-            potencial_indicator = average_t_points
+            potential_indicator = average_t_points
             if traffic_light_filter.points_from_red <= int(average_t_points) <= traffic_light_filter.points_to_red:
-                potencial_text = traffic_light_filter.circle_diagram_description_red
+                potential_text = traffic_light_filter.circle_diagram_description_red
             if traffic_light_filter.points_from_yellow <= int(average_t_points) <= traffic_light_filter.points_to_yellow:
-                potencial_text = traffic_light_filter.circle_diagram_description_yellow
+                potential_text = traffic_light_filter.circle_diagram_description_yellow
             if traffic_light_filter.points_from_green <= int(average_t_points) <= traffic_light_filter.points_to_green:
-                potencial_text = traffic_light_filter.circle_diagram_description_green
+                potential_text = traffic_light_filter.circle_diagram_description_green
 
         data_for_circle.append({
             'average_t_points': average_t_points,
@@ -130,14 +130,14 @@ def page_circle_diagram(pdf, questionnaire_id, report_id, lang):
 
     y = pdf.get_y() + 10
     pdf.set_xy(x, y)
-    draw_lie_scale(pdf, x + 2, y + 1, 70, 10, potencial_indicator, 'media/images/kettel_page3.png')
+    draw_potential_scale(pdf, x + 2, y + 1, 70, 10, potential_indicator, 'media/images/kettel_page3.png')
     text = u'Уровень потенциала отражается на шкале от 0 до 10. ' \
            u'Зелеными рамками выделены средние показатели потенциала' \
            u' на рынке труда для данной категории персонала'
 
     pdf.set_font("RalewayBold", "", 11)
     pdf.set_xy(x + 78, y)
-    pdf.cell(5, 12, str(potencial_indicator), ln=0)
+    pdf.cell(5, 12, str(potential_indicator), ln=0)
 
     pdf.set_font("RalewayLight", "", 9)
     pdf.set_xy(x + 90, y)
@@ -146,7 +146,7 @@ def page_circle_diagram(pdf, questionnaire_id, report_id, lang):
 
     y = pdf.get_y() + 15
     pdf.set_xy(x, y)
-    pdf.multi_cell(190, 4, potencial_text)
+    pdf.multi_cell(190, 4, potential_text)
 
     insert_page_number(pdf)
 
@@ -308,6 +308,26 @@ def draw_circle_diagram(pdf, data_for_circle):
     # save(p, '2/eeeee.html')
     name = 'pdf/images/plot' + str(time.time()) + '.png'
     # export_png(p, filename=name, scale_factor=1, width=500, height=500)
-    export_png(p, filename=name, webdriver=web_driver)
+    if DEBUG == 0:
+        export_png(p, filename=name, webdriver=web_driver)
+    else:
+        export_png(p, filename=name)
 
     pdf.image(name, x=20, y=18, h=pdf.epw*0.9)
+
+
+def draw_potential_scale(pdf, x, y, w, h, lie_points, img_link):
+    pdf.set_line_width(0.3)
+    pdf.set_fill_color(230, 230, 230)
+
+    pdf.rect(x, y, w, h, 'F')
+
+    pdf.set_draw_color(146, 208, 80)
+    pdf.rect(x-1+29.1-6.9, y-1, 29.1, h+2)
+
+    # pdf.set_draw_color(255, 0, 0)
+    # pdf.rect(x-1+29.1, y-1, 43, h+2)
+
+    for i in range(lie_points):
+        pdf.image(img_link, x=x+1, y=y+1, w=5.9)
+        x += 5.9 + 1
