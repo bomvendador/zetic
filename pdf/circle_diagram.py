@@ -323,7 +323,7 @@ def draw_potential_scale(pdf, x, y, w, h, lie_points, img_link):
     pdf.rect(x, y, w, h, 'F')
 
     pdf.set_draw_color(146, 208, 80)
-    pdf.rect(x-1+29.1-6.9, y-1, 29.1-1, h+2)
+    pdf.rect(x-1+29.1-6.9, y-1, 6.9*4, h+2)
 
     # pdf.set_draw_color(255, 0, 0)
     # pdf.rect(x-1+29.1, y-1, 43, h+2)
