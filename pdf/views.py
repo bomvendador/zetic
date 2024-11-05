@@ -88,21 +88,21 @@ def pdf_single_generator(data):
     pdf.add_page()
     page2(pdf, lie_points, lang)
 
-    individual_report_allowed_options = IndividualReportAllowedOptions.objects.get(name='Краткие выводы')
+    individual_report_allowed_options_short_conclusions = IndividualReportAllowedOptions.objects.get(name='Краткие выводы')
 
     show_short_conclusions = True
     participant_short_conclusions_options_filter = ParticipantIndividualReportAllowedOptions.objects.filter(Q(participant=questionnaire_inst.participant) &
-                                                                                                  Q(option=individual_report_allowed_options))
+                                                                                                  Q(option=individual_report_allowed_options_short_conclusions))
     if participant_short_conclusions_options_filter.exists():
         participant_short_conclusions_options = ParticipantIndividualReportAllowedOptions.objects.get(Q(participant=questionnaire_inst.participant) &
-                                                                                                  Q(option=individual_report_allowed_options))
+                                                                                                  Q(option=individual_report_allowed_options_short_conclusions))
         if not participant_short_conclusions_options.value:
             show_short_conclusions = False
     else:
-        company_short_conclusions_options_filter = CompanyIndividualReportAllowedOptions.objects.filter(Q(option=individual_report_allowed_options) &
+        company_short_conclusions_options_filter = CompanyIndividualReportAllowedOptions.objects.filter(Q(option=individual_report_allowed_options_short_conclusions) &
                                                                                                  Q(company=questionnaire_inst.participant.employee.company))
         if company_short_conclusions_options_filter:
-            company_short_conclusions_options = CompanyIndividualReportAllowedOptions.objects.get(Q(option=individual_report_allowed_options) &
+            company_short_conclusions_options = CompanyIndividualReportAllowedOptions.objects.get(Q(option=individual_report_allowed_options_short_conclusions) &
                                                                                                   Q(company=questionnaire_inst.participant.employee.company))
 
             if not company_short_conclusions_options.value:
@@ -117,8 +117,15 @@ def pdf_single_generator(data):
 
     #     page3(pdf, extract_section(request_json, '1'), lang, participant_info)
 
-    pdf.add_page()
-    page_circle_diagram(pdf, questionnaire_id, report_id, lang)
+
+    individual_report_allowed_options_circle_diagram = IndividualReportAllowedOptions.objects.get(name='Круговая диаграмма')
+    participant_short_conclusions_options_filter_circle_diagram = ParticipantIndividualReportAllowedOptions.objects.get(
+        Q(participant=questionnaire_inst.participant) &
+        Q(option=individual_report_allowed_options_circle_diagram)).value
+    # print(f'circle_diagram = {}')
+    if participant_short_conclusions_options_filter_circle_diagram:
+        pdf.add_page()
+        page_circle_diagram(pdf, questionnaire_id, report_id, lang)
 
 
     answer_code_1 = category_data('1_', questionnaire_id, employee.id)

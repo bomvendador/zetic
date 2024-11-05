@@ -163,11 +163,17 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col col-lg-2 col-sm-12 text-end">
-                                <button class="btn btn-primary my-1" type="button" id="add_participant"><i
+                                <button class="btn btn-primary my-1" type="button" id="add_participant"
+                        {% if made_by_migration %}
+                            disabled title="В исследование миграции добавить участников нельзя"
+                        {% endif %}
+                                ><i
                                         class="fa fa-user-plus button-icon"></i>Добавить участника
                                 </button>
                             </div>
+
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

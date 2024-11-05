@@ -865,6 +865,7 @@ $('#save_question_groups').on('click', function () {
 
 
 $('#add_participant').on('click', function () {
+
     show_progressbar_loader()
     $.ajax({
         headers: {"X-CSRFToken": token},

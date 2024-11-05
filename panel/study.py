@@ -73,8 +73,14 @@ def study_details(request, study_id):
             questionnaires_left = company_inst.demo_status_questionnaires_limit - company_questionnaires_qnt
         participant_individual_report_allowed_options = ParticipantIndividualReportAllowedOptions.objects.filter(participant__study=study)
         study_individual_report_allowed_options = StudyIndividualReportAllowedOptions.objects.filter(study=study)
+
+        if 'Исследование миграции' in study.name:
+            made_by_migration = True
+        else:
+            made_by_migration = False
         context.update(
             {
+                'made_by_migration': made_by_migration,
                 'study': study,
                 'participant_individual_report_allowed_options': participant_individual_report_allowed_options,
                 'study_individual_report_allowed_options': study_individual_report_allowed_options,
