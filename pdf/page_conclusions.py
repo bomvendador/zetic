@@ -165,6 +165,9 @@ def page(pdf, questionnaire_id, lang, report_id):
                     y = y + 2
                     pdf.set_xy(x, y)
                 pdf.rect(x - 7, start_y_recommendation_block, x + 176, y - start_y_recommendation_block, 'D')
+                print('====recommendations=======')
+                print(f'y = {y}')
+                print('=======================')
 
             y = y + 4
             pdf.set_xy(x, y)
