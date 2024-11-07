@@ -131,6 +131,7 @@ def page(pdf, questionnaire_id, lang, report_id):
             print(conclusion_text['text'])
             print(f'y = {y}')
             print('=======================')
+            logger.info(f'y = {y}')
             if y > MAX_Y and conclusion_text['recommendations']:
                 insert_page_number(pdf)
                 pdf.add_page()
@@ -168,7 +169,7 @@ def page(pdf, questionnaire_id, lang, report_id):
                 print('====recommendations=======')
                 print(f'y = {y}')
                 print('=======================')
-
+                logger.info(f'rec y = {y}')
             y = y + 4
             pdf.set_xy(x, y)
 
