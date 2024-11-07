@@ -9,8 +9,11 @@ from pdf_group.page_funcs import block_name_
 from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B, MIN_SCALE_DELTA_Y, MAX_Y, START_Y
 
 from celery.utils.log import get_task_logger
+import logging
 
 logger = get_task_logger(__name__)
+
+logger2 = logging.getLogger(__name__)
 
 
 def page(pdf, questionnaire_id, lang, report_id):
@@ -132,6 +135,7 @@ def page(pdf, questionnaire_id, lang, report_id):
             print(f'y = {y}')
             print('=======================')
             logger.info(f'y = {y}')
+            logger2.info(f'y = {y}')
             if y > MAX_Y and conclusion_text['recommendations']:
                 insert_page_number(pdf)
                 pdf.add_page()
