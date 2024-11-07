@@ -1,4 +1,6 @@
 from pdf.draw import draw_full_scale, insert_page_number
+from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B, MIN_SCALE_DELTA_Y, MAX_Y, START_Y
+from pdf_group.page_funcs import block_name_
 
 
 def page5(pdf, json_section, lang, participant_info):
@@ -13,6 +15,11 @@ def page5(pdf, json_section, lang, participant_info):
         pdf.cell(0, 0, 'Факторы профессионального выгорания')
     else:
         pdf.cell(0, 0, 'Section B')
+
+    y += 5
+
+    pdf.set_draw_color(0, 0, 0)
+    pdf.line(x + 1, y, x + 220, y)
 
     y += 5
     # 17
@@ -31,18 +38,37 @@ def page5(pdf, json_section, lang, participant_info):
     # vert_text_y = 73
     vert_text_y = 65
     if lang == 'ru':
-        with pdf.rotation(90, 10, vert_text_y+1):
-            pdf.text(0, vert_text_y+1, "Фаза 1. Напряжение")
+
+        y = pdf.get_y() + 5
+
+        pdf.set_xy(x, y)
+        block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, x, str('Фаза 1. Напряжение').upper())
+        pdf.set_text_color(0, 0, 0)
+
+        y = pdf.get_y() + 10
+        pdf.set_xy(x, y)
+
+        text = u'В данной фазе отражается отношение к рабочей нагрузке и рабочим процессам. Показатели выше ' \
+               u'4 стенов  говорят о наличии раздражения и разочарования от работы, ощущении себя “не на своем месте”. ' \
+               u'Наличие высоких показателей в данных шкалах еще не влияет на качество работы, но уже заставляет ' \
+               u'сотрудника находиться в постоянном напряжении и игнорировать собственные чувства.'
+
+        pdf.multi_cell(0, 4, text, align='J')
+
+        # with pdf.rotation(90, 10, vert_text_y+1):
+        #     pdf.text(0, vert_text_y+1, "Фаза 1. Напряжение")
     else:
         with pdf.rotation(90, 10, vert_text_y+1):
             pdf.text(0, vert_text_y, "Phase 1. Tension")
 
-    pdf.set_draw_color(0, 0, 0)
-    pdf.line(13, vert_text_y - 25, 13, vert_text_y + 18)
+    # pdf.set_draw_color(0, 0, 0)
+    # pdf.line(13, vert_text_y - 25, 13, vert_text_y + 18)
+
+    pdf.line(0, pdf.get_y() + 2, x + 220,  pdf.get_y() + 2)
 
     y += 22
     # y += vert_text_y
-    x += 6
+    # x += 6
     if lang == 'ru':
         scale_legend_left = u'''
     Слабо выражено
@@ -90,17 +116,34 @@ def page5(pdf, json_section, lang, participant_info):
     vert_text_y = 122
     # vert_text_y = 152
     if lang == 'ru':
-        with pdf.rotation(90, 10, vert_text_y+2):
-            pdf.text(0, vert_text_y+2, "Фаза 2. Сопротивление")
+
+        y = pdf.get_y() + 15
+        pdf.set_xy(x, y)
+        block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, x, str('Фаза 2. Сопротивление').upper())
+        pdf.set_text_color(0, 0, 0)
+
+        y = pdf.get_y() + 10
+        pdf.set_xy(x, y)
+
+        text = u'В данной фазе отражается отношение к взаимодействию с коллегами и партнерами. Показатели выше ' \
+               u'4 стенов  говорят об ощущении непродуктивности коммуникаций и их неэкологичности. Наличие высоких ' \
+               u'показателей в данных шкалах опосредованно влияет на качество работы, возникает потребность сократить ' \
+               u'или дистанцироваться от части рабочих коммуникаций, сохраняя силы и внимание для решения других ' \
+               u'важных задач.'
+
+        pdf.multi_cell(0, 4, text, align='J')
+
+        # with pdf.rotation(90, 10, vert_text_y+2):
+        #     pdf.text(0, vert_text_y+2, "Фаза 2. Сопротивление")
     else:
         with pdf.rotation(90, 10, vert_text_y+1):
             pdf.text(0, vert_text_y+1, "Phase 2. Resistance")
 
-    pdf.set_draw_color(0, 0, 0)
-    pdf.line(13, vert_text_y - 25, 13, vert_text_y + 18)
+    # pdf.set_draw_color(0, 0, 0)
+    # pdf.line(13, vert_text_y - 25, 13, vert_text_y + 18)
+    pdf.line(0, pdf.get_y() + 2, x + 220,  pdf.get_y() + 2)
 
-
-    y += 40
+    y = pdf.get_y()
     # y += vert_text_y - 35
     if lang == 'ru':
         scale_name = u'''Усталость от 
@@ -120,16 +163,35 @@ def page5(pdf, json_section, lang, participant_info):
     # vert_text_y = 232
     vert_text_y = 179
     if lang == 'ru':
-        with pdf.rotation(90, 10, vert_text_y+2):
-            pdf.text(0, vert_text_y+2, "Фаза 3. Истощение")
+
+        y = pdf.get_y() + 15
+
+        pdf.set_xy(x, y)
+        block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, x, str('Фаза 3. Истощение').upper())
+        pdf.set_text_color(0, 0, 0)
+
+        y = pdf.get_y() + 10
+        pdf.set_xy(x, y)
+
+        text = u'В данной фазе отражается уровень усталости и потери мотивации. Показатели выше 4 стенов  говорят ' \
+               u'об ощущении истощения, потере внимания и снижении интереса к работе. Наличие высоких показателей ' \
+               u'в данных шкалах говорит о необходимости преодолевать свою усталость и раздражение, потребности ' \
+               u'пересмотреть свой рабочий режим и круг обязанностей.'
+
+        pdf.multi_cell(0, 4, text, align='J')
+
+        # with pdf.rotation(90, 10, vert_text_y+2):
+        #     pdf.text(0, vert_text_y+2, "Фаза 3. Истощение")
     else:
         with pdf.rotation(90, 10, vert_text_y):
             pdf.text(0, vert_text_y, "Phase 3. Exhaustion")
 
-    pdf.set_draw_color(0, 0, 0)
-    pdf.line(13, vert_text_y - 22, 13, vert_text_y + 18)
+    # pdf.set_draw_color(0, 0, 0)
+    # pdf.line(13, vert_text_y - 22, 13, vert_text_y + 18)
 
-    y += 40
+    pdf.line(0, pdf.get_y() + 2, x + 220,  pdf.get_y() + 2)
+
+    y = pdf.get_y()
     # y += vert_text_y
     if lang == 'ru':
         scale_name = u'''Сокращение

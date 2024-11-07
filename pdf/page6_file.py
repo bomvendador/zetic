@@ -1,4 +1,6 @@
 from pdf.draw import draw_full_scale, insert_page_number
+from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B, MIN_SCALE_DELTA_Y, MAX_Y, START_Y
+from pdf_group.page_funcs import block_name_
 
 
 def page6(pdf, json_section, lang, participant_info):
@@ -16,6 +18,11 @@ def page6(pdf, json_section, lang, participant_info):
         pdf.cell(0, 0, 'Section V')
 
     y += 5
+
+    pdf.set_draw_color(0, 0, 0)
+    pdf.line(x + 1, y, x + 220, y)
+
+    y += 5
     # 17
     pdf.set_xy(x, y)
     pdf.set_font("RalewayLight", "", 9)
@@ -27,6 +34,15 @@ def page6(pdf, json_section, lang, participant_info):
                u'life strategies.'
 
     pdf.multi_cell(0, 4, text, align='J')
+
+    y = pdf.get_y() + 5
+
+    pdf.set_xy(x, y)
+    block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, x, str('Создание гармонии').upper())
+    pdf.set_text_color(0, 0, 0)
+
+    y = pdf.get_y()
+    pdf.set_xy(x, y)
 
     y += 13
     x += 6
@@ -54,16 +70,16 @@ def page6(pdf, json_section, lang, participant_info):
     pdf.multi_cell(50, 3, scale_legend_right, align='R')
 
     pdf.set_font("RalewayLight", "", 9)
-    vert_text_y = 72
-    if lang == 'ru':
-        with pdf.rotation(90, 10, vert_text_y+13):
-            pdf.text(0, vert_text_y+13, "Создание гармонии")
-    else:
-        with pdf.rotation(90, 10, vert_text_y+13):
-            pdf.text(0, vert_text_y+13, "Creating harmony")
-
-    pdf.set_draw_color(0, 0, 0)
-    pdf.line(13, vert_text_y - 35, 13, vert_text_y + 52)
+    # vert_text_y = 72
+    # if lang == 'ru':
+    #     with pdf.rotation(90, 10, vert_text_y+13):
+    #         pdf.text(0, vert_text_y+13, "Создание гармонии")
+    # else:
+    #     with pdf.rotation(90, 10, vert_text_y+13):
+    #         pdf.text(0, vert_text_y+13, "Creating harmony")
+    #
+    # pdf.set_draw_color(0, 0, 0)
+    # pdf.line(13, vert_text_y - 35, 13, vert_text_y + 52)
     if lang == 'ru':
         scale_name = u'''Причастность'''
     else:
@@ -103,16 +119,26 @@ seeking'''
     pdf.set_font("RalewayLight", "", 9)
     vert_text_y = 172
     if lang == 'ru':
-        with pdf.rotation(90, 10, vert_text_y+7):
-            pdf.text(0, vert_text_y+7, "Преодоление")
+
+        y = pdf.get_y() + 15
+
+        pdf.set_xy(x, y)
+        block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, x, str('Преодоление').upper())
+        pdf.set_text_color(0, 0, 0)
+
+        y = pdf.get_y()
+        pdf.set_xy(x, y)
+
+        # with pdf.rotation(90, 10, vert_text_y+7):
+        #     pdf.text(0, vert_text_y+7, "Преодоление")
     else:
         with pdf.rotation(90, 10, vert_text_y+12):
             pdf.text(0, vert_text_y+12, "Overcoming resistance")
 
     pdf.set_draw_color(0, 0, 0)
-    pdf.line(13, vert_text_y - 35, 13, vert_text_y + 52)
+    # pdf.line(13, vert_text_y - 35, 13, vert_text_y + 52)
 
-    y += 20
+    y = pdf.get_y() + 10
     if lang == 'ru':
         scale_name = u'''Признание'''
     else:

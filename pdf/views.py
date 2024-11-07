@@ -76,14 +76,15 @@ def pdf_single_generator(data):
         "name": employee.name,
         "sex": employee.sex.name_ru,
         "birth_year": employee.birth_year,
-        "email": employee.email
+        "email": employee.email,
+        "company_name": employee.company.name,
     }
     # participant_name = participant_info['name']
     lang = 'ru'
     # lang = request_json['lang']
     # lie_points = round(request_json['lie_points']/40 * 10)
 
-    title_page(pdf, employee.name, lang)
+    title_page(pdf, employee.name, lang, employee.company.name)
 
     pdf.add_page()
     page2(pdf, lie_points, lang)

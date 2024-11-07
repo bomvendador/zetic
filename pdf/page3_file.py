@@ -12,22 +12,27 @@ def page3(pdf, answers_code_1, lang, participant_info):
     pdf.set_font("RalewayBold", "", 10)
 
     if lang == 'ru':
-        pdf.cell(0, 0, 'Базовые черты личности')
+        pdf.cell(0, 0, 'Черты личности')
     else:
         pdf.cell(0, 0, 'Section K')
+
+    y += 5
+
+    pdf.set_draw_color(0, 0, 0)
+    pdf.line(x + 1, y, x + 220, y)
 
     y = y + 5
     # 17
     pdf.set_xy(x, y)
     pdf.set_font("RalewayLight", "", 9)
 
-    vert_text_y = 63
+    vert_text_y = 63 + 5
     if lang == 'ru':
         with pdf.rotation(90, 12, vert_text_y+1):
-                pdf.text(0, vert_text_y + 1, "Эмоциональная устойчивость")
+            pdf.text(0, vert_text_y + 1, "Эмоциональная устойчивость")
     else:
         with pdf.rotation(90, 12, vert_text_y - 7):
-                pdf.text(0, vert_text_y - 7, "Emotional stability")
+            pdf.text(0, vert_text_y - 7, "Emotional stability")
 
     pdf.set_draw_color(0, 0, 0)
     pdf.line(15, vert_text_y - 33, 15, vert_text_y + 14)
@@ -82,8 +87,7 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Шкала O
     Тревожность        '''
         scale_legend_left = u'''
-    Безмятежность,
-    Энергичность
+    Безмятежность
         '''
         scale_legend_right = u'''
     Чувство вины, Тревожность,
@@ -145,13 +149,13 @@ def page3(pdf, answers_code_1, lang, participant_info):
         draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     pdf.set_font("RalewayLight", "", 9)
-    vert_text_y = 117
+    vert_text_y = 117 + 5
     if lang == 'ru':
         with pdf.rotation(90, 12, vert_text_y+1):
-                pdf.text(0, vert_text_y + 1, "Командная устойчивость")
+            pdf.text(0, vert_text_y + 1, "Командная устойчивость")
     else:
         with pdf.rotation(90, 12, vert_text_y - 6):
-                pdf.text(0, vert_text_y - 6, "Team resilience")
+            pdf.text(0, vert_text_y - 6, "Team resilience")
     pdf.set_draw_color(0, 0, 0)
     pdf.line(15, vert_text_y - 36, 15, vert_text_y + 26)
 
@@ -226,8 +230,7 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Восприятие
         '''
         scale_legend_left = u'''
-    Рассудительность, Циничность,
-    Ответственность
+    Рассудительность, Циничность
         '''
         scale_legend_right = u'''
     Эмпатичность,
@@ -284,13 +287,13 @@ def page3(pdf, answers_code_1, lang, participant_info):
         draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     pdf.set_font("RalewayLight", "", 9)
-    vert_text_y = 185
+    vert_text_y = 185 + 5
     if lang == 'ru':
         with pdf.rotation(90, 12, vert_text_y):
-                pdf.text(0, vert_text_y, "Устойчивость результата")
+            pdf.text(0, vert_text_y, "Устойчивость результата")
     else:
         with pdf.rotation(90, 12, vert_text_y):
-                pdf.text(0, vert_text_y, "Stability of the results")
+            pdf.text(0, vert_text_y, "Stability of the results")
     pdf.set_draw_color(0, 0, 0)
     pdf.line(15, vert_text_y - 36, 15, vert_text_y + 26)
 
@@ -305,7 +308,7 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Реалистичность, Прозаичность
         '''
         scale_legend_right = u'''
-    Восторженность,
+    Абстрактное мышление,
     Воображение
         '''
     else:
@@ -368,8 +371,8 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Непостоянство, Ненадежность
         '''
         scale_legend_right = u'''
-    Настойчивость,
-    Дисциплина, Долг
+    Планирование,
+    Дисциплина
         '''
     else:
         scale_name = u'''
@@ -401,7 +404,7 @@ def page3(pdf, answers_code_1, lang, participant_info):
         '''
         scale_legend_right = u'''
     Самоконтроль,
-    Сильная воля, Точность
+    Сильная воля, Долг
         '''
     else:
         scale_name = u'''
@@ -422,13 +425,14 @@ def page3(pdf, answers_code_1, lang, participant_info):
         draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
 
     pdf.set_font("RalewayLight", "", 9)
-    vert_text_y = 252
+    vert_text_y = 252 + 5
     if lang == 'ru':
         with pdf.rotation(90, 12, vert_text_y+2):
-                pdf.text(0, vert_text_y+2, "Устойчивость в изменениях")
+
+            pdf.text(0, vert_text_y+2, "Устойчивость в изменениях")
     else:
         with pdf.rotation(90, 12, vert_text_y):
-                pdf.text(0, vert_text_y, "Resilience to change")
+            pdf.text(0, vert_text_y, "Resilience to change")
     pdf.set_draw_color(0, 0, 0)
     pdf.line(15, vert_text_y - 36, 15, vert_text_y + 26)
 
@@ -439,7 +443,7 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Критичность
         '''
         scale_legend_left = u'''
-    Консерватизм,
+    Консерватизм, Интуиция
     Принятие быстрых решений
         '''
         scale_legend_right = u'''

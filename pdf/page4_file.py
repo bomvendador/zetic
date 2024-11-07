@@ -1,4 +1,6 @@
 from pdf.draw import draw_full_scale, insert_page_number
+from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B, MIN_SCALE_DELTA_Y, MAX_Y, START_Y
+from pdf_group.page_funcs import block_name_
 
 
 def page4(pdf, json_section, lang, participant_info):
@@ -12,6 +14,11 @@ def page4(pdf, json_section, lang, participant_info):
         pdf.cell(0, 0, 'Поведение в стрессе и неопределенности')
     else:
         pdf.cell(0, 0, 'Section C')
+
+    y += 5
+
+    pdf.set_draw_color(0, 0, 0)
+    pdf.line(x + 1, y, x + 220, y)
 
     y += 5
     # 17
@@ -32,7 +39,21 @@ def page4(pdf, json_section, lang, participant_info):
     pdf.set_xy(x, y)
     pdf.set_font("RalewayBold", "", 10)
     if lang == 'ru':
-        pdf.cell(0, 0, 'Стратегии, направленные на активный поиск выхода и преодоление сложностей')
+
+        pdf.set_xy(x, y)
+        block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, x, str('Стратегии, направленные на активный поиск выхода и преодоление сложностей').upper())
+        pdf.set_text_color(0, 0, 0)
+
+        y = pdf.get_y() + 10
+        pdf.set_xy(x, y)
+
+        text = u'В данный блок отнесены стратегии, направленные на мобилизацию ресурсов и проактивное решение ' \
+               u'стрессовой ситуации. При их постоянном использовании - организм истощается”.'
+
+        pdf.multi_cell(0, 4, text, align='J')
+
+    # pdf.cell(0, 0, 'Стратегии, направленные на активный поиск выхода и преодоление сложностей')
+
         scale_legend_left = u'''
     Слабо выражено
     '''
@@ -49,7 +70,10 @@ def page4(pdf, json_section, lang, participant_info):
     Strongly expressed
     '''
 
-    y += 2
+
+    y = pdf.get_y() + 2
+
+    pdf.line(0, y, x + 220, y)
 
     pdf.set_xy(x+37, y)
     pdf.set_font("RalewayLight", "", 6)
@@ -103,11 +127,28 @@ self-affirmation'''
     pdf.set_xy(x, y)
     pdf.set_font("RalewayBold", "", 10)
     if lang == 'ru':
-        pdf.cell(0, 0, 'Стратегии, направленные на игнорирование проблемы и отказ искать выход из ситуации')
+
+        pdf.set_xy(x, y)
+        block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, x, str('Стратегии, направленные на игнорирование проблемы и отказ искать выход из ситуации').upper())
+        pdf.set_text_color(0, 0, 0)
+
+        y = pdf.get_y() + 10
+        pdf.set_xy(x, y)
+
+        text = u'В данный блок отнесены стратегии, направленные на накопление ресурса и стабилизацию своего состояния. ' \
+               u'Они позволяют переключить внимание, сбросить напряжение, накопить достаточно ресурсов (силы, идеи, ' \
+               u'устойчивость) для дальнейшей работы.'
+
+        pdf.multi_cell(0, 4, text, align='J')
+
+        # pdf.cell(0, 0, 'Стратегии, направленные на игнорирование проблемы и отказ искать выход из ситуации')
     else:
         pdf.cell(0, 0, 'Strategies for ignoring problems and avoiding solutions research')
 
-    y -= 2
+    y = pdf.get_y()
+
+    pdf.line(0, y+2, x + 220, y+2)
+
     if lang == 'ru':
         scale_name = u'''Замещение, отвлечение,
 бегство от стресса'''
@@ -147,11 +188,27 @@ Social Support'''
     pdf.set_xy(x, y)
     pdf.set_font("RalewayBold", "", 10)
     if lang == 'ru':
-        pdf.cell(0, 0, 'Стратегии, провоцирующие дальнейшее нахождение в стрессе и усиление переживаний', scale_element_file)
+        pdf.set_xy(x, y)
+        block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, x, str('Стратегии, провоцирующие дальнейшее нахождение в стрессе и усиление переживаний').upper())
+        pdf.set_text_color(0, 0, 0)
+
+        y = pdf.get_y() + 10
+        pdf.set_xy(x, y)
+
+        text = u'В данный блок отнесены стратегии, направленные на проживание напряжения (вины, стыда, злости) и ' \
+               u'поиск скрытых резервов организма. При их постоянном использовании - снижается самооценка, повышается ' \
+               u'тревога и неуверенность, быстрее наступает выгорание.'
+
+        pdf.multi_cell(0, 4, text, align='J')
+
+        # pdf.cell(0, 0, 'Стратегии, провоцирующие дальнейшее нахождение в стрессе и усиление переживаний', scale_element_file)
     else:
         pdf.cell(0, 0, 'Strategies leading to further stress and strengthening worries', scale_element_file)
 
-    y -= 2
+    y = pdf.get_y()
+
+    pdf.line(0, y+2, x + 220, y+2)
+
     if lang == 'ru':
         scale_name = u'''Самообвинение 
 и жалость к себе'''

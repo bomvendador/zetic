@@ -16,9 +16,16 @@ def page2(pdf, lie_points, lang):
 
     # 17
     # pdf.set_font("RalewayLight", "", 9)
+
     pdf.set_font("Cambria", "", 10)
 
     y = y + 5
+
+    pdf.set_draw_color(0, 0, 0)
+    pdf.line(x + 1, y, x + 220, y)
+
+    y = y + 5
+
     pdf.set_xy(x, y)
     if lang == 'ru':
         text = u'Zetic – российский разработчик технологичных решений прогнозирования эффективности сотрудников и команд.' \
@@ -221,9 +228,9 @@ Cекция «Черты личности» построена исходя из
         pdf.multi_cell(0, 4, text)
 
     if lang == 'ru':
-        draw_lie_scale(pdf, 50, 266-3-10, 70, 10, lie_points, 'media/images/lie_scale_rec.png')
+        draw_lie_scale(pdf, 50, 266-3-5, 70, 10, lie_points, 'media/images/lie_scale_rec.png')
     else:
-        draw_lie_scale(pdf, 40, 266-3-10, 70, 10, lie_points, 'media/images/lie_scale_rec.png')
+        draw_lie_scale(pdf, 40, 266-3-5, 70, 10, lie_points, 'media/images/lie_scale_rec.png')
 
     insert_page_number(pdf)
 
