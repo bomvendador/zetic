@@ -146,7 +146,7 @@ def page_circle_diagram(pdf, questionnaire_id, report_id, lang):
 
     y = pdf.get_y() + 15
     pdf.set_xy(x, y)
-    pdf.multi_cell(190, 4, potential_text)
+    pdf.multi_cell(190, 4, str(potential_text))
 
     insert_page_number(pdf)
 
