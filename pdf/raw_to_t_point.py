@@ -4,6 +4,8 @@ from pdf.models import Questionnaire, QuestionnaireQuestionAnswers, QuestionAnsw
 from .raw_to_t_point_data import KOPPINGI_DEFAULT, KETTEL_1_MEN_1950_1993, KETTEL_1_WOMEN_1950_1993, KETTEL_1_WOMEN_1994_2022, \
     KETTEL_1_MEN_1994_2022, BOYKO_DEFAULT, VALUES_DEFAULT
 
+from django.db.models import Max
+
 
 def filter_raw_points_to_t_points(raw_point, employee_id, category_id):
     employee = Employee.objects.get(id=employee_id)
@@ -28,9 +30,16 @@ def filter_raw_points_to_t_points(raw_point, employee_id, category_id):
         t_point_inst = RawToTPoints.objects.get(type=raw_points_filter, category=category, raw_points=raw_point)
     except RawToTPoints.DoesNotExist:
         raw_points_filter = RawToTPointsType.objects.get(is_default=True, age_gender_group=age_gender_group)
-        t_point_inst = RawToTPoints.objects.get(type=raw_points_filter, category=category, raw_points=raw_point)
+        if RawToTPoints.objects.get(type=raw_points_filter, category=category, raw_points=raw_point).exists():
+            t_point_inst = RawToTPoints.objects.get(type=raw_points_filter, category=category, raw_points=raw_point)
+        else:
+            max_raw_point = RawToTPoints.objects.filter(type=raw_points_filter, category=category).aggregate(Max('raw_points'))
+            if raw_point > max_raw_point:
+                t_point_inst = 10
+            else:
+                t_point_inst = 5
 
-    # print(f'category - {category.id} raw_points_filter id - {raw_points_filter.name_ru} raw_points = {raw_point} t_points = {t_point_inst.t_point}')
+                # print(f'category - {category.id} raw_points_filter id - {raw_points_filter.name_ru} raw_points = {raw_point} t_points = {t_point_inst.t_point}')
 
     return t_point_inst.t_point
 
