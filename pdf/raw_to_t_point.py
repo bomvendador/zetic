@@ -28,20 +28,22 @@ def filter_raw_points_to_t_points(raw_point, employee_id, category_id):
 
     try:
         t_point_inst = RawToTPoints.objects.get(type=raw_points_filter, category=category, raw_points=raw_point)
+        t_points = t_point_inst.t_point
     except RawToTPoints.DoesNotExist:
         raw_points_filter = RawToTPointsType.objects.get(is_default=True, age_gender_group=age_gender_group)
         if RawToTPoints.objects.filter(type=raw_points_filter, category=category, raw_points=raw_point).exists():
             t_point_inst = RawToTPoints.objects.get(type=raw_points_filter, category=category, raw_points=raw_point)
+            t_points = t_point_inst.t_point
         else:
             max_raw_point = RawToTPoints.objects.filter(type=raw_points_filter, category=category).order_by('raw_points')[0]
             if raw_point > max_raw_point.raw_points:
-                t_point_inst = 10
+                t_points = 10
             else:
-                t_point_inst = 5
+                t_points = 5
 
                 # print(f'category - {category.id} raw_points_filter id - {raw_points_filter.name_ru} raw_points = {raw_point} t_points = {t_point_inst.t_point}')
 
-    return t_point_inst.t_point
+    return t_points
 
 
 def get_t_point(raw_point, category_code, gender, birth_year):
