@@ -926,7 +926,10 @@ def individual_reports_list(request):
         for company in companies:
             reports = Report.objects.filter(participant__employee__company=company)
             if reports.exists():
-                companies_arr.append(company.name)
+                companies_arr.append({
+                    'name': company.name,
+                    'id': company.id
+                })
         context.update(
             {'companies_arr': companies_arr}
         )

@@ -64,9 +64,9 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    {% for company_arr in companies_arr %}
+                                                    {% for company in companies_arr %}
                                                         <tr class="table-row cursor-pointer">
-                                                            <td>{{ company_arr }}</td>
+                                                            <td>{{ company.id }}. {{ company.name }}</td>
                                                         </tr>
                                                     {% endfor %}
                                                     </tbody>
