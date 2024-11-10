@@ -65,7 +65,7 @@
                                                     </thead>
                                                     <tbody>
                                                     {% for company in companies_arr %}
-                                                        <tr class="table-row cursor-pointer">
+                                                        <tr class="table-row cursor-pointer" data-company-id="{{ company.id }}">
                                                             <td>{{ company.id }}. {{ company.name }}</td>
                                                         </tr>
                                                     {% endfor %}
@@ -324,14 +324,14 @@
             btn_spinner($('#next'))
             switch (route_index) {
                 case 1:
-                    let company = $('.project-chosen').text().trim()
+                    let company_id = $('.project-chosen').data('company-id')
                     $.ajax({
                         headers: {"X-CSRFToken": token},
                         url: "{% url 'get_individual_reports_list' %}",
                         type: 'POST',
 
                         data: JSON.stringify({
-                            'company': company,
+                            'company_id': company_id,
                         }),
                         processData: false,
                         contentType: false,

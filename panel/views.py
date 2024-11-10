@@ -941,8 +941,8 @@ def individual_reports_list(request):
 def get_individual_reports_list(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
-        company = json_data['company']
-        reports = Report.objects.filter(participant__employee__company__name=company)
+        company_id = json_data['company_id']
+        reports = Report.objects.filter(participant__employee__company__id=company_id)
         report_arr = []
         for report in reports:
             if report.comments:
