@@ -33,8 +33,8 @@ def filter_raw_points_to_t_points(raw_point, employee_id, category_id):
         if RawToTPoints.objects.filter(type=raw_points_filter, category=category, raw_points=raw_point).exists():
             t_point_inst = RawToTPoints.objects.get(type=raw_points_filter, category=category, raw_points=raw_point)
         else:
-            max_raw_point = RawToTPoints.objects.filter(type=raw_points_filter, category=category).aggregate(Max('raw_points'))
-            if raw_point > max_raw_point:
+            max_raw_point = RawToTPoints.objects.filter(type=raw_points_filter, category=category).order_by('raw_points')[0]
+            if raw_point > int(max_raw_point):
                 t_point_inst = 10
             else:
                 t_point_inst = 5
