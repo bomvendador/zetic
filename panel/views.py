@@ -557,6 +557,9 @@ def get_participants_data_for_group_report(participants_ids):
         participant_inst = Participant.objects.get(id=participant_id)
         employee_inst = Employee.objects.get(id=participant_inst.employee.id)
         employee_position_inst = EmployeePosition.objects.get(employee=employee_inst)
+        print(f'===get_participants_data_for_group_report====')
+        print(f'участник - {participant_inst.employee.name} email - {participant_inst.employee.email}')
+        print(f'===++++++++++++++++++++++++++++====')
         report = Report.objects.filter(participant_id=participant_id).latest('added')
         report_data_inst = ReportData.objects.filter(report=report)
 
