@@ -1,6 +1,37 @@
 expand_menu_item('#menu_companies_list')
 
 $('.update_company_report_options_allowed_btn').on('click', function () {
+
+    let output_html = '<h2 class="mb-0" style="text-align: center">Изменение настроек индивидуальных настроек</h2>' +
+        '<br>' +
+        '<hr class="solid mt-0" style="background-color: black;">' +
+        '<h4 style="text-align: center">Изменить настройки всех существующих участников опросов?</h4>' +
+        '<hr class="solid mt-0" style="background-color: black;">' +
+        '<h5 style="text-align: center; color: red">Внимание! Настройки ВСЕХ респондентов будут изменны</h5>' +
+        '<hr class="solid mt-0" style="background-color: black;">'
+
+
+    Swal.fire({
+        html: output_html,
+        icon: 'question',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет',
+        showCancelButton: true
+    }).then((result) => {
+        let change_participants_individual_report_options = false
+        if (result.value) {
+            change_participants_individual_report_options = true
+            save_individual_options(change_participants_individual_report_options, $(this))
+        } else {
+            save_individual_options(change_participants_individual_report_options, $(this))
+        }
+    })
+})
+
+function save_individual_options(change_participants_individual_report_options, node) {
+    btn_spinner(node)
     let options_vals = []
     $(this).closest('.card').find('.option-switch').each(function () {
         console.log(`${$(this).data("option-id")} ${$(this).prop('checked')}`)
@@ -20,6 +51,7 @@ $('.update_company_report_options_allowed_btn').on('click', function () {
         data: JSON.stringify({
             'options_vals': options_vals,
             'company_id': company_id,
+            'change_participants_individual_report_options': change_participants_individual_report_options,
         }),
         processData: false,
         contentType: false,
@@ -27,15 +59,14 @@ $('.update_company_report_options_allowed_btn').on('click', function () {
             toastr.error('Ошибка', data)
         },
         success: function (data) {
-            btn_text('#update_company_individual_report_options_allowed', 'Сохранить')
+            btn_text(node, 'Сохранить')
             toastr.success('Данные сохранены')
 
         }
     });
 
 
-
-})
+}
 
 $('.copy-company-questionnaire-link').on('click', function (e) {
     e.preventDefault();

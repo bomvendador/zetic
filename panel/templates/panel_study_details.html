@@ -280,18 +280,36 @@
                                                 </td>
                                                 <td>{{ participant.answered_questions_qnt }}/{{ participant.total_questions_qnt }}</td>
                                                 <td>
-                                                    {% for option in participant_individual_report_allowed_options %}
-                                                        {% if option.participant == participant %}
+                                                    {% for participant_individual_option in participant_individual_report_allowed_options %}
+                                                        {% if participant_individual_option.participant == participant %}
                                                             <div>
                                                                 <div style="white-space: nowrap">
-                                                                    {% if option.value %}
-                                                                        <i style="color: green" class="fe fe-check"></i>
-                                                                        {{ option.option.name }}
+                                                                    {% for company_individual_option in company_individual_report_allowed_options %}
+                                                                        {% if participant_individual_option.option == company_individual_option.option %}
+                                                                            {% if company_individual_option.value %}
+                                                                                <i style="color: green" class="fe fe-check" title="Настройки компании"></i>
+                                                                            {% else %}
+                                                                                <i style="color: red" class="fe fe-x" title="Настройки компании"></i>
+                                                                            {% endif %}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                    {% for study_individual_option in study_individual_report_allowed_options %}
+                                                                        {% if participant_individual_option.option == study_individual_option.option %}
+                                                                            {% if study_individual_option.value %}
+                                                                                <i style="color: green" class="fe fe-check" title="Настройки исследования"></i>
+                                                                            {% else %}
+                                                                                <i style="color: red" class="fe fe-x" title="Настройки исследования"></i>
+                                                                            {% endif %}
+                                                                        {% endif %}
+                                                                    {% endfor %}
 
+                                                                    {% if participant_individual_option.value %}
+                                                                        <i style="color: green" class="fe fe-check" title="Настройки участинка"></i>
                                                                     {% else %}
-                                                                        <i style="color: red" class="fe fe-x"></i>
-                                                                        {{ option.option.name }}
+                                                                        <i style="color: red" class="fe fe-x" title="Настройки участинка"></i>
                                                                     {% endif %}
+                                                                        {{ participant_individual_option.option.name }}
+
                                                                 </div>
                                                             </div>
 

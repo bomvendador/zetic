@@ -1,7 +1,7 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, Participant, \
     EmailSentToParticipant, Report, ResearchTemplate, ResearchTemplateSections, Questionnaire, QuestionnaireVisits, \
     CommonBooleanSettings, Category, CategoryQuestions, QuestionnaireQuestionAnswers, \
-    ParticipantIndividualReportAllowedOptions, StudyIndividualReportAllowedOptions
+    ParticipantIndividualReportAllowedOptions, StudyIndividualReportAllowedOptions, CompanyIndividualReportAllowedOptions
 from login.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
@@ -73,6 +73,7 @@ def study_details(request, study_id):
             questionnaires_left = company_inst.demo_status_questionnaires_limit - company_questionnaires_qnt
         participant_individual_report_allowed_options = ParticipantIndividualReportAllowedOptions.objects.filter(participant__study=study)
         study_individual_report_allowed_options = StudyIndividualReportAllowedOptions.objects.filter(study=study)
+        company_individual_report_allowed_options = CompanyIndividualReportAllowedOptions.objects.filter(company=company_inst)
 
         if 'Исследование миграции' in study.name:
             made_by_migration = True
@@ -84,6 +85,7 @@ def study_details(request, study_id):
                 'study': study,
                 'participant_individual_report_allowed_options': participant_individual_report_allowed_options,
                 'study_individual_report_allowed_options': study_individual_report_allowed_options,
+                'company_individual_report_allowed_options': company_individual_report_allowed_options,
                 'demo_status_setting': CommonBooleanSettings.objects.get(name='Демо-режимы для компаний').value,
                 'company_questionnaires_qnt': company_questionnaires_qnt,
                 'company': company_inst,

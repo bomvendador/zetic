@@ -534,19 +534,39 @@ def update_company_report_options_allowed(request):
     if request.method == 'PUT':
         json_data = json.loads(request.body.decode('utf-8'))
         options_vals = json_data['options_vals']
+        change_participants_individual_report_options = json_data['change_participants_individual_report_options']
         company_id = json_data['company_id']
+        company_ist = Company.objects.get(id=company_id)
         for option in options_vals:
             option_type = option['type']
             option_id = option['id']
             option_val = option['value']
             if option_type == 'individual':
-                company_option = CompanyIndividualReportAllowedOptions.objects.get(Q(company_id=company_id) &
-                                                                                   Q(option_id=option_id))
+                # company_option = CompanyIndividualReportAllowedOptions.objects.get(Q(company_id=company_id) &
+                #                                                                    Q(option_id=option_id))
+                company_option = CompanyIndividualReportAllowedOptions.objects.get(id=option_id)
             else:
-                company_option = CompanyGroupReportAllowedOptions.objects.get(Q(company_id=company_id) &
-                                                                                   Q(option_id=option_id))
+                company_option = CompanyGroupReportAllowedOptions.objects.get(id=option_id)
+                # company_option = CompanyGroupReportAllowedOptions.objects.get(Q(company_id=company_id) &
+                #                                                                    Q(option_id=option_id))
             company_option.value = option_val
             company_option.save()
+            if change_participants_individual_report_options:
+                study_individual_report_allowed_options = StudyIndividualReportAllowedOptions.objects.filter(Q(study__company=company_ist) &
+                                                                                                             Q(option=company_option.option))
+                if study_individual_report_allowed_options.exists():
+                    for study_individual_option in study_individual_report_allowed_options:
+                        study_individual_option.value = option_val
+                        study_individual_option.save()
+                participants = Participant.objects.filter(employee__company=company_ist)
+                if participants.exists():
+                    for participant in participants:
+                        participant_individual_report_allowed_options = ParticipantIndividualReportAllowedOptions.objects.filter(Q(participant=participant) &
+                                                                                                                                 Q(option=company_option.option))
+                        for participant_individual_option in participant_individual_report_allowed_options:
+                            participant_individual_option.value = option_val
+                            participant_individual_option.save()
+
         return HttpResponse(status=200)
 
 

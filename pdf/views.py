@@ -102,7 +102,7 @@ def pdf_single_generator(data):
     else:
         company_short_conclusions_options_filter = CompanyIndividualReportAllowedOptions.objects.filter(Q(option=individual_report_allowed_options_short_conclusions) &
                                                                                                  Q(company=questionnaire_inst.participant.employee.company))
-        if company_short_conclusions_options_filter:
+        if company_short_conclusions_options_filter.exists():
             company_short_conclusions_options = CompanyIndividualReportAllowedOptions.objects.get(Q(option=individual_report_allowed_options_short_conclusions) &
                                                                                                   Q(company=questionnaire_inst.participant.employee.company))
 
@@ -117,7 +117,6 @@ def pdf_single_generator(data):
     #     # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
 
     #     page3(pdf, extract_section(request_json, '1'), lang, participant_info)
-
 
     individual_report_allowed_options_circle_diagram = IndividualReportAllowedOptions.objects.get(name='Круговая диаграмма')
     participant_short_conclusions_options_filter_circle_diagram = ParticipantIndividualReportAllowedOptions.objects.get(
