@@ -537,6 +537,7 @@ def update_company_report_options_allowed(request):
         change_participants_individual_report_options = json_data['change_participants_individual_report_options']
         company_id = json_data['company_id']
         company_ist = Company.objects.get(id=company_id)
+        print(json_data)
         for option in options_vals:
             option_type = option['type']
             option_id = option['id']
@@ -558,9 +559,11 @@ def update_company_report_options_allowed(request):
                     for study_individual_option in study_individual_report_allowed_options:
                         study_individual_option.value = option_val
                         study_individual_option.save()
-                participants = Participant.objects.filter(employee__company=company_ist)
+                participants = Participant.objects.filter(Q(employee__company=company_ist) &
+                                                          Q(completed_at__isnull=True))
                 if participants.exists():
                     for participant in participants:
+                        print(f'part id = {participant.id}')
                         participant_individual_report_allowed_options = ParticipantIndividualReportAllowedOptions.objects.filter(Q(participant=participant) &
                                                                                                                                  Q(option=company_option.option))
                         for participant_individual_option in participant_individual_report_allowed_options:
