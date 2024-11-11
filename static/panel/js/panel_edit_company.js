@@ -4,7 +4,7 @@ expand_menu_item('#menu_companies_list')
     $('.update_company_report_options_allowed_btn').on('click', function (event) {
         let node_btn = $(this)
 
-        let output_html = '<h2 class="mb-0" style="text-align: center">Изменение настроек индивидуальных настроек</h2>' +
+        let output_html = '<h2 class="mb-0" style="text-align: center">Изменение индивидуальных настроек</h2>' +
             '<br>' +
             '<hr class="solid mt-0" style="background-color: black;">' +
             '<h4 style="text-align: center">Изменить настройки всех существующих участников опросов?</h4>' +
