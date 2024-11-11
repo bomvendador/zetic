@@ -9,7 +9,7 @@ expand_menu_item('#menu_companies_list')
             '<hr class="solid mt-0" style="background-color: black;">' +
             '<h4 style="text-align: center">Изменить настройки всех существующих участников опросов?</h4>' +
             '<hr class="solid mt-0" style="background-color: black;">' +
-            '<h5 style="text-align: center; color: red">Внимание! Настройки ВСЕХ респондентов будут изменны</h5>' +
+            '<h5 style="text-align: center; color: red">Внимание! Настройки ВСЕХ респондентов будут изменены</h5>' +
             '<hr class="solid mt-0" style="background-color: black;">'
 
 
@@ -30,14 +30,14 @@ expand_menu_item('#menu_companies_list')
             btn_spinner(node_btn)
             let options_vals = []
             node_btn.closest('.card').find('.option-switch').each(function () {
-                console.log(`${$(this).data("option-id")} ${$(this).prop('checked')}`)
+                // console.log(`${$(this).data("option-id")} ${$(this).prop('checked')}`)
                 options_vals.push({
                     'type': $(this).data("type"),
                     'id': $(this).data("option-id"),
                     'value': $(this).prop('checked'),
                 })
             })
-            console.log(options_vals)
+            // console.log(options_vals)
             btn_spinner('#update_company_individual_report_options_allowed')
 
             $.ajax({
