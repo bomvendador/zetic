@@ -95,7 +95,31 @@ $('#next_btn').on('click', function (e) {
             },
             success: function (data) {
                 $('#next_btn').text('Далее').attr('disabled', false).css('opacity', 1)
-                window.location.reload()
+
+                if (data === 'tech_works') {
+                    console.log(data)
+                    let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<h2 class="mb-0 mt-0" style="text-align: center">Технические работы</h2>' +
+                        '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<h4 style="text-align: center">На сайте ведутся технические работы</h4>' +
+                        '<h4 style="text-align: center">Просим прощения за неудобства </h4>' +
+                        '<h4 style="text-align: center">В ближайшее время сервис возобновит свою работу </h4>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
+
+
+                    Swal.fire({
+                        html: output_html,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ОК'
+                    }).then(function (result) {
+                        window.location.reload()
+                    })
+
+                } else {
+                    window.location.reload()
+                }
                 //     console.log(data)
                 //     $('#input_modal_edit_section').modal('hide')
                 //     if (data['error']) {

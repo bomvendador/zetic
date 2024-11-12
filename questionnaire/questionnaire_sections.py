@@ -4,7 +4,8 @@ import random
 from sendemail.tasks import pdf_single_generator_task
 
 from pdf.models import Category, Section, CategoryQuestions, QuestionAnswers, Participant, Employee, EmployeeGender, \
-    EmployeePosition, EmployeeRole, Industry, Questionnaire, ResearchTemplateSections, QuestionnaireQuestionAnswers
+    EmployeePosition, EmployeeRole, Industry, Questionnaire, ResearchTemplateSections, QuestionnaireQuestionAnswers, \
+    CommonBooleanSettings
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
 import json
@@ -29,6 +30,9 @@ def section_view(request, section_id, code):
     categories_inst = Category.objects.filter(section=section_inst)
     questions = []
     questionnaire_inst = Questionnaire.objects.get(participant__invitation_code=code)
+    tech_works_mode = CommonBooleanSettings.objects.get(name='Технические работы').value
+    if tech_works_mode:
+        return render(request, 'tech_works/tech_works_page.html', context)
 
     if not questionnaire_inst.active:
         context.update({
@@ -95,6 +99,10 @@ def section_view(request, section_id, code):
 
 def save_answers(request):
     if request.method == 'POST':
+        tech_works_mode = CommonBooleanSettings.objects.get(name='Технические работы').value
+        if tech_works_mode:
+            return HttpResponse('tech_works')
+
         json_data = json.loads(request.body.decode('utf-8'))
         answers = json_data['answers']
         code = json_data['code']

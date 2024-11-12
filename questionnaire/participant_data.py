@@ -1,6 +1,6 @@
 from pdf.models import Category, Section, CategoryQuestions, QuestionAnswers, Participant, Employee, EmployeeGender, \
     EmployeePosition, EmployeeRole, Industry, Questionnaire, ResearchTemplateSections, QuestionnaireQuestionAnswers, \
-    QuestionnaireVisits
+    QuestionnaireVisits, CommonBooleanSettings
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
 import json
@@ -20,6 +20,11 @@ def get_participant_data(request, code):
     participant_inst = Participant.objects.get(invitation_code=code)
     questionnaire_inst = Questionnaire.objects.get(participant=participant_inst)
     email_subject_prefix = EMAIL_SUBJECT_PREFIX
+
+    tech_works_mode = CommonBooleanSettings.objects.get(name='Технические работы').value
+    if tech_works_mode:
+        return render(request, 'tech_works/tech_works_page.html', context)
+
     if not questionnaire_inst.data_filled_up_by_participant:
         years = []
         current_year = datetime.now().year
@@ -94,25 +99,29 @@ def get_participant_data(request, code):
 
 def save_participant_data(request):
     if request.method == 'POST':
-        json_data = json.loads(request.body.decode('utf-8'))
-        data = json_data['data']
-        code = data['code']
-        year = data['year']
-        gender = data['gender']
-        name = data['name']
-        role_id = data['role_id']
-        position_id = data['position_id']
-        industry_id = data['industry_id']
-        questionnaire_inst = Questionnaire.objects.get(participant__invitation_code=code)
-        questionnaire_inst.data_filled_up_by_participant = True
-        questionnaire_inst.save()
-        employee_inst = Employee.objects.get(id=questionnaire_inst.participant.employee_id)
-        employee_inst.name = name
-        employee_inst.birth_year = year
-        employee_inst.role = EmployeeRole.objects.get(id=role_id)
-        employee_inst.position = EmployeePosition.objects.get(id=position_id)
-        employee_inst.industry = Industry.objects.get(id=industry_id)
-        employee_inst.role = EmployeeRole.objects.get(id=role_id)
-        employee_inst.sex = EmployeeGender.objects.get(name_en=gender)
-        employee_inst.save()
-        return HttpResponse(status=200)
+        tech_works_mode = CommonBooleanSettings.objects.get(name='Технические работы').value
+        if tech_works_mode:
+            return HttpResponse('tech_works')
+        else:
+            json_data = json.loads(request.body.decode('utf-8'))
+            data = json_data['data']
+            code = data['code']
+            year = data['year']
+            gender = data['gender']
+            name = data['name']
+            role_id = data['role_id']
+            position_id = data['position_id']
+            industry_id = data['industry_id']
+            questionnaire_inst = Questionnaire.objects.get(participant__invitation_code=code)
+            questionnaire_inst.data_filled_up_by_participant = True
+            questionnaire_inst.save()
+            employee_inst = Employee.objects.get(id=questionnaire_inst.participant.employee_id)
+            employee_inst.name = name
+            employee_inst.birth_year = year
+            employee_inst.role = EmployeeRole.objects.get(id=role_id)
+            employee_inst.position = EmployeePosition.objects.get(id=position_id)
+            employee_inst.industry = Industry.objects.get(id=industry_id)
+            employee_inst.role = EmployeeRole.objects.get(id=role_id)
+            employee_inst.sex = EmployeeGender.objects.get(name_en=gender)
+            employee_inst.save()
+            return HttpResponse(status=200)

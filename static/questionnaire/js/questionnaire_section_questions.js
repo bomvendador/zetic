@@ -60,42 +60,44 @@ $('#save_page_answers').on('click', function () {
             //
             // }
             // console.log(data)
-            let response = data['response']
-            // console.log(data)
-            // console.log(`total_questionnaire_questions_qnt = ${response['total_questionnaire_questions_qnt']}`)
 
-            // if(){
-            //
-            // }
-
-            if (response['total_questionnaire_answers_qnt'] === response['total_questionnaire_questions_qnt']) {
+            if (data === 'tech_works') {
+                console.log(data)
                 let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                    '<h4 style="text-align: center" class="mb-0"><b>Вы ответили на все вопросы опросника</b></h4>' +
-                    '<br>' +
+                    '<h2 class="mb-0 mt-0" style="text-align: center">Технические работы</h2>' +
                     '<hr class="solid mt-0" style="background-color: black;">' +
-                    '<div style="text-align: center">Отчет будет автоматически отправлен на Вашу почту</div>' +
-                    '<div style="text-align: center"><b>' + response['email'] + '</b></div>' +
-                    '<br>' +
+                    '<h4 style="text-align: center">На сайте ведутся технические работы</h4>' +
+                    '<h4 style="text-align: center">Просим прощения за неудобства </h4>' +
+                    '<h4 style="text-align: center">В ближайшее время сервис возобновит свою работу </h4>' +
                     '<hr class="solid mt-0" style="background-color: black;">'
+
+
                 Swal.fire({
                     html: output_html,
-                    icon: 'success',
+                    icon: 'warning',
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'ОК'
-                }).then((result) => {
-                    if (result.value) {
-                        // $('#back_to_sections_link').click()
-                        window.location.href = document.getElementById("back_to_sections_link").getAttribute("href")
-                        // window.location.href = `${code}`
-
-                    }
+                }).then(function (result) {
+                    window.location.reload()
                 })
 
             } else {
-                if (response['total_section_questions_qnt'] === response['questions_answered_qnt']) {
+                let response = data['response']
+                // console.log(data)
+                // console.log(`total_questionnaire_questions_qnt = ${response['total_questionnaire_questions_qnt']}`)
+
+                // if(){
+                //
+                // }
+
+                if (response['total_questionnaire_answers_qnt'] === response['total_questionnaire_questions_qnt']) {
                     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                        '<div style="text-align: center">Вы ответили на все вопросы в данной секции</div>' +
+                        '<h4 style="text-align: center" class="mb-0"><b>Вы ответили на все вопросы опросника</b></h4>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<div style="text-align: center">Отчет будет автоматически отправлен на Вашу почту</div>' +
+                        '<div style="text-align: center"><b>' + response['email'] + '</b></div>' +
                         '<br>' +
                         '<hr class="solid mt-0" style="background-color: black;">'
                     Swal.fire({
@@ -112,12 +114,34 @@ $('#save_page_answers').on('click', function () {
 
                         }
                     })
-                    section_ended = true
+
                 } else {
-                    window.location.reload()
+                    if (response['total_section_questions_qnt'] === response['questions_answered_qnt']) {
+                        let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                            '<div style="text-align: center">Вы ответили на все вопросы в данной секции</div>' +
+                            '<br>' +
+                            '<hr class="solid mt-0" style="background-color: black;">'
+                        Swal.fire({
+                            html: output_html,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'ОК'
+                        }).then((result) => {
+                            if (result.value) {
+                                // $('#back_to_sections_link').click()
+                                window.location.href = document.getElementById("back_to_sections_link").getAttribute("href")
+                                // window.location.href = `${code}`
+
+                            }
+                        })
+                        section_ended = true
+                    } else {
+                        window.location.reload()
+
+                    }
 
                 }
-
             }
 
 

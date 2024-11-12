@@ -1,3 +1,5 @@
+from pdf.models import CommonBooleanSettings
+
 from django.shortcuts import render
 import time
 
@@ -5,7 +7,10 @@ import time
 
 
 def questionnaire_context():
+    tech_works_mode = CommonBooleanSettings.objects.get(name='Технические работы').value
+
     context = {
-        'timestamp': time.time()
+        'timestamp': time.time(),
+        'tech_works': tech_works_mode,
     }
     return context

@@ -19,7 +19,7 @@
 
 
     <!-- TITLE -->
-    <title>ZETIC - практическая психолгия</title>
+    <title>ZETIC - практическая психология</title>
 
     <!-- BOOTSTRAP CSS -->
     {#    <link id="style" href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />#}
@@ -114,15 +114,17 @@
                                 <div class="d-flex order-lg-2 flex-row justify-content-center align-items-center">
                                     {% if show_back_to_sections %}
                                         <div class="dropdown d-flex">
-                                            <a id="back_to_sections_link" href="{% url 'participant_data' code %}" style="padding: 5px 10px; margin-right: 10px; margin-bottom: 5px;" class="btn btn-info">
+                                            <a id="back_to_sections_link" href="{% url 'participant_data' code %}"
+                                               style="padding: 5px 10px; margin-right: 10px; margin-bottom: 5px;"
+                                               class="btn btn-info">
                                                 <i class="fe fe-chevron-left"
                                                    style="margin-right: 5px; font-size: 18px"></i><span
                                                     style="font-size: 16px">К секциям</span>
                                             </a>
                                         </div>
-{#                                        <div class="dropdown d-flex" style="margin-right: 10px">#}
-{#                                            |#}
-{#                                        </div>#}
+                                        {#                                        <div class="dropdown d-flex" style="margin-right: 10px">#}
+                                        {#                                            |#}
+                                        {#                                        </div>#}
                                     {% endif %}
                                     <!-- Theme-Layout -->
                                     <!-- CART -->
@@ -834,6 +836,8 @@
 
 <script>
     let csrf_token = '{{ csrf_token }}'
+    let tech_works = "{{ tech_works }}"
+
     {#let cur_user_email = '{{ cur_userprofile.user.email }}'#}
     {#let url_team_distribution = "{% url 'team_distribution' %}"#}
     {#let url_panel_home = "{% url 'panel_home' %}"#}

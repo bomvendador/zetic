@@ -1,5 +1,9 @@
 // console.log(`${window.location.protocol} ${window.location.host}`)
 
+if(tech_works === 'True' && cur_user_role_name !== 'Суперадмин'){
+    window.location.href = url_tech_works
+}
+
 $('.menu_item').each(function () {
     $(this).removeClass('active')
 })

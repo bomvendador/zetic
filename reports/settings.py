@@ -15,7 +15,6 @@ import os
 
 import environ
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,7 +41,6 @@ ADMINS = [('Alexey Rodin', 'bomvendador@yandex.ru')]
 SERVER_EMAIL = 'info@zetic.ru'
 EMAIL_SUBJECT_PREFIX = env('EMAIL_SUBJECT_PREFIX')
 
-
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = 1
 # DEBUG = True
@@ -52,7 +50,6 @@ if DEBUG == 0:
     API_LINK = 'https://console.zetic.ru/api/'
 else:
     API_LINK = 'https://demo-admin.zetic.borsky.dev/api/'
-
 
 ALLOWED_HOSTS = ['51.250.112.107', '51.250.47.137', 'zetictest.ru', 'zetictest.com', '127.0.0.1', '0.0.0.0']
 # ALLOWED_HOSTS = ['51.250.45.169', 'https://zetictest.ru', 'zetictest.com', '127.0.0.1', '0.0.0.0']
@@ -136,7 +133,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'reports.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -169,9 +165,6 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = "Europe/Moscow"
-
-
-
 
 # print(os.environ.get('SQL_NAME', BASE_DIR / 'db.sqlite3'))
 # print(os.environ.get('SQL_PASSWORD', BASE_DIR / 'db.sqlite3'))
@@ -207,7 +200,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -218,7 +210,6 @@ TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
