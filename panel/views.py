@@ -10,7 +10,7 @@ from pdf.models import Company, Participant, ReportData, Report, Category, Repor
     Section, \
     MatrixFilter, MatrixFilterParticipantNotDistributed, MatrixFilterInclusiveEmployeePosition, MatrixFilterCategory, \
     MatrixFilterParticipantNotDistributedEmployeePosition, QuestionnaireQuestionAnswers, QuestionAnswers, \
-    ReportDataByCategories, Questionnaire, Project, ProjectStudy, ProjectParticipants, ConsultantCompany
+    ReportDataByCategories, Questionnaire, Project, ProjectStudy, ProjectParticipants, ConsultantCompany, CommonBooleanSettings
 # from django.contrib.auth.models import User
 
 from login.models import UserRole, UserProfile, User
@@ -36,14 +36,36 @@ from django.db.models import Sum
 from pdf import raw_to_t_point
 
 
+def tech_works(request):
+    userprofile = UserProfile.objects.get(user=request.user)
+    # print(userprofile.role.name)
+    tech_works_mode = CommonBooleanSettings.objects.get(name='Технические работы').value
+    context = {
+        'cur_userprofile': userprofile,
+        'timestamp': time.time(),
+        'tech_works': tech_works_mode,
+    }
+
+    return render(request, 'tech_works/tech_works_page.html', context)
+
+
 @login_required(redirect_field_name=None, login_url='/login/')
 def info_common(request):
     userprofile = UserProfile.objects.get(user=request.user)
+    tech_works_mode = CommonBooleanSettings.objects.get(name='Технические работы').value
+
     context = {
         'cur_userprofile': userprofile,
-        'timestamp': time.time()
-
+        'timestamp': time.time(),
+        'tech_works': tech_works_mode,
     }
+    print(tech_works_mode)
+    # if tech_works_mode:
+    #     if not userprofile.role.name == 'Суперадмин':
+    #         print(userprofile.role.name)
+    #         return redirect('/tech_works/')
+    #         # return render(request, 'tech_works/tech_works_page.html', context)
+
     if userprofile.role.name == 'Админ заказчика':
 
         employee = Employee.objects.get(user=request.user)

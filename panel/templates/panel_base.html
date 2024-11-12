@@ -76,6 +76,7 @@
 
 <!-- PAGE -->
 <div class="page">
+
     <div class="page-main">
 
         <!-- app-Header -->
@@ -524,9 +525,15 @@
 
         <!--app-content open-->
         <div class="main-content app-content mt-0">
+            {% if tech_works %}
+            <div class="alert alert-danger" role="alert">
+                Включен режим технических работ! <b>Разрешен только просмотр информации без её изменения/удаления!</b>
+            </div>
+            {% endif %}
 
 
             <div class="side-app">
+
                 {% block content %}
 
                 {% endblock %}
@@ -1205,6 +1212,7 @@
 <script>
     let csrf_token = '{{ csrf_token }}'
     let cur_user_email = '{{ cur_userprofile.user.email }}'
+    let cur_user_role_name = '{{ cur_userprofile.role.name }}'
     let url_team_distribution = "{% url 'team_distribution' %}"
     let url_panel_home = "{% url 'panel_home' %}"
     let url_group_reports_list = "{% url 'group_reports_list' %}"
@@ -1244,7 +1252,10 @@
     let url_add_consultant_form = "{% url 'add_consultant_form' %}"
     let url_edit_consultant_form_list = "{% url 'edit_consultant_form_list' %}"
     let url_processing_main = "{% url 'processing_main' %}"
+    let url_tech_works = "{% url 'tech_works' %}"
+    let tech_works = "{{ tech_works }}"
 
+    console.log(tech_works)
 
 </script>
 <script src="{% static 'panel/js/panel_base.js' %}?{{ timestamp }}"></script>

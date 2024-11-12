@@ -19,6 +19,8 @@ from sendemail import tasks
 
 urlpatterns = [
     path('', panel_views.home, name="panel_home"),
+    path('tech_works', panel_views.tech_works, name="tech_works"),
+
     path('team_distribution', panel_views.team_distribution, name='team_distribution'),
     path('get_company_projects_for_group_report', panel_views.get_company_projects_for_group_report, name='get_company_projects_for_group_report'),
     path('get_company_projects_with_group_report', panel_views.get_company_projects_with_group_report, name='get_company_projects_with_group_report'),

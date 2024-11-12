@@ -169,7 +169,11 @@
                                                                style="margin-left: 0"
 
                                                                 {% if boolean_setting.value %}
-                                                               checked="checked"{% endif %}>
+                                                               checked="checked"
+                                                                {% endif %}
+                                                                {% if boolean_setting.name == 'Технические работы' %}
+                                                               disabled
+                                                               {% endif %}>
                                                     </div>
                                                     <div class="col-9 d-none save-boolean-setting-div">
                                                         <i class="fe fe-save save-boolean-setting"

@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Site Under Maintenance Flat Responsive widget Template :: w3layouts</title>
+    <!-- custom-theme -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords"
+          content="Site Under Maintenance Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design"/>
+    <script type="application/x-javascript"> addEventListener("load", function () {
+        setTimeout(hideURLbar, 0);
+    }, false);
+
+    function hideURLbar() {
+        window.scrollTo(0, 1);
+    } </script>
+    <!-- //custom-theme -->
+    {#<link href="css/font-awesome.css" rel="stylesheet">#}
+    <link href="{% static 'panel/css/tech_works.css' %}" rel="stylesheet"/>
+
+    {#    <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />#}
+    <link href="//fonts.googleapis.com/css?family=Hind+Siliguri:300,400,500,600,700" rel="stylesheet">
+</head>
+<body class="bg-agileinfo">
+<h1 class="agile-head text-center">ТЕХНИЧЕСКИЕ РАБОТЫ</h1>
+<div class="container-w3" style="padding: 15px; border: 1px solid white;">
+    <div class="content1-w3layouts">
+        <img src="/static/panel/media/images/2.png" alt="under-construction">
+        <hr style="opacity: 0.5; margin-top: 26px;">
+        <div style="font-size: 30px; color: white; margin-top: 25px;" class="text-center">На сервере ведутся технические работы.</div>
+        <div style="font-size: 25px; color: white; margin-top: 20px;" class="text-center">Просим прощения за неудобства.</div>
+        <div style="font-size: 25px; color: white;" class="text-center">В ближайшее время сервис возобновит свою работу.</div>
+    </div>
+</div>
+</body>
+</html>
+
+
+<script>
+
+    let tech_works = "{{ tech_works }}";
+    let url_panel_home = "{% url 'panel_home' %}"
+
+</script>
+<script src="{% static 'panel/js/tech_works/panel_tech_works.js' %}?{{ timestamp }}"></script>
