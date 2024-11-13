@@ -237,7 +237,7 @@ def save_data_to_db_and_send_report(data):
     if report_id == '':
         if request_type == 'consultant_form':
             consultant_form_id = data['consultant_form_id']
-            consultant_name = ConsultantForm.objects.get(id=consultant_form_id).user,file_name
+            consultant_name = ConsultantForm.objects.get(id=consultant_form_id).user.first_name
             data_for_mail.update({
                 'consultant_name': consultant_name
             })
