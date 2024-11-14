@@ -14,12 +14,22 @@
 
         <!-- PAGE-HEADER -->
         <div class="page-header">
-            <h1 class="page-title">Редактирование группового отчета</h1>
+            {% if type == 'copy' %}
+                <h1 class="page-title">Создаение копии группового отчета</h1>
+
+            {% else %}
+                <h1 class="page-title">Редактирование группового отчета</h1>
+
+            {% endif %}
             <div>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
                     {#                        <li class="breadcrumb-item active" aria-current="page">Dashboard 01</li>#}
-                    <li class="breadcrumb-item active" aria-current="page">Распределение</li>
+                    {% if type == 'copy' %}
+                        <li class="breadcrumb-item active" aria-current="page">Создание копии отчета</li>
+                    {% else %}
+                        <li class="breadcrumb-item active" aria-current="page">Распределение</li>
+                    {% endif %}
                 </ol>
             </div>
         </div>
@@ -290,9 +300,9 @@
                                                                 <th class="wd-15p border-bottom-0 table-header">
                                                                     Распределение
                                                                 </th>
-                                                                <th class="wd-15p border-bottom-0 table-header">
-                                                                    Номер в отчете
-                                                                </th>
+                                                                    <th class="wd-15p border-bottom-0 table-header">
+                                                                        Номер в отчете
+                                                                    </th>
                                                                 <th class="wd-15p border-bottom-0 table-header">
 
                                                                 </th>
@@ -302,7 +312,9 @@
 
                                                             {% for report in group_reports %}
                                                                 <tr class="table-row-undistributed-participant" style=""
-                                                                    data-participant-number="{{ report.report.participant_number }}"
+                                                                    data-participant-number="
+
+                                                                            {% if type == 'edit' %}{{ report.report.participant_number }}{% endif %}"
                                                                     data-employee-id="{{ report.participant_data.employee_id }}"
                                                                     data-participant-id="{{ report.participant_data.participant_id }}">
                                                                     <td class="bold-participant"
@@ -369,10 +381,14 @@
                                                                             {% endfor %}
                                                                         </select>
                                                                     </td>
+
                                                                     <td class="participant-number"
                                                                         style="vertical-align: middle; text-align: center">
-                                                                        <span>{{ report.report.participant_number }}</span>
+                                                                        {% if type == 'edit' %}
+                                                                            <span>{{ report.report.participant_number }}</span>
+                                                                        {% endif %}
                                                                     </td>
+
                                                                     <td style="vertical-align: middle; text-align: center">
                                                                         <button class="btn-close delete-participant-from-group-report"
                                                                                 aria-label="Close">
@@ -590,6 +606,7 @@
         let company_name = '{{ company_name }}';
         let group_report_id = {{ group_report_id }};
         let project_id = {{ project_id }};
+        let report_type = '{{ type }}'
     </script>
     <script src="{% static 'panel/js/panel_edit_group_report.js' %}?{{ timestamp }}"></script>
 

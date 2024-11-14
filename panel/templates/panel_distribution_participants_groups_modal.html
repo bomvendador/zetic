@@ -32,17 +32,17 @@
                                 </thead>
                                 <tbody>
                                 {% for report in group_reports %}
-                                    {% if report.report.group_name %}
+                                    {% if report.report.group_name_modal %}
                                         <tr class="participants-group-modal-item" style="vertical-align: middle">
                                             <td style="vertical-align: middle">
-                                                <input class="radio-custom" style="width: 16px; height: 16px" type="radio" name="" value="1" checked="checked">
+                                                <input class="radio-custom" style="width: 16px; height: 16px" type="radio" name="" value="1">
                                             </td>
                                             <td>
-                                                <input type="text group-name" class="form-control" value="{{ report.report.group_name }}">
+                                                <input type="text group-name" class="form-control" value="{{ report.report.group_name_modal }}">
                                             </td>
                                             <td style="vertical-align: middle">
                                                 <div class="media-body">
-                                                    <input class="cursor-pointer group-color-picker" type="text" data-coloris="" style="width: 30px; color: transparent; background-color: {{ report.report.group_color }};border: solid" value="{{ report.report.group_color }}">
+                                                    <input class="cursor-pointer group-color-picker" type="text" data-coloris="" style="width: 30px; color: transparent; background-color: {{ report.report.group_color_modal }};border: solid" value="{{ report.report.group_color_modal }}">
                                                     <span class="d-block w-80p">
                                                         <span class="color-picker"></span>
                                                     </span>

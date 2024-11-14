@@ -55,17 +55,12 @@ $('#save_page_answers').on('click', function () {
             $('#next_btn').text('Далее').attr('disabled', false).css('opacity', 1)
         },
         success: function (data) {
-            // btn_text($('#save_page_answers'), 'Далее')
-            // if(){
-            //
-            // }
-            // console.log(data)
-
+            btn_text($('#save_page_answers'), 'Далее')
             if (data === 'tech_works') {
                 console.log(data)
                 let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
                     '<h2 class="mb-0 mt-0" style="text-align: center">Технические работы</h2>' +
-                    '<hr class="solid mt-0" style="background-color: black;">' +
+                    '<hr class="solid" style="background-color: black;">' +
                     '<h4 style="text-align: center">На сайте ведутся технические работы</h4>' +
                     '<h4 style="text-align: center">Просим прощения за неудобства </h4>' +
                     '<h4 style="text-align: center">В ближайшее время сервис возобновит свою работу </h4>' +

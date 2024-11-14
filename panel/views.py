@@ -696,10 +696,14 @@ def save_group_report_data(request):
         # print('===421===')
 
         operation = json_data['operation']
+        if 'report_type' in json_data:
+            report_type = json_data['report_type']
+        else:
+            report_type = 'new'
         project_id = json_data['project_id']
         square_results = json_data['square_results']
 
-        if operation == 'edit':
+        if operation == 'edit' and report_type == 'edit':
             group_report_inst = ReportGroup.objects.get(id=json_data['group_report_id'])
             # report_group_square = ReportGroupSquare.objects.filter(report_group=group_report_inst).delete()
             # ReportGroupSquare.objects.filter(report_group=group_report_inst).delete()
@@ -731,6 +735,7 @@ def save_group_report_data(request):
             project = Project.objects.get(id=project_id)
             json_data['project_name'] = project.name
             json_data['company_name'] = project.company.name
+            json_data['report_type'] = report_type
 
             cnt = 0
             for square_result in square_results:
@@ -794,24 +799,33 @@ def get_available_participants_for_group_report(request):
 def edit_group_report_data(request, report_id,  project_id):
     context = info_common(request)
     group_report_inst = ReportGroup.objects.get(id=report_id)
-    group_report_squares_inst = ReportGroupSquare.objects.filter(report_group=group_report_inst)
+    group_report_squares_inst = ReportGroupSquare.objects.filter(report_group=group_report_inst).order_by('participant_number')
     participants_emails = []
     group_reports = []
+    group_names = []
     for group_report in group_report_squares_inst:
 
         # participants_emails.append(group_report.report.participant.employee.email)
         participant_data = get_participants_data_for_group_report([group_report.report.participant.id])
         # print(participant_data)
-        group_reports.append({
-            'participant_data': participant_data[0],
-            'report': {
-                'group_name': group_report.participant_group,
-                'group_color': group_report.participant_group_color,
+
+        report_data = {
                 'bold': group_report.bold,
                 'square_code': group_report.square_code,
                 'participant_number': group_report.participant_number,
-                'employee_id': group_report.report.participant.employee.id
-            },
+                'employee_id': group_report.report.participant.employee.id,
+                'group_name': group_report.participant_group,
+                'group_color': group_report.participant_group_color,
+        }
+        if group_report.participant_group not in group_names:
+            group_names.append(group_report.participant_group)
+            report_data.update({
+                'group_name_modal': group_report.participant_group,
+                'group_color_modal': group_report.participant_group_color,
+            })
+        group_reports.append({
+            'participant_data': participant_data[0],
+            'report': report_data,
 
         })
 
@@ -821,7 +835,55 @@ def edit_group_report_data(request, report_id,  project_id):
         'company_id': group_report_inst.company.id,
         'group_report_id': report_id,
         'company_name': group_report_inst.company.name,
-        'project_id': project_id
+        'project_id': project_id,
+        'type': 'edit',
+    })
+    # print(group_reports)
+
+    return render(request, 'panel_edit_group_report.html', context)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def copy_group_report_data(request, report_id,  project_id):
+    context = info_common(request)
+    group_report_inst = ReportGroup.objects.get(id=report_id)
+    group_report_squares_inst = ReportGroupSquare.objects.filter(report_group=group_report_inst).order_by('participant_number')
+    participants_emails = []
+    group_reports = []
+    group_names = []
+    for group_report in group_report_squares_inst:
+
+        # participants_emails.append(group_report.report.participant.employee.email)
+        participant_data = get_participants_data_for_group_report([group_report.report.participant.id])
+        # print(participant_data)
+        report_data = {
+                'bold': group_report.bold,
+                'square_code': group_report.square_code,
+                'participant_number': group_report.participant_number,
+                'employee_id': group_report.report.participant.employee.id,
+                'group_name': group_report.participant_group,
+                'group_color': group_report.participant_group_color,
+        }
+        if group_report.participant_group not in group_names:
+            group_names.append(group_report.participant_group)
+            report_data.update({
+                'group_name_modal': group_report.participant_group,
+                'group_color_modal': group_report.participant_group_color,
+            })
+        group_reports.append({
+            'participant_data': participant_data[0],
+            'report': report_data,
+
+        })
+
+    context.update({
+        'group_reports': group_reports,
+        'squares_data': squares_data,
+        'company_id': group_report_inst.company.id,
+        'group_report_id': report_id,
+        'company_name': group_report_inst.company.name,
+        'project_id': project_id,
+        'type': 'copy',
     })
     # print(group_reports)
 
@@ -1107,7 +1169,7 @@ def delete_group_report(request):
         group_report_inst = ReportGroup.objects.get(id=json_data['report_id'])
         group_report_inst.delete()
 
-        return HttpResponse('ok')
+        return HttpResponse(status=200)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')

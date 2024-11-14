@@ -111,7 +111,7 @@ $('#tbody_undistributed_participants').on('click', '.delete-participant-from-gro
     }).then((result) => {
         if (result.value) {
             let tr = $(this).closest('tr')
-            let data_participant_number = tr.data('participant-number')
+            let data_participant_number = tr.data('participant-number').trim()
             if (data_participant_number !== '') {
                 let employee_id = $(this).closest('tr').data('employee-id')
                 show_progressbar_loader()
@@ -193,7 +193,7 @@ $('#add_participants_from_modal').on('click', function () {
                     let html = ''
 
                     html = '<tr class="table-row-undistributed-participant" style = "" data-participant-number="" ' +
-                        'data-employee-id="'+ employee_id + '" data-participant-id="'+ participant_id + '" >' +
+                        'data-employee-id="' + employee_id + '" data-participant-id="' + participant_id + '" >' +
                         '<td class="bold-participant" style="text-align: center;vertical-align: middle;" >' +
                         '<input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0">' +
                         '</td>' +
@@ -998,7 +998,11 @@ function save_report() {
         })
     })
     console.log(square_results)
-
+    square_results.sort((function (index) {
+        return function (a, b) {
+            return (a[index] === b[index] ? 0 : (a[index] < b[index] ? -1 : 1));
+        };
+    })(7));
     $.ajax({
         headers: {"X-CSRFToken": token},
         url: url_save_group_report_data,
@@ -1011,7 +1015,8 @@ function save_report() {
             'comments': $('#report-comments-text').val(),
             'group_report_id': group_report_id,
             'operation': 'edit',
-            'project_id': project_id
+            'project_id': project_id,
+            'report_type': report_type,
         }),
         processData: false,
         contentType: false,
@@ -1043,10 +1048,22 @@ function save_report() {
                     a.click();
                     setTimeout(function () {
                         // {#location.href = {% url 'panel_home' %}#}
-                        window.location.reload()
+                        if (report_type === 'copy') {
+                            let report_id = data['response']['report_id']
+                            window.location.href = '/panel/edit_group_report_data/' + report_id + '/' + project_id
+                        } else {
+                            window.location.reload()
+                        }
+
+
                     }, 1500)
                 } else {
-                    window.location.reload()
+                    if (report_type === 'copy') {
+                        let report_id = data['response']['report_id']
+                        window.location.href = '/panel/edit_group_report_data/' + report_id + '/' + project_id
+                    } else {
+                        window.location.reload()
+                    }
                     // {#location.href = {% url 'panel_home' %}#}
                 }
             })
@@ -1059,6 +1076,12 @@ function save_report() {
     });
 
 }
+
+$('#remove_participants_numbers').on('click', function () {
+    $('.participant-number').each(function () {
+
+    })
+})
 
 
 let enabled_route_number = 0

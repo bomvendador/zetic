@@ -6,8 +6,13 @@ def save_data_to_db(request_json, file_name):
 
     company_inst = Company.objects.get(id=request_json['company_id'])
     operation = request_json['operation']
+    report_type = request_json['report_type']
+
     if operation == 'edit':
-        report_group_inst = ReportGroup.objects.get(id=request_json['group_report_id'])
+        if report_type == 'copy':
+            report_group_inst = ReportGroup()
+        else:
+            report_group_inst = ReportGroup.objects.get(id=request_json['group_report_id'])
     else:
         report_group_inst = ReportGroup()
     report_group_inst.file = file_name
@@ -24,7 +29,7 @@ def save_data_to_db(request_json, file_name):
         group_name = participant_data[4]
         group_color = participant_data[5]
         employee_email = participant_data[1]
-        if operation == 'new':
+        if operation == 'new' or report_type == 'copy':
             project_inst = Project.objects.get(id=request_json['project_id'])
             project_participant_inst = ProjectParticipants()
             project_participant_inst.participant = Participant.objects.get(id=participant_id)
@@ -43,4 +48,4 @@ def save_data_to_db(request_json, file_name):
         report_group_square_inst.participant_group_color = group_color
         report_group_square_inst.participant_number = participant_number
         report_group_square_inst.save()
-
+    return report_group_inst.id

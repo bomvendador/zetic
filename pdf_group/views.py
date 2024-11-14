@@ -148,11 +148,13 @@ def pdf_group_generator(request_json):
 
     path = "media/reportsPDF/group/"
 
-    save_data_group(request_json, file_name)
+    report_id = save_data_group(request_json, file_name)
     # print(request_json['square_results'])
     # response = save_serve_file(pdf, path, file_name, request_json)
     response = save_serve_file(pdf, path, file_name)
-
+    response.update({
+        'report_id': report_id
+    })
     return response
 
 
