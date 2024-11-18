@@ -129,25 +129,25 @@ def pdf_single_generator(data):
 
 
     answer_code_1 = category_data('1_', questionnaire_id, employee.id)
-    if answer_code_1:
+    if len(answer_code_1) > 0:
         pdf.add_page()
         # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
         page3(pdf, answer_code_1, lang, participant_info)
 
     answer_code_2 = category_data('2_', questionnaire_id, employee.id)
-    if answer_code_2:
+    if len(answer_code_2) > 0:
         pdf.add_page()
         # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
         page4(pdf, answer_code_2, lang, participant_info)
 
     answer_code_3 = category_data('3_', questionnaire_id, employee.id)
-    if answer_code_3:
+    if len(answer_code_3) > 0:
         pdf.add_page()
         # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
         page5(pdf, answer_code_3, lang, participant_info)
 
     answer_code_4 = category_data('4_', questionnaire_id, employee.id)
-    if answer_code_4:
+    if len(answer_code_4) > 0:
         pdf.add_page()
         # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
         page6(pdf, answer_code_4, lang, participant_info)
