@@ -127,36 +127,36 @@ def pdf_single_generator(data):
         pdf.add_page()
         page_circle_diagram(pdf, questionnaire_id, report_id, lang)
 
-
-    answer_code_1 = category_data('1_', questionnaire_id, employee.id)
-    print(f'answer_code_1 = {len(answer_code_1)}')
-    if len(answer_code_1) > 0:
+    response_code_1 = category_data('1_', questionnaire_id, employee.id)
+    if response_code_1['category_is_not_empty']:
+        answer_code_1 = response_code_1['answers']
         pdf.add_page()
         # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
         page3(pdf, answer_code_1, lang, participant_info)
 
-    answer_code_2 = category_data('2_', questionnaire_id, employee.id)
-
-    print(f'answer_code_2 = {len(answer_code_2)}')
-
-    if len(answer_code_2) > 0:
+    # answer_code_2 = category_data('2_', questionnaire_id, employee.id)
+    # if len(answer_code_2) > 0:
+    response_code_2 = category_data('2_', questionnaire_id, employee.id)
+    if response_code_2['category_is_not_empty']:
+        answer_code_2 = response_code_2['answers']
         pdf.add_page()
         # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
         page4(pdf, answer_code_2, lang, participant_info)
 
-    answer_code_3 = category_data('3_', questionnaire_id, employee.id)
-
-
-    print(f'answer_code_3 = {len(answer_code_3)}')
-
-    if len(answer_code_3) > 0:
+    # answer_code_3 = category_data('3_', questionnaire_id, employee.id)
+    # if len(answer_code_3) > 0:
+    response_code_3 = category_data('3_', questionnaire_id, employee.id)
+    if response_code_3['category_is_not_empty']:
+        answer_code_3 = response_code_3['answers']
         pdf.add_page()
         # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
         page5(pdf, answer_code_3, lang, participant_info)
 
-    answer_code_4 = category_data('4_', questionnaire_id, employee.id)
-    print(f'answer_code_4 = {len(answer_code_4)}')
-    if len(answer_code_4) > 0:
+    # answer_code_4 = category_data('4_', questionnaire_id, employee.id)
+    # if len(answer_code_4) > 0:
+    response_code_4 = category_data('4_', questionnaire_id, employee.id)
+    if response_code_4['category_is_not_empty']:
+        answer_code_4 = response_code_4['answers']
         pdf.add_page()
         # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
         page6(pdf, answer_code_4, lang, participant_info)
@@ -250,7 +250,7 @@ def category_data(code_prefix, questionnaire_id, employee_id):
         answers_category_code_1 = questionnaire_questions_answers.first().question.category
     categories = Category.objects.filter(code__startswith=code_prefix)
     answers = []
-
+    category_is_not_empty = False
     for category in categories:
         code2 = category.code.split('_')[1]
         # print(f'cpde2 = {code2}')
@@ -259,6 +259,7 @@ def category_data(code_prefix, questionnaire_id, employee_id):
             report_by_categories_inst = ReportDataByCategories.objects.filter(Q(category_code=category.code) & Q(report__participant__employee_id=employee_id))
             if report_by_categories_inst.exists():
                 points = report_by_categories_inst.latest('created_at').t_points
+                category_is_not_empty = True
             else:
                 raw_points = 0
                 for answer in questionnaire_questions_answers:
@@ -277,7 +278,11 @@ def category_data(code_prefix, questionnaire_id, employee_id):
                 # print('=== answers_code_1 ===')
                 # print(answers_code_1)
                 # print('======================')
-    return answers
+    response = {
+        'answers': answers,
+        'category_is_not_empty': category_is_not_empty
+    }
+    return response
 
 
 def save_serve_file(pdf, path, file_name):
