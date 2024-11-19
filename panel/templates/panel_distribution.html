@@ -685,7 +685,7 @@
                 if (is_checked) {
                     set_checkbox_checked(this)
 
-                }else {
+                } else {
                     set_checkbox_unchecked(this)
                 }
             })
@@ -1317,7 +1317,15 @@
                                     html += '<option value=""></option>'
 
                                     squares_data.forEach(function (item) {
-                                        html += `<option value="${item['square_role_name']}" title="${item['code']} - ${item['square_name']} - ${item['square_role_name']}">${item['code']} - ${item['square_name']} - ${item['square_role_name']}</option>`
+                                        if (participant_squares.length > 0) {
+                                            if (item['code'].toString() === participant_squares[0]['square_code'].toString()) {
+                                                html += `<option value="${item['square_role_name']}" title="${item['code']} - ${item['square_name']} - ${item['square_role_name']}" selected>${item['code']} - ${item['square_name']} - ${item['square_role_name']}</option>`
+                                            }
+                                        } else {
+                                            html += `<option value="${item['square_role_name']}" title="${item['code']} - ${item['square_name']} - ${item['square_role_name']}">${item['code']} - ${item['square_name']} - ${item['square_role_name']}</option>`
+
+                                        }
+
                                     })
 
                                     html += '</select>'
@@ -1326,6 +1334,7 @@
 
 
                                     $('#tbody_undistributed_participants').append(html)
+
 
                                     {#$('.undistributed-table').removeAttr('width').DataTable({#}
                                     {#        'columnDefs': [#}
@@ -1371,7 +1380,6 @@
 
 
                         {#console.log(report_participants)#}
-                        console.log('fffffffff')
                         route_menu_handler(route_index, 'next')
                     } else {
                         toastr.error('Участники не выбраны')
