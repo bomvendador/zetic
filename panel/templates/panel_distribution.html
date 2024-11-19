@@ -1272,11 +1272,11 @@
                             },
                             success: function (data) {
 
-                                console.log(data)
+                                {#console.log(data)#}
                                 {#let data_json = $.parseJSON(data);#}
                                 let participants_data = data['participants_data']
                                 let squares_data = data['squares_data']
-                                console.log(squares_data)
+                                {#console.log(squares_data)#}
                                 let html = ''
                                 let possible_categories = []
                                 let possible_categories_participant = []
@@ -1320,10 +1320,11 @@
                                         if (participant_squares.length > 0) {
                                             if (item['code'].toString() === participant_squares[0]['square_code'].toString()) {
                                                 html += `<option value="${item['square_role_name']}" title="${item['code']} - ${item['square_name']} - ${item['square_role_name']}" selected>${item['code']} - ${item['square_name']} - ${item['square_role_name']}</option>`
+                                            } else {
+                                                html += `<option value="${item['square_role_name']}" title="${item['code']} - ${item['square_name']} - ${item['square_role_name']}">${item['code']} - ${item['square_name']} - ${item['square_role_name']}</option>`
                                             }
                                         } else {
                                             html += `<option value="${item['square_role_name']}" title="${item['code']} - ${item['square_name']} - ${item['square_role_name']}">${item['code']} - ${item['square_name']} - ${item['square_role_name']}</option>`
-
                                         }
 
                                     })
