@@ -1165,7 +1165,7 @@
                         },
                         success: function (data) {
                             let projects = data['projects'];
-                            console.log(projects)
+                            {#console.log(projects)#}
                             let html = ''
                             for (let i = 0; i < projects.length; i++) {
                                 html += '<tr class="table-row cursor-pointer company-project-added" data-project-id="' + projects[i]['id'] + '" id="project_id_' + projects[i]['id'] + '">'
@@ -1210,7 +1210,7 @@
                                 toastr.error('Ошибка', data)
                             },
                             success: function (data) {
-                                console.log(data)
+                                {#console.log(data)#}
 
                                 let participants = data['participants'];
                                 let html = ''
@@ -1222,7 +1222,7 @@
                                     html += '</tr>'
                                 }
                                 $('#wizard1-tbody-1').html(html)
-                                console.log('wizard1-tbody-2 - ' + $('#project_participants_table').html())
+                                {#console.log('wizard1-tbody-2 - ' + $('#project_participants_table').html())#}
                                 process_table('.team-table')
                                 btn_text($('#next'), '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
 
