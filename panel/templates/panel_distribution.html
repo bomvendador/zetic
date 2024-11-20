@@ -465,8 +465,13 @@
                                                                     Должность
                                                                 </th>
                                                                 <th class="wd-15p border-bottom-0 table-header">
+                                                                    Личный отчет
+                                                                </th>
+
+                                                                <th class="wd-15p border-bottom-0 table-header">
                                                                     Автораспределение
                                                                 </th>
+
                                                                 <th class="wd-15p border-bottom-0 table-header"
                                                                     style="width: 100px">
                                                                     Распределение
@@ -1287,6 +1292,7 @@
                                 for (let i = 0; i < participants_data.length; i++) {
                                     {#console.log('-------------------------')#}
                                     let participant_squares = participants_data[i]['participant_squares']
+                                    let individual_reports_files = participants_data[i]['individual_reports_files']
                                     let html = ''
 
 
@@ -1297,6 +1303,14 @@
                                     html += '<td class="email">' + participants_data[i]['email'] + '</td>'
                                     html += '<td class="role_name">' + participants_data[i]['role_name'] + '</td>'
                                     html += '<td class="position">' + participants_data[i]['position'] + '</td>'
+
+                                    html += '<td>'
+                                    for (let j = 0; j < individual_reports_files.length; j++) {
+                                        html += '<div>'
+                                        html += `<a style="padding: 0!important;" class="dropdown-item" href="/panel/download_single_report/${individual_reports_files[j]}">Скачать</a>`
+                                        html += '</div>'
+                                    }
+                                    html += '</td>'
 
                                     html += '<td>'
                                     if (participant_squares.length > 0) {

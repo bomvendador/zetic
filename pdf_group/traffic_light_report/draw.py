@@ -281,7 +281,7 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results,
         participant_inst = Participant.objects.get(id=participant_id)
         print(f'277 - participant_name - {participant_inst.employee.name} participant_email - {participant_inst.employee.email}')
         report_inst = Report.objects.filter(Q(participant=participant_inst)).latest('added')
-        name = participant_inst.employee.name
+        name = participant_inst.employee.name.strip()
         name_with_number = str(participant_number) + '. ' + name
         participant_name_length = len(name_with_number)
         if participant_name_length > name_max_length:
@@ -296,9 +296,11 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results,
             for traffic_light_report_category in traffic_light_report_categories_inst:
                 # print(f'participant_name - {participant_inst.employee.name} participant_email - {participant_inst.employee.email} traffic_light_report_categories_code = {traffic_light_report_category.category.code}')
 
-                report_data_by_categories_inst = ReportDataByCategories.objects.filter(Q(report=report_inst) & Q(category_code=traffic_light_report_category.category.code)).latest('created_at')
-                t_point = report_data_by_categories_inst.t_points
-                total_t_points = total_t_points + t_point
+                report_data_by_categories_inst = ReportDataByCategories.objects.filter(Q(report=report_inst) & Q(category_code=traffic_light_report_category.category.code))
+                if report_data_by_categories_inst.exists():
+                    report_data_by_categories_inst = ReportDataByCategories.objects.filter(Q(report=report_inst) & Q(category_code=traffic_light_report_category.category.code)).latest('created_at')
+                    t_point = report_data_by_categories_inst.t_points
+                    total_t_points = total_t_points + t_point
                 # print(f'traffic_light_report - {traffic_light_report.name} code - {report_data_by_categories_inst.category_code} t_points - {t_point}')
 
             average_t_points = total_t_points / len(traffic_light_report_categories_inst)

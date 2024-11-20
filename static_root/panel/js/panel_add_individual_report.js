@@ -80,10 +80,10 @@ window.onerror = function myErrorHandler(errorMsg, url, lineNumber){
             // let range = XLSX.utils.decode_range(sheet)
             // let cell_ref = XLSX.utils.encode_cell({c:8, r:3})
             console.log(sheet['K4'])
-            let participant_name = sheet['I3'].v
-            let email = sheet['K3'].v
+            let participant_name = sheet['I3'].v.trim()
+            let email = sheet['K3'].v.trim()
             let study_name = sheet['K4'].v
-            let company_name = sheet['K5'].v
+            let company_name = sheet['K5'].v.trim()
             let birth_year = sheet['I4'].v
             let gender = sheet['I5'].v
             let lie_points = Math.round(sheet['I7'].v)

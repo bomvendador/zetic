@@ -673,6 +673,11 @@ def get_participants_data_for_group_report(participants_ids):
                             'percentage': 0
                         })
 
+        individual_reports_inst = Report.objects.filter(participant=report.participant)
+        individual_reports_files = []
+        for report in individual_reports_inst:
+            individual_reports_files.append(report.file.name)
+
         participants_data.append({
             'fio': report.participant.employee.name,
             'email': report.participant.employee.email,
@@ -682,6 +687,7 @@ def get_participants_data_for_group_report(participants_ids):
             'participant_squares': participant_squares[:3],
             'employee_id': report.participant.employee.id,
             'participant_id': report.participant.id,
+            'individual_reports_files': individual_reports_files,
         })
         # print(participant_squares)
     return participants_data
@@ -808,6 +814,10 @@ def edit_group_report_data(request, report_id,  project_id):
         # participants_emails.append(group_report.report.participant.employee.email)
         participant_data = get_participants_data_for_group_report([group_report.report.participant.id])
         # print(participant_data)
+        individual_reports_inst = Report.objects.filter(participant=group_report.report.participant)
+        individual_reports_files = []
+        for report in individual_reports_inst:
+            individual_reports_files.append(report.file.name)
 
         report_data = {
                 'bold': group_report.bold,
@@ -816,6 +826,7 @@ def edit_group_report_data(request, report_id,  project_id):
                 'employee_id': group_report.report.participant.employee.id,
                 'group_name': group_report.participant_group,
                 'group_color': group_report.participant_group_color,
+                'individual_reports_files': individual_reports_files,
         }
         if group_report.participant_group not in group_names:
             group_names.append(group_report.participant_group)
@@ -828,6 +839,7 @@ def edit_group_report_data(request, report_id,  project_id):
             'report': report_data,
 
         })
+
 
     context.update({
         'group_reports': group_reports,

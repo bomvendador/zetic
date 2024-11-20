@@ -692,7 +692,7 @@ def draw_participants_table(square_data, pdf, width, x, y):
 
         # pdf.multi_cell(7, line_height, str(cnt), border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
         pdf.multi_cell(7, line_height, str(square_data_item[7]), border=1, align='C', new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
-        pdf.multi_cell((width - 10) - 7, line_height, participant_name, border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
+        pdf.multi_cell((width - 10) - 7, line_height, participant_name.strip(), border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
         pdf.multi_cell(10, line_height, '', border=1, new_x='RIGHT', new_y='TOP', max_line_height=pdf.font_size)
 
         orange_color = is_orange_color(email)

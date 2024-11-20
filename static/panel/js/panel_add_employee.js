@@ -513,8 +513,8 @@ function allFieldsFilledOut(obj, column_number) {
 }
 
 $('#save_employee').on('click', function () {
-    let name = $('#employee_name').val()
-    let email = $('#employee_email').val()
+    let name = $('#employee_name').val().trim()
+    let email = $('#employee_email').val().trim()
     let role = $('#employee_role').val()
     let position = $('#employee_position').val()
     let industry = $('#employee_industry').val()

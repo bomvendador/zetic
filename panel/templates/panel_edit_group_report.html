@@ -298,11 +298,14 @@
                                                                     Автораспределение
                                                                 </th>
                                                                 <th class="wd-15p border-bottom-0 table-header">
+                                                                    Личный отчет
+                                                                </th>
+                                                                <th class="wd-15p border-bottom-0 table-header">
                                                                     Распределение
                                                                 </th>
-                                                                    <th class="wd-15p border-bottom-0 table-header">
-                                                                        Номер в отчете
-                                                                    </th>
+                                                                <th class="wd-15p border-bottom-0 table-header">
+                                                                    Номер в отчете
+                                                                </th>
                                                                 <th class="wd-15p border-bottom-0 table-header">
 
                                                                 </th>
@@ -313,6 +316,7 @@
                                                             {% for report in group_reports %}
                                                                 <tr class="table-row-undistributed-participant" style=""
                                                                     data-participant-number="
+
 
                                                                             {% if type == 'edit' %}{{ report.report.participant_number }}{% endif %}"
                                                                     data-employee-id="{{ report.participant_data.employee_id }}"
@@ -364,6 +368,13 @@
                                                                             Отсутствует
                                                                         {% endif %}
 
+                                                                    </td>
+                                                                    <td style="vertical-align: middle">
+                                                                        {% for individual_report_file in report.report.individual_reports_files %}
+                                                                        <a style="padding: 0!important;"
+                                                                           class="dropdown-item"
+                                                                           href="/panel/download_single_report/{{ individual_report_file }}">Скачать</a>
+                                                                        {% endfor %}
                                                                     </td>
                                                                     <td>
                                                                         <select name="category"
