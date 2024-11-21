@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 
 import json
 # Create your views here.
+from django.db.models import Max
 
 from pdf.models import Company, Participant, ReportData, Report, Category, ReportGroup, ReportGroupSquare, Industry, \
     Employee, EmployeeRole, EmployeePosition, EmployeeGender, Study, ResearchTemplate, ResearchTemplateSections, \
@@ -281,7 +282,7 @@ def team_distribution(request):
     context.update({
         'companies': response
     })
-    print(response)
+    # print(response)
     return render(request, 'panel_distribution.html', context)
 
 
@@ -381,7 +382,7 @@ def get_report_participants_data(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
         report_participants = json_data['report_participants']
-        print(report_participants)
+        # print(report_participants)
         participants_data = get_participants_data_for_group_report(report_participants)
         response = {}
 
@@ -697,10 +698,10 @@ def get_participants_data_for_group_report(participants_ids):
 def save_group_report_data(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
-        # print('--- 421 ---')
+        # print('--- 700 ---')
         # print(json_data)
-        # print('===421===')
-
+        # print('===702===')
+        # return
         operation = json_data['operation']
         if 'report_type' in json_data:
             report_type = json_data['report_type']
@@ -710,27 +711,58 @@ def save_group_report_data(request):
         square_results = json_data['square_results']
 
         if operation == 'edit' and report_type == 'edit':
-            group_report_inst = ReportGroup.objects.get(id=json_data['group_report_id'])
+            group_report_id = json_data['group_report_id']
+            group_report_inst = ReportGroup.objects.get(id=group_report_id)
             # report_group_square = ReportGroupSquare.objects.filter(report_group=group_report_inst).delete()
             # ReportGroupSquare.objects.filter(report_group=group_report_inst).delete()
             for square_result in square_results:
                 participant_number = square_result[7]
-                if participant_number == '':
-                    report_group_square_inst = ReportGroupSquare.objects.filter(report_group=group_report_inst)
-                    biggest_number = 0
-                    if report_group_square_inst:
-                        for report_group_square in report_group_square_inst:
-                            if int(report_group_square.participant_number) > int(biggest_number):
-                                biggest_number = report_group_square.participant_number
+                participant_id = square_result[8]
+                report_inst = Report.objects.get(participant_id=participant_id)
+                # print(f'report_inst.id = {report_inst.id}')
+                # return
+                group_name = square_result[4]
+                square_code = square_result[6]
+                square_name = square_result[0]
+                bold = square_result[3]
+                color = square_result[5]
+
+                if not ReportGroupSquare.objects.filter(Q(report=Report.objects.get(participant_id=participant_id)) &
+                                                        Q(report_group_id=group_report_id)).exists():
+                    # print(f'participant_id: {participant_id} - name: {square_result[2]}')
+                    report_group_square = ReportGroupSquare()
+                    report_group_square.report = Report.objects.get(participant_id=participant_id)
+                    # new_particoapnt_number =
+                    if participant_number == '':
+                        report_group_square_inst = ReportGroupSquare.objects.filter(report_group=group_report_inst)
+                        biggest_number = 0
+                        if report_group_square_inst:
+                            biggest_number = ReportGroupSquare.objects.aggregate(Max('participant_number'))['participant_number__max']
+                            # for report_group_square in report_group_square_inst:
+                            #     if int(report_group_square.participant_number) > int(biggest_number):
+                            #         biggest_number = report_group_square.participant_number
+                        else:
+                            biggest_number = 1
+                        report_group_square.participant_number = biggest_number
+                        # print(f'biggest_number = {biggest_number}')
                     else:
-                        biggest_number = 1
-                    new_report_group_square = ReportGroupSquare()
-                    new_report_group_square.report_group = group_report_inst
-                    new_report_group_square.participant_number = biggest_number + 1
-                    new_report_group_square.save()
-                    square_result[7] = biggest_number + 1
+                        report_group_square.participant_number = participant_number
+                        biggest_number = participant_number
+                    report_group_square.report_group = group_report_inst
+                    # print(f'new_report_group_square -в = {report_group_square.id}')
+                    square_result[7] = biggest_number
+                else:
+                    report_group_square = ReportGroupSquare.objects.get(Q(report=Report.objects.get(participant_id=participant_id)) &
+                                                        Q(report_group_id=group_report_id))
+                report_group_square.square_name = square_name
+                report_group_square.square_code = square_code
+                report_group_square.participant_group_color = color
+                report_group_square.participant_group = group_name
+                report_group_square.bold = bold
+                report_group_square.save()
+
             json_data['square_results'] = square_results
-            ReportGroupSquare.objects.filter(report_group=group_report_inst).delete()
+            # ReportGroupSquare.objects.filter(report_group=group_report_inst).delete()
             project_participants = ProjectParticipants.objects.filter(report_group=group_report_inst)
             project = project_participants[0].project
             json_data['project_name'] = project.name
@@ -785,8 +817,9 @@ def get_available_participants_for_group_report(request):
         reports_inst = Report.objects.filter(participant__employee__company=company_inst)
         employees_inst = Employee.objects.filter(company_id=company_id)
         employees = []
+
         for report in reports_inst:
-            # print(employee.name)
+
             employee_is_in_group_report = False
             for group_report_participant in group_report_squares_inst:
                 if group_report_participant.report.participant.employee == report.participant.employee:
@@ -795,9 +828,11 @@ def get_available_participants_for_group_report(request):
                 # print(employee.email)
                 employees.append({
                     'participant_data': get_participants_data_for_group_report([report.participant.id]),
-                    'squares_data': squares_data
+                    'squares_data': squares_data,
+                    'report_file': report.file.name,
                 })
         # print(employees)
+
         return JsonResponse(employees, safe=False)
 
 

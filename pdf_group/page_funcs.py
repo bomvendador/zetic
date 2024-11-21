@@ -63,7 +63,7 @@ def data_by_points(square_results, section_code, category_code):
         group_color = square_result[5]
         email = square_result[1]
         bold = square_result[3]
-        cnt = cnt + 1
+        cnt = square_result[7]
         report = Report.objects.filter(participant__employee__email=email).latest('added')
         # print(f'report_id = {report.id}')
 

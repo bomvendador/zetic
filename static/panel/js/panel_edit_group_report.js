@@ -111,7 +111,7 @@ $('#tbody_undistributed_participants').on('click', '.delete-participant-from-gro
     }).then((result) => {
         if (result.value) {
             let tr = $(this).closest('tr')
-            let data_participant_number = tr.data('participant-number').trim()
+            let data_participant_number = tr.data('participant-number')
             if (data_participant_number !== '') {
                 let employee_id = $(this).closest('tr').data('employee-id')
                 show_progressbar_loader()
@@ -173,6 +173,7 @@ $('#create_group_report').on('click', function () {
 
 $('#add_participants_from_modal').on('click', function () {
     let participants_chosen_cnt = 0
+    console.log(participants_with_report_array)
     $('#participants_to_add_table .participant-chosen').each(function () {
         if ($(this).prop('checked')) {
             participants_chosen_cnt = participants_chosen_cnt + 1
@@ -186,6 +187,7 @@ $('#add_participants_from_modal').on('click', function () {
                 let participant_squares = participant_data['participant_squares']
 
                 let squares_data = item['squares_data']
+                let report_file = item['report_file']
                 if (email_from_modal === participant_data['email']) {
 
                     // console.log(participant_data)
@@ -212,6 +214,10 @@ $('#add_participants_from_modal').on('click', function () {
                         html += 'Отсутствует'
                     }
                     html += '</td>' +
+                        `<td class="report_files" style="vertical-align: middle">` +
+                        `<a style="padding: 0!important;" class="dropdown-item" href="/panel/download_single_report/${report_file}">Скачать</a>` +
+                        '</td>' +
+
                         '<td>' +
                         '<select name="category" class="form-control form-select category-selected" data-bs-placeholder="Выберите категорию">' +
                         '<option value=""></option>'
@@ -227,7 +233,7 @@ $('#add_participants_from_modal').on('click', function () {
                         '<button class="btn-close delete-participant-from-group-report" aria-label="Close">' +
                         '<span aria-hidden="true">×</span>' +
                         '</button>' +
-                        '</td>'
+                        '</td>' +
 
                     '</tr>'
 
@@ -270,7 +276,7 @@ $('#open_modal_for_adding_participants').on('click', function () {
                 let participant_data = item['participant_data'][0];
                 // console.log(participant_data)
                 let participant_already_is_in_table = false
-
+                let report_file = item['report_file']
                 $('#tbody_undistributed_participants tr').each(function () {
                     let email = $(this).find('td').eq(3).text()
                     if (participant_data["email"] === email) {
@@ -285,7 +291,7 @@ $('#open_modal_for_adding_participants').on('click', function () {
                     let participant_id = participant_data["participant_id"]
                     html = html + '<tr class="table-row-participant-to-add-to-group-report" style = "" data-participant-number = "" ' +
                         'data-employee-id="' + employee_id + '" data-participant-id="' + participant_id + '" >' +
-                        '<td class="" style = "" >' +
+                        '<td class="" style = "vertical-align: middle" >' +
                         // '<td class="" style = "text-align: center;vertical-align: middle;" >' +
                         '<input class="checkbox-custom participant-chosen" style = "width: 16px; height: 16px" type = "checkbox" name = "" value = "0">' +
                         '</td>' +
@@ -293,6 +299,9 @@ $('#open_modal_for_adding_participants').on('click', function () {
                         '<td class="email" style="vertical-align: middle">' + participant_data["email"] + '</td>' +
                         '<td class="role_name" style="vertical-align: middle">' + participant_data["role_name"] + '</td>' +
                         '<td class="position" style="vertical-align: middle">' + participant_data["position"] + '</td>' +
+                        `<td class="report_files" style="vertical-align: middle">` +
+                        `<a style="padding: 0!important;" class="dropdown-item" href="/panel/download_single_report/${report_file}">Скачать</a>` +
+                        '</td>' +
                         '</tr>'
                 }
 

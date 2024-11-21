@@ -315,10 +315,7 @@
 
                                                             {% for report in group_reports %}
                                                                 <tr class="table-row-undistributed-participant" style=""
-                                                                    data-participant-number="
-
-
-                                                                            {% if type == 'edit' %}{{ report.report.participant_number }}{% endif %}"
+                                                                    data-participant-number="{% if type == 'edit' %}{{ report.report.participant_number }}{% endif %}"
                                                                     data-employee-id="{{ report.participant_data.employee_id }}"
                                                                     data-participant-id="{{ report.participant_data.participant_id }}">
                                                                     <td class="bold-participant"

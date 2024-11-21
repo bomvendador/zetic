@@ -38,14 +38,14 @@ def save_data_to_db(request_json, file_name):
             # project_participant_inst.created_by = request.user
             project_participant_inst.save()
 
-        report_group_square_inst = ReportGroupSquare()
-        report_group_square_inst.report_group = report_group_inst
-        report_group_square_inst.square_name = square_name
-        report_group_square_inst.square_code = square_code
-        report_group_square_inst.report = Report.objects.filter(participant__employee__email=employee_email).latest('added')
-        report_group_square_inst.bold = bold
-        report_group_square_inst.participant_group = group_name
-        report_group_square_inst.participant_group_color = group_color
-        report_group_square_inst.participant_number = participant_number
-        report_group_square_inst.save()
+            report_group_square_inst = ReportGroupSquare()
+            report_group_square_inst.report_group = report_group_inst
+            report_group_square_inst.square_name = square_name
+            report_group_square_inst.square_code = square_code
+            report_group_square_inst.report = Report.objects.filter(participant__employee__email=employee_email).latest('added')
+            report_group_square_inst.bold = bold
+            report_group_square_inst.participant_group = group_name
+            report_group_square_inst.participant_group_color = group_color
+            report_group_square_inst.participant_number = participant_number
+            report_group_square_inst.save()
     return report_group_inst.id
