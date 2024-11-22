@@ -14,7 +14,7 @@ import fpdf
 import cyrtranslit
 from reports import settings
 import time
-
+from pdf.models import CompanyGroupReportAllowedOptions, GroupReportAllowedOptions, Company
 from pdf_group.title import title_page
 from pdf_group.squares import page as squares_page
 from pdf_group.section_1 import page as section_1_page
@@ -27,7 +27,7 @@ from pdf_group.integral_report_page import page as integral_report_page
 from pdf_group.traffic_light_report.traffic_light_report_page import page as traffic_light_report_page
 from pdf.views import save_serve_file
 from pdf_group.save_data import save_data_to_db as save_data_group
-
+from django.db.models import Sum, Q
 
 def pdf_group_generator(request_json):
     pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
@@ -41,6 +41,10 @@ def pdf_group_generator(request_json):
     pdf.add_font("RalewayLight", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Light.ttf", uni=True)
     pdf.add_font("RalewayBold", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Bold.ttf", uni=True)
     pdf.add_font("NotoSansDisplayMedium", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/NotoSansDisplay-Medium.ttf", uni=True)
+
+    company_id = request_json['company_id']
+
+
 
     max_y = 280
     total_participant_qnt = len(request_json['square_results'])
@@ -77,13 +81,28 @@ def pdf_group_generator(request_json):
 
     pdf.set_line_width(0.1)
 
-    pdf.add_page()
-    pdf.set_text_color(0, 0, 0)
-    integral_report_page(pdf, 'ru', request_json['square_results'])
+    # integral_group_report_allowed = True
+    integral_group_report_allowed_options = GroupReportAllowedOptions.objects.get(name='Интегральный отчет')
+    company_integral_group_report_options = CompanyGroupReportAllowedOptions.objects.get(Q(option=integral_group_report_allowed_options) &
+                                                                                     Q(company=Company.objects.get(id=company_id))).value
+    # if not company_integral_group_report_options:
+    #     integral_group_report_allowed = False
 
-    pdf.add_page()
-    pdf.set_text_color(0, 0, 0)
-    traffic_light_report_page(pdf, 'ru', request_json)
+    # print(f'company_integral_group_report_options id = {len(company_integral_group_report_options)}')
+    # print(f'integral_group_report_allowed = {integral_group_report_allowed}')
+    if company_integral_group_report_options:
+        pdf.add_page()
+        pdf.set_text_color(0, 0, 0)
+        integral_report_page(pdf, 'ru', request_json['square_results'])
+
+    traffic_light_group_report_allowed_options = GroupReportAllowedOptions.objects.get(name='Светофор')
+    company_traffic_light_group_report_options = CompanyGroupReportAllowedOptions.objects.get(Q(option=traffic_light_group_report_allowed_options) &
+                                                                                     Q(company=Company.objects.get(id=company_id))).value
+
+    if company_traffic_light_group_report_options:
+        pdf.add_page()
+        pdf.set_text_color(0, 0, 0)
+        traffic_light_report_page(pdf, 'ru', request_json)
 
     pdf.set_line_width(0.1)
     pdf.add_page()
