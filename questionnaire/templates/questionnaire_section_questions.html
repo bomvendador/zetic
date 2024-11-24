@@ -36,8 +36,7 @@
                                 {% for question in questions %}
                                     <div class="form-group section-question" style="margin-bottom: 3em"
                                          id="question_id_{{ question.id }}">
-                                        <div class="form-label">{{ question.text }}</div>
-                                        <hr style="background-color: blue">
+                                        <div class="form-label" style="margin-bottom: 15px;padding: 10px;background: #e7e7e7;">{{ question.text }}</div>
                                         <div class="custom-controls-stacked">
                                             {% for answer in question.answers %}
                                                 <label class="custom-control custom-radio">
