@@ -1083,6 +1083,7 @@ def get_individual_reports_list(request):
             report_arr.append({
                 'id': report.id,
                 'company': report.participant.employee.company.name,
+                'participant_id': report.participant.id,
                 'date': timezone.localtime(report.added).strftime("%d.%m.%Y %H:%M:%S"),
                 'name': report.participant.employee.name,
                 'file_name': report.file.name,

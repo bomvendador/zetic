@@ -344,7 +344,7 @@
                             let data_json = data['data'];
                             let html = ''
                             for (let i = 0; i < data_json.length; i++) {
-                                html += '<tr class="" id="report_id_' + data_json[i]['id'] + '">'
+                                html += `<tr class="" id="report_id_${data_json[i]['id']}" data-participant-id="${data_json[i]['participant_id']}">`
                                 html += '<td>' + data_json[i]['name'] + '</td>'
                                 html += '<td><span style="display: none">' + data_json[i]['timestamp'] + '</span> ' + data_json[i]['date'] + '</td>'
                                 html += '<td>' + data_json[i]['company'] + '</td>'

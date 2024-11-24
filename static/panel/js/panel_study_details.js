@@ -626,7 +626,7 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
                         let output_html = '<h2 class="mb-0" style="text-align: center">Ошибка отправки</h2>' +
                             '<br>' +
                             '<hr class="solid mt-0" style="background-color: black;">' +
-                            '<h4 style="text-align: center">Следущим участникам не удаломь отправить приглашение:</h4>' +
+                            '<h4 style="text-align: center">Следущим участникам не удалось отправить приглашение:</h4>' +
                             '<hr class="solid mt-0" style="background-color: black;">' +
                             '<ul style="margin-left: 1rem">' +
                             emails_list_html +

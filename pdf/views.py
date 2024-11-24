@@ -259,7 +259,7 @@ def category_data(code_prefix, questionnaire_id, employee_id):
             report_by_categories_inst = ReportDataByCategories.objects.filter(Q(category_code=category.code) & Q(report__participant__employee_id=employee_id))
             if report_by_categories_inst.exists():
                 points = report_by_categories_inst.latest('created_at').t_points
-                category_is_not_empty = True
+
             else:
                 raw_points = 0
                 for answer in questionnaire_questions_answers:
@@ -278,6 +278,8 @@ def category_data(code_prefix, questionnaire_id, employee_id):
                 # print('=== answers_code_1 ===')
                 # print(answers_code_1)
                 # print('======================')
+    if len(questionnaire_questions_answers) > 0:
+        category_is_not_empty = True
     response = {
         'answers': answers,
         'category_is_not_empty': category_is_not_empty

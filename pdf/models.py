@@ -14,7 +14,7 @@ class ResearchTemplate(models.Model):
     by_default = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.id}. {self.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name}'
 
     class Meta:
         verbose_name_plural = 'Шаблоны опросника'
@@ -29,7 +29,7 @@ class Section(models.Model):
     # code = models.CharField(max_length=10, blank=True, null=True, default=None)
 
     def __str__(self):
-        return f'{self.id}. {self.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name}'
 
     class Meta:
         verbose_name_plural = 'Секции'
@@ -44,7 +44,7 @@ class ResearchTemplateSections(models.Model):
     position = models.IntegerField(null=False, default=0)
 
     def __str__(self):
-        return f'{self.id}. research_template - {self.research_template.name} section - {self.section.name} position - {self.position}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. research_template - {self.research_template.name} section - {self.section.name} position - {self.position}'
 
     class Meta:
         verbose_name_plural = 'Секции шаблона опросника'
@@ -61,7 +61,7 @@ class Category(models.Model):
 
     def __str__(self):
         # return f'категория - {self.name}'
-        return f'ID. {self.id} категория - {self.name} | секция - {self.section} | code - {self.code}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id} категория - {self.name} | секция - {self.section} | code - {self.code}'
 
     class Meta:
         verbose_name_plural = 'Категории'
@@ -76,7 +76,7 @@ class CategoryQuestions(models.Model):
 
     def __str__(self):
         # return f'категория - {self.name}'
-        return f'ID. {self.id} категория - {self.category.name} | секция - {self.category.section.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id} категория - {self.category.name} | секция - {self.category.section.name}'
 
     class Meta:
         verbose_name_plural = 'Вопросы категории'
@@ -93,7 +93,7 @@ class QuestionAnswers(models.Model):
 
     def __str__(self):
         # return f'категория - {self.name}'
-        return f'ID. {self.id} вопрос - {self.question.text} | категория - {self.question.category.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id} вопрос - {self.question.text} | категория - {self.question.category.name}'
 
     class Meta:
         verbose_name_plural = 'Ответы на вопросы'
@@ -112,7 +112,7 @@ class PointDescription(models.Model):
         if self.text_en == '':
             return u'Англ отсутсвует'
         else:
-            return f'{self.category.section.name} - {self.category.name} - {self.value}'
+            return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.category.section.name} - {self.category.name} - {self.value}'
 
     class Meta:
         verbose_name_plural = 'Оисания баллов'
@@ -132,7 +132,7 @@ class Company(models.Model):
     demo_status_questionnaires_limit = models.IntegerField(null=True, default=3)
 
     def __str__(self):
-        return f'{self.id}. {self.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name}'
 
     class Meta:
         verbose_name_plural = 'Компании'
@@ -145,7 +145,7 @@ class IndividualReportAllowedOptions(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False, default='')
 
     def __str__(self):
-        return f'{self.id}. {self.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name}'
 
     class Meta:
         verbose_name_plural = 'Опции в личных отчетах (IndividualReportAllowedOptions)'
@@ -160,7 +160,7 @@ class CompanyIndividualReportAllowedOptions(models.Model):
     value = models.BooleanField(default=True, null=False)
 
     def __str__(self):
-        return f'{self.id}. {self.company.name} - {self.option.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.company.name} - {self.option.name}'
 
     class Meta:
         verbose_name_plural = 'Опции компании в личных отчетах (CompanyIndividualReportAllowedOptions)'
@@ -173,7 +173,7 @@ class GroupReportAllowedOptions(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False, default='')
 
     def __str__(self):
-        return f'{self.id}. {self.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name}'
 
     class Meta:
         verbose_name_plural = 'Опции в группоовых отчетах (GroupReportAllowedOptions)'
@@ -188,7 +188,7 @@ class CompanyGroupReportAllowedOptions(models.Model):
     value = models.BooleanField(default=True, null=False)
 
     def __str__(self):
-        return f'{self.id}. {self.company.name} - {self.option.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.company.name} - {self.option.name}'
 
     class Meta:
         verbose_name_plural = 'Опции компании в группоовых отчетах (CompanyGroupReportAllowedOptions)'
@@ -203,7 +203,7 @@ class CompanySelfQuestionnaireLink(models.Model):
     code = models.CharField(max_length=20, blank=False, null=False, default='')
 
     def __str__(self):
-        return f'{self.id}. {self.company.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.company.name}'
 
     class Meta:
         verbose_name_plural = 'Ссылки компаний для создания опросников'
@@ -298,9 +298,9 @@ class Employee(models.Model):
     def __str__(self):
         if self.name:
             # return f'{self.id}. {self.name} - {self.email} - role_id - {self.role.id}'
-            return f'{self.id}. {self.name} - {self.email}'
+            return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name} - {self.email}'
         else:
-            return f'{self.id}. {self.email}'
+            return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.email}'
             # return f'{self.id}. {self.email} - role_id - {self.role.id}'
 
     class Meta:
@@ -315,7 +315,7 @@ class CompanyReportMadeNotificationReceivers(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Employee_notification_receivers')
 
     def __str__(self):
-        return f'{self.id}. {self.company.name} - {self.employee.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.company.name} - {self.employee.name}'
 
     class Meta:
         verbose_name_plural = 'Сотрудники-получатели уведомления о созданном отчете'
@@ -328,7 +328,7 @@ class UsersReportMadeNotificationReceivers(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='User_notification_receivers')
 
     def __str__(self):
-        return f'{self.id}. {self.user.username} - {self.user.first_name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.user.username} - {self.user.first_name}'
 
     class Meta:
         verbose_name_plural = 'Пользователи-получатели уведомления о созданном отчете'
@@ -346,7 +346,7 @@ class Study(models.Model):
 
     def __str__(self):
         if self.company:
-            return f'{self.name} - {self.company.id}.{self.company.name}'
+            return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.name} - {self.company.id}.{self.company.name}'
         else:
             return self.name
 
@@ -363,7 +363,7 @@ class StudyIndividualReportAllowedOptions(models.Model):
     value = models.BooleanField(default=True, null=False)
 
     def __str__(self):
-        return f'{self.id}. {self.study.name} - {self.option.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.study.name} - {self.option.name}'
 
     class Meta:
         verbose_name_plural = 'Опции исследований в личных отчетах (StudyIndividualReportAllowedOptions)'
@@ -389,7 +389,7 @@ class Participant(models.Model):
 
     def __str__(self):
         if self.employee and self.study:
-            return f'{self.id}. {self.employee.name} - {self.employee.company.name} STUDY - {self.study.name}'
+            return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.employee.name} - {self.employee.company.name} STUDY - {self.study.name}'
         else:
             return f'ID - {self.id}'
 
@@ -406,7 +406,7 @@ class ParticipantIndividualReportAllowedOptions(models.Model):
     value = models.BooleanField(default=True, null=False)
 
     def __str__(self):
-        return f'{self.id}. {self.participant.employee.name} - {self.option.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.participant.employee.name} - {self.option.name}'
 
     class Meta:
         verbose_name_plural = 'Опции участников в личных отчетах (ParticipantIndividualReportAllowedOptions)'
@@ -434,7 +434,7 @@ class ConsultantCompany(models.Model):
 
     def __str__(self):
         # return f'{self.name} - {self.company.name}'
-        return f'{self.id}. {self.user.first_name} - {self.company.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.user.first_name} - {self.company.name}'
 
     class Meta:
         verbose_name_plural = 'Компания консультанта (ConsultantCompany)'
@@ -449,7 +449,7 @@ class ConsultantStudy(models.Model):
 
     def __str__(self):
         # return f'{self.name} - {self.company.name}'
-        return f'{self.id}. {self.user.first_name} - {self.study.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.user.first_name} - {self.study.name}'
 
     class Meta:
         verbose_name_plural = 'Исследование консультанта (ConsultantStudy)'
@@ -466,7 +466,7 @@ class ConsultantForm(models.Model):
 
     def __str__(self):
         # return f'{self.name} - {self.company.name}'
-        return f'{self.id}. {self.user.first_name} - {self.participant.employee.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.user.first_name} - {self.participant.employee.name}'
 
     class Meta:
         verbose_name_plural = 'Анкета консультанта (ConsultantForm)'
@@ -481,7 +481,7 @@ class ConsultantFormResources(models.Model):
 
     def __str__(self):
         # return f'{self.name} - {self.company.name}'
-        return f'{self.id}. {self.name} - {self.consultant_form.participant.employee.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name} - {self.consultant_form.participant.employee.name}'
 
     class Meta:
         verbose_name_plural = 'Анкета консультанта - Ресурс (ConsultantFormResources)'
@@ -496,7 +496,7 @@ class ConsultantFormResourcesComments(models.Model):
 
     def __str__(self):
         # return f'{self.name} - {self.company.name}'
-        return f'{self.id}. {self.consultant_form_resource.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.consultant_form_resource.name}'
 
     class Meta:
         verbose_name_plural = 'Анкета консультанта - Ресурс_коммент (ConsultantFormResourcesComments)'
@@ -511,7 +511,7 @@ class ConsultantFormGrowthZone(models.Model):
 
     def __str__(self):
         # return f'{self.name} - {self.company.name}'
-        return f'{self.id}. {self.name} - {self.consultant_form.participant.employee.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name} - {self.consultant_form.participant.employee.name}'
 
     class Meta:
         verbose_name_plural = 'Анкета консультанта - Ресурс (ConsultantFormResources)'
@@ -526,7 +526,7 @@ class ConsultantFormGrowthZoneComments(models.Model):
 
     def __str__(self):
         # return f'{self.name} - {self.company.name}'
-        return f'{self.id}. {self.consultant_form_growth_zone.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.consultant_form_growth_zone.name}'
 
     class Meta:
         verbose_name_plural = 'Анкета консультанта - Зона роста_коммент (ConsultantFormGrowthZoneComments)'
@@ -539,7 +539,7 @@ class ConsultantFormEmailSentToParticipant(models.Model):
     consultant_form = models.ForeignKey(ConsultantForm, on_delete=models.CASCADE, default=None, null=True)
 
     def __str__(self):
-        return f'{self.consultant_form.participant.employee.name} - {self.created_at}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.consultant_form.participant.employee.name} - {self.created_at}'
 
     class Meta:
         verbose_name_plural = 'Анкеты консультанта Отправления респонденту (ConsultantFormEmailSentToParticipant)'
@@ -554,7 +554,7 @@ class Questionnaire(models.Model):
 
     def __str__(self):
         # return f'{self.name} - {self.company.name}'
-        return f'{self.id}. {self.participant.employee.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.participant.employee.name}'
 
     class Meta:
         verbose_name_plural = 'Опросник респондента (questionnnaire)'
@@ -582,7 +582,7 @@ class QuestionnaireVisits(models.Model):
     questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE, default=None, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.questionnaire.participant.employee.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.questionnaire.participant.employee.name}'
 
     class Meta:
         verbose_name_plural = 'Опросник время посещения (QuestionnaireVisits)'
@@ -596,7 +596,7 @@ class Project(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default=None, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.id}. {self.name} - {self.company.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name} - {self.company.name}'
 
     class Meta:
         verbose_name_plural = 'Проекты'
@@ -610,7 +610,7 @@ class ProjectStudy(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.id}. {self.study.name} - {self.study.company.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.study.name} - {self.study.company.name}'
 
     class Meta:
         verbose_name_plural = 'Исследования (Study) проектов'
@@ -633,6 +633,7 @@ class ProjectStudy(models.Model):
 #         verbose_name = 'Группа вопросов для участника'
 #
 
+
 class EmailSentToParticipant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
@@ -640,7 +641,7 @@ class EmailSentToParticipant(models.Model):
     type = models.CharField(max_length=30, blank=True, null=True, default=None)
 
     def __str__(self):
-        return f'{self.participant.employee.name} - {self.type}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.participant.employee.name} - {self.type}'
 
     class Meta:
         verbose_name_plural = 'Письма отправленные'
@@ -656,7 +657,7 @@ class AgeGenderGroup(models.Model):
     employee_gender = models.ForeignKey(EmployeeGender, on_delete=models.PROTECT, default=None, null=True)
 
     def __str__(self):
-        return f'{self.name} -- {self.birth_year_start} - {self.birth_year_end}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.name} -- {self.birth_year_start} - {self.birth_year_end}'
 
     class Meta:
         verbose_name_plural = 'Возрастные группы'
@@ -675,7 +676,7 @@ class RawToTPointsType(models.Model):
     age_gender_group = models.ForeignKey(AgeGenderGroup, on_delete=models.PROTECT, default=None, null=True)
 
     def __str__(self):
-        return f'{self.name_ru}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name_ru}'
 
     class Meta:
         verbose_name_plural = 'Фильтры поправок'
@@ -709,7 +710,7 @@ class Report(models.Model):
     type = models.CharField(max_length=30, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.participant} - {self.file.name}'
+        return f'[{timezone.localtime(self.added).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.participant} - {self.file.name}'
 
     def filename(self):
         return os.path.basename(self.file.name)
@@ -749,7 +750,7 @@ class ReportDataByCategories(models.Model):
     # def __str__(self):
     #     return f'{self.report.participant.employee.name} - {self.report.participant.employee.company.name} - {self.section_name} - {self.category_code} - {self.category_name} - {self.points}'
     def __str__(self):
-        return f'{self.report.participant.employee.name} - {self.section_name} - {self.category_code} - {self.category_name} - {self.t_points}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.report.participant.employee.name} - {self.section_name} - {self.category_code} - {self.category_name} - {self.t_points}'
 
     class Meta:
         verbose_name_plural = 'Данные индивидуальных отчетов по категориям'
@@ -764,7 +765,7 @@ class ReportGroup(models.Model):
     comments = models.TextField(default=None, blank=True, null=True, verbose_name='Комментарии групповой отчет')
 
     def __str__(self):
-        return f'{self.company} - {self.file.name}'
+        return f'[{timezone.localtime(self.added).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.company} - {self.file.name}'
 
     class Meta:
         verbose_name_plural = 'Групповые отчеты'
@@ -783,7 +784,7 @@ class ReportGroupSquare(models.Model):
     participant_number = models.IntegerField(null=False, default=0)
 
     def __str__(self):
-        return f'{self.report.participant.employee.name} - {self.square_name}'
+        return f'[{timezone.localtime(self.added).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.report.participant.employee.name} - {self.square_name}'
 
     class Meta:
         verbose_name_plural = 'Данные по квадратам групповых отчетов'
@@ -798,7 +799,7 @@ class ProjectParticipants(models.Model):
     report_group = models.ForeignKey(ReportGroup, on_delete=models.CASCADE, default=None, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.id}. {self.participant.employee.name} - {self.project.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.participant.employee.name} - {self.project.name}'
 
     class Meta:
         verbose_name_plural = 'Участники проектов'
@@ -826,7 +827,7 @@ class MatrixFilter(models.Model):
     square_name = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.square_code} - {self.square_name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.square_code} - {self.square_name}'
 
     class Meta:
         verbose_name_plural = 'Фильтры матриц'
@@ -842,7 +843,7 @@ class MatrixFilterCategory(models.Model):
     points_to = models.IntegerField(null=False, default=0)
 
     def __str__(self):
-        return f'{self.matrix_filter.square_code}-{self.matrix_filter.square_name} -- {self.category.name} : {self.points_from} - {self.points_to}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.matrix_filter.square_code}-{self.matrix_filter.square_name} -- {self.category.name} : {self.points_from} - {self.points_to}'
 
     class Meta:
         verbose_name_plural = 'Категории (шкалы) фильтров матриц'
@@ -856,7 +857,7 @@ class MatrixFilterInclusiveEmployeePosition(models.Model):
     employee_position = models.ForeignKey(EmployeePosition, on_delete=models.PROTECT, default=None, null=True)
 
     def __str__(self):
-        return f'{self.matrix_filter.square_code}-{self.matrix_filter.square_name} -- {self.employee_position.name_ru}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.matrix_filter.square_code}-{self.matrix_filter.square_name} -- {self.employee_position.name_ru}'
 
     class Meta:
         verbose_name_plural = 'Должности, включенные в фильтры матриц'
@@ -870,7 +871,7 @@ class MatrixFilterParticipantNotDistributed(models.Model):
     square_name = models.CharField(max_length=30, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.created_at} - {self.created_by.username}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.created_by.username}'
 
     class Meta:
         verbose_name_plural = 'Фильтры матриц (если ни в один квадрет не попал)'
@@ -884,7 +885,7 @@ class MatrixFilterParticipantNotDistributedEmployeePosition(models.Model):
     employee_position = models.ForeignKey(EmployeePosition, on_delete=models.PROTECT, default=None, null=True)
 
     def __str__(self):
-        return f'{self.matrix_filter.id}-{self.matrix_filter.created_at} -- {self.employee_position.name_ru}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.matrix_filter.id}-{self.matrix_filter.created_at} -- {self.employee_position.name_ru}'
 
     class Meta:
         verbose_name_plural = 'Должности, для нераспределенных в фильтры матриц'
@@ -897,7 +898,7 @@ class IndividualReportPointsDescriptionFilter(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name}'
 
     class Meta:
         verbose_name_plural = 'Фильтры Описания баллов (личные отчеты)'
@@ -913,7 +914,7 @@ class IndividualReportPointsDescriptionFilterCategory(models.Model):
     points_to = models.IntegerField(null=False, default=0)
 
     def __str__(self):
-        return f'{self.filter.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.filter.name}'
 
     class Meta:
         verbose_name_plural = 'Фильтры описания баллов: Категории (шкалы)  (личные отчеты)'
@@ -927,7 +928,7 @@ class IndividualReportPointsDescriptionFilterText(models.Model):
     text = models.TextField(default=None, blank=True, null=True, verbose_name='Текст описания')
 
     def __str__(self):
-        return f'{self.filter.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.filter.name}'
 
     class Meta:
         verbose_name_plural = 'Фильтры описания баллов: Тексты описания (личные отчеты)'
@@ -941,7 +942,7 @@ class IndividualReportPointsDescriptionFilterTextRecommendations(models.Model):
     text = models.TextField(default=None, blank=True, null=True, verbose_name='Текст рекомендации')
 
     def __str__(self):
-        return f'{self.id} {self.filter_text.filter.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id} {self.filter_text.filter.name}'
 
     class Meta:
         verbose_name_plural = 'Фильтры описания баллов: Тексты рекомендаций (личные отчеты)'
@@ -967,7 +968,7 @@ class TrafficLightReportFilter(models.Model):
     for_circle_diagram = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name}'
 
     class Meta:
         verbose_name_plural = 'Фильтры Светофор (командные отчеты)'
@@ -981,7 +982,7 @@ class TrafficLightReportFilterCategory(models.Model):
     filter = models.ForeignKey(TrafficLightReportFilter, on_delete=models.CASCADE, default=None, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.filter.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.filter.name}'
 
     class Meta:
         verbose_name_plural = 'Категории (шкалы) фильтров Светофор (командные отчеты)'
@@ -994,7 +995,7 @@ class IntegralReportFilter(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name}'
 
     class Meta:
         verbose_name_plural = 'Фильтры интегрального отчета'
@@ -1008,7 +1009,7 @@ class IntegralReportFilterCategory(models.Model):
     filter = models.ForeignKey(IntegralReportFilter, on_delete=models.CASCADE, default=None, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.filter.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.filter.name}'
 
     class Meta:
         verbose_name_plural = 'Категории (шкалы) фильтров интегральных отчетов'
@@ -1034,7 +1035,7 @@ class ProcessingRuns(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.button_id} - ${self.name}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.button_id} - ${self.name}'
 
     class Meta:
         verbose_name_plural = 'Запуск обработок (ProcessingRuns)'
