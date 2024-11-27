@@ -1099,6 +1099,14 @@ def get_individual_reports_list(request):
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
+def individual_report_group_action(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        print(json_data)
+        return HttpResponse(status=200)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
 def users_list(request):
     context = info_common(request)
     context.update(
