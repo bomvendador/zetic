@@ -118,12 +118,16 @@ def pdf_single_generator(data):
 
     #     page3(pdf, extract_section(request_json, '1'), lang, participant_info)
 
+    study_inst = questionnaire_inst.participant.study
     individual_report_allowed_options_circle_diagram = IndividualReportAllowedOptions.objects.get(name='Круговая диаграмма')
-    participant_short_conclusions_options_filter_circle_diagram = ParticipantIndividualReportAllowedOptions.objects.get(
-        Q(participant=questionnaire_inst.participant) &
-        Q(option=individual_report_allowed_options_circle_diagram)).value
+    if 'Создано сотрудником' in study_inst.name:
+        participant_circle_diagram_options_filter_circle_diagram = CompanyIndividualReportAllowedOptions.objects.get(Q(option=individual_report_allowed_options_circle_diagram) &
+                                                                                                                        Q(company=questionnaire_inst.participant.employee.company)).value
+    else:
+        participant_circle_diagram_options_filter_circle_diagram = ParticipantIndividualReportAllowedOptions.objects.get(Q(participant=questionnaire_inst.participant) &
+                                                                                                                            Q(option=individual_report_allowed_options_circle_diagram)).value
     # print(f'circle_diagram = {}')
-    if participant_short_conclusions_options_filter_circle_diagram:
+    if participant_circle_diagram_options_filter_circle_diagram:
         pdf.add_page()
         page_circle_diagram(pdf, questionnaire_id, report_id, lang)
 
