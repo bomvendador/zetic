@@ -25,11 +25,33 @@
                 <div class="row ">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card-header border-bottom-0">
-                                <div class="card-title">
-                                    Определение параметров личных отчетов
+                            <div class="card-header border-bottom-0 row pb-0">
+                                <div class="col col-lg-6 col-sm-12">
+                                    <div class="card-title">
+                                        Определение параметров личных отчетов
+                                    </div>
                                 </div>
+                                <div class="col col-lg-6 col-sm-12 text-end d-none" id="mass_actions_block">
+                                    <div>
+                                        <div style="display: inline-block">
+                                            <select name="country" class="form-control form-select"
+                                                    id="individual_reports_select_group_action"
+                                                    disabled>
+                                                <option value="no_action">-- Выберите действие --</option>
+                                                <option value="download_individual_reports">Загрузить отчеты</option>
+                                            </select>
+                                        </div>
+                                        <div style="display: inline-block">
+                                            <button class="btn btn-primary my-1" type="button"
+                                                    id="individual_reports_run_group_action"
+                                                    disabled><i class="fa fa-play button-icon"></i>Выполнить
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
+
                             <div class="card-body">
                                 <div id="wizard1" role="application" class="wizard clearfix">
                                     <div class="steps clearfix">
@@ -65,7 +87,8 @@
                                                     </thead>
                                                     <tbody>
                                                     {% for company in companies_arr %}
-                                                        <tr class="table-row cursor-pointer" data-company-id="{{ company.id }}">
+                                                        <tr class="table-row cursor-pointer"
+                                                            data-company-id="{{ company.id }}">
                                                             <td>{{ company.id }}. {{ company.name }}</td>
                                                         </tr>
                                                     {% endfor %}
@@ -86,6 +109,13 @@
                                                             <thead>
                                                             {#                                                            <tr class="table-header">#}
                                                             <tr>
+                                                                <th data-orderable="false"
+                                                                    class="border-bottom-0 table-header">
+                                                                    <input id="select_all_participants_for_group_action"
+                                                                           type="checkbox"
+                                                                           class="" style="transform: scale(1.1)">
+                                                                </th>
+
                                                                 <th class="wd-15p border-bottom-0 table-header">
                                                                     Участник
                                                                 </th>
@@ -214,6 +244,68 @@
             $('#input-modal-report-comments').modal('show')
         })
 
+        $('#individual_reports_run_group_action').on('click', function () {
+            let participants_ids_to_run_group_action = []
+            let action_name = $('#individual_reports_select_group_action option:selected').val()
+            if (action_name === 'no_action') {
+                toastr.error('Действие для группы не выбрано')
+                $('#individual_reports_select_group_action').addClass('is-invalid')
+            } else {
+                let selected_participants_reports_ids = []
+                $('#wizard1-tbody-1 .select-participant-for-group-action:checked').each(function () {
+                    let tr = $(this).closest('tr')
+                    if (tr.find('.individual-report-icon').length > 0) {
+                        let report_id = tr.attr('id').split('_')[2]
+                        selected_participants_reports_ids.push(report_id)
+                    }
+                })
+                console.log(selected_participants_reports_ids)
+                switch (action_name) {
+                    case "download_individual_reports":
+                        if (selected_participants_reports_ids.length === 0) {
+                            toastr.error('Выбранные сотрудники не имеют отчетов')
+                        } else {
+                            show_progressbar_loader()
+
+                            let comments = $('#report-comments-text').val()
+                            $.ajax({
+                                headers: {"X-CSRFToken": token},
+                                url: "{% url 'individual_report_group_action' %}",
+                                type: 'POST',
+
+                                data: JSON.stringify({
+                                    'action_type': action_name,
+                                    'selected_participants_reports_ids': selected_participants_reports_ids
+                                }),
+                                processData: false,
+                                contentType: false,
+                                error: function (data) {
+                                    toastr.error('Ошибка', data)
+                                },
+                                success: function (data) {
+                                    console.log(data)
+                                    let a = document.createElement("a");
+                                    a.setAttribute('target', '_blank')
+                                    a.href = 'download_tmp_file/' + decodeURIComponent(data);
+                                    a.click();
+
+                                    {#$('#' + report_tr_id).find('td').eq(4).text(comments)#}
+                                    hide_progressbar_loader()
+                                    {#$('#input-modal-report-comments').modal('hide')#}
+                                    {#toastr.success('Комментарии сохранены')#}
+                                }
+                            });
+
+                        }
+
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        })
+
         $('#modal_save_comments_btn').on('click', function () {
             btn_spinner('#modal_save_comments_btn')
             let comments = $('#report-comments-text').val()
@@ -287,6 +379,37 @@
         })
 
 
+        $('#project_participants_table').on('click', '.select-participant-for-group-action', function () {
+
+            let checked_checkboxes_cnt = $('#project_participants_table .select-participant-for-group-action:checked').length
+            console.log(checked_checkboxes_cnt)
+            if ($(this).prop('checked')) {
+                if (checked_checkboxes_cnt === 1) {
+                    $('#individual_reports_select_group_action').removeAttr('disabled')
+                    $('#individual_reports_run_group_action').removeAttr('disabled')
+                }
+            } else {
+                if (checked_checkboxes_cnt === 0) {
+                    $('#individual_reports_select_group_action').attr('disabled', true)
+                    $('#individual_reports_run_group_action').attr('disabled', true)
+                }
+
+            }
+        })
+        $('#select_all_participants_for_group_action').on('click', function () {
+            if ($(this).prop('checked')) {
+                $('#project_participants_table .select-participant-for-group-action').prop('checked', true)
+                $('#individual_reports_select_group_action').removeAttr('disabled')
+                $('#individual_reports_run_group_action').removeAttr('disabled')
+            } else {
+                $('#project_participants_table .select-participant-for-group-action').prop('checked', false)
+                $('#individual_reports_select_group_action').attr('disabled', true)
+                $('#individual_reports_run_group_action').attr('disabled', true)
+
+            }
+        })
+
+
         function route_menu_handler(route_index, btn_type) {
             let new_menu_number = 0
             if (btn_type === 'next') {
@@ -295,6 +418,19 @@
                 new_menu_number = route_index - 1
             }
             console.log('new_menu_number - ' + new_menu_number)
+            switch (new_menu_number) {
+                case 1:
+                    $('#mass_actions_block').addClass('d-none');
+                    break;
+                case 2:
+                    $('#mass_actions_block').removeClass('d-none');
+                    break;
+
+                default:
+                    break;
+
+
+            }
             {#if (new_menu_number <= 4){#}
             $('.route-item').each(function (i, obj) {
                 if (parseInt($(this).find('.number').html()) !== new_menu_number) {
@@ -343,15 +479,20 @@
                             {#let data_json = $.parseJSON(data);#}
                             let data_json = data['data'];
                             let html = ''
-                            for (let i = 0; i < data_json.length; i++) {
-                                html += `<tr class="" id="report_id_${data_json[i]['id']}" data-participant-id="${data_json[i]['participant_id']}">`
-                                html += '<td>' + data_json[i]['name'] + '</td>'
-                                html += '<td><span style="display: none">' + data_json[i]['timestamp'] + '</span> ' + data_json[i]['date'] + '</td>'
-                                html += '<td>' + data_json[i]['company'] + '</td>'
-                                if (data_json[i]['type'] === 'consultant_form') {
+                            data_json.forEach(function (item) {
+                                html += `<tr class="report-row" id="report_id_${item['id']}" data-participant-id="${item['participant_id']}">`
+                                html += '<td><input class="select-participant-for-group-action" type="checkbox" class="" style="transform: scale(1.1)">'
+                                if (item['file_name'] !== '') {
+                                    html += '<i class="fe fe-file-text individual-report-icon" style="color: blue" title="Отчет создан"></i>'
+                                }
+                                html += '</td>'
+                                html += '<td>' + item['name'] + '</td>'
+                                html += '<td><span style="display: none">' + item['timestamp'] + '</span> ' + item['date'] + '</td>'
+                                html += '<td>' + item['company'] + '</td>'
+                                if (item['type'] === 'consultant_form') {
                                     html += '<td>Выводы экперта</td>'
                                 } else {
-                                    if (data_json[i]['primary'] === true) {
+                                    if (item['primary'] === true) {
                                         html += '<td>Первичный</td>'
 
                                     } else {
@@ -360,13 +501,16 @@
 
                                 }
                                 {% if not cur_userprofile.role.name == 'Админ заказчика' %}
-                                    html += '<td>' + data_json[i]['comments'] + '</td>'//комментарии
+                                    html += '<td>' + item['comments'] + '</td>'//комментарии
                                 {% endif %}
                                 html += '<td>'
                                 html += '<div style="text-align: center;">'
                                 html += '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>'
                                 html += '<ul class="dropdown-menu">'
-                                html += '<li><a class="dropdown-item" href="download_single_report/' + data_json[i]['file_name'] + '">Скачать</a></li>'
+                                if (item['file_name'] !== '') {
+                                    html += '<li><a class="dropdown-item" href="download_single_report/' + item['file_name'] + '">Скачать</a></li>'
+
+                                }
                                 {% if not cur_userprofile.role.name == 'Партнер' %}
                                     html += '<li class="regenerate_report"><a class="dropdown-item cursor-pointer">Пересоздать</a></li>'
                                 {% endif %}
@@ -380,29 +524,76 @@
 
                                 html += '</tr>'
 
+                            })
+
+                            {#for (let i = 0; i < data_json.length; i++) {#}
+                            {#    html += `<tr class="report-row" id="report_id_${data_json[i]['id']}" data-participant-id="${data_json[i]['participant_id']}">`#}
+                            {#    html += '<td><input class="select-participant-for-group-action" type="checkbox" class="" style="transform: scale(1.1)">'#}
+                            {#    if (data_json[i]['file_name'] !== '') {#}
+                            {#        html += '<i class="fe fe-file-text individual-report-icon" style="color: blue" title="Отчет создан"></i>'#}
+                            {#    }#}
+                            {#    html += '</td>'#}
+                            {#    html += '<td>' + data_json[i]['name'] + '</td>'#}
+                            {#    html += '<td><span style="display: none">' + data_json[i]['timestamp'] + '</span> ' + data_json[i]['date'] + '</td>'#}
+                            {#    html += '<td>' + data_json[i]['company'] + '</td>'#}
+                            {#    if (data_json[i]['type'] === 'consultant_form') {#}
+                            {#        html += '<td>Выводы экперта</td>'#}
+                            {#    } else {#}
+                            {#        if (data_json[i]['primary'] === true) {#}
+                            {#            html += '<td>Первичный</td>'#}
+                            {##}
+                            {#        } else {#}
+                            {#            html += '<td>Пересозданный</td>'#}
+                            {#        }#}
+                            {##}
+                            {#    }#}
+                            {#    {% if not cur_userprofile.role.name == 'Админ заказчика' %}#}
+                            {#        html += '<td>' + data_json[i]['comments'] + '</td>'//комментарии#}
+                            {#    {% endif %}#}
+                            {#    html += '<td>'#}
+                            {#    html += '<div style="text-align: center;">'#}
+                            {#    html += '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>'#}
+                            {#    html += '<ul class="dropdown-menu">'#}
+                            {#    if (data_json[i]['file_name'] !== '') {#}
+                            {#        html += '<li><a class="dropdown-item" href="download_single_report/' + data_json[i]['file_name'] + '">Скачать</a></li>'#}
+                            {##}
+                            {#    }#}
+                            {#    {% if not cur_userprofile.role.name == 'Партнер' %}#}
+                            {#        html += '<li class="regenerate_report"><a class="dropdown-item cursor-pointer">Пересоздать</a></li>'#}
+                            {#    {% endif %}#}
+                            {#    {% if not cur_userprofile.role.name == 'Админ заказчика' %}#}
+                            {#        html += '<li><a class="dropdown-item report_comments cursor-pointer">Комментарий</a></li>'#}
+                            {#    {% endif %}#}
+                            {#    html += '</ul>'#}
+                            {#    html += '</div>'#}
+                            {##}
+                            {#    html += '</td>'#}
+                            {##}
+                            {#    html += '</tr>'#}
+                            {##}
+                            {##}
+                            {#}#}
+                                {#console.log(html)#}
+                                $('#wizard1-tbody-1').html(html)
+                                {#console.log('wizard1-tbody-1 - ' + $('#wizard1-tbody-1').html())#}
+                                {#process_table('.team-table')#}
+                                process_table('#project_participants_table')
+                                btn_text($('#next'), '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
+
+                                route_menu_handler(route_index, 'next')
+
+                                {#$('#wizard1-h-1').attr('aria-hidden', 'false')#}
+                                {#$('#wizard1-p-1').attr('aria-hidden', 'false')#}
+                                {#$('#wizard1-h-0').attr('aria-hidden', 'true')#}
+                                {#$('#wizard1-p-0').attr('aria-hidden', 'true')#}
+                                $('#wizard1-h-1').css('display', 'block')
+                                $('#wizard1-p-1').css('display', 'block')
+                                $('#wizard1-h-0').css('display', 'none')
+                                $('#wizard1-p-0').css('display', 'none')
+                                $('#next').addClass('disabled')
 
                             }
-                            {#console.log(html)#}
-                            $('#wizard1-tbody-1').html(html)
-                            {#console.log('wizard1-tbody-1 - ' + $('#wizard1-tbody-1').html())#}
-                            {#process_table('.team-table')#}
-                            process_table('#project_participants_table')
-                            btn_text($('#next'), '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
-
-                            route_menu_handler(route_index, 'next')
-
-                            {#$('#wizard1-h-1').attr('aria-hidden', 'false')#}
-                            {#$('#wizard1-p-1').attr('aria-hidden', 'false')#}
-                            {#$('#wizard1-h-0').attr('aria-hidden', 'true')#}
-                            {#$('#wizard1-p-0').attr('aria-hidden', 'true')#}
-                            $('#wizard1-h-1').css('display', 'block')
-                            $('#wizard1-p-1').css('display', 'block')
-                            $('#wizard1-h-0').css('display', 'none')
-                            $('#wizard1-p-0').css('display', 'none')
-                            $('#next').addClass('disabled')
-
-                        }
-                    });
+                        });
 
                     break;
                 default:
@@ -411,23 +602,38 @@
 
         }
 
-        let enabled_route_number = 0
-        // выбор проекта
-        $('#menu_individual_reports_list').closest('.slide').addClass('is-expanded')
-        $('#menu_individual_reports_list').addClass('active')
-        $(".table-row").on('click', function (e) {
-            $(".table-row").css('background-color', '').css('color', '').removeClass('project-chosen')
-            $(this).css('background-color', '#6c5ffc').css('color', 'white').addClass('project-chosen')
-            $('#next').removeClass('disabled')
-        })
+            let enabled_route_number = 0
+            // выбор проекта
+            $('#menu_individual_reports_list').closest('.slide').addClass('is-expanded')
+            $('#menu_individual_reports_list').addClass('active')
+            $(".table-row").on('click', function (e) {
+                $(".table-row").css('background-color', '').css('color', '').removeClass('project-chosen')
+                $(this).css('background-color', '#6c5ffc').css('color', 'white').addClass('project-chosen')
+                $('#next').removeClass('disabled')
+            })
 
-        $('#next').on('click', function () {
-            if ($(this).hasClass('disabled')) {
-                if (enabled_route_number === 1) {
-                    toastr.error('Выберите проект')
+            $('#next').on('click', function () {
+                if ($(this).hasClass('disabled')) {
+                    if (enabled_route_number === 1) {
+                        toastr.error('Выберите проект')
+                    }
+                } else {
+                    {#$(this).find('a').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="width: 25px;height: 25px;"></span>')#}
+                    $('.route-item').each(function (i, obj) {
+                        if (!$(this).hasClass('disabled')) {
+                            enabled_route_number = parseInt($(this).find('.number').html())
+
+                        }
+                        {#route_menu_handler($(this).find('.number').html())#}
+
+                    })
+                    $('#previous').removeClass('disabled')
+                    route_handler(enabled_route_number)
+
                 }
-            } else {
-                {#$(this).find('a').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="width: 25px;height: 25px;"></span>')#}
+
+            })
+            $('#previous').on('click', function () {
                 $('.route-item').each(function (i, obj) {
                     if (!$(this).hasClass('disabled')) {
                         enabled_route_number = parseInt($(this).find('.number').html())
@@ -436,68 +642,53 @@
                     {#route_menu_handler($(this).find('.number').html())#}
 
                 })
-                $('#previous').removeClass('disabled')
-                route_handler(enabled_route_number)
-
-            }
-
-        })
-        $('#previous').on('click', function () {
-            $('.route-item').each(function (i, obj) {
-                if (!$(this).hasClass('disabled')) {
-                    enabled_route_number = parseInt($(this).find('.number').html())
-
+                switch (enabled_route_number) {
+                    case 2:
+                    {#$('#wizard1-tbody-1').html('')#}
+                    {#process_table('.team-table')#}
+                        $('.team-table').DataTable().clear().destroy()
+                        $('#wizard1-h-1').css('display', 'none')
+                        $('#wizard1-p-1').css('display', 'none')
+                        $('#wizard1-h-0').css('display', 'block')
+                        $('#wizard1-p-0').css('display', 'block')
+                        $(this).addClass('disabled')
+                        break;
+                    case 3:
+                    {#$('#wizard1-tbody-1').html('')#}
+                    {#process_table('.team-table')#}
+                        $('.undistributed-table').DataTable().clear().destroy()
+                        $('#wizard1-h-1').css('display', 'block')
+                        $('#wizard1-p-1').css('display', 'block')
+                        $('#wizard1-h-2').css('display', 'none')
+                        $('#wizard1-p-2').css('display', 'none')
+                        $('.list-group-item').each(function () {
+                            $(this).remove()
+                        })
+                        $('#next').removeClass('disabled').html('<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
+                        break;
+                    default:
+                        break;
                 }
-                {#route_menu_handler($(this).find('.number').html())#}
+                route_menu_handler(enabled_route_number, 'previous')
 
             })
-            switch (enabled_route_number) {
-                case 2:
-                {#$('#wizard1-tbody-1').html('')#}
-                {#process_table('.team-table')#}
-                    $('.team-table').DataTable().clear().destroy()
-                    $('#wizard1-h-1').css('display', 'none')
-                    $('#wizard1-p-1').css('display', 'none')
-                    $('#wizard1-h-0').css('display', 'block')
-                    $('#wizard1-p-0').css('display', 'block')
-                    $(this).addClass('disabled')
-                    break;
-                case 3:
-                {#$('#wizard1-tbody-1').html('')#}
-                {#process_table('.team-table')#}
-                    $('.undistributed-table').DataTable().clear().destroy()
-                    $('#wizard1-h-1').css('display', 'block')
-                    $('#wizard1-p-1').css('display', 'block')
-                    $('#wizard1-h-2').css('display', 'none')
-                    $('#wizard1-p-2').css('display', 'none')
-                    $('.list-group-item').each(function () {
-                        $(this).remove()
-                    })
-                    $('#next').removeClass('disabled').html('<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
-                    break;
-                default:
-                    break;
+
+            let table = ''
+
+            function process_table(element) {
+                $(element).DataTable().destroy()
+                $(element).DataTable({
+                    "searching": true,
+                    "destroy": true,
+                    "paging": false,
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"
+                    },
+                    "initComplete": function () {
+
+                    },
+                })
             }
-            route_menu_handler(enabled_route_number, 'previous')
-
-        })
-
-        let table = ''
-
-        function process_table(element) {
-            $(element).DataTable().destroy()
-            $(element).DataTable({
-                "searching": true,
-                "destroy": true,
-                "paging": false,
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"
-                },
-                "initComplete": function () {
-
-                },
-            })
-        }
 
 
     </script>

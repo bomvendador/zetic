@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseServerError, JsonResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseServerError, JsonResponse, HttpResponseRedirect, FileResponse
 from django.contrib.auth import authenticate, login, logout
+from reports.settings import MEDIA_ROOT, BASE_DIR
 
+import os
+import zipfile
 import json
 # Create your views here.
 from django.db.models import Max
@@ -1102,8 +1105,18 @@ def get_individual_reports_list(request):
 def individual_report_group_action(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
-        print(json_data)
-        return HttpResponse(status=200)
+        action_type = json_data['action_type']
+        selected_participants_reports_ids = json_data['selected_participants_reports_ids']
+        match action_type:
+            case 'download_individual_reports':
+                tmp = os.path.join(BASE_DIR, 'media', 'files', 'tmp')
+                zip_name = 'Индивидуальные отчеты_' + Report.objects.get(id=selected_participants_reports_ids[0]).participant.employee.company.name + \
+                           '_' + str(len(selected_participants_reports_ids)) + '_шт_' + str(time.time()) + '.zip'
+                with zipfile.ZipFile(os.path.join(tmp, zip_name), 'w') as zipf:
+                    for report_id in selected_participants_reports_ids:
+                        report = Report.objects.get(id=report_id)
+                        zipf.write(os.path.join(MEDIA_ROOT, 'reportsPDF', 'single', report.file.name), arcname=report.file.name)
+                return HttpResponse(zip_name)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')

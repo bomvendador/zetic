@@ -27,6 +27,7 @@ urlpatterns = [
     path('get_participants_by_project_studies', panel_views.get_participants_by_project_studies, name='get_participants_by_project_studies'),
     path('get_report_participants_data', panel_views.get_report_participants_data, name='get_report_participants_data'),
     path('download_file/<str:filename>', pdf_views.download_file, name='download_file'),
+    path('download_tmp_file/<str:filename>', pdf_views.download_tmp_file, name='download_tmp_file'),
     path('logout', panel_views.panel_logout, name='logout'),
     path('users_list', panel_views.users_list, name='users_list'),
     path('user_profile/<int:user_id>', panel_views.user_profile, name='user_profile'),
@@ -37,6 +38,7 @@ urlpatterns = [
     path('delete_user', panel_views.delete_user, name='delete_user'),
 
     path('individual_reports_list', panel_views.individual_reports_list, name='individual_reports_list'),
+    path('individual_report_group_action', panel_views.individual_report_group_action, name='individual_report_group_action'),
     path('get_individual_reports_list', panel_views.get_individual_reports_list, name='get_individual_reports_list'),
     path('save_individual_report_comments', panel_views.save_individual_report_comments,
          name='save_individual_report_comments'),

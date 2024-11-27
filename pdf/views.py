@@ -320,9 +320,15 @@ def download_single_report(request, filename):
 @csrf_exempt
 def download_file(request, filename):
     files_folder = os.path.join(settings.MEDIA_ROOT, 'files')
-    # group_reports_folder = os.path.join(files_folder, 'single')
     full_path = os.path.join(files_folder, filename)
-    print(full_path)
+    response = FileResponse(open(full_path, 'rb'))
+    return response
+
+
+@csrf_exempt
+def download_tmp_file(request, filename):
+    files_folder = os.path.join(settings.MEDIA_ROOT, 'files', 'tmp')
+    full_path = os.path.join(files_folder, filename)
     response = FileResponse(open(full_path, 'rb'))
     return response
 
