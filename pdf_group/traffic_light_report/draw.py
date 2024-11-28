@@ -272,6 +272,7 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results,
     # for data in square_results:
     # items_colors_arr = []
     data_items = []
+    total_t_points_categories = []
     for data in square_results:
         print('---data---')
         print(data)
@@ -288,8 +289,10 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results,
             name_max_length = participant_name_length
         colors_for_participant = []
         # pdf.text(start_X, participant_name_y + interval_between_description_and_filters_name, name_with_number)
+        total_t_points_categories_participant = []
         for traffic_light_report in traffic_light_report_inst:
             # filter_colors_arr = []
+            total_t_points_category = 0
             color_obj = {}
             total_t_points = 0
             traffic_light_report_categories_inst = TrafficLightReportFilterCategory.objects.filter(filter=traffic_light_report)
@@ -301,9 +304,12 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results,
                     report_data_by_categories_inst = ReportDataByCategories.objects.filter(Q(report=report_inst) & Q(category_code=traffic_light_report_category.category.code)).latest('created_at')
                     t_point = report_data_by_categories_inst.t_points
                     total_t_points = total_t_points + t_point
+
                 # print(f'traffic_light_report - {traffic_light_report.name} code - {report_data_by_categories_inst.category_code} t_points - {t_point}')
 
+            total_t_points_category += total_t_points
             average_t_points = total_t_points / len(traffic_light_report_categories_inst)
+            total_t_points_categories_participant.append(average_t_points)
             if traffic_light_report.points_from_red <= int(average_t_points) <= traffic_light_report.points_to_red:
                 color_obj = {
                     'r': color['red']['r'],
@@ -327,8 +333,20 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results,
         # items_colors_arr.append(colors_for_participant)
         data_items.append({
             'colors': colors_for_participant,
-            'name': name_with_number
+            'name': name_with_number,
+            'total_t_points_categories_participant': total_t_points_categories_participant
         })
+        total_t_points_categories.append(total_t_points_categories_participant)
+
+    # print(total_t_points_categories)
+    # расчет средних значений по шкалам светофора
+    total_t_points_categories_processed = []
+    for index in range(0, len(traffic_light_report_inst)):
+        category_sum = 0
+        for total_t_points_category in total_t_points_categories:
+            category_sum += total_t_points_category[index]
+        total_t_points_categories_processed.append(math.trunc(round(category_sum/len(total_t_points_categories)/10, 2) * 100))
+    # print(total_t_points_categories_processed)
 
     participant_name_ends_x = start_X + name_max_length * letter_interval_participant_name
 
@@ -341,18 +359,27 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results,
     interval_between_columns = border_width / (columns_qnt + 1)
 
     column_item_start_x = start_x_border + interval_between_columns
-    pdf.set_font("RalewayLight", "", 8)
+    pdf.set_font("RalewayBold", "", 8)
     # cnt = 0
     # print(f'items_colors_arr len - {len(items_colors_arr)}')
+    pdf.text(start_X, start_Y + columns_max_y_length + 2 + 8 + interval_between_description_and_filters_name, 'Среднее')
+    cnt = 0
     for report in traffic_light_report_inst:
         # item_start_y = start_y_border + interval_between_rows + item_marker_width
         # print('--------')
+        pdf.set_font("RalewayLight", "", 8)
         with pdf.rotation(90, column_item_start_x, start_Y + columns_max_y_length + 2 + interval_between_description_and_filters_name):
             pdf.text(column_item_start_x, start_Y + columns_max_y_length + 2 + interval_between_description_and_filters_name, report.name)
+        # среднее значение по шкалам
+        pdf.set_font("CambriaBold", "", 8)
+        percent = str(total_t_points_categories_processed[cnt]) + '%'
+        pdf.text(column_item_start_x - 3, start_Y + columns_max_y_length + 2 + 7 + interval_between_description_and_filters_name, percent)
+
         column_item_start_x = column_item_start_x + interval_between_columns
         # print('--------')
-        # cnt = cnt + 1
+        cnt += 1
 
+    pdf.set_font("RalewayLight", "", text_size_for_name)
     draw_traffic_light_report_border(pdf, lang, start_x_border, start_y_border, end_X, end_Y)
 
     draw_traffic_light_report_legend(pdf, lang, start_x_border, end_Y + 10, color, item_marker_width)

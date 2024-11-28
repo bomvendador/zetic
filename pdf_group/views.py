@@ -29,6 +29,7 @@ from pdf.views import save_serve_file
 from pdf_group.save_data import save_data_to_db as save_data_group
 from django.db.models import Sum, Q
 
+
 def pdf_group_generator(request_json):
     pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
     pdf.add_font("cambria", style="",

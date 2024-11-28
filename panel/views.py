@@ -721,7 +721,7 @@ def save_group_report_data(request):
             for square_result in square_results:
                 participant_number = square_result[7]
                 participant_id = square_result[8]
-                report_inst = Report.objects.get(participant_id=participant_id)
+                report_inst = Report.objects.filter(participant_id=participant_id).latest('added')
                 # print(f'report_inst.id = {report_inst.id}')
                 # return
                 group_name = square_result[4]
@@ -730,11 +730,11 @@ def save_group_report_data(request):
                 bold = square_result[3]
                 color = square_result[5]
 
-                if not ReportGroupSquare.objects.filter(Q(report=Report.objects.get(participant_id=participant_id)) &
+                if not ReportGroupSquare.objects.filter(Q(report=report_inst) &
                                                         Q(report_group_id=group_report_id)).exists():
                     # print(f'participant_id: {participant_id} - name: {square_result[2]}')
                     report_group_square = ReportGroupSquare()
-                    report_group_square.report = Report.objects.get(participant_id=participant_id)
+                    report_group_square.report = report_inst
                     # new_particoapnt_number =
                     if participant_number == '':
                         report_group_square_inst = ReportGroupSquare.objects.filter(report_group=group_report_inst)
@@ -755,7 +755,7 @@ def save_group_report_data(request):
                     # print(f'new_report_group_square -в = {report_group_square.id}')
                     square_result[7] = biggest_number
                 else:
-                    report_group_square = ReportGroupSquare.objects.get(Q(report=Report.objects.get(participant_id=participant_id)) &
+                    report_group_square = ReportGroupSquare.objects.get(Q(report=report_inst) &
                                                         Q(report_group_id=group_report_id))
                 report_group_square.square_name = square_name
                 report_group_square.square_code = square_code
