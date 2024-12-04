@@ -364,13 +364,21 @@ def get_participants_by_project_studies(request):
         project_id = json_data['project_id']
         project_studies = ProjectStudy.objects.filter(project_id=project_id)
         participants = []
+        data_to_check = []
         for project_study in project_studies:
             participants_inst = Participant.objects.filter(study=project_study.study, completed_at__isnull=False)
             for participant in participants_inst:
+                if not [participant.employee_id, participant.study.id] in data_to_check:
+                    data_to_check.append([participant.employee_id, participant.study.id])
+                else:
+                    for participant_arr in participants:
+                        if participant_arr['id'] == participant.id:
+                            participants.remove(participant_arr)
                 participants.append({
                     'employee_id': participant.employee_id,
                     'id': participant.id,
                     'study_name': participant.study.name,
+                    'study_id': participant.study.id,
                     'name': participant.employee.name,
                     'email': participant.employee.email,
                 })

@@ -101,7 +101,7 @@
 
                                             <div class="table-responsive">
                                                 <table class="table table-bordered text-nowrap border-bottom list-table"
-                                                       id="responsive-datatable">
+                                                       id="responsive_datatable_projects">
                                                     <thead>
                                                     {#                                                            <tr class="table-header">#}
                                                     <tr>
@@ -1180,10 +1180,16 @@
                                 html += '<td>' + projects[i]['created_by'] + '</td>'
                                 html += '</tr>'
                             }
-                            $('#wizard1-tbody-3').html(html)
+                            {#$('#wizard1-tbody-3').html(html)#}
                             {#console.log('wizard1-tbody-1 - ' + $('#wizard1-tbody-1').html())#}
                             {#process_table('.team-table')#}
                             btn_text($('#next'), '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
+
+                                {#process_table('#responsive-datatable')#}
+                            $('#responsive_datatable_projects').DataTable().clear().destroy()
+                            $('#wizard1-tbody-3').html(html)
+                            process_table('#responsive_datatable_projects')
+
 
                             route_menu_handler(route_index, 'next')
 
@@ -1220,7 +1226,7 @@
                                 let participants = data['participants'];
                                 let html = ''
                                 for (let i = 0; i < participants.length; i++) {
-                                    html += '<tr class="table-row cursor-pointer project-participant-added" data-employee-id="' + participants[i]['employee_id'] + '" id="participant_id_' + participants[i]['id'] + '" title="Исследование - ' + participants[i]['study_name'] + '">'
+                                    html += '<tr class="table-row cursor-pointer project-participant-added" data-study-id="' + participants[i]['study_id'] + '" data-employee-id="' + participants[i]['employee_id'] + '" id="participant_id_' + participants[i]['id'] + '" title="Исследование - ' + participants[i]['study_name'] + '">'
                                     html += '<td>' + participants[i]['name'] + '</td>'
                                     html += '<td>' + participants[i]['email'] + '</td>'
                                     html += '<td>' + participants[i]['study_name'] + '</td>'
@@ -1574,7 +1580,7 @@
                     $('#wizard1-p-1').css('display', 'none')
                     $('#wizard1-h-3').css('display', 'block')
                     $('#wizard1-p-3').css('display', 'block')
-                    $(this).addClass('disabled')
+                    {#$(this).addClass('disabled')#}
                     break;
                 case 4:
                 {#$('#wizard1-tbody-1').html('')#}
