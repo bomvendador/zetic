@@ -255,15 +255,14 @@ def category_data(code_prefix, questionnaire_id, employee_id):
     categories = Category.objects.filter(code__startswith=code_prefix)
     answers = []
     category_is_not_empty = False
+    report_by_categories_exists = False
     for category in categories:
         code2 = category.code.split('_')[1]
-        # print(f'cpde2 = {code2}')
         if not int(code2) == 100:
-            # print('pass')
             report_by_categories_inst = ReportDataByCategories.objects.filter(Q(category_code=category.code) & Q(report__participant__employee_id=employee_id))
             if report_by_categories_inst.exists():
                 points = report_by_categories_inst.latest('created_at').t_points
-
+                report_by_categories_exists = True
             else:
                 raw_points = 0
                 for answer in questionnaire_questions_answers:
@@ -282,7 +281,7 @@ def category_data(code_prefix, questionnaire_id, employee_id):
                 # print('=== answers_code_1 ===')
                 # print(answers_code_1)
                 # print('======================')
-    if len(questionnaire_questions_answers) > 0:
+    if len(questionnaire_questions_answers) > 0 or report_by_categories_exists:
         category_is_not_empty = True
     response = {
         'answers': answers,

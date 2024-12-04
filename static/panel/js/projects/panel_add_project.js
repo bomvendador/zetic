@@ -118,49 +118,57 @@ $('#save_new_project').on('click', function () {
         toastr.error('Название не заполнено')
         $('#input_project_name').addClass('is-invalid')
     } else {
-        $('#tbody_studies tr').each(function (index) {
-            let study_id = $(this).data('study-id')
-            study_ids.push(study_id)
-        })
-        btn_spinner('#save_new_project')
-        $.ajax({
-            headers: {"X-CSRFToken": token},
-            url: url_save_new_project,
-            type: 'POST',
-            data: JSON.stringify({
-                'study_ids': study_ids,
-                'name': name,
-                'company_id': company_id
-            }),
-            processData: false,
-            contentType: false,
-            error: function (data) {
-                toastr.error('Ошибка', data)
-            },
-            success: function (data) {
-                btn_text('#save_new_project', 'Сохранить проект')
-                // hide_progressbar_loader()
-                // let employees = data['response']['employees']
-                let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
-                    '<br>' +
-                    '<hr class="solid mt-0" style="background-color: black;">' +
-                    '<h4 style="text-align: center">Проект добавлен</h4>' +
-                    '<hr class="solid mt-0" style="background-color: black;">'
+        if (name.indexOf('/') !== -1) {
+            toastr.error('Имя проекта на должно содержать символ "/"')
+            $('#input_project_name').addClass('is-invalid')
 
-                Swal.fire({
-                    html: output_html,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'ОК'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = url_projects_list
-                    }
-                })
+        } else {
+            $('#tbody_studies tr').each(function (index) {
+                let study_id = $(this).data('study-id')
+                study_ids.push(study_id)
+            })
+            btn_spinner('#save_new_project')
+            $.ajax({
+                headers: {"X-CSRFToken": token},
+                url: url_save_new_project,
+                type: 'POST',
+                data: JSON.stringify({
+                    'study_ids': study_ids,
+                    'name': name,
+                    'company_id': company_id
+                }),
+                processData: false,
+                contentType: false,
+                error: function (data) {
+                    toastr.error('Ошибка', data)
+                },
+                success: function (data) {
+                    btn_text('#save_new_project', 'Сохранить проект')
+                    // hide_progressbar_loader()
+                    // let employees = data['response']['employees']
+                    let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<h4 style="text-align: center">Проект добавлен</h4>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
 
-            }
-        })
+                    Swal.fire({
+                        html: output_html,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ОК'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = url_projects_list
+                        }
+                    })
+
+                }
+            })
+
+        }
+
 
     }
 

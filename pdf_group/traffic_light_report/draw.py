@@ -346,7 +346,7 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results,
         for total_t_points_category in total_t_points_categories:
             category_sum += total_t_points_category[index]
         total_t_points_categories_processed.append(math.trunc(round(category_sum/len(total_t_points_categories)/10, 2) * 100))
-    # print(total_t_points_categories_processed)
+    # end
 
     participant_name_ends_x = start_X + name_max_length * letter_interval_participant_name
 

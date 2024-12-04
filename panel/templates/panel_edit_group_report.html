@@ -315,7 +315,8 @@
 
                                                             {% for report in group_reports %}
                                                                 <tr class="table-row-undistributed-participant" style=""
-                                                                    data-participant-number="{% if type == 'edit' %}{{ report.report.participant_number }}{% endif %}"
+                                                                    data-participant-number="
+                                                                            {% if type == 'edit' %}{{ report.report.participant_number }}{% endif %}"
                                                                     data-employee-id="{{ report.participant_data.employee_id }}"
                                                                     data-participant-id="{{ report.participant_data.participant_id }}">
                                                                     <td class="bold-participant"
@@ -368,9 +369,11 @@
                                                                     </td>
                                                                     <td style="vertical-align: middle">
                                                                         {% for individual_report_file in report.report.individual_reports_files %}
-                                                                        <a style="padding: 0!important;"
-                                                                           class="dropdown-item"
-                                                                           href="/panel/download_single_report/{{ individual_report_file }}">Скачать</a>
+                                                                            {% if individual_report_file %}
+                                                                                <a style="padding: 0!important;"
+                                                                                   class="dropdown-item"
+                                                                                   href="/panel/download_single_report/{{ individual_report_file }}">Скачать</a>
+                                                                            {% endif %}
                                                                         {% endfor %}
                                                                     </td>
                                                                     <td>
