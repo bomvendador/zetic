@@ -642,6 +642,7 @@
         let group_color
         let group_color_picker_element
         let company_id = ''
+        let participants_distributed_by_squares = []
 
         function coloris(element) {
             Coloris({
@@ -1185,7 +1186,7 @@
                             {#process_table('.team-table')#}
                             btn_text($('#next'), '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="9 18 15 12 9 6"></polyline></svg>')
 
-                                {#process_table('#responsive-datatable')#}
+                            {#process_table('#responsive-datatable')#}
                             $('#responsive_datatable_projects').DataTable().clear().destroy()
                             $('#wizard1-tbody-3').html(html)
                             process_table('#responsive_datatable_projects')
@@ -1312,9 +1313,12 @@
 
                                     html += '<td>'
                                     for (let j = 0; j < individual_reports_files.length; j++) {
-                                        html += '<div>'
-                                        html += `<a style="padding: 0!important;" class="dropdown-item" href="/panel/download_single_report/${individual_reports_files[j]}">Скачать</a>`
-                                        html += '</div>'
+                                        if (individual_reports_files[j] !== '') {
+                                            html += '<div>'
+                                            html += `<a style="padding: 0!important;" class="dropdown-item" href="/panel/download_single_report/${individual_reports_files[j]}">Скачать</a>`
+                                            html += '</div>'
+
+                                        }
                                     }
                                     html += '</td>'
 
@@ -1479,6 +1483,14 @@
                 error: function (data) {
                     toastr.error('Ошибка', data)
                     console.log(data)
+
+                    $('#undistributed-participants-table').removeClass('d-none')
+                    $('.list-group-square').html('')
+
+                    btn_text($('#next'), 'Создзать отчет')
+                    $('#next').addClass('disabled')
+
+
                 },
                 success: function (data) {
                     console.log('succes - ' + data['file_name'])
@@ -1580,7 +1592,7 @@
                     $('#wizard1-p-1').css('display', 'none')
                     $('#wizard1-h-3').css('display', 'block')
                     $('#wizard1-p-3').css('display', 'block')
-                    {#$(this).addClass('disabled')#}
+                {#$(this).addClass('disabled')#}
                     break;
                 case 4:
                 {#$('#wizard1-tbody-1').html('')#}
@@ -1783,6 +1795,7 @@
 
             // распределение участников
             let participants_groups = []
+
             $('#distribute-undistributed-participants').on('click', function () {
                 let category_not_selected = false
                 $('.category-selected').each(function () {
@@ -1795,6 +1808,7 @@
                     toastr.error('Выберите категорию для всех нераспределенных участников')
                 } else {
                     let distributed_cnt = 0
+                    participants_distributed_by_squares = []
                     $('.table-row-undistributed-participant').each(function () {
                         let participant_id = $(this).data('participant-id')
                         let fio = $(this).find('.fio').text()
@@ -1803,18 +1817,49 @@
                         let bold = $(this).find('td:nth-child(1) input').val()
                         let group_name = $(this).find('td:nth-child(2) span').text()
                         let group_color = $(this).find('td:nth-child(2)').css('background-color')
+                        let role = $(this).find('td:nth-child(5)').text()
+                        let position = $(this).find('td:nth-child(6)').text()
+                        let reports = []
+                        let reports_nodes = $(this).find('td:nth-child(7) a')
+                        reports_nodes.each(function () {
+                            reports.push($(this).attr('href'))
+                        })
+                        let auto_distribution = []
+                        let auto_distribution_nodes = $(this).find('td:nth-child(8) div')
+                        auto_distribution_nodes.each(function () {
+                            auto_distribution.push($(this).html())
+                        })
+                        {#console.log(reports)#}
+                        {#console.log(auto_distribution)#}
 
+
+                        participants_distributed_by_squares.push({
+                            'participant_id': participant_id,
+                            'fio': fio,
+                            'email': email,
+                            'square_name_distributed': $(this).find('.category-selected option:selected').text(),
+                            'bold': bold,
+                            'group_name': group_name,
+                            'group_color': group_color,
+                            'role': role,
+                            'position': position,
+                            'reports': reports,
+                            'auto_distribution': auto_distribution,
+                        })
                         {#let #}
                         {#console.log($(this).find('.fio').text() + ' - ' + $(this).find('.category-selected').val())#}
 
                         let list_id = get_listgroup_id_by_name(square_name)
                         $('#' + list_id).append('<li class="list-group-item" id="' + email + '" data-participant-id="' + participant_id + '" data-bold="' + bold + '" data-group-name="' + group_name + '" data-group-color="' + group_color + '">' + fio + '</li>')
-                        $(this).remove()
+                        {#$(this).remove()#}
                         distributed_cnt++
                     })
+                    console.log(participants_distributed_by_squares)
+
                     {#let cur_distributed_cnt = parseInt($('#bage_distributed_participants').text())#}
                     {#$('#bage_distributed_participants').html(cur_distributed_cnt + distributed_cnt)#}
-                    $('.undistributed-table').DataTable().clear().destroy()
+
+                    {#$('.undistributed-table').DataTable().clear().destroy()#}
                     $('#undistributed-participants-table').addClass('d-none')
                     toastr.success('Участники распределены (' + distributed_cnt + ' чел.)')
                     $('#next').removeClass('disabled').addClass('cursor-pointer')
