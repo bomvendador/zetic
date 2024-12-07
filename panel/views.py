@@ -713,9 +713,9 @@ def save_group_report_data(request):
         # print(json_data)
         # print('===702===')
         # return
-        response = JsonResponse({"error": "there was an error"})
-        response.status_code = 403  # To announce that the user isn't allowed to publish
-        return response
+        # response = JsonResponse({"error": "there was an error"})
+        # response.status_code = 403  # To announce that the user isn't allowed to publish
+        # return response
 
         operation = json_data['operation']
         if 'report_type' in json_data:
