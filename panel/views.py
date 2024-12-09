@@ -1089,8 +1089,13 @@ def get_individual_reports_list(request):
         json_data = json.loads(request.body.decode('utf-8'))
         company_id = json_data['company_id']
         reports = Report.objects.filter(participant__employee__company__id=company_id)
+
         report_arr = []
         for report in reports:
+            if report.study:
+                study_name = report.study.name
+            else:
+                study_name = ""
             if report.comments:
                 comments = report.comments
             else:
@@ -1098,7 +1103,9 @@ def get_individual_reports_list(request):
             report_arr.append({
                 'id': report.id,
                 'company': report.participant.employee.company.name,
+                'study_name': study_name,
                 'participant_id': report.participant.id,
+                'email': report.participant.employee.email,
                 'date': timezone.localtime(report.added).strftime("%d.%m.%Y %H:%M:%S"),
                 'name': report.participant.employee.name,
                 'file_name': report.file.name,

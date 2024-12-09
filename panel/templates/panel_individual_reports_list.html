@@ -119,6 +119,13 @@
                                                                 <th class="wd-15p border-bottom-0 table-header">
                                                                     Участник
                                                                 </th>
+                                                                <th class="wd-15p border-bottom-0 table-header">
+                                                                    Email
+                                                                </th>
+                                                                <th class="wd-15p border-bottom-0 table-header">
+                                                                    Исследование
+                                                                </th>
+
                                                                 <th class="wd-15p border-bottom-0 table-header">Дата
                                                                     заполнения
                                                                 </th>
@@ -487,6 +494,8 @@
                                 }
                                 html += '</td>'
                                 html += '<td>' + item['name'] + '</td>'
+                                html += '<td>' + item['email'] + '</td>'
+                                html += '<td>' + item['study_name'] + '</td>'
                                 html += '<td><span style="display: none">' + item['timestamp'] + '</span> ' + item['date'] + '</td>'
                                 html += '<td>' + item['company'] + '</td>'
                                 if (item['type'] === 'consultant_form') {
