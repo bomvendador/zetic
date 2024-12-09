@@ -3,6 +3,7 @@ from pdf.draw import insert_page_number
 
 def page(pdf, lang):
     pdf.set_auto_page_break(False)
+    pdf.set_line_width(0.1)
 
     x = 12
     y = 12
@@ -45,10 +46,12 @@ def page(pdf, lang):
     #            u'become the largest in Russia over the past 15 years. Zetic 4S questionnaire consists of:'
     pdf.multi_cell(0, 4, text)
 
+    y = y + 5
+
     pdf.set_font("cambria", "", 10)
     pdf.set_xy(x, y)
 
-    text = u'                                     – стремится к развитию продуктов и бизнеса в долгосрочной перспективе. Таким сотрудникам' \
+    text = u'Стремится к развитию продуктов и бизнеса в долгосрочной перспективе. Таким сотрудникам' \
            u' свойственно глубоко погружаться в запросы рынка / клиентов, разрабатывать и предлагать варианты' \
            u' развития бизнеса (клиентов, продуктов/решений, монетизации, новых рыночных ниш и т.д.).'
     # else:
@@ -105,12 +108,12 @@ def page(pdf, lang):
     # )
     pdf.multi_cell(0, 4, text)
 
-
-
+    y = y + 5
     pdf.set_font("cambria", "", 10)
-    pdf.set_xy(x + 28, y)
+    pdf.set_xy(x, y)
 
-    text ="– нацелен на выполнение планов и продуктивность здесь и сейчас; нетерпелив, прагматичен на -" \
+    text = u"Нацелен на выполнение планов и продуктивность здесь и сейчас; нетерпелив, прагматичен на целен на организацию " \
+           u"работы и достижение целей командой; получает удовлетворение от собственной вовлеченности в работу и достижения результатов."
 
     # else:
     #     text = u'Based on decades of academic research Zetic has developed a tool for scientific personality measurement ' \
@@ -120,18 +123,18 @@ def page(pdf, lang):
     # pdf.multi_cell(0, 4, text, markdown=True)
     pdf.multi_cell(0, 4, text)
 
-    pdf.set_font("cambria", "", 10)
-    pdf.set_xy(x, y + 4)
+    # pdf.set_font("cambria", "", 10)
+    # pdf.set_xy(x, y + 4)
 
-    text =  "целен на организацию работы и достижение целей командой; получает удовлетворение от собственной вовлеченности" \
-            "в работу и достижения результатов."
+    # text =  "целен на организацию работы и достижение целей командой; получает удовлетворение от собственной вовлеченности" \
+    #         "в работу и достижения результатов."
     # else:
     #     text = u'Based on decades of academic research Zetic has developed a tool for scientific personality measurement ' \
     #            u'for business. The tool can be used for a variety of recruitment and development purposes. The approach was ' \
     #            u'tested on a large sample of executives over several years. Our study of resilience and stress behavior has ' \
     #            u'become the largest in Russia over the past 15 years. Zetic 4S questionnaire consists of:'
     # pdf.multi_cell(0, 4, text, markdown=True)
-    pdf.multi_cell(0, 4, text)
+    # pdf.multi_cell(0, 4, text)
     # pdf.write(15, text)
 
     pdf.set_font("cambria", "", 10)
@@ -175,10 +178,12 @@ def page(pdf, lang):
     #            u'become the largest in Russia over the past 15 years. Zetic 4S questionnaire consists of:'
     pdf.multi_cell(0, 4, text)
 
+    y = y + 5
     pdf.set_font("cambria", "", 10)
-    pdf.set_xy(x + 28, y)
+    pdf.set_xy(x, y)
 
-    text = u'– обеспечивает прозрачность и стандартизацию работы в краткосрочном аспекте; таким сотруд -' \
+    text = u'Обеспечивает прозрачность и стандартизацию работы в краткосрочном аспекте; таким сотрудникам свойственно ' \
+           u'унифицировать работу, структурировать информацию и процессы, следить за порядком, согласовывать и поддерживать единые правила работы.' \
     # else:
     #     text = u'Based on decades of academic research Zetic has developed a tool for scientific personality measurement ' \
     #            u'for business. The tool can be used for a variety of recruitment and development purposes. The approach was ' \
@@ -186,17 +191,17 @@ def page(pdf, lang):
     #            u'become the largest in Russia over the past 15 years. Zetic 4S questionnaire consists of:'
     pdf.multi_cell(0, 4, text)
 
-    pdf.set_font("cambria", "", 10)
-    pdf.set_xy(x, y + 4)
-
-    text = u'никам свойственно унифицировать работу, структурировать информацию и процессы, следить за порядком, ' \
-           u' согласовывать и поддерживать единые правила работы.'
+    # pdf.set_font("cambria", "", 10)
+    # pdf.set_xy(x, y + 4)
+    #
+    # text = u'никам свойственно унифицировать работу, структурировать информацию и процессы, следить за порядком, ' \
+    #        u' согласовывать и поддерживать единые правила работы.'
     # else:
     #     text = u'Based on decades of academic research Zetic has developed a tool for scientific personality measurement ' \
     #            u'for business. The tool can be used for a variety of recruitment and development purposes. The approach was ' \
     #            u'tested on a large sample of executives over several years. Our study of resilience and stress behavior has ' \
     #            u'become the largest in Russia over the past 15 years. Zetic 4S questionnaire consists of:'
-    pdf.multi_cell(0, 4, text)
+    # pdf.multi_cell(0, 4, text)
 
     pdf.set_font("cambria", "", 10)
     # 30
@@ -242,10 +247,11 @@ def page(pdf, lang):
     #            u'become the largest in Russia over the past 15 years. Zetic 4S questionnaire consists of:'
     pdf.multi_cell(0, 4, text)
 
+    y = y + 5
     pdf.set_font("Cambria", "", 10)
     pdf.set_xy(x, y)
 
-    text = u'              – стремится к передаче знаний, обеспечению целостности культуры в долгосрочной перспективе; настраивает ' \
+    text = u'Стремится к передаче знаний, обеспечению целостности культуры в долгосрочной перспективе; настраивает ' \
            u'сотрудников на совместную работу, формируют атмосферу взаимного уважения в коллективе.'
     # else:
     #     text = u'Based on decades of academic research Zetic has developed a tool for scientific personality measurement ' \

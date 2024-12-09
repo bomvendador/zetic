@@ -1462,7 +1462,9 @@
                     square_results.push([square_name, $(this).attr('id'), $(this).text(), $(this).data('bold'), $(this).data('group-name'), $(this).data('group-color'), square_code, '', $(this).data('participant-id')])
                 })
             })
+            console.log(square_results.sort((a, b) => a[2].localeCompare(b[2])))
             console.log(square_results)
+            {#return#}
 
             let url = "{% url 'save_group_report_data' %}"
             $.ajax({
@@ -1471,7 +1473,7 @@
                 type: 'POST',
 
                 data: JSON.stringify({
-                    'square_results': square_results,
+                    'square_results': square_results.sort((a, b) => a[2].localeCompare(b[2])),
                     'project': project_name,
                     'company_id': company_id,
                     'comments': $('#report-comments-text').val(),
