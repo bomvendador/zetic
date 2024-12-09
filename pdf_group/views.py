@@ -65,21 +65,9 @@ def pdf_group_generator(request_json):
 
     pdf.add_page()
     pdf.set_text_color(0, 0, 0)
-    description_page(pdf, lang)
-
-    pdf.add_page()
-    pdf.set_text_color(0, 0, 0)
     participants_page(pdf, request_json['square_results'], lang)
 
-    pdf.add_page()
-    pdf.set_text_color(0, 0, 0)
-    squares_page(pdf, request_json['square_results'], table_y)
-
-    # if 'group_report_id' in request_json:
-    #     group_report_id = request_json['group_report_id']
-    # else:
-    #     group_report_id = ''
-
+    # интегральный отчет
     pdf.set_line_width(0.1)
 
     # integral_group_report_allowed = True
@@ -95,7 +83,9 @@ def pdf_group_generator(request_json):
         pdf.add_page()
         pdf.set_text_color(0, 0, 0)
         integral_report_page(pdf, 'ru', request_json['square_results'])
+    # ---------------------
 
+    # светофор
     traffic_light_group_report_allowed_options = GroupReportAllowedOptions.objects.get(name='Светофор')
     company_traffic_light_group_report_options = CompanyGroupReportAllowedOptions.objects.get(Q(option=traffic_light_group_report_allowed_options) &
                                                                                      Q(company=Company.objects.get(id=company_id))).value
@@ -104,6 +94,20 @@ def pdf_group_generator(request_json):
         pdf.add_page()
         pdf.set_text_color(0, 0, 0)
         traffic_light_report_page(pdf, 'ru', request_json)
+    # -------------
+
+    pdf.add_page()
+    pdf.set_text_color(0, 0, 0)
+    squares_page(pdf, request_json['square_results'], table_y)
+
+    pdf.add_page()
+    pdf.set_text_color(0, 0, 0)
+    description_page(pdf, lang)
+
+    # if 'group_report_id' in request_json:
+    #     group_report_id = request_json['group_report_id']
+    # else:
+    #     group_report_id = ''
 
     pdf.set_line_width(0.1)
     pdf.add_page()
