@@ -709,9 +709,9 @@ def get_participants_data_for_group_report(participants_ids):
 def save_group_report_data(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
-        # print('--- 700 ---')
-        # print(json_data)
-        # print('===702===')
+        print('--- 700 ---')
+        print(json_data)
+        print('==========')
         # return
         # response = JsonResponse({"error": "there was an error"})
         # response.status_code = 403  # To announce that the user isn't allowed to publish
@@ -752,14 +752,14 @@ def save_group_report_data(request):
                         report_group_square_inst = ReportGroupSquare.objects.filter(report_group=group_report_inst)
                         biggest_number = 0
                         if report_group_square_inst:
-                            biggest_number = ReportGroupSquare.objects.aggregate(Max('participant_number'))['participant_number__max']
+                            biggest_number = report_group_square_inst.aggregate(Max('participant_number'))['participant_number__max'] + 1
                             # for report_group_square in report_group_square_inst:
                             #     if int(report_group_square.participant_number) > int(biggest_number):
                             #         biggest_number = report_group_square.participant_number
                         else:
                             biggest_number = 1
                         report_group_square.participant_number = biggest_number
-                        # print(f'biggest_number = {biggest_number}')
+                        # print(f'biggest_number = {biggest_number + 1}')
                     else:
                         report_group_square.participant_number = participant_number
                         biggest_number = participant_number
@@ -833,19 +833,38 @@ def get_available_participants_for_group_report(request):
         employees_inst = Employee.objects.filter(company_id=company_id)
         employees = []
 
-        for report in reports_inst:
+        for employee in employees_inst:
+            # employee_report = Report.objects.filter(participant__employee=employee).latest('added')
+            report_group_squares_employee = ReportGroupSquare.objects.filter(Q(report__participant__employee=employee) &
+                                                                             Q(report_group=group_report_id))
+            if not report_group_squares_employee:
+                individual_reports = Report.objects.filter(participant__employee=employee)
+                if individual_reports.exists():
+                    report_files = []
+                    for individual_report in individual_reports:
+                        report_files.append(individual_report.file.name)
+                    employees.append({
+                        'participant_data': get_participants_data_for_group_report([individual_reports.latest('added').participant.id]),
+                        'squares_data': squares_data,
+                        'report_file': report_files
+                    })
 
-            employee_is_in_group_report = False
-            for group_report_participant in group_report_squares_inst:
-                if group_report_participant.report.participant.employee == report.participant.employee:
-                    employee_is_in_group_report = True
-            if not employee_is_in_group_report:
-                # print(employee.email)
-                employees.append({
-                    'participant_data': get_participants_data_for_group_report([report.participant.id]),
-                    'squares_data': squares_data,
-                    'report_file': report.file.name,
-                })
+
+
+        # for report in reports_inst:
+        #     print(report.file.name)
+        #
+        #     employee_is_in_group_report = False
+        #     for group_report_participant in group_report_squares_inst:
+        #         if group_report_participant.report.participant.employee == report.participant.employee:
+        #             employee_is_in_group_report = True
+        #     if not employee_is_in_group_report:
+        #         # print(employee.email)
+        #         employees.append({
+        #             'participant_data': get_participants_data_for_group_report([report.participant.id]),
+        #             'squares_data': squares_data,
+        #             'report_file': report.file.name,
+        #         })
         # print(employees)
 
         return JsonResponse(employees, safe=False)

@@ -235,7 +235,7 @@ $('#add_participants_from_modal').on('click', function () {
                         '</button>' +
                         '</td>' +
 
-                    '</tr>'
+                        '</tr>'
 
                     $('#tbody_undistributed_participants').append(html)
                     $('#edit_group_report_add_participants_modal').modal('hide')
@@ -272,11 +272,12 @@ $('#open_modal_for_adding_participants').on('click', function () {
             let participants_could_be_added_cnt = 0
             participants_with_report_array = data
             hide_progressbar_loader()
+            console.log(data)
             data.forEach(function (item) {
                 let participant_data = item['participant_data'][0];
                 // console.log(participant_data)
                 let participant_already_is_in_table = false
-                let report_file = item['report_file']
+                let report_files = item['report_file']
                 $('#tbody_undistributed_participants tr').each(function () {
                     let email = $(this).find('td').eq(3).text()
                     if (participant_data["email"] === email) {
@@ -299,9 +300,15 @@ $('#open_modal_for_adding_participants').on('click', function () {
                         '<td class="email" style="vertical-align: middle">' + participant_data["email"] + '</td>' +
                         '<td class="role_name" style="vertical-align: middle">' + participant_data["role_name"] + '</td>' +
                         '<td class="position" style="vertical-align: middle">' + participant_data["position"] + '</td>' +
-                        `<td class="report_files" style="vertical-align: middle">` +
-                        `<a style="padding: 0!important;" class="dropdown-item" href="/panel/download_single_report/${report_file}">Скачать</a>` +
-                        '</td>' +
+                        `<td class="report_files" style="vertical-align: middle">`
+                    report_files.forEach((file_name) => {
+                        if (file_name !== "") {
+                            html += `<a style="padding: 0!important;" class="dropdown-item" href="/panel/download_single_report/${file_name}">Скачать</a>`
+
+                        }
+
+                    })
+                    html += '</td>' +
                         '</tr>'
                 }
 
@@ -1012,6 +1019,7 @@ function save_report() {
             return (a[index] === b[index] ? 0 : (a[index] < b[index] ? -1 : 1));
         };
     })(7));
+    console.log(square_results.sort((a, b) => a[2].localeCompare(b[2])))
     $.ajax({
         headers: {"X-CSRFToken": token},
         url: url_save_group_report_data,

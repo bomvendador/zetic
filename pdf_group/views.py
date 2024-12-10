@@ -45,8 +45,6 @@ def pdf_group_generator(request_json):
 
     company_id = request_json['company_id']
 
-
-
     max_y = 280
     total_participant_qnt = len(request_json['square_results'])
     # line_height = round(pdf.font_size * 2)
@@ -56,7 +54,7 @@ def pdf_group_generator(request_json):
     # print(f'line_height = {line_height} total_participant_qnt = {total_participant_qnt} table_height = {table_height} table_y = {table_y}')
 
     pdf.add_page()
-    print(request_json)
+    # print(request_json)
     # lang = request_json['lang']
     lang = 'ru'
     # client_name = request_json['project']
