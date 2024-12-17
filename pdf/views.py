@@ -62,7 +62,7 @@ def pdf_single_generator(data):
         questionnaire=questionnaire_inst,
         question__category__for_validity=True)
     employee = questionnaire_inst.participant.employee
-    if not report_id == '':
+    if report_id != '':
         report_inst = Report.objects.get(id=report_id)
         lie_points = report_inst.lie_points
     else:
@@ -70,7 +70,6 @@ def pdf_single_generator(data):
         for answer in questionnaire_questions_answers_for_validity_inst:
             sum_lie_point = sum_lie_point + answer.answer.raw_point
         lie_points = round(sum_lie_point / 40 * 10)
-
 
     participant_info = {
         "name": employee.name,

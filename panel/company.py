@@ -55,7 +55,7 @@ def save_new_company(request):
         else:
             company_inst = Company()
             company_inst.name = name
-            if not demo_limit == '':
+            if demo_limit != '':
                 company_inst.demo_status_questionnaires_limit = demo_limit
             company_inst.created_by = request.user
             public_code = generate_code(8)

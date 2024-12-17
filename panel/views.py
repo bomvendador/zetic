@@ -39,6 +39,8 @@ from django.db.models import Sum
 
 from pdf import raw_to_t_point
 
+from panel.constants import CONSTANT_USER_ROLES, CONSTANT_SQUARE_NAMES
+
 
 def tech_works(request):
     userprofile = UserProfile.objects.get(user=request.user)
@@ -63,14 +65,7 @@ def info_common(request):
         'timestamp': time.time(),
         'tech_works': tech_works_mode,
     }
-    print(tech_works_mode)
-    # if tech_works_mode:
-    #     if not userprofile.role.name == 'Суперадмин':
-    #         print(userprofile.role.name)
-    #         return redirect('/tech_works/')
-    #         # return render(request, 'tech_works/tech_works_page.html', context)
-
-    if userprofile.role.name == 'Админ заказчика':
+    if userprofile.role.name == CONSTANT_USER_ROLES['CLIENT_ADMIN']:
 
         employee = Employee.objects.get(user=request.user)
 
@@ -216,21 +211,21 @@ def home(request):
         return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
     else:
         userprofile = UserProfile.objects.get(user=request.user)
-        if userprofile.role.name == 'Админ заказчика':
+        if userprofile.role.name == CONSTANT_USER_ROLES['CLIENT_ADMIN']:
             company = Employee.objects.get(user=request.user).company
             stats.update({
                 'employees_qnt': Employee.objects.filter(company=company).count(),
                 'individual_reports_qnt': Report.objects.filter(study__company=company).count(),
                 'group_reports_qnt': ReportGroup.objects.filter(company=company).count()
             })
-        if userprofile.role.name == 'Админ' or userprofile.role.name == 'Суперадмин':
+        if userprofile.role.name == CONSTANT_USER_ROLES['ADMIN'] or userprofile.role.name == CONSTANT_USER_ROLES['SUPER_ADMIN']:
             stats.update({
                 'companies_qnt': Company.objects.all().count(),
                 'employees_qnt': Employee.objects.all().count(),
                 'individual_reports_qnt': Report.objects.all().count(),
                 'group_reports_qnt': ReportGroup.objects.all().count()
             })
-        if userprofile.role.name == 'Менеджер':
+        if userprofile.role.name == CONSTANT_USER_ROLES['MANAGER']:
             companies = Company.objects.filter(created_by=request.user)
             individual_reports = Report.objects.all()
             group_reports = ReportGroup.objects.all()
@@ -269,10 +264,10 @@ def team_distribution(request):
     context = info_common(request)
     cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
     response = []
-    if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
+    if cur_user_role_name == CONSTANT_USER_ROLES['MANAGER'] or cur_user_role_name == CONSTANT_USER_ROLES['PARTNER']:
         companies = Company.objects.filter(created_by=request.user)
 
-    if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
+    if cur_user_role_name == CONSTANT_USER_ROLES['ADMIN'] or cur_user_role_name == CONSTANT_USER_ROLES['SUPER_ADMIN']:
         companies = Company.objects.all()
     for company in companies:
         projects = Project.objects.filter(company=company)
@@ -283,7 +278,8 @@ def team_distribution(request):
             })
 
     context.update({
-        'companies': response
+        'companies': response,
+        'CONSTANT_SQUARE_NAMES': CONSTANT_SQUARE_NAMES
     })
     # print(response)
     return render(request, 'panel_distribution.html', context)
@@ -728,14 +724,10 @@ def save_group_report_data(request):
         if operation == 'edit' and report_type == 'edit':
             group_report_id = json_data['group_report_id']
             group_report_inst = ReportGroup.objects.get(id=group_report_id)
-            # report_group_square = ReportGroupSquare.objects.filter(report_group=group_report_inst).delete()
-            # ReportGroupSquare.objects.filter(report_group=group_report_inst).delete()
             for square_result in square_results:
                 participant_number = square_result[7]
                 participant_id = square_result[8]
                 report_inst = Report.objects.filter(participant_id=participant_id).latest('added')
-                # print(f'report_inst.id = {report_inst.id}')
-                # return
                 group_name = square_result[4]
                 square_code = square_result[6]
                 square_name = square_result[0]
@@ -744,7 +736,6 @@ def save_group_report_data(request):
 
                 if not ReportGroupSquare.objects.filter(Q(report=report_inst) &
                                                         Q(report_group_id=group_report_id)).exists():
-                    # print(f'participant_id: {participant_id} - name: {square_result[2]}')
                     report_group_square = ReportGroupSquare()
                     report_group_square.report = report_inst
                     # new_particoapnt_number =
@@ -795,16 +786,7 @@ def save_group_report_data(request):
                 cnt = cnt + 1
                 # square_result.append(cnt)
                 square_result[7] = cnt
-                employee_email = square_result[1]
-        # print('--- 449 ---')
-        # print(json_data)
-        # print('===449===')
-
-
-        # for item in json_data['square_results']:
-        #     print(item)
         response = pdf_group_generator(json_data)
-        # print(response)
 
         return JsonResponse({'response': response})
 
@@ -826,15 +808,10 @@ def get_available_participants_for_group_report(request):
         json_data = json.loads(request.body.decode('utf-8'))
         company_id = json_data['company_id']
         group_report_id = json_data['group_report_id']
-        group_report_inst = ReportGroup.objects.get(id=group_report_id)
-        group_report_squares_inst = ReportGroupSquare.objects.filter(report_group=group_report_inst)
-        company_inst = Company.objects.get(id=company_id)
-        reports_inst = Report.objects.filter(participant__employee__company=company_inst)
         employees_inst = Employee.objects.filter(company_id=company_id)
         employees = []
 
         for employee in employees_inst:
-            # employee_report = Report.objects.filter(participant__employee=employee).latest('added')
             report_group_squares_employee = ReportGroupSquare.objects.filter(Q(report__participant__employee=employee) &
                                                                              Q(report_group=group_report_id))
             if not report_group_squares_employee:
@@ -848,25 +825,6 @@ def get_available_participants_for_group_report(request):
                         'squares_data': squares_data,
                         'report_file': report_files
                     })
-
-
-
-        # for report in reports_inst:
-        #     print(report.file.name)
-        #
-        #     employee_is_in_group_report = False
-        #     for group_report_participant in group_report_squares_inst:
-        #         if group_report_participant.report.participant.employee == report.participant.employee:
-        #             employee_is_in_group_report = True
-        #     if not employee_is_in_group_report:
-        #         # print(employee.email)
-        #         employees.append({
-        #             'participant_data': get_participants_data_for_group_report([report.participant.id]),
-        #             'squares_data': squares_data,
-        #             'report_file': report.file.name,
-        #         })
-        # print(employees)
-
         return JsonResponse(employees, safe=False)
 
 
@@ -875,7 +833,6 @@ def edit_group_report_data(request, report_id,  project_id):
     context = info_common(request)
     group_report_inst = ReportGroup.objects.get(id=report_id)
     group_report_squares_inst = ReportGroupSquare.objects.filter(report_group=group_report_inst).order_by('participant_number')
-    participants_emails = []
     group_reports = []
     group_names = []
     for group_report in group_report_squares_inst:
@@ -908,8 +865,6 @@ def edit_group_report_data(request, report_id,  project_id):
             'report': report_data,
 
         })
-
-
     context.update({
         'group_reports': group_reports,
         'squares_data': squares_data,
@@ -918,6 +873,7 @@ def edit_group_report_data(request, report_id,  project_id):
         'company_name': group_report_inst.company.name,
         'project_id': project_id,
         'type': 'edit',
+        'CONSTANT_SQUARE_NAMES': CONSTANT_SQUARE_NAMES,
     })
     # print(group_reports)
 
@@ -929,7 +885,6 @@ def copy_group_report_data(request, report_id,  project_id):
     context = info_common(request)
     group_report_inst = ReportGroup.objects.get(id=report_id)
     group_report_squares_inst = ReportGroupSquare.objects.filter(report_group=group_report_inst).order_by('participant_number')
-    participants_emails = []
     group_reports = []
     group_names = []
     for group_report in group_report_squares_inst:
@@ -965,6 +920,7 @@ def copy_group_report_data(request, report_id,  project_id):
         'company_name': group_report_inst.company.name,
         'project_id': project_id,
         'type': 'copy',
+        'CONSTANT_SQUARE_NAMES': CONSTANT_SQUARE_NAMES,
     })
     # print(group_reports)
 
@@ -979,16 +935,15 @@ def group_reports_list(request):
         return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
     else:
         cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
-        if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
+        if cur_user_role_name == CONSTANT_USER_ROLES['MANAGER'] or cur_user_role_name == CONSTANT_USER_ROLES['PARTNER']:
             companies = Company.objects.filter(created_by=request.user)
-        if cur_user_role_name == 'Админ заказчика':
+        if cur_user_role_name == CONSTANT_USER_ROLES['CLIENT_ADMIN']:
             companies = Company.objects.filter(id=Employee.objects.get(user=request.user).company.id)
-        if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
+        if cur_user_role_name == CONSTANT_USER_ROLES['ADMIN'] or cur_user_role_name == CONSTANT_USER_ROLES['SUPER_ADMIN']:
             companies = Company.objects.all()
         companies_arr = []
         for company in companies:
             projects = Project.objects.filter(company=company)
-            # report_group = ReportGroup.objects.filter(company=company)
             if projects.exists():
                 companies_arr.append({
                     'name': company.name,
@@ -1005,7 +960,6 @@ def group_reports_list(request):
 def get_group_reports_list(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
-        company = json_data['company']
         project_id = json_data['project_id']
         project_participants = ProjectParticipants.objects.filter(project_id=project_id)
 
@@ -1080,11 +1034,11 @@ def individual_reports_list(request):
             if consultant_companies.exists():
                 for consultant_company in consultant_companies:
                     companies.append(consultant_company.company)
-        if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
+        if cur_user_role_name == CONSTANT_USER_ROLES['MANAGER'] or cur_user_role_name == CONSTANT_USER_ROLES['PARTNER']:
             companies = Company.objects.filter(created_by=request.user)
-        if cur_user_role_name == 'Админ заказчика':
+        if cur_user_role_name == CONSTANT_USER_ROLES['CLIENT_ADMIN']:
             companies = Company.objects.filter(id=Employee.objects.get(user=request.user).company.id)
-        if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
+        if cur_user_role_name == CONSTANT_USER_ROLES['ADMIN'] or cur_user_role_name == CONSTANT_USER_ROLES['SUPER_ADMIN']:
             companies = Company.objects.all()
 
         companies_arr = []
@@ -1294,12 +1248,10 @@ def save_migration(request):
     if request.method == 'POST':
         start_time = time.perf_counter()
         json_data = json.loads(request.body.decode('utf-8'))
-        # print(request)
         # print(json_data)
         # print(type(json.loads(json_data)))
         companies = json.loads(json_data)['companies']
         # print(type(companies))
-        reports_qnt = 0
         employee_qnt = 0
         final_dict = {"lang": "ru"}
         for company in companies:

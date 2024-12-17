@@ -7,17 +7,17 @@ def page2(pdf, lie_points, lang):
     x = 12
     y = 12
     pdf.set_xy(x,y)
-    # pdf.set_font("RalewayBold", "", 10)
-    pdf.set_font("Cambria-Bold", "", 11)
+    pdf.set_font("RalewayBold", "", 10)
+    # pdf.set_font("Cambria-Bold", "", 11)
     if lang == 'ru':
         pdf.cell(0, 0, 'О Zetic')
     else:
         pdf.cell(0, 0, 'Introduction')
 
     # 17
-    # pdf.set_font("RalewayLight", "", 9)
+    pdf.set_font("RalewayLight", "", 9)
 
-    pdf.set_font("Cambria", "", 10)
+    # pdf.set_font("Cambria", "", 10)
 
     y = y + 5
 
@@ -30,8 +30,8 @@ def page2(pdf, lie_points, lang):
     if lang == 'ru':
         text = u'Zetic – российский разработчик технологичных решений прогнозирования эффективности сотрудников и команд.' \
                u'. Мы изучаем способы измерения и стандартизации поведения и создаем предиктивные психометрические инструменты оценки. ' \
-               u'Мы также проводим научные исследования в области прикладной психологии труда, изучая закономерности поведения руководителей.' \
-               u'в рабочей среде. Результаты исследования можно посмотреть на нашем сайте ww.zetic.ru в разделе «Материалы».'
+               u'Мы также проводим научные исследования в области прикладной психологии труда, изучая закономерности поведения руководителей ' \
+               u'в рабочей среде. Результаты исследования можно посмотреть на нашем сайте www.zetic.ru в разделе «Материалы».'
     else:
         text = u'Based on decades of academic research Zetic has developed a tool for scientific personality measurement ' \
                u'for business. The tool can be used for a variety of recruitment and development purposes. The approach was ' \
@@ -46,7 +46,7 @@ def page2(pdf, lie_points, lang):
         y += 25
         pdf.set_xy(x, y)
         text = u'Мы являемся резидентом «Российского инновационного кластера», совмещаем фундаментальный научный подход с анализом' \
-                u'больших данных с помощью искусственного интеллекта.'
+                u' больших данных с помощью искусственного интеллекта.'
         pdf.multi_cell(0, 4, text)
 
     else:
@@ -62,8 +62,8 @@ def page2(pdf, lie_points, lang):
     # 127
 
 
-    # pdf.set_font("RalewayBold", "", 10)
-    pdf.set_font("Cambria-Bold", "", 11)
+    pdf.set_font("RalewayBold", "", 10)
+    # pdf.set_font("Cambria-Bold", "", 11)
 
     if lang == 'ru':
         y += 15
@@ -79,8 +79,8 @@ def page2(pdf, lie_points, lang):
 
     y += 4
     pdf.set_xy(x, y)
-    pdf.set_font("Cambria", "", 10)
-    # pdf.set_font("RalewayLight", "", 9)
+    # pdf.set_font("Cambria", "", 10)
+    pdf.set_font("RalewayLight", "", 9)
     if lang == 'ru':
         text = u'Опросник Zetic – инструмент нового поколения с высокой валидностью и надежностью оценки. ' \
                u'Опросник позволяет считать глубинные особенности поведения и построить эффективную программу развития. ' \
@@ -130,8 +130,8 @@ Cекция «Черты личности» построена исходя из
     '''
         pdf.multi_cell(0, 5, text)
 
-    pdf.set_font("Cambria-Bold", "", 11)
-    # pdf.set_font("RalewayBold", "", 10)
+    # pdf.set_font("Cambria-Bold", "", 11)
+    pdf.set_font("RalewayBold", "", 10)
 
     if lang == 'ru':
         y += 80 - 2 + 15 + 2
@@ -147,8 +147,8 @@ Cекция «Черты личности» построена исходя из
 
     y += 4
     pdf.set_xy(x, y)
-    pdf.set_font("Cambria", "", 10)
-    # pdf.set_font("RalewayLight", "", 9)
+    # pdf.set_font("Cambria", "", 10)
+    pdf.set_font("RalewayLight", "", 9)
     if lang == 'ru':
         text = u'Результаты оценки описывают индивидуальный профиль устойчивости. Отчет помогает обозначить особенности ' \
                u'реагирования на ситуации неопределенности или стресса, выявить черты личности, влияющие на рабочее поведение ' \
@@ -166,8 +166,8 @@ Cекция «Черты личности» построена исходя из
 
 
     # 160
-    # pdf.set_font("RalewayBold", "", 10)
-    pdf.set_font("Cambria-Bold", "", 11)
+    pdf.set_font("RalewayBold", "", 10)
+    # pdf.set_font("Cambria-Bold", "", 11)
     y += 15 + 3 + 3 + 2
     pdf.set_xy(x, y)
 
@@ -180,8 +180,8 @@ Cекция «Черты личности» построена исходя из
     # 164
     y += 4
     pdf.set_xy(x, y)
-    pdf.set_font("Cambria", "", 10)
-    # pdf.set_font("RalewayLight", "", 9)
+    # pdf.set_font("Cambria", "", 10)
+    pdf.set_font("RalewayLight", "", 9)
     if lang == 'ru':
 
         text = u'Результаты в отчете показаны в шкале стенов от 0 до 10 (от английского «стандартная десятка»). Стен означает, ' \
@@ -214,7 +214,8 @@ Cекция «Черты личности» построена исходя из
 
     pdf.line(x1=0, y1=y - 12, x2=250, y2=y - 12)
 
-    pdf.set_font("Cambria", "", 8)
+    pdf.set_font("RalewayLight", "", 8)
+    # pdf.set_font("Cambria", "", 8)
     y += 17
     pdf.set_xy(x, y)
 

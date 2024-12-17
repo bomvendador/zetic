@@ -31,17 +31,18 @@ from django.db.models import Sum, Q
 
 
 def pdf_group_generator(request_json):
+    static_url = 'static/'
     pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
     pdf.add_font("cambria", style="",
-                 fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Cambria.ttf", uni=True)
+                 fname=os.path.join(settings.BASE_DIR, static_url) + "/fonts/Cambria.ttf", uni=True)
     pdf.add_font("CambriaBold", style="",
-                 fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Cambria-Bold.ttf", uni=True)
+                 fname=os.path.join(settings.BASE_DIR, static_url) + "/fonts/Cambria-Bold.ttf", uni=True)
 
-    pdf.add_font("RalewayMedium", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Medium.ttf", uni=True)
-    pdf.add_font("RalewayRegular", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Regular.ttf", uni=True)
-    pdf.add_font("RalewayLight", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Light.ttf", uni=True)
-    pdf.add_font("RalewayBold", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Bold.ttf", uni=True)
-    pdf.add_font("NotoSansDisplayMedium", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/NotoSansDisplay-Medium.ttf", uni=True)
+    pdf.add_font("RalewayMedium", style="", fname=os.path.join(settings.BASE_DIR, static_url) + "/fonts/Raleway-Medium.ttf", uni=True)
+    pdf.add_font("RalewayRegular", style="", fname=os.path.join(settings.BASE_DIR, static_url) + "/fonts/Raleway-Regular.ttf", uni=True)
+    pdf.add_font("RalewayLight", style="", fname=os.path.join(settings.BASE_DIR, static_url) + "/fonts/Raleway-Light.ttf", uni=True)
+    pdf.add_font("RalewayBold", style="", fname=os.path.join(settings.BASE_DIR, static_url) + "/fonts/Raleway-Bold.ttf", uni=True)
+    pdf.add_font("NotoSansDisplayMedium", style="", fname=os.path.join(settings.BASE_DIR, static_url) + "/fonts/NotoSansDisplay-Medium.ttf", uni=True)
 
     company_id = request_json['company_id']
 
@@ -94,13 +95,18 @@ def pdf_group_generator(request_json):
         traffic_light_report_page(pdf, 'ru', request_json)
     # -------------
 
+    # страница квадратов
     pdf.add_page()
     pdf.set_text_color(0, 0, 0)
     squares_page(pdf, request_json['square_results'], table_y)
 
+    # ---------------
+
+    # страница описания
     pdf.add_page()
     pdf.set_text_color(0, 0, 0)
     description_page(pdf, lang)
+    #-----------------
 
     # if 'group_report_id' in request_json:
     #     group_report_id = request_json['group_report_id']

@@ -2,6 +2,8 @@ from pdf.models import EmployeePosition, EmployeeRole, Industry, User, Participa
 
 import rstr
 
+CLIENT_ADMIN = 'Админ заказчика'
+
 squares_data = [
     {
         'code': '1_1',

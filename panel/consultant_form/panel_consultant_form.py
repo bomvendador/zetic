@@ -20,7 +20,7 @@ from django.db.models import Sum, Q
 from django.template.loader import render_to_string
 
 from sendemail.tasks import send_report_to_participant_with_consultant_text_task
-
+from panel.constants import CONSTANT_USER_ROLES
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -30,11 +30,11 @@ def add_consultant_form(request):
         return render(request, 'login.html', {'error': 'Ваша учетная запись деактивирована'})
     else:
         cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
-        if cur_user_role_name == 'Консультант':
+        if cur_user_role_name == CONSTANT_USER_ROLES['CONSULTANT']:
             companies = ConsultantCompany.objects.filter(user=request.user)
-        if cur_user_role_name == 'Менеджер':
+        if cur_user_role_name == CONSTANT_USER_ROLES['MANAGER']:
             companies = Company.objects.filter(created_by=request.user)
-        if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
+        if cur_user_role_name == CONSTANT_USER_ROLES['ADMIN'] or cur_user_role_name == CONSTANT_USER_ROLES['SUPER_ADMIN']:
             companies = Company.objects.all()
         context.update(
             {
@@ -55,7 +55,7 @@ def edit_consultant_form_list(request):
         cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
         companies_result = []
 
-        if cur_user_role_name == 'Консультант':
+        if cur_user_role_name == CONSTANT_USER_ROLES['CONSULTANT']:
             companies = ConsultantCompany.objects.filter(user=request.user)
             for company in companies:
                 if ConsultantForm.objects.filter(Q(user=request.user) & Q(participant__employee__company=company.company)).exists():
@@ -63,10 +63,10 @@ def edit_consultant_form_list(request):
                         'id': company.company.id,
                         'name': company.company.name,
                     })
-        if cur_user_role_name == 'Менеджер':
+        if cur_user_role_name == CONSTANT_USER_ROLES['MANAGER']:
             companies = Company.objects.filter(created_by=request.user)
             consultant_forms = ConsultantForm.objects.filter(participant__employee__company__created_by =request.user)
-        if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
+        if cur_user_role_name == CONSTANT_USER_ROLES['ADMIN'] or cur_user_role_name == CONSTANT_USER_ROLES['SUPER_ADMIN']:
             companies = Company.objects.all()
             for company in companies:
                 if ConsultantForm.objects.filter(Q(participant__employee__company=company)).exists():
@@ -141,7 +141,7 @@ def get_consultant_company_studies(request):
         company_id = json_data['company_id']
         cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
         studies = []
-        if cur_user_role_name == 'Консультант':
+        if cur_user_role_name == CONSTANT_USER_ROLES['CONSULTANT']:
             consultant_company = ConsultantCompany.objects.get(Q(company_id=company_id) & Q(user=request.user))
             consultant_studies = ConsultantStudy.objects.filter(consultant_company=consultant_company)
             if consultant_studies.exists():
@@ -175,7 +175,7 @@ def get_consultant_forms(request):
         company_id = json_data['company_id']
         cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
         consultant_forms = []
-        if cur_user_role_name == 'Консультант':
+        if cur_user_role_name == CONSTANT_USER_ROLES['CONSULTANT']:
             if company_id == 'all':
                 consultant_form_inst = ConsultantForm.objects.filter(Q(user=request.user))
             else:
