@@ -664,6 +664,7 @@
 
         }
 
+
         document.addEventListener('coloris:pick', event => {
             {#console.log(event.target)#}
             group_color = event.detail.color
@@ -1300,12 +1301,11 @@
                                     {#console.log('-------------------------')#}
                                     let participant_squares = participants_data[i]['participant_squares']
                                     let individual_reports_files = participants_data[i]['individual_reports_files']
-                                    let html = ''
 
 
                                     html += '<tr class="table-row-undistributed-participant" style="" data-participant-id="' + participants_data[i]['participant_id'] + '">'
-                                    html += '<td class="bold-participant" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'
-                                    html += '<td class="participant-group" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom select-for-group-checkbox" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></label></td>'
+                                    html += '<td class="bold-participant" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></td>'
+                                    html += '<td class="participant-group" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom select-for-group-checkbox" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></td>'
                                     html += '<td class="fio">' + participants_data[i]['fio'] + '</td>'
                                     html += '<td class="email">' + participants_data[i]['email'] + '</td>'
                                     html += '<td class="role_name">' + participants_data[i]['role_name'] + '</td>'
@@ -1358,59 +1358,42 @@
                                     html += '</tr>'
 
 
-                                    $('#tbody_undistributed_participants').append(html)
-
-
-                                    {#$('.undistributed-table').removeAttr('width').DataTable({#}
-                                    {#        'columnDefs': [#}
-                                    {#            {'orderable': false, 'targets': [0, 7]},#}
-                                    {#            {width: 5, targets: 0}#}
-                                    {#        ],#}
-                                    {#        autoWidth: false,#}
-                                    {#        "info": true,#}
-                                    {#        "bFilter": true,#}
-                                    {#        order: [1, 'asc'],#}
-                                    {#        "searching": true,#}
-                                    {#        "destroy": true,#}
-                                    {#        "paging": false,#}
-                                    {#        "language": {#}
-                                    {#            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"#}
-                                    {#        },#}
-                                    {#        "initComplete": function () {#}
-                                    {#        }#}
-                                    {#    })#}
-                                    {##}
-                                    {##}
-                                    {#    process_table('.undistributed-table')#}
-
-
-                                    $('#wizard1-h-2').css('display', 'block')
-                                    $('#wizard1-p-2').css('display', 'block')
-                                    $('#wizard1-h-1').css('display', 'none')
-                                    $('#wizard1-p-1').css('display', 'none')
-                                    if ($('.table-row-undistributed-participant').length > 0) {
-                                        $('#next').addClass('disabled')
-                                        $('#undistributed-participants-table').removeClass('d-none')
-                                        //
-                                    } else {
-                                        $('#next').removeClass('disabled')
-                                        $('#undistributed-participants-table').addClass('d-none')
-                                    }
-                                    $('#next').text('Создать отчет')
-
                                 }
 
+                                {#$('#tbody_undistributed_participants').append(html)#}
+
+                                $('#distribution_table').DataTable().destroy()
+                                $('#tbody_undistributed_participants').html(html)
+                                console.log(html)
+
+
+                                process_table_clear('#distribution_table')
+
+
+                                $('#wizard1-h-2').css('display', 'block')
+                                $('#wizard1-p-2').css('display', 'block')
+                                $('#wizard1-h-1').css('display', 'none')
+                                $('#wizard1-p-1').css('display', 'none')
+                                if ($('.table-row-undistributed-participant').length > 0) {
+                                    $('#next').addClass('disabled')
+                                    $('#undistributed-participants-table').removeClass('d-none')
+                                    //
+                                } else {
+                                    $('#next').removeClass('disabled')
+                                    $('#undistributed-participants-table').addClass('d-none')
+                                }
+                                $('#next').text('Создать отчет')
                             }
                         });
-
-
                         {#console.log(report_participants)#}
                         route_menu_handler(route_index, 'next')
                     } else {
                         toastr.error('Участники не выбраны')
                     }
                     break;
-                case 4:
+                case
+                4
+                :
                     let output_html = '<h2 class="mb-0" style="text-align: center">Комментарии к отчету</h2>' +
                         '<br>' +
                         '<hr class="solid mt-0" style="background-color: black;">' +
@@ -1599,7 +1582,7 @@
                 case 4:
                 {#$('#wizard1-tbody-1').html('')#}
                 {#process_table('.team-table')#}
-                    $('.undistributed-table').DataTable().clear().destroy()
+                {#    $('.undistributed-table').DataTable().clear().destroy()#}
                     $('#wizard1-h-1').css('display', 'block')
                     $('#wizard1-p-1').css('display', 'block')
                     $('#wizard1-h-2').css('display', 'none')

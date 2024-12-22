@@ -11,7 +11,7 @@ let token = csrf_token;
 
 
 $('.menu_item').on('click', function () {
-    var menuID = $(this).attr('id');
+    let menuID = $(this).attr('id');
     show_progressbar_loader()
     switch (menuID) {
         case'menu_distribution':
