@@ -105,7 +105,7 @@ def pdf_group_generator(request_json):
                     groups_for_integral_report.append(key_vals)
                     group_name_for_report = key_vals[0][4]
                     pdf.add_page()
-                    integral_report_page(pdf, 'ru', square_results, f'Интегральный отчет (группа - "{group_name_for_report}")')
+                    integral_report_page(pdf, 'ru', key_vals, f'Интегральный отчет (группа - "{group_name_for_report}")')
 
             # print('-------------------')
         pdf.add_page()
