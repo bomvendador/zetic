@@ -45,9 +45,9 @@ def pdf_group_generator(request_json):
     pdf.add_font("NotoSansDisplayMedium", style="", fname=os.path.join(settings.BASE_DIR, static_url) + "/fonts/NotoSansDisplay-Medium.ttf", uni=True)
 
     company_id = request_json['company_id']
-
+    square_results = request_json['square_results']
     max_y = 280
-    total_participant_qnt = len(request_json['square_results'])
+    total_participant_qnt = len(square_results)
     # line_height = round(pdf.font_size * 2)
     line_height = 5.5
     table_height = round(total_participant_qnt / 2) * line_height
@@ -55,7 +55,7 @@ def pdf_group_generator(request_json):
     # print(f'line_height = {line_height} total_participant_qnt = {total_participant_qnt} table_height = {table_height} table_y = {table_y}')
 
     pdf.add_page()
-    # print(request_json)
+    print(square_results)
     # lang = request_json['lang']
     lang = 'ru'
     # client_name = request_json['project']
@@ -64,7 +64,7 @@ def pdf_group_generator(request_json):
 
     pdf.add_page()
     pdf.set_text_color(0, 0, 0)
-    participants_page(pdf, request_json['square_results'], lang)
+    participants_page(pdf, square_results, lang)
 
     # интегральный отчет
     pdf.set_line_width(0.1)
@@ -79,9 +79,39 @@ def pdf_group_generator(request_json):
     # print(f'company_integral_group_report_options id = {len(company_integral_group_report_options)}')
     # print(f'integral_group_report_allowed = {integral_group_report_allowed}')
     if company_integral_group_report_options:
+        groups = []
+        for participant_data in square_results:
+            group_name = participant_data[4]
+            if group_name != '':
+                if not any(group_name in key for key in groups):
+                    groups.append({
+                        group_name: [participant_data]
+                    })
+                else:
+                    for group in groups:
+                        if group_name in group:
+                            group[group_name].append(participant_data)
+
+        # print('----groups-----')
+        # print(groups)
+        # print('--------------')
+        if len(groups) > 0:
+            groups_for_integral_report = []
+            # print('====groups_for_integral_report====')
+            for group in groups:
+                key_vals = next(iter(group.values()))
+                if len(key_vals) >= 3:
+                    # print(key_vals)
+                    groups_for_integral_report.append(key_vals)
+                    group_name_for_report = key_vals[0][4]
+                    pdf.add_page()
+                    integral_report_page(pdf, 'ru', square_results, f'Интегральный отчет (группа - "{group_name_for_report}")')
+
+            # print('-------------------')
         pdf.add_page()
         pdf.set_text_color(0, 0, 0)
-        integral_report_page(pdf, 'ru', request_json['square_results'])
+        integral_report_page(pdf, 'ru', square_results, 'Интегральный отчет (все участники)')
+
     # ---------------------
 
     # светофор
@@ -98,7 +128,7 @@ def pdf_group_generator(request_json):
     # страница квадратов
     pdf.add_page()
     pdf.set_text_color(0, 0, 0)
-    squares_page(pdf, request_json['square_results'], table_y)
+    squares_page(pdf, square_results, table_y)
 
     # ---------------
 
@@ -116,59 +146,59 @@ def pdf_group_generator(request_json):
     pdf.set_line_width(0.1)
     pdf.add_page()
     pdf.set_text_color(0, 0, 0)
-    section_1_page(pdf, request_json['square_results'], lang)
+    section_1_page(pdf, square_results, lang)
 
     pdf.add_page()
     pdf.set_text_color(0, 0, 0)
-    section_2_page(pdf, request_json['square_results'], lang)
+    section_2_page(pdf, square_results, lang)
 
     pdf.add_page()
     pdf.set_text_color(0, 0, 0)
-    section_3_page(pdf, request_json['square_results'], lang)
+    section_3_page(pdf, square_results, lang)
 
     pdf.add_page()
     pdf.set_text_color(0, 0, 0)
-    section_4_page(pdf, request_json['square_results'], lang)
+    section_4_page(pdf, square_results, lang)
 
     # pdf.add_page()
     #
     # pdf.set_text_color(0, 0, 0)
-    # page4(pdf, request_json['square_results'], lang, table_y)
+    # page4(pdf, square_results, lang, table_y)
     #
     # pdf.add_page()
     #
     # pdf.set_text_color(0, 0, 0)
-    # page5(pdf, request_json['square_results'], lang, table_y)
+    # page5(pdf, square_results, lang, table_y)
     #
     # pdf.add_page()
     #
     # pdf.set_text_color(0, 0, 0)
-    # page6(pdf, request_json['square_results'], lang, table_y)
+    # page6(pdf, square_results, lang, table_y)
     #
     # pdf.add_page()
     #
     # pdf.set_text_color(0, 0, 0)
-    # page7(pdf, request_json['square_results'], lang, table_y)
+    # page7(pdf, square_results, lang, table_y)
     #
     # pdf.add_page()
     #
     # pdf.set_text_color(0, 0, 0)
-    # page8(pdf, request_json['square_results'], lang, table_y)
+    # page8(pdf, square_results, lang, table_y)
     #
     # pdf.add_page()
     #
     # pdf.set_text_color(0, 0, 0)
-    # page9(pdf, request_json['square_results'], lang, table_y)
+    # page9(pdf, square_results, lang, table_y)
     #
     # pdf.add_page()
     #
     # pdf.set_text_color(0, 0, 0)
-    # page10(pdf, request_json['square_results'], lang, table_y)
+    # page10(pdf, square_results, lang, table_y)
     #
     # pdf.add_page()
     #
     # pdf.set_text_color(0, 0, 0)
-    # page11(pdf, request_json['square_results'], lang, table_y)
+    # page11(pdf, square_results, lang, table_y)
 
     now = datetime.datetime.now()
 
@@ -177,7 +207,7 @@ def pdf_group_generator(request_json):
     path = "media/reportsPDF/group/"
 
     report_id = save_data_group(request_json, file_name)
-    # print(request_json['square_results'])
+    # print(square_results)
     # response = save_serve_file(pdf, path, file_name, request_json)
     response = save_serve_file(pdf, path, file_name)
     response.update({

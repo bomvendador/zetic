@@ -8,17 +8,17 @@ from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B, MIN_SCALE_DELTA_Y, M
 from pdf.models import Report, ReportData, Questionnaire, QuestionnaireQuestionAnswers, Participant, Category, ReportDataByCategories
 
 
-def page(pdf, lang, square_results):
+def page(pdf, lang, square_results, report_name):
     # questionnaire_inst = Questionnaire.objects.filter(participant__employee__email=participant_email).latest('created_at')
     pdf.set_auto_page_break(False)
 
     x = 12
     y = 12
-    pdf.set_xy(x,y)
+    pdf.set_xy(x, y)
     pdf.set_font("RalewayBold", "", 10)
 
     # if lang == 'ru':
-    pdf.cell(0, 0, 'Интегральные показатели')
+    pdf.cell(0, 0, report_name)
     # else:
     #     pdf.cell(0, 0, 'Section K')
     pdf.set_draw_color(0, 0, 0)
