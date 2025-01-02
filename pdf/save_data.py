@@ -1,10 +1,11 @@
 from pdf.models import Report, Participant, Company, ReportData, Section, Category, Employee, Study, EmployeeRole, \
     EmployeeGender, QuestionnaireQuestionAnswers, Questionnaire, RawToTPointsType, RawToTPoints, ReportDataByCategories, \
-    ConsultantForm, ConsultantFormEmailSentToParticipant
+    ConsultantForm, ConsultantFormEmailSentToParticipant, CommonBooleanSettings
 from login.models import UserProfile
 from . import raw_to_t_point
 from panel import mail_handler
 from django.utils import timezone
+from reports.settings import DEBUG
 
 
 # def create_report(questionnaire_id):
@@ -234,18 +235,20 @@ def save_data_to_db_and_send_report(data):
 
     send_email_result_to_participant = {}
     send_email_result_to_zetic_admin = {}
-    if report_id == '':
-        if request_type == 'consultant_form':
-            consultant_form_id = data['consultant_form_id']
-            consultant_name = ConsultantForm.objects.get(id=consultant_form_id).user.first_name
-            data_for_mail.update({
-                'consultant_name': consultant_name
-            })
-            send_email_result_to_participant = mail_handler.send_notification_to_participant_report_made(data_for_mail, report.id, request_type)
-        else:
-            if participant.send_report_to_participant_after_filling_up:
+    send_emails_after_individual_report_filled_up_setting = CommonBooleanSettings.objects.get(name='Отправлять письма после заполнения личного отчета').value
+    if send_emails_after_individual_report_filled_up_setting:
+        if report_id == '':
+            if request_type == 'consultant_form':
+                consultant_form_id = data['consultant_form_id']
+                consultant_name = ConsultantForm.objects.get(id=consultant_form_id).user.first_name
+                data_for_mail.update({
+                    'consultant_name': consultant_name
+                })
                 send_email_result_to_participant = mail_handler.send_notification_to_participant_report_made(data_for_mail, report.id, request_type)
-            send_email_result_to_zetic_admin = mail_handler.send_notification_report_made(data_for_mail, report.id)
+            else:
+                if participant.send_report_to_participant_after_filling_up:
+                    send_email_result_to_participant = mail_handler.send_notification_to_participant_report_made(data_for_mail, report.id, request_type)
+                send_email_result_to_zetic_admin = mail_handler.send_notification_report_made(data_for_mail, report.id)
 
     # сохраняем инфо об отправке письма респонденту с выводами ээкперта
     if 'consultant_form_id' in data:

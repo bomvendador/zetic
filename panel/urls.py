@@ -9,6 +9,7 @@ from panel import employee, study, sections, individual_report_file, company, ma
     filters_traffic_light_report, search, processing
 from panel.common_settings import settings, notification_report_made_receivers
 from panel.consultant_form import panel_consultant_form
+from panel.individual_report_contradiction_filter import individual_report_contradicions
 # from panel import study
 # from panel import individual_report_file
 # from panel import company
@@ -184,6 +185,12 @@ urlpatterns = [
     path('save_new_individual_report_points_description_filter', filters_individual_report_points_description.save_new_individual_report_points_description_filter, name='save_new_individual_report_points_description_filter'),
     path('save_edited_individual_report_points_description_filter', filters_individual_report_points_description.save_edited_individual_report_points_description_filter, name='save_edited_individual_report_points_description_filter'),
     path('individual_report_points_description_filter/<int:filter_id>', filters_individual_report_points_description.edit_individual_report_points_description_filter, name='individual_report_points_description_filter'),
+
+    path('individual_report_contradictions_list', individual_report_contradicions.individual_report_contradictions_list, name='individual_report_contradictions_list'),
+    path('add_individual_report_contradictions_filter', individual_report_contradicions.add_contradictions_filter, name='add_individual_report_contradictions_filter'),
+    path('save_individual_report_contradictions_filter', individual_report_contradicions.save_individual_report_contradictions_filter, name='save_individual_report_contradictions_filter'),
+    path('individual_report_contradictions_filter/<int:filter_id>', individual_report_contradicions.edit_individual_report_contradictions_filter , name='individual_report_contradictions_filter'),
+    path('delete_individual_report_contradictions_filter', individual_report_contradicions.delete_individual_report_contradictions_filter , name='delete_individual_report_contradictions_filter'),
 
     path('integral_report_filters_list', filters_integral_report.integral_report_filters_list, name='integral_report_filters_list'),
     path('add_integral_report_filter', filters_integral_report.add_filter, name='add_integral_report_filter'),

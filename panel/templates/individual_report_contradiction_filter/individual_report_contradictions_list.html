@@ -8,7 +8,7 @@
 
         <!-- PAGE-HEADER -->
         <div class="page-header">
-            <h1 class="page-title">Фильтр описания баллов в личных отчетах</h1>
+            <h1 class="page-title">Противоречия шкал в личных отчетах</h1>
             <div>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
@@ -72,7 +72,7 @@
                                                     </thead>
                                                     <tbody id="wizard1-tbody-1">
                                                     {% for filter in filters %}
-                                                        <tr>
+                                                        <tr data-filter-id="{{ filter.id }}">
                                                             <td class="">
                                                                 {{ filter.name }}
                                                             </td>
@@ -112,7 +112,7 @@
                                                                         <li>
                                                                             {#                                                                                    <a class="dropdown-item edit-company-study cursor-pointer" data-study-id="{{ study.id }}" href="{% url 'edit_company_study' study.id %}">#}
                                                                             <a class="dropdown-item edit-filter cursor-pointer"
-                                                                               href="{% url 'individual_report_points_description_filter' filter.id %}">
+                                                                               href="{% url 'individual_report_contradictions_filter' filter.id %}">
                                                                                 <svg style="margin-right: 5px"
                                                                                      xmlns="http://www.w3.org/2000/svg"
                                                                                      width="15" height="15"
@@ -128,7 +128,7 @@
                                                                             </a>
                                                                         </li>
                                                                         <li>
-                                                                            <a class="dropdown-item delete-filter cursor-pointer font-color-danger">
+                                                                            <a class="dropdown-item delete-contradictions-filter cursor-pointer font-color-danger">
                                                                                 <svg style="margin-right: 5px"
                                                                                      xmlns="http://www.w3.org/2000/svg"
                                                                                      width="15" height="15"
@@ -179,7 +179,7 @@
 
 
 
-    <button type="button" class="btn btn-primary float-button" id="add_individual_report_point_description_filter"><i
+    <button type="button" class="btn btn-primary float-button" id="add_individual_report_contradictions_filter"><i
             class="fe fe-plus"></i></button>
 
 
@@ -196,13 +196,13 @@
         {#let url_edit_section = "{% url 'edit_section' %}"#}
         {#let url_delete_section = "{% url 'delete_section' %}"#}
 
-        let url_add_filter_matrix = "{% url 'add_filter_matrix' %}";
-        let url_add_individual_report_points_description_filter = "{% url 'add_individual_report_points_description_filter' %}";
+        let url_add_individual_report_contradictions_filter = "{% url 'add_individual_report_contradictions_filter' %}";
+        let url_delete_individual_report_contradictions_filter = "{% url 'delete_individual_report_contradictions_filter' %}";
 
 
     </script>
 
-    <script src="{% static 'panel/js/individual_report_points_description/panel_individual_report_filter_list.js' %}?{{ timestamp }}"></script>
+    <script src="{% static 'panel/js/individual_report_contradictions/panel_individual_report_contradictions_filter_list.js' %}?{{ timestamp }}"></script>
     {#<script src="{% static 'panel/js/panel_study_details.js' %}"></script>#}
 
 {% endblock %}

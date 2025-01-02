@@ -1,5 +1,6 @@
 import datetime
 
+
 def title_page(pdf, participant, lang, company_name):
     pdf.image('media/images/page_img.png', x=0, y=0, w=210)
 
@@ -49,15 +50,21 @@ def title_page(pdf, participant, lang, company_name):
     if lang == 'ru':
         pdf.cell(20, 0, 'Участник:', ln=0)
         pdf.set_font("RalewayBold", "", 12)
-        pdf.write(0, participant)
+
+        pdf.set_xy(43, y)
+        pdf.cell(22, 0, participant, ln=0)
+        # pdf.write(0, participant)
 
         y = y + 8
         pdf.set_font("RalewayRegular", "", 12)
         pdf.set_xy(20, y)
         pdf.cell(22, 0, 'Компания:', ln=0)
+
         pdf.set_font("RalewayBold", "", 12)
-        # pdf.set_xy(20, y)
-        pdf.write(0, company_name)
+        pdf.set_xy(43, y)
+        pdf.cell(22, 0, company_name, ln=0)
+
+        # pdf.write(0, company_name)
 
     else:
         pdf.cell(20, 0, 'Participant:', ln=0)

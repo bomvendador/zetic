@@ -3,7 +3,13 @@ from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B, MIN_SCALE_DELTA_Y, M
 from pdf_group.page_funcs import block_name_
 
 
-def page5(pdf, json_section, lang, participant_info):
+# def page5(pdf, json_section, lang):
+def page5(pages_data):
+    pdf = pages_data['pdf']
+    lang = pages_data['lang']
+    json_section = pages_data['answer_code']
+    participant_info = pages_data['participant_info']
+    contradiction_filters_data = pages_data['contradiction_filters_data']
     scale_element_file = 'media/images/boyko_page5.png'
     pdf.set_auto_page_break(False)
 
@@ -98,8 +104,7 @@ def page5(pdf, json_section, lang, participant_info):
 работы'''
     else:
         scale_name = u''''''
-    draw_full_scale(pdf, scale_name, x, y + 12, y + 12 - 2, json_section, '3_14', scale_element_file, lang,
-                    participant_info)
+    draw_full_scale(pdf, scale_name, x, y + 12, y + 12 - 2, json_section, '3_14', scale_element_file, lang, contradiction_filters_data)
 
     y += 20
 
@@ -109,8 +114,7 @@ def page5(pdf, json_section, lang, participant_info):
     else:
         scale_name = u''''''
 
-    draw_full_scale(pdf, scale_name, x, y + 12, y + 12 - 2, json_section, '3_13', scale_element_file, lang,
-                    participant_info)
+    draw_full_scale(pdf, scale_name, x, y + 12, y + 12 - 2, json_section, '3_13', scale_element_file, lang, contradiction_filters_data)
 
     # vert_text_y = 152
     vert_text_y = 122
@@ -150,7 +154,7 @@ def page5(pdf, json_section, lang, participant_info):
 коммуникаций'''
     else:
         scale_name = u''''''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '3_15', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '3_15', scale_element_file, lang, contradiction_filters_data)
 
     y += 20
     if lang == 'ru':
@@ -158,7 +162,7 @@ def page5(pdf, json_section, lang, participant_info):
     else:
         scale_name = u''''''
 
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '3_16', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '3_16', scale_element_file, lang, contradiction_filters_data)
 
     # vert_text_y = 232
     vert_text_y = 179
@@ -199,8 +203,7 @@ def page5(pdf, json_section, lang, participant_info):
     else:
         scale_name = u'''Emotional
     defense'''
-    draw_full_scale(pdf, scale_name, x, y + 12, y + 12 - 2, json_section, '3_18', scale_element_file, lang,
-                    participant_info)
+    draw_full_scale(pdf, scale_name, x, y + 12, y + 12 - 2, json_section, '3_18', scale_element_file, lang, contradiction_filters_data)
 
     y += 20
 
@@ -211,68 +214,4 @@ def page5(pdf, json_section, lang, participant_info):
     response'''
     draw_full_scale(pdf, scale_name, x, y + 12, y + 12, json_section, '3_17', scale_element_file, lang,
                     participant_info)
-
-
-    # y += 20
-    # if lang == 'ru':
-    #     scale_name = u'''Экономия эмоций'''
-    # else:
-    #     scale_name = u'''Emotional saving'''
-    # draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '3_18', scale_element_file, lang, participant_info)
-
-#     y += 20
-#     if lang == 'ru':
-#         scale_name = u'''Эмпатическая
-# усталость'''
-#         draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '3_8', scale_element_file, lang, participant_info)
-#     else:
-#         scale_name = u'''Empathic fatigue'''
-#         draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '3_8', scale_element_file, lang, participant_info)
-#
-#     vert_text_y = 232
-#     if lang == 'ru':
-#         with pdf.rotation(90, 10, vert_text_y+1):
-#             pdf.text(0, vert_text_y+1, "Фаза 3. Истощение")
-#     else:
-#         with pdf.rotation(90, 10, vert_text_y):
-#             pdf.text(0, vert_text_y, "Phase 3. Exhaustion")
-#
-#     pdf.set_draw_color(0, 0, 0)
-#     pdf.line(13, vert_text_y - 35, 13, vert_text_y + 31)
-#
-#     y += 20
-#     if lang == 'ru':
-#         scale_name = u'''Эмоциональная
-# опустошенность'''
-#     else:
-#         scale_name = u'''Emotional
-# emptiness'''
-#     draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '3_9', scale_element_file, lang, participant_info)
-#
-#     y += 20
-#     if lang == 'ru':
-#         scale_name = u'''Эмоциональная
-# отстраненность'''
-#     else:
-#         scale_name = u'''Emotional
-# detachment'''
-#     draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '3_10', scale_element_file, lang, participant_info)
-#
-#     y += 20
-#     if lang == 'ru':
-#         scale_name = u'''Личностная
-# отстраненность'''
-#     else:
-#         scale_name = u'''Personal
-# detachment'''
-#     draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '3_11', scale_element_file, lang, participant_info)
-#
-#     y += 20
-#     if lang == 'ru':
-#         scale_name = u'''Психосоматика'''
-#     else:
-#         scale_name = u'''Physical discomfort'''
-#
-#     draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '3_12', scale_element_file, lang, participant_info)
-
     insert_page_number(pdf)

@@ -3,7 +3,7 @@
 # Create your views here.
 from pdf.models import Questionnaire, QuestionnaireQuestionAnswers, QuestionAnswers, Category, CategoryQuestions, \
     Report, ReportDataByCategories, ParticipantIndividualReportAllowedOptions, IndividualReportAllowedOptions, \
-    CompanyIndividualReportAllowedOptions
+    CompanyIndividualReportAllowedOptions, IndividualReportContradictionFilter, IndividualReportContradictionFilterCategory
 from django.http import HttpResponse, HttpResponseNotFound, StreamingHttpResponse, JsonResponse, FileResponse
 from django.db.models import Sum, Q
 from . import raw_to_t_point
@@ -37,24 +37,28 @@ import json
 
 def pdf_single_generator(data):
 # def pdf_single_generator(questionnaire_id, report_id):
+    print('------data-----')
+    print(data)
+    print('-----------')
     questionnaire_id = data['questionnaire_id']
     report_id = data['report_id']
     time_start = time.perf_counter()
+    static_dir = 'static/'
     pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
     pdf.add_font("Cambria", style="",
-                 fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Cambria.ttf", uni=True)
+                 fname=os.path.join(settings.BASE_DIR, static_dir) + "/fonts/Cambria.ttf", uni=True)
     pdf.add_font("Cambria-Bold", style="",
-                 fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Cambria-Bold.ttf", uni=True)
+                 fname=os.path.join(settings.BASE_DIR, static_dir) + "/fonts/Cambria-Bold.ttf", uni=True)
     pdf.add_font("RalewayMedium", style="",
-                 fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Medium.ttf", uni=True)
+                 fname=os.path.join(settings.BASE_DIR, static_dir) + "/fonts/Raleway-Medium.ttf", uni=True)
     pdf.add_font("RalewayRegular", style="",
-                 fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Regular.ttf", uni=True)
+                 fname=os.path.join(settings.BASE_DIR, static_dir) + "/fonts/Raleway-Regular.ttf", uni=True)
     pdf.add_font("RalewayLight", style="",
-                 fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Light.ttf", uni=True)
-    pdf.add_font("RalewayBold", style="", fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/Raleway-Bold.ttf",
+                 fname=os.path.join(settings.BASE_DIR, static_dir) + "/fonts/Raleway-Light.ttf", uni=True)
+    pdf.add_font("RalewayBold", style="", fname=os.path.join(settings.BASE_DIR, static_dir) + "/fonts/Raleway-Bold.ttf",
                  uni=True)
     pdf.add_font("NotoSansDisplayMedium", style="",
-                 fname=os.path.join(settings.BASE_DIR, 'static/') + "/fonts/NotoSansDisplay-Medium.ttf", uni=True)
+                 fname=os.path.join(settings.BASE_DIR, static_dir) + "/fonts/NotoSansDisplay-Medium.ttf", uni=True)
     pdf.add_page()
 
     questionnaire_inst = Questionnaire.objects.get(id=questionnaire_id)
@@ -131,38 +135,95 @@ def pdf_single_generator(data):
         page_circle_diagram(pdf, questionnaire_id, report_id, lang)
 
     response_code_1 = category_data('1_', questionnaire_id, employee.id)
+    response_code_2 = category_data('2_', questionnaire_id, employee.id)
+    response_code_3 = category_data('3_', questionnaire_id, employee.id)
+    response_code_4 = category_data('4_', questionnaire_id, employee.id)
+
+    print('----response_code_1-----')
+    print(response_code_1)
+    print('---------')
+    responses_codes = {
+        '1': response_code_1,
+        '2': response_code_2,
+        '3': response_code_3,
+        '4': response_code_4,
+    }
+
+    contradiction_filters_data = []
+    contradiction_filters = IndividualReportContradictionFilter.objects.all()
+    for contradiction_filter in contradiction_filters:
+        contradiction_filter_to_show = True
+        contradiction_filter_data = []
+        contradiction_filter_categories = IndividualReportContradictionFilterCategory.objects.filter(filter=contradiction_filter)
+        for contradiction_filter_category in contradiction_filter_categories:
+            category_code = contradiction_filter_category.category.code
+            points_from = contradiction_filter_category.points_from
+            points_to = contradiction_filter_category.points_to
+            category_prefix = category_code.split('_')[0]
+            if responses_codes[category_prefix]:
+                response_code_answers = responses_codes[category_prefix]['answers']
+                for answer in response_code_answers:
+                    if answer['code'] == category_code:
+                        if points_from <= answer['points'] <= points_to:
+                            contradiction_filter_data.append(category_code)
+                        else:
+                            contradiction_filter_to_show = False
+        if contradiction_filter_to_show:
+            contradiction_filters_data.append(contradiction_filter_data)
+    print(contradiction_filters_data)
+    pages_data = {
+        'pdf': pdf,
+        'lang': lang,
+        'participant_info': participant_info,
+        'contradiction_filters_data': contradiction_filters_data,
+    }
+
     if response_code_1['category_is_not_empty']:
         answer_code_1 = response_code_1['answers']
+        pages_data.update({
+            'answer_code': answer_code_1
+        })
         pdf.add_page()
         # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
-        page3(pdf, answer_code_1, lang, participant_info)
+        # page3(pdf, answer_code_1, lang, participant_info)
+        page3(pages_data)
 
     # answer_code_2 = category_data('2_', questionnaire_id, employee.id)
     # if len(answer_code_2) > 0:
-    response_code_2 = category_data('2_', questionnaire_id, employee.id)
     if response_code_2['category_is_not_empty']:
         answer_code_2 = response_code_2['answers']
+        pages_data.update({
+            'answer_code': answer_code_2
+        })
+
         pdf.add_page()
         # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
-        page4(pdf, answer_code_2, lang, participant_info)
+        # page4(pdf, answer_code_2, lang, participant_info, contradiction_filters_data)
+        page4(pages_data)
 
     # answer_code_3 = category_data('3_', questionnaire_id, employee.id)
     # if len(answer_code_3) > 0:
-    response_code_3 = category_data('3_', questionnaire_id, employee.id)
     if response_code_3['category_is_not_empty']:
         answer_code_3 = response_code_3['answers']
+        pages_data.update({
+            'answer_code': answer_code_3
+        })
         pdf.add_page()
         # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
-        page5(pdf, answer_code_3, lang, participant_info)
+        # page5(pdf, answer_code_3, lang, participant_info)
+        page5(pages_data)
 
     # answer_code_4 = category_data('4_', questionnaire_id, employee.id)
     # if len(answer_code_4) > 0:
-    response_code_4 = category_data('4_', questionnaire_id, employee.id)
     if response_code_4['category_is_not_empty']:
         answer_code_4 = response_code_4['answers']
+        pages_data.update({
+            'answer_code': answer_code_4
+        })
         pdf.add_page()
         # page3(pdf, extract_section(request_json, 'Кеттелл'), lang)
-        page6(pdf, answer_code_4, lang, participant_info)
+        # page6(pdf, answer_code_4, lang, participant_info)
+        page6(pages_data)
 
     individual_report_allowed_options = IndividualReportAllowedOptions.objects.get(name='Выводы эксперта')
     show_consultant_page = True

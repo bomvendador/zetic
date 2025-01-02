@@ -570,7 +570,7 @@ class QuestionnaireQuestionAnswers(models.Model):
     participant = models.ForeignKey(Participant, on_delete=models.PROTECT, default=None, blank=True, null=True)
 
     def __str__(self):
-        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] ({self.questionnaire.participant.total_questions_qnt}/{self.questionnaire.participant.answered_questions_qnt}){self.questionnaire.participant.employee.name} - {self.question.category.section.name} -  {self.question.category.code}. {self.question.category.name} - очки = {self.answer.raw_point} ответ - {self.answer.text}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] ID - {self.id}. ({self.questionnaire.participant.total_questions_qnt}/{self.questionnaire.participant.answered_questions_qnt}){self.questionnaire.participant.employee.name} - {self.question.category.section.name} -  {self.question.category.code}. {self.question.category.name} - очки = {self.answer.raw_point} ответ - {self.answer.text}'
 
     class Meta:
         verbose_name_plural = 'Опросник респондента_ответы (QuestionnaireQuestionAnswers)'
@@ -939,7 +939,7 @@ class IndividualReportPointsDescriptionFilterTextRecommendations(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
     filter_text = models.ForeignKey(IndividualReportPointsDescriptionFilterText, on_delete=models.CASCADE, default=None, blank=True, null=True)
-    text = models.TextField(default=None, blank=True, null=True, verbose_name='Текст рекомендации')
+    text = models.TextField(default=None, blank=True, verbose_name='Текст рекомендации')
 
     def __str__(self):
         return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id} {self.filter_text.filter.name}'
@@ -947,6 +947,35 @@ class IndividualReportPointsDescriptionFilterTextRecommendations(models.Model):
     class Meta:
         verbose_name_plural = 'Фильтры описания баллов: Тексты рекомендаций (личные отчеты)'
         verbose_name = 'Фильтр описания баллов: Текст рекомендации (личные отчеты)'
+
+
+class IndividualReportContradictionFilter(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    name = models.CharField(max_length=200, blank=True)
+
+    def __str__(self):
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name}'
+
+    class Meta:
+        verbose_name_plural = 'Противоречия в шкалах (личные отчеты)'
+        verbose_name = 'Противоречие в шкалах (личные отчеты)'
+
+
+class IndividualReportContradictionFilterCategory(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, default=None, blank=True, null=True)
+    filter = models.ForeignKey(IndividualReportContradictionFilter, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    points_from = models.IntegerField(null=False, default=0)
+    points_to = models.IntegerField(null=False, default=0)
+
+    def __str__(self):
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.filter.name}'
+
+    class Meta:
+        verbose_name_plural = 'Противоречия в шкалах: Категории (шкалы) (личные отчеты)'
+        verbose_name = 'Противоречия в шкалах : Категория (шкалы) (личные отчеты)'
 
 
 class TrafficLightReportFilter(models.Model):

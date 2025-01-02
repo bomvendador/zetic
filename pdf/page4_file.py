@@ -3,7 +3,13 @@ from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B, MIN_SCALE_DELTA_Y, M
 from pdf_group.page_funcs import block_name_
 
 
-def page4(pdf, json_section, lang, participant_info):
+# def page4(pdf, json_section, lang, participant_info, contradiction_filters_data):
+def page4(pages_data):
+    pdf = pages_data['pdf']
+    lang = pages_data['lang']
+    json_section = pages_data['answer_code']
+    participant_info = pages_data['participant_info']
+    contradiction_filters_data = pages_data['contradiction_filters_data']
     scale_element_file = 'media/images/kopingi_page4.png'
     pdf.set_auto_page_break(False)
     x = 10
@@ -87,14 +93,14 @@ def page4(pdf, json_section, lang, participant_info):
 самоутверждение'''
     else:
         scale_name = u'''Response control'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_20', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_20', scale_element_file, lang, contradiction_filters_data)
 
     y += 15
     if lang == 'ru':
         scale_name = u'''Контроль над ситуацией'''
     else:
         scale_name = u'''Situation control'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_2', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_2', scale_element_file, lang, contradiction_filters_data)
 
     y += 15
     if lang == 'ru':
@@ -103,25 +109,7 @@ def page4(pdf, json_section, lang, participant_info):
     else:
         scale_name = u'''Positive
 self-affirmation'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_18', scale_element_file, lang, participant_info)
-
-# #     y += 15
-# #     if lang == 'ru':
-# #         scale_name = u'''Снижение значения
-# # стрессовой ситуации'''
-# #         draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_4', scale_element_file, lang, participant_info)
-# #
-# #     else:
-# #         scale_name = u'''Stress minimization'''
-# #         draw_full_scale(pdf, scale_name, x, y + 12, y + 12, json_section, '2_4',
-# #                         scale_element_file, lang)
-#
-#     y += 15
-#     if lang == 'ru':
-#         scale_name = u'''Самоутверждение'''
-#     else:
-#         scale_name = u'''Self-assertion'''
-#     draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_5', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_18', scale_element_file, lang, contradiction_filters_data)
 
     y += 23
     pdf.set_xy(x, y)
@@ -154,26 +142,17 @@ self-affirmation'''
 бегство от стресса'''
     else:
         scale_name = u'''Distraction'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_17', scale_element_file, lang, participant_info)
-
-#     y += 15
-#     if lang == 'ru':
-#         scale_name = u'''Бегство от стрессовой
-# ситуации'''
-#         draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_7', scale_element_file, lang, participant_info)
-#     else:
-#         scale_name = u'''Escape'''
-#         draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_7', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_17', scale_element_file, lang, contradiction_filters_data)
 
     y += 15
     if lang == 'ru':
         scale_name = u'''Антиципирующее
 избегание'''
-        draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_8', scale_element_file, lang, participant_info)
+        draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_8', scale_element_file, lang, contradiction_filters_data)
     else:
         scale_name = u'''Avoidance'''
         draw_full_scale(pdf, scale_name, x, y + 12, y + 12 - 2, json_section, '2_8',
-                        scale_element_file, lang, participant_info)
+                        scale_element_file, lang, contradiction_filters_data)
 
     y += 15
     if lang == 'ru':
@@ -182,7 +161,7 @@ self-affirmation'''
     else:
         scale_name = u'''Need for
 Social Support'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_10', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_10', scale_element_file, lang, contradiction_filters_data)
 
     y += 23
     pdf.set_xy(x, y)
@@ -214,7 +193,7 @@ Social Support'''
 и жалость к себе'''
     else:
         scale_name = u'''Self-pity'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_19', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_19', scale_element_file, lang, contradiction_filters_data)
 
     y += 15
     if lang == 'ru':
@@ -223,7 +202,7 @@ Social Support'''
     else:
         scale_name = u'''Social
 withdrawal'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_12', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_12', scale_element_file, lang, contradiction_filters_data)
 
     # y += 15
     # if lang == 'ru':
@@ -236,24 +215,24 @@ withdrawal'''
     if lang == 'ru':
         scale_name = u'''«Заезженная
 пластинка»'''
-        draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_14', scale_element_file, lang, participant_info)
+        draw_full_scale(pdf, scale_name, x, y+12, y+12-2, json_section, '2_14', scale_element_file, lang, contradiction_filters_data)
     else:
         scale_name = u'''Rumination'''
-        draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_14', scale_element_file, lang, participant_info)
+        draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_14', scale_element_file, lang, contradiction_filters_data)
 
     y += 15
     if lang == 'ru':
         scale_name = u'''Самооправдание'''
     else:
         scale_name = u'''Denial of guilt'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_15', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_15', scale_element_file, lang, contradiction_filters_data)
 
     y += 15
     if lang == 'ru':
         scale_name = u'''Агрессия'''
     else:
         scale_name = u'''Aggression'''
-    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_16', scale_element_file, lang, participant_info)
+    draw_full_scale(pdf, scale_name, x, y+12, y+12, json_section, '2_16', scale_element_file, lang, contradiction_filters_data)
 
     insert_page_number(pdf)
 

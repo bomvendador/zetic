@@ -1,0 +1,22 @@
+<tr>
+    <td style="padding-left: 0">
+        <select class="form-control form-select select_category" data-placeholder="Выберите шкалу">
+            <option value="" label="--Выберите шкалу--"></option>
+            {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.code }}. {{ category.name }}</option>
+            {% endfor %}
+        </select>
+    </td>
+    <td class="point_from">
+        <input type="number" min="0" max="10" class="form-control points_from">
+    </td>
+    <td>
+        <input type="number" min="0" max="10" class="form-control points_to">
+    </td>
+    <td style="text-align: center; vertical-align: middle;">
+        <div style="float: right">
+            <i class="fe fe-x delete-category-row" style="font-size: 20px; cursor: pointer"></i>
+        </div>
+    </td>
+
+</tr>

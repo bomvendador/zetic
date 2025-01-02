@@ -2,7 +2,13 @@ from pdf.extract_data import extract_categories, point_with_description
 from pdf.draw import draw_scale, insert_page_number
 
 
-def page3(pdf, answers_code_1, lang, participant_info):
+# def page3(pdf, answers_code_1, lang, participant_info):
+def page3(pages_data):
+    pdf = pages_data['pdf']
+    lang = pages_data['lang']
+    answers_code_1 = pages_data['answer_code']
+    participant_info = pages_data['participant_info']
+    contradiction_filters_data = pages_data['contradiction_filters_data']
     pdf.set_margins(top=15, left=0, right=5)
     pdf.set_auto_page_break(False)
 
@@ -76,10 +82,11 @@ def page3(pdf, answers_code_1, lang, participant_info):
         Stability, Maturity,
         Workability
         '''
+    category_code = '1_1'
     # points_with_description = extract_categories(answers_code_1, '1_1', lang, participant_info)
-    points_with_description = point_with_description(answers_code_1, '1_1', lang)
+    points_with_description = point_with_description(answers_code_1, category_code, lang)
     # points_with_description = extract_categories(answers_code_1, 'Шкала C', lang)
-    draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+    draw_scale_page3(pdf, x, y, category_code, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'], contradiction_filters_data)
     print(points_with_description)
     y += 17
     if lang == 'ru':
@@ -106,12 +113,13 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Self-blaming, Anxiety,
     Impressionability
         '''
+    category_code = '1_2'
     # points_with_description = extract_categories(answers_code_1, '1_2', lang, participant_info)
-    points_with_description = point_with_description(answers_code_1, '1_2', lang)
+    points_with_description = point_with_description(answers_code_1, category_code, lang)
 
     # points_with_description = extract_categories(answers_code_1, 'Шкала O', lang)
     if points_with_description:
-        draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+        draw_scale_page3(pdf, x, y, category_code, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'], contradiction_filters_data)
     # print(points_with_description)
 
     y += 17
@@ -142,11 +150,12 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Tension, Overthought,
     High drive, Irritability
         '''
+    category_code = '1_3'
     # points_with_description = extract_categories(answers_code_1, '1_3', lang, participant_info)
-    points_with_description = point_with_description(answers_code_1, '1_3', lang)
+    points_with_description = point_with_description(answers_code_1, category_code, lang)
     # points_with_description = extract_categories(answers_code_1, 'Шкала Q4', lang, participant_info)
     if points_with_description:
-        draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+        draw_scale_page3(pdf, x, y, category_code, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'], contradiction_filters_data)
 
     pdf.set_font("RalewayLight", "", 9)
     vert_text_y = 117 + 5
@@ -186,10 +195,11 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Carelessness, Enthusiasm,
     Expressiveness
         '''
+    category_code = '1_4'
     # points_with_description = extract_categories(answers_code_1, '1_4', lang, participant_info)
-    points_with_description = point_with_description(answers_code_1, '1_4', lang)
+    points_with_description = point_with_description(answers_code_1, category_code, lang)
     if points_with_description:
-        draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+        draw_scale_page3(pdf, x, y, category_code, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'], contradiction_filters_data)
 
     y += 17
     if lang == 'ru':
@@ -218,10 +228,11 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Social awareness,
     Influence, Cunning
         '''
+    category_code = '1_5'
     # points_with_description = extract_categories(answers_code_1, '1_5', lang, participant_info)
-    points_with_description = point_with_description(answers_code_1, '1_5', lang)
+    points_with_description = point_with_description(answers_code_1, category_code, lang)
     if points_with_description:
-        draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+        draw_scale_page3(pdf, x, y, category_code, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'], contradiction_filters_data)
 
     y += 17
     if lang == 'ru':
@@ -249,10 +260,11 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Tender-mind, Empathy,
     Intuitiveness
         '''
+    category_code = '1_6'
     # points_with_description = extract_categories(answers_code_1, '1_6', lang, participant_info)
-    points_with_description = point_with_description(answers_code_1, '1_6', lang)
+    points_with_description = point_with_description(answers_code_1, category_code, lang)
     if points_with_description:
-        draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+        draw_scale_page3(pdf, x, y, category_code, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'], contradiction_filters_data)
 
     y += 17
     if lang == 'ru':
@@ -281,10 +293,11 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Sociability, Warmth,
     Kindness, Openness
         '''
+    category_code = '1_7'
     # points_with_description = extract_categories(answers_code_1, '1_7', lang, participant_info)
-    points_with_description = point_with_description(answers_code_1, '1_7', lang)
+    points_with_description = point_with_description(answers_code_1, category_code, lang)
     if points_with_description:
-        draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+        draw_scale_page3(pdf, x, y, category_code, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'], contradiction_filters_data)
 
     pdf.set_font("RalewayLight", "", 9)
     vert_text_y = 185 + 5
@@ -324,10 +337,11 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Abstracteness, Imagination,
     Idea-oriention
         '''
+    category_code = '1_9'
     # points_with_description = extract_categories(answers_code_1, '1_8', lang, participant_info)
-    points_with_description = point_with_description(answers_code_1, '1_8', lang)
+    points_with_description = point_with_description(answers_code_1, category_code, lang)
     if points_with_description:
-        draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+        draw_scale_page3(pdf, x, y, category_code, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'], contradiction_filters_data)
 
     y += 17
     if lang == 'ru':
@@ -356,10 +370,11 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Independence,
     Resourcefulness
         '''
+    category_code = '1_9'
     # points_with_description = extract_categories(answers_code_1, '1_9', lang, participant_info)
-    points_with_description = point_with_description(answers_code_1, '1_9', lang)
+    points_with_description = point_with_description(answers_code_1, category_code, lang)
     if points_with_description:
-        draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+        draw_scale_page3(pdf, x, y, category_code, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'], contradiction_filters_data)
 
     y += 17
     if lang == 'ru':
@@ -387,10 +402,11 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Perseverance, Conformity
     Discipline, Obligation
         '''
+    category_code = '1_10'
     # points_with_description = extract_categories(answers_code_1, '1_10', lang, participant_info)
-    points_with_description = point_with_description(answers_code_1, '1_10', lang)
+    points_with_description = point_with_description(answers_code_1, category_code, lang)
     if points_with_description:
-        draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+        draw_scale_page3(pdf, x, y, category_code, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'], contradiction_filters_data)
 
     y += 17
     if lang == 'ru':
@@ -419,10 +435,11 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Self control
     Strong will, Accuracy
         '''
+    category_code = '1_11'
     # points_with_description = extract_categories(answers_code_1, '1_11', lang, participant_info)
-    points_with_description = point_with_description(answers_code_1, '1_11', lang)
+    points_with_description = point_with_description(answers_code_1, category_code, lang)
     if points_with_description:
-        draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+        draw_scale_page3(pdf, x, y, category_code, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'], contradiction_filters_data)
 
     pdf.set_font("RalewayLight", "", 9)
     vert_text_y = 252 + 5
@@ -463,10 +480,11 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Information analysis, Criticality
     Work optimization
         '''
+    category_code = '1_13'
     # points_with_description = extract_categories(answers_code_1, '1_12', lang, participant_info)
-    points_with_description = point_with_description(answers_code_1, '1_12', lang)
+    points_with_description = point_with_description(answers_code_1, category_code, lang)
     if points_with_description:
-        draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+        draw_scale_page3(pdf, x, y, category_code, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'], contradiction_filters_data)
 
     y += 17
     if lang == 'ru':
@@ -495,10 +513,12 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Suspicion
     Caution
         '''
+
+    category_code = '1_13'
     # points_with_description = extract_categories(answers_code_1, '1_13', lang, participant_info)
-    points_with_description = point_with_description(answers_code_1, '1_13', lang)
+    points_with_description = point_with_description(answers_code_1, category_code, lang)
     if points_with_description:
-        draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+        draw_scale_page3(pdf, x, y, category_code, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'], contradiction_filters_data)
 
     y += 17
     if lang == 'ru':
@@ -525,9 +545,10 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Adventurism
         '''
     # points_with_description = extract_categories(answers_code_1, '1_14', lang, participant_info)
-    points_with_description = point_with_description(answers_code_1, '1_14', lang)
+    category_code = '1_14'
+    points_with_description = point_with_description(answers_code_1, category_code, lang)
     if points_with_description:
-        draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+        draw_scale_page3(pdf, x, y, category_code, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'], contradiction_filters_data)
 
     y += 17
     if lang == 'ru':
@@ -556,15 +577,17 @@ def page3(pdf, answers_code_1, lang, participant_info):
     Assertiveness, Dominance
     Self-confidence
         '''
+
+    category_code = '1_15'
     # points_with_description = extract_categories(answers_code_1, '1_15', lang, participant_info)
-    points_with_description = point_with_description(answers_code_1, '1_15', lang)
+    points_with_description = point_with_description(answers_code_1, category_code, lang)
     if points_with_description:
-        draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'])
+        draw_scale_page3(pdf, x, y, category_code, scale_name, scale_legend_left, scale_legend_right, points_with_description['points'], points_with_description['point_description'], contradiction_filters_data)
 
     insert_page_number(pdf)
 
 
-def draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_right, points, points_description):
+def draw_scale_page3(pdf, x, y, category_code, scale_name, scale_legend_left, scale_legend_right, points, points_description, contradiction_filters_data):
     pdf.set_xy(x, y)
     pdf.set_font("RalewayLight", "", 9)
     pdf.multi_cell(0, 4, scale_name)
@@ -579,9 +602,16 @@ def draw_scale_page3(pdf, x, y, scale_name, scale_legend_left, scale_legend_righ
     pdf.set_font("RalewayLight", "", 6)
     pdf.multi_cell(0, 3, scale_legend_left)
 
-    draw_scale(pdf, x+3, y-7, 70, 10, points, 'media/images/kettel_page3.png')
+    border_red_color = False
+    for contradiction_filter in contradiction_filters_data:
+        for contradiction_category in contradiction_filter:
+            if contradiction_category == category_code:
+                border_red_color = True
+    draw_scale(pdf, x+3, y-7, 70, 10, points, 'media/images/kettel_page3.png', border_red_color)
 
     x += 24
     pdf.set_xy(x, y)
     pdf.set_font("RalewayLight", "", 6)
     pdf.multi_cell(50, 3, scale_legend_right, align='R')
+
+
