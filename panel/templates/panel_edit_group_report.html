@@ -289,20 +289,22 @@
                                                                 <th class="wd-15p border-bottom-0 table-header">ФИО</th>
                                                                 <th class="wd-15p border-bottom-0 table-header">email
                                                                 </th>
+                                                                <th class="wd-15p border-bottom-0 table-header">
+                                                                    Автораспределение
+                                                                </th>
+                                                                <th class="wd-15p border-bottom-0 table-header">
+                                                                    Распределение
+                                                                </th>
+
                                                                 <th class="wd-15p border-bottom-0 table-header">Роль
                                                                 </th>
                                                                 <th class="wd-15p border-bottom-0 table-header">
                                                                     Должность
                                                                 </th>
                                                                 <th class="wd-15p border-bottom-0 table-header">
-                                                                    Автораспределение
-                                                                </th>
-                                                                <th class="wd-15p border-bottom-0 table-header">
                                                                     Личный отчет
                                                                 </th>
-                                                                <th class="wd-15p border-bottom-0 table-header">
-                                                                    Распределение
-                                                                </th>
+
                                                                 <th class="wd-15p border-bottom-0 table-header">
                                                                     Номер в отчете
                                                                 </th>
@@ -316,6 +318,7 @@
                                                             {% for report in group_reports %}
                                                                 <tr class="table-row-undistributed-participant" style=""
                                                                     data-participant-number="
+
                                                                             {% if type == 'edit' %}{{ report.report.participant_number }}{% endif %}"
                                                                     data-employee-id="{{ report.participant_data.employee_id }}"
                                                                     data-participant-id="{{ report.participant_data.participant_id }}">
@@ -347,10 +350,6 @@
                                                                         style="vertical-align: middle">{{ report.participant_data.fio }}</td>
                                                                     <td class="email"
                                                                         style="vertical-align: middle">{{ report.participant_data.email }}</td>
-                                                                    <td class="role_name"
-                                                                        style="vertical-align: middle">{{ report.participant_data.role_name }}</td>
-                                                                    <td class="position"
-                                                                        style="vertical-align: middle">{{ report.participant_data.position }}</td>
 
                                                                     <td style="vertical-align: middle">
                                                                         {% if report.participant_data.participant_squares %}
@@ -367,15 +366,6 @@
                                                                         {% endif %}
 
                                                                     </td>
-                                                                    <td style="vertical-align: middle">
-                                                                        {% for individual_report_file in report.report.individual_reports_files %}
-                                                                            {% if individual_report_file %}
-                                                                                <a style="padding: 0!important;"
-                                                                                   class="dropdown-item"
-                                                                                   href="/panel/download_single_report/{{ individual_report_file }}">Скачать</a>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </td>
                                                                     <td>
                                                                         <select name="category"
                                                                                 class="form-control form-select category-selected"
@@ -391,6 +381,21 @@
                                                                                     - {{ square_data.square_role_name }}</option>
                                                                             {% endfor %}
                                                                         </select>
+                                                                    </td>
+
+                                                                    <td class="role_name"
+                                                                        style="vertical-align: middle">{{ report.participant_data.role_name }}</td>
+                                                                    <td class="position"
+                                                                        style="vertical-align: middle">{{ report.participant_data.position }}</td>
+
+                                                                    <td style="vertical-align: middle">
+                                                                        {% for individual_report_file in report.report.individual_reports_files %}
+                                                                            {% if individual_report_file %}
+                                                                                <a style="padding: 0!important;"
+                                                                                   class="dropdown-item"
+                                                                                   href="/panel/download_single_report/{{ individual_report_file }}">Скачать</a>
+                                                                            {% endif %}
+                                                                        {% endfor %}
                                                                     </td>
 
                                                                     <td class="participant-number"

@@ -459,6 +459,15 @@
                                                                 <th class="wd-15p border-bottom-0 table-header">ФИО</th>
                                                                 <th class="wd-15p border-bottom-0 table-header">email
                                                                 </th>
+                                                                <th class="wd-15p border-bottom-0 table-header">
+                                                                    Автораспределение
+                                                                </th>
+
+                                                                <th class="wd-15p border-bottom-0 table-header"
+                                                                    style="width: 100px">
+                                                                    Распределение
+                                                                </th>
+
                                                                 <th class="wd-15p border-bottom-0 table-header">Роль
                                                                 </th>
                                                                 <th class="wd-15p border-bottom-0 table-header">
@@ -468,14 +477,6 @@
                                                                     Личный отчет
                                                                 </th>
 
-                                                                <th class="wd-15p border-bottom-0 table-header">
-                                                                    Автораспределение
-                                                                </th>
-
-                                                                <th class="wd-15p border-bottom-0 table-header"
-                                                                    style="width: 100px">
-                                                                    Распределение
-                                                                </th>
                                                             </tr>
                                                             </thead>
                                                             <tbody id="tbody_undistributed_participants">
@@ -1308,19 +1309,6 @@
                                     html += '<td class="participant-group" style="text-align: center;vertical-align: middle;"><input class="checkbox-custom select-for-group-checkbox" style="width: 16px; height: 16px" type="checkbox" name="" value="0"></td>'
                                     html += '<td class="fio">' + participants_data[i]['fio'] + '</td>'
                                     html += '<td class="email">' + participants_data[i]['email'] + '</td>'
-                                    html += '<td class="role_name">' + participants_data[i]['role_name'] + '</td>'
-                                    html += '<td class="position">' + participants_data[i]['position'] + '</td>'
-
-                                    html += '<td>'
-                                    for (let j = 0; j < individual_reports_files.length; j++) {
-                                        if (individual_reports_files[j] !== '') {
-                                            html += '<div>'
-                                            html += `<a style="padding: 0!important;" class="dropdown-item" href="/panel/download_single_report/${individual_reports_files[j]}">Скачать</a>`
-                                            html += '</div>'
-
-                                        }
-                                    }
-                                    html += '</td>'
 
                                     html += '<td>'
                                     if (participant_squares.length > 0) {
@@ -1355,6 +1343,22 @@
 
                                     html += '</select>'
                                     html += '</td>'
+
+
+                                    html += '<td class="role_name">' + participants_data[i]['role_name'] + '</td>'
+                                    html += '<td class="position">' + participants_data[i]['position'] + '</td>'
+
+                                    html += '<td>'
+                                    for (let j = 0; j < individual_reports_files.length; j++) {
+                                        if (individual_reports_files[j] !== '') {
+                                            html += '<div>'
+                                            html += `<a style="padding: 0!important;" class="dropdown-item" href="/panel/download_single_report/${individual_reports_files[j]}">Скачать</a>`
+                                            html += '</div>'
+
+                                        }
+                                    }
+                                    html += '</td>'
+
                                     html += '</tr>'
 
 
