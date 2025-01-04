@@ -278,7 +278,16 @@
                                                     {% endif %}
 
                                                 </td>
-                                                <td>{{ participant.answered_questions_qnt }}/{{ participant.total_questions_qnt }}</td>
+                                                <td>
+                                                    {% if cur_userprofile.role.name != 'Партнер' and cur_userprofile.role.name != 'Админ заказчика' %}
+                                                    <div>
+                                                        {{ participant.answered_questions_qnt }}/{{ participant.total_questions_qnt }}
+                                                    </div>
+                                                    {% endif %}
+                                                    <div>
+                                                        {{ participant.question_answered_percentage }}
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     {% for participant_individual_option in participant_individual_report_allowed_options %}
                                                         {% if participant_individual_option.participant == participant %}

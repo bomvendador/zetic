@@ -24,6 +24,9 @@ def companies_studies_list(request):
 
     cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
     studies_arr = []
+    if cur_user_role_name == 'Админ заказчика':
+        employee = Employee.objects.get(user=request.user)
+        companies = Company.objects.filter(id=employee.company.id)
     if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
         companies = Company.objects.filter(created_by=request.user)
 
@@ -69,6 +72,10 @@ def companies_studies_list(request):
 def add_study(request):
     context = info_common(request)
     cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
+    if cur_user_role_name == 'Админ заказчика':
+        employee = Employee.objects.get(user=request.user)
+        companies = Company.objects.filter(id=employee.company.id)
+        research_templates = ResearchTemplate.objects.all()
 
     if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
         companies = Company.objects.filter(created_by=request.user)

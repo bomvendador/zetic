@@ -88,10 +88,8 @@
                        href="javascript:void(0)"></a>
                     <!-- sidebar-toggle-->
                     <a class="logo-horizontal ">
-                        {#                            <img src="../assets/images/brand/logo.png" class="header-brand-img desktop-logo" alt="logo">#}
                         <img src="{% static 'images/zetic_logo.png' %}" class="header-brand-img desktop-logo"
                              alt="logo">
-                        {#                            <img src="../assets/images/brand/logo-3.png" class="header-brand-img light-logo1"#}
                         <img src="{% static 'images/zetic_logo.png' %}" class="header-brand-img light-logo1"
                              alt="logo" style="height: 40px">
                     </a>
@@ -288,7 +286,7 @@
                             </li>
                         {% endif %}
 
-                        {% if cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Суперадмин' or cur_userprofile.role.name == 'Менеджер'  or cur_userprofile.role.name == 'Партнер' %}
+                        {% if cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Суперадмин' or cur_userprofile.role.name == 'Менеджер'  or cur_userprofile.role.name == 'Партнер'   or cur_userprofile.role.name == 'Админ заказчика' %}
                             <li class="sub-category">
                                 <h3>Опросники/Отчеты</h3>
                             </li>

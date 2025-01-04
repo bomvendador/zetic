@@ -318,7 +318,7 @@ def category_data(code_prefix, questionnaire_id, employee_id):
     report_by_categories_exists = False
     for category in categories:
         code2 = category.code.split('_')[1]
-        if not int(code2) == 100:
+        if int(code2) != 100:
             report_by_categories_inst = ReportDataByCategories.objects.filter(Q(category_code=category.code) & Q(report__participant__employee_id=employee_id))
             if report_by_categories_inst.exists():
                 points = report_by_categories_inst.latest('created_at').t_points
