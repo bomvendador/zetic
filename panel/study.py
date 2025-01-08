@@ -141,6 +141,7 @@ def get_company_studies(request):
                 'id': study.id,
                 'company_name': company.name,
                 'research_name': research_name,
+                'created_at': timezone.localtime(study.created_at).strftime("%d.%m.%Y %H:%M:%S")
             })
             # studies_db_qnt = Study.objects.filter(public_code=study['public_code']).count()
             # studies_db_qnt = studies.count()

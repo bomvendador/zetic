@@ -157,16 +157,17 @@ expand_menu_item('#menu_study_list')
                         let data_json = data['data'];
                         let name = ''
                         let html = ''
-                        for(let i=0; i < data_json.length; i++){
-                            if(data_json[i]['name'] === 'null'){
+                        for(const element of data_json) {
+                            if (element['name'] === 'null') {
                                 name = ''
-                            }else {
-                                name = data_json[i]['name']
+                            } else {
+                                name = element['name']
                             }
-                            html += '<tr class="" id=study_id_' + data_json[i]['id'] + '>'
-                            html += '<td>' + data_json[i]['name'] + '</td>'
-                            html += '<td>' + data_json[i]['company_name'] + '</td>'
-                            html += '<td>' + data_json[i]['research_name'] + '</td>'
+                            html += '<tr class="" id=study_id_' + element['id'] + '>'
+                            html += '<td>' + element['name'] + '</td>'
+                            html += '<td>' + element['created_at'] + '</td>'
+                            html += '<td>' + element['company_name'] + '</td>'
+                            html += '<td>' + element['research_name'] + '</td>'
                             html += '<td>'
                             html += '<div style="text-align: center;">'
                             html += '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>'
