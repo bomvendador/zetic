@@ -14,6 +14,8 @@ from .views import info_common
 from api.outcoming import Attributes, sync_add_employee
 from .custom_funcs import update_attributes
 
+from panel.constants import CONSTANT_USER_ROLES, CONSTANT_SQUARE_NAMES
+
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def get_company_projects(request):
@@ -104,10 +106,13 @@ def save_edited_project(request):
 def projects_list(request):
     context = info_common(request)
     cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
-    if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
-        companies_inst = Company.objects.filter(created_by=request.user)
-    else:
-        companies_inst = Company.objects.all()
+    match cur_user_role_name:
+        case role if role == CONSTANT_USER_ROLES['MANAGER'] or cur_user_role_name == CONSTANT_USER_ROLES['PARTNER']:
+            companies_inst = Company.objects.filter(created_by=request.user)
+        case role if role == CONSTANT_USER_ROLES['ADMIN'] or cur_user_role_name == CONSTANT_USER_ROLES['SUPER_ADMIN']:
+            companies_inst = Company.objects.all()
+        case role if role == CONSTANT_USER_ROLES['CLIENT_ADMIN']:
+            companies_inst = Company.objects.filter(id=Employee.objects.get(user=request.user).company.id)
     companies = []
     for company in companies_inst:
         projects = Project.objects.filter(company=company)
@@ -117,11 +122,6 @@ def projects_list(request):
                 'id': company.id,
                 'active': company.active,
             })
-
-    # if cur_user_role_name == 'Менеджер':
-    #     companies = Company.objects.filter(created_by=request.user)
-    # if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
-    #     companies = Company.objects.all()
     context.update(
         {
             'companies': companies,
@@ -135,11 +135,20 @@ def projects_list(request):
 def add_new_project(request):
     context = info_common(request)
     cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
-    if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
-        companies = Company.objects.filter(created_by=request.user)
+    match cur_user_role_name:
+        case role if role == CONSTANT_USER_ROLES['MANAGER'] or cur_user_role_name == CONSTANT_USER_ROLES['PARTNER']:
+            companies = Company.objects.filter(created_by=request.user)
+        case role if role == CONSTANT_USER_ROLES['ADMIN'] or cur_user_role_name == CONSTANT_USER_ROLES['SUPER_ADMIN']:
+            companies = Company.objects.all()
+        case role if role == CONSTANT_USER_ROLES['CLIENT_ADMIN']:
+            companies = Company.objects.filter(id=Employee.objects.get(user=request.user).company.id)
 
-    if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
-        companies = Company.objects.all().order_by('name')
+
+    # if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
+    #     companies = Company.objects.filter(created_by=request.user)
+    #
+    # if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
+    #     companies = Company.objects.all().order_by('name')
     companies_for_projects = []
     for company in companies:
         studies = Study.objects.filter(company=company)

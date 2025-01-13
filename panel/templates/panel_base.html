@@ -240,6 +240,10 @@
                                     </li>
                                 </ul>
                             </li>
+                        {% endif %}
+
+                        {% if cur_userprofile.role.name == CONSTANT_USER_ROLES.ADMIN or cur_userprofile.role.name == CONSTANT_USER_ROLES.SUPER_ADMIN or cur_userprofile.role.name == CONSTANT_USER_ROLES.MANAGER or cur_userprofile.role.name == CONSTANT_USER_ROLES.PARTNER or cur_userprofile.role.name == CONSTANT_USER_ROLES.CLIENT_ADMIN %}
+
                             <li class="slide">
                                 <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
                                     <i class="side-menu__icon fe fe-folder"></i>
@@ -313,13 +317,11 @@
                                         class="side-menu__label">Командные отчеты</span><i
                                         class="angle fe fe-chevron-right"></i></a>
                                 <ul class="slide-menu">
-                                    {% if not cur_userprofile.role.name == 'Админ заказчика' %}
-                                        <li>
-                                            <div class="slide-item cursor-pointer menu_item" id="menu_distribution">
-                                                Создание отчета
-                                            </div>
-                                        </li>
-                                    {% endif %}
+                                    <li>
+                                        <div class="slide-item cursor-pointer menu_item" id="menu_distribution">
+                                            Создание отчета
+                                        </div>
+                                    </li>
                                     <li>
                                         <div class="slide-item cursor-pointer menu_item" id="menu_group_reports_list">
                                             Список отчетов
@@ -352,27 +354,28 @@
 
                             </ul>
                         </li>
-                        <li class="slide">
-                            <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)"><i
-                                    class="side-menu__icon fe fe-file-text"></i><span
-                                    class="side-menu__label">Анкеты респондентов</span><i
-                                    class="angle fe fe-chevron-right"></i></a>
-                            <ul class="slide-menu">
-                                <li class="side-menu-label1"><a href="javascript:void(0)">Apps</a></li>
-                                <li>
-                                    <div class="slide-item cursor-pointer menu_item" id="menu_consultant_form_list">
-                                        Список анкет
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="slide-item cursor-pointer menu_item"
-                                         id="menu_consultant_form_add"> Добавить
-                                    </div>
-                                </li>
+                        {% if not cur_userprofile.role.name == CONSTANT_USER_ROLES.CLIENT_ADMIN %}
+                            <li class="slide">
+                                <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)"><i
+                                        class="side-menu__icon fe fe-file-text"></i><span
+                                        class="side-menu__label">Анкеты респондентов</span><i
+                                        class="angle fe fe-chevron-right"></i></a>
+                                <ul class="slide-menu">
+                                    <li class="side-menu-label1"><a href="javascript:void(0)"></a></li>
+                                    <li>
+                                        <div class="slide-item cursor-pointer menu_item" id="menu_consultant_form_list">
+                                            Список анкет
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="slide-item cursor-pointer menu_item"
+                                             id="menu_consultant_form_add"> Добавить
+                                        </div>
+                                    </li>
 
-                            </ul>
-                        </li>
-
+                                </ul>
+                            </li>
+                        {% endif %}
                         {% if cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Суперадмин' %}
                             <li class="sub-category">
                                 <h3>ZETIC</h3>
@@ -524,9 +527,10 @@
         <!--app-content open-->
         <div class="main-content app-content mt-0">
             {% if tech_works %}
-            <div class="alert alert-danger" role="alert">
-                Включен режим технических работ! <b>Разрешен только просмотр информации без её изменения/удаления!</b>
-            </div>
+                <div class="alert alert-danger" role="alert">
+                    Включен режим технических работ! <b>Разрешен только просмотр информации без её
+                    изменения/удаления!</b>
+                </div>
             {% endif %}
 
 

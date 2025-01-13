@@ -64,6 +64,7 @@ def info_common(request):
         'cur_userprofile': userprofile,
         'timestamp': time.time(),
         'tech_works': tech_works_mode,
+        'CONSTANT_USER_ROLES': CONSTANT_USER_ROLES
     }
     if userprofile.role.name == CONSTANT_USER_ROLES['CLIENT_ADMIN']:
 
@@ -248,7 +249,7 @@ def home(request):
             })
 
         context.update({
-            'stats': stats
+            'stats': stats,
         })
     return render(request, 'panel_home.html', context)
 
@@ -264,11 +265,22 @@ def team_distribution(request):
     context = info_common(request)
     cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
     response = []
-    if cur_user_role_name == CONSTANT_USER_ROLES['MANAGER'] or cur_user_role_name == CONSTANT_USER_ROLES['PARTNER']:
-        companies = Company.objects.filter(created_by=request.user)
+    match cur_user_role_name:
+        case role if role == CONSTANT_USER_ROLES['MANAGER'] or cur_user_role_name == CONSTANT_USER_ROLES['PARTNER']:
+            companies = Company.objects.filter(created_by=request.user)
+        case role if role == CONSTANT_USER_ROLES['ADMIN'] or cur_user_role_name == CONSTANT_USER_ROLES['SUPER_ADMIN']:
+            companies = Company.objects.all()
+        case role if role == CONSTANT_USER_ROLES['CLIENT_ADMIN']:
+            companies = Company.objects.filter(id=Employee.objects.get(user=request.user).company.id)
+        #
+        # case _:
+        #     employees_inst = Employee.objects.filter(Q(email=email))
 
-    if cur_user_role_name == CONSTANT_USER_ROLES['ADMIN'] or cur_user_role_name == CONSTANT_USER_ROLES['SUPER_ADMIN']:
-        companies = Company.objects.all()
+    # if cur_user_role_name == CONSTANT_USER_ROLES['MANAGER'] or cur_user_role_name == CONSTANT_USER_ROLES['PARTNER']:
+    #     companies = Company.objects.filter(created_by=request.user)
+    #
+    # if cur_user_role_name == CONSTANT_USER_ROLES['ADMIN'] or cur_user_role_name == CONSTANT_USER_ROLES['SUPER_ADMIN']:
+    #     companies = Company.objects.all()
     for company in companies:
         projects = Project.objects.filter(company=company)
         if projects.exists():

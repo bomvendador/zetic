@@ -19,6 +19,8 @@ from django.template.loader import render_to_string
 import operator
 from functools import reduce
 
+from .constants import CONSTANT_USER_ROLES
+
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def search_employees(request):
@@ -55,30 +57,59 @@ def search_for_employees(request):
         email = json_data['email']
         fio_split = json_data['fio'].strip().split(' ')
         employee_role_name = UserProfile.objects.get(user=request.user).role.name
-        if not fio == '' and not email == '':
-            if employee_role_name == 'Партнер':
-                # employees_inst = Employee.objects.filter(Q(name=fio) & Q(email=email) & Q(created_by=request.user))
-                employees_inst = Employee.objects.filter(reduce(operator.and_, (Q(name__contains=x) for x in fio_split))
-                                                         & Q(created_by=request.user)
-                                                         & Q(email=email))
-            else:
-                # employees_inst = Employee.objects.filter(Q(name=fio) & Q(email=email))
-                employees_inst = Employee.objects.filter(reduce(operator.and_, (Q(name__contains=x) for x in fio_split))
-                                                         & Q(email=email))
+        employee = Employee.objects.get(user=request.user)
+        if fio != '' and email != '':
+            match employee_role_name:
+                case role if role == CONSTANT_USER_ROLES['PARTNER']:
+                    employees_inst = Employee.objects.filter(reduce(operator.and_, (Q(name__contains=x) for x in fio_split))
+                                                             & Q(created_by=request.user)
+                                                             & Q(email=email))
+                case role if role == CONSTANT_USER_ROLES['CLIENT_ADMIN']:
+                    employees_inst = Employee.objects.filter(reduce(operator.and_, (Q(name__contains=x) for x in fio_split))
+                                                             & Q(company=employee.company)
+                                                             & Q(email=email))
 
-        elif not fio == '':
-            if employee_role_name == 'Партнер':
-                # employees_inst = Employee.objects.filter(Q(name=fio) & Q(created_by=request.user))
-                employees_inst = Employee.objects.filter(reduce(operator.and_, (Q(name__contains=x) for x in fio_split))
-                                                         & Q(created_by=request.user))
-            else:
-                # employees_inst = Employee.objects.filter(Q(name=fio))
-                employees_inst = Employee.objects.filter(reduce(operator.and_, (Q(name__contains=x) for x in fio_split)))
+                case _:
+                    employees_inst = Employee.objects.filter(reduce(operator.and_, (Q(name__contains=x) for x in fio_split))
+                                                             & Q(email=email))
+
+        elif fio != '':
+            match employee_role_name:
+                case role if role == CONSTANT_USER_ROLES['PARTNER']:
+                    employees_inst = Employee.objects.filter(
+                        reduce(operator.and_, (Q(name__contains=x) for x in fio_split))
+                        & Q(created_by=request.user))
+                case role if role == CONSTANT_USER_ROLES['CLIENT_ADMIN']:
+                    employees_inst = Employee.objects.filter(reduce(operator.and_, (Q(name__contains=x) for x in fio_split))
+                                                             & Q(company=employee.company))
+
+                case _:
+                    employees_inst = Employee.objects.filter(
+                        reduce(operator.and_, (Q(name__contains=x) for x in fio_split)))
+
+            # if employee_role_name == CONSTANT_USER_ROLES['PARTNER']:
+            #     # employees_inst = Employee.objects.filter(Q(name=fio) & Q(created_by=request.user))
+            #     employees_inst = Employee.objects.filter(reduce(operator.and_, (Q(name__contains=x) for x in fio_split))
+            #                                              & Q(created_by=request.user))
+            # else:
+            #     # employees_inst = Employee.objects.filter(Q(name=fio))
+            #     employees_inst = Employee.objects.filter(reduce(operator.and_, (Q(name__contains=x) for x in fio_split)))
         else:
-            if employee_role_name == 'Партнер':
-                employees_inst = Employee.objects.filter(Q(email=email) & Q(created_by=request.user))
-            else:
-                employees_inst = Employee.objects.filter(Q(email=email))
+            match employee_role_name:
+                case role if role == CONSTANT_USER_ROLES['PARTNER']:
+                    employees_inst = Employee.objects.filter(Q(email=email) & Q(created_by=request.user))
+                case role if role == CONSTANT_USER_ROLES['CLIENT_ADMIN']:
+                    employees_inst = Employee.objects.filter(reduce(operator.and_, (Q(name__contains=x) for x in fio_split))
+                                                             & Q(company=employee.company)
+                                                             & Q(email=email))
+
+                case _:
+                    employees_inst = Employee.objects.filter(Q(email=email))
+
+            # if employee_role_name == 'Партнер':
+            #     employees_inst = Employee.objects.filter(Q(email=email) & Q(created_by=request.user))
+            # else:
+            #     employees_inst = Employee.objects.filter(Q(email=email))
         data = []
         for employee in employees_inst:
             employee_data = {
