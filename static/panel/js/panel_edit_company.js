@@ -1,69 +1,138 @@
 expand_menu_item('#menu_companies_list')
 
-
-    $('.update_company_report_options_allowed_btn').on('click', function (event) {
-        let node_btn = $(this)
-
-        let output_html = '<h2 class="mb-0" style="text-align: center">Изменение индивидуальных настроек</h2>' +
-            '<br>' +
-            '<hr class="solid mt-0" style="background-color: black;">' +
-            '<h4 style="text-align: center">Изменить настройки всех существующих участников опросов?</h4>' +
-            '<hr class="solid mt-0" style="background-color: black;">' +
-            '<h5 style="text-align: center; color: red">Внимание! Настройки ВСЕХ респондентов будут изменены</h5>' +
-            '<hr class="solid mt-0" style="background-color: black;">'
-
-
-        Swal.fire({
-            html: output_html,
-            icon: 'question',
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Да',
-            cancelButtonText: 'Нет',
-            showCancelButton: true
-        }).then((result) => {
-            let change_participants_individual_report_options = false
-            if (result.value) {
-                change_participants_individual_report_options = true
-            }
-
-            btn_spinner(node_btn)
-            let options_vals = []
-            node_btn.closest('.card').find('.option-switch').each(function () {
-                // console.log(`${$(this).data("option-id")} ${$(this).prop('checked')}`)
-                options_vals.push({
-                    'type': $(this).data("type"),
-                    'id': $(this).data("option-id"),
-                    'value': $(this).prop('checked'),
+$('.self-questionnaire-link-status').on('click', function () {
+    let node = $(this)
+    let link_id = node.closest('tr').data('link-id')
+    let operation = node.data('operation')
+    let question_text = ''
+    if(operation === 'block'){
+        question_text = 'Заблокировать ссылку?'
+    }else {
+        question_text = 'Разблокировать ссылку?'
+    }
+    let output_html = '<h2 class="mb-0" style="text-align: center">Изменение доступности ссылки</h2>' +
+        '<br>' +
+        '<hr class="solid mt-0" style="background-color: black;">' +
+        '<h4 style="text-align: center">' + question_text + '</h4>' +
+        '<hr class="solid mt-0" style="background-color: black;">'
+    Swal.fire({
+        html: output_html,
+        icon: 'question',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет',
+        showCancelButton: true
+    }).then((result) => {
+        let change_participants_individual_report_options = false
+        if (result.value) {
+            change_participants_individual_report_options = true
+        }
+        show_progressbar_loader()
+        $.ajax({
+            headers: {"X-CSRFToken": token},
+            url: url_change_self_questionnaire_link_active_field,
+            type: 'POST',
+            data: JSON.stringify({
+                'link_id': link_id,
+                'operation': operation,
+            }),
+            processData: false,
+            contentType: false,
+            error: function (data) {
+                toastr.error('Ошибка', data)
+            },
+            success: function (data) {
+                hide_progressbar_loader()
+                let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
+                    '<br>' +
+                    '<hr class="solid mt-0" style="background-color: black;">' +
+                    '<h4 style="text-align: center">Данные ссылки обновлены</h4>' +
+                    '<hr class="solid mt-0" style="background-color: black;">'
+                Swal.fire({
+                    html: output_html,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ОК'
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.reload()
+                    }
                 })
-            })
-            // console.log(options_vals)
-            btn_spinner('#update_company_individual_report_options_allowed')
-
-            $.ajax({
-                headers: {"X-CSRFToken": token},
-                url: url_update_company_report_options_allowed,
-                type: 'PUT',
-                data: JSON.stringify({
-                    'options_vals': options_vals,
-                    'company_id': company_id,
-                    'change_participants_individual_report_options': change_participants_individual_report_options,
-                }),
-                processData: false,
-                contentType: false,
-                error: function (data) {
-                    toastr.error('Ошибка', data)
-                },
-                success: function (data) {
-                    btn_text(node_btn, 'Сохранить')
-                    toastr.success('Данные сохранены')
-
-                }
-            });
 
 
-        })
+            }
+        });
+
+
     })
+
+})
+
+$('.update_company_report_options_allowed_btn').on('click', function (event) {
+    let node_btn = $(this)
+
+    let output_html = '<h2 class="mb-0" style="text-align: center">Изменение индивидуальных настроек</h2>' +
+        '<br>' +
+        '<hr class="solid mt-0" style="background-color: black;">' +
+        '<h4 style="text-align: center">Изменить настройки всех существующих участников опросов?</h4>' +
+        '<hr class="solid mt-0" style="background-color: black;">' +
+        '<h5 style="text-align: center; color: red">Внимание! Настройки ВСЕХ респондентов будут изменены</h5>' +
+        '<hr class="solid mt-0" style="background-color: black;">'
+
+
+    Swal.fire({
+        html: output_html,
+        icon: 'question',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет',
+        showCancelButton: true
+    }).then((result) => {
+        let change_participants_individual_report_options = false
+        if (result.value) {
+            change_participants_individual_report_options = true
+        }
+
+        btn_spinner(node_btn)
+        let options_vals = []
+        node_btn.closest('.card').find('.option-switch').each(function () {
+            // console.log(`${$(this).data("option-id")} ${$(this).prop('checked')}`)
+            options_vals.push({
+                'type': $(this).data("type"),
+                'id': $(this).data("option-id"),
+                'value': $(this).prop('checked'),
+            })
+        })
+        // console.log(options_vals)
+        btn_spinner('#update_company_individual_report_options_allowed')
+
+        $.ajax({
+            headers: {"X-CSRFToken": token},
+            url: url_update_company_report_options_allowed,
+            type: 'PUT',
+            data: JSON.stringify({
+                'options_vals': options_vals,
+                'company_id': company_id,
+                'change_participants_individual_report_options': change_participants_individual_report_options,
+            }),
+            processData: false,
+            contentType: false,
+            error: function (data) {
+                toastr.error('Ошибка', data)
+            },
+            success: function (data) {
+                btn_text(node_btn, 'Сохранить')
+                toastr.success('Данные сохранены')
+
+            }
+        });
+
+
+    })
+})
 
 
 $('.copy-company-questionnaire-link').on('click', function (e) {

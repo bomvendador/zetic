@@ -9,7 +9,7 @@ from pdf.models import Participant, Report, Category, Section, PointDescription,
     IndividualReportPointsDescriptionFilterTextRecommendations, IndividualReportPointsDescriptionFilterCategory, \
     ConsultantCompany, ConsultantStudy, ConsultantForm, ConsultantFormEmailSentToParticipant, \
     CompanyIndividualReportAllowedOptions, CompanyGroupReportAllowedOptions, IndividualReportAllowedOptions, \
-    GroupReportAllowedOptions, StudyIndividualReportAllowedOptions, ParticipantIndividualReportAllowedOptions
+    GroupReportAllowedOptions, StudyIndividualReportAllowedOptions, ParticipantIndividualReportAllowedOptions, CompanySelfQuestionnaireLink
 from login.models import UserRole, UserProfile
 
 
@@ -72,3 +72,4 @@ admin.site.register(CompanyGroupReportAllowedOptions)
 admin.site.register(GroupReportAllowedOptions)
 admin.site.register(StudyIndividualReportAllowedOptions)
 admin.site.register(ParticipantIndividualReportAllowedOptions)
+admin.site.register(CompanySelfQuestionnaireLink)

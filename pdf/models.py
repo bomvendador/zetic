@@ -56,7 +56,7 @@ class Category(models.Model):
     created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
     section = models.ForeignKey(Section, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Секция')
     name = models.CharField(max_length=100, blank=False, null=False)
-    code = models.CharField(max_length=10, blank=True, default=None)
+    code = models.CharField(max_length=10, blank=True, default=None, null=True)
     for_validity = models.BooleanField(default=False, null=False)
 
     def __str__(self):
@@ -71,7 +71,7 @@ class CategoryQuestions(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, default=None, blank=True, null=True)
-    text = models.TextField(blank=True, verbose_name='Текст вопроса')
+    text = models.TextField(blank=True, null=True, verbose_name='Текст вопроса')
 
     def __str__(self):
         # return f'категория - {self.name}'
@@ -86,7 +86,7 @@ class QuestionAnswers(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
     question = models.ForeignKey(CategoryQuestions, on_delete=models.CASCADE, default=None, blank=True, null=True)
-    text = models.TextField(blank=True, verbose_name='Текст ответа')
+    text = models.TextField(blank=True, verbose_name='Текст ответа', null=True)
     raw_point = models.IntegerField(null=False, default=0)
     position = models.IntegerField(null=False, default=0)
 
@@ -104,8 +104,8 @@ class PointDescription(models.Model):
     created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Описание')
     value = models.IntegerField(null=False, default=0)
-    text = models.TextField(blank=True, verbose_name='Русский')
-    text_en = models.TextField(default=None, blank=True, verbose_name='Английский')
+    text = models.TextField(blank=True, verbose_name='Русский', null=True)
+    text_en = models.TextField(default=None, blank=True, verbose_name='Английский', null=True)
 
     def __str__(self):
         if self.text_en == '':
@@ -124,7 +124,7 @@ class Company(models.Model):
     name = models.CharField(max_length=150, blank=False, null=False)
     version = models.IntegerField(null=True, default=0)
     active = models.BooleanField(default=True, null=False)
-    email = models.CharField(max_length=100, blank=True, default=None)
+    email = models.CharField(max_length=100, blank=True, default=None, null=True)
     public_code = models.CharField(max_length=10, blank=False, null=False, default='')
     demo_status = models.BooleanField(default=True, null=False)
     demo_status_questionnaires_limit = models.IntegerField(null=True, default=3)
@@ -199,13 +199,14 @@ class CompanySelfQuestionnaireLink(models.Model):
     company = models.ForeignKey(Company, default=None, null=True, on_delete=models.PROTECT)
     research_template = models.ForeignKey(ResearchTemplate, default=None, null=True, on_delete=models.PROTECT)
     code = models.CharField(max_length=20, blank=False, null=False, default='')
+    active = models.BooleanField(default=True, null=False)
 
     def __str__(self):
         return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.company.name}'
 
     class Meta:
-        verbose_name_plural = 'Ссылки компаний для создания опросников'
-        verbose_name = 'Ссылка компании для создания опросников'
+        verbose_name_plural = 'Ссылки компаний для создания опросников (CompanySelfQuestionnaireLink)'
+        verbose_name = 'Ссылка компании для создания опросников (CompanySelfQuestionnaireLink)'
 
 
 class Industry(models.Model):
@@ -213,9 +214,9 @@ class Industry(models.Model):
     created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT, related_name='Создано_пользователем')
     edited_at = models.DateTimeField(auto_now=True, null=True)
     edited_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT, related_name='Изменено_пользователем')
-    name_ru = models.CharField(max_length=100, blank=True)
-    name_en = models.CharField(max_length=100, blank=True)
-    public_code = models.CharField(max_length=10, blank=True, default='')
+    name_ru = models.CharField(max_length=100, blank=True, null=True)
+    name_en = models.CharField(max_length=100, blank=True, null=True)
+    public_code = models.CharField(max_length=10, blank=True, default='', null=True)
 
     def __str__(self):
         return self.name_ru
@@ -230,9 +231,9 @@ class EmployeeRole(models.Model):
     created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT, related_name='Создано_пользователем_роль_сотрудника')
     edited_at = models.DateTimeField(auto_now=True, null=True)
     edited_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT, related_name='Изменено_пользователем_роль_сотрудника')
-    name_ru = models.CharField(max_length=100, blank=True)
-    name_en = models.CharField(max_length=100, blank=True)
-    public_code = models.CharField(max_length=10, blank=True, default='')
+    name_ru = models.CharField(max_length=100, blank=True, null=True)
+    name_en = models.CharField(max_length=100, blank=True, null=True)
+    public_code = models.CharField(max_length=10, blank=True, default='', null=True)
 
     def __str__(self):
         return self.name_ru
@@ -247,9 +248,9 @@ class EmployeeGender(models.Model):
     created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT, related_name='Создано_пользователем_пол_сотрудника')
     edited_at = models.DateTimeField(auto_now=True, null=True)
     edited_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT, related_name='Изменено_пользователем_пол_сотрудника')
-    name_ru = models.CharField(max_length=100, blank=True)
-    name_en = models.CharField(max_length=100, blank=True)
-    public_code = models.CharField(max_length=10, blank=True, default='')
+    name_ru = models.CharField(max_length=100, blank=True, null=True)
+    name_en = models.CharField(max_length=100, blank=True, null=True)
+    public_code = models.CharField(max_length=10, blank=True, default='', null=True)
 
     def __str__(self):
         return self.name_ru
@@ -262,9 +263,9 @@ class EmployeeGender(models.Model):
 class EmployeePosition(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
-    name_ru = models.CharField(max_length=100, blank=True)
-    name_en = models.CharField(max_length=100, blank=True)
-    public_code = models.CharField(max_length=10, blank=True, default='')
+    name_ru = models.CharField(max_length=100, blank=True, null=True)
+    name_en = models.CharField(max_length=100, blank=True, null=True)
+    public_code = models.CharField(max_length=10, blank=True, default='', null=True)
 
     def __str__(self):
         return self.name_ru
@@ -279,7 +280,7 @@ class Employee(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, related_name='created_by_user')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, blank=True, null=True,
                              verbose_name='Пользователь', related_name='employee_user')
-    name = models.CharField(max_length=100, blank=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
     sex = models.ForeignKey(EmployeeGender, on_delete=models.PROTECT, default=None, blank=True, null=True, verbose_name='Пол')
     birth_year = models.IntegerField(blank=True, null=True)
     email = models.CharField(max_length=100, blank=True, null=False, default=None)
@@ -335,8 +336,8 @@ class Study(models.Model):
     version = models.IntegerField(null=False, default=0)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default=None, null=True)
     research_template = models.ForeignKey(ResearchTemplate, on_delete=models.PROTECT, default=None, null=True)
-    name = models.CharField(max_length=100, blank=True)
-    public_code = models.CharField(max_length=30, blank=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    public_code = models.CharField(max_length=30, blank=True, null=True)
 
     def __str__(self):
         if self.company:
@@ -374,7 +375,7 @@ class Participant(models.Model):
     study = models.ForeignKey(Study, on_delete=models.CASCADE, default=None, null=True, blank=True)
     invitation_sent = models.BooleanField(default=False)
     invitation_sent_datetime = models.DateTimeField(blank=True, null=True, default=None)
-    invitation_code = models.TextField(default=None, blank=True)
+    invitation_code = models.TextField(default=None, blank=True, null=True)
     total_questions_qnt = models.IntegerField(default=0, null=True, blank=True)
     answered_questions_qnt = models.IntegerField(default=0, null=True, blank=True)
     current_percentage = models.IntegerField(default=0, null=True, blank=True)
@@ -461,9 +462,9 @@ class ConsultantForm(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT, default=None, blank=True, null=True, related_name='UserConsultantForm')
-    special_comments = models.TextField(default=None, blank=True, verbose_name='Специальные комментарии')
-    risks = models.TextField(default=None, blank=True, verbose_name='Риски')
-    career_track = models.TextField(default=None, blank=True, verbose_name='Карьерный трек')
+    special_comments = models.TextField(default=None, blank=True, verbose_name='Специальные комментарии', null=True)
+    risks = models.TextField(default=None, blank=True, verbose_name='Риски', null=True)
+    career_track = models.TextField(default=None, blank=True, verbose_name='Карьерный трек', null=True)
 
     def __str__(self):
         return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.user.first_name} - {self.participant.employee.name}'
@@ -476,7 +477,7 @@ class ConsultantForm(models.Model):
 class ConsultantFormResources(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
-    name = models.CharField(max_length=100, blank=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
     consultant_form = models.ForeignKey(ConsultantForm, on_delete=models.CASCADE, default=None, null=True)
 
     def __str__(self):
@@ -491,7 +492,7 @@ class ConsultantFormResourcesComments(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
     consultant_form_resource = models.ForeignKey(ConsultantFormResources, on_delete=models.CASCADE, default=None, null=True)
-    text = models.TextField(default=None, blank=True, verbose_name='Ресурс_текст_коммента')
+    text = models.TextField(default=None, blank=True, verbose_name='Ресурс_текст_коммента', null=True)
 
     def __str__(self):
         return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.consultant_form_resource.name}'
@@ -504,7 +505,7 @@ class ConsultantFormResourcesComments(models.Model):
 class ConsultantFormGrowthZone(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
-    name = models.CharField(max_length=100, blank=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
     consultant_form = models.ForeignKey(ConsultantForm, on_delete=models.CASCADE, default=None, null=True)
 
     def __str__(self):
@@ -519,7 +520,7 @@ class ConsultantFormGrowthZoneComments(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
     consultant_form_growth_zone = models.ForeignKey(ConsultantFormGrowthZone, on_delete=models.CASCADE, default=None, null=True)
-    text = models.TextField(default=None, blank=True, verbose_name='Зона роста_текст_коммента')
+    text = models.TextField(default=None, blank=True, verbose_name='Зона роста_текст_коммента', null=True)
 
     def __str__(self):
         return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.consultant_form_growth_zone.name}'
@@ -587,7 +588,7 @@ class QuestionnaireVisits(models.Model):
 class Project(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True)
-    name = models.CharField(max_length=200, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default=None, null=True, blank=True)
 
     def __str__(self):
@@ -616,7 +617,7 @@ class EmailSentToParticipant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, null=True)
-    type = models.CharField(max_length=30, blank=True, default=None)
+    type = models.CharField(max_length=30, blank=True, default=None, null=True)
 
     def __str__(self):
         return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.participant.employee.name} - {self.type}'
@@ -629,7 +630,7 @@ class EmailSentToParticipant(models.Model):
 class AgeGenderGroup(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
-    name = models.CharField(max_length=100, blank=True)
+    name = models.CharField(max_length=100, blank=True, default=None, null=True)
     birth_year_start = models.IntegerField(blank=True, null=True)
     birth_year_end = models.IntegerField(blank=True, null=True)
     employee_gender = models.ForeignKey(EmployeeGender, on_delete=models.PROTECT, default=None, null=True)
@@ -646,8 +647,8 @@ class RawToTPointsType(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
     is_default = models.BooleanField(default=False)
-    name = models.CharField(max_length=100, blank=True)
-    name_ru = models.CharField(max_length=200, blank=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    name_ru = models.CharField(max_length=200, blank=True, null=True)
     industry = models.ForeignKey(Industry, on_delete=models.PROTECT, default=None, null=True)
     employee_position = models.ForeignKey(EmployeePosition, on_delete=models.PROTECT, default=None, null=True)
     employee_role = models.ForeignKey(EmployeeRole, on_delete=models.PROTECT, default=None, null=True)
@@ -677,15 +678,15 @@ class RawToTPoints(models.Model):
 
 class Report(models.Model):
     added = models.DateTimeField(auto_now_add=True, null=True)
-    code = models.CharField(max_length=30, blank=True)
+    code = models.CharField(max_length=30, blank=True, null=True)
     lie_points = models.IntegerField(null=False, default=0)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Участник')
     file = models.FileField(upload_to='media/reportsPDF/', default=None)
-    lang = models.CharField(max_length=2, blank=True, default=None)
+    lang = models.CharField(max_length=2, blank=True, default=None, null=True)
     study = models.ForeignKey(Study, on_delete=models.CASCADE, default=None, null=True, blank=True)
-    comments = models.TextField(default=None, blank=True, verbose_name='Комментарии индивидуальный отчет')
+    comments = models.TextField(default=None, blank=True, verbose_name='Комментарии индивидуальный отчет', null=True)
     primary = models.BooleanField(default=True)
-    type = models.CharField(max_length=30, blank=True)
+    type = models.CharField(max_length=30, blank=True, null=True)
 
     def __str__(self):
         return f'[{timezone.localtime(self.added).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.participant} - {self.file.name}'
@@ -700,10 +701,10 @@ class Report(models.Model):
 
 class ReportData(models.Model):
     report = models.ForeignKey(Report, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Отчет')
-    section_name = models.CharField(max_length=50, blank=True, default=None)
-    section_code = models.CharField(max_length=2, blank=True, default=None)
-    category_name = models.CharField(max_length=100, blank=True, default=None)
-    category_code = models.CharField(max_length=5, blank=True, default=None)
+    section_name = models.CharField(max_length=50, blank=True, default=None, null=True)
+    section_code = models.CharField(max_length=2, blank=True, default=None, null=True)
+    category_name = models.CharField(max_length=100, blank=True, default=None, null=True)
+    category_code = models.CharField(max_length=5, blank=True, default=None, null=True)
     points = models.IntegerField(null=False, default=0)
 
     def __str__(self):
@@ -717,10 +718,10 @@ class ReportData(models.Model):
 class ReportDataByCategories(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=False, blank=False)
     report = models.ForeignKey(Report, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Отчет')
-    section_name = models.CharField(max_length=50, blank=True, default=None)
-    section_code = models.CharField(max_length=2, blank=True, default=None)
-    category_name = models.CharField(max_length=100, blank=True, default=None)
-    category_code = models.CharField(max_length=5, blank=True, default=None)
+    section_name = models.CharField(max_length=50, blank=True, default=None, null=True)
+    section_code = models.CharField(max_length=2, blank=True, default=None, null=True)
+    category_name = models.CharField(max_length=100, blank=True, default=None, null=True)
+    category_code = models.CharField(max_length=5, blank=True, default=None, null=True)
     t_points = models.IntegerField(null=False, default=0)
 
     def __str__(self):
@@ -734,9 +735,9 @@ class ReportDataByCategories(models.Model):
 class ReportGroup(models.Model):
     added = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     file = models.FileField(upload_to='media/reportsPDF/', default=None, max_length=254)
-    lang = models.CharField(max_length=2, blank=True, default='ru')
+    lang = models.CharField(max_length=2, blank=True, default='ru', null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Проект групповой отчет')
-    comments = models.TextField(default=None, blank=True, verbose_name='Комментарии групповой отчет')
+    comments = models.TextField(default=None, blank=True, verbose_name='Комментарии групповой отчет', null=True)
 
     def __str__(self):
         return f'[{timezone.localtime(self.added).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.company} - {self.file.name}'
@@ -750,10 +751,10 @@ class ReportGroupSquare(models.Model):
     added = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     report_group = models.ForeignKey(ReportGroup, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Отчет групповой')
     square_name = models.CharField(max_length=30, blank=False, null=False, verbose_name='Квадрат_имя')
-    square_code = models.CharField(max_length=30, blank=True, verbose_name='Квадрат_код', default=None)
+    square_code = models.CharField(max_length=30, blank=True, verbose_name='Квадрат_код', default=None, null=True)
     report = models.ForeignKey(Report, on_delete=models.CASCADE, default=None, blank=True, null=True, verbose_name='Отчет индивидуальный для группового')
-    participant_group = models.CharField(max_length=300, blank=True, verbose_name='Группа участника', default=None)
-    participant_group_color = models.CharField(max_length=20, blank=True, verbose_name='Цвет группы участника', default=None)
+    participant_group = models.CharField(max_length=300, blank=True, verbose_name='Группа участника', default=None, null=True)
+    participant_group_color = models.CharField(max_length=20, blank=True, verbose_name='Цвет группы участника', default=None, null=True)
     bold = models.BooleanField(default=False)
     participant_number = models.IntegerField(null=False, default=0)
 
@@ -797,8 +798,8 @@ class ProjectParticipants(models.Model):
 class MatrixFilter(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
-    square_code = models.CharField(max_length=30, blank=True)
-    square_name = models.CharField(max_length=200, blank=True)
+    square_code = models.CharField(max_length=30, blank=True, null=True)
+    square_name = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.square_code} - {self.square_name}'
@@ -841,8 +842,8 @@ class MatrixFilterInclusiveEmployeePosition(models.Model):
 class MatrixFilterParticipantNotDistributed(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
-    square_code = models.CharField(max_length=30, blank=True)
-    square_name = models.CharField(max_length=30, blank=True)
+    square_code = models.CharField(max_length=30, blank=True, null=True)
+    square_name = models.CharField(max_length=30, blank=True, null=True)
 
     def __str__(self):
         return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.created_by.username}'
@@ -869,7 +870,7 @@ class MatrixFilterParticipantNotDistributedEmployeePosition(models.Model):
 class IndividualReportPointsDescriptionFilter(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
-    name = models.CharField(max_length=200, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name}'
@@ -899,7 +900,7 @@ class IndividualReportPointsDescriptionFilterText(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
     filter = models.ForeignKey(IndividualReportPointsDescriptionFilter, on_delete=models.CASCADE, default=None, blank=True, null=True)
-    text = models.TextField(default=None, blank=True, verbose_name='Текст описания')
+    text = models.TextField(default=None, blank=True, verbose_name='Текст описания', null=True)
 
     def __str__(self):
         return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.filter.name}'
@@ -913,7 +914,7 @@ class IndividualReportPointsDescriptionFilterTextRecommendations(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
     filter_text = models.ForeignKey(IndividualReportPointsDescriptionFilterText, on_delete=models.CASCADE, default=None, blank=True, null=True)
-    text = models.TextField(default=None, blank=True, verbose_name='Текст рекомендации')
+    text = models.TextField(default=None, blank=True, verbose_name='Текст рекомендации', null=True)
 
     def __str__(self):
         return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id} {self.filter_text.filter.name}'
@@ -926,7 +927,7 @@ class IndividualReportPointsDescriptionFilterTextRecommendations(models.Model):
 class IndividualReportContradictionFilter(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
-    name = models.CharField(max_length=200, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name}'
@@ -955,17 +956,17 @@ class IndividualReportContradictionFilterCategory(models.Model):
 class TrafficLightReportFilter(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
-    name = models.CharField(max_length=200, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
     points_from_red = models.IntegerField(null=False, default=0)
     points_to_red = models.IntegerField(null=False, default=0)
-    circle_diagram_description_red = models.TextField(default=None, blank=True)
+    circle_diagram_description_red = models.TextField(default=None, blank=True, null=True)
     points_from_yellow = models.IntegerField(null=False, default=0)
     points_to_yellow = models.IntegerField(null=False, default=0)
-    circle_diagram_description_yellow = models.TextField(default=None, blank=True)
+    circle_diagram_description_yellow = models.TextField(default=None, blank=True, null=True)
     points_from_green = models.IntegerField(null=False, default=0)
     points_to_green = models.IntegerField(null=False, default=0)
-    circle_diagram_description_green = models.TextField(default=None, blank=True)
-    direction = models.CharField(max_length=30, blank=True)
+    circle_diagram_description_green = models.TextField(default=None, blank=True, null=True)
+    direction = models.CharField(max_length=30, blank=True, null=True)
     position = models.IntegerField(null=False, default=0)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None, blank=True, null=True)
     for_circle_diagram = models.BooleanField(default=False)
@@ -995,7 +996,7 @@ class TrafficLightReportFilterCategory(models.Model):
 class IntegralReportFilter(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
-    name = models.CharField(max_length=200, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name}'
@@ -1021,7 +1022,7 @@ class IntegralReportFilterCategory(models.Model):
 
 class CommonBooleanSettings(models.Model):
     value = models.BooleanField(default=False)
-    name = models.CharField(max_length=200, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -1034,8 +1035,8 @@ class CommonBooleanSettings(models.Model):
 class ProcessingRuns(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     run_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
-    button_id = models.CharField(max_length=200, blank=True)
-    name = models.CharField(max_length=200, blank=True)
+    button_id = models.CharField(max_length=200, blank=True, null=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.button_id} - ${self.name}'

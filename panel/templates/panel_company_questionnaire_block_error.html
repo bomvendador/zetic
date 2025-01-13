@@ -1,0 +1,119 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- META DATA -->
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Данные респондента --ZETIC--</title>
+    {% block links %}
+        <link href="{% static 'questionnaire/css/participant_data.css' %}" rel="stylesheet"/>
+        {#        <link id="style" href="{% static 'login/plugins/bootstrap/css/bootstrap.css' %}" rel="stylesheet"/>#}
+
+        <link rel="shortcut icon" type="image/x-icon" href="{% static 'login/images/brand/favicon.ico' %}"/>
+        <link href="{% static 'login/plugins/toastr/css/toastr.css' %}" rel="stylesheet"/>
+        <link href="{% static 'login/plugins/sweet-alerts2/css/sweetalert2.min.css' %}" rel="stylesheet"/>
+
+
+    {% endblock %}
+
+<style>
+
+    .card {
+        position: relative;
+        width: 100%;
+    }
+{#.card{#}
+{#    display: flex;#}
+{#    -ms-flex-direction: column;#}
+{#    flex-direction: column;#}
+{#    min-width: 0;#}
+{#    word-wrap: break-word;#}
+{#    background-color: #fff;#}
+{#    border: inherit !important;#}
+{#    background-clip: border-box;#}
+{#    border-radius: 7px;#}
+{#    box-shadow: 0 4px 25px 0 rgba(168, 180, 208, 0)#}
+{#}#}
+
+.card-header {
+    background: none;
+    padding: 0.2rem 1.5rem;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-bottom: 0;
+    background-color: transparent;
+    {#border-bottom: 1px solid ;#}
+    color: red;
+    letter-spacing: 0.2px;
+    background-color: #ffbbbb;
+}
+
+.card-title {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.card-body {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 25px;
+    margin: 0;
+    position: relative;
+    color: #595959;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+    <div>
+        <img src="{% static 'images/zetic_logo.png' %}" class="header-brand-img desktop-logo" alt="logo"
+             style="height: 5em">
+
+    </div>
+    <hr>
+
+    <div class="col-md-4 col-xl-4" style="border: #cbcbcb solid 0.2px; margin-top: 1em">
+        <div class="card">
+            <div class="card-header br-te-3 br-ts-3">
+                <h3 class="card-title text-white">Ссылка заблокировна</h3>
+            </div>
+            <div class="card-body">
+                <b>Уважаемый участник опроса,</b>
+                <div style="margin-top: 1em">
+                    Ссылка Вашей компании заблокирована. Обратитесь с администратору.
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+</body>
+
+
+<script src="{% static 'login/js/jquery.min.js' %}"></script>
+<script src="{% static 'login/plugins/toastr/js/toastr.js' %}"></script>
+<script src="{% static 'panel/js/panel_company_questionnaire_participant_data.js' %}?{{ timestamp }}"></script>
+<script src="{% static 'login/plugins/sweet-alerts2/js/sweetalert2.min.js' %}"></script>
+
+<script>
+
+    {#let ff= "{% url 'participant_data' %}"#}
+    let url_create_self_questionnaire = "{% url 'create_self_questionnaire' %}"
+    let csrf_token = '{{ csrf_token }}';
+    let code = '{{ code }}';
+    let company_id = '{{ company.id }}';
+
+</script>
+
+</html>

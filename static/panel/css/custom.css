@@ -76,3 +76,14 @@
     background-color: var(--primary-bg-color) !important;
     border: 1px solid var(--primary-bg-color) !important;
 }
+
+.vertical-align-outer {
+    position: relative;
+}
+
+.vertical-align-inner {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+

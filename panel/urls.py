@@ -65,6 +65,7 @@ urlpatterns = [
     path('company_questionnaire/<str:code>', company.company_questionnaire, name='company_questionnaire'),
     path('appoint_company_admin', company.appoint_company_admin, name='appoint_company_admin'),
     path('create_self_questionnaire', company.create_self_questionnaire, name='create_self_questionnaire'),
+    path('change_self_questionnaire_link_active_field', company.change_self_questionnaire_link_active_field, name='change_self_questionnaire_link_active_field'),
     path('add_report_made_notification_receiver', company.add_report_made_notification_receiver, name='add_report_made_notification_receiver'),
     path('delete_report_made_notification_receiver', company.delete_report_made_notification_receiver, name='delete_report_made_notification_receiver'),
     path('update_company_report_options_allowed', company.update_company_report_options_allowed, name='update_company_report_options_allowed'),

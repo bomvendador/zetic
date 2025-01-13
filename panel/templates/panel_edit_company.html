@@ -216,6 +216,7 @@
                                 <table class="table text-nowrap text-md-nowrap mb-0">
                                     <thead>
                                     <tr>
+                                        <th style="width: 2%"></th>
                                         <th>Ссылка</th>
                                         <th>Шаблон</th>
                                         <th></th>
@@ -226,6 +227,30 @@
                                         {% for link in links %}
                                             <tr data-link-id="{{ link.id }}">
                                                 {#                                                <td><input type="text" class="form-control" value="{% url 'company_questionnaire' link.code %}" disabled/></td>#}
+
+                                                <td class="vertical-align-outer">
+                                                    {% if link.active == True %}
+                                                        <span class="self-questionnaire-link-status vertical-align-inner"
+                                                              data-operation="block">
+                                                            <i class="fe fe-unlock"
+                                                               style="color: #48be00; cursor: pointer;"
+                                                               data-bs-toggle="tooltip"
+                                                               title=""
+                                                               data-bs-original-title="Ссылка активна. Нажмите для блокировки"></i>
+                                                        </span>
+                                                    {% else %}
+                                                        <span class="self-questionnaire-link-status vertical-align-inner"
+                                                              data-operation="unblock">
+                                                            <i class="fe fe-lock"
+                                                               style="color: red; cursor: pointer;"
+                                                               data-bs-toggle="tooltip"
+                                                               data-bs-original-title="Ссылка заблокирована. Нажмите для разблокировки"
+                                                               aria-label="fe fe-lock"></i>
+                                                        </span>
+                                                    {% endif %}
+                                                </td>
+
+
                                                 <td>
                                                     <div class="input-group">
                                                         <a type="text" class="form-control" style="padding: 5px 10px"
@@ -464,8 +489,10 @@
                                         <div class="form-switch">
                                             <input class="form-check-input option-switch" type="checkbox" role="switch"
                                                    id="company_active"
-                                                   {% if option.value %}checked="checked"{% endif %} data-option-id="{{ option.id }}" data-type="individual">
-                                            <label class="form-check-label" for="company_active">{{ option.option.name }}</label>
+                                                   {% if option.value %}checked="checked"{% endif %}
+                                                   data-option-id="{{ option.id }}" data-type="individual">
+                                            <label class="form-check-label"
+                                                   for="company_active">{{ option.option.name }}</label>
                                         </div>
 
                                     </div>
@@ -473,7 +500,8 @@
                             {% endfor %}
                         </div>
                         <div class="card-footer text-end">
-                            <button class="btn btn-primary my-1 nav-buttons update_company_report_options_allowed_btn" type="button">Сохранить
+                            <button class="btn btn-primary my-1 nav-buttons update_company_report_options_allowed_btn"
+                                    type="button">Сохранить
                             </button>
                         </div>
                     </div>
@@ -491,8 +519,10 @@
                                         <div class="form-switch">
                                             <input class="form-check-input option-switch" type="checkbox" role="switch"
                                                    id="company_active"
-                                                   {% if option.value %}checked="checked"{% endif %} data-option-id="{{ option.id }}" data-type="group">
-                                            <label class="form-check-label" for="company_active">{{ option.option.name }}</label>
+                                                   {% if option.value %}checked="checked"{% endif %}
+                                                   data-option-id="{{ option.id }}" data-type="group">
+                                            <label class="form-check-label"
+                                                   for="company_active">{{ option.option.name }}</label>
                                         </div>
 
                                     </div>
@@ -500,7 +530,8 @@
                             {% endfor %}
                         </div>
                         <div class="card-footer text-end">
-                            <button class="btn btn-primary my-1 nav-buttons update_company_report_options_allowed_btn" type="button">Сохранить
+                            <button class="btn btn-primary my-1 nav-buttons update_company_report_options_allowed_btn"
+                                    type="button">Сохранить
                             </button>
                         </div>
                     </div>
@@ -735,6 +766,7 @@
         let url_add_consultant_study_for_company = "{% url 'add_consultant_study_for_company' %}"
         let url_delete_consultant_study_from_company = "{% url 'delete_consultant_study_from_company' %}"
         let url_update_company_report_options_allowed = "{% url 'update_company_report_options_allowed' %}"
+        let url_change_self_questionnaire_link_active_field = "{% url 'change_self_questionnaire_link_active_field' %}"
         let active;
         let company_id = {{ company.id }};
         let location_origin = window.location.origin

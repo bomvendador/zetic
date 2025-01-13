@@ -283,7 +283,6 @@ def delete_consultant_study_from_company(request):
         return HttpResponse(status=200)
 
 
-
 @login_required(redirect_field_name=None, login_url='/login/')
 def add_consultant_for_company(request):
     if request.method == 'POST':
@@ -330,6 +329,7 @@ def company_questionnaire(request, code):
         questionnaires_left = 0
     else:
         questionnaires_left = company_inst.demo_status_questionnaires_limit - company_questionnaires_qnt
+
     if questionnaires_left == 0 and company_inst.demo_status and demo_status_for_companies_setting:
         if not request.user.is_authenticated:
             subject = f'Превышение лимита для ссылки (компания - {company_inst.id}. {company_inst.name}'
@@ -355,20 +355,23 @@ def company_questionnaire(request, code):
                 print(e)
         return render(request, 'panel_company_questionnaire_participant_data_limit_error.html')
     else:
-        years = []
-        current_year = datetime.now().year
-        for i in range(1960, current_year - 18 + 1):
-            years.append(i)
-        context = {
-            'gender': EmployeeGender.objects.all(),
-            'roles': EmployeeRole.objects.all(),
-            'industries': Industry.objects.all(),
-            'positions': EmployeePosition.objects.all(),
-            'years': years,
-            'company': company_self_questionnaire_link_inst.company,
-            'code': code,
-        }
-        return render(request, 'panel_company_questionnaire_participant_data.html', context)
+        if company_self_questionnaire_link_inst.active:
+            years = []
+            current_year = datetime.now().year
+            for i in range(1960, current_year - 18 + 1):
+                years.append(i)
+            context = {
+                'gender': EmployeeGender.objects.all(),
+                'roles': EmployeeRole.objects.all(),
+                'industries': Industry.objects.all(),
+                'positions': EmployeePosition.objects.all(),
+                'years': years,
+                'company': company_self_questionnaire_link_inst.company,
+                'code': code,
+            }
+            return render(request, 'panel_company_questionnaire_participant_data.html', context)
+        else:
+            return render(request, 'panel_company_questionnaire_block_error.html')
 
 
 def create_self_questionnaire(request):
@@ -454,6 +457,21 @@ def create_self_questionnaire(request):
                 'code': participant_code,
             }
         return JsonResponse(response)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def change_self_questionnaire_link_active_field(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        link_id = json_data['link_id']
+        operation = json_data['operation']
+        link_inst = CompanySelfQuestionnaireLink.objects.get(id=link_id)
+        if operation == 'block':
+            link_inst.active = False
+        else:
+            link_inst.active = True
+        link_inst.save()
+        return HttpResponse(status=200)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
