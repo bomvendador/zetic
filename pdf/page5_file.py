@@ -1,4 +1,4 @@
-from pdf.draw import draw_full_scale, insert_page_number
+from pdf.draw import draw_full_scale, insert_page_number, draw_scale
 from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B, MIN_SCALE_DELTA_Y, MAX_Y, START_Y
 from pdf_group.page_funcs import block_name_
 
@@ -12,6 +12,12 @@ def page5(pages_data):
     contradiction_filters_data = pages_data['contradiction_filters_data']
     scale_element_file = 'media/images/boyko_page5.png'
     pdf.set_auto_page_break(False)
+
+    points_sum = 0
+    for data in json_section:
+        points_sum += data['points']
+    points_average = round(points_sum/len(json_section))
+    # print(round(points_sum/len(json_section)))
 
     x = 10
     y = 10
@@ -105,7 +111,6 @@ def page5(pages_data):
     else:
         scale_name = u''''''
     draw_full_scale(pdf, scale_name, x, y + 12, y + 12 - 2, json_section, '3_14', scale_element_file, lang, contradiction_filters_data)
-
     y += 20
 
     if lang == 'ru':
@@ -214,4 +219,29 @@ def page5(pages_data):
     response'''
     draw_full_scale(pdf, scale_name, x, y + 12, y + 12, json_section, '3_17', scale_element_file, lang,
                     participant_info)
+
+# общий уровень выгорания
+
+    y = pdf.get_y() + 15
+
+    pdf.set_xy(x, y)
+    pdf.set_fill_color(BLOCK_R, BLOCK_G, BLOCK_B)
+    pdf.set_draw_color(BLOCK_R, BLOCK_G, BLOCK_B)
+    rect_width = 210
+    rect_height = 2
+    pdf.rect(0, y, rect_width, rect_height, 'FD')
+
+    # y += pdf.get_y() + 25
+    y += 2
+    pdf.set_xy(x, y + 10)
+    pdf.set_font("RalewayBold", "", 9)
+    scale_name = u'''Общий уровень
+выгорания'''
+
+    pdf.multi_cell(0, 4, scale_name)
+    pdf.set_xy(x+110, y+8)
+    pdf.cell(10, h=12, txt=str(points_average), ln=0, align='C')
+    pdf.set_font("RalewayLight", "", 8)
+    # pdf.multi_cell(0, h=4, txt=points_with_description['point_description'], align='L')
+    draw_scale(pdf, x+40, y+9, 70, 10, points_average, scale_element_file, False)
     insert_page_number(pdf)

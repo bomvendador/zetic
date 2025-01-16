@@ -6,25 +6,22 @@ from django.db.models import Q
 import math
 
 
-def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
+def draw_arrow_section_template(pdf, start_x, start_y, r, g, b, section_qnt, rect_width, rect_height):
     # print(f'data_by_points - {data_by_points}')
     pdf.set_draw_color(r, g, b)
     pdf.set_fill_color(r, g, b)
     # отрисовка прямоугольника
-    rect_width = 140 + 10
-    rect_height = 4
-    pdf.rect(startX, startY, rect_width, rect_height, 'FD')
+    pdf.rect(start_x, start_y, rect_width, rect_height, 'FD')
     # отрисовка треугольника
     triangle_width = 7
-    point1 = (startX + rect_width, startY - rect_height/2)
-    point2 = (startX + rect_width + triangle_width, startY - rect_height/2 + rect_height)
-    point3 = (startX + rect_width, startY - rect_height/2 + rect_height * 2)
+    point1 = (start_x + rect_width, start_y - rect_height/2)
+    point2 = (start_x + rect_width + triangle_width, start_y - rect_height/2 + rect_height)
+    point3 = (start_x + rect_width, start_y - rect_height/2 + rect_height * 2)
     pdf.polygon(point_list=[point1, point2, point3, point1], style="FD")
     pdf.set_font("NotoSansDisplayMedium", "", 8)
-    section_qnt = 11
     section_width = rect_width / section_qnt
 
-    line_x_start = startX
+    line_x_start = start_x
 
     for cur_section in range(section_qnt):
 
@@ -33,37 +30,28 @@ def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
         else:
             cur_section_width = section_width
 
-        # # отрисовка прямоугольника на шкале
-        # if (cur_section % 2) != 0:
-        #     new_r = r + 50
-        #     new_g = g + 50
-        #     new_b = b + 50
-        #     if new_r > 255:
-        #         new_r = 255
-        #     if new_g > 255:
-        #         new_g = 255
-        #     if new_b > 255:
-        #         new_b = 255
-        #     pdf.set_draw_color(new_r, new_g, new_b)
-        #     pdf.set_fill_color(new_r, new_g, new_b)
-        #     # pdf.rect(line_x_start - cur_section_width / 2, startY + rect_height + 1.3, section_width - 0.17, 15, 'FD')
-        #     pdf.rect(line_x_start - cur_section_width / 2, startY - rect_height/2 + 1, section_width - 0.17, 15, 'FD')
-        #
-        # pdf.set_draw_color(r, g, b)
-        # pdf.set_fill_color(r, g, b)
-
         # отрисовка линий
-        pdf.line(line_x_start + cur_section_width, startY - rect_height/2 + 1, line_x_start + cur_section_width, startY + rect_height + rect_height/2 - 1)
+        pdf.line(line_x_start + cur_section_width, start_y - rect_height/2 + 1, line_x_start + cur_section_width, start_y + rect_height + rect_height/2 - 1)
         pdf.set_text_color(105, 105, 105)
         # цифры текст на шкале
         if cur_section + 1 == section_qnt:
-            pdf.text(line_x_start + cur_section_width - 1.5, startY + 3, str(cur_section))
+            pdf.text(line_x_start + cur_section_width - 1.5, start_y + 3, str(cur_section))
         else:
-            pdf.text(line_x_start + cur_section_width - 0.75, startY + 3, str(cur_section))
+            pdf.text(line_x_start + cur_section_width - 0.75, start_y + 3, str(cur_section))
         line_x_start = line_x_start + cur_section_width
+
+
+def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
+    rect_width = 140 + 10
+    rect_height = 4
+    section_qnt = 11
+    section_width = rect_width / section_qnt
+
+    draw_arrow_section_template(pdf, startX, startY, r, g, b, section_qnt, rect_width, rect_height)
+
     total_points = 0
     total_participants_qnt = 0
-
+    # отрисовка данных респондентов на шкале
     for key, value in data_by_points.items():
 
         if len(value) > 0:
@@ -111,6 +99,53 @@ def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
         pdf.text(average_number_x - 4.5, startY - 3.5, 'СРЕДНЕЕ')
 
 
+def draw_arrow_average_points(pdf, startX, startY, r, g, b, points):
+    rect_width = 140 + 10
+    rect_height = 4
+    section_qnt = 11
+    section_width = rect_width / section_qnt
+
+    draw_arrow_section_template(pdf, startX, startY, r, g, b, section_qnt, rect_width, rect_height)
+
+    scale_number_x = startX + points * section_width - section_width / 2 + section_width  # x позиция черты на шкале
+    draw_single_circle_arrow_average_points(pdf, scale_number_x - 1.75, startY + 5.5, points, r, g, b)
+
+    # total_points = 0
+    # total_participants_qnt = 0
+    #
+    # for key, value in data_by_points.items():
+    #
+    #     if len(value) > 0:
+    #         circles_placed_cnt = 0
+    #
+    #         col_qnt = len(value)
+    #         first_item_x = 0
+    #         if col_qnt > 4:
+    #             col_qnt = 4
+    #
+    #         cur_col = 1
+    #         delta_y = 0
+    #
+    #         for scale_number_data in value:
+    #             group_color = scale_number_data[3]
+    #             email = scale_number_data[4]
+    #             total_points = total_points + scale_number_data[1]
+    #             bold = scale_number_data[5]
+    #             circles_placed_cnt = circles_placed_cnt + 1
+    #
+    #             if cur_col > col_qnt:
+    #                 delta_y = delta_y + 3.5
+    #                 cur_col = 1
+    #                 first_item_x = 0
+    #
+    #             scale_number_x = startX + scale_number_data[1] * section_width - section_width / 2 + section_width  # x позиция черты на шкале
+    #             draw_single_circle_arrow(pdf, scale_number_x - 1.75 * col_qnt + first_item_x, startY + 5.5 + delta_y, scale_number_data[2], group_color, email, bold)
+    #             first_item_x = first_item_x + 3.5
+    #             cur_col = cur_col + 1
+    #
+    #         total_participants_qnt = total_participants_qnt + circles_placed_cnt
+
+
 def draw_single_circle_arrow(pdf, x, y, number, group_color, email, bold):
     # print(f'start - {pdf.get_y()}')
     # print(f'bold - {bold}')
@@ -139,6 +174,28 @@ def draw_single_circle_arrow(pdf, x, y, number, group_color, email, bold):
             pdf.text(x + 0.5, y + 2.5, str(number))
         else:
             pdf.text(x + 0.6, y + 2.5, str(number))
+    # print(f'start - {pdf.get_y()}')
+    pdf.set_line_width(0.2)
+
+
+def draw_single_circle_arrow_average_points(pdf, x, y, number, r, g, b):
+    # print(f'start - {pdf.get_y()}')
+    # print(f'bold - {bold}')
+    pdf.set_draw_color(0, 0, 0)
+    pdf.set_text_color(0, 0, 0)
+    pdf.set_font("NotoSansDisplayMedium", "", 6)
+    # color_r = int(group_color[group_color.find('(') + len('('):group_color.rfind(')')].split(',')[0])
+    # color_g = int(group_color[group_color.find('(') + len('('):group_color.rfind(')')].split(',')[1].strip())
+    # color_b = int(group_color[group_color.find('(') + len('('):group_color.rfind(')')].split(',')[2].strip())
+    pdf.set_fill_color(r, g, b)
+    pdf.circle(x, y, r=3.4, style="FD")
+    # if int(number) < 10:
+    #     pdf.text(x + 1.1, y + 2.5, str(number))
+    # else:
+    #     if 10 <= number < 20:
+    #         pdf.text(x + 0.5, y + 2.5, str(number))
+    #     else:
+    #         pdf.text(x + 0.6, y + 2.5, str(number))
     # print(f'start - {pdf.get_y()}')
     pdf.set_line_width(0.2)
 

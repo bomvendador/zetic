@@ -57,7 +57,9 @@ def search_for_employees(request):
         email = json_data['email']
         fio_split = json_data['fio'].strip().split(' ')
         employee_role_name = UserProfile.objects.get(user=request.user).role.name
-        employee = Employee.objects.get(user=request.user)
+
+        if Employee.objects.filter(user=request.user).exists():
+            employee = Employee.objects.get(user=request.user)
         if fio != '' and email != '':
             match employee_role_name:
                 case role if role == CONSTANT_USER_ROLES['PARTNER']:

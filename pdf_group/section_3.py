@@ -2,13 +2,25 @@ import math
 
 from pdf.draw import insert_page_number
 # from pdf_group.draw import draw_table
-from pdf_group.page_funcs import proceed_scale, block_name, data_by_points, get_additional_delta_y, block_name_
+from pdf_group.page_funcs import proceed_scale, block_name, data_by_points, get_additional_delta_y, block_name_, proceed_scale_average_points
 from pdf_group.page_funcs import BLOCK_R, BLOCK_G, BLOCK_B, MIN_SCALE_DELTA_Y, MAX_Y, START_Y
+
+
+def calculate_section_points(section_data):
+    participants_cnt = 0
+    participant_points = 0
+    for key, value in section_data.items():
+        if len(value) > 0:
+            participants_cnt += 1
+            participant_points += value[0][1]
+    return round(participant_points/participants_cnt)
 
 
 def page(pdf, square_results, lang):
     pdf.set_margins(top=15, left=0, right=5)
     pdf.set_auto_page_break(False)
+
+    average_points = []
 
     section_code = '3'
 
@@ -35,6 +47,8 @@ def page(pdf, square_results, lang):
     category_code = '3_14'
     section_data = data_by_points(square_results, section_code, category_code)
 
+    average_points.append(round(calculate_section_points(section_data)))
+
     additional_delta_y = get_additional_delta_y(section_data)
 
     if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
@@ -55,6 +69,8 @@ def page(pdf, square_results, lang):
     category_code = '3_13'
     section_data = data_by_points(square_results, section_code, category_code)
 
+    average_points.append(round(calculate_section_points(section_data)))
+
     additional_delta_y = get_additional_delta_y(section_data)
 
     scale_name = 'Профессиональный тупик'
@@ -63,14 +79,16 @@ def page(pdf, square_results, lang):
     proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code, description_delta_y=5, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
     # ----------------------
 
-    start_block_name_y = y + MIN_SCALE_DELTA_Y + additional_delta_y + 15
+    start_block_name_y = y + MIN_SCALE_DELTA_Y + additional_delta_y + 5
     block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, start_block_name_y, x, "ФАЗА 2. СОПРОТИВЛЕНИЕ")
 
     # ----------------------
-    y = y + MIN_SCALE_DELTA_Y + additional_delta_y + 12 + 15
+    y = y + MIN_SCALE_DELTA_Y + additional_delta_y + 12 + 5
 
     category_code = '3_15'
     section_data = data_by_points(square_results, section_code, category_code)
+
+    average_points.append(round(calculate_section_points(section_data)))
 
     additional_delta_y = get_additional_delta_y(section_data)
 
@@ -92,6 +110,8 @@ def page(pdf, square_results, lang):
     category_code = '3_16'
     section_data = data_by_points(square_results, section_code, category_code)
 
+    average_points.append(round(calculate_section_points(section_data)))
+
     additional_delta_y = get_additional_delta_y(section_data)
 
     if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
@@ -108,16 +128,18 @@ def page(pdf, square_results, lang):
     proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code, description_delta_y=9, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
     # -------------------------
 
-    start_block_name_y = y + MIN_SCALE_DELTA_Y + additional_delta_y + 15
+    start_block_name_y = y + MIN_SCALE_DELTA_Y + additional_delta_y + 5
     block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, start_block_name_y, x, "ФАЗА 3. ИСТОЩЕНИЕ")
 
     # -------------------------
 
-    y = y + MIN_SCALE_DELTA_Y + additional_delta_y + 12 + 15
+    y = y + MIN_SCALE_DELTA_Y + additional_delta_y + 12 + 5
 
     category_code = '3_18'
 
     section_data = data_by_points(square_results, section_code, category_code)
+
+    average_points.append(round(calculate_section_points(section_data)))
 
     additional_delta_y = get_additional_delta_y(section_data)
 
@@ -142,6 +164,8 @@ def page(pdf, square_results, lang):
     category_code = '3_17'
     section_data = data_by_points(square_results, section_code, category_code)
 
+    average_points.append(round(calculate_section_points(section_data)))
+
     additional_delta_y = get_additional_delta_y(section_data)
 
     if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
@@ -161,141 +185,20 @@ def page(pdf, square_results, lang):
     proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
                   description_delta_y=5, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
 
-    # -------------------------
-    # y = y + MIN_SCALE_DELTA_Y + additional_delta_y
-    #
-    # category_code = '3_7'
-    # section_data = data_by_points(square_results, section_code, category_code)
-    #
-    # additional_delta_y = get_additional_delta_y(section_data)
-    #
-    # if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
-    #     insert_page_number(pdf)
-    #     pdf.add_page()
-    #     y = START_Y
-    # else:
-    #     y = y
-    #
-    # scale_name = 'Экономия эмоций'
-    #
-    # scale_description = 'Перенос защиты на другие\nсферы жизни (общение с\nблизкими, семьей),\nпотребность в изоляции\nот других людей'
-    #
-    # proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
-    #               description_delta_y=5, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
-    # # -------------------------
-    # y = y + MIN_SCALE_DELTA_Y + additional_delta_y
-    #
-    # category_code = '3_8'
-    # section_data = data_by_points(square_results, section_code, category_code)
-    #
-    # additional_delta_y = get_additional_delta_y(section_data)
-    #
-    # if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
-    #     insert_page_number(pdf)
-    #     pdf.add_page()
-    #     y = START_Y
-    # else:
-    #     y = y
-    #
-    # scale_name = 'Эмпатическая усталость'
-    #
-    # scale_description = 'Попытки облегчить или\nсократить обязанности,\nтребующие эмоциональных\nзатрат или эмоционального\nвовлечения'
-    #
-    # proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
-    #               description_delta_y=5, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
-    # # -------------------------
-    # start_block_name_y = y + MIN_SCALE_DELTA_Y + additional_delta_y
-    #
-    # y = y + MIN_SCALE_DELTA_Y + additional_delta_y + 12
-    #
-    # category_code = '3_9'
-    # section_data = data_by_points(square_results, section_code, category_code)
-    #
-    # additional_delta_y = get_additional_delta_y(section_data)
-    #
-    # if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
-    #     insert_page_number(pdf)
-    #     pdf.add_page()
-    #     start_block_name_y = START_Y
-    #     y = start_block_name_y + 12
-    #
-    # else:
-    #     y = y
-    #
-    # block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, start_block_name_y, x, "ФАЗА 3. ИСТОЩЕНИЕ")
-    #
-    # scale_name = 'Эмоциональная\nопустошенность'
-    #
-    # scale_description = 'Избегание эмоционального\nответа на важные ситуации\nи коммуникации'
-    #
-    # proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
-    #               description_delta_y=9, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
-    # # -------------------------
-    # y = y + MIN_SCALE_DELTA_Y + additional_delta_y
-    #
-    # category_code = '3_10'
-    # section_data = data_by_points(square_results, section_code, category_code)
-    #
-    # additional_delta_y = get_additional_delta_y(section_data)
-    #
-    # if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
-    #     insert_page_number(pdf)
-    #     pdf.add_page()
-    #     y = START_Y
-    # else:
-    #     y = y
-    #
-    # scale_name = 'Эмоциональная\nотстраненность'
-    #
-    # scale_description = 'Сокращение эмоционального\nотклика на рабочие ситуации,\nнеготовность активно\nобщаться с другими'
-    #
-    # proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
-    #               description_delta_y=9, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
-    # # -------------------------
-    # y = y + MIN_SCALE_DELTA_Y + additional_delta_y
-    #
-    # category_code = '3_11'
-    # section_data = data_by_points(square_results, section_code, category_code)
-    #
-    # additional_delta_y = get_additional_delta_y(section_data)
-    #
-    # if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
-    #     insert_page_number(pdf)
-    #     pdf.add_page()
-    #     y = START_Y
-    # else:
-    #     y = y
-    #
-    # scale_name = 'Личностная\nотстраненность'
-    #
-    # scale_description = 'Обесценивание рабочих задач,\nагрессия на стандартные\nрабочие ситуации ("ненавижу",\n"не выношу", "не хочу")'
-    #
-    # proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
-    #               description_delta_y=9, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
-    # # -------------------------
-    # y = y + MIN_SCALE_DELTA_Y + additional_delta_y
-    #
-    # category_code = '3_12'
-    # section_data = data_by_points(square_results, section_code, category_code)
-    #
-    # additional_delta_y = get_additional_delta_y(section_data)
-    #
-    # if (y + MIN_SCALE_DELTA_Y + additional_delta_y) > MAX_Y:
-    #     insert_page_number(pdf)
-    #     pdf.add_page()
-    #     y = START_Y
-    # else:
-    #     y = y
-    #
-    # scale_name = 'Психосоматика'
-    #
-    # scale_description = 'Телесные неприятные\nсостояния, плохое\nсамочувствие, отсутствие\nсил/энергии'
-    #
-    # proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
-    #               description_delta_y=5, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
-    # -------------------------
+    y += 35
+    pdf.set_xy(x, y)
+    pdf.set_fill_color(BLOCK_R, BLOCK_G, BLOCK_B)
+    pdf.set_draw_color(BLOCK_R, BLOCK_G, BLOCK_B)
+    rect_width = 210
+    rect_height = 2
+    pdf.rect(0, y, rect_width, rect_height, 'FD')
 
-    # draw_table(square_results, pdf, width=90, x=14, y=table_y)
+    y += 10
+    average_points_for_scale = round(sum(average_points) / len(average_points))
+    scale_name = 'Общий уровень\nвыгорания'
+    proceed_scale_average_points(pdf, x, y, scale_name, average_points_for_scale, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
+
+
     insert_page_number(pdf)
 
 
