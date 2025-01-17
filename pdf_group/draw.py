@@ -42,6 +42,8 @@ def draw_arrow_section_template(pdf, start_x, start_y, r, g, b, section_qnt, rec
 
 
 def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
+    # print('----data_by_points----')
+    # print(data_by_points)
     rect_width = 140 + 10
     rect_height = 4
     section_qnt = 11
@@ -99,53 +101,6 @@ def draw_arrow(pdf, startX, startY, r, g, b, data_by_points):
         pdf.text(average_number_x - 4.5, startY - 3.5, 'СРЕДНЕЕ')
 
 
-def draw_arrow_average_points(pdf, startX, startY, r, g, b, points):
-    rect_width = 140 + 10
-    rect_height = 4
-    section_qnt = 11
-    section_width = rect_width / section_qnt
-
-    draw_arrow_section_template(pdf, startX, startY, r, g, b, section_qnt, rect_width, rect_height)
-
-    scale_number_x = startX + points * section_width - section_width / 2 + section_width  # x позиция черты на шкале
-    draw_single_circle_arrow_average_points(pdf, scale_number_x - 1.75, startY + 5.5, points, r, g, b)
-
-    # total_points = 0
-    # total_participants_qnt = 0
-    #
-    # for key, value in data_by_points.items():
-    #
-    #     if len(value) > 0:
-    #         circles_placed_cnt = 0
-    #
-    #         col_qnt = len(value)
-    #         first_item_x = 0
-    #         if col_qnt > 4:
-    #             col_qnt = 4
-    #
-    #         cur_col = 1
-    #         delta_y = 0
-    #
-    #         for scale_number_data in value:
-    #             group_color = scale_number_data[3]
-    #             email = scale_number_data[4]
-    #             total_points = total_points + scale_number_data[1]
-    #             bold = scale_number_data[5]
-    #             circles_placed_cnt = circles_placed_cnt + 1
-    #
-    #             if cur_col > col_qnt:
-    #                 delta_y = delta_y + 3.5
-    #                 cur_col = 1
-    #                 first_item_x = 0
-    #
-    #             scale_number_x = startX + scale_number_data[1] * section_width - section_width / 2 + section_width  # x позиция черты на шкале
-    #             draw_single_circle_arrow(pdf, scale_number_x - 1.75 * col_qnt + first_item_x, startY + 5.5 + delta_y, scale_number_data[2], group_color, email, bold)
-    #             first_item_x = first_item_x + 3.5
-    #             cur_col = cur_col + 1
-    #
-    #         total_participants_qnt = total_participants_qnt + circles_placed_cnt
-
-
 def draw_single_circle_arrow(pdf, x, y, number, group_color, email, bold):
     # print(f'start - {pdf.get_y()}')
     # print(f'bold - {bold}')
@@ -174,28 +129,6 @@ def draw_single_circle_arrow(pdf, x, y, number, group_color, email, bold):
             pdf.text(x + 0.5, y + 2.5, str(number))
         else:
             pdf.text(x + 0.6, y + 2.5, str(number))
-    # print(f'start - {pdf.get_y()}')
-    pdf.set_line_width(0.2)
-
-
-def draw_single_circle_arrow_average_points(pdf, x, y, number, r, g, b):
-    # print(f'start - {pdf.get_y()}')
-    # print(f'bold - {bold}')
-    pdf.set_draw_color(0, 0, 0)
-    pdf.set_text_color(0, 0, 0)
-    pdf.set_font("NotoSansDisplayMedium", "", 6)
-    # color_r = int(group_color[group_color.find('(') + len('('):group_color.rfind(')')].split(',')[0])
-    # color_g = int(group_color[group_color.find('(') + len('('):group_color.rfind(')')].split(',')[1].strip())
-    # color_b = int(group_color[group_color.find('(') + len('('):group_color.rfind(')')].split(',')[2].strip())
-    pdf.set_fill_color(r, g, b)
-    pdf.circle(x, y, r=3.4, style="FD")
-    # if int(number) < 10:
-    #     pdf.text(x + 1.1, y + 2.5, str(number))
-    # else:
-    #     if 10 <= number < 20:
-    #         pdf.text(x + 0.5, y + 2.5, str(number))
-    #     else:
-    #         pdf.text(x + 0.6, y + 2.5, str(number))
     # print(f'start - {pdf.get_y()}')
     pdf.set_line_width(0.2)
 

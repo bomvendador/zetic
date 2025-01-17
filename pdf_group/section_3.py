@@ -16,11 +16,24 @@ def calculate_section_points(section_data):
     return round(participant_points/participants_cnt)
 
 
+def calculate_section_points_by_participants(section_data):
+    participants_points = []
+    for key, value in section_data.items():
+        if len(value) > 0:
+            participants_cnt += 1
+            participants_points.append({
+               'number': value[0][2],
+               'points': value[0][1],
+            })
+    return participants_points
+
+
 def page(pdf, square_results, lang):
     pdf.set_margins(top=15, left=0, right=5)
     pdf.set_auto_page_break(False)
 
     average_points = []
+    average_points_by_participants = []
 
     section_code = '3'
 
@@ -47,6 +60,7 @@ def page(pdf, square_results, lang):
     category_code = '3_14'
     section_data = data_by_points(square_results, section_code, category_code)
 
+    average_points_by_participants.append(section_data)
     average_points.append(round(calculate_section_points(section_data)))
 
     additional_delta_y = get_additional_delta_y(section_data)
@@ -69,6 +83,7 @@ def page(pdf, square_results, lang):
     category_code = '3_13'
     section_data = data_by_points(square_results, section_code, category_code)
 
+    average_points_by_participants.append(section_data)
     average_points.append(round(calculate_section_points(section_data)))
 
     additional_delta_y = get_additional_delta_y(section_data)
@@ -88,6 +103,7 @@ def page(pdf, square_results, lang):
     category_code = '3_15'
     section_data = data_by_points(square_results, section_code, category_code)
 
+    average_points_by_participants.append(section_data)
     average_points.append(round(calculate_section_points(section_data)))
 
     additional_delta_y = get_additional_delta_y(section_data)
@@ -110,6 +126,7 @@ def page(pdf, square_results, lang):
     category_code = '3_16'
     section_data = data_by_points(square_results, section_code, category_code)
 
+    average_points_by_participants.append(section_data)
     average_points.append(round(calculate_section_points(section_data)))
 
     additional_delta_y = get_additional_delta_y(section_data)
@@ -139,6 +156,7 @@ def page(pdf, square_results, lang):
 
     section_data = data_by_points(square_results, section_code, category_code)
 
+    average_points_by_participants.append(section_data)
     average_points.append(round(calculate_section_points(section_data)))
 
     additional_delta_y = get_additional_delta_y(section_data)
@@ -164,6 +182,7 @@ def page(pdf, square_results, lang):
     category_code = '3_17'
     section_data = data_by_points(square_results, section_code, category_code)
 
+    average_points_by_participants.append(section_data)
     average_points.append(round(calculate_section_points(section_data)))
 
     additional_delta_y = get_additional_delta_y(section_data)
@@ -181,7 +200,9 @@ def page(pdf, square_results, lang):
     scale_name = 'Психосоматика'
 
     scale_description = 'Постоянное напряжение,\nусталость, отсутствие сил'
-
+    print('==============section_data===============')
+    print(section_data)
+    print('=======================================')
     proceed_scale(pdf, x, y, scale_name, section_data, scale_description, section_code, category_code,
                   description_delta_y=5, line_delta_y=2.5, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
 
@@ -194,10 +215,13 @@ def page(pdf, square_results, lang):
     pdf.rect(0, y, rect_width, rect_height, 'FD')
 
     y += 10
-    average_points_for_scale = round(sum(average_points) / len(average_points))
-    scale_name = 'Общий уровень\nвыгорания'
-    proceed_scale_average_points(pdf, x, y, scale_name, average_points_for_scale, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
 
+    # average_points_for_scale = round(sum(average_points) / len(average_points))
+
+    # print('----average_points_by_participants----')
+    # print(average_points_by_participants)
+    scale_name = 'Общий уровень\nвыгорания'
+    proceed_scale_average_points(pdf, x, y, scale_name, average_points_by_participants, arrow_color_r=255, arrow_color_g=168, arrow_color_b=29)
 
     insert_page_number(pdf)
 

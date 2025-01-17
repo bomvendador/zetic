@@ -139,9 +139,6 @@ def pdf_single_generator(data):
     response_code_3 = category_data('3_', questionnaire_id, employee.id)
     response_code_4 = category_data('4_', questionnaire_id, employee.id)
 
-    print('----response_code_1-----')
-    print(response_code_1)
-    print('---------')
     responses_codes = {
         '1': response_code_1,
         '2': response_code_2,
@@ -170,7 +167,7 @@ def pdf_single_generator(data):
                             contradiction_filter_to_show = False
         if contradiction_filter_to_show:
             contradiction_filters_data.append(contradiction_filter_data)
-    print(contradiction_filters_data)
+    # print(contradiction_filters_data)
     pages_data = {
         'pdf': pdf,
         'lang': lang,

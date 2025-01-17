@@ -1,4 +1,4 @@
-from pdf_group.draw import draw_arrow, draw_participants_table, draw_arrow_average_points
+from pdf_group.draw import draw_arrow, draw_participants_table
 from pdf.models import Report, ReportData, Questionnaire, QuestionnaireQuestionAnswers, Participant, Category, ReportDataByCategories
 import math
 from pdf import raw_to_t_point
@@ -31,14 +31,40 @@ def proceed_scale(pdf, x, y, scale_name, section_data, scale_description, sectio
     pdf.multi_cell(0, 4, scale_description)
 
 
-def proceed_scale_average_points(pdf, x, y, scale_name,  points, arrow_color_r, arrow_color_g, arrow_color_b):
+def proceed_scale_average_points(pdf, x, y, scale_name,  points_arr, arrow_color_r, arrow_color_g, arrow_color_b):
     pdf.set_text_color(0, 0, 0)
     pdf.set_font("RalewayBold", "", 9)
     pdf.set_xy(x, y + 1)
     pdf.multi_cell(0, 4, scale_name)
     pdf.set_font("RalewayRegular", "", 9)
-
-    draw_arrow_average_points(pdf, startX=x + 45, startY=y + 4, r=arrow_color_r, g=arrow_color_g, b=arrow_color_b, points=points)
+    data_by_participants = {}
+    for scale in points_arr:
+        for key, value in scale.items():
+            # print(f'-------value======= for {key}')
+            # print(value)
+            if len(value) > 0:
+                for participant_data in value:
+                    if participant_data[2] not in data_by_participants:
+                        data_by_participants.update({
+                            participant_data[2]: {
+                                'points': [],
+                                'color': participant_data[3],
+                                'bold': participant_data[5],
+                                'name': participant_data[0],
+                                'email': participant_data[4],
+                            }
+                        })
+                    data_by_participants[participant_data[2]]['points'].append(participant_data[1])
+    new_section_data = {}
+    for i in range(0, 11):
+        new_section_data.update({
+            i: []
+        })
+        for participant_number, participant_data in data_by_participants.items():
+            points = round(sum(participant_data['points'])/len(participant_data['points']))
+            if points == i:
+                new_section_data[i].append([participant_data['name'], points, participant_number, participant_data['color'], participant_data['email'], participant_data['bold']])
+    draw_arrow(pdf, startX=x + 45, startY=y + 4, r=arrow_color_r, g=arrow_color_g, b=arrow_color_b, data_by_points=new_section_data)
 
 
 def block_name(pdf, block_r, block_g, block_b, y, start_block_name_y, block_name, end_y_delta, end_y_text_delta):
