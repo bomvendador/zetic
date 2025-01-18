@@ -16,18 +16,6 @@ def calculate_section_points(section_data):
     return round(participant_points/participants_cnt)
 
 
-def calculate_section_points_by_participants(section_data):
-    participants_points = []
-    for key, value in section_data.items():
-        if len(value) > 0:
-            participants_cnt += 1
-            participants_points.append({
-               'number': value[0][2],
-               'points': value[0][1],
-            })
-    return participants_points
-
-
 def page(pdf, square_results, lang):
     pdf.set_margins(top=15, left=0, right=5)
     pdf.set_auto_page_break(False)

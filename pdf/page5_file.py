@@ -236,7 +236,7 @@ def page5(pages_data):
     pdf.set_xy(x, y + 10)
     pdf.set_font("RalewayBold", "", 9)
     scale_name = u'''Общий уровень
-выгорания'''
+выгорания11'''
 
     pdf.multi_cell(0, 4, scale_name)
     pdf.set_xy(x+110, y+8)
