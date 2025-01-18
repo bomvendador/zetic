@@ -126,7 +126,9 @@ def page5(pages_data):
     # vert_text_y = 152
     if lang == 'ru':
 
-        y = pdf.get_y() + 15
+        # y = pdf.get_y() + 15
+        # print(f'фаза 2 y = {y}')
+        y = 114
         pdf.set_xy(x, y)
         block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, x, str('Фаза 2. Сопротивление').upper())
         pdf.set_text_color(0, 0, 0)
@@ -173,7 +175,10 @@ def page5(pages_data):
     vert_text_y = 179
     if lang == 'ru':
 
-        y = pdf.get_y() + 15
+        # y = pdf.get_y() + 15
+        y = 185
+        # print(f'фаза 3 y = {y}')
+
 
         pdf.set_xy(x, y)
         block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, x, str('Фаза 3. Истощение').upper())
@@ -222,7 +227,9 @@ def page5(pages_data):
 
 # общий уровень выгорания
 
-    y = pdf.get_y() + 15
+    # y = pdf.get_y() + 15
+    y = 256
+    # print(f'общий y = {y}')
 
     pdf.set_xy(x, y)
     pdf.set_fill_color(BLOCK_R, BLOCK_G, BLOCK_B)
