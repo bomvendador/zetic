@@ -337,7 +337,7 @@ def page3(pages_data):
     Abstracteness, Imagination,
     Idea-oriention
         '''
-    category_code = '1_9'
+    category_code = '1_8'
     # points_with_description = extract_categories(answers_code_1, '1_8', lang, participant_info)
     points_with_description = point_with_description(answers_code_1, category_code, lang)
     if points_with_description:
@@ -480,7 +480,7 @@ def page3(pages_data):
     Information analysis, Criticality
     Work optimization
         '''
-    category_code = '1_13'
+    category_code = '1_12'
     # points_with_description = extract_categories(answers_code_1, '1_12', lang, participant_info)
     points_with_description = point_with_description(answers_code_1, category_code, lang)
     if points_with_description:
