@@ -57,7 +57,6 @@ $('#save_page_answers').on('click', function () {
         success: function (data) {
             btn_text($('#save_page_answers'), 'Далее')
             if (data === 'tech_works') {
-                console.log(data)
                 let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
                     '<h2 class="mb-0 mt-0" style="text-align: center">Технические работы</h2>' +
                     '<hr class="solid" style="background-color: black;">' +
@@ -65,8 +64,6 @@ $('#save_page_answers').on('click', function () {
                     '<h4 style="text-align: center">Просим прощения за неудобства </h4>' +
                     '<h4 style="text-align: center">В ближайшее время сервис возобновит свою работу </h4>' +
                     '<hr class="solid mt-0" style="background-color: black;">'
-
-
                 Swal.fire({
                     html: output_html,
                     icon: 'warning',
@@ -79,14 +76,28 @@ $('#save_page_answers').on('click', function () {
 
             } else {
                 let response = data['response']
-                // console.log(data)
-                // console.log(`total_questionnaire_questions_qnt = ${response['total_questionnaire_questions_qnt']}`)
+                if (response['all_questions_answered_repeatedly']) {
+                    let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<h4 style="text-align: center" class="mb-0"><b>Ответы уже были получены ранее</b></h4>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<div style="text-align: center">На все вопросы на странице ответы уже были получены ранее</div>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
+                    Swal.fire({
+                        html: output_html,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ОК'
+                    }).then((result) => {
+                        if (result.value) {
+                            window.location.reload()
 
-                // if(){
-                //
-                // }
+                        }
+                    })
 
-                if (response['total_questionnaire_answers_qnt'] === response['total_questionnaire_questions_qnt']) {
+                } else if (response['total_questionnaire_answers_qnt'] === response['total_questionnaire_questions_qnt']) {
                     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
                         '<h4 style="text-align: center" class="mb-0"><b>Вы ответили на все вопросы опросника</b></h4>' +
                         '<br>' +
@@ -110,31 +121,28 @@ $('#save_page_answers').on('click', function () {
                         }
                     })
 
+                } else if (response['total_section_questions_qnt'] === response['questions_answered_qnt']) {
+                    let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<div style="text-align: center">Вы ответили на все вопросы в данной секции</div>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
+                    Swal.fire({
+                        html: output_html,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ОК'
+                    }).then((result) => {
+                        if (result.value) {
+                            // $('#back_to_sections_link').click()
+                            window.location.href = document.getElementById("back_to_sections_link").getAttribute("href")
+                            // window.location.href = `${code}`
+
+                        }
+                    })
+                    section_ended = true
                 } else {
-                    if (response['total_section_questions_qnt'] === response['questions_answered_qnt']) {
-                        let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                            '<div style="text-align: center">Вы ответили на все вопросы в данной секции</div>' +
-                            '<br>' +
-                            '<hr class="solid mt-0" style="background-color: black;">'
-                        Swal.fire({
-                            html: output_html,
-                            icon: 'success',
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'ОК'
-                        }).then((result) => {
-                            if (result.value) {
-                                // $('#back_to_sections_link').click()
-                                window.location.href = document.getElementById("back_to_sections_link").getAttribute("href")
-                                // window.location.href = `${code}`
-
-                            }
-                        })
-                        section_ended = true
-                    } else {
-                        window.location.reload()
-
-                    }
+                    window.location.reload()
 
                 }
             }

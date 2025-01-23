@@ -105,19 +105,28 @@ def save_answers(request):
 
         json_data = json.loads(request.body.decode('utf-8'))
         answers = json_data['answers']
+        questions_answered_cnt = len(answers)
+        questions_answered_repeatedly_cnt = 0
         code = json_data['code']
         section_id = json_data['section_id']
+
         # participant_id = json_data['participant_id']
         questionnaire_inst = Questionnaire.objects.get(participant__invitation_code=code)
         for answer in answers:
             question_id = answer['question_id']
             answer_id = answer['answer_id']
-            answer_inst = QuestionnaireQuestionAnswers()
-            answer_inst.question = CategoryQuestions.objects.get(id=question_id)
-            answer_inst.answer = QuestionAnswers.objects.get(id=answer_id)
-            answer_inst.questionnaire = questionnaire_inst
-            answer_inst.section = Section.objects.get(id=section_id)
-            answer_inst.save()
+            existing_answer = QuestionnaireQuestionAnswers.objects.filter(Q(question_id=question_id) &
+                                                                          Q(questionnaire=questionnaire_inst))
+            print(f'existing_answer = {len(existing_answer)}')
+            if not existing_answer.exists():
+                answer_inst = QuestionnaireQuestionAnswers()
+                answer_inst.question = CategoryQuestions.objects.get(id=question_id)
+                answer_inst.answer = QuestionAnswers.objects.get(id=answer_id)
+                answer_inst.questionnaire = questionnaire_inst
+                answer_inst.section = Section.objects.get(id=section_id)
+                answer_inst.save()
+            else:
+                questions_answered_repeatedly_cnt += 1
         total_section_questions_qnt = len(CategoryQuestions.objects.filter(category__section_id=section_id))
         questions_answered_qnt = len(QuestionnaireQuestionAnswers.objects.filter(questionnaire=questionnaire_inst, section_id=section_id))
         total_questionnaire_answers_qnt = len(QuestionnaireQuestionAnswers.objects.filter(questionnaire=questionnaire_inst))
@@ -136,13 +145,18 @@ def save_answers(request):
         participant_inst.current_percentage = int(total_questionnaire_answers_qnt / total_questionnaire_questions_qnt * 100)
         participant_inst.save()
 
-        if total_questionnaire_questions_qnt == total_questionnaire_answers_qnt:
-            if DEBUG == 0:
-                pdf_single_generator_task.delay(questionnaire_inst.id, '')
-                # pdf_single_generator(questionnaire_inst.id, '')
-            else:
-                pdf_single_generator_task(questionnaire_inst.id, '')
+        all_questions_answered_repeatedly = False
+        if questions_answered_cnt == questions_answered_repeatedly_cnt:
+            all_questions_answered_repeatedly = True
+        else:
+            if total_questionnaire_questions_qnt == total_questionnaire_answers_qnt:
+                if DEBUG == 0:
+                    pdf_single_generator_task.delay(questionnaire_inst.id, '')
+                    # pdf_single_generator(questionnaire_inst.id, '')
+                else:
+                    pdf_single_generator_task(questionnaire_inst.id, '')
         response = {
+            'all_questions_answered_repeatedly': all_questions_answered_repeatedly,
             'total_section_questions_qnt': total_section_questions_qnt,
             'questions_answered_qnt': questions_answered_qnt,
             'total_questionnaire_answers_qnt': total_questionnaire_answers_qnt,
