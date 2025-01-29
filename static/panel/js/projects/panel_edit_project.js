@@ -152,4 +152,9 @@ $('#add_project').on('click', function () {
     window.location.href = url_add_new_project
 })
 
+$('#add_potential_matrix_to_project').on('click', function () {
+    console.log('dddd')
+    window.location.href = url_add_potential_matrix_for_project
+})
+
 

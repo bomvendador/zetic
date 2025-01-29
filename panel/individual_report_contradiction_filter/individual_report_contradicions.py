@@ -1,17 +1,10 @@
 from pdf.models import IndividualReportContradictionFilter, IndividualReportContradictionFilterCategory, Category
-from login.models import UserProfile
-from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
 import json
-from django.utils import timezone
-from django.core import serializers
 
 from ..views import info_common
-
-from django.utils.dateformat import DateFormat
-from django.core.exceptions import ObjectDoesNotExist
 
 
 @login_required(redirect_field_name=None, login_url='/login/')

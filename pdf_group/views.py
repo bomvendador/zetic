@@ -24,6 +24,7 @@ from pdf_group.section_4 import page as section_4_page
 from pdf_group.description import page as description_page
 from pdf_group.participants_list import page as participants_page
 from pdf_group.integral_report_page import page as integral_report_page
+from pdf_group.potential_matrix_page import page as potential_matrix_page
 from pdf_group.traffic_light_report.traffic_light_report_page import page as traffic_light_report_page
 from pdf.views import save_serve_file
 from pdf_group.save_data import save_data_to_db as save_data_group
@@ -138,6 +139,12 @@ def pdf_group_generator(request_json):
     description_page(pdf, lang)
     #-----------------
 
+    # страница матрицы потенциала
+    pdf.add_page()
+    pdf.set_text_color(0, 0, 0)
+    potential_matrix_page(pdf, 'ru', request_json)
+    #-----------------
+
     # if 'group_report_id' in request_json:
     #     group_report_id = request_json['group_report_id']
     # else:
@@ -202,7 +209,7 @@ def pdf_group_generator(request_json):
 
     now = datetime.datetime.now()
 
-    file_name = cyrtranslit.to_latin(request_json['company_name'], 'ru') + '_' + cyrtranslit.to_latin(request_json['project_name'], 'ru') + "___" + now.strftime("%d_%m_%Y__%H_%M_%S") + "_" + lang.upper() + '_group.pdf'
+    file_name = cyrtranslit.to_latin(request_json['company_name'], 'ru') + ' - ' + cyrtranslit.to_latin(request_json['project_name'], 'ru') + " - [ " + now.strftime("%d.%m.%Y__%H-%M-%S") + " ]_" + lang.upper() + '_group.pdf'
 
     path = "media/reportsPDF/group/"
 

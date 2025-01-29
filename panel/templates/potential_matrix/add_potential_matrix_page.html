@@ -1,0 +1,229 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+{% block links %}
+    <link href="{% static 'panel/plugins/circle_progress_bar/css/circle.css' %}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                {% if potential_matrix %}
+                    <h1 class="page-title">Изменение матрицы потенциала</h1>
+                {% else %}
+                    <h1 class="page-title">Добавление матрицы потенциала</h1>
+                {% endif %}
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                        {% if potential_matrix %}
+                            <li class="breadcrumb-item active" aria-current="page">Изменение матрицы потенциала</li>
+                        {% else %}
+                            <li class="breadcrumb-item active" aria-current="page">Добавление матрицы потенциала</li>
+                        {% endif %}
+
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- ROW-1 OPEN -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Параметры фильтра</h3>
+                        </div>
+                        <div class="card-body">
+                            {% if project %}
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="company">Компания</label>
+                                            <input type="text" class="form-control" id="company"
+                                                   value="{{ project.company.id }}. {{ project.company.name }}"
+                                                   disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="project">Проект</label>
+                                            <input type="text" class="form-control" id="project"
+                                                   value="{{ project.id }}. {{ project.name }}" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="method">Квадрат</label>
+                                        <select name="method"
+                                                class="form-control form-select"
+                                                id="square">
+                                            <option value="0">-- Сделайте выбор --</option>
+                                            {% for matrix_not_defined in matrices_not_defined %}
+                                                {% if potential_matrix.code == matrix_not_defined.code %}
+                                                    <option value="{{ matrix_not_defined.code }}"
+                                                            selected>{{ matrix_not_defined.code }}
+                                                        - {{ matrix_not_defined.name }}</option>
+                                                {% else %}
+                                                    <option value="{{ matrix_not_defined.code }}">{{ matrix_not_defined.code }}
+                                                        - {{ matrix_not_defined.name }}</option>
+                                                {% endif %}
+
+                                                {#                                                {% for category in potential_matrix_categories %}#}
+                                                {#                                                    {% if category.matrix == matrix %}#}
+                                                {#                                                        <option value="{{ matrix.code }}" selected>{{ matrix.code }}#}
+                                                {#                                                            - {{ matrix.name }}</option>#}
+                                                {#                                                    {% else %}#}
+                                                {#                                                        <option value="{{ matrix.code }}">{{ matrix.code }}#}
+                                                {#                                                            - {{ matrix.name }}</option>#}
+                                                {##}
+                                                {#                                                    {% endif %}#}
+                                                {##}
+                                                {#                                                {% endfor %}#}
+
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header row pt-2 pb-2 justify-content-md-center">
+                            <div class="">
+                                <table style="width: 100%">
+                                    <thead></thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <h3 class="card-title">Шкалы (категории) + баллы</h3>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-primary my-1" type="button" id="add_filter_category"
+                                                    style="float: right">Добавить шкалу
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table text-nowrap border-bottom" id="table_filter_categories">
+                                    <thead class="thead-style">
+                                    <tr>
+                                        <th style="width: 60%">Наименование</th>
+                                        <th style="width: 20%">Балл, от</th>
+                                        <th style="width: 20%">Балл, до</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbody_filter_categories">
+                                    {% for matrix_category in potential_matrix_categories %}
+                                        <tr data-category-id="{{ matrix_category.id }}">
+                                            <td>
+                                                <select class="form-control form-select select_category"
+                                                        data-placeholder="Выберите шкалу">
+                                                    <option label="--Выберите шкалу--"></option>
+
+                                                    {% for category in categories %}
+                                                        <option value="{{ category.id }}"
+                                                                {% if matrix_category.category.id == category.id %}
+                                                                selected
+                                                                {% endif %}
+                                                        >{{ category.code }}. {{ category.name }}
+                                                        </option>
+                                                    {% endfor %}
+
+                                                </select>
+                                            </td>
+                                            <td class="point_from">
+                                                <input type="number" min="0" max="10" class="form-control points_from"
+                                                       value="{{ matrix_category.points_from }}">
+                                            </td>
+                                            <td>
+                                                <input type="number" min="0" max="10" class="form-control points_to"
+                                                       value="{{ matrix_category.points_to }}">
+                                            </td>
+                                            <td style="text-align: center; vertical-align: middle;">
+                                                <div style="float: right">
+                                                    <i class="fe fe-x delete-category-row"
+                                                       style="font-size: 20px; cursor: pointer"></i>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>                        <!-- ROW-1 CLOSED -->
+
+
+            <button class="btn ripple btn-primary w-100 mb-4" style="height: 40px" type="button"
+                    id="save_potential_matrix">
+                Сохранить матрицу
+            </button>
+
+        </div>
+        <!--CONTAINER CLOSED -->
+
+    </div>
+
+
+    <!-- ROW-1 CLOSED -->
+
+
+    <!--CONTAINER CLOSED -->
+    <template id="category_tr_template">
+        {% include 'potential_matrix/potential_matrix_category_tr.html' %}
+    </template>
+
+{% endblock %}
+
+{% block script %}
+
+    <script>
+
+        let url_get_company_employees_for_new_study = "{% url 'get_company_employees_for_new_study' %}"
+        let url_save_potential_matrix = "{% url 'save_potential_matrix' %}"
+        let url_potential_matrix_list = "{% url 'potential_matrix_list' %}"
+        {% if potential_matrix %}
+            let matrix_id = {{ potential_matrix.id }};
+        {% else %}
+            let matrix_id = '';
+        {% endif %}
+
+        {% if project %}
+            let project_id = {{ project.id }};
+            let url_edit_project = "{% url 'edit_project' project.id %}"
+        {% else %}
+            let url_edit_project = ''
+            let project_id = '';
+        {% endif %}
+
+    </script>
+    <script src="{% static 'login/js/select2.js' %}"></script>
+
+    <script src="{% static 'panel/js/potential_matrix/add_potential_matrix.js' %}?{{ timestamp }}"></script>
+{% endblock %}

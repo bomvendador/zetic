@@ -10,6 +10,7 @@ from panel import employee, study, sections, individual_report_file, company, ma
 from panel.common_settings import settings, notification_report_made_receivers
 from panel.consultant_form import panel_consultant_form
 from panel.individual_report_contradiction_filter import individual_report_contradicions
+from panel.potential_matrix import potential_matrix_views
 # from panel import study
 # from panel import individual_report_file
 # from panel import company
@@ -192,6 +193,13 @@ urlpatterns = [
     path('save_individual_report_contradictions_filter', individual_report_contradicions.save_individual_report_contradictions_filter, name='save_individual_report_contradictions_filter'),
     path('individual_report_contradictions_filter/<int:filter_id>', individual_report_contradicions.edit_individual_report_contradictions_filter , name='individual_report_contradictions_filter'),
     path('delete_individual_report_contradictions_filter', individual_report_contradicions.delete_individual_report_contradictions_filter , name='delete_individual_report_contradictions_filter'),
+
+    path('potential_matrix_list', potential_matrix_views.potential_matrix_list, name='potential_matrix_list'),
+    path('add_potential_matrix', potential_matrix_views.add_potential_matrix, name='add_potential_matrix'),
+    path('save_potential_matrix', potential_matrix_views.save_potential_matrix, name='save_potential_matrix'),
+    path('delete_potential_matrix', potential_matrix_views.delete_potential_matrix, name='delete_potential_matrix'),
+    path('potential_matrix/<int:matrix_id>', potential_matrix_views.edit_potential_matrix, name='edit_potential_matrix'),
+    path('add_potential_matrix_for_project/<int:project_id>', potential_matrix_views.add_potential_matrix_for_project, name='add_potential_matrix_for_project'),
 
     path('integral_report_filters_list', filters_integral_report.integral_report_filters_list, name='integral_report_filters_list'),
     path('add_integral_report_filter', filters_integral_report.add_filter, name='add_integral_report_filter'),

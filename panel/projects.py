@@ -1,5 +1,5 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, User, Participant, EmployeeGender, \
-    Project, Study, ProjectStudy, TrafficLightReportFilter, TrafficLightReportFilterCategory
+    Project, Study, ProjectStudy, TrafficLightReportFilter, TrafficLightReportFilterCategory, PotentialMatrix, PotentialMatrixCategory
 from login.models import UserProfile
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -35,7 +35,6 @@ def get_company_projects(request):
             response = render_to_string('projects/panel_company_projects_rows.html', context)
         else:
             response = 'no_projects'
-        print(response)
         return HttpResponse(response)
 
 
@@ -63,7 +62,6 @@ def get_company_studies(request):
 def save_new_project(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
-        print(json_data)
         study_ids = json_data['study_ids']
         name = json_data['name']
         company_id = json_data['company_id']
@@ -85,7 +83,6 @@ def save_new_project(request):
 def save_edited_project(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
-        print(json_data)
         study_ids = json_data['study_ids']
         name = json_data['name']
         project_id = json_data['project_id']
@@ -175,13 +172,17 @@ def edit_project(request, project_id):
     studies = ProjectStudy.objects.filter(project=project)
     filters_inst = TrafficLightReportFilter.objects.filter(project=project).order_by('position')
     filters_categories = TrafficLightReportFilterCategory.objects.filter(filter__project=project)
+    potential_matrices = PotentialMatrix.objects.filter(project=project)
+    potential_matrices_categories = PotentialMatrixCategory.objects.filter(matrix__project=project)
 
     context.update(
         {
             'project': project,
             'studies': studies,
             'filters': filters_inst,
-            'filters_categories': filters_categories
+            'filters_categories': filters_categories,
+            'potential_matrices': potential_matrices,
+            'potential_matrices_categories': potential_matrices_categories,
         }
     )
     return render(request, 'projects/panel_edit_project.html', context)

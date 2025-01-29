@@ -38,3 +38,60 @@ CONSTANT_SQUARE_NAMES = {
         '4': 'Решатель проблем',
     },
 }
+
+CONSTANT_POTENTIAL_MATRIX = {
+    '1_1': {
+        'name': 'HiPro',
+        'colorR': 255,
+        'colorG': 255,
+        'colorB': 255,
+    },
+    '1_2': {
+        'name': 'Кадровый резерв',
+        'colorR': 255,
+        'colorG': 255,
+        'colorB': 255,
+    },
+    '1_3': {
+        'name': 'Кадровый резерв',
+        'colorR': 255,
+        'colorG': 200,
+        'colorB': 200,
+    },
+    '2_1': {
+        'name': 'HiPro',
+        'colorR': 255,
+        'colorG': 255,
+        'colorB': 255,
+    },
+    '2_2': {
+        'name': 'Кадровая основа',
+        'colorR': 255,
+        'colorG': 255,
+        'colorB': 255,
+    },
+    '2_3': {
+        'name': 'Кадровый резерв',
+        'colorR': 255,
+        'colorG': 255,
+        'colorB': 255,
+    },
+    '3_1': {
+        'name': 'Зона особого внимания',
+        'colorR': 226,
+        'colorG': 239,
+        'colorB': 218,
+    },
+    '3_2': {
+        'name': 'Зона особого внимания',
+        'colorR': 255,
+        'colorG': 255,
+        'colorB': 255,
+    },
+    '3_3': {
+        'name': 'Менеджерский резерв',
+        'colorR': 255,
+        'colorG': 255,
+        'colorB': 255,
+    },
+}

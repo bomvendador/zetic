@@ -212,8 +212,6 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
                     'category_points_sum': category_points_sum,
                     'category_points_cnt': category_points_cnt,
                 })
-    print(integral_report_data)
-    # print(categories_t_points)
     circle_radius = 2.5
     if len(integral_report_data) > 0:
         pdf.set_fill_color(r=85, g=85, b=200)
@@ -398,3 +396,5 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
         #     pdf.circle(x - circle_radius / 2, y, circle_radius, style="FD")
         #     name_length = len(data['name'])
         #     pdf.text(x - (name_length * letter_width) / 2 - circle_radius / 2, y - 1, data['name'])
+
+

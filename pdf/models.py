@@ -695,8 +695,8 @@ class Report(models.Model):
         return os.path.basename(self.file.name)
 
     class Meta:
-        verbose_name_plural = 'Индивидуальные отчеты'
-        verbose_name = 'Индивидуальный отчет'
+        verbose_name_plural = 'Индивидуальные отчеты (Report)'
+        verbose_name = 'Индивидуальный отчет (Report)'
 
 
 class ReportData(models.Model):
@@ -728,8 +728,8 @@ class ReportDataByCategories(models.Model):
         return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.report.participant.employee.name} - {self.section_name} - {self.category_code} - {self.category_name} - {self.t_points}'
 
     class Meta:
-        verbose_name_plural = 'Данные индивидуальных отчетов по категориям'
-        verbose_name = 'Данные индивидуальных отчетов по категориям'
+        verbose_name_plural = 'Данные индивидуальных отчетов по категориям (ReportDataByCategories)'
+        verbose_name = 'Данные индивидуальных отчетов по категориям (ReportDataByCategories)'
 
 
 class ReportGroup(models.Model):
@@ -762,8 +762,8 @@ class ReportGroupSquare(models.Model):
         return f'[{timezone.localtime(self.added).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.report.participant.employee.name} - {self.square_name}'
 
     class Meta:
-        verbose_name_plural = 'Данные по квадратам групповых отчетов'
-        verbose_name = 'Данные по квадрату групповых отчетов'
+        verbose_name_plural = 'Данные по квадратам групповых отчетов (ReportGroupSquare)'
+        verbose_name = 'Данные по квадрату групповых отчетов (ReportGroupSquare)'
 
 
 class ProjectParticipants(models.Model):
@@ -951,6 +951,37 @@ class IndividualReportContradictionFilterCategory(models.Model):
     class Meta:
         verbose_name_plural = 'Противоречия в шкалах: Категории (шкалы) (личные отчеты)'
         verbose_name = 'Противоречия в шкалах : Категория (шкалы) (личные отчеты)'
+
+
+class PotentialMatrix(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    code = models.CharField(max_length=200, blank=True, null=True)
+    project = models.ForeignKey(Project, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+
+    def __str__(self):
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name}'
+
+    class Meta:
+        verbose_name_plural = 'Матрицы потенциала (PotentialMatrix)'
+        verbose_name = 'Матрица потенциала (PotentialMatrix)'
+
+
+class PotentialMatrixCategory(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, default=None, blank=True, null=True)
+    matrix = models.ForeignKey(PotentialMatrix, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    points_from = models.IntegerField(null=False, default=0)
+    points_to = models.IntegerField(null=False, default=0)
+
+    def __str__(self):
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.matrix.name}'
+
+    class Meta:
+        verbose_name_plural = 'Матрицы потенциала: Категории (шкалы) (PotentialMatrixCategory)'
+        verbose_name = 'Матрица потенциала: Категории (шкалы) (PotentialMatrixCategory)'
 
 
 class TrafficLightReportFilter(models.Model):
