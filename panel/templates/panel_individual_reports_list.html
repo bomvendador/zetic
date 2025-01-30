@@ -39,6 +39,7 @@
                                                     disabled>
                                                 <option value="no_action">-- Выберите действие --</option>
                                                 <option value="download_individual_reports">Скачать отчеты</option>
+                                                <option value="download_t_points">Экспорт в Excel (т-баллы)</option>
                                             </select>
                                         </div>
                                         <div style="display: inline-block">
@@ -240,6 +241,8 @@
 {% block script %}
 
     <script src="{% static 'login/js/select2.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
     {#    <script src="{% static 'login/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>#}
     <script>
 
@@ -267,6 +270,7 @@
                     }
                 })
                 console.log(selected_participants_reports_ids)
+                let url = "{% url 'individual_report_group_action' %}"
                 switch (action_name) {
                     case "download_individual_reports":
                         if (selected_participants_reports_ids.length === 0) {
@@ -277,7 +281,7 @@
                             let comments = $('#report-comments-text').val()
                             $.ajax({
                                 headers: {"X-CSRFToken": token},
-                                url: "{% url 'individual_report_group_action' %}",
+                                url: url,
                                 type: 'POST',
 
                                 data: JSON.stringify({
@@ -306,6 +310,68 @@
                         }
 
 
+                        break;
+
+                    case 'download_t_points':
+                        show_progressbar_loader()
+                        $.ajax({
+                                headers: {"X-CSRFToken": token},
+                                url: url,
+                                type: 'POST',
+
+                                data: JSON.stringify({
+                                    'action_type': action_name,
+                                    'selected_participants_reports_ids': selected_participants_reports_ids
+                                }),
+                                processData: false,
+                                contentType: false,
+                                error: function (data) {
+                                    toastr.error('Ошибка', data)
+                                },
+                                success: function (response) {
+                                    hide_progressbar_loader()
+                                    let reports_data = response['reports_data']
+                                    let categories_names = response['categories_names']
+                                    let sheet_header = ['Компания', 'Участник', 'Email', 'Пол', 'Должность', 'Индустрия', 'Роль/Функция', 'Год рождения', 'Окончание заполнения']
+                                    let sheet_data = []
+                                    categories_names.forEach(function (name) {
+                                        sheet_header.push(name)
+                                    })
+                                    sheet_data.push(sheet_header)
+                                    reports_data.forEach(function (report_data) {
+                                        {#console.log(report_data)#}
+                                        let participant_row_data = []
+                                        let categories_data = report_data['categories_data']
+                                        let company = report_data['company']
+                                        let participant = report_data['participant']
+                                        let email = report_data['email']
+                                        let gender = report_data['gender']
+                                        let position = report_data['position']
+                                        let industry = report_data['industry']
+                                        let role = report_data['role']
+                                        let birth_year = report_data['birth_year']
+                                        let completed_at = report_data['completed_at']
+                                        participant_row_data.push(company, participant, email, gender, position, industry, role, birth_year, completed_at)
+                                        categories_data.forEach(function (category) {
+                                            participant_row_data.push(category['points'])
+                                        })
+                                        sheet_data.push(participant_row_data)
+
+                                    })
+                                    let workbook = XLSX.utils.book_new(), worksheet = XLSX.utils.aoa_to_sheet(sheet_data);
+                                    workbook.SheetNames.push("First");
+                                    workbook.Sheets["First"] = worksheet;
+                                    let currentdate = new Date();
+                                    let datetime_string = currentdate.getDate() + '_'
+                                        + (currentdate.getMonth() + 1).toString() + '_'
+                                        + currentdate.getFullYear() + " @ "
+                                        + currentdate.getHours() + ":"
+                                        + currentdate.getMinutes() + ":"
+                                        + currentdate.getSeconds();
+                                    XLSX.writeFile(workbook, '[Т-Баллы] ' + datetime_string + ".xlsx");
+                                }
+                            }
+                        );
                         break;
                     default:
                         break;

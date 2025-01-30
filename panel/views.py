@@ -1121,6 +1121,40 @@ def individual_report_group_action(request):
                         report = Report.objects.get(id=report_id)
                         zipf.write(os.path.join(MEDIA_ROOT, 'reportsPDF', 'single', report.file.name), arcname=report.file.name)
                 return HttpResponse(zip_name)
+            case 'download_t_points':
+                categories_names = []
+                reports_data = []
+                for report_id in selected_participants_reports_ids:
+                    report = Report.objects.get(id=report_id)
+                    report_data = {
+                        'company': report.participant.employee.company.name,
+                        'participant': report.participant.employee.name,
+                        'email': report.participant.employee.email,
+                        'gender': report.participant.employee.sex.name_ru,
+                        'position': report.participant.employee.position.name_ru,
+                        'industry': report.participant.employee.industry.name_ru,
+                        'role': report.participant.employee.role.name_ru,
+                        'birth_year': report.participant.employee.birth_year,
+                        'completed_at': timezone.localtime(report.participant.completed_at).strftime("%d.%m.%Y %H:%M:%S"),
+                        'categories_data': []
+                    }
+                    categories = Category.objects.all().order_by('code')
+                    for category in categories:
+                        report_data_by_categories = ReportDataByCategories.objects.filter(Q(report_id=report_id) &
+                                                                                          Q(category_code=category.code))
+                        if report_data_by_categories:
+                            if category.name not in categories_names:
+                                categories_names.append(category.name)
+                            for report_data_by_category in report_data_by_categories:
+                                report_data['categories_data'].append({
+                                    'name': category.name,
+                                    'points': report_data_by_category.t_points
+                                })
+                    reports_data.append(report_data)
+                return JsonResponse({
+                    'reports_data': reports_data,
+                    'categories_names': categories_names
+                })
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
