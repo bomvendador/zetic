@@ -176,7 +176,7 @@ def search_for_questionnaire_status(request):
         status = json_data['status']
         all_companies = False
         employee_role_name = UserProfile.objects.get(user=request.user).role.name
-
+        print(json_data)
         if company_id == '' or company_id == 'all':
             all_companies = True
         if status == 'not_started':
@@ -230,7 +230,7 @@ def search_for_questionnaire_status(request):
             data = {
                 'fio': questionnaire.participant.employee.name,
                 'email': questionnaire.participant.employee.email,
-                'answers': f'{questionnaire.participant.answered_questions_qnt} / {questionnaire.participant.total_questions_qnt}',
+                'answers': f'{round(questionnaire.participant.answered_questions_qnt/questionnaire.participant.total_questions_qnt)} %',
                 'created_at': timezone.localtime(questionnaire.created_at).strftime("%d.%m.%Y %H:%M:%S"),
                 'active': questionnaire.active
             }
