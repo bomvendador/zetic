@@ -811,9 +811,9 @@ $('#tbody_company_admins').on('click', '.delete-company-admin', function () {
     let tr = $(this).closest('tr')
     let employee_id = $(this).closest('tr').attr('id').split('_')[2]
     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-        '<div>Удалить админа?</div>' +
-        '<br>' +
-        '<hr class="solid mt-0" style="background-color: black;">'
+        '<h3 style="text-align: center">Удаление админа</h3>' +
+        '<hr class="solid mt-0" style="background-color: black;">' +
+        '<div style="text-align: center">Удалить админа?</div>'
     Swal.fire({
         html: output_html,
         icon: 'question',
