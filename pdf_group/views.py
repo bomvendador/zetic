@@ -56,7 +56,7 @@ def pdf_group_generator(request_json):
     # print(f'line_height = {line_height} total_participant_qnt = {total_participant_qnt} table_height = {table_height} table_y = {table_y}')
 
     pdf.add_page()
-    print(square_results)
+    # print(square_results)
     # lang = request_json['lang']
     lang = 'ru'
     # client_name = request_json['project']
@@ -68,50 +68,51 @@ def pdf_group_generator(request_json):
     participants_page(pdf, square_results, lang)
 
     # интегральный отчет
-    pdf.set_line_width(0.1)
+    if len(square_results) >= 3:
+        pdf.set_line_width(0.1)
 
-    # integral_group_report_allowed = True
-    integral_group_report_allowed_options = GroupReportAllowedOptions.objects.get(name='Интегральный отчет')
-    company_integral_group_report_options = CompanyGroupReportAllowedOptions.objects.get(Q(option=integral_group_report_allowed_options) &
-                                                                                     Q(company=Company.objects.get(id=company_id))).value
-    # if not company_integral_group_report_options:
-    #     integral_group_report_allowed = False
+        # integral_group_report_allowed = True
+        integral_group_report_allowed_options = GroupReportAllowedOptions.objects.get(name='Интегральный отчет')
+        company_integral_group_report_options = CompanyGroupReportAllowedOptions.objects.get(Q(option=integral_group_report_allowed_options) &
+                                                                                         Q(company=Company.objects.get(id=company_id))).value
+        # if not company_integral_group_report_options:
+        #     integral_group_report_allowed = False
 
-    # print(f'company_integral_group_report_options id = {len(company_integral_group_report_options)}')
-    # print(f'integral_group_report_allowed = {integral_group_report_allowed}')
-    if company_integral_group_report_options:
-        groups = []
-        for participant_data in square_results:
-            group_name = participant_data[4]
-            if group_name != '':
-                if not any(group_name in key for key in groups):
-                    groups.append({
-                        group_name: [participant_data]
-                    })
-                else:
-                    for group in groups:
-                        if group_name in group:
-                            group[group_name].append(participant_data)
+        # print(f'company_integral_group_report_options id = {len(company_integral_group_report_options)}')
+        # print(f'integral_group_report_allowed = {integral_group_report_allowed}')
+        if company_integral_group_report_options:
+            groups = []
+            for participant_data in square_results:
+                group_name = participant_data[4]
+                if group_name != '':
+                    if not any(group_name in key for key in groups):
+                        groups.append({
+                            group_name: [participant_data]
+                        })
+                    else:
+                        for group in groups:
+                            if group_name in group:
+                                group[group_name].append(participant_data)
 
-        # print('----groups-----')
-        # print(groups)
-        # print('--------------')
-        if len(groups) > 0:
-            groups_for_integral_report = []
-            # print('====groups_for_integral_report====')
-            for group in groups:
-                key_vals = next(iter(group.values()))
-                if len(key_vals) >= 3:
-                    # print(key_vals)
-                    groups_for_integral_report.append(key_vals)
-                    group_name_for_report = key_vals[0][4]
-                    pdf.add_page()
-                    integral_report_page(pdf, 'ru', key_vals, f'Интегральный отчет (группа - "{group_name_for_report}")')
+            # print('----groups-----')
+            # print(groups)
+            # print('--------------')
+            if len(groups) > 0:
+                groups_for_integral_report = []
+                # print('====groups_for_integral_report====')
+                for group in groups:
+                    key_vals = next(iter(group.values()))
+                    if len(key_vals) >= 3:
+                        # print(key_vals)
+                        groups_for_integral_report.append(key_vals)
+                        group_name_for_report = key_vals[0][4]
+                        pdf.add_page()
+                        integral_report_page(pdf, 'ru', key_vals, f'Интегральный отчет (группа - "{group_name_for_report}")')
 
-            # print('-------------------')
-        pdf.add_page()
-        pdf.set_text_color(0, 0, 0)
-        integral_report_page(pdf, 'ru', square_results, 'Интегральный отчет (все участники)')
+                # print('-------------------')
+            pdf.add_page()
+            pdf.set_text_color(0, 0, 0)
+            integral_report_page(pdf, 'ru', square_results, 'Интегральный отчет (все участники)')
 
     # ---------------------
 

@@ -269,6 +269,7 @@ def draw_single_circle_potential_matrix_squares(square_data, pdf, square_x_cnt, 
     if bold == 1:
         pdf.set_draw_color(r=0, g=0, b=0)
     else:
+        pdf.set_line_width(0.1)
         pdf.set_draw_color(r=135, g=135, b=135)
     pdf.circle(square_x_cnt[square_name]['circle_coords'][0] + 9 * square_x_cnt[square_name]['cur_X_pos'], square_x_cnt[square_name]['circle_coords'][1] + 9 * square_x_cnt[square_name]['cur_Y_pos'], 8, style="FD")
     if cnt <= 9:
@@ -283,3 +284,5 @@ def draw_single_circle_potential_matrix_squares(square_data, pdf, square_x_cnt, 
         square_x_cnt[square_name]['cur_X_pos'] = 0
         square_x_cnt[square_name]['cur_Y_pos'] = square_x_cnt[square_name]['cur_Y_pos'] + 1
     square_x_cnt[square_name]['cnt'] = square_x_cnt[square_name]['cnt'] + 1
+    pdf.set_line_width(0.5)
+
