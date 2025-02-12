@@ -37,6 +37,8 @@ from reports.settings import DEBUG
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
+from selenium.webdriver.firefox.options import Options as Firefox_Options
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
 
@@ -79,9 +81,12 @@ def page_circle_diagram(pdf, questionnaire_id, report_id, lang):
         for filter_category in traffic_light_report_filter_categories:
             if report_id != '':
                 report = Report.objects.get(id=report_id)
-                report_data_by_categories_inst = ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).latest('created_at')
-                t_point = report_data_by_categories_inst.t_points
-                total_t_points = total_t_points + t_point
+                report_data_by_categories_inst = ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code))
+                if report_data_by_categories_inst:
+                    report_data_by_categories_inst = report_data_by_categories_inst.latest('created_at')
+                    # report_data_by_categories_inst = ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=filter_category.category.code)).latest('created_at')
+                    t_point = report_data_by_categories_inst.t_points
+                    total_t_points = total_t_points + t_point
             else:
                 raw_points = 0
                 questionnaire = Questionnaire.objects.get(id=questionnaire_id)
@@ -311,7 +316,15 @@ def draw_circle_diagram(pdf, data_for_circle):
     if DEBUG == 0:
         export_png(p, filename=name, webdriver=web_driver)
     else:
-        export_png(p, filename=name)
+        # driver = webdriver.Firefox(executable_path=r'D:\projects\bokeh\geckodriver.exe')
+
+        options = Firefox_Options()
+        options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
+        cap = DesiredCapabilities().FIREFOX
+        cap["marionette"] = False
+        driver = webdriver.Firefox(capabilities=cap, executable_path=r'D:\projects\bokeh\geckodriver.exe', options=options)
+
+        export_png(p, filename=name, webdriver=driver)
 
     pdf.image(name, x=20, y=18, h=pdf.epw*0.9)
 

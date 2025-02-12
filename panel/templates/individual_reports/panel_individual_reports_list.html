@@ -202,7 +202,9 @@
             </div>
         </div>
     </div>
+    <div id="modal_report_options">
 
+    </div>
 
     <!-- Модальное окно комментарии к отчету -->
     <div class="modal fade" id="input-modal-report-comments">
@@ -234,6 +236,7 @@
             </div>
         </div>
     </div>
+
 
 
 {% endblock %}
@@ -406,11 +409,27 @@
             });
 
         })
-
+        let report_id
         $('#project_participants_table').on('click', '.regenerate_report', function () {
             let tr_report_id = $(this).closest('tr').attr('id')
-            let report_id = tr_report_id.split('_')[2]
-            show_progressbar_loader()
+            report_id = tr_report_id.split('_')[2]
+
+            $('#modal_report_options #modal_change_report_options').modal('show')
+
+
+        })
+
+        $('#modal_report_options').on('click', '#change_report_options_save', function () {
+            let options_data = []
+
+            $('#modal_report_options .option-for-individual-report').each(function () {
+                options_data.push({
+                    'id': $(this).data('option-id'),
+                    'value': $(this).prop('checked')
+                })
+            })
+            let btn_text_value = $('#change_report_options_save').html()
+            btn_spinner($('#change_report_options_save'))
             $.ajax({
                 headers: {"X-CSRFToken": token},
                 url: "{% url 'pdf_regenerate_report' %}",
@@ -418,6 +437,7 @@
 
                 data: JSON.stringify({
                     'report_id': report_id,
+                    'options_data': options_data
                 }),
                 processData: false,
                 contentType: false,
@@ -425,7 +445,7 @@
                     toastr.error('Ошибка', data)
                 },
                 success: function (data) {
-                    hide_progressbar_loader()
+                    btn_text($('#change_report_options_save'), btn_text_value)
                     console.log(data)
                     let company_name = data
 
@@ -448,9 +468,7 @@
                 }
             });
 
-
         })
-
 
         $('#project_participants_table').on('click', '.select-participant-for-group-action', function () {
 
@@ -551,6 +569,9 @@
                             console.log(data)
                             {#let data_json = $.parseJSON(data);#}
                             let data_json = data['data'];
+                            let modal_report_options_html = data['modal_report_option'];
+
+                            $('#modal_report_options').html(modal_report_options_html)
                             let html = ''
                             data_json.forEach(function (item) {
                                 html += `<tr class="report-row" id="report_id_${item['id']}" data-participant-id="${item['participant_id']}">`

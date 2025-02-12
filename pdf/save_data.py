@@ -159,15 +159,20 @@ def save_data_to_db_and_send_report(data):
         report.type = request_type
     report.save()
 
-    if not report_id == '':
+    if report_id != '':
         cur_report_inst = Report.objects.get(id=report_id)
         report.primary = False
         report.lie_points = cur_report_inst.lie_points
         report.save()
-        report_by_categories_inst = ReportDataByCategories.objects.filter(report_id=report_id)
-        for report_by_categories in report_by_categories_inst:
-            report_by_categories.report = report
-            report_by_categories.save()
+        cur_report_by_categories_inst = ReportDataByCategories.objects.filter(report_id=report_id)
+        for report_by_categories in cur_report_by_categories_inst:
+            new_report_by_categories = ReportDataByCategories()
+            new_report_by_categories.report = report
+            new_report_by_categories.section_name = report_by_categories.section_name
+            new_report_by_categories.category_name = report_by_categories.category_name
+            new_report_by_categories.category_code = report_by_categories.category_code
+            new_report_by_categories.t_points = report_by_categories.t_points
+            new_report_by_categories.save()
 
     study_inst = Study.objects.get(id=study_id)
     questionnaire_question_answers = QuestionnaireQuestionAnswers.objects.filter(questionnaire=questionnaire_inst)

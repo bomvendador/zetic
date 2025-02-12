@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse, HttpResponseRedirect, FileResponse
 from django.contrib.auth import authenticate, login, logout
 from reports.settings import MEDIA_ROOT, BASE_DIR
+from django.template.loader import render_to_string
 
 import os
 import zipfile
@@ -14,7 +15,8 @@ from pdf.models import Company, Participant, ReportData, Report, Category, Repor
     Section, \
     MatrixFilter, MatrixFilterParticipantNotDistributed, MatrixFilterInclusiveEmployeePosition, MatrixFilterCategory, \
     MatrixFilterParticipantNotDistributedEmployeePosition, QuestionnaireQuestionAnswers, QuestionAnswers, \
-    ReportDataByCategories, Questionnaire, Project, ProjectStudy, ProjectParticipants, ConsultantCompany, CommonBooleanSettings
+    ReportDataByCategories, Questionnaire, Project, ProjectStudy, ProjectParticipants, ConsultantCompany, \
+    CommonBooleanSettings, StudyIndividualReportAllowedOptions, CompanyIndividualReportAllowedOptions, IndividualReportAllowedOptions
 # from django.contrib.auth.models import User
 
 from login.models import UserRole, UserProfile, User
@@ -1061,11 +1063,14 @@ def individual_reports_list(request):
                     'name': company.name,
                     'id': company.id
                 })
-        context.update(
-            {'companies_arr': companies_arr}
-        )
 
-        return render(request, 'panel_individual_reports_list.html', context)
+
+        context.update({
+            'companies_arr': companies_arr,
+            # 'companies_arr': IndividualReportAllowedOptions.objects.all()
+        })
+
+        return render(request, 'individual_reports/panel_individual_reports_list.html', context)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -1099,8 +1104,21 @@ def get_individual_reports_list(request):
                 'primary': report.primary,
                 'type': report.type,
             })
+        # study_individual_report_allowed_options = StudyIndividualReportAllowedOptions.objects.filter(study=study)
+        company_individual_report_allowed_options = CompanyIndividualReportAllowedOptions.objects.filter(company_id=company_id)
+        reports_options = []
+        for option in company_individual_report_allowed_options:
+            reports_options.append({
+                'company_option_id': option.id,
+                'individual_option_id': option.option.id,
+                'option_name': option.option.name,
+                'value': option.value
+            })
+        modal_report_option = render_to_string('individual_reports/modal_report_option.html', {'options': company_individual_report_allowed_options})
         response = {
-            'data': list(report_arr)
+            'data': list(report_arr),
+            # 'modal_report_option': list(reports_options),
+            'modal_report_option': modal_report_option
         }
         return JsonResponse(response)
 

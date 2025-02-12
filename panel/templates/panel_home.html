@@ -1,23 +1,23 @@
 {% extends 'panel_base.html' %}
 {% load static %}
-    {% block content %}
-        <!-- CONTAINER -->
-        <div class="main-container container-fluid">
+{% block content %}
+    <!-- CONTAINER -->
+    <div class="main-container container-fluid">
 
-            <!-- PAGE-HEADER -->
-            <div class="page-header">
-                <h1 class="page-title">Статистика</h1>
-                <div>
-                    <ol class="breadcrumb">
-{#                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>#}
-{#                        <li class="breadcrumb-item active" aria-current="page">Dashboard 01</li>#}
-                        <li class="breadcrumb-item active" aria-current="page">Home</li>
-                    </ol>
-                </div>
+        <!-- PAGE-HEADER -->
+        <div class="page-header">
+            <h1 class="page-title">Статистика</h1>
+            <div>
+                <ol class="breadcrumb">
+                    {#                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>#}
+                    {#                        <li class="breadcrumb-item active" aria-current="page">Dashboard 01</li>#}
+                    <li class="breadcrumb-item active" aria-current="page">Home</li>
+                </ol>
             </div>
-            <!-- PAGE-HEADER END -->
+        </div>
+        <!-- PAGE-HEADER END -->
 
-            {% if cur_userprofile.role.name == 'Админ заказчика' %}
+        {% if cur_userprofile.role.name == 'Админ заказчика' %}
             <!-- ROW-1 -->
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
@@ -73,13 +73,13 @@
                                 </div>
                             </div>
                         </div>
-                     </div>
+                    </div>
                 </div>
             </div>
             <!-- ROW-1 END -->
 
-            {% endif %}
-            {% if cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Суперадмин' or cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Менеджер' %}
+        {% endif %}
+        {% if cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Суперадмин' or cur_userprofile.role.name == 'Админ' or cur_userprofile.role.name == 'Менеджер' %}
             <!-- ROW-1 -->
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
@@ -111,16 +111,16 @@
                                         <div class="mt-2">
                                             <h6 class="">ТОП-5 Ценностей (MAX)</h6>
                                             {% for item in stats.top_4 %}
-                                            <ul>
-                                                <li style="font-size: 16px"><b>{{ item }}</b></li>
-                                            </ul>
+                                                <ul>
+                                                    <li style="font-size: 16px"><b>{{ item }}</b></li>
+                                                </ul>
                                             {% endfor %}
                                         </div>
-{#                                        <div class="ms-auto">#}
-{#                                            <div class="chart-wrapper mt-1">#}
-{#                                                <i class="side-menu__icon fe fe-briefcase stats-icons"></i>#}
-{#                                            </div>#}
-{#                                        </div>#}
+                                        {#                                        <div class="ms-auto">#}
+                                        {#                                            <div class="chart-wrapper mt-1">#}
+                                        {#                                                <i class="side-menu__icon fe fe-briefcase stats-icons"></i>#}
+                                        {#                                            </div>#}
+                                        {#                                        </div>#}
                                     </div>
                                 </div>
                             </div>
@@ -132,16 +132,16 @@
                                         <div class="mt-2">
                                             <h6 class="">ТОП-5 Стратегии стресса (MAX)</h6>
                                             {% for item in stats.top_2 %}
-                                            <ul>
-                                                <li style="font-size: 16px"><b>{{ item }}</b></li>
-                                            </ul>
+                                                <ul>
+                                                    <li style="font-size: 16px"><b>{{ item }}</b></li>
+                                                </ul>
                                             {% endfor %}
                                         </div>
-{#                                        <div class="ms-auto">#}
-{#                                            <div class="chart-wrapper mt-1">#}
-{#                                                <i class="side-menu__icon fe fe-briefcase stats-icons"></i>#}
-{#                                            </div>#}
-{#                                        </div>#}
+                                        {#                                        <div class="ms-auto">#}
+                                        {#                                            <div class="chart-wrapper mt-1">#}
+                                        {#                                                <i class="side-menu__icon fe fe-briefcase stats-icons"></i>#}
+                                        {#                                            </div>#}
+                                        {#                                        </div>#}
                                     </div>
                                 </div>
                             </div>
@@ -153,16 +153,16 @@
                                         <div class="mt-2">
                                             <h6 class="">ТОП-5 Черты характера (MAX)</h6>
                                             {% for item in stats.top_1 %}
-                                            <ul>
-                                                <li style="font-size: 16px"><b>{{ item }}</b></li>
-                                            </ul>
+                                                <ul>
+                                                    <li style="font-size: 16px"><b>{{ item }}</b></li>
+                                                </ul>
                                             {% endfor %}
                                         </div>
-{#                                        <div class="ms-auto">#}
-{#                                            <div class="chart-wrapper mt-1">#}
-{#                                                <i class="side-menu__icon fe fe-briefcase stats-icons"></i>#}
-{#                                            </div>#}
-{#                                        </div>#}
+                                        {#                                        <div class="ms-auto">#}
+                                        {#                                            <div class="chart-wrapper mt-1">#}
+                                        {#                                                <i class="side-menu__icon fe fe-briefcase stats-icons"></i>#}
+                                        {#                                            </div>#}
+                                        {#                                        </div>#}
                                     </div>
                                 </div>
                             </div>
@@ -174,16 +174,16 @@
                                         <div class="mt-2">
                                             <h6 class="">ТОП-5 Черты характера (MIN)</h6>
                                             {% for item in stats.categories_names_1_min %}
-                                            <ul>
-                                                <li style="font-size: 16px"><b>{{ item }}</b></li>
-                                            </ul>
+                                                <ul>
+                                                    <li style="font-size: 16px"><b>{{ item }}</b></li>
+                                                </ul>
                                             {% endfor %}
                                         </div>
-{#                                        <div class="ms-auto">#}
-{#                                            <div class="chart-wrapper mt-1">#}
-{#                                                <i class="side-menu__icon fe fe-briefcase stats-icons"></i>#}
-{#                                            </div>#}
-{#                                        </div>#}
+                                        {#                                        <div class="ms-auto">#}
+                                        {#                                            <div class="chart-wrapper mt-1">#}
+                                        {#                                                <i class="side-menu__icon fe fe-briefcase stats-icons"></i>#}
+                                        {#                                            </div>#}
+                                        {#                                        </div>#}
                                     </div>
                                 </div>
                             </div>
@@ -259,38 +259,37 @@
                                 </div>
                             </div>
                         </div>
-                        <div
-  style="height: 100px"
-  id="captcha-container"
-  class="smart-captcha"
-  data-sitekey="ysc1_drDe4cB6Es9a4JdOzJUpv2nRaoqj2OkWWDaBwecA11312865"
-></div>
+{#                        <div#}
+{#                                style="height: 100px"#}
+{#                                id="captcha-container"#}
+{#                                class="smart-captcha"#}
+{#                                data-sitekey="ysc1_drDe4cB6Es9a4JdOzJUpv2nRaoqj2OkWWDaBwecA11312865"#}
+{#                        ></div>#}
 
 
-
-                     </div>
+                    </div>
                 </div>
             </div>
             <!-- ROW-1 END -->
 
-            {% endif %}
+        {% endif %}
 
-           <!-- ROW-4 END -->
-           <!-- ROW-4 END -->
-        </div>
-        <!-- CONTAINER END -->
-    {% endblock %}
+        <!-- ROW-4 END -->
+        <!-- ROW-4 END -->
+    </div>
+    <!-- CONTAINER END -->
+{% endblock %}
 
 {% block script %}
 
 
-<script>
+    <script>
 
-$('[name="smart-token"]').change(function(){
-      console.log($(this).val())
-    console.log('eeeeeee')
-})
+        {#$('[name="smart-token"]').change(function () {#}
+        {#    console.log($(this).val())#}
+        {#    console.log('eeeeeee')#}
+        {#})#}
 
 
-</script>
+    </script>
 {% endblock %}

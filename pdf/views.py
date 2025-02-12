@@ -35,13 +35,23 @@ import fitz
 import json
 
 
+def get_regeneration_report_option_value_by_individual_option_id(options_data_report_regeneration, individual_option_id):
+    for option in options_data_report_regeneration:
+        if individual_option_id == option['id']:
+            return option['value']
+
+
 def pdf_single_generator(data):
 # def pdf_single_generator(questionnaire_id, report_id):
-    print('------data-----')
-    print(data)
-    print('-----------')
+#     print('------data-----')
+#     print(data)
+#     print('-----------')
     questionnaire_id = data['questionnaire_id']
     report_id = data['report_id']
+    try:
+        options_data_report_regeneration = data['options_data']
+    except KeyError:
+        options_data_report_regeneration = ''
     time_start = time.perf_counter()
     static_dir = 'static/'
     pdf = fpdf.FPDF(orientation="P", unit="mm", format="A4")
@@ -95,22 +105,26 @@ def pdf_single_generator(data):
     individual_report_allowed_options_short_conclusions = IndividualReportAllowedOptions.objects.get(name='Краткие выводы')
 
     show_short_conclusions = True
-    participant_short_conclusions_options_filter = ParticipantIndividualReportAllowedOptions.objects.filter(Q(participant=questionnaire_inst.participant) &
-                                                                                                  Q(option=individual_report_allowed_options_short_conclusions))
-    if participant_short_conclusions_options_filter.exists():
-        participant_short_conclusions_options = ParticipantIndividualReportAllowedOptions.objects.get(Q(participant=questionnaire_inst.participant) &
-                                                                                                  Q(option=individual_report_allowed_options_short_conclusions))
-        if not participant_short_conclusions_options.value:
-            show_short_conclusions = False
+    if options_data_report_regeneration != '':
+        show_short_conclusions = get_regeneration_report_option_value_by_individual_option_id(
+            options_data_report_regeneration, individual_report_allowed_options_short_conclusions.id)
     else:
-        company_short_conclusions_options_filter = CompanyIndividualReportAllowedOptions.objects.filter(Q(option=individual_report_allowed_options_short_conclusions) &
-                                                                                                 Q(company=questionnaire_inst.participant.employee.company))
-        if company_short_conclusions_options_filter.exists():
-            company_short_conclusions_options = CompanyIndividualReportAllowedOptions.objects.get(Q(option=individual_report_allowed_options_short_conclusions) &
-                                                                                                  Q(company=questionnaire_inst.participant.employee.company))
-
-            if not company_short_conclusions_options.value:
+        participant_short_conclusions_options_filter = ParticipantIndividualReportAllowedOptions.objects.filter(Q(participant=questionnaire_inst.participant) &
+                                                                                                      Q(option=individual_report_allowed_options_short_conclusions))
+        if participant_short_conclusions_options_filter.exists():
+            participant_short_conclusions_options = ParticipantIndividualReportAllowedOptions.objects.get(Q(participant=questionnaire_inst.participant) &
+                                                                                                      Q(option=individual_report_allowed_options_short_conclusions))
+            if not participant_short_conclusions_options.value:
                 show_short_conclusions = False
+        else:
+            company_short_conclusions_options_filter = CompanyIndividualReportAllowedOptions.objects.filter(Q(option=individual_report_allowed_options_short_conclusions) &
+                                                                                                     Q(company=questionnaire_inst.participant.employee.company))
+            if company_short_conclusions_options_filter.exists():
+                company_short_conclusions_options = CompanyIndividualReportAllowedOptions.objects.get(Q(option=individual_report_allowed_options_short_conclusions) &
+                                                                                                      Q(company=questionnaire_inst.participant.employee.company))
+
+                if not company_short_conclusions_options.value:
+                    show_short_conclusions = False
     if show_short_conclusions:
         pdf.add_page()
         page_short_conclusions(pdf, questionnaire_id, lang, report_id)
@@ -123,14 +137,26 @@ def pdf_single_generator(data):
 
     study_inst = questionnaire_inst.participant.study
     individual_report_allowed_options_circle_diagram = IndividualReportAllowedOptions.objects.get(name='Круговая диаграмма')
-    if 'Создано сотрудником' in study_inst.name:
-        participant_circle_diagram_options_filter_circle_diagram = CompanyIndividualReportAllowedOptions.objects.get(Q(option=individual_report_allowed_options_circle_diagram) &
-                                                                                                                        Q(company=questionnaire_inst.participant.employee.company)).value
+
+    if options_data_report_regeneration != '': # если отчет пересоздается
+        show_circle_diagram = get_regeneration_report_option_value_by_individual_option_id(
+            options_data_report_regeneration, individual_report_allowed_options_circle_diagram.id)
     else:
-        participant_circle_diagram_options_filter_circle_diagram = ParticipantIndividualReportAllowedOptions.objects.get(Q(participant=questionnaire_inst.participant) &
-                                                                                                                            Q(option=individual_report_allowed_options_circle_diagram)).value
+
+        if 'Создано сотрудником' in study_inst.name:
+            participant_circle_diagram_options_filter_circle_diagram = CompanyIndividualReportAllowedOptions.objects.get(Q(option=individual_report_allowed_options_circle_diagram) &
+                                                                                                                            Q(company=questionnaire_inst.participant.employee.company)).value
+        else:
+            participant_circle_diagram_options_filter_circle_diagram = ParticipantIndividualReportAllowedOptions.objects.get(Q(participant=questionnaire_inst.participant) &
+                                                                                                                                Q(option=individual_report_allowed_options_circle_diagram)).value
+
+        if participant_circle_diagram_options_filter_circle_diagram:
+            show_circle_diagram = True
+        else:
+            show_circle_diagram = False
     # print(f'circle_diagram = {}')
-    if participant_circle_diagram_options_filter_circle_diagram:
+    # print(f'circle_diagram = {participant_circle_diagram_options_filter_circle_diagram}')
+    if show_circle_diagram:
         pdf.add_page()
         page_circle_diagram(pdf, questionnaire_id, report_id, lang)
 
@@ -224,22 +250,28 @@ def pdf_single_generator(data):
 
     individual_report_allowed_options = IndividualReportAllowedOptions.objects.get(name='Выводы эксперта')
     show_consultant_page = True
-    participant_consultant_page_options_filter = ParticipantIndividualReportAllowedOptions.objects.filter(Q(participant=questionnaire_inst.participant) &
-                                                                                                  Q(option=individual_report_allowed_options))
-    if participant_consultant_page_options_filter.exists():
-        participant_consultant_page_options = ParticipantIndividualReportAllowedOptions.objects.get(Q(participant=questionnaire_inst.participant) &
-                                                                                                    Q(option=individual_report_allowed_options))
-        if not participant_consultant_page_options.value:
-            show_consultant_page = False
-    else:
-        company_consultant_page_options_filter = CompanyIndividualReportAllowedOptions.objects.filter(Q(option=individual_report_allowed_options) &
-                                                                                                      Q(company=questionnaire_inst.participant.employee.company))
-        if company_consultant_page_options_filter:
-            company_consultant_page_options = CompanyIndividualReportAllowedOptions.objects.get(Q(option=individual_report_allowed_options) &
-                                                                                                Q(company=questionnaire_inst.participant.employee.company))
 
-            if not company_consultant_page_options.value:
+    if options_data_report_regeneration != '':  # если отчет пересоздается
+        show_consultant_page = get_regeneration_report_option_value_by_individual_option_id(
+            options_data_report_regeneration, individual_report_allowed_options.id)
+    else:
+
+        participant_consultant_page_options_filter = ParticipantIndividualReportAllowedOptions.objects.filter(Q(participant=questionnaire_inst.participant) &
+                                                                                                      Q(option=individual_report_allowed_options))
+        if participant_consultant_page_options_filter.exists():
+            participant_consultant_page_options = ParticipantIndividualReportAllowedOptions.objects.get(Q(participant=questionnaire_inst.participant) &
+                                                                                                        Q(option=individual_report_allowed_options))
+            if not participant_consultant_page_options.value:
                 show_consultant_page = False
+        else:
+            company_consultant_page_options_filter = CompanyIndividualReportAllowedOptions.objects.filter(Q(option=individual_report_allowed_options) &
+                                                                                                          Q(company=questionnaire_inst.participant.employee.company))
+            if company_consultant_page_options_filter:
+                company_consultant_page_options = CompanyIndividualReportAllowedOptions.objects.get(Q(option=individual_report_allowed_options) &
+                                                                                                    Q(company=questionnaire_inst.participant.employee.company))
+
+                if not company_consultant_page_options.value:
+                    show_consultant_page = False
 
     if 'consultant_form_id' in data and show_consultant_page:
         pdf.add_page()
@@ -295,10 +327,11 @@ def regenerate_report(request):
         json_data = json.loads(request.body.decode('utf-8'))
         print(json_data)
         report_id = json_data['report_id']
+        options_data = json_data['options_data']
         report = Report.objects.get(id=report_id)
         questionnaire = Questionnaire.objects.get(participant=report.participant)
 
-        pdf_single_generator({'questionnaire_id': questionnaire.id, 'report_id': report_id})
+        pdf_single_generator({'questionnaire_id': questionnaire.id, 'report_id': report_id, 'options_data': options_data})
         return HttpResponse(report.participant.employee.company.name)
 
 
