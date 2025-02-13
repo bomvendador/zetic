@@ -62,6 +62,7 @@ def page_traffic_light_descriptions_title(pdf, lang):
 
 
 def page_traffic_light_descriptions(pdf, lang, project_id):
+    print('page_traffic_light_descriptions')
     pdf.add_page()
     pdf.set_auto_page_break(False)
 
