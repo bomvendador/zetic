@@ -85,8 +85,13 @@ def page_circle_diagram_descriptions(pdf, lang):
         name = traffic_light_filter.name
         description = traffic_light_filter.description
         if description:
-            y = pdf.get_y() + 5
-            pdf.set_xy(x, y)
+            if pdf.get_y() >= MAX_Y:
+                pdf.add_page()
+                page_circle_diagram_descriptions_title(pdf, lang)
+                pdf.set_xy(x, pdf.get_y() + 15)
+            else:
+                y = pdf.get_y() + 5
+                pdf.set_xy(x, y)
 
             block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, x, str(name).upper())
             pdf.set_text_color(0, 0, 0)
@@ -95,9 +100,6 @@ def page_circle_diagram_descriptions(pdf, lang):
             pdf.set_xy(x, y)
             pdf.multi_cell(0, 4, description, align='J')
 
-            if pdf.get_y() >= MAX_Y:
-                pdf.add_page()
-                page_circle_diagram_descriptions_title(pdf, lang)
     insert_page_number(pdf)
 
 
