@@ -87,10 +87,10 @@ def page_traffic_light_descriptions(pdf, lang, project_id):
 
             y = pdf.get_y() + 12
             pdf.set_xy(x, y)
-
             pdf.multi_cell(0, 4, description, align='J')
-        if y >= MAX_Y:
-            pdf.add_page()
-            page_traffic_light_descriptions_title(pdf, lang)
+
+            if pdf.get_y() >= MAX_Y:
+                pdf.add_page()
+                page_traffic_light_descriptions_title(pdf, lang)
     insert_page_number(pdf)
 
