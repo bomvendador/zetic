@@ -66,12 +66,10 @@ def page_traffic_light_descriptions(pdf, lang, project_id):
     pdf.set_auto_page_break(False)
 
     x = 12
-
     page_traffic_light_descriptions_title(pdf, lang)
 
     traffic_light_filters = TrafficLightReportFilter.objects.filter(project_id=project_id)
-    if not traffic_light_filters.exists():
-        traffic_light_filters = TrafficLightReportFilter.objects.all()
+
     y = pdf.get_y() + 10
     pdf.set_xy(x, y)
 
@@ -94,9 +92,5 @@ def page_traffic_light_descriptions(pdf, lang, project_id):
             y = pdf.get_y() + 12
             pdf.set_xy(x, y)
             pdf.multi_cell(0, 4, description, align='J')
-
-            if pdf.get_y() >= MAX_Y:
-                pdf.add_page()
-                page_traffic_light_descriptions_title(pdf, lang)
     insert_page_number(pdf)
 
