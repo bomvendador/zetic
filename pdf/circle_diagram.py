@@ -54,10 +54,7 @@ if DEBUG == 0:
     web_driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver', chrome_options=chrome_options)
 
 
-def page_circle_diagram_descriptions(pdf, lang):
-    pdf.add_page()
-    pdf.set_auto_page_break(False)
-
+def page_circle_diagram_descriptions_title(pdf, lang):
     x = 12
     y = 12
     pdf.set_xy(x, y)
@@ -69,6 +66,16 @@ def page_circle_diagram_descriptions(pdf, lang):
         pdf.cell(0, 0, 'Short conclusions')
     pdf.set_draw_color(0, 0, 0)
     pdf.line(x + 1, y + 5, x + 220, y + 5)
+
+
+def page_circle_diagram_descriptions(pdf, lang):
+    pdf.add_page()
+    pdf.set_auto_page_break(False)
+
+    x = 12
+
+    page_circle_diagram_descriptions_title(pdf, lang)
+
     traffic_light_filters = TrafficLightReportFilter.objects.filter(project=None).order_by('position')
 
     y = pdf.get_y() + 10
@@ -88,6 +95,9 @@ def page_circle_diagram_descriptions(pdf, lang):
             pdf.set_xy(x, y)
 
             pdf.multi_cell(0, 4, description, align='J')
+        if y >= MAX_Y:
+            page_circle_diagram_descriptions_title(pdf, lang)
+            insert_page_number(pdf)
     insert_page_number(pdf)
 
 
