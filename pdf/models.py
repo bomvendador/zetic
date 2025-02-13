@@ -1001,6 +1001,7 @@ class TrafficLightReportFilter(models.Model):
     position = models.IntegerField(null=False, default=0)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None, blank=True, null=True)
     for_circle_diagram = models.BooleanField(default=False)
+    description = models.TextField(default=None, blank=True, verbose_name='Описание фильтра', null=True)
 
     def __str__(self):
         return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.name}'

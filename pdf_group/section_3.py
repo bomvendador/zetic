@@ -13,7 +13,12 @@ def calculate_section_points(section_data):
         if len(value) > 0:
             participants_cnt += 1
             participant_points += value[0][1]
-    return round(participant_points/participants_cnt)
+    if participants_cnt == 0:
+        result = 0
+    else:
+        result = round(participant_points/participants_cnt)
+    return result
+    # return round(participant_points/participants_cnt)
 
 
 def page(pdf, square_results, lang):

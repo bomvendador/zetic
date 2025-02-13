@@ -7,6 +7,7 @@ from django.db.models import Q
 import math
 
 from pdf.draw import insert_page_number
+from pdf_group.draw import is_orange_color
 
 
 
@@ -245,9 +246,9 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results,
     text_size_for_filters = 8
     interval_between_description_and_filters_name = 4
 
-    print('-- square results ---')
-    print(square_results)
-    print('-------')
+    # print('-- square results ---')
+    # print(square_results)
+    # print('-------')
 
     # participant_id = int(square_results[0][8])
     if TrafficLightReportFilter.objects.filter(project_id=project_id).exists():
@@ -274,13 +275,13 @@ def draw_traffic_light_report_table(pdf, lang, start_x, start_y, square_results,
     data_items = []
     total_t_points_categories = []
     for data in square_results:
-        print('---data---')
-        print(data)
+        # print('---data---')
+        # print(data)
         participant_id = int(data[8])
         participant_number = data[7]
         category_code = data[6]
         participant_inst = Participant.objects.get(id=participant_id)
-        print(f'277 - participant_name - {participant_inst.employee.name} participant_email - {participant_inst.employee.email}')
+        # print(f'277 - participant_name - {participant_inst.employee.name} participant_email - {participant_inst.employee.email}')
         report_inst = Report.objects.filter(Q(participant=participant_inst)).latest('added')
         name = participant_inst.employee.name.strip()
         name_with_number = str(participant_number) + '. ' + name

@@ -112,6 +112,7 @@ $('#save_edited_traffic_light_report_filter').on('click', function () {
     let circle_diagrams_descriptions_ok = true
 
     let filter_name = $('#input_filter_name').val()
+    let description = $('#input_filter_description').val()
 
     $('#input_filter_name').on('click', function () {
         $('#input_filter_name').removeClass('is-invalid')
@@ -216,6 +217,8 @@ $('#save_edited_traffic_light_report_filter').on('click', function () {
                 'position': filter_position,
                 'green_from_left': $('#green_from_left').prop('checked'),
                 'for_circle_diagram': $('#for_circle_diagram').prop('checked'),
+                'description': description
+
             }),
             processData: false,
             contentType: false,

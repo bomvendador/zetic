@@ -100,6 +100,7 @@ $('#save_traffic_light_report_filter').on('click', function () {
     let points_val_ok = true
     let categories_val_arr = []
     let categories_arr = []
+    let description = $('#input_filter_description').val()
 
     let filter_name = $('#input_filter_name').val()
     $('#input_filter_name').on('click', function () {
@@ -189,7 +190,8 @@ $('#save_traffic_light_report_filter').on('click', function () {
                 'green': green,
                 'position': filter_position,
                 'project_id': project_id,
-                'green_from_left': $('#green_from_left').prop('checked')
+                'green_from_left': $('#green_from_left').prop('checked'),
+                'description': description
             }),
             processData: false,
             contentType: false,

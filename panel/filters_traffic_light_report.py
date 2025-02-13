@@ -115,6 +115,7 @@ def save_new_traffic_light_report_filter(request):
         project_id = json_data['project_id']
         green_from_left = json_data['green_from_left']
         position = json_data['position']
+        description = json_data['description']
         filter_inst = TrafficLightReportFilter()
 
         if not project_id == '':
@@ -146,6 +147,7 @@ def save_new_traffic_light_report_filter(request):
         filter_inst.points_to_yellow = yellow['points_to']
         filter_inst.points_from_red = red['points_from']
         filter_inst.points_to_red = red['points_to']
+        filter_inst.description = description
         if green_from_left:
             filter_inst.direction = 'green_from_left'
         else:
@@ -189,6 +191,7 @@ def save_edited_traffic_light_report_filter(request):
         filter_id = json_data['filter_id']
         green_from_left = json_data['green_from_left']
         position = json_data['position']
+        description = json_data['description']
         for_circle_diagram = json_data['for_circle_diagram']
         filter_inst = TrafficLightReportFilter.objects.get(id=filter_id)
         if filter_inst.project:
@@ -212,6 +215,7 @@ def save_edited_traffic_light_report_filter(request):
         filter_inst.points_from_red = red['points_from']
         filter_inst.points_to_red = red['points_to']
         filter_inst.position = position
+        filter_inst.description = description
         if green_from_left:
             filter_inst.direction = 'green_from_left'
         else:
