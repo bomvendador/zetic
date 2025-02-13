@@ -69,6 +69,8 @@ def page_traffic_light_descriptions(pdf, lang, project_id):
     page_traffic_light_descriptions_title(pdf, lang)
 
     traffic_light_filters = TrafficLightReportFilter.objects.filter(project_id=project_id)
+    if not traffic_light_filters.exists():
+        traffic_light_filters = TrafficLightReportFilter.objects.filter(project=None)
 
     y = pdf.get_y() + 10
     pdf.set_xy(x, y)
