@@ -85,8 +85,8 @@ def page_circle_diagram_descriptions(pdf, lang):
         name = traffic_light_filter.name
         description = traffic_light_filter.description
         if description:
-            print(f'y = {pdf.get_y()}')
             if pdf.get_y() >= 250:
+                insert_page_number(pdf)
                 pdf.add_page()
                 page_circle_diagram_descriptions_title(pdf, lang)
                 y = pdf.get_y() + 15

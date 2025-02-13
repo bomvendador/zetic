@@ -79,7 +79,13 @@ def page_traffic_light_descriptions(pdf, lang, project_id):
         name = traffic_light_filter.name
         description = traffic_light_filter.description
         if description:
-            y = pdf.get_y() + 5
+            if pdf.get_y() >= 250:
+                insert_page_number(pdf)
+                pdf.add_page()
+                page_traffic_light_descriptions_title(pdf, lang)
+                y = pdf.get_y() + 15
+            else:
+                y = pdf.get_y() + 5
             pdf.set_xy(x, y)
 
             block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, x, str(name).upper())
