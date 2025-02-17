@@ -229,14 +229,14 @@ Cекция «Черты личности» построена исходя из
         pdf.multi_cell(0, 4, text)
 
     if lang == 'ru':
-        draw_lie_scale(pdf, 50, 266-3-5, 70, 10, lie_points, 'media/images/lie_scale_rec.png')
+        draw_lie_scale(pdf, 50, 266-3-5, 70, 10, lie_points)
     else:
-        draw_lie_scale(pdf, 40, 266-3-5, 70, 10, lie_points, 'media/images/lie_scale_rec.png')
+        draw_lie_scale(pdf, 40, 266-3-5, 70, 10, lie_points)
 
     insert_page_number(pdf)
 
 
-def draw_lie_scale(pdf, x, y, w, h, lie_points, img_link):
+def draw_lie_scale(pdf, x, y, w, h, lie_points):
     print(f'lie_points = {lie_points}')
     pdf.set_line_width(0.3)
     pdf.set_fill_color(230, 230, 230)
@@ -249,5 +249,9 @@ def draw_lie_scale(pdf, x, y, w, h, lie_points, img_link):
     pdf.rect(x-1+29.1, y-1, 43, h+2)
 
     for i in range(lie_points):
+        if i <= 3:
+            img_link = 'media/images/kopingi_page4.png'
+        else:
+            img_link = 'media/images/lie_scale_rec.png'
         pdf.image(img_link, x=x+1, y=y+1, w=5.9)
         x += 5.9 + 1
