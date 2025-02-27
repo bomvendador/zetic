@@ -1,5 +1,6 @@
-from pdf.models import PotentialMatrix, PotentialMatrixCategory, ReportDataByCategories, Report
-from django.db.models import Sum, Q
+from pdf.models import PotentialMatrix, ReportDataByCategories, Report, ConditionGroupCategoryPotentialMatrix, \
+    ConditionGroup, ConditionGroupOfGroups, ConditionGroupPotentialMatrix
+from django.db.models import Sum, Q,Max
 
 
 
@@ -227,30 +228,141 @@ def draw_potential_matrix_participants(pdf, total_width, total_height, lang, req
 
     for square_data in square_results:
         participant_id = square_data[8]
-        # print(f'participant_number = {participant_id}')
+        print('===========================================================================================================')
+        print(f'participant_number = {participant_id}')
         report = Report.objects.filter(participant_id=participant_id).latest('added')
+        # print()
         for matrix in potential_matrices:
-            matrix_categories = PotentialMatrixCategory.objects.filter(matrix=matrix)
+
             add_to_squares = True
-            # print(f'участник - {report.participant.employee.email} матрица - {matrix.code}')
-            for matrix_category in matrix_categories:
+            print(f'участник - {report.participant.employee.email} матрица - {matrix.code}')
+            potential_matrix_groups_max_level = ConditionGroupPotentialMatrix.objects.filter(matrix=matrix).aggregate(Max('level'))['level__max']
+            print(f'potential_matrix_groups_max_level = {potential_matrix_groups_max_level}')
+            matrix_check_result = True
+            all_matrix_groups_check_results = []
+            levels_check_result = []
+            final_child_groups_check_result = []
+            for level in reversed(range(potential_matrix_groups_max_level + 1)):
+                print(f'level = {level}')
+                if level > 0: #если группа НЕ корневая
+                    potential_matrix_groups = ConditionGroupPotentialMatrix.objects.filter(Q(matrix=matrix) &
+                                                                                           Q(level=level))
+                    parent_group_of_level = ConditionGroupOfGroups.objects.get(group=potential_matrix_groups[0].group).parent_group
+                    parent_group_of_level_type = parent_group_of_level.type
+                    child_groups_check_result = []
 
-                code = matrix_category.category.code
-                points_from = matrix_category.points_from
-                points_to = matrix_category.points_to
-                t_points_sum = ReportDataByCategories.objects.filter(Q(report=report) &
-                                                                     Q(category_code=code)).aggregate(Sum('t_points'))['t_points__sum']
-                # print(f'категория {code} очки = {t_points_sum}')
+                    for matrix_group in potential_matrix_groups:
 
-                if not t_points_sum:
-                    add_to_squares = False
+                        group_type = matrix_group.group.type
+
+                        matrix_categories = ConditionGroupCategoryPotentialMatrix.objects.filter(group=matrix_group.group)
+                        if matrix_categories:
+                            categories_check_result = []
+                            for matrix_category in matrix_categories:
+                                print(f'++++ category check - {matrix_category.category.code}. {matrix_category.category.name}')
+
+                                code = matrix_category.category.code
+                                points_from = matrix_category.points_from
+                                points_to = matrix_category.points_to
+                                t_points_sum = ReportDataByCategories.objects.filter(Q(report=report) &
+                                                                                     Q(category_code=code)).aggregate(Sum('t_points'))['t_points__sum']
+                                if not t_points_sum:
+                                    categories_check_result.append(False)
+                                    # add_to_squares = False
+                                else:
+                                    if not points_from <= t_points_sum <= points_to:
+                                        categories_check_result.append(False)
+                                    else:
+                                        categories_check_result.append(True)
+                                        # add_to_squares = False
+                            if group_type == 'and':
+                                if False in categories_check_result:
+                                    child_groups_check_result.append(False)
+                                    group_check_result = False
+                                else:
+                                    child_groups_check_result.append(True)
+                                    group_check_result = True
+                            else:
+                                if True in categories_check_result:
+                                    child_groups_check_result.append(True)
+                                    group_check_result = True
+                                else:
+                                    child_groups_check_result.append(False)
+                                    group_check_result = False
+                            all_matrix_groups_check_results.append({
+                                'group_id': matrix_group.id,
+                                'result': group_check_result
+                            })
+                            print('---categories_check_result---')
+                            print(categories_check_result)
+                            print('------------------------')
+                        else: # есть только группы в группе, нет категорий
+                            groups_of_group = ConditionGroupOfGroups.objects.filter(Q(parent_group=matrix_group.group))
+                            if groups_of_group:
+                                group_of_group_type = groups_of_group[0].group.type
+                                parent_groups_of_group_results = []
+                                for group_of_group in groups_of_group:
+                                    for group_result in all_matrix_groups_check_results:
+                                        if group_result['group_id'] == group_of_group.group.id:
+                                            parent_groups_of_group_results.append(group_result['result'])
+
+                                if group_of_group_type == 'and':
+                                    if False in parent_groups_of_group_results:
+                                        child_groups_check_result.append(False)
+                                    else:
+                                        child_groups_check_result.append(True)
+                                else:
+                                    if True in parent_groups_of_group_results:
+                                        child_groups_check_result.append(True)
+                                    else:
+                                        child_groups_check_result.append(False)
+                # else:
+                #     final_child_groups_check_result = child_groups_check_result
+
+
+                    print('---child_groups_check_result---')
+                    print(child_groups_check_result)
+                    print('------------------------')
+
+                    # if parent_group_of_level_type == 'and':
+                    #     if False in child_groups_check_result:
+                    #         levels_check_result.append(False)
+                    #     else:
+                    #         levels_check_result.append(True)
+                    # else:
+                    #     if True in child_groups_check_result:
+                    #         levels_check_result.append(True)
+                    #     else:
+                    #         levels_check_result.append(False)
+
+            # print('---level_check_result---')
+            # print(levels_check_result)
+            # print('-------------------')
+            root_group = ConditionGroupPotentialMatrix.objects.get(Q(matrix=matrix) &
+                                                                   Q(level=0))
+
+            print('---final child_groups_check_result---')
+            print(child_groups_check_result)
+            print('------------------------')
+
+            print(f'root_group type = {root_group.group.type}')
+            if root_group.group.type == 'and':
+                if False not in child_groups_check_result:
+                    print('...........1 вствить...................')
+                    draw_single_circle_potential_matrix_squares(square_data, pdf, square_x_cnt, cnt, matrix.code)
                 else:
-                    if not points_from <= t_points_sum <= points_to:
-                        add_to_squares = False
-            if add_to_squares:
-                draw_single_circle_potential_matrix_squares(square_data, pdf, square_x_cnt, cnt, matrix.code)
-                # print(f'добавлена матрица {matrix.code}')
-                # print('---------------------------------------------------------------------------------------')
+                    print('...........1 НЕ вствить...................')
+            else:
+                if True in child_groups_check_result:
+                    print('...........2 вствить...................')
+                    draw_single_circle_potential_matrix_squares(square_data, pdf, square_x_cnt, cnt, matrix.code)
+                else:
+                    print('...........2 НЕ вствить...................')
+
+            print('***************all_matrix_groups_check_results*******************')
+            print(all_matrix_groups_check_results)
+            print('************************************************************')
+        print('===========================================================================================================')
 
 
 def draw_single_circle_potential_matrix_squares(square_data, pdf, square_x_cnt, cnt, matrix_code):

@@ -99,81 +99,19 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" id="potential_matrix_conditions_body">
                 <div class="col-xl-12 col-sm-12">
                     <div class="card">
-                        <div class="card-header row pt-2 pb-2 justify-content-md-center">
-                            <div class="">
-                                <table style="width: 100%">
-                                    <thead></thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            <h3 class="card-title">Шкалы (категории) + баллы</h3>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-primary my-1" type="button" id="add_filter_category"
-                                                    style="float: right">Добавить шкалу
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
+                        <div class="card-header">
+                            <h3 class="card-title">Группы/Категории + баллы</h3>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table text-nowrap border-bottom" id="table_filter_categories">
-                                    <thead class="thead-style">
-                                    <tr>
-                                        <th style="width: 60%">Наименование</th>
-                                        <th style="width: 20%">Балл, от</th>
-                                        <th style="width: 20%">Балл, до</th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="tbody_filter_categories">
-                                    {% for matrix_category in potential_matrix_categories %}
-                                        <tr data-category-id="{{ matrix_category.id }}">
-                                            <td>
-                                                <select class="form-control form-select select_category"
-                                                        data-placeholder="Выберите шкалу">
-                                                    <option label="--Выберите шкалу--"></option>
+                            {% if not groups_by_levels %}
+                                {% include 'common_templates/conditions_group.html' %}
+                            {% endif %}
 
-                                                    {% for category in categories %}
-                                                        <option value="{{ category.id }}"
-                                                                {% if matrix_category.category.id == category.id %}
-                                                                selected
-                                                                {% endif %}
-                                                        >{{ category.code }}. {{ category.name }}
-                                                        </option>
-                                                    {% endfor %}
 
-                                                </select>
-                                            </td>
-                                            <td class="point_from">
-                                                <input type="number" min="0" max="10" class="form-control points_from"
-                                                       value="{{ matrix_category.points_from }}">
-                                            </td>
-                                            <td>
-                                                <input type="number" min="0" max="10" class="form-control points_to"
-                                                       value="{{ matrix_category.points_to }}">
-                                            </td>
-                                            <td style="text-align: center; vertical-align: middle;">
-                                                <div style="float: right">
-                                                    <i class="fe fe-x delete-category-row"
-                                                       style="font-size: 20px; cursor: pointer"></i>
-                                                </div>
-                                            </td>
 
-                                        </tr>
-
-                                    {% endfor %}
-
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -193,11 +131,25 @@
 
     <!-- ROW-1 CLOSED -->
 
+    {% include 'potential_matrix/modal_add_item.html' %}
 
     <!--CONTAINER CLOSED -->
     <template id="category_tr_template">
-        {% include 'potential_matrix/potential_matrix_category_tr.html' %}
+{#        <div>#}
+            {% include 'potential_matrix/potential_matrix_category_tr.html' %}
+{#        </div>#}
     </template>
+    <template id="conditions_group_template">
+        <div>
+            {% include 'common_templates/conditions_group.html' %}
+        </div>
+    </template>
+    <template id="potential_matrix_category_table_template">
+        <div>
+            {% include 'potential_matrix/potential_matrix_category_table.html' %}
+        </div>
+    </template>
+
 
 {% endblock %}
 
@@ -208,6 +160,14 @@
         let url_get_company_employees_for_new_study = "{% url 'get_company_employees_for_new_study' %}"
         let url_save_potential_matrix = "{% url 'save_potential_matrix' %}"
         let url_potential_matrix_list = "{% url 'potential_matrix_list' %}"
+
+        {% if groups_by_levels %}
+        let groups_by_levels = {{ groups_by_levels|safe }}
+        {% else %}
+        let groups_by_levels = ''
+        {% endif %}
+        {#console.log(groups_by_levels)#}
+
         {% if potential_matrix %}
             let matrix_id = {{ potential_matrix.id }};
         {% else %}
@@ -222,8 +182,10 @@
             let project_id = '';
         {% endif %}
 
+
     </script>
     <script src="{% static 'login/js/select2.js' %}"></script>
 
     <script src="{% static 'panel/js/potential_matrix/add_potential_matrix.js' %}?{{ timestamp }}"></script>
+    <script src="{% static 'panel/js/common_funcs/conditions_group.js' %}?{{ timestamp }}"></script>
 {% endblock %}

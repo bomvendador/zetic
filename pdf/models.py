@@ -968,22 +968,6 @@ class PotentialMatrix(models.Model):
         verbose_name = 'Матрица потенциала (PotentialMatrix)'
 
 
-class PotentialMatrixCategory(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.PROTECT, default=None, blank=True, null=True)
-    matrix = models.ForeignKey(PotentialMatrix, on_delete=models.CASCADE, default=None, blank=True, null=True)
-    points_from = models.IntegerField(null=False, default=0)
-    points_to = models.IntegerField(null=False, default=0)
-
-    def __str__(self):
-        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.matrix.name}'
-
-    class Meta:
-        verbose_name_plural = 'Матрицы потенциала: Категории (шкалы) (PotentialMatrixCategory)'
-        verbose_name = 'Матрица потенциала: Категории (шкалы) (PotentialMatrixCategory)'
-
-
 class TrafficLightReportFilter(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
@@ -1076,3 +1060,65 @@ class ProcessingRuns(models.Model):
     class Meta:
         verbose_name_plural = 'Запуск обработок (ProcessingRuns)'
         verbose_name = 'Запуск обработки (ProcessingRuns)'
+
+
+class ConditionGroup(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    type = models.CharField(max_length=30, blank=True, null=True)
+
+    def __str__(self):
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.created_by.first_name}'
+
+    class Meta:
+        verbose_name_plural = 'Группы условий (ConditionGroups)'
+        verbose_name = 'Группа условий (ConditionGroups)'
+
+
+class ConditionGroupOfGroups(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    group = models.ForeignKey(ConditionGroup, on_delete=models.CASCADE, default=None, blank=True, null=True, related_name='Group')
+    parent_group = models.ForeignKey(ConditionGroup, on_delete=models.CASCADE, default=None, blank=True, null=True, related_name='Parent Group+')
+    matrix = models.ForeignKey(PotentialMatrix, on_delete=models.CASCADE, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.created_by.first_name}; GroupID - {self.group.id}'
+
+    class Meta:
+        verbose_name_plural = 'Группы групп условий (ConditionGroupOfGroups)'
+        verbose_name = 'Группа групп условий (ConditionGroupOfGroups)'
+
+
+class ConditionGroupCategoryPotentialMatrix(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    group = models.ForeignKey(ConditionGroup, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    matrix = models.ForeignKey(PotentialMatrix, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    points_from = models.IntegerField(null=False, default=0)
+    points_to = models.IntegerField(null=False, default=0)
+
+    def __str__(self):
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.created_by.first_name}; GroupID - {self.group.id}'
+
+    class Meta:
+        verbose_name_plural = 'Категории группы условий (матрицв потенциала) (ConditionGroupCategoryPotentialMatrix)'
+        verbose_name = 'Категория группы условий (матрицв потенциала) (ConditionGroupCategoryPotentialMatrix)'
+
+
+class ConditionGroupPotentialMatrix(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    group = models.ForeignKey(ConditionGroup, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    matrix = models.ForeignKey(PotentialMatrix, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    level = models.IntegerField(null=False, default=0)
+
+    def __str__(self):
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.created_by.first_name}; GroupID - {self.group.id}'
+
+    class Meta:
+        verbose_name_plural = 'Группы условий (матрицв потенциала) (ConditionGroupPotentialMatrix)'
+        verbose_name = 'Группа условий (матрицв потенциала) (ConditionGroupPotentialMatrix)'
+
+

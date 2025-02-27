@@ -11,6 +11,7 @@ from django.utils import timezone
 from reports import settings
 from smtplib import SMTPException, SMTPRecipientsRefused
 import uuid
+from reports.settings import DEBUG
 
 import json
 # from api.outcoming import get_code_for_invitation
@@ -522,9 +523,19 @@ def send_notification_report_made(data, report_id):
         to_email.append(receiver.employee.email)
     context = {
         'data': data,
-        'employee': report.participant.employee
+        'employee': report.participant.employee,
+        'created_by': {
+            'role': UserProfile.objects.get(user=report.participant.employee.created_by).role.name,
+            'name': UserProfile.objects.get(user=report.participant.employee.created_by).fio,
+            'email': UserProfile.objects.get(user=report.participant.employee.created_by).user.email
+        },
+        'debug': DEBUG
     }
-    subject = participant_name + ' окончил(а) заполнение опросника'
+    if DEBUG == 0:
+        subject = participant_name + ' окончил(а) заполнение опросника'
+    else:
+        subject = participant_name + ' окончил(а) заполнение опросника (тестовое сообщение)'
+
     html_message = render_to_string('notification_report_made.html', context)
 
     from_email = 'ZETIC <info@zetic.ru>'

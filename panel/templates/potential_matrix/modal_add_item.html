@@ -1,0 +1,33 @@
+<!-- Модальное изменения разделов отчета-->
+<div class="modal fade" id="modal_add_item">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header" style="background-color: #dbdbdb">
+                <h5 class="modal-title"><b>Добавление элемента</b></h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <select class="form-control form-select"
+                                data-placeholder="Выберите элемент" id="select_item">
+                            <option value="0">-- Сделайте выбор --</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="row" style="padding: 0px 15px 15px">
+                    <div class="col-lg-12 col-sm-12 mt-3">
+                        <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                id="modal_add_item_btn">Ок
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

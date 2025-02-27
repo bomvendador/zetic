@@ -1,5 +1,5 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, User, Participant, EmployeeGender, \
-    Project, Study, ProjectStudy, TrafficLightReportFilter, TrafficLightReportFilterCategory, PotentialMatrix, PotentialMatrixCategory
+    Project, Study, ProjectStudy, TrafficLightReportFilter, TrafficLightReportFilterCategory, PotentialMatrix
 from login.models import UserProfile
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -173,7 +173,7 @@ def edit_project(request, project_id):
     filters_inst = TrafficLightReportFilter.objects.filter(project=project).order_by('position')
     filters_categories = TrafficLightReportFilterCategory.objects.filter(filter__project=project)
     potential_matrices = PotentialMatrix.objects.filter(project=project)
-    potential_matrices_categories = PotentialMatrixCategory.objects.filter(matrix__project=project)
+    # potential_matrices_categories = PotentialMatrixCategory.objects.filter(matrix__project=project)
 
     context.update(
         {
@@ -182,7 +182,7 @@ def edit_project(request, project_id):
             'filters': filters_inst,
             'filters_categories': filters_categories,
             'potential_matrices': potential_matrices,
-            'potential_matrices_categories': potential_matrices_categories,
+            # 'potential_matrices_categories': potential_matrices_categories,
         }
     )
     return render(request, 'projects/panel_edit_project.html', context)

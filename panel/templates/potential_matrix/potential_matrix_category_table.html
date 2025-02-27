@@ -1,0 +1,51 @@
+<div class="table-responsive categories-table" data-table-group-id>
+    <table class="table text-nowrap border-bottom">
+        <thead class="thead-style">
+        <tr>
+            <th style="width: 60%">Наименование</th>
+            <th style="width: 20%">Балл, от</th>
+            <th style="width: 20%">Балл, до</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody class="categories-table-tbody">
+        {% for matrix_category in potential_matrix_categories %}
+            <tr data-category-id="{{ matrix_category.id }}">
+                <td>
+                    <select class="form-control form-select select_category"
+                            data-placeholder="Выберите шкалу">
+                        <option label="--Выберите шкалу--"></option>
+
+                        {% for category in categories %}
+                            <option value="{{ category.id }}"
+                                    {% if matrix_category.category.id == category.id %}
+                                    selected
+                                    {% endif %}
+                            >{{ category.code }}. {{ category.name }}
+                            </option>
+                        {% endfor %}
+
+                    </select>
+                </td>
+                <td class="point_from">
+                    <input type="number" min="0" max="10" class="form-control points_from"
+                           value="{{ matrix_category.points_from }}">
+                </td>
+                <td>
+                    <input type="number" min="0" max="10" class="form-control points_to"
+                           value="{{ matrix_category.points_to }}">
+                </td>
+                <td style="text-align: center; vertical-align: middle;">
+                    <div style="float: right">
+                        <i class="fe fe-x delete-category-row"
+                           style="font-size: 20px; cursor: pointer"></i>
+                    </div>
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>

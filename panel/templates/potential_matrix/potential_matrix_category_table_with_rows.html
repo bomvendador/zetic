@@ -1,0 +1,15 @@
+<div class="table-responsive categories-table" data-table-group-id="group_{{ group_level_id }}">
+    <table class="table text-nowrap border-bottom">
+        <thead class="thead-style">
+        <tr>
+            <th style="width: 60%">Наименование</th>
+            <th style="width: 20%">Балл, от</th>
+            <th style="width: 20%">Балл, до</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody class="categories-table-tbody">
+            {{ category_rows_html|safe }}
+        </tbody>
+    </table>
+</div>

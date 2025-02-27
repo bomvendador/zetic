@@ -10,7 +10,7 @@ from pdf.models import Participant, Report, Category, Section, PointDescription,
     ConsultantCompany, ConsultantStudy, ConsultantForm, ConsultantFormEmailSentToParticipant, \
     CompanyIndividualReportAllowedOptions, CompanyGroupReportAllowedOptions, IndividualReportAllowedOptions, \
     GroupReportAllowedOptions, StudyIndividualReportAllowedOptions, ParticipantIndividualReportAllowedOptions, \
-    CompanySelfQuestionnaireLink, PotentialMatrix, PotentialMatrixCategory
+    CompanySelfQuestionnaireLink, PotentialMatrix
 from login.models import UserRole, UserProfile
 
 
@@ -75,4 +75,3 @@ admin.site.register(StudyIndividualReportAllowedOptions)
 admin.site.register(ParticipantIndividualReportAllowedOptions)
 admin.site.register(CompanySelfQuestionnaireLink)
 admin.site.register(PotentialMatrix)
-admin.site.register(PotentialMatrixCategory)

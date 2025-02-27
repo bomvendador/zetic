@@ -3,15 +3,15 @@
         <select class="form-control form-select select_category" data-placeholder="Выберите шкалу">
             <option value="" label="--Выберите шкалу--"></option>
             {% for category in categories %}
-            <option value="{{ category.id }}">{{ category.code }}. {{ category.name }}</option>
+            <option value="{{ category.id }}"{% if matrix_category_data.category == category %} selected{% endif %}>{{ category.code }}. {{ category.name }}</option>
             {% endfor %}
         </select>
     </td>
     <td class="point_from">
-        <input type="number" min="0" max="10" class="form-control points_from">
+        <input type="number" min="0" max="10" class="form-control points_from" value="{{ matrix_category_data.points_from }}">
     </td>
     <td>
-        <input type="number" min="0" max="10" class="form-control points_to">
+        <input type="number" min="0" max="10" class="form-control points_to" value="{{ matrix_category_data.points_to }}">
     </td>
     <td style="text-align: center; vertical-align: middle;">
         <div style="float: right">
