@@ -1,0 +1,19 @@
+<h4>Уважаемый участник,</h4>
+{% if not message_text %}
+{% include 'email_templates/invitation_message_body_text.html' %}
+{% else %}
+{{ message_text|safe }}
+{% endif %}
+
+<p>
+    Пройдите по ссылке: <a href="{{ protocol }}//{{ hostname }}/questionnaire/{{ code_for_participant }}">Ссылка на опросник</a><br>
+</p>
+
+
+<br>
+Команда Zetic<br>
+    <a>www.zetic.ru</a><br>
+    <a href="mailto:info@zetic.ru">info@zetic.ru</a><br>
+
+    +7 495 127 03 89
+</p>

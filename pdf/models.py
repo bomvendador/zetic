@@ -338,6 +338,7 @@ class Study(models.Model):
     research_template = models.ForeignKey(ResearchTemplate, on_delete=models.PROTECT, default=None, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
     public_code = models.CharField(max_length=30, blank=True, null=True)
+    invitation_message_text = models.TextField(blank=True, null=True)
 
     def __str__(self):
         if self.company:

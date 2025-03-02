@@ -30,6 +30,7 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
     wrong_emails = []
     participant_total_questions = 0
     research_template_sections = ResearchTemplateSections.objects.filter(research_template__study=Study.objects.get(id=study_id))
+    study_inst = Study.objects.get(id=study_id)
     for research_template_section in research_template_sections:
 
         categories = Category.objects.filter(section_id=research_template_section.section_id)
@@ -58,12 +59,24 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
             questionnaire_inst = Questionnaire()
             questionnaire_inst.participant = participant_inst
             questionnaire_inst.save()
+            invitation_message_text = study_inst.invitation_message_text
+            if invitation_message_text:
+                message_html = ''
+                split_lines = invitation_message_text.splitlines()
+                for line in split_lines:
+                    message_html += '<p>' + line + '</p>'
+                print('message_html')
+                print(message_html)
+                context.update({
+                    'message_text': message_html
+                })
+            else:
+                print('стандартное сообщение')
 
             context.update({
                 'code_for_participant': code_for_participant,
             })
-
-            html_message = render_to_string('invitation_message.html', context)
+            html_message = render_to_string('email_templates/invitation_message.html', context)
         elif email_type == 'reminder':
             context.update({
                 'code_for_participant': participant_inst.invitation_code,
@@ -73,7 +86,7 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
             context.update({
                 'code_for_participant': participant_inst.invitation_code,
             })
-            html_message = render_to_string('invitation_message.html', context)
+            html_message = render_to_string('email_templates/invitation_message.html', context)
 
         plain_text = strip_tags(html_message)
         from_email = 'ZETIC <info@zetic.ru>'
@@ -136,7 +149,7 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
 def mass_send_invitation_email(request):
     if request.method == 'POST':
         json_request = json.loads(request.body.decode('utf-8'))
-        print(json_request)
+        # print(json_request)
         study_id = json_request['study_id']
         study_inst = Study.objects.get(id=study_id)
         company = study_inst.company
@@ -390,7 +403,7 @@ def send_invitation_email(request):
 
             subject = 'Опросник ZETIC'
             if email_type == 'initial':
-                html_message = render_to_string('invitation_message.html', context)
+                html_message = render_to_string('email_templates/invitation_message.html', context)
             else:
                 html_message = render_to_string('invitation_message_reminder.html', context)
 

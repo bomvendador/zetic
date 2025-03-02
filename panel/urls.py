@@ -111,6 +111,7 @@ urlpatterns = [
     path('get_employees_for_study', study.get_employees_for_study, name='get_employees_for_study'),
     path('save_study_participants', study.save_study_participants, name='save_study_participants'),
     path('save_study_name', study.save_study_name, name='save_study_name'),
+    path('save_study_invitation_message', study.save_study_invitation_message, name='save_study_invitation_message'),
     path('delete_participants_from_study', study.delete_participants_from_study, name='delete_participants_from_study'),
     path('change_questionnaire_status', study.change_questionnaire_status, name='change_questionnaire_status'),
     path('get_participants_raw_points', study.get_participants_raw_points, name='get_participants_raw_points'),

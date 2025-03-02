@@ -103,6 +103,29 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xl-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Текст сообщения (приглашение участника к заполнению опросника)</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-primary" role="alert">
+                                <span class="alert-inner--icon"><i class="fe fe-info"></i></span>
+                                <span style="margin-left: 0.5em;" class="alert-inner--text">Каждый перевод строки в тексте - новый абзац</span>
+                            </div>
+                            <textarea class="form-control mb-4" rows="10" id="invitation_message_text">{% if not study.invitation_message_text %}{{ invitation_message_text }}{% else %}{{ study.invitation_message_text }}{% endif %}</textarea>
+
+                            <div style="display: inline-block">
+                                <button style="width: 10em" class="btn btn-primary my-1" type="button"
+                                        id="save_invitation_text" disabled>Сохранить
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% if company.demo_status and demo_status_setting %}
                 <div class="row" id="questionnaires_left_div">
                     <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3">
@@ -166,9 +189,9 @@
 
                             <div class="col col-lg-2 col-sm-12 text-end">
                                 <button class="btn btn-primary my-1" type="button" id="add_participant"
-                        {% if made_by_migration %}
-                            disabled title="В исследование миграции добавить участников нельзя"
-                        {% endif %}
+                                        {% if made_by_migration %}
+                                        disabled title="В исследование миграции добавить участников нельзя"
+                                        {% endif %}
                                 ><i
                                         class="fa fa-user-plus button-icon"></i>Добавить участника
                                 </button>
@@ -280,9 +303,9 @@
                                                 </td>
                                                 <td>
                                                     {% if cur_userprofile.role.name != 'Партнер' and cur_userprofile.role.name != 'Админ заказчика' %}
-                                                    <div>
-                                                        {{ participant.answered_questions_qnt }}/{{ participant.total_questions_qnt }}
-                                                    </div>
+                                                        <div>
+                                                            {{ participant.answered_questions_qnt }}/{{ participant.total_questions_qnt }}
+                                                        </div>
                                                     {% endif %}
                                                     <div>
                                                         {{ participant.question_answered_percentage }}
@@ -296,28 +319,36 @@
                                                                     {% for company_individual_option in company_individual_report_allowed_options %}
                                                                         {% if participant_individual_option.option == company_individual_option.option %}
                                                                             {% if company_individual_option.value %}
-                                                                                <i style="color: green" class="fe fe-check" title="Настройки компании"></i>
+                                                                                <i style="color: green"
+                                                                                   class="fe fe-check"
+                                                                                   title="Настройки компании"></i>
                                                                             {% else %}
-                                                                                <i style="color: red" class="fe fe-x" title="Настройки компании"></i>
+                                                                                <i style="color: red" class="fe fe-x"
+                                                                                   title="Настройки компании"></i>
                                                                             {% endif %}
                                                                         {% endif %}
                                                                     {% endfor %}
                                                                     {% for study_individual_option in study_individual_report_allowed_options %}
                                                                         {% if participant_individual_option.option == study_individual_option.option %}
                                                                             {% if study_individual_option.value %}
-                                                                                <i style="color: green" class="fe fe-check" title="Настройки исследования"></i>
+                                                                                <i style="color: green"
+                                                                                   class="fe fe-check"
+                                                                                   title="Настройки исследования"></i>
                                                                             {% else %}
-                                                                                <i style="color: red" class="fe fe-x" title="Настройки исследования"></i>
+                                                                                <i style="color: red" class="fe fe-x"
+                                                                                   title="Настройки исследования"></i>
                                                                             {% endif %}
                                                                         {% endif %}
                                                                     {% endfor %}
 
                                                                     {% if participant_individual_option.value %}
-                                                                        <i style="color: green" class="fe fe-check" title="Настройки участинка"></i>
+                                                                        <i style="color: green" class="fe fe-check"
+                                                                           title="Настройки участинка"></i>
                                                                     {% else %}
-                                                                        <i style="color: red" class="fe fe-x" title="Настройки участинка"></i>
+                                                                        <i style="color: red" class="fe fe-x"
+                                                                           title="Настройки участинка"></i>
                                                                     {% endif %}
-                                                                        {{ participant_individual_option.option.name }}
+                                                                    {{ participant_individual_option.option.name }}
 
                                                                 </div>
                                                             </div>
@@ -635,7 +666,8 @@
                             {% for option in study_individual_report_allowed_options %}
                                 <div class="form-switch">
 
-                                    <input class="form-check-input option-for-individual-report" type="checkbox" role="switch"
+                                    <input class="form-check-input option-for-individual-report" type="checkbox"
+                                           role="switch"
                                            data-option-id="{{ option.option.id }}"
                                             {% if option.value %}
                                            checked
@@ -743,6 +775,7 @@
         let url_origin = window.location.origin;
         let questionnaires_left = {{ questionnaires_left }};
         let company_demo_status = '{{ company.demo_status }}';
+        let url_save_study_invitation_message = "{% url 'save_study_invitation_message' %}"
 
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>

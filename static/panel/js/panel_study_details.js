@@ -9,6 +9,41 @@ function copyText(e) {
     document.execCommand("copy");
 }
 
+$('#invitation_message_text').on('input', function () {
+    $('#save_invitation_text').attr('disabled', false)
+})
+
+$('#save_invitation_text').on('click', function () {
+    let invitation_message_text = $('#invitation_message_text').val()
+    if (invitation_message_text === '') {
+        toastr.error('Тект сообщения должен быть заполнен')
+    } else {
+        btn_spinner($('#save_invitation_text'))
+        $.ajax({
+            headers: {"X-CSRFToken": token},
+            url: url_save_study_invitation_message,
+            type: 'POST',
+
+            data: JSON.stringify({
+                'study_id': study_id,
+                'message_text': invitation_message_text,
+            }),
+            processData: false,
+            contentType: false,
+            error: function (data) {
+                toastr.error('Ошибка', data)
+            },
+            success: function (data) {
+                btn_text($('#save_invitation_text'), 'Сохранить')
+                $('#save_invitation_text').attr('disabled', true)
+                toastr.success('Текст сообщения сохранен')
+            }
+        });
+
+    }
+
+})
+
 $('.copy-questionnaire-link').on('click', function (e) {
     e.preventDefault();
     let text = window.location.origin + $(this).closest('div').find('a').attr('href');
@@ -177,7 +212,8 @@ $('#run_group_action').on('click', function () {
 
                 getParticipantsWithoutInvitations();
 
-                if (participants_ids_to_send_invitation_to.length >= 1) {
+                // if (participants_ids_to_send_invitation_to.length >= 1) {
+                if (true) {
                     // if (participants_ids_to_send_invitation_to.length > questionnaires_left && company_demo_status === 'True') {
                     if (participants_ids_to_send_invitation_to.length > questionnaires_left && $('#questionnaires_left_div').length) {
                         let user_role_name = $('#cur_role_name').text()
