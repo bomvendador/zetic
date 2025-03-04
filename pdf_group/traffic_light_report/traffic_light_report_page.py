@@ -72,7 +72,7 @@ def page_traffic_light_descriptions(pdf, lang, project_id):
     if not traffic_light_filters.exists():
         traffic_light_filters = TrafficLightReportFilter.objects.filter(project=None)
 
-    y = pdf.get_y() + 10
+    y = pdf.get_y() + 5
     pdf.set_xy(x, y)
 
     for traffic_light_filter in traffic_light_filters:
@@ -83,7 +83,7 @@ def page_traffic_light_descriptions(pdf, lang, project_id):
                 insert_page_number(pdf)
                 pdf.add_page()
                 page_traffic_light_descriptions_title(pdf, lang)
-                y = pdf.get_y() + 15
+                y = pdf.get_y() + 5
             else:
                 y = pdf.get_y() + 5
             pdf.set_xy(x, y)
@@ -91,7 +91,7 @@ def page_traffic_light_descriptions(pdf, lang, project_id):
             block_name_(pdf, BLOCK_R, BLOCK_G, BLOCK_B, y, x, str(name).upper())
             pdf.set_text_color(0, 0, 0)
 
-            y = pdf.get_y() + 12
+            y = pdf.get_y() + 10
             pdf.set_xy(x, y)
             pdf.multi_cell(0, 4, description, align='J')
     insert_page_number(pdf)
