@@ -101,7 +101,7 @@ def pdf_group_generator(request_json):
             pdf.set_text_color(0, 0, 0)
             integral_report_page(pdf, 'ru', square_results, 'Интегральный отчет (все участники)')
 
-            if len(groups) > 0:
+            if len(groups) >= 2:
                 groups_for_integral_report = []
                 # print('====groups_for_integral_report====')
                 for group in groups:
