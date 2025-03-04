@@ -45,7 +45,7 @@ def draw_potential_matrix_squares(pdf, lang, start_x, request_json):
         pdf.rect(x_for_square_name, y_for_square_name, total_width / 3, 5,
                  'FD')
         x_gap += 1
-        print(f'name_width = {pdf.get_string_width(value["name"])}')
+        # print(f'name_width = {pdf.get_string_width(value["name"])}')
         pdf.text(x_for_square_name + 5, y_for_square_name + 3.5, value['name'])
 
     pdf.set_line_width(0.4)
