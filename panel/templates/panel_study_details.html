@@ -227,6 +227,7 @@
                                         <th>Напоминания</th>
                                         <th>Посещения опросника</th>
                                         <th>Ссылка на опросник</th>
+                                        <th>Отчет</th>
                                         {#                                                        <th data-orderable="false"></th>#}
                                     </tr>
                                     </thead>
@@ -417,6 +418,14 @@
                                                         </div>
                                                     {% endif %}
 
+                                                </td>
+                                                <td class="wd-15p border-bottom-0">
+                                                    {% for report in reports %}
+                                                        {% if report.participant == participant %}
+                                                        <a style="padding: 0!important;" class="dropdown-item"
+                                                           href="/panel/download_single_report/{{ report.file }}">Скачать</a>
+                                                        {% endif %}
+                                                    {% endfor %}
                                                 </td>
 
 
