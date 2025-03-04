@@ -97,6 +97,10 @@ def pdf_group_generator(request_json):
             # print('----groups-----')
             # print(groups)
             # print('--------------')
+            pdf.add_page()
+            pdf.set_text_color(0, 0, 0)
+            integral_report_page(pdf, 'ru', square_results, 'Интегральный отчет (все участники)')
+
             if len(groups) > 0:
                 groups_for_integral_report = []
                 # print('====groups_for_integral_report====')
@@ -110,9 +114,7 @@ def pdf_group_generator(request_json):
                         integral_report_page(pdf, 'ru', key_vals, f'Интегральный отчет (группа - "{group_name_for_report}")')
 
                 # print('-------------------')
-            pdf.add_page()
-            pdf.set_text_color(0, 0, 0)
-            integral_report_page(pdf, 'ru', square_results, 'Интегральный отчет (все участники)')
+
 
     # ---------------------
 
