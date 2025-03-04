@@ -1,7 +1,7 @@
 from pdf.models import PotentialMatrix, ReportDataByCategories, Report, ConditionGroupCategoryPotentialMatrix, \
     ConditionGroup, ConditionGroupOfGroups, ConditionGroupPotentialMatrix
 from django.db.models import Sum, Q,Max
-
+from panel.constants import CONSTANT_POTENTIAL_MATRIX
 
 
 def draw_potential_matrix_squares(pdf, lang, start_x, request_json):
@@ -15,6 +15,7 @@ def draw_potential_matrix_squares(pdf, lang, start_x, request_json):
     end_Y = start_Y + total_width
     total_height = end_Y - start_Y
 
+
     # 1.3 (зеленый квадрат)
     pdf.set_fill_color(226, 239, 218)
     pdf.rect(start_X + total_width / 3 * 2, start_Y, total_width / 3, total_height / 3, 'F')
@@ -23,7 +24,30 @@ def draw_potential_matrix_squares(pdf, lang, start_x, request_json):
     pdf.set_fill_color(255, 200, 200)
     pdf.rect(start_X, start_Y + total_height / 3 * 2, total_width / 3, total_height / 3, 'F')
 
-    print(f'total_width - {total_width}')
+    pdf.set_font("RalewayLight", "", 8)
+    pdf.set_text_color(118, 134, 146)
+
+    # отрисовка названия
+    cnt = 0
+    pdf.set_fill_color(r=230, g=230, b=227)
+    pdf.set_draw_color(r=230, g=230, b=227)
+    y_gap = 1
+    x_gap = 0
+    for key, value in CONSTANT_POTENTIAL_MATRIX.items():
+        cnt += 1
+        if cnt > 3:
+            cnt = 1
+            y_gap += 1
+            x_gap = 0
+
+        x_for_square_name = start_X + (total_width / 3 * x_gap)
+        y_for_square_name = start_Y + (total_height / 3 * y_gap) - 5
+        pdf.rect(x_for_square_name, y_for_square_name, total_width / 3, 5,
+                 'FD')
+        x_gap += 1
+        print(f'name_width = {pdf.get_string_width(value["name"])}')
+        pdf.text(x_for_square_name + 5, y_for_square_name + 3.5, value['name'])
+
     pdf.set_line_width(0.4)
     pdf.set_draw_color(r=135, g=135, b=135)
     pdf.rect(start_X, start_Y, total_width, total_height, 'D') #обводка
@@ -124,6 +148,7 @@ def draw_potential_matrix_squares(pdf, lang, start_x, request_json):
         pdf.text(start_X + total_width + delta_Y_for_horizontal_arrow + 2, start_Y + total_height / 2 + 10, 'Потенциал')
 
     # pdf.text((start_X + total_width) / 2 - 30, start_Y + total_height + delta_Y_for_horizontal_arrow + 2, 'Согласованность ответов участников')
+
 
     # описание матрицы
     y = start_Y + total_height + delta_Y_for_horizontal_arrow + 8
@@ -228,22 +253,23 @@ def draw_potential_matrix_participants(pdf, total_width, total_height, lang, req
 
     for square_data in square_results:
         participant_id = square_data[8]
-        print('===========================================================================================================')
-        print(f'participant_number = {participant_id}')
+        # print('===========================================================================================================')
+        # print(f'participant_number = {participant_id}')
         report = Report.objects.filter(participant_id=participant_id).latest('added')
         # print()
+        final_participant_matrices = []
         for matrix in potential_matrices:
 
             add_to_squares = True
-            print(f'участник - {report.participant.employee.email} матрица - {matrix.code}')
+            # print(f'участник - {report.participant.employee.email} матрица - {matrix.code}')
             potential_matrix_groups_max_level = ConditionGroupPotentialMatrix.objects.filter(matrix=matrix).aggregate(Max('level'))['level__max']
-            print(f'potential_matrix_groups_max_level = {potential_matrix_groups_max_level}')
+            # print(f'potential_matrix_groups_max_level = {potential_matrix_groups_max_level}')
             matrix_check_result = True
             all_matrix_groups_check_results = []
             levels_check_result = []
             final_child_groups_check_result = []
             for level in reversed(range(potential_matrix_groups_max_level + 1)):
-                print(f'level = {level}')
+                # print(f'level = {level}')
                 if level > 0: #если группа НЕ корневая
                     potential_matrix_groups = ConditionGroupPotentialMatrix.objects.filter(Q(matrix=matrix) &
                                                                                            Q(level=level))
@@ -259,7 +285,7 @@ def draw_potential_matrix_participants(pdf, total_width, total_height, lang, req
                         if matrix_categories:
                             categories_check_result = []
                             for matrix_category in matrix_categories:
-                                print(f'++++ category check - {matrix_category.category.code}. {matrix_category.category.name}')
+                                # print(f'++++ category check - {matrix_category.category.code}. {matrix_category.category.name}')
 
                                 code = matrix_category.category.code
                                 points_from = matrix_category.points_from
@@ -293,9 +319,9 @@ def draw_potential_matrix_participants(pdf, total_width, total_height, lang, req
                                 'group_id': matrix_group.id,
                                 'result': group_check_result
                             })
-                            print('---categories_check_result---')
-                            print(categories_check_result)
-                            print('------------------------')
+                            # print('---categories_check_result---')
+                            # print(categories_check_result)
+                            # print('------------------------')
                         else: # есть только группы в группе, нет категорий
                             groups_of_group = ConditionGroupOfGroups.objects.filter(Q(parent_group=matrix_group.group))
                             if groups_of_group:
@@ -320,9 +346,9 @@ def draw_potential_matrix_participants(pdf, total_width, total_height, lang, req
                 #     final_child_groups_check_result = child_groups_check_result
 
 
-                    print('---child_groups_check_result---')
-                    print(child_groups_check_result)
-                    print('------------------------')
+                    # print('---child_groups_check_result---')
+                    # print(child_groups_check_result)
+                    # print('------------------------')
 
                     # if parent_group_of_level_type == 'and':
                     #     if False in child_groups_check_result:
@@ -341,28 +367,46 @@ def draw_potential_matrix_participants(pdf, total_width, total_height, lang, req
             root_group = ConditionGroupPotentialMatrix.objects.get(Q(matrix=matrix) &
                                                                    Q(level=0))
 
-            print('---final child_groups_check_result---')
-            print(child_groups_check_result)
-            print('------------------------')
-
-            print(f'root_group type = {root_group.group.type}')
+            # print('---final child_groups_check_result---')
+            # print(child_groups_check_result)
+            # print('------------------------')
+            #
+            # print(f'root_group type = {root_group.group.type}')
             if root_group.group.type == 'and':
                 if False not in child_groups_check_result:
-                    print('...........1 вствить...................')
-                    draw_single_circle_potential_matrix_squares(square_data, pdf, square_x_cnt, cnt, matrix.code)
-                else:
-                    print('...........1 НЕ вствить...................')
+                    # print('...........1 вствить...................')
+                    # draw_single_circle_potential_matrix_squares(square_data, pdf, square_x_cnt, cnt, matrix.code)
+                    final_participant_matrices.append(matrix.code)
+                # else:
+                #     print('...........1 НЕ вствить...................')
             else:
                 if True in child_groups_check_result:
-                    print('...........2 вствить...................')
-                    draw_single_circle_potential_matrix_squares(square_data, pdf, square_x_cnt, cnt, matrix.code)
-                else:
-                    print('...........2 НЕ вствить...................')
+                    # print('...........2 вствить...................')
+                    # draw_single_circle_potential_matrix_squares(square_data, pdf, square_x_cnt, cnt, matrix.code)
+                    final_participant_matrices.append(matrix.code)
+                # else:
+                #     print('...........2 НЕ вствить...................')
 
-            print('***************all_matrix_groups_check_results*******************')
-            print(all_matrix_groups_check_results)
-            print('************************************************************')
-        print('===========================================================================================================')
+        #     print('***************all_matrix_groups_check_results*******************')
+        #     print(all_matrix_groups_check_results)
+        #     print('************************************************************')
+        # print('===========================================================================================================')
+        # print('------------final_participant_matrices-----------')
+        # print(final_participant_matrices)
+        # print('===================================================')
+        matrix_code_rank = {
+            'rank': 9,
+            'code': '3_1'
+        }
+        if len(final_participant_matrices) > 0:
+            for final_participant_matrix in final_participant_matrices:
+                current_matrix_rank = CONSTANT_POTENTIAL_MATRIX[final_participant_matrix]['rank']
+                if current_matrix_rank < matrix_code_rank['rank']:
+                    matrix_code_rank = {
+                        'rank': current_matrix_rank,
+                        'code': final_participant_matrix
+                    }
+        draw_single_circle_potential_matrix_squares(square_data, pdf, square_x_cnt, cnt, matrix_code_rank['code'])
 
 
 def draw_single_circle_potential_matrix_squares(square_data, pdf, square_x_cnt, cnt, matrix_code):
