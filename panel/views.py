@@ -16,7 +16,8 @@ from pdf.models import Company, Participant, ReportData, Report, Category, Repor
     MatrixFilter, MatrixFilterParticipantNotDistributed, MatrixFilterInclusiveEmployeePosition, MatrixFilterCategory, \
     MatrixFilterParticipantNotDistributedEmployeePosition, QuestionnaireQuestionAnswers, QuestionAnswers, \
     ReportDataByCategories, Questionnaire, Project, ProjectStudy, ProjectParticipants, ConsultantCompany, \
-    CommonBooleanSettings, StudyIndividualReportAllowedOptions, CompanyIndividualReportAllowedOptions, IndividualReportAllowedOptions
+    CommonBooleanSettings, StudyIndividualReportAllowedOptions, CompanyIndividualReportAllowedOptions, \
+    IndividualReportAllowedOptions, ParticipantIndividualReportAllowedOptions
 # from django.contrib.auth.models import User
 
 from login.models import UserRole, UserProfile, User
@@ -1090,6 +1091,15 @@ def get_individual_reports_list(request):
                 comments = report.comments
             else:
                 comments = ''
+            participant_individual_report_allowed_options = ParticipantIndividualReportAllowedOptions.objects.filter(
+                participant=report.participant)
+            report_allowed_options = []
+            for option in participant_individual_report_allowed_options:
+                report_allowed_options.append({
+                    'option_name': option.option.name,
+                    'option_value': option.value,
+                })
+            employee = report.participant.employee
             report_arr.append({
                 'id': report.id,
                 'company': report.participant.employee.company.name,
@@ -1103,6 +1113,12 @@ def get_individual_reports_list(request):
                 'timestamp': report.added,
                 'primary': report.primary,
                 'type': report.type,
+                'report_allowed_options': report_allowed_options,
+                'industry': employee.industry.name_ru,
+                'position': employee.position.name_ru,
+                'role': employee.role.name_ru,
+                'birth_year': employee.birth_year,
+                'gender': employee.sex.name_ru,
             })
         # study_individual_report_allowed_options = StudyIndividualReportAllowedOptions.objects.filter(study=study)
         company_individual_report_allowed_options = CompanyIndividualReportAllowedOptions.objects.filter(company_id=company_id)

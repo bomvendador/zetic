@@ -301,7 +301,6 @@ function route_handler(route_index) {
                     toastr.error('Ошибка', data)
                 },
                 success: function (data) {
-                    console.log(data)
                     let data_json = data['data'];
                     let modal_report_options_html = data['modal_report_option'];
 
@@ -314,22 +313,42 @@ function route_handler(route_index) {
                             html += '<i class="fe fe-file-text individual-report-icon" style="color: blue" title="Отчет создан"></i>'
                         }
                         html += '</td>'
+
+                        html += '<td>'
+                        item['report_allowed_options'].forEach(function (option) {
+                            html += '<div><div style="white-space: nowrap">'
+                            if (option['option_value']) {
+                                html += '<i style="color: green; margin-right: 0.3em" class="fe fe-check" title="Настройки участинка"></i>'
+                            } else {
+                                html += '<i style="color: red; margin-right: 0.3em" class="fe fe-x" title="Настройки участинка"></i>'
+                            }
+
+                            html += option['option_name'] + '</div></div>'
+                        })
+                        html += '</td>'
+
                         html += '<td>' + item['name'] + '</td>'
                         html += '<td>' + item['email'] + '</td>'
+                        html += '<td>' + item['birth_year'] + '</td>'
+                        html += '<td>' + item['gender'] + '</td>'
+                        html += '<td>' + item['industry'] + '</td>'
+                        html += '<td>' + item['position'] + '</td>'
+                        html += '<td>' + item['role'] + '</td>'
                         html += '<td>' + item['study_name'] + '</td>'
                         html += '<td><span style="display: none">' + item['timestamp'] + '</span> ' + item['date'] + '</td>'
                         html += '<td>' + item['company'] + '</td>'
                         if (item['type'] === 'consultant_form') {
                             html += '<td>Выводы экперта</td>'
+                        } else if (item['primary'] === true) {
+
+
+                            html += '<td>Первичный</td>'
+
+
                         } else {
-                            if (item['primary'] === true) {
-                                html += '<td>Первичный</td>'
-
-                            } else {
-                                html += '<td>Пересозданный</td>'
-                            }
-
+                            html += '<td>Пересозданный</td>'
                         }
+
                         if (cur_userprofile_role_name !== 'Админ заказчика') {
                             html += '<td>' + item['comments'] + '</td>'//комментарии
                         }
