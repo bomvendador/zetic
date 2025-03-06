@@ -41,17 +41,28 @@ from selenium.webdriver.chrome.options import Options
 
 from selenium.webdriver.firefox.options import Options as Firefox_Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.chrome.service import Service
 
 
 if DEBUG == 0:
 #     # driver_path = ChromeDriverManager().install()
 #     # os.environ["BOKEH_CHROMEDRIVER_PATH"] = driver_path
 #     os.environ["BOKEH_CHROMEDRIVER_PATH"] = '/usr/bin/chromedriver'
-    chrome_options = Options()
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--disable-dev-shm-usage')
-    web_driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver', chrome_options=chrome_options)
+
+    service = Service(executable_path='/usr/bin/chromedriver')
+
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+
+    # chrome_options = Options()
+    # chrome_options.add_argument('--headless')
+    # chrome_options.add_argument('--no-sandbox')
+    # chrome_options.add_argument('--disable-dev-shm-usage')
+    # web_driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver', chrome_options=chrome_options)
+
+    web_driver = webdriver.Chrome(service=service, options=options)
 
 
 def page_circle_diagram_descriptions_title(pdf, lang):
