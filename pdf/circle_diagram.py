@@ -49,7 +49,7 @@ if DEBUG == 0:
 #     # os.environ["BOKEH_CHROMEDRIVER_PATH"] = driver_path
 #     os.environ["BOKEH_CHROMEDRIVER_PATH"] = '/usr/bin/chromedriver'
 
-    service = Service(executable_path='/usr/bin/chromedriver.exe')
+    service = Service(executable_path='/usr/bin/chromedriver')
 
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
