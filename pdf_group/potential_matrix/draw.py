@@ -269,11 +269,11 @@ def draw_potential_matrix_participants(pdf, total_width, total_height, lang, req
             levels_check_result = []
             final_child_groups_check_result = []
             for level in reversed(range(potential_matrix_groups_max_level + 1)):
-                print(f'level = {level}')
+                # print(f'level = {level}')
                 if level > 0: #если группа НЕ корневая
                     potential_matrix_groups = ConditionGroupPotentialMatrix.objects.filter(Q(matrix=matrix) &
                                                                                            Q(level=level))
-                    print(f'matrix - {matrix.id} {matrix.name}_{matrix.code} Level - {level} potential_matrix_groups len = {len(potential_matrix_groups)}')
+                    # print(f'matrix - {matrix.id} {matrix.name}_{matrix.code} Level - {level} potential_matrix_groups len = {len(potential_matrix_groups)}')
                     parent_group_of_level = ConditionGroupOfGroups.objects.get(group=potential_matrix_groups[0].group).parent_group
                     parent_group_of_level_type = parent_group_of_level.type
                     child_groups_check_result = []

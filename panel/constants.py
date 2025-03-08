@@ -55,7 +55,7 @@ CONSTANT_POTENTIAL_MATRIX = {
         'rank': 2
     },
     '1_3': {
-        'name': 'Готовность к переходу в ближайшее время',
+        'name': 'Готовность к переходу',
         'colorR': 255,
         'colorG': 200,
         'colorB': 200,
@@ -83,7 +83,7 @@ CONSTANT_POTENTIAL_MATRIX = {
         'rank': 3
     },
     '3_1': {
-        'name': 'Необходимость повышенного внимания',
+        'name': 'Зона контроля',
         'colorR': 226,
         'colorG': 239,
         'colorB': 218,
