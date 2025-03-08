@@ -1116,7 +1116,7 @@ class ConditionGroupPotentialMatrix(models.Model):
     level = models.IntegerField(null=False, default=0)
 
     def __str__(self):
-        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.created_by.first_name}; GroupID - {self.group.id}'
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.created_by.first_name}; GroupID - {self.group.id} Level - {self.level}'
 
     class Meta:
         verbose_name_plural = 'Группы условий (матрицв потенциала) (ConditionGroupPotentialMatrix)'
