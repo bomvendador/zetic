@@ -1,4 +1,5 @@
 from pdf.models import EmployeePosition, EmployeeRole, Industry, User, Participant, EmployeeGender
+from datetime import datetime
 
 import rstr
 
@@ -148,4 +149,12 @@ def update_attributes(request, response):
         inst.save()
 
 
+def string_to_date_format(date_string):
+    date_format = "%d-%m-%Y"
 
+    # Convert string to datetime object
+    date_object = datetime.strptime(date_string, date_format).date()
+    print(date_object.day)
+    print(date_object.month)
+    print(date_object.year)
+    return date_object

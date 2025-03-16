@@ -2,6 +2,7 @@ import os.path
 
 from django.db import models
 from django.contrib.auth.models import User
+from login.models import UserProfile
 import datetime
 from django.utils import timezone
 # from positions import PositionField
@@ -395,6 +396,10 @@ class Participant(models.Model):
         else:
             text = round(self.answered_questions_qnt / self.total_questions_qnt * 100)
         return f'{text}%'
+
+    def get_creator(self):
+        user_profile = UserProfile.objects.get(user=self.created_by)
+        return user_profile
 
     class Meta:
         verbose_name_plural = 'Участники опроса'

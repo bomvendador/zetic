@@ -1,0 +1,16 @@
+{% for item in data %}
+    <tr>
+        <td class="wd-15p border-bottom-0">{{ forloop.counter }}</td>
+        <td class="wd-15p border-bottom-0">{{ item.participant.employee.name }}</td>
+        <td class="wd-15p border-bottom-0">{{ item.participant.employee.email }}</td>
+        <td class="wd-15p border-bottom-0">{{ item.participant.employee.company.name }}</td>
+        <td class="wd-15p border-bottom-0">{{ item.participant.employee.industry.name_ru }}</td>
+        <td class="wd-15p border-bottom-0">{{ item.participant.employee.role.name_ru }}</td>
+        <td class="wd-15p border-bottom-0">{{ item.participant.employee.position.name_ru }}</td>
+        <td class="wd-15p border-bottom-0">{{ item.participant.employee.birth_year }}</td>
+        <td class="wd-15p border-bottom-0">{{ item.participant.employee.sex.name_ru }}</td>
+        <td class="wd-15p border-bottom-0">{{ item.participant.created_at|date:"d.m.Y H:i" }}</td>
+        <td class="wd-15p border-bottom-0">{{ item.participant.get_creator.fio }}</td>
+        <td class="wd-15p border-bottom-0">{{ item.added|date:"d.m.Y H:i" }}</td>
+    </tr>
+{% endfor %}

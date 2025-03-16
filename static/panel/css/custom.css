@@ -6,11 +6,11 @@
     right: 30px;
 }
 
-.form-control:focus{
+.form-control:focus {
     border-color: #0c63e4;
 }
 
-.question_group_selected{
+.question_group_selected {
     background-color: #3c8dfd;
     color: whitesmoke;
 
@@ -21,35 +21,35 @@
     color: whitesmoke;
 }
 
-.participant_item_selected{
+.participant_item_selected {
     background-color: #3c8dfd;
     color: whitesmoke;
 
 }
 
-.participant_item:hover{
+.participant_item:hover {
     background-color: #3c8dfd;
     color: whitesmoke;
 }
 
-.no-data-text{
+.no-data-text {
     color: red;
     text-align: center;
 }
 
-.modal-header-style{
+.modal-header-style {
     background-color: #dbdbdb
 }
 
-.font-color-success{
+.font-color-success {
     color: #09ad95 !important
 }
 
-.font-color-warning{
+.font-color-warning {
     color: #f7b731 !important
 }
 
-.font-color-danger{
+.font-color-danger {
     color: #e82646 !important
 }
 
@@ -64,11 +64,11 @@
 
 
 .swal2-container {
-  z-index: 9999;
+    z-index: 9999;
 }
 
 .button-icon {
-    margin-right: 10px!important;
+    margin-right: 10px !important;
     transform: scale(1.1);
 }
 
@@ -87,3 +87,11 @@
     transform: translateY(-50%);
 }
 
+.btn-export {
+    background: green !important;
+    border: none !important;
+    color: #fff !important;
+    font-size: 14px !important;
+    padding: 7px 20px !important;
+    border-radius: 0.3em;
+}

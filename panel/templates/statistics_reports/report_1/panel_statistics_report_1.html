@@ -1,0 +1,229 @@
+{% extends 'statistics_reports/panel_statistics_reports_base.html' %}
+{% load static %}
+{% load tz %}
+
+<!-- CONTAINER -->
+{% block statistics_report_content %}
+    <!-- ROW-1 -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
+
+            <div class="row ">
+                <div class="col-md-12">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Отборы для отчета</h3>
+                        </div>
+                        <div class="card-body pt-2">
+
+                            <div class="row">
+                                <label class="form-label">Дата окончания заполнения</label>
+
+                                <div class="col-lg-6 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-text">
+                                            <i class="fa fa-clock-o tx-16 lh-0 op-6"></i>
+                                        </div>
+                                        <input class="form-control datepicker-date" id="date_from" placeholder="с"
+                                               type="text">
+                                    </div>
+
+
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-text">
+                                            <i class="fa fa-clock-o tx-16 lh-0 op-6"></i>
+                                        </div>
+                                        <input class="form-control datepicker-date" id="date_to" placeholder="по"
+                                               type="text">
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Компании</label>
+                                        <select class="form-control select-2-custom"
+                                                data-placeholder="Выберите компанию"
+                                                 multiple="multiple" id="companies">
+                                            {% if filters.companies != 'No companies for user' %}
+                                                {% for company in filters.companies %}
+                                                    <option value="{{ company.id }}">
+                                                        {{ company.name }}
+                                                    </option>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+
+
+                                <div class="col-lg-3 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Пол</label>
+                                        <select class="form-control select2"
+                                                data-placeholder="Выберите пол" id="gender">
+                                            <option value="">-- Сделайте выбор --</option>
+                                            {% for gender in filters.genders %}
+                                                <option value="{{ gender.id }}">
+                                                    {{ gender.name_ru }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <label class="form-label">Возраст респондента</label>
+                                <div class="col-lg-3 col-sm-12">
+
+                                    <div class="input-group form-group">
+                                        <input class="form-control" id="age_from" placeholder="от"
+                                               type="number" min="18" max="100">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-12">
+                                    <div class="input-group form-group">
+                                        <input class="form-control" id="age_to" placeholder="до"
+                                               type="number" min="18" max="100">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Роли</label>
+                                        <select class="form-control select-2-custom"
+                                                data-placeholder="Выберите роли"
+                                                multiple id="roles">
+                                            {% for role in filters.roles %}
+                                                <option value="{{ role.id }}">
+                                                    {{ role.name_ru }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Должности</label>
+                                        <select class="form-control select-2-custom"
+                                                data-placeholder="Выберите должности"
+                                                multiple id="positions">
+                                            {% for position in filters.positions %}
+                                                <option value="{{ position.id }}">
+                                                    {{ position.name_ru }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Индустрии</label>
+                                        <select class="form-control select-2-custom"
+                                                data-placeholder="Выберите индустрии"
+                                                multiple id="industries">
+                                            {% for industry in filters.industries %}
+                                                <option value="{{ industry.id }}">
+                                                    {{ industry.name_ru }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12">
+                                    <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                            id="create_report_1">
+                                        Сформировать отчет
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Отчет</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table text-nowrap border-bottom team-table dataTable no-footer"
+                                       id="table_report_1">
+                                    <thead>
+                                    {#                                                            <tr class="table-header">#}
+                                    <tr>
+                                        <th class="wd-15p border-bottom-0 table-header">#</th>
+                                        <th class="wd-15p border-bottom-0 table-header">Имя</th>
+                                        <th class="wd-15p border-bottom-0 table-header">Email</th>
+                                        <th class="wd-15p border-bottom-0 table-header">Компания</th>
+                                        <th class="wd-15p border-bottom-0 table-header">Индустрия</th>
+                                        <th class="wd-15p border-bottom-0 table-header">Роль</th>
+                                        <th class="wd-15p border-bottom-0 table-header">Должность</th>
+                                        <th class="wd-15p border-bottom-0 table-header">Год рождения</th>
+                                        <th class="wd-15p border-bottom-0 table-header">Пол</th>
+                                        <th class="wd-15p border-bottom-0 table-header">Когда создан опросник</th>
+                                        <th class="wd-15p border-bottom-0 table-header">Кем создан опросник</th>
+                                        <th class="wd-15p border-bottom-0 table-header">Дата окончания заполнения</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="table_report_1_tbody">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block search_script %}
+
+    <script>
+
+        {#let url_get_company_projects = "{% url 'get_company_projects' %}"#}
+        let url_create_statistics_report_1 = "{% url 'create_statistics_report_1' %}"
+
+
+    </script>
+
+
+    {#        <script src="../assets/plugins/date-picker/date-picker.js"></script>#}
+    {#    <script src="../assets/plugins/date-picker/jquery-ui.js"></script>#}
+    {#    <script src="../assets/plugins/input-mask/jquery.maskedinput.js"></script>#}
+
+
+    {#    <script src="{% static 'panel/plugins/date-picker/date-picker.js' %}?{{ timestamp }}"></script>#}
+    {#    <script src="{% static 'panel/plugins/bootstrap-daterangepicker/daterangepicker.js' %}"></script>#}
+    <script src="{% static 'panel/plugins/bootstrap-datepicker/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'panel/js/statistics_reports/panel_statistics_report_1.js' %}?{{ timestamp }}"></script>
+
+
+{% endblock %}

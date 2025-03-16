@@ -1,0 +1,86 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+{% load tz %}
+{% block content %}
+
+    <!-- CONTAINER -->
+    <div class="main-container container-fluid" id="main-container">
+
+        <!-- PAGE-HEADER -->
+        <div class="page-header">
+            <h1 class="page-title">Статистические отчеты</h1>
+            <div>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                    {#                        <li class="breadcrumb-item active" aria-current="page">Dashboard 01</li>#}
+                    <li class="breadcrumb-item active" aria-current="page">Статистические отчеты</li>
+                </ol>
+            </div>
+        </div>
+        <!-- PAGE-HEADER END -->
+
+        <!-- ROW-1 -->
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
+
+                <div class="row ">
+                    <div class="col-md-12">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Вариант отчета</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="form-group">
+                                            <select name="user_role" class="form-control form-select"
+                                                    id="statistics_reports_report_type_select_filter">
+                                                <option value="report_1"{% if name == 'Количество заполненных опросников' %} selected{% endif %}>Количество заполненных опросников</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% block statistics_report_content %}
+
+        {% endblock %}
+
+
+    </div>
+
+
+{% endblock %}
+
+{% block script %}
+
+    <script src="{% static 'login/js/select2.js' %}"></script>
+    {#    <script src="{% static 'login/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>#}
+    <script>
+
+        let url_get_company_projects = "{% url 'get_company_projects' %}"
+        {#let url_statistics_report_1 = "{% url 'statistics_report_1' %}"#}
+        let url_search_for_questionnaire_status = "{% url 'search_for_questionnaire_status' %}"
+        let url_search_questionnaire_status = "{% url 'search_questionnaire_status' %}"
+
+        let current_filter_selected = $('#statistics_reports_report_type_select_filter').val()
+
+
+    </script>
+
+    <script src="{% static 'panel/js/statistics_reports/panel_statistics_reports.js' %}?{{ timestamp }}"></script>
+
+    {% block search_script %}
+
+    {% endblock %}
+
+{% endblock %}
+
+

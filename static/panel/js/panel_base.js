@@ -1,6 +1,6 @@
 // console.log(`${window.location.protocol} ${window.location.host}`)
 
-if(tech_works === 'True' && cur_user_role_name !== 'Суперадмин'){
+if (tech_works === 'True' && cur_user_role_name !== 'Суперадмин') {
     window.location.href = url_tech_works
 }
 
@@ -116,6 +116,9 @@ $('.menu_item').on('click', function () {
         case'menu_processing':
             window.location.href = url_processing_main;
             break;
+        case'menu_statistics_report_1':
+            window.location.href = url_statistics_report_1;
+            break;
         default:
             break;
     }
@@ -195,6 +198,33 @@ function process_table_clear(element) {
         },
     })
 }
+
+
+function process_table_clear_with_excel_btn(element, title) {
+    $(element).DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                text: '<i class="fe fe-download"></i>  Excel',
+                className: 'btn-export',
+                title: title,
+                download: 'open',
+            },
+
+        ],
+        "searching": true,
+        "destroy": true,
+        "paging": false,
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json"
+        },
+        "initComplete": function () {
+
+        },
+    })
+}
+
 
 function expand_menu_item(item_id) {
     $(item_id).closest('.slide').addClass('is-expanded')
