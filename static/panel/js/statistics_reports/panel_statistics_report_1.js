@@ -74,6 +74,7 @@ $('#create_report_1').on('click', function () {
                     $('#table_report_1_tbody').html(response['rows'])
 
                     process_table_clear_with_excel_btn('#table_report_1', $('#statistics_reports_report_type_select_filter option:selected').text())
+                    toastr.success('Отчет сформирован')
                 }
             }
         });
