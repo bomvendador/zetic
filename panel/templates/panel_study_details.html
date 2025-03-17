@@ -107,14 +107,18 @@
                 <div class="col-xl-12 col-sm-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Текст сообщения (приглашение участника к заполнению опросника)</h3>
+                            <h3 class="card-title">Текст сообщения участнику опроса</h3>
                         </div>
                         <div class="card-body">
                             <div class="alert alert-primary" role="alert">
                                 <span class="alert-inner--icon"><i class="fe fe-info"></i></span>
                                 <span style="margin-left: 0.5em;" class="alert-inner--text">Каждый перевод строки в тексте - новый абзац</span>
                             </div>
-                            <textarea class="form-control mb-4" rows="10" id="invitation_message_text">{% if not study.invitation_message_text %}{{ invitation_message_text }}{% else %}{{ study.invitation_message_text }}{% endif %}</textarea>
+                            <label for="invitation_message_text"><b>Приглашение участника к заполнению опросника</b></label>
+                            <textarea class="form-control mb-4" rows="7" id="invitation_message_text">{% if not study.invitation_message_text %}{{ invitation_message_text }}{% else %}{{ study.invitation_message_text }}{% endif %}</textarea>
+
+                            <label for="invitation_reminder_message_text"><b>Напоминание участнику о заполнении опросника</b></label>
+                            <textarea class="form-control mb-4" rows="7" id="invitation_reminder_message_text">{% if not study.reminder_message_text %}{{ invitation_reminder_message_text }}{% else %}{{ study.reminder_message_text }}{% endif %}</textarea>
 
                             <div style="display: inline-block">
                                 <button style="width: 10em" class="btn btn-primary my-1" type="button"

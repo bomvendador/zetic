@@ -340,6 +340,7 @@ class Study(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     public_code = models.CharField(max_length=30, blank=True, null=True)
     invitation_message_text = models.TextField(blank=True, null=True)
+    reminder_message_text = models.TextField(blank=True, null=True)
 
     def __str__(self):
         if self.company:

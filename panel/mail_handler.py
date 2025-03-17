@@ -26,6 +26,14 @@ def generate_participant_link_code(string_length):
     return random[0:string_length] # Return the random string.
 
 
+def set_message_text(invitation_message_text):
+    message_html = ''
+    split_lines = invitation_message_text.splitlines()
+    for line in split_lines:
+        message_html += '<p>' + line + '</p>'
+    return message_html
+
+
 def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, email_type, send_report_to_participant_after_filling_up_mass, protocol, hostname):
     wrong_emails = []
     participant_total_questions = 0
@@ -61,27 +69,24 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
             questionnaire_inst.save()
             invitation_message_text = study_inst.invitation_message_text
             if invitation_message_text:
-                message_html = ''
-                split_lines = invitation_message_text.splitlines()
-                for line in split_lines:
-                    message_html += '<p>' + line + '</p>'
-                print('message_html')
-                print(message_html)
                 context.update({
-                    'message_text': message_html
+                    'message_text': set_message_text(invitation_message_text)
                 })
-            else:
-                print('стандартное сообщение')
 
             context.update({
                 'code_for_participant': code_for_participant,
             })
             html_message = render_to_string('email_templates/invitation_message.html', context)
         elif email_type == 'reminder':
+            invitation_message_text = study_inst.reminder_message_text
+            if invitation_message_text:
+                context.update({
+                    'message_text': set_message_text(invitation_message_text)
+                })
             context.update({
                 'code_for_participant': participant_inst.invitation_code,
             })
-            html_message = render_to_string('invitation_message_reminder.html', context)
+            html_message = render_to_string('email_templates/invitation_message_reminder.html', context)
         elif email_type == 'self_questionnaire':
             context.update({
                 'code_for_participant': participant_inst.invitation_code,
@@ -405,7 +410,7 @@ def send_invitation_email(request):
             if email_type == 'initial':
                 html_message = render_to_string('email_templates/invitation_message.html', context)
             else:
-                html_message = render_to_string('invitation_message_reminder.html', context)
+                html_message = render_to_string('email_templates/invitation_message_reminder.html', context)
 
             plain_text = strip_tags(html_message)
             from_email = 'ZETIC <info@zetic.ru>'
@@ -462,7 +467,7 @@ def send_reminder(data):
         'participant_email': participant_email,
     }
     subject = 'Опросник ZETIC (напоминание)'
-    html_message = render_to_string('invitation_message_reminder.html', context)
+    html_message = render_to_string('email_templates/invitation_message_reminder.html', context)
 
     plain_text = strip_tags(html_message)
     from_email = 'ZETIC <info@zetic.ru>'

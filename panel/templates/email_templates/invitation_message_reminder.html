@@ -1,6 +1,6 @@
 <h4>Уважаемый участник,</h4>
 {% if not message_text %}
-{% include  'email_templates/invitation_message_body_text.html' %}
+{% include  'email_templates/invitation_message_reminder_body_text.html' %}
 {% else %}
 {{ message_text|safe }}
 {% endif %}

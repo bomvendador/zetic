@@ -13,7 +13,7 @@ from django.utils import timezone
 from .views import info_common
 from api import outcoming
 from django.db.models import Sum, Q
-from panel.constants import CONSTANT_INVITATION_MESSAGE_TEXT
+from panel.constants import CONSTANT_INVITATION_MESSAGE_TEXT, CONSTANT_INVITATION_REMINDER_MESSAGE_TEXT
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
@@ -85,6 +85,7 @@ def study_details(request, study_id):
                 'made_by_migration': made_by_migration,
                 'study': study,
                 'invitation_message_text': CONSTANT_INVITATION_MESSAGE_TEXT,
+                'invitation_reminder_message_text': CONSTANT_INVITATION_REMINDER_MESSAGE_TEXT,
                 'participant_individual_report_allowed_options': participant_individual_report_allowed_options,
                 'study_individual_report_allowed_options': study_individual_report_allowed_options,
                 'company_individual_report_allowed_options': company_individual_report_allowed_options,
@@ -478,7 +479,9 @@ def save_study_invitation_message(request):
         json_request = json.loads(request.body.decode('utf-8'))
         study_id = json_request['study_id']
         message_text = json_request['message_text']
+        reminder_message_text = json_request['reminder_message_text']
         study_inst = Study.objects.get(id=study_id)
         study_inst.invitation_message_text = message_text
+        study_inst.reminder_message_text = reminder_message_text
         study_inst.save()
         return HttpResponse(status=200)

@@ -13,10 +13,15 @@ $('#invitation_message_text').on('input', function () {
     $('#save_invitation_text').attr('disabled', false)
 })
 
+$('#invitation_reminder_message_text').on('input', function () {
+    $('#save_invitation_text').attr('disabled', false)
+})
+
 $('#save_invitation_text').on('click', function () {
     let invitation_message_text = $('#invitation_message_text').val()
-    if (invitation_message_text === '') {
-        toastr.error('Тект сообщения должен быть заполнен')
+    let invitation_reminder_message_text = $('#invitation_reminder_message_text').val()
+    if (invitation_message_text === '' || invitation_reminder_message_text === '') {
+        toastr.error('Тект сообщения участнику должен быть заполнен')
     } else {
         btn_spinner($('#save_invitation_text'))
         $.ajax({
@@ -27,6 +32,7 @@ $('#save_invitation_text').on('click', function () {
             data: JSON.stringify({
                 'study_id': study_id,
                 'message_text': invitation_message_text,
+                'reminder_message_text': invitation_reminder_message_text,
             }),
             processData: false,
             contentType: false,
