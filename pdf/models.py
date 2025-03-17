@@ -395,7 +395,10 @@ class Participant(models.Model):
         if self.answered_questions_qnt == 0 or self.answered_questions_qnt is None:
             text = 0
         else:
-            text = round(self.answered_questions_qnt / self.total_questions_qnt * 100)
+            if self.total_questions_qnt != 0:
+                text = round(self.answered_questions_qnt / self.total_questions_qnt * 100)
+            else:
+                text = 0
         return f'{text}%'
 
     def get_creator(self):
