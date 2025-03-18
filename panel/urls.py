@@ -12,7 +12,8 @@ from panel.consultant_form import panel_consultant_form
 from panel.individual_report_contradiction_filter import individual_report_contradicions
 from panel.potential_matrix import potential_matrix_views
 import panel.statistics_reports.statistics_reports as statistics_reports
-import panel.statistics_reports.report_1 as statistics_reports_report_1
+import panel.statistics_reports.report_1 as statistics_report_1
+import panel.statistics_reports.report_2 as statistics_report_2
 
 # from panel import study
 # from panel import individual_report_file
@@ -261,8 +262,10 @@ urlpatterns = [
     path('processing_main', processing.processing_main, name='processing_main'),
     path('run_processing', processing.run_processing, name='run_processing'),
 
-    path('statistics_report_1', statistics_reports_report_1.report_1, name='statistics_report_1'),
-    path('create_statistics_report_1', statistics_reports_report_1.create_report_1, name='create_statistics_report_1'),
+    path('statistics_report_1', statistics_reports.report_1, name='statistics_report_1'),
+    path('create_statistics_report_1', statistics_report_1.create_report_1, name='create_statistics_report_1'),
+    path('statistics_report_2', statistics_reports.report_2, name='statistics_report_2'),
+    path('create_statistics_report_2', statistics_report_2.create_report_2, name='create_statistics_report_2'),
 
 ]
 

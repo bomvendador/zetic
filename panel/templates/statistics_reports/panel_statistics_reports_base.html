@@ -36,9 +36,24 @@
                                         <div class="form-group">
                                             <select name="user_role" class="form-control form-select"
                                                     id="statistics_reports_report_type_select_filter">
-                                                <option value="report_1"{% if name == 'Количество заполненных опросников' %} selected{% endif %}>Количество заполненных опросников</option>
+                                                <option value="report_1"
+                                                        {% if name == 'Заполнившие опросник участники' %}
+                                                        selected{% endif %}>Заполнившие опросник участники
+                                                </option>
+                                                <option value="report_2"
+                                                        {% if name == 'Незаполнившие опросник участники' %}
+                                                        selected
+                                                        {% endif %}>Незаполнившие опросник участники
+                                                </option>
                                             </select>
                                         </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div style="padding: 0.50rem 1.25rem !important;" class="alert alert-primary" role="alert">
+{#                                            <span class="alert-inner--icon"><i class="fe fe-info"></i></span>#}
+                                            <span id="report_description" class="alert-inner--text"></span>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -65,21 +80,24 @@
     {#    <script src="{% static 'login/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>#}
     <script>
 
-        let url_get_company_projects = "{% url 'get_company_projects' %}"
+        {#let url_get_company_projects = "{% url 'get_company_projects' %}"#}
         {#let url_statistics_report_1 = "{% url 'statistics_report_1' %}"#}
-        let url_search_for_questionnaire_status = "{% url 'search_for_questionnaire_status' %}"
-        let url_search_questionnaire_status = "{% url 'search_questionnaire_status' %}"
+        {#let url_search_for_questionnaire_status = "{% url 'search_for_questionnaire_status' %}"#}
+        {#let url_search_questionnaire_status = "{% url 'search_questionnaire_status' %}"#}
+        let url_statistics_report_1 = "{% url 'statistics_report_1' %}"
+        let url_statistics_report_2 = "{% url 'statistics_report_2' %}"
 
         let current_filter_selected = $('#statistics_reports_report_type_select_filter').val()
 
 
     </script>
 
-    <script src="{% static 'panel/js/statistics_reports/panel_statistics_reports.js' %}?{{ timestamp }}"></script>
 
     {% block search_script %}
 
     {% endblock %}
+
+    <script src="{% static 'panel/js/statistics_reports/panel_statistics_reports.js' %}?{{ timestamp }}"></script>
 
 {% endblock %}
 

@@ -18,7 +18,7 @@
                         <div class="card-body pt-2">
 
                             <div class="row">
-                                <label class="form-label">Дата окончания заполнения</label>
+                                <label class="form-label">Дата отправки приглашения участнику</label>
 
                                 <div class="col-lg-3 col-sm-12">
                                     <div class="input-group">
@@ -153,7 +153,7 @@
                             <div class="row">
                                 <div class="col-lg-12 col-sm-12">
                                     <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
-                                            id="create_report_1">
+                                            id="create_report_2">
                                         Сформировать отчет
                                     </button>
                                 </div>
@@ -168,7 +168,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table text-nowrap border-bottom team-table dataTable no-footer"
-                                       id="table_report_1">
+                                       id="table_report_2">
                                     <thead>
                                     {#                                                            <tr class="table-header">#}
                                     <tr>
@@ -176,17 +176,17 @@
                                         <th class="wd-15p border-bottom-0 table-header">Имя</th>
                                         <th class="wd-15p border-bottom-0 table-header">Email</th>
                                         <th class="wd-15p border-bottom-0 table-header">Компания</th>
+                                        <th class="wd-15p border-bottom-0 table-header">Исследование</th>
                                         <th class="wd-15p border-bottom-0 table-header">Индустрия</th>
                                         <th class="wd-15p border-bottom-0 table-header">Роль</th>
                                         <th class="wd-15p border-bottom-0 table-header">Должность</th>
                                         <th class="wd-15p border-bottom-0 table-header">Год рождения</th>
                                         <th class="wd-15p border-bottom-0 table-header">Пол</th>
-                                        <th class="wd-15p border-bottom-0 table-header">Когда создан опросник</th>
-                                        <th class="wd-15p border-bottom-0 table-header">Кем создан опросник</th>
-                                        <th class="wd-15p border-bottom-0 table-header">Дата окончания заполнения</th>
+                                        <th class="wd-15p border-bottom-0 table-header">Когда добавлен участник</th>
+                                        <th class="wd-15p border-bottom-0 table-header">Кем добавлен участник</th>
                                     </tr>
                                     </thead>
-                                    <tbody id="table_report_1_tbody">
+                                    <tbody id="table_report_2_tbody">
 
                                     </tbody>
                                 </table>
@@ -209,7 +209,7 @@
     <script>
 
         {#let url_get_company_projects = "{% url 'get_company_projects' %}"#}
-        let url_create_statistics_report_1 = "{% url 'create_statistics_report_1' %}"
+        let url_create_statistics_report_2 = "{% url 'create_statistics_report_2' %}"
 
 
     </script>
@@ -223,7 +223,7 @@
     {#    <script src="{% static 'panel/plugins/date-picker/date-picker.js' %}?{{ timestamp }}"></script>#}
     {#    <script src="{% static 'panel/plugins/bootstrap-daterangepicker/daterangepicker.js' %}"></script>#}
     <script src="{% static 'panel/plugins/bootstrap-datepicker/bootstrap-datepicker.js' %}"></script>
-    <script src="{% static 'panel/js/statistics_reports/panel_statistics_report_1.js' %}?{{ timestamp }}"></script>
+    <script src="{% static 'panel/js/statistics_reports/panel_statistics_report_2.js' %}?{{ timestamp }}"></script>
 
 
 {% endblock %}

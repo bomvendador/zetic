@@ -1,13 +1,14 @@
 process_table_clear('#table_report_1')
 
-$('#report_description').text('Список опросников, заполнение которых было завершено')
+$('#report_description').text('Список опросников, по которым приглашение было отправлено участнику и заполнение не было завершено')
+
 
 $(document).ready(function () {
     $(".select-2-custom").select2();
 });
 
 
-$('#create_report_1').on('click', function () {
+$('#create_report_2').on('click', function () {
     let companies_ids = $('#companies').val()
     let gender_id = $('#gender').val()
     let date_from = $('#date_from').val()
@@ -27,14 +28,14 @@ $('#create_report_1').on('click', function () {
     let date_from_date = new Date(date_from_split[2], date_from_split[1], date_from_split[0])
     let date_to_date = new Date(date_to_split[2], date_to_split[1], date_to_split[0])
     if (date_to_date < date_from_date) {
-        toastr.error('Некорректный диапазон "Дата окончания заполенения"')
+        toastr.error('Некорректный диапазон "Дата отправки приглашения участнику"')
         test_ok = false
     }
     if (test_ok) {
-        btn_spinner('#create_report_1')
+        btn_spinner('#create_report_2')
         $.ajax({
             headers: {"X-CSRFToken": token},
-            url: url_create_statistics_report_1,
+            url: url_create_statistics_report_2,
             type: 'POST',
             data: JSON.stringify({
                 'companies_ids': companies_ids,
@@ -53,20 +54,19 @@ $('#create_report_1').on('click', function () {
                 toastr.error('Ошибка', data)
             },
             success: function (data) {
-                btn_text('#create_report_1', 'Сформировать отчет')
+                btn_text('#create_report_2', 'Сформировать отчет')
                 let response = data['response']
                 if (response['access_error']) {
                     toastr.error(response['access_error'])
                 } else {
-                    $('#table_report_1').DataTable().destroy()
-                    if (response['rows']) {
-                        $('#table_report_1_tbody').html(response['rows'])
-                    } else {
-                        $('#table_report_1_tbody').html('')
+                    $('#table_report_2').DataTable().destroy()
+                    if(response['rows']){
+                        $('#table_report_2_tbody').html(response['rows'])
+                    }else {
+                        $('#table_report_2_tbody').html('')
                     }
 
-
-                    process_table_clear_with_excel_btn('#table_report_1', $('#statistics_reports_report_type_select_filter option:selected').text())
+                    process_table_clear_with_excel_btn('#table_report_2', $('#statistics_reports_report_type_select_filter option:selected').text())
                     toastr.success('Отчет сформирован')
                 }
             }
