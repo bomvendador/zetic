@@ -72,16 +72,26 @@
                                                     <tbody>
                                                     {% for company in companies %}
                                                         {% if user_role_name == 'Консультант' %}
-                                                        <tr class="table-row company cursor-pointer" data-company-id="{{ company.company.id }}">
-                                                            <td>{{ company.company.id }}. {{ company.company.name }}</td>
-                                                        </tr>
+                                                            <tr class="table-row company cursor-pointer"
+                                                                data-company-id="{{ company.company.id }}">
+                                                                <td>{{ company.company.id }}. {{ company.company.name }}</td>
+                                                            </tr>
                                                         {% else %}
-                                                        <tr class="table-row company cursor-pointer" data-company-id="{{ company.id }}">
-                                                            <td>{{ company.id }}. {{ company.name }}</td>
-                                                        </tr>
+                                                            <tr class="table-row company cursor-pointer"
+                                                                data-company-id="{{ company.id }}">
+                                                                <td>{{ company.id }}. {{ company.name }}</td>
+                                                            </tr>
 
                                                         {% endif %}
                                                     {% endfor %}
+                                                    {% if user_role_name != 'Консультант' %}
+                                                        {% for company in user_companies %}
+                                                            <tr class="table-row company cursor-pointer"
+                                                                data-company-id="{{ company.company.id }}">
+                                                                <td>{{ company.company.id }}. {{ company.company.name }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                     </tbody>
                                                 </table>
                                             </div>

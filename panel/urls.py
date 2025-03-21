@@ -42,6 +42,8 @@ urlpatterns = [
     path('add_user', panel_views.add_user, name='add_user'),
     path('save_new_user', panel_views.save_new_user, name='save_new_user'),
     path('delete_user', panel_views.delete_user, name='delete_user'),
+    path('add_user_company', panel_views.add_user_company, name='add_user_company'),
+    path('delete_user_company', panel_views.delete_user_company, name='delete_user_company'),
 
     path('individual_reports_list', panel_views.individual_reports_list, name='individual_reports_list'),
     path('individual_report_group_action', panel_views.individual_report_group_action, name='individual_report_group_action'),

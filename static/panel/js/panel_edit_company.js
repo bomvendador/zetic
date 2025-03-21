@@ -5,9 +5,9 @@ $('.self-questionnaire-link-status').on('click', function () {
     let link_id = node.closest('tr').data('link-id')
     let operation = node.data('operation')
     let question_text = ''
-    if(operation === 'block'){
+    if (operation === 'block') {
         question_text = 'Заблокировать ссылку?'
-    }else {
+    } else {
         question_text = 'Разблокировать ссылку?'
     }
     let output_html = '<h2 class="mb-0" style="text-align: center">Изменение доступности ссылки</h2>' +
@@ -27,43 +27,44 @@ $('.self-questionnaire-link-status').on('click', function () {
         let change_participants_individual_report_options = false
         if (result.value) {
             change_participants_individual_report_options = true
+            show_progressbar_loader()
+            $.ajax({
+                headers: {"X-CSRFToken": token},
+                url: url_change_self_questionnaire_link_active_field,
+                type: 'POST',
+                data: JSON.stringify({
+                    'link_id': link_id,
+                    'operation': operation,
+                }),
+                processData: false,
+                contentType: false,
+                error: function (data) {
+                    toastr.error('Ошибка', data)
+                },
+                success: function (data) {
+                    hide_progressbar_loader()
+                    let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
+                        '<br>' +
+                        '<hr class="solid mt-0" style="background-color: black;">' +
+                        '<h4 style="text-align: center">Данные ссылки обновлены</h4>' +
+                        '<hr class="solid mt-0" style="background-color: black;">'
+                    Swal.fire({
+                        html: output_html,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ОК'
+                    }).then((result) => {
+                        if (result.value) {
+                            window.location.reload()
+                        }
+                    })
+
+
+                }
+            });
+
         }
-        show_progressbar_loader()
-        $.ajax({
-            headers: {"X-CSRFToken": token},
-            url: url_change_self_questionnaire_link_active_field,
-            type: 'POST',
-            data: JSON.stringify({
-                'link_id': link_id,
-                'operation': operation,
-            }),
-            processData: false,
-            contentType: false,
-            error: function (data) {
-                toastr.error('Ошибка', data)
-            },
-            success: function (data) {
-                hide_progressbar_loader()
-                let output_html = '<h2 class="mb-0" style="text-align: center">Данные сохранены</h2>' +
-                    '<br>' +
-                    '<hr class="solid mt-0" style="background-color: black;">' +
-                    '<h4 style="text-align: center">Данные ссылки обновлены</h4>' +
-                    '<hr class="solid mt-0" style="background-color: black;">'
-                Swal.fire({
-                    html: output_html,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'ОК'
-                }).then((result) => {
-                    if (result.value) {
-                        window.location.reload()
-                    }
-                })
-
-
-            }
-        });
 
 
     })

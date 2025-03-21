@@ -1,7 +1,8 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, Participant, \
     EmailSentToParticipant, Report, ResearchTemplate, ResearchTemplateSections, Questionnaire, QuestionnaireVisits, \
     CommonBooleanSettings, Category, CategoryQuestions, QuestionnaireQuestionAnswers, \
-    ParticipantIndividualReportAllowedOptions, StudyIndividualReportAllowedOptions, CompanyIndividualReportAllowedOptions
+    ParticipantIndividualReportAllowedOptions, StudyIndividualReportAllowedOptions, CompanyIndividualReportAllowedOptions, \
+    UserCompanies
 from login.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
@@ -31,9 +32,10 @@ def studies_list(request):
             companies = Company.objects.filter(id=company.id)
         if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
             companies = Company.objects.all()
-
+        user_companies = UserCompanies.objects.filter(user=request.user)
         context.update({
             'companies': companies,
+            'user_companies': user_companies,
             'employee_positions': EmployeePosition.objects.all(),
             'employee_roles': EmployeeRole.objects.all(),
             'industries': Industry.objects.all()

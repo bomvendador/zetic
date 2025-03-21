@@ -3,7 +3,7 @@ import datetime
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, ConsultantCompany, \
     ConsultantStudy, Participant, TrafficLightReportFilter, \
     ConsultantForm, ConsultantFormGrowthZone, ConsultantFormResources, ConsultantFormResourcesComments, \
-    ConsultantFormGrowthZoneComments, ConsultantFormEmailSentToParticipant
+    ConsultantFormGrowthZoneComments, ConsultantFormEmailSentToParticipant, UserCompanies
 from login.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
@@ -32,13 +32,15 @@ def add_consultant_form(request):
         cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
         if cur_user_role_name == CONSTANT_USER_ROLES['CONSULTANT']:
             companies = ConsultantCompany.objects.filter(user=request.user)
-        if cur_user_role_name == CONSTANT_USER_ROLES['MANAGER']:
+        if cur_user_role_name == CONSTANT_USER_ROLES['MANAGER'] or cur_user_role_name == CONSTANT_USER_ROLES['PARTNER']:
             companies = Company.objects.filter(created_by=request.user)
         if cur_user_role_name == CONSTANT_USER_ROLES['ADMIN'] or cur_user_role_name == CONSTANT_USER_ROLES['SUPER_ADMIN']:
             companies = Company.objects.all()
+        user_companies = UserCompanies.objects.filter(user=request.user)
         context.update(
             {
                 'companies': companies,
+                'user_companies': user_companies,
                 'user_role_name': cur_user_role_name,
             }
         )
@@ -56,27 +58,37 @@ def edit_consultant_form_list(request):
         companies_result = []
 
         if cur_user_role_name == CONSTANT_USER_ROLES['CONSULTANT']:
-            companies = ConsultantCompany.objects.filter(user=request.user)
-            for company in companies:
+            consultant_companies = ConsultantCompany.objects.filter(user=request.user)
+            for company in consultant_companies:
                 if ConsultantForm.objects.filter(Q(user=request.user) & Q(participant__employee__company=company.company)).exists():
                     companies_result.append({
                         'id': company.company.id,
                         'name': company.company.name,
                     })
-        if cur_user_role_name == CONSTANT_USER_ROLES['MANAGER']:
+        if cur_user_role_name == CONSTANT_USER_ROLES['MANAGER'] or cur_user_role_name == CONSTANT_USER_ROLES['PARTNER']:
             companies = Company.objects.filter(created_by=request.user)
-            consultant_forms = ConsultantForm.objects.filter(participant__employee__company__created_by =request.user)
         if cur_user_role_name == CONSTANT_USER_ROLES['ADMIN'] or cur_user_role_name == CONSTANT_USER_ROLES['SUPER_ADMIN']:
             companies = Company.objects.all()
+        if companies.exists():
             for company in companies:
                 if ConsultantForm.objects.filter(Q(participant__employee__company=company)).exists():
                     companies_result.append({
                         'id': company.id,
                         'name': company.name,
                     })
+
+        user_companies = UserCompanies.objects.filter(user=request.user)
+        for company in user_companies:
+            if ConsultantForm.objects.filter(Q(participant__employee__company=company.company)).exists():
+                companies_result.append({
+                    'id': company.company.id,
+                    'name': company.company.name,
+                })
+
         context.update(
             {
                 'companies': companies_result,
+                'user_companies': user_companies,
                 'user_role_name': cur_user_role_name,
             }
         )

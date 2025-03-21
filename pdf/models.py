@@ -138,6 +138,20 @@ class Company(models.Model):
         verbose_name = 'Компания'
 
 
+class UserCompanies(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT, related_name='Пользователь компании+')
+    company = models.ForeignKey(Company, default=None, null=True, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.user.email} - {self.company.name}'
+
+    class Meta:
+        verbose_name_plural = 'Компании пользователей'
+        verbose_name = 'Компания пользователя'
+
+
 class IndividualReportAllowedOptions(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(User, default=None, null=True, on_delete=models.PROTECT)

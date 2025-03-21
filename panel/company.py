@@ -2,7 +2,7 @@ from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Indust
     CompanySelfQuestionnaireLink, EmployeeGender, Questionnaire, Study, Participant, CommonBooleanSettings, \
     CompanyReportMadeNotificationReceivers, ConsultantCompany, ConsultantStudy, IndividualReportAllowedOptions, \
     CompanyIndividualReportAllowedOptions, GroupReportAllowedOptions, CompanyGroupReportAllowedOptions, \
-    StudyIndividualReportAllowedOptions, ParticipantIndividualReportAllowedOptions
+    StudyIndividualReportAllowedOptions, ParticipantIndividualReportAllowedOptions, UserCompanies
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
@@ -140,9 +140,11 @@ def companies_list(request):
         companies = Company.objects.filter(created_by=request.user)
     else:
         companies = Company.objects.all()
+    user_companies = UserCompanies.objects.filter(user=request.user)
     context.update(
         {
             'companies': companies,
+            'user_companies': user_companies
          }
     )
 

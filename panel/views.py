@@ -17,7 +17,7 @@ from pdf.models import Company, Participant, ReportData, Report, Category, Repor
     MatrixFilterParticipantNotDistributedEmployeePosition, QuestionnaireQuestionAnswers, QuestionAnswers, \
     ReportDataByCategories, Questionnaire, Project, ProjectStudy, ProjectParticipants, ConsultantCompany, \
     CommonBooleanSettings, StudyIndividualReportAllowedOptions, CompanyIndividualReportAllowedOptions, \
-    IndividualReportAllowedOptions, ParticipantIndividualReportAllowedOptions
+    IndividualReportAllowedOptions, ParticipantIndividualReportAllowedOptions, UserCompanies
 # from django.contrib.auth.models import User
 
 from login.models import UserRole, UserProfile, User
@@ -291,11 +291,19 @@ def team_distribution(request):
                 'name': company.name,
                 'id': company.id,
             })
-
+    user_companies = UserCompanies.objects.filter(user=request.user)
+    for user_company in user_companies:
+        projects = Project.objects.filter(company=user_company.company)
+        if projects.exists():
+            response.append({
+                'name': user_company.company.name,
+                'id': user_company.company.id,
+            })
     context.update({
         'companies': response,
         'CONSTANT_SQUARE_NAMES': CONSTANT_SQUARE_NAMES
     })
+
     # print(response)
     return render(request, 'panel_distribution.html', context)
 
@@ -964,6 +972,15 @@ def group_reports_list(request):
                     'name': company.name,
                     'id': company.id,
                 })
+        user_companies = UserCompanies.objects.filter(user=request.user)
+        for user_company in user_companies:
+            projects = Project.objects.filter(company=user_company.company)
+            if projects.exists():
+                companies_arr.append({
+                    'name': user_company.company.name,
+                    'id': user_company.company.id,
+                })
+
         context.update(
             {'companies_arr': companies_arr}
         )
@@ -1064,7 +1081,14 @@ def individual_reports_list(request):
                     'name': company.name,
                     'id': company.id
                 })
-
+        user_companies = UserCompanies.objects.filter(user=request.user)
+        for user_company in user_companies:
+            reports = Report.objects.filter(participant__employee__company=user_company.company)
+            if reports.exists():
+                companies_arr.append({
+                    'name': user_company.company.name,
+                    'id': user_company.company.id,
+                })
 
         context.update({
             'companies_arr': companies_arr,
@@ -1203,13 +1227,58 @@ def users_list(request):
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def user_profile(request, user_id):
+    user_ = User.objects.get(id=user_id)
     context = info_common(request)
+    user_companies = Company.objects.filter(created_by=user_)
+    companies_set_to_user = UserCompanies.objects.filter(user=user_)
+    not_user_companies = Company.objects.filter(~Q(created_by=user_))
+    available_companies = []
+    companies_set_by_admin = []
+    for company in not_user_companies:
+        if not UserCompanies.objects.filter(Q(company=company) & Q(user=user_)).exists():
+            available_companies.append({
+                'id': company.id,
+                'name': company.name,
+            })
+        else:
+            companies_set_by_admin.append({
+                'id': company.id,
+                'name': company.name,
+            })
     context.update({
         'user_profile': UserProfile.objects.get(user_id=user_id),
-        'roles': UserRole.objects.all()
+        'roles': UserRole.objects.all(),
+        'user_companies': user_companies,
+        'companies_set_to_user': companies_set_to_user,
+        'available_companies': available_companies,
+        'companies_set_by_admin': companies_set_by_admin,
     })
-
     return render(request, 'panel_user_profile.html', context)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def add_user_company(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        user_id = json_data['user_id']
+        company_id = json_data['company_id']
+        new_user_company = UserCompanies()
+        new_user_company.created_by = request.user
+        new_user_company.user = User.objects.get(id=user_id)
+        new_user_company.company = Company.objects.get(id=company_id)
+        new_user_company.save()
+        return HttpResponse(status=200)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def delete_user_company(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        user_id = json_data['user_id']
+        company_id = json_data['company_id']
+        UserCompanies.objects.get(Q(user=User.objects.get(id=user_id)) &
+                                  Q(company=Company.objects.get(id=company_id))).delete()
+        return HttpResponse(status=200)
 
 
 @login_required(redirect_field_name=None, login_url='/login/')

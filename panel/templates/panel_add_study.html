@@ -55,6 +55,11 @@
                                                     data-company-active="{{ company.active }}"
                                                     value="{{ company.id }}">{{ company.id }}. {{ company.name }}</option>
                                         {% endfor %}
+                                        {% for company in user_companies %}
+                                            <option id="company_id_{{ company.company.id }}"
+                                                    data-company-active="{{ company.company.active }}"
+                                                    value="{{ company.company.id }}">{{ company.company.id }}. {{ company.company.name }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                                 <div class="col-md-6 col-sm-12">

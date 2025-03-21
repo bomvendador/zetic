@@ -1,5 +1,5 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, User, Participant, EmployeeGender, \
-    Project, Study, ProjectStudy, TrafficLightReportFilter, TrafficLightReportFilterCategory, PotentialMatrix
+    Project, Study, ProjectStudy, TrafficLightReportFilter, TrafficLightReportFilterCategory, PotentialMatrix, UserCompanies
 from login.models import UserProfile
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -119,6 +119,17 @@ def projects_list(request):
                 'id': company.id,
                 'active': company.active,
             })
+    user_companies = UserCompanies.objects.filter(user=request.user)
+    for user_company in user_companies:
+        projects = Project.objects.filter(company=user_company.company)
+        if projects.exists():
+            companies.append({
+                'name': user_company.company.name,
+                'id': user_company.company.id,
+                'active': user_company.company.active,
+            })
+
+
     context.update(
         {
             'companies': companies,
@@ -140,12 +151,6 @@ def add_new_project(request):
         case role if role == CONSTANT_USER_ROLES['CLIENT_ADMIN']:
             companies = Company.objects.filter(id=Employee.objects.get(user=request.user).company.id)
 
-
-    # if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
-    #     companies = Company.objects.filter(created_by=request.user)
-    #
-    # if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
-    #     companies = Company.objects.all().order_by('name')
     companies_for_projects = []
     for company in companies:
         studies = Study.objects.filter(company=company)
@@ -155,6 +160,16 @@ def add_new_project(request):
                 'name': company.name,
                 'active': company.active,
             })
+    user_companies = UserCompanies.objects.filter(user=request.user)
+    for user_company in user_companies:
+        studies = Study.objects.filter(company=user_company.company)
+        if studies.exists():
+            companies_for_projects.append({
+                'id': user_company.company.id,
+                'name': user_company.company.name,
+                'active': user_company.company.active,
+            })
+
     context.update(
         {
             'companies': companies_for_projects,

@@ -60,6 +60,12 @@
                                                     </option>
                                                 {% endfor %}
                                             {% endif %}
+                                            {% for user_company in filters.user_companies %}
+                                                <option value="{{ user_company.company.id }}">
+                                                    {{ user_company.company.name }}
+                                                </option>
+
+                                            {% endfor %}
                                         </select>
                                     </div>
                                 </div>

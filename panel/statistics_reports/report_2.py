@@ -1,7 +1,7 @@
 import datetime
 
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, User, Participant, EmployeeGender, \
-    Project, ProjectParticipants, Questionnaire, Report, QuestionnaireVisits, QuestionnaireQuestionAnswers, Study
+    Project, ProjectParticipants, Questionnaire, Report, QuestionnaireVisits, QuestionnaireQuestionAnswers, Study, UserCompanies
 from login.models import UserProfile
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -57,10 +57,14 @@ def create_report_2(request):
                                                                        Q(completed_at=None))
                 case 'Админ' | 'Партнер':
                     if not companies_ids:
-                        user_companies = Company.objects.filter(created_by=request.user)
+                        companies_created_by_user = Company.objects.filter(created_by=request.user)
                         companies_ids = []
-                        for user_company in user_companies:
+                        for user_company in companies_created_by_user:
                             companies_ids.append(user_company.id)
+                        user_companies = UserCompanies.objects.filter(user=request.user)
+                        for user_company in user_companies:
+                            companies_ids.append(user_company.company.id)
+
                     participants_data = Participant.objects.filter(Q(employee__company__in=companies_ids) &
                                                                    Q(invitation_sent=True) &
                                                                    Q(completed_at=None))

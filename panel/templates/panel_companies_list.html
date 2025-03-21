@@ -66,6 +66,28 @@
                                                                             </td>
                                                                         </tr>
                                                                     {% endfor %}
+                                                                    {% for company in user_companies %}
+                                                                        <tr>
+                                                                            <td>
+                                                                                {{ company.company.id }}. {{ company.company.name }}
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ company.company.created_at|date:"d.m.Y H:i" }}
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ company.company.created_by.first_name }}
+                                                                            </td>
+
+                                                                            <td>
+                                                                                <div style="text-align: center;">
+                                                                                <i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>
+                                                                                <ul class="dropdown-menu" id="company_id_{{ company.company.id }}">
+                                                                                    <li><a class="dropdown-item edit-company cursor-pointer">Изменить</a></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    {% endfor %}
                                                                     </tbody>
                                                                 </table>
                                                     </div>

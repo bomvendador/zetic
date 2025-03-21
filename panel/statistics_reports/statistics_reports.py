@@ -1,5 +1,5 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, User, Participant, EmployeeGender, \
-    Project, ProjectParticipants, Questionnaire, Report, QuestionnaireVisits, QuestionnaireQuestionAnswers, Study
+    Project, ProjectParticipants, Questionnaire, Report, QuestionnaireVisits, QuestionnaireQuestionAnswers, Study, UserCompanies
 from login.models import UserProfile
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -18,14 +18,17 @@ def report_1(request):
             companies = Company.objects.filter(created_by=request.user)
         case _:
             companies = 'No companies for user'
+    user_companies = UserCompanies.objects.filter(user=request.user)
 
     filters = {
         'companies': companies,
+        'user_companies': user_companies,
         'genders': EmployeeGender.objects.all(),
         'roles': EmployeeRole.objects.all(),
         'industries': Industry.objects.all(),
         'positions': EmployeePosition.objects.all(),
     }
+    print(filters)
 
     context.update(
         {
@@ -48,9 +51,11 @@ def report_2(request):
             companies = Company.objects.filter(created_by=request.user)
         case _:
             companies = 'No companies for user'
+    user_companies = UserCompanies.objects.filter(user=request.user)
 
     filters = {
         'companies': companies,
+        'user_companies': user_companies,
         'genders': EmployeeGender.objects.all(),
         'roles': EmployeeRole.objects.all(),
         'industries': Industry.objects.all(),

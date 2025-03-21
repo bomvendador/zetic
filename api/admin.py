@@ -11,7 +11,7 @@ from pdf.models import Participant, Report, Category, Section, PointDescription,
     CompanyIndividualReportAllowedOptions, CompanyGroupReportAllowedOptions, IndividualReportAllowedOptions, \
     GroupReportAllowedOptions, StudyIndividualReportAllowedOptions, ParticipantIndividualReportAllowedOptions, \
     CompanySelfQuestionnaireLink, PotentialMatrix, ConditionGroupPotentialMatrix, ConditionGroup, \
-    ConditionGroupOfGroups, ConditionGroupCategoryPotentialMatrix
+    ConditionGroupOfGroups, ConditionGroupCategoryPotentialMatrix, UserCompanies
 from login.models import UserRole, UserProfile
 
 
@@ -80,3 +80,4 @@ admin.site.register(ConditionGroup)
 admin.site.register(ConditionGroupOfGroups)
 admin.site.register(ConditionGroupPotentialMatrix)
 admin.site.register(ConditionGroupCategoryPotentialMatrix)
+admin.site.register(UserCompanies)

@@ -78,6 +78,11 @@
                                                                     <td>{{ company.id }}. {{ company.name }}</td>
                                                                 </tr>
                                                                 {% endfor %}
+                                                                {% for company in user_companies %}
+                                                                <tr class="table-row cursor-pointer" id="company_id_{{ company.company.id }}">
+                                                                    <td>{{ company.company.id }}. {{ company.company.name }}</td>
+                                                                </tr>
+                                                                {% endfor %}
                                                             </tbody>
                                                         </table>
                                                     </div>

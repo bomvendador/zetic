@@ -2,8 +2,9 @@ import time
 
 from pdf.models import Category, Section, ResearchTemplate, ResearchTemplateSections, Study, Company, Employee, \
     Participant, IndividualReportAllowedOptions, GroupReportAllowedOptions, CompanyIndividualReportAllowedOptions, \
-    CompanyGroupReportAllowedOptions, ParticipantIndividualReportAllowedOptions, StudyIndividualReportAllowedOptions
-from login.models import UserProfile
+    CompanyGroupReportAllowedOptions, ParticipantIndividualReportAllowedOptions, StudyIndividualReportAllowedOptions, \
+    UserCompanies
+from login.models import UserProfile, User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -32,6 +33,9 @@ def companies_studies_list(request):
 
     if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
         companies = Company.objects.all()
+    user_companies = UserCompanies.objects.filter(user=request.user)
+    # for user_company in user_companies:
+    #     companies.update()
 
     for company in companies:
         studies = Study.objects.filter(company=company)
@@ -43,6 +47,27 @@ def companies_studies_list(request):
                 created_by = ''
             name = study.name
             company_name = company.name
+            if study.research_template:
+                research_template_name = study.research_template.name
+            else:
+                research_template_name = ''
+            studies_arr.append({
+                'name': name,
+                'created_at': created_at,
+                'created_by': created_by,
+                'company_name': company_name,
+                'research_template_name': research_template_name,
+            })
+    for user_company in user_companies:
+        studies = Study.objects.filter(company=user_company.company)
+        for study in studies:
+            created_at = timezone.localtime(study.created_at).strftime("%d.%m.%Y %H:%M:%S")
+            if study.created_by:
+                created_by = study.created_by.first_name
+            else:
+                created_by = ''
+            name = study.name
+            company_name = user_company.company.name
             if study.research_template:
                 research_template_name = study.research_template.name
             else:
@@ -84,6 +109,7 @@ def add_study(request):
     if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
         companies = Company.objects.all()
         research_templates = ResearchTemplate.objects.all()
+    user_companies = UserCompanies.objects.filter(user=request.user)
     individual_report_allowed_options = IndividualReportAllowedOptions.objects.all()
     context.update(
         {
@@ -91,6 +117,7 @@ def add_study(request):
             'companies': companies,
             'research_templates': research_templates,
             'user_role': cur_user_role_name,
+            'user_companies': user_companies
         }
     )
 

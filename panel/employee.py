@@ -1,5 +1,5 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, User, Participant, EmployeeGender, \
-    Project, ProjectParticipants, Questionnaire, Report, QuestionnaireVisits
+    Project, ProjectParticipants, Questionnaire, Report, QuestionnaireVisits, UserCompanies
 from login.models import UserProfile
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -30,40 +30,7 @@ def add_employee(request):
             if cur_user_role_name == 'Админ заказчика':
                 employee = Employee.objects.get(user=request.user)
                 companies = Company.objects.filter(id=employee.company.id)
-    # try:
-    #     response = requests.get(settings.API_LINK + 'attributes',
-    #                             headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
-    #     update_attributes(request, response)
-    #     sex = response['sex']
-    #     positions = response['position']
-    #     industries = response['industry']
-    #     roles = response['role']
-    #
-    # except ValueError:
-    #     sex = []
-    #     positions = []
-    #     industries = []
-    #     roles = []
-    #     for item in EmployeeGender.objects.all():
-    #         sex.append({
-    #             'id': item.public_code,
-    #             'name_ru': item.name_ru
-    #         })
-    #     for item in EmployeeRole.objects.all():
-    #         roles.append({
-    #             'id': item.public_code,
-    #             'name_ru': item.name_ru
-    #         })
-    #     for item in EmployeePosition.objects.all():
-    #         positions.append({
-    #             'id': item.public_code,
-    #             'name_ru': item.name_ru
-    #         })
-    #     for item in Industry.objects.all():
-    #         industries.append({
-    #             'id': item.public_code,
-    #             'name_ru': item.name_ru
-    #         })
+    user_companies = UserCompanies.objects.filter(user=request.user)
 
     sex = []
     positions = []
@@ -97,7 +64,8 @@ def add_employee(request):
         'employee_positions': positions,
         'employee_roles': roles,
         'industries': industries,
-        'genders': sex
+        'genders': sex,
+        'user_companies': user_companies
     })
 
     response = render(request, 'employee/panel_add_employee.html', context)
@@ -358,41 +326,7 @@ def employees_list(request):
         companies = Company.objects.filter(id=employee.company.id)
     if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
         companies = Company.objects.all()
-    # try:
-    #     response = requests.get(settings.API_LINK + 'attributes',
-    #                             headers={'Authorization': 'Bearer ' + settings.API_BEARER}).json()
-    #     update_attributes(request, response)
-    #     sex = response['sex']
-    #     positions = response['position']
-    #     industries = response['industry']
-    #     roles = response['role']
-    #
-    # except ValueError:
-    #     sex = []
-    #     positions = []
-    #     industries = []
-    #     roles = []
-    #     for item in EmployeeGender.objects.all():
-    #         sex.append({
-    #             'id': item.public_code,
-    #             'name_ru': item.name_ru
-    #         })
-    #     for item in EmployeeRole.objects.all():
-    #         roles.append({
-    #             'id': item.public_code,
-    #             'name_ru': item.name_ru
-    #         })
-    #     for item in EmployeePosition.objects.all():
-    #         positions.append({
-    #             'id': item.public_code,
-    #             'name_ru': item.name_ru
-    #         })
-    #     for item in Industry.objects.all():
-    #         industries.append({
-    #             'id': item.public_code,
-    #             'name_ru': item.name_ru
-    #         })
-
+    user_companies = UserCompanies.objects.filter(user=request.user)
     sex = []
     positions = []
     industries = []
@@ -422,6 +356,7 @@ def employees_list(request):
     context.update(
         {
             'companies': companies,
+            'user_companies': user_companies,
             'employees': Employee.objects.all(),
             'employee_positions': positions,
             'employee_roles': roles,
