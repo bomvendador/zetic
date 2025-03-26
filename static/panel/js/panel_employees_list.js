@@ -277,6 +277,145 @@ $('#main-container').on('click', '.delete-employee', function () {
 
 })
 
+let employee_id_for_company_change
+
+$('#main-container').on('click', '.change-employee-company', function () {
+    employee_id_for_company_change = $(this).closest('tr').attr('id').split('_')[2]
+    show_progressbar_loader()
+
+    $.ajax({
+        headers: {"X-CSRFToken": token},
+        url: url_check_employee_before_company_change,
+        type: 'POST',
+
+        data: JSON.stringify({
+            'employee_id': employee_id_for_company_change,
+        }),
+        processData: false,
+        contentType: false,
+        error: function (data) {
+            toastr.error('Ошибка', data)
+        },
+        success: function (data) {
+            hide_progressbar_loader()
+            let output_html = '<h2 class="mb-0" style="text-align: center">Смена компании сотрудника</h2>' +
+                '<br>' +
+                '<hr class="solid mt-0" style="background-color: black!important;">'
+
+            if (data['employee_instances'].length > 0) {
+                console.log(data['employee_instances'])
+                output_html += '<h4 style="text-align: left; margin-left: 0.5em; margin-bottom: 1em">В рамках текущей компании сотрудник имеет связь со следующими элементами:</h4>' +
+                    '<table class="table border text-nowrap text-md-nowrap table-striped mb-0">'
+                data['employee_instances'].forEach(function (employee_instance) {
+                    output_html += `<tr><td><b>${employee_instance}</b></td></tr>`
+                })
+                output_html += '</table><br><hr class="solid mt-0" style="background-color: black;">'
+            }
+
+
+            output_html += '<h3 style="text-align: center">Сменить компанию сотрудника?</h3>' +
+                '<hr class="solid mt-0" style="background-color: black;">'
+            Swal.fire({
+                html: output_html,
+                icon: 'question',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Да',
+                cancelButtonText: 'Нет',
+                showCancelButton: true
+            }).then((result) => {
+                if (result.value) {
+
+                    $.ajax({
+                        headers: {"X-CSRFToken": token},
+                        url: url_get_available_employee_companies,
+                        type: 'POST',
+
+                        data: JSON.stringify({
+                            'employee_id': employee_id_for_company_change,
+                        }),
+                        processData: false,
+                        contentType: false,
+                        error: function (data) {
+                            toastr.error('Ошибка', data)
+                        },
+                        success: function (data) {
+                            hide_progressbar_loader()
+                            let available_companies = data['available_companies']
+                            if (available_companies.length === 0) {
+                                toastr.warning('Доступные компании отсутствуют')
+                            } else {
+                                available_companies.forEach(function (company) {
+                                    $('#select_user_company').append(`<option value="${company['id']}">${company['name']}</option>`)
+                                })
+                                $('#select_user_company').select2({
+                                    dropdownParent: $("#input_modal_choose_user_company"),
+                                    width: '100%'
+                                })
+                                $('#input_modal_choose_user_company').modal('show')
+
+                            }
+
+                        }
+                    });
+                }
+            })
+
+        }
+    });
+})
+$('#modal_change_user_company_btn').on('click', function () {
+    let company_id = $('#select_user_company').val()
+    btn_spinner($('#modal_change_user_company_btn'))
+
+    $.ajax({
+        headers: {"X-CSRFToken": token},
+        url: url_set_new_employee_company,
+        type: 'POST',
+
+        data: JSON.stringify({
+            'employee_id': employee_id_for_company_change,
+            'company_id': company_id
+        }),
+        processData: false,
+        contentType: false,
+        error: function (data) {
+            toastr.error('Ошибка', data)
+        },
+        success: function (data) {
+            hide_progressbar_loader()
+
+            btn_text($('#modal_change_user_company_btn'), 'Изменить компанию сотрудника')
+            $('#input_modal_choose_user_company').modal('hide')
+            let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                '<h3 style="text-align: center">Компания сотрудника изменена</h3>' +
+                '<hr class="solid mt-0" style="background-color: black;">'
+            Swal.fire({
+                html: output_html,
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ок',
+            }).then((result) => {
+                if (result.value) {
+                    window.location.reload()
+                }
+            })
+
+
+        }
+    });
+})
+
+$('#select_user_company').on('change', function () {
+    if ($(this).val() !== '') {
+        $('#modal_change_user_company_btn').prop('disabled', false)
+    } else {
+        $('#modal_change_user_company_btn').prop('disabled', true)
+
+    }
+})
+
 
 let company_id
 
@@ -335,6 +474,7 @@ function route_handler(route_index) {
                     let data_json = data['data'];
                     let name = ''
                     let html = ''
+                    let cur_user_role_name = $('#cur_role_name').text()
                     for (let i = 0; i < data_json.length; i++) {
                         if (data_json[i]['name'] === 'null') {
                             name = ''
@@ -355,14 +495,14 @@ function route_handler(route_index) {
                         html += '<div style="text-align: center;">'
                         html += '<i class="fe fe-more-vertical cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px"></i>'
                         html += '<ul class="dropdown-menu">'
-                        html += '<li><a class="dropdown-item edit-employee cursor-pointer">Изменить</a></li>'
-                        if ($('#cur_role_name').text() === 'Менеджер' || $('#cur_role_name').text() === 'Админ заказчика') {
-                            console.log(data_json[i]['created_by_email'])
+                        html += '<li><a class="dropdown-item edit-employee cursor-pointer"><i class="fe fe-edit-2" style="margin-right: 0.5em"></i>  Изменить</a></li>'
+                        html += '<li><a class="dropdown-item change-employee-company cursor-pointer"><i class="fe fe-repeat" style="margin-right: 0.5em"></i>  Сменить компанию</a></li>'
+                        if (cur_user_role_name === 'Менеджер' || cur_user_role_name === 'Админ заказчика') {
                             if (cur_user_email === data_json[i]['created_by_email']) {
-                                html += '<li><a class="dropdown-item cursor-pointer delete-employee">Удалить</a></li>'
+                                html += '<li><a class="dropdown-item cursor-pointer delete-employee"><i class="fe fe-trash" style="margin-right: 0.5em"></i>Удалить</a></li>'
                             }
                         } else {
-                            html += '<li><a class="dropdown-item cursor-pointer delete-employee">Удалить</a></li>'
+                            html += '<li style="color: red"><a class="dropdown-item cursor-pointer delete-employee"><i class="fe fe-trash" style="margin-right: 0.5em"></i>Удалить</a></li>'
                         }
                         html += '</ul>'
                         html += '</div>'

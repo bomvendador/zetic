@@ -1146,3 +1146,18 @@ class ConditionGroupPotentialMatrix(models.Model):
         verbose_name = 'Группа условий (матрицв потенциала) (ConditionGroupPotentialMatrix)'
 
 
+class EmployeeCompanyChangeEvent(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    employee_previous_company = models.ForeignKey(Company, on_delete=models.CASCADE, default=None, blank=True, null=True, related_name='employee_previous_company')
+    employee_new_company = models.ForeignKey(Company, on_delete=models.CASCADE, default=None, blank=True, null=True, related_name='employee_new_company')
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return f'[{timezone.localtime(self.created_at).strftime("%d.%m.%Y %H:%M:%S")}] : {self.id}. {self.employee.name}; Prev_company - {self.employee_previous_company.name}; New_company - {self.employee_new_company.name}'
+
+    class Meta:
+        verbose_name_plural = 'Переводы сотрудников в другие компании (EmployeeCompanyChangeEvent)'
+        verbose_name = 'Перевод сотрудника в другую компанию (EmployeeCompanyChangeEvent)'
+
+

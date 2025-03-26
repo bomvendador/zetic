@@ -229,6 +229,40 @@
             </div>
         </div>
 
+    <!-- Модальное окно выбора компании -->
+    <div class="modal fade" id="input_modal_choose_user_company">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header modal-header-style">
+                    <h5 class="modal-title">Выбор компании</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3 form-group">
+{#                            <label for="input_position_ru_name" class="col-form-label">Выберите сотрудника</label>#}
+                            <select class="form-control select2-show-search form-select w-100"
+                                data-placeholder="Выберите компанию" id="select_user_company">
+
+                                <option value="">--Выберите компанию--</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <div class="row" style="padding: 0px 15px 15px">
+                        <div class="col-lg-12 col-sm-12 mt-3">
+                            <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
+                                    id="modal_change_user_company_btn" disabled>Изменить компанию сотрудника
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     {% endblock %}
@@ -244,6 +278,9 @@
     let url_get_employee_data = "{% url 'get_employee_data' %}"
     let url_save_new_employee_html = "{% url 'save_new_employee_html' %}"
     let url_delete_employee = "{% url 'delete_employee' %}"
+    let url_check_employee_before_company_change = "{% url 'check_employee_before_company_change' %}"
+    let url_get_available_employee_companies = "{% url 'get_available_employee_companies' %}"
+    let url_set_new_employee_company = "{% url 'set_new_employee_company' %}"
     let server_error = false
 
     {% if employee_positions == 'Server error' or employee_roles == 'Server error' or industries == 'Server error' or genders == 'Server error' %}

@@ -1,5 +1,7 @@
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, User, Participant, EmployeeGender, \
-    Project, ProjectParticipants, Questionnaire, Report, QuestionnaireVisits, UserCompanies
+    Project, ProjectParticipants, Questionnaire, Report, QuestionnaireVisits, UserCompanies,\
+    CompanyReportMadeNotificationReceivers, ReportGroup, ReportGroupSquare, ConsultantForm, ProjectStudy,\
+    EmployeeCompanyChangeEvent, Study
 from login.models import UserProfile
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -197,12 +199,10 @@ def delete_employee(request):
         json_data = json.loads(request.body.decode('utf-8'))
         employee_id = json_data['employee_id']
         employee = Employee.objects.get(id=employee_id)
-        print(json_data)
         employee_created_participant = False
         employee_is_participant = Participant.objects.filter(employee=employee).exists()
         if employee.user is not None:
             employee_created_participant = Participant.objects.filter(created_by=employee.user).exists()
-            print(Participant.objects.filter(created_by=employee.user).count())
         response = {}
         errors = []
         if employee_is_participant:
@@ -427,3 +427,124 @@ def delete_company_admin(request):
         employee.save()
 
         return HttpResponse(status=200)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def check_employee_before_company_change(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        employee_id = json_data['employee_id']
+        company = Employee.objects.get(id=employee_id).company
+        employee_instances = []
+        if CompanyReportMadeNotificationReceivers.objects.filter(Q(employee_id=employee_id) & Q(company=company)).exists():
+            employee_instances.append('Получатель уведомления о созданном отчете')
+
+        if Participant.objects.filter(Q(employee_id=employee_id)).exists():
+            if Report.objects.filter(participant__employee_id=employee_id):
+                employee_instances.append('Личный отчет')
+            if ReportGroupSquare.objects.filter(report__participant__employee_id=employee_id).exists():
+                employee_instances.append('Командный отчет')
+            if Questionnaire.objects.filter(participant__employee_id=employee_id).exists():
+                employee_instances.append('Опросник')
+            if ProjectStudy.objects.filter(study__participant__employee_id=employee_id).exists():
+                employee_instances.append('Проект')
+            if ConsultantForm.objects.filter(user__participant__employee_id=employee_id).exists():
+                employee_instances.append('Анкета консультанта')
+        print(employee_instances)
+        response = {
+            'employee_instances': employee_instances
+        }
+        return JsonResponse(response)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def get_available_employee_companies(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        employee_id = json_data['employee_id']
+        available_companies = []
+        companies = []
+        cur_employee_company = Employee.objects.get(id=employee_id).company
+        cur_user_role_name = UserProfile.objects.get(user=request.user).role.name
+
+        user_companies = UserCompanies.objects.filter(Q(user=request.user) &
+                                                      ~Q(company=cur_employee_company))
+        user_companies_ids = []
+        for user_company in user_companies:
+            user_companies_ids.append(user_company.company.id)
+            available_companies.append({
+                'id': user_company.company.id,
+                'name': user_company.company.name
+            })
+
+        if cur_user_role_name == 'Менеджер' or cur_user_role_name == 'Партнер':
+            if len(user_companies_ids) > 0:
+                companies = Company.objects.filter(Q(created_by=request.user) &
+                                                   ~Q(id=cur_employee_company.id) &
+                                                   ~Q(id__in=user_companies_ids))
+            else:
+                companies = Company.objects.filter(Q(created_by=request.user) &
+                                                   ~Q(id=cur_employee_company.id))
+
+        if cur_user_role_name == 'Админ' or cur_user_role_name == 'Суперадмин':
+            if len(user_companies_ids) > 0:
+                companies = Company.objects.filter(~Q(id=cur_employee_company.id) &
+                                                   ~Q(id__in=user_companies_ids))
+            else:
+                companies = Company.objects.filter(~Q(id=cur_employee_company.id))
+
+        for company in companies:
+            available_companies.append({
+                'id': company.id,
+                'name': company.name
+            })
+        response = {
+            'available_companies': available_companies
+        }
+        return JsonResponse(response)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def set_new_employee_company(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        employee_id = json_data['employee_id']
+        company_id = json_data['company_id']
+        company = Company.objects.get(id=company_id)
+        employee = Employee.objects.get(id=employee_id)
+        employee_previous_company = employee.company
+        employee.company = company
+        employee.save()
+        if CompanyReportMadeNotificationReceivers.objects.filter(Q(employee_id=employee_id) & Q(company=company)).exists():
+            company_report_made_notification_receivers = CompanyReportMadeNotificationReceivers.objects.filter(Q(employee_id=employee_id) & Q(company=company))
+            for receiver in company_report_made_notification_receivers:
+                receiver.company = company
+                receiver.save()
+        event = EmployeeCompanyChangeEvent()
+        event.created_by = request.user
+        event.employee = employee
+        event.employee_previous_company = employee_previous_company
+        event.employee_mew_company = employee.company
+        event.save(0)
+        employee_participants = Participant.objects.filter(employee=employee)
+        for participant in employee_participants:
+            new_study = Study()
+            new_study.created_by = request.user
+            new_study.company = company
+            new_study.research_template = participant.study.research_template
+            new_study.name = f'{participant.employee.name} ({participant.employee.email}) перенесен(а) из компании {employee_previous_company.name}'
+            new_study.invitation_message_text = participant.study.invitation_message_text
+            new_study.reminder_message_text = participant.study.reminder_message_text
+            new_study.save()
+            if 'Создано сотрудником' in participant.study.name or 'перенесен(а) из компании' in participant.study.name:
+                participant.study.delete()
+            participant.study = new_study
+            participant.save()
+            individual_reports = Report.objects.filter(participant=participant)
+            for report in individual_reports:
+                report.study = new_study
+                report.save()
+                ReportGroupSquare.objects.filter(report=report).delete()
+        return HttpResponse(status=200)
+
+

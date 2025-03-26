@@ -101,6 +101,9 @@ urlpatterns = [
     path('get_company_no_admins', employee.get_company_no_admins, name='get_company_no_admins'),
     path('deactivate_company_admin', employee.deactivate_company_admin, name='deactivate_company_admin'),
     path('delete_company_admin', employee.delete_company_admin, name='delete_company_admin'),
+    path('check_employee_before_company_change', employee.check_employee_before_company_change, name='check_employee_before_company_change'),
+    path('get_available_employee_companies', employee.get_available_employee_companies, name='get_available_employee_companies'),
+    path('set_new_employee_company', employee.set_new_employee_company, name='set_new_employee_company'),
 
     path('search_employees', search.search_employees, name='search_employees'),
     path('search_questionnaire_status', search.search_questionnaire_status, name='search_questionnaire_status'),
