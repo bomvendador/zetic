@@ -259,10 +259,10 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
                 if square_id == '1' or square_id == '3':
                     if item_y >= prev_y:
                         item_y = prev_y - 1
-                    prev_y = item_y - 6
+                    prev_y = item_y - 7
                 else:
                     if item_y - 5 <= prev_y:
-                        item_y = prev_y + 6
+                        item_y = prev_y + 9
                     prev_y = item_y
                 for report_data_sorted_by_x in new_list_sorted_by_x:
                     if report_data_sorted_by_x['name'] == report_data_sorted_by_y['name']:
