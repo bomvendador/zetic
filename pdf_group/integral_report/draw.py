@@ -254,6 +254,7 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
             else:
                 new_list_sorted_by_y = sorted(square_report_data, key=itemgetter('y'), reverse=True)
             print('++++++new_list_sorted_by_y+++++')
+            print(f'square_id = {square_id}')
             print(new_list_sorted_by_y)
             print('+++++++++++++++++++')
             for report_data_sorted_by_y in new_list_sorted_by_y:
