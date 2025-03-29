@@ -31,12 +31,13 @@ def draw_integral_report_squares(pdf, lang, start_x, square_results):
     pdf.set_line_width(0.2)
     pdf.line(start_X, start_Y + total_height / 2, start_X + total_width, start_Y + total_height / 2) #центральная горизонтальная линия
     pdf.line(start_X + total_width / 2, start_Y, start_X + total_width / 2,  start_Y + total_height) #центральная вертикальная линия
+    print(f'X вертикальной линии - {start_X + total_width / 2}')
 
-    pdf.set_line_width(0.1)
-    pdf.line(start_X, start_Y + total_height / 2 / 2, start_X + total_width, start_Y + total_height / 2 / 2) #горизонтальная линия 1/4
-    pdf.line(start_X, start_Y + total_height * (3/4), start_X + total_width, start_Y + total_height * (3/4)) #горизонтальная линия 3/4
-    pdf.line(start_X + total_width / 2 / 2, start_Y, start_X + total_width / 2 / 2,  start_Y + total_height) #вертикальная линия 1/4
-    pdf.line(start_X + total_width * (3/4), start_Y, start_X + total_width * (3/4), start_Y + total_height) #вертикальная линия 3/4
+    # pdf.set_line_width(0.1)
+    # pdf.line(start_X, start_Y + total_height / 2 / 2, start_X + total_width, start_Y + total_height / 2 / 2) #горизонтальная линия 1/4
+    # pdf.line(start_X, start_Y + total_height * (3/4), start_X + total_width, start_Y + total_height * (3/4)) #горизонтальная линия 3/4
+    # pdf.line(start_X + total_width / 2 / 2, start_Y, start_X + total_width / 2 / 2,  start_Y + total_height) #вертикальная линия 1/4
+    # pdf.line(start_X + total_width * (3/4), start_Y, start_X + total_width * (3/4), start_Y + total_height) #вертикальная линия 3/4
 
     pdf.set_font("RalewayLight", "", 8)
 
@@ -150,11 +151,10 @@ def draw_integral_report_squares(pdf, lang, start_x, square_results):
 def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_results):
     # ['Переговорщик', 'mariya.lyushakova@rt.ru', 'Люшакова Мария Олеговна', 0, '', 'rgba(0, 0, 0, 0)', '1_3', 1]
     pdf.set_font("RalewayLight", "", 8)
-
     matrix_height = end_y - start_y
     matrix_width = end_x - start_x
-    # group_report = ReportGroup.objects.get(id=group_report_id)
-    # report_group_squares = ReportGroupSquare.objects.filter(report_group=group_report)
+    middle_x = start_x + matrix_width / 2
+    middle_y = start_y + matrix_height / 2
 
     integral_report_filters = IntegralReportFilter.objects.all()
     integral_report_data = []
@@ -177,28 +177,10 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
                         category_t_points.append(t_points)
                 if len(category_t_points) > 0:
                     categories_t_points.append(category_t_points)
-
-            # average_category_t_point = math.floor((category_points_sum / category_points_cnt) * 10) / 10
-
-
-
-                # for report_group_square in report_group_squares:
-                #     report = report_group_square.report
-                #     report_data_by_categories = ReportDataByCategories.objects.filter(Q(report=report) & Q(category_code=category_code))
-                #     if report_data_by_categories.exists():
-                #         category_points_cnt = category_points_cnt + 1
-                #         category_points_sum = category_points_sum + report_data_by_categories[0].t_points
-            variance_from_average = []
-            # print(f'categories_t_points')
-            print(f'++++{integral_report_filter.name}++++')
-            print(categories_t_points)
             average_categories_t_points = []
             for category_points in categories_t_points:
                 average_category_t_points = math.floor((sum(category_points) / len(category_points)) * 10) / 10
                 average_categories_t_points.append(average_category_t_points)
-            # print('---variance_from_average---')
-            # print(variance_from_average)
-            # print('----')
 
             if len(average_categories_t_points) > 0:
                 x = 10 - math.floor((sum(average_categories_t_points) / len(average_categories_t_points)) * 10) / 10
@@ -217,184 +199,108 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
         pdf.set_fill_color(r=85, g=85, b=200)
         pdf.set_draw_color(r=255, g=255, b=255)
         pdf.set_font("RalewayLight", "", 11)
-        letter_width = 1.9
         matrix_interval_width = matrix_width / 10
         matrix_interval_height = matrix_height / 10
         # левый верхний угол
         matrix_squares = [
         {
             'start_x': 0,
-            'end_x': 2.5,
-            'start_y': 7.5,
-            'end_y': 11,
+            'end_x': 5,
+            'start_y': 5,
+            'end_y': 10,
             'report_data': [],
-            'square_id': '1_1'
+            'square_id': '1'
         },
         {
-            'start_x': 2.5,
-            'end_x': 5,
-            'start_y': 7.5,
-            'end_y': 11,
+            'start_x': 5,
+            'end_x': 10,
+            'start_y': 5,
+            'end_y': 10,
             'report_data': [],
-            'square_id': '1_2'
+            'square_id': '2'
         },
         {
             'start_x': 0,
-            'end_x': 2.5,
-            'start_y': 5,
-            'end_y': 7.5,
-            'report_data': [],
-            'square_id': '1_3'
-        },
-        {
-            'start_x': 2.5,
-            'end_x': 5,
-            'start_y': 5,
-            'end_y': 7.5,
-            'report_data': [],
-            'square_id': '1_4'
-        },
-        {
-            'start_x': 5,
-            'end_x': 7.5,
-            'start_y': 7.5,
-            'end_y': 11,
-            'report_data': [],
-            'square_id': '2_1'
-        },
-        {
-            'start_x': 7.5,
-            'end_x': 11,
-            'start_y': 7.5,
-            'end_y': 11,
-            'report_data': [],
-            'square_id': '2_2'
-        },
-        {
-            'start_x': 5,
-            'end_x': 7.5,
-            'start_y': 5,
-            'end_y': 7.5,
-            'report_data': [],
-            'square_id': '2_3'
-        },
-        {
-            'start_x': 7.5,
-            'end_x': 11,
-            'start_y': 5,
-            'end_y': 7.5,
-            'report_data': [],
-            'square_id': '2_4'
-        },
-        {
-            'start_x': 0,
-            'end_x': 2.5,
-            'start_y': 2.5,
-            'end_y': 5,
-            'report_data': [],
-            'square_id': '3_1'
-        },
-        {
-            'start_x': 2.5,
-            'end_x': 5,
-            'start_y': 2.5,
-            'end_y': 5,
-            'report_data': [],
-            'square_id': '3_2'
-        },
-        {
-            'start_x': 0,
-            'end_x': 2.5,
-            'start_y': 0,
-            'end_y': 2.5,
-            'report_data': [],
-            'square_id': '3_3'
-        },
-        {
-            'start_x': 2.5,
             'end_x': 5,
             'start_y': 0,
-            'end_y': 2.5,
+            'end_y': 5,
             'report_data': [],
-            'square_id': '3_4'
+            'square_id': '3'
         },
         {
             'start_x': 5,
-            'end_x': 7.5,
-            'start_y': 2.5,
+            'end_x': 10,
+            'start_y': 0,
             'end_y': 5,
             'report_data': [],
-            'square_id': '4_1'
+            'square_id': '4'
         },
-        {
-            'start_x': 7.5,
-            'end_x': 11,
-            'start_y': 2.5,
-            'end_y': 5,
-            'report_data': [],
-            'square_id': '4_2'
-        },
-        {
-            'start_x': 5,
-            'end_x': 7.5,
-            'start_y': 0,
-            'end_y': 2.2,
-            'report_data': [],
-            'square_id': '4_3'
-        },
-        {
-            'start_x': 7.5,
-            'end_x': 11,
-            'start_y': 0,
-            'end_y': 2.5,
-            'report_data': [],
-            'square_id': '4_4'
-        }]
+        ]
+
         for data in integral_report_data:
             for square in matrix_squares:
                 if square['start_x'] <= data['x'] < square['end_x'] and \
                         square['start_y'] <= data['y'] < square['end_y']:
                     square['report_data'].append(data)
         for square in matrix_squares:
-            new_list = sorted(square['report_data'], key=itemgetter('y'), reverse=True)
-            square['report_data'] = new_list
-        print(matrix_squares)
+            square_report_data = square['report_data']
+            new_list_sorted_by_x = sorted(square_report_data, key=itemgetter('x'), reverse=False)
+
+            square_id = square['square_id']
+            prev_y = middle_y
+
+            if square_id == '1' or square_id == '2':
+                new_list_sorted_by_y = sorted(square_report_data, key=itemgetter('y'), reverse=False)
+            else:
+                new_list_sorted_by_y = sorted(square_report_data, key=itemgetter('y'), reverse=True)
+
+            for report_data_sorted_by_y in new_list_sorted_by_y:
+                item_y = end_y - report_data_sorted_by_y['y'] * matrix_interval_height
+                if square_id == '1' or square_id == '2':
+                    if item_y >= prev_y:
+                        item_y = prev_y - 1
+                    prev_y = item_y - 6
+                else:
+                    if item_y - 5 <= prev_y:
+                        item_y = prev_y + 6
+                    prev_y = item_y
+                for report_data_sorted_by_x in new_list_sorted_by_x:
+                    if report_data_sorted_by_x['name'] == report_data_sorted_by_y['name']:
+                        report_data_sorted_by_x['y'] = item_y
+
+            square['report_data'] = new_list_sorted_by_x
         for matrix_square in matrix_squares:
             report_data = matrix_square['report_data']
             if len(report_data) > 0:
                 cnt = 0
-                between_items_interval_y = 7
-
                 for matrix_item in report_data:
                     cnt = cnt + 1
-                    square_start_x = matrix_square['start_x']
-                    if matrix_square['end_y'] > 10:
-                        square_start_y = 10
-                    else:
-                        square_start_y = matrix_square['end_y']
-                    item_x = 0
+                    x = matrix_item['x'] * matrix_interval_width + start_x
+
                     name = matrix_item['name']
-                    print(name)
-                    # если нечетное
-                    if cnt % 2 != 0:
-                        item_x = 0.83 + square_start_x
+
+                    name_length = pdf.get_string_width(name)
+                    text_end_x = x + name_length / 2
+                    text_start_x = x - name_length / 2
+                    square_id = matrix_square['square_id']
+
+                    # если текст начинается вне пределов квадрата
+                    if square_id == '1' or square_id == '3':
+                        if text_end_x >= middle_x:
+                            x = middle_x - (name_length / 2 + 1)
+                        if text_start_x <= start_x:
+                            x = start_x + 1
                     else:
-                        item_x = 0.83 * 2 + square_start_x
+                        if text_end_x >= end_x:
+                            x = end_x - (name_length / 2 + 1)
+                        if text_start_x <= middle_x:
+                            x = middle_x + name_length / 2 + 1
+                    text_start_x = x - name_length / 2
 
-                        # match square_start_x:
-                        #     case 0:
-                        #         item_x = 0.83 + square_start_x
-                    x = start_x + matrix_interval_width * item_x
-                    y = end_y - matrix_interval_height * square_start_y + (cnt * between_items_interval_y)
-                    name_length = len(name)
-                    pdf.circle(x - circle_radius / 2, y, circle_radius, style="FD")
-                    pdf.text(x - (name_length * letter_width) / 2 - circle_radius / 2, y - 1, name)
+                    circle_y = matrix_item['y']
+                    text_y = circle_y - 1
 
-        # for data in integral_report_data:
-        #     x = start_x + matrix_interval_width * data['x']
-        #     y = end_y - matrix_interval_height * data['y']
-        #     pdf.circle(x - circle_radius / 2, y, circle_radius, style="FD")
-        #     name_length = len(data['name'])
-        #     pdf.text(x - (name_length * letter_width) / 2 - circle_radius / 2, y - 1, data['name'])
+                    pdf.circle(x - circle_radius / 2, circle_y, circle_radius, style="FD")
+                    pdf.text(text_start_x, text_y, name)
 
 

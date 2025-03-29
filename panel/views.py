@@ -1009,7 +1009,7 @@ def get_group_reports_list(request):
                     reports_group_square = ReportGroupSquare.objects.filter(report_group=group_report)
                     if reports_group_square.exists():
                         for report_group_square in reports_group_square:
-                            print(f'report_group_square - {report_group_square.report.id}')
+                            # print(f'report_group_square - {report_group_square.report.id}')
                             report_group_square_arr.append(report_group_square.report.participant.employee.name)
                         report.append({
                             'company': group_report.company.name,
