@@ -265,8 +265,8 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
                 print(f'{report_data_sorted_by_y["name"]} item_y1 = {item_y} prev_y = {prev_y}')
                 if square_id == '1' or square_id == '2':
                     if item_y >= prev_y:
-                        item_y = prev_y - 2
-                    prev_y = item_y - 7
+                        item_y = prev_y - 4
+                    prev_y = item_y - 5
                 else:
                     if item_y - 6 <= prev_y:
                         item_y = prev_y + 8
