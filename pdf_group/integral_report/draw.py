@@ -249,7 +249,7 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
             square_id = square['square_id']
             prev_y = middle_y
 
-            if square_id == '1' or square_id == '3':
+            if square_id == '1' or square_id == '2':
                 new_list_sorted_by_y = sorted(square_report_data, key=itemgetter('y'), reverse=False)
             else:
                 new_list_sorted_by_y = sorted(square_report_data, key=itemgetter('y'), reverse=True)
@@ -259,7 +259,7 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
             print('+++++++++++++++++++')
             for report_data_sorted_by_y in new_list_sorted_by_y:
                 item_y = end_y - report_data_sorted_by_y['y'] * matrix_interval_height
-                if square_id == '1' or square_id == '3':
+                if square_id == '1' or square_id == '2':
                     if item_y >= prev_y:
                         item_y = prev_y - 1
                     prev_y = item_y - 7
