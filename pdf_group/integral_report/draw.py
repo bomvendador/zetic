@@ -291,7 +291,7 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
                     cnt = cnt + 1
                     x = matrix_item['x'] * matrix_interval_width + start_x
 
-                    name = f"{matrix_item['name']} X - {x} Y - {matrix_item['y']}"
+                    name = f"{matrix_item['name']}"
 
                     name_length = pdf.get_string_width(name)
                     text_end_x = x + name_length / 2
