@@ -262,7 +262,7 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
             print('+++++++++++++++++++')
             for report_data_sorted_by_y in new_list_sorted_by_y:
                 item_y = end_y - report_data_sorted_by_y['y'] * matrix_interval_height
-                print(f'{report_data_sorted_by_y["name"]} item_y1 = {item_y}')
+                print(f'{report_data_sorted_by_y["name"]} item_y1 = {item_y} prev_y = {prev_y}')
                 if square_id == '1' or square_id == '2':
                     if item_y >= prev_y:
                         item_y = prev_y - 1
@@ -271,7 +271,7 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
                     if item_y - 6 <= prev_y:
                         item_y = prev_y + 8
                     prev_y = item_y
-                print(f'{report_data_sorted_by_y["name"]} item_y2 = {item_y}')
+                print(f'{report_data_sorted_by_y["name"]} item_y2 = {item_y} prev_y = {prev_y}')
 
                 for report_data_sorted_by_x in new_list_sorted_by_x:
                     if report_data_sorted_by_x['name'] == report_data_sorted_by_y['name']:
