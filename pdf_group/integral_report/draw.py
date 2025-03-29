@@ -243,18 +243,20 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
                         square['start_y'] <= data['y'] < square['end_y']:
                     square['report_data'].append(data)
         for square in matrix_squares:
+
             square_report_data = square['report_data']
             new_list_sorted_by_x = sorted(square_report_data, key=itemgetter('x'), reverse=False)
 
             square_id = square['square_id']
             prev_y = middle_y
+            print('--------------===================+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            print(f'square_id = {square_id}')
 
             if square_id == '1' or square_id == '2':
                 new_list_sorted_by_y = sorted(square_report_data, key=itemgetter('y'), reverse=False)
             else:
                 new_list_sorted_by_y = sorted(square_report_data, key=itemgetter('y'), reverse=True)
             print('++++++new_list_sorted_by_y+++++')
-            print(f'square_id = {square_id}')
             print(new_list_sorted_by_y)
             print('+++++++++++++++++++')
             for report_data_sorted_by_y in new_list_sorted_by_y:
