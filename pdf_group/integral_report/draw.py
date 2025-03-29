@@ -249,7 +249,7 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
 
             square_id = square['square_id']
             prev_y = middle_y
-            print('--------------===================+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            print('--------------===================++++++++++++START+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
             print(f'square_id = {square_id}')
 
             if square_id == '1' or square_id == '2':
@@ -277,6 +277,8 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
             print('----------new_list_sorted_by_x------------')
             print(new_list_sorted_by_x)
             print('-----------------------------')
+            print('--------------===================++++++++++++END+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+
         for matrix_square in matrix_squares:
             report_data = matrix_square['report_data']
             if len(report_data) > 0:
