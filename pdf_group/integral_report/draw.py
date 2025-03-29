@@ -261,7 +261,7 @@ def draw_integral_report_items(pdf, start_x, start_y, end_x, end_y, square_resul
                     if item_y >= prev_y:
                         item_y = prev_y - 4
                     if prev_y - item_y <= circle_radius:
-                        item_y = prev_y + circle_radius + 1
+                        item_y = prev_y - circle_radius - 1
                     prev_y = item_y - 5
                 else:
                     if item_y - 6 <= prev_y:
