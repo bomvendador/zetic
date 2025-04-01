@@ -118,6 +118,11 @@ def search_for_employees(request):
                 'name': employee.name,
                 'email': employee.email,
                 'company_name': employee.company.name,
+                'gender': employee.sex.name_ru,
+                'birth_year': employee.birth_year,
+                'role': employee.role.name_ru,
+                'position': employee.position.name_ru,
+                'industry': employee.industry.name_ru,
             }
             participants = Participant.objects.filter(employee=employee)
             projects = []
@@ -126,6 +131,7 @@ def search_for_employees(request):
             reports_files = []
             questionnaires_visits = []
             studies = []
+
             invitation_code = ''
             if participants.exists():
                 for participant in participants:
@@ -160,7 +166,8 @@ def search_for_employees(request):
                     'reports_files': reports_files,
                     'invitation_code': invitation_code,
                     'url_origin': f'{request._current_scheme_host}',
-                    'studies': studies
+                    'studies': studies,
+                    'employee': employee
                 })
 
             data.append(employee_data)
