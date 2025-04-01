@@ -26,6 +26,9 @@ $('#statistics_reports_report_type_select_filter').on('change', function () {
             case 'report_2':
                 window.location.href = url_statistics_report_2;
                 break;
+            case 'report_3':
+                window.location.href = url_statistics_report_3;
+                break;
             default:
                 break;
 

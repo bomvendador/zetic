@@ -14,6 +14,7 @@ from panel.potential_matrix import potential_matrix_views
 import panel.statistics_reports.statistics_reports as statistics_reports
 import panel.statistics_reports.report_1 as statistics_report_1
 import panel.statistics_reports.report_2 as statistics_report_2
+import panel.statistics_reports.report_3 as statistics_report_3
 
 # from panel import study
 # from panel import individual_report_file
@@ -271,6 +272,8 @@ urlpatterns = [
     path('create_statistics_report_1', statistics_report_1.create_report_1, name='create_statistics_report_1'),
     path('statistics_report_2', statistics_reports.report_2, name='statistics_report_2'),
     path('create_statistics_report_2', statistics_report_2.create_report_2, name='create_statistics_report_2'),
+    path('statistics_report_3', statistics_reports.report_3, name='statistics_report_3'),
+    path('create_statistics_report_3', statistics_report_3.create_report_3, name='create_statistics_report_3'),
 
 ]
 

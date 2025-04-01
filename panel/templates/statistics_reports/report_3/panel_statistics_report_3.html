@@ -18,7 +18,7 @@
                         <div class="card-body pt-2">
 
                             <div class="row">
-                                <label class="form-label">Дата окончания заполнения</label>
+                                <label class="form-label">Дата добавления сотрудника</label>
 
                                 <div class="col-lg-3 col-sm-12">
                                     <div class="input-group">
@@ -43,26 +43,16 @@
                                 </div>
 
 
-
                             </div>
-                            <div class="row mt-5 mb-4">
 
-                                <div class="col-lg-3 col-sm-12">
-                                    <div class="form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch"
-                                               id="only_relevant_reports">
-                                        <label style="margin-right: 3em" class="form-check-label" for="only_relevant_reports">Показать только актуальные отчеты</label>
 
-                                    </div>
-                                </div>
-                            </div>
                             <div class="row">
                                 <div class="col-lg-12 col-sm-12">
                                     <div class="form-group">
                                         <label class="form-label">Компании</label>
                                         <select class="form-control select-2-custom"
                                                 data-placeholder="Выберите компанию"
-                                                multiple="multiple" id="companies">
+                                                 multiple="multiple" id="companies">
                                             {% if filters.companies != 'No companies for user' %}
                                                 {% for company in filters.companies %}
                                                     <option value="{{ company.id }}">
@@ -74,9 +64,10 @@
                                                 <option value="{{ user_company.company.id }}">
                                                     {{ user_company.company.name }}
                                                 </option>
-
                                             {% endfor %}
+
                                         </select>
+
                                     </div>
                                 </div>
                             </div>
@@ -169,7 +160,7 @@
                             <div class="row">
                                 <div class="col-lg-12 col-sm-12">
                                     <button class="btn ripple btn-primary w-100" style="height: 40px" type="button"
-                                            id="create_report_1">
+                                            id="create_report_3">
                                         Сформировать отчет
                                     </button>
                                 </div>
@@ -184,7 +175,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table text-nowrap border-bottom team-table dataTable no-footer"
-                                       id="table_report_1">
+                                       id="table_report_3">
                                     <thead>
                                     {#                                                            <tr class="table-header">#}
                                     <tr>
@@ -197,12 +188,11 @@
                                         <th class="wd-15p border-bottom-0 table-header">Должность</th>
                                         <th class="wd-15p border-bottom-0 table-header">Год рождения</th>
                                         <th class="wd-15p border-bottom-0 table-header">Пол</th>
-                                        <th class="wd-15p border-bottom-0 table-header">Когда создан опросник</th>
-                                        <th class="wd-15p border-bottom-0 table-header">Кем создан опросник</th>
-                                        <th class="wd-15p border-bottom-0 table-header">Дата окончания заполнения</th>
+                                        <th class="wd-15p border-bottom-0 table-header">Когда добавлен сотрудник</th>
+                                        <th class="wd-15p border-bottom-0 table-header">Кем добавлен сотрудник</th>
                                     </tr>
                                     </thead>
-                                    <tbody id="table_report_1_tbody">
+                                    <tbody id="table_report_3_tbody">
 
                                     </tbody>
                                 </table>
@@ -225,7 +215,7 @@
     <script>
 
         {#let url_get_company_projects = "{% url 'get_company_projects' %}"#}
-        let url_create_statistics_report_1 = "{% url 'create_statistics_report_1' %}"
+        let url_create_statistics_report_3 = "{% url 'create_statistics_report_3' %}"
 
 
     </script>
@@ -239,7 +229,7 @@
     {#    <script src="{% static 'panel/plugins/date-picker/date-picker.js' %}?{{ timestamp }}"></script>#}
     {#    <script src="{% static 'panel/plugins/bootstrap-daterangepicker/daterangepicker.js' %}"></script>#}
     <script src="{% static 'panel/plugins/bootstrap-datepicker/bootstrap-datepicker.js' %}"></script>
-    <script src="{% static 'panel/js/statistics_reports/panel_statistics_report_1.js' %}?{{ timestamp }}"></script>
+    <script src="{% static 'panel/js/statistics_reports/panel_statistics_report_3.js' %}?{{ timestamp }}"></script>
 
 
 {% endblock %}

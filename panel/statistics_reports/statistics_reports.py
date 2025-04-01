@@ -72,3 +72,35 @@ def report_2(request):
     return render(request, 'statistics_reports/report_2/panel_statistics_report_2.html', context)
 
 
+@login_required(redirect_field_name=None, login_url='/login/')
+def report_3(request):
+    context = info_common(request)
+    cur_user_role_name = context['cur_userprofile'].role.name
+    match cur_user_role_name:
+        case 'Суперадмин':
+            companies = Company.objects.all()
+        case 'Админ' | 'Партнер':
+            companies = Company.objects.filter(created_by=request.user)
+        case _:
+            companies = 'No companies for user'
+    user_companies = UserCompanies.objects.filter(user=request.user)
+
+    filters = {
+        'companies': companies,
+        'user_companies': user_companies,
+        'genders': EmployeeGender.objects.all(),
+        'roles': EmployeeRole.objects.all(),
+        'industries': Industry.objects.all(),
+        'positions': EmployeePosition.objects.all(),
+    }
+
+    context.update(
+        {
+            'name': 'Сотрудники компаний',
+            'filters': filters
+        }
+    )
+
+    return render(request, 'statistics_reports/report_3/panel_statistics_report_3.html', context)
+
+

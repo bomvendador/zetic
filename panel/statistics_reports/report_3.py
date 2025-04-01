@@ -1,5 +1,4 @@
 import datetime
-from dateutil.relativedelta import relativedelta
 
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, User, Participant, EmployeeGender, \
     Project, ProjectParticipants, Questionnaire, Report, QuestionnaireVisits, QuestionnaireQuestionAnswers, Study, UserCompanies
@@ -22,11 +21,11 @@ from django.template.loader import render_to_string
 import operator
 from functools import reduce
 
-from panel.constants import CONSTANT_USER_ROLES, CONSTANT_INDIVIDUAL_REPORT_RELEVANT_TERM
+from panel.constants import CONSTANT_USER_ROLES
 
 
 @login_required(redirect_field_name=None, login_url='/login/')
-def create_report_1(request):
+def create_report_3(request):
     if request.method == 'POST':
         json_data = json.loads(request.body.decode('utf-8'))
         companies_ids = json_data['companies_ids']
@@ -38,10 +37,9 @@ def create_report_1(request):
         roles_ids = json_data['roles_ids']
         positions_ids = json_data['positions_ids']
         industries_ids = json_data['industries_ids']
-        only_relevant_reports = json_data['only_relevant_reports']
         user_role = UserProfile.objects.get(user=request.user).role.name
         response = {}
-        reports_data = None
+        employees_data = None
         if user_role != CONSTANT_USER_ROLES['SUPER_ADMIN'] and user_role != CONSTANT_USER_ROLES['ADMIN'] and user_role != CONSTANT_USER_ROLES['PARTNER']:
             response.update({
                 'access_error': 'Отчет для роли пользователя недоступен'
@@ -50,10 +48,10 @@ def create_report_1(request):
             match user_role:
                 case 'Суперадмин':
                     if companies_ids:
-                        reports_data = Report.objects.filter(Q(participant__employee__company__in=companies_ids) &
-                                                             Q(primary=True))
+
+                        employees_data = Employee.objects.filter(Q(company_id__in=companies_ids))
                     else:
-                        reports_data = Report.objects.all()
+                        employees_data = Employee.objects.all()
                 case 'Админ' | 'Партнер':
                     if not companies_ids:
                         companies_created_by_user = Company.objects.filter(created_by=request.user)
@@ -64,42 +62,42 @@ def create_report_1(request):
                         for user_company in user_companies:
                             companies_ids.append(user_company.company.id)
 
-                    reports_data = Report.objects.filter(Q(participant__employee__company__in=companies_ids) &
-                                                         Q(primary=True))
+                    employees_data = Employee.objects.filter(Q(company_id__in=companies_ids))
 
+                    # participants_data = Report.objects.filter(Q(participant__employee__company__in=companies_ids) &
+                    #                                      Q(primary=True))
         if date_from:
-            reports_data = reports_data.filter(added__date__gte=string_to_date_format(date_from))
+            employees_data = employees_data.filter(created_at__date__gte=string_to_date_format(date_from))
         if date_to:
-            reports_data = reports_data.filter(added__date__lte=string_to_date_format(date_to))
-        if only_relevant_reports:
-            relevant_term_date = datetime.datetime.now() - relativedelta(months=CONSTANT_INDIVIDUAL_REPORT_RELEVANT_TERM)
-            reports_data = reports_data.filter(added__date__gte=relevant_term_date.date())
+            employees_data = employees_data.filter(created_at__date__lte=string_to_date_format(date_to))
+
         if gender_id:
             gender = EmployeeGender.objects.get(id=gender_id)
-            reports_data = reports_data.filter(participant__employee__sex=gender)
+            employees_data = employees_data.filter(sex=gender)
 
         if age_from:
             year_to = datetime.datetime.now().year - int(age_from)
-            reports_data = reports_data.filter(participant__employee__birth_year__lte=year_to)
+            employees_data = employees_data.filter(birth_year__lte=year_to)
         if age_to:
             year_from = datetime.datetime.now().year - int(age_to)
-            reports_data = reports_data.filter(participant__employee__birth_year__gte=year_from)
+            employees_data = employees_data.filter(birth_year__gte=year_from)
 
         if roles_ids:
-            reports_data = reports_data.filter(participant__employee__role__in=roles_ids)
+            employees_data = employees_data.filter(role__in=roles_ids)
 
         if industries_ids:
-            reports_data = reports_data.filter(participant__employee__industry__in=industries_ids)
+            employees_data = employees_data.filter(industry__in=industries_ids)
 
         if positions_ids:
-            reports_data = reports_data.filter(participant__employee__position__in=positions_ids)
+            employees_data = employees_data.filter(position__in=positions_ids)
 
-        # print(len(reports_data))
-        if reports_data:
-            rows = render_to_string('statistics_reports/report_1/tr_statistics_report_1.html', {'data': reports_data}).rstrip()
+        # print(len(participants_data))
+        if employees_data:
+            rows = render_to_string('statistics_reports/report_3/tr_statistics_report_3.html', {'data': employees_data}).rstrip()
             # print(rows)
             response.update({
                 'rows': rows
             })
-        # print(response)
+        print(response['rows'])
+
         return JsonResponse({'response': response})
