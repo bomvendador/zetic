@@ -12,5 +12,13 @@
         <td class="wd-15p border-bottom-0">{{ item.participant.created_at|date:"d.m.Y H:i" }}</td>
         <td class="wd-15p border-bottom-0">{{ item.participant.get_creator.fio }}</td>
         <td class="wd-15p border-bottom-0">{{ item.added|date:"d.m.Y H:i" }}</td>
+        <td class="wd-15p border-bottom-0">
+            {% if item.is_relevant %}
+            Да
+            {% else %}
+            Нет
+            {% endif %}
+        </td>
+
     </tr>
 {% endfor %}

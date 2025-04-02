@@ -6,6 +6,9 @@ from login.models import UserProfile
 import datetime
 from django.utils import timezone
 # from positions import PositionField
+from dateutil.relativedelta import relativedelta
+from panel.constants import CONSTANT_INDIVIDUAL_REPORT_RELEVANT_TERM
+
 
 
 class ResearchTemplate(models.Model):
@@ -717,6 +720,13 @@ class Report(models.Model):
 
     def filename(self):
         return os.path.basename(self.file.name)
+
+    def is_relevant(self):
+        relevant_term_date = datetime.datetime.now() - relativedelta(months=CONSTANT_INDIVIDUAL_REPORT_RELEVANT_TERM)
+        if self.added.date() >= relevant_term_date.date():
+            return True
+        else:
+            return False
 
     class Meta:
         verbose_name_plural = 'Индивидуальные отчеты (Report)'
