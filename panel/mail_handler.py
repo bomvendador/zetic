@@ -94,7 +94,7 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
             html_message = render_to_string('email_templates/invitation_message.html', context)
 
         plain_text = strip_tags(html_message)
-        from_email = 'ZETIC <info@zetic.ru>'
+        from_email = 'бот ZETIC <bot@zetic.ru>'
         to_email = participant_email
         subject = 'Опросник ZETIC'
         success_sent_qnt = 0
