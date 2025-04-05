@@ -110,6 +110,8 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
                 [to_email],
                 html_message=html_message,
                 fail_silently=False,
+                auth_user='bot@zetic.ru',
+                auth_password='fNZ-fEN-sHi-4Jz'
             )
             participant_inst.invitation_sent = True
             participant_inst.invitation_sent_datetime = timezone.now()
