@@ -601,7 +601,7 @@ def send_notification_to_participant_report_made(data, report_id, request_type):
         use_tls=EMAIL_USE_TLS,
         use_ssl=EMAIL_USE_SSL,
         username='bot@zetic.ru',
-        password='fNZ-fEN-sHi-4Jz',
+        password='pwphhzvlrhdbitzv',
     )
     email = EmailMessage(
         subject, html_message, from_email, [to_email], connection=connection)
