@@ -11,7 +11,7 @@ from django.utils import timezone
 from reports import settings
 from smtplib import SMTPException, SMTPRecipientsRefused
 import uuid
-from reports.settings import DEBUG, EMAIL_HOST, EMAIL_PORT
+from reports.settings import DEBUG, EMAIL_HOST, EMAIL_PORT, EMAIL_USE_SSL, EMAIL_USE_TLS
 
 import json
 # from api.outcoming import get_code_for_invitation
@@ -598,13 +598,15 @@ def send_notification_to_participant_report_made(data, report_id, request_type):
     connection = get_connection(
         host=EMAIL_HOST,
         port=EMAIL_PORT,
+        use_tls=EMAIL_USE_TLS,
+        use_ssl=EMAIL_USE_SSL,
         username='bot@zetic.ru',
         password='fNZ-fEN-sHi-4Jz',
     )
-    # email = EmailMessage(
-    #     subject, html_message, from_email, [to_email], connection=connection)
     email = EmailMessage(
-        subject, html_message, from_email, [to_email])
+        subject, html_message, from_email, [to_email], connection=connection)
+    # email = EmailMessage(
+    #     subject, html_message, from_email, [to_email])
     email.attach_file(settings.MEDIA_ROOT + '/reportsPDF/single/' + report.file.name, 'application/pdf')
     email.content_subtype = "html"
     try:
