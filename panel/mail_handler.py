@@ -558,10 +558,20 @@ def send_notification_report_made(data, report_id):
 
     html_message = render_to_string('notification_report_made.html', context)
 
-    from_email = 'ZETIC <info@zetic.ru>'
+    from_email = 'бот ZETIC <bot@zetic.ru>'
+
+    connection = get_connection(
+        host=EMAIL_HOST,
+        port=EMAIL_PORT,
+        use_tls=EMAIL_USE_TLS,
+        use_ssl=EMAIL_USE_SSL,
+        username='bot@zetic.ru',
+        password='fNZ-fEN-sHi-4Jz',
+    )
 
     email = EmailMessage(
-        subject, html_message, from_email, to_email)
+        subject, html_message, from_email, to_email, connection=connection)
+
     email.attach_file(settings.MEDIA_ROOT + '/reportsPDF/single/' + report.file.name, 'application/pdf')
     email.content_subtype = "html"
     try:
@@ -605,8 +615,6 @@ def send_notification_to_participant_report_made(data, report_id, request_type):
     )
     email = EmailMessage(
         subject, html_message, from_email, [to_email], connection=connection)
-    # email = EmailMessage(
-    #     subject, html_message, from_email, [to_email])
     email.attach_file(settings.MEDIA_ROOT + '/reportsPDF/single/' + report.file.name, 'application/pdf')
     email.content_subtype = "html"
     try:
