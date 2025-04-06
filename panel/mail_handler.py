@@ -601,12 +601,12 @@ def send_notification_to_participant_report_made(data, report_id, request_type):
         use_tls=EMAIL_USE_TLS,
         use_ssl=EMAIL_USE_SSL,
         username='bot@zetic.ru',
-        password='pwphhzvlrhdbitzv',
+        password='fNZ-fEN-sHi-4Jz',
     )
-    email = EmailMessage(
-        subject, html_message, from_email, [to_email], connection=connection)
     # email = EmailMessage(
-    #     subject, html_message, from_email, [to_email])
+    #     subject, html_message, from_email, [to_email], connection=connection)
+    email = EmailMessage(
+        subject, html_message, from_email, [to_email])
     email.attach_file(settings.MEDIA_ROOT + '/reportsPDF/single/' + report.file.name, 'application/pdf')
     email.content_subtype = "html"
     try:
