@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import send_mail, get_connection
 from login.models import UserProfile
 from pdf.models import Employee, Company, EmployeePosition, EmployeeRole, Industry, Study, Section, Participant, EmailSentToParticipant, \
     CategoryQuestions, ResearchTemplate, ResearchTemplateSections, Category, Questionnaire, Report, \
@@ -94,7 +94,7 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
             html_message = render_to_string('email_templates/invitation_message.html', context)
 
         plain_text = strip_tags(html_message)
-        from_email = 'бот ZETIC <bot@zetic.ru>'
+        from_email = 'ZETIC бот<bot@zetic.ru>'
         to_email = participant_email
         subject = 'Опросник ZETIC'
         success_sent_qnt = 0
@@ -595,11 +595,16 @@ def send_notification_to_participant_report_made(data, report_id, request_type):
 
     if settings.DEBUG == 1:
         to_email = 'bomvendador@yandex.ru'
+    connection = get_connection(
+        username='bot@zetic.ru',
+        password='fNZ-fEN-sHi-4Jz',
+    )
     email = EmailMessage(
-        subject, html_message, from_email, [to_email])
+        subject, html_message, from_email, [to_email], connection=connection)
     email.attach_file(settings.MEDIA_ROOT + '/reportsPDF/single/' + report.file.name, 'application/pdf')
     email.content_subtype = "html"
     try:
+        email.send_
         email.send()
         result = {
             'result': 200
