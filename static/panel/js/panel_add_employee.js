@@ -173,6 +173,44 @@ function process_table(element) {
     })
 }
 
+$('#download_template_btn').on('click', function () {
+    let employees_quantity = $('#employees_quantity').val()
+    if (employees_quantity === '') {
+        toastr.error('Введите кол-во сотрудников')
+    } else {
+        btn_spinner($('#download_template_btn'))
+
+        $.ajax({
+            headers: {"X-CSRFToken": token},
+            url: url_download_add_employee_template,
+            type: 'POST',
+            data: JSON.stringify({
+                'employees_quantity': employees_quantity
+            }),
+            processData: false,
+            contentType: false,
+            error: function (data) {
+                toastr.error('Ошибка', data)
+                btn_text($('#download_template_btn'), 'Скачать шаблон')
+
+            },
+            success: function (data) {
+                let file_name = data['file_name']
+                fake_download_file(file_name)
+                btn_text($('#download_template_btn'), 'Скачать шаблон')
+                $('#input_modal_employees_quantity_for_template').modal('hide')
+                $('#employees_quantity').val('')
+            }
+        });
+
+    }
+
+})
+
+$('#download_template').on('click', function () {
+    $('#input_modal_employees_quantity_for_template').modal('show')
+})
+
 $("#parse_file").on("click", function () {
     //Reference the FileUpload element.
     $('.error-message-close-btn').each(function (i, e) {
@@ -181,7 +219,7 @@ $("#parse_file").on("click", function () {
     let fileUpload = $("#files")[0];
 
     //Validate whether File is valid Excel file.
-    let regex = /^([а-яА-Яa-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+    let regex = /^([а-яА-Яa-zA-Z0-9\s_\\.\-:()])+(.xls|.xlsx)$/;
     if (regex.test(fileUpload.value.toLowerCase())) {
         if (typeof (FileReader) != "undefined") {
             let reader = new FileReader();
@@ -223,7 +261,7 @@ function ProcessExcel(data) {
     let sheets = workbook.SheetNames;
     let sheet
     for (let i = 0; i < sheets.length; i++) {
-        if (sheets[i] === 'Данные участников') {
+        if (sheets[i] === 'Сотрудники') {
             sheet = sheets[i]
             sheet_exists = true
         }
@@ -242,8 +280,9 @@ function ProcessExcel(data) {
         let all_fields_filled_out = true
         let head_vals = {
             'array': [
-                'Фамилия Имя (или псевдоним по выбору участника)',
-                'E-mail для приглашений',
+                '#',
+                'ФИО/псевдоним',
+                'E-mail',
                 'Роль',
                 'Должность',
                 'Индустрия',
@@ -281,26 +320,24 @@ function ProcessExcel(data) {
             for (let i = 0; i < excelRows.length; i++) {
                 // all_fields_filled_out = true
                 // проверка полей на пустоту
-
-                all_fields_filled_out = allFieldsFilledOut(excelRows[i], i + 2)
+                let employee_number = i + 1
+                all_fields_filled_out = allFieldsFilledOut(excelRows[i], employee_number)
 
                 if (all_fields_filled_out) {
-
-
                     let row_to_add = {}
                     $.each(excelRows[i], function (key, val) {
                         data_errors_exists = true
                         switch (key) {
-                            case 'Фамилия Имя (или псевдоним по выбору участника)':
+                            case 'ФИО/псевдоним':
                                 row_to_add[key] = val
                                 break;
-                            case 'E-mail для приглашений':
+                            case 'E-mail':
                                 if (isEmail(val)) {
                                     row_to_add[key] = val
                                 } else {
                                     after_all_checks_ok = false
                                     data_errors_exists = true
-                                    show_error_message('Указан некорректный Email (строка - ' + (i + 2) + ')')
+                                    show_error_message('Указан некорректный Email (номер сотрудника - ' + employee_number + ')')
                                 }
                                 break;
                             case 'Роль':
@@ -312,7 +349,7 @@ function ProcessExcel(data) {
                                 })
                                 if (data_errors_exists) {
                                     after_all_checks_ok = false
-                                    show_error_message('Роль отсутствует в базе данных (строка - ' + (i + 2) + ')')
+                                    show_error_message('Роль отсутствует в базе данных (номер сотрудника - ' + employee_number + ')')
                                 }
 
                                 break;
@@ -325,7 +362,7 @@ function ProcessExcel(data) {
                                 })
                                 if (data_errors_exists) {
                                     after_all_checks_ok = false
-                                    show_error_message('Должность отсутствует в базе данных (строка - ' + (i + 2) + ')')
+                                    show_error_message('Должность отсутствует в базе данных (номер сотрудника - ' + employee_number + ')')
                                 }
                                 break;
                             case 'Индустрия':
@@ -337,7 +374,7 @@ function ProcessExcel(data) {
                                 })
                                 if (data_errors_exists) {
                                     after_all_checks_ok = false
-                                    show_error_message('Индустрия отсутствует в базе данных (строка - ' + (i + 2) + ')')
+                                    show_error_message('Индустрия отсутствует в базе данных (номер сотрудника - ' + employee_number + ')')
                                 }
                                 break;
                             case 'Пол':
@@ -358,7 +395,7 @@ function ProcessExcel(data) {
                                 // }
                                 if (data_errors_exists) {
                                     after_all_checks_ok = false
-                                    show_error_message('Пол отсутствует в базе данных (строка - ' + (i + 2) + ')')
+                                    show_error_message('Пол отсутствует в базе данных (номер сотрудника - ' + employee_number + ')')
                                 }
 
                                 break;
@@ -368,7 +405,7 @@ function ProcessExcel(data) {
                                 } else {
                                     after_all_checks_ok = false
                                     data_errors_exists = true
-                                    show_error_message('Указан некорректный Год рождения (строка - ' + (i + 2) + ')')
+                                    show_error_message('Указан некорректный Год рождения (номер сотрудника - ' + employee_number + ')')
                                 }
                                 break;
                             default:
@@ -383,7 +420,6 @@ function ProcessExcel(data) {
                 }
             }
             if (after_all_checks_ok && all_fields_filled_out) {
-                console.log(employees_obj)
                 btn_spinner($('#parse_file'))
                 $.ajax({
                     headers: {"X-CSRFToken": token},
@@ -399,19 +435,19 @@ function ProcessExcel(data) {
                         toastr.error('Ошибка', data)
                     },
                     success: function (data) {
-                        console.log(data)
                         let data_json = data['emails']
                         let cnt = data['cnt']
-                        let cnt_html_emails = '<div style="text-align: left; padding-left: 7px;">' +
+                        let cnt_html_emails = '<div style="text-align: left;">' +
                             '<hr class="solid mt-0" style="background-color: black;">' +
                             '<b>Количество добавленных сотрудников - ' + cnt + '</b>' +
+                            '<hr class="solid" style="background-color: black;">' +
                             '</div>'
                         let cnt_html_no_emails = '<div style="text-align: center">' +
                             '<hr class="solid mt-0" style="background-color: black;">' +
                             '<b>Количество добавленных сотрудников - ' + cnt + '</b>' +
+                            '<hr class="solid" style="background-color: black;">' +
                             '</div>'
                         let output_html = ''
-                        console.log(data_json)
                         if (data_json !== 'None') {
                             let list_html = '<ul><hr class="solid" style="background-color: black;">'
                             for (let i = 0; i < data_json.length; i++) {
@@ -420,7 +456,7 @@ function ProcessExcel(data) {
                                 list_html += '</b></li>'
                             }
                             list_html += '</ul>'
-                            output_html = '<div>Сотрудники со следующими email уже существуют в базе данных:' +
+                            output_html = '<div>Сотрудники со следующими E-mail уже существуют в базе данных:' +
                                 list_html +
                                 '</div>' +
                                 '<br>' + cnt_html_emails
@@ -438,7 +474,7 @@ function ProcessExcel(data) {
                             })
 
                         } else {
-                            output_html = '<div>Сотрудники добавлены в базу данных' + '</div>' +
+                            output_html = '<h3 style="text-align: center;" class="mb-0">Сотрудники добавлены в базу данных' + '</h3>' +
                                 '<br>' + cnt_html_no_emails
                             Swal.fire({
                                 html: output_html,
@@ -479,34 +515,15 @@ function isYear(year) {
     return regex.test(year);
 }
 
-function allFieldsFilledOut(obj, column_number) {
+function allFieldsFilledOut(obj, employee_number) {
     let fields_not_empy = true
-    if (!('E-mail для приглашений' in obj)) {
+    if (!('ФИО/псевдоним' in obj)) {
         fields_not_empy = false
-        show_error_message('Поле "E-mail для приглашений" пустое (строка - ' + column_number + ')')
+        show_error_message('Поле "ФИО/псевдоним" пустое (номер сотрудника - ' + employee_number + ')')
     }
-    if (!('Роль' in obj)) {
+    if (!('E-mail' in obj)) {
         fields_not_empy = false
-        show_error_message('Поле "Роль" пустое (строка - ' + column_number + ')')
-    }
-    if (!('Должность' in obj)) {
-        fields_not_empy = false
-        show_error_message('Поле "Должность" пустое (строка - ' + column_number + ')')
-    }
-
-    if (!('Индустрия' in obj)) {
-        fields_not_empy = false
-        show_error_message('Поле "Индустрия" пустое (строка - ' + column_number + ')')
-    }
-
-    if (!('Пол' in obj)) {
-        fields_not_empy = false
-        show_error_message('Поле "Пол" пустое (строка - ' + column_number + ')')
-    }
-
-    if (!('Год рождения' in obj)) {
-        fields_not_empy = false
-        show_error_message('Поле "Год рождения" пустое (строка - ' + column_number + ')')
+        show_error_message('Поле "E-mail" пустое (номер сотрудника - ' + employee_number + ')')
     }
 
     return fields_not_empy
@@ -544,7 +561,7 @@ $('#save_employee').on('click', function () {
 
     if (!test_ok) {
         toastr.error('Имя и Email должны быть заполнены')
-    }else {
+    } else {
         btn_spinner($('#save_employee'))
         let role_id = $('#employee_role option:selected').val().split('_')[2]
         let position_id = $('#employee_position option:selected').val().split('_')[2]

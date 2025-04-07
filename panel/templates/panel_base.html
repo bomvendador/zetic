@@ -377,7 +377,7 @@
 
                             </ul>
                         </li>
-                        {% if not cur_userprofile.role.name == CONSTANT_USER_ROLES.CLIENT_ADMIN %}
+                        {% if cur_userprofile.role.name != CONSTANT_USER_ROLES.CLIENT_ADMIN and cur_userprofile.role.name != CONSTANT_USER_ROLES.PARTNER %}
                             <li class="slide">
                                 <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)"><i
                                         class="side-menu__icon fe fe-file-text"></i><span
@@ -1284,7 +1284,6 @@
 
     let tech_works = "{{ tech_works }}"
 
-    console.log(tech_works)
 
 </script>
 <script src="{% static 'panel/js/panel_base.js' %}?{{ timestamp }}"></script>

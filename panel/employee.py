@@ -18,6 +18,9 @@ from django.db.models import Sum, Q
 
 from django.template.loader import render_to_string
 
+import xlsxwriter
+from datetime import date, time
+
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def add_employee(request):
@@ -233,20 +236,26 @@ def save_new_employee_xls(request):
         existing_employees = []
         cnt = 0
         for employee in employees:
-            email = employee['E-mail для приглашений']
+            email = employee['E-mail']
             if not is_employee_already_exists(email):
                 cnt = cnt + 1
                 employee_inst = Employee()
                 employee_inst.email = email
-                employee_inst.birth_year = employee['Год рождения']
-                employee_inst.role = employee['Роль']
-                employee_inst.position = employee['Должность']
-                employee_inst.industry = employee['Индустрия']
-                employee_inst.sex = employee['Пол']
-                try:
-                    employee_inst.name = employee['Фамилия Имя (или псевдоним по выбору участника)']
-                except KeyError:
-                    pass
+                employee_inst.name = employee['ФИО/псевдоним']
+                if 'Год рождения' in employee:
+                    employee_inst.birth_year = employee['Год рождения']
+                if 'Роль' in employee:
+                    employee_inst.role = EmployeeRole.objects.filter(name_ru=employee['Роль'])[0]
+                if 'Должность' in employee:
+                    employee_inst.position = EmployeePosition.objects.filter(name_ru=employee['Должность'])[0]
+                if 'Индустрия' in employee:
+                    employee_inst.industry = Industry.objects.filter(name_ru=employee['Индустрия'])[0]
+                if 'Пол' in employee:
+                    employee_inst.sex = EmployeeGender.objects.get(name_ru=employee['Пол'])
+                # try:
+                #     employee_inst.name = employee['Фамилия Имя (или псевдоним по выбору участника)']
+                # except KeyError:
+                #     pass
                 employee_inst.company = Company.objects.get(id=company_id)
                 employee_inst.created_by = request.user
                 employee_inst.save()
@@ -548,3 +557,128 @@ def set_new_employee_company(request):
         return HttpResponse(status=200)
 
 
+def download_add_employee_template(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body.decode('utf-8'))
+        employees_quantity = json_data['employees_quantity']
+        file_name = f'Шаблон_для_добавления_сотрудников ({employees_quantity} чел.).xlsx'
+        workbook = xlsxwriter.Workbook(f"media/files/{file_name}")
+        workbook.set_properties({
+            'company': 'Zetic'
+        })
+
+        worksheet_data = workbook.add_worksheet('Data')
+
+        header_format = workbook.add_format(
+            {
+                "border": 1,
+                "bg_color": "#0d6efd",
+                "font_color": "white",
+                "bold": True,
+                "text_wrap": True,
+                "valign": "vcenter",
+                "align": "center",
+                "indent": 1,
+            }
+        )
+
+        # Set up layout of the worksheet.
+        worksheet_data.set_column("A:A", 40)
+        worksheet_data.set_column("B:B", 20)
+        worksheet_data.set_column("C:C", 20)
+        worksheet_data.set_column("D:D", 20)
+        worksheet_data.set_column("E:E", 20)
+        worksheet_data.set_column("F:F", 20)
+        worksheet_data.set_column("G:G", 20)
+        worksheet_data.set_row(0, 36)
+
+        # Write the header cells and some data that will be used in the examples.
+        heading1 = "Роль"
+        heading2 = "Должность"
+        heading3 = "Индустрия"
+        heading4 = "Год рождения"
+
+        worksheet_data.write("A1", heading1, header_format)
+        worksheet_data.write("B1", heading2, header_format)
+        worksheet_data.write("C1", heading3, header_format)
+        worksheet_data.write("D1", heading4, header_format)
+
+        roles = EmployeeRole.objects.all()
+        cnt = 1
+
+        for item in roles:
+            cnt += 1
+            worksheet_data.write("A" + repr(cnt), item.name_ru)
+        a_cnt = cnt
+
+        industries = Industry.objects.all()
+        cnt = 1
+        for item in industries:
+            cnt += 1
+            worksheet_data.write("C" + repr(cnt), item.name_ru)
+        c_cnt = cnt
+
+        positions = EmployeePosition.objects.all()
+        cnt = 1
+        for item in positions:
+            cnt += 1
+            worksheet_data.write("B" + repr(cnt), item.name_ru)
+        b_cnt = cnt
+
+        cnt = 1
+        for i in range(1940, 2010):
+            cnt += 1
+            worksheet_data.write("D" + repr(cnt), i)
+        d_cnt = cnt
+
+        worksheet_data.hide()
+
+        worksheet_employees = workbook.add_worksheet('Сотрудники')
+
+        # Set up layout of the worksheet.
+        worksheet_employees.set_column("A:A", 5)
+        worksheet_employees.set_column("B:B", 40)
+        worksheet_employees.set_column("C:C", 20)
+        worksheet_employees.set_column("D:D", 20)
+        worksheet_employees.set_column("E:E", 20)
+        worksheet_employees.set_column("F:F", 20)
+        worksheet_employees.set_column("G:G", 20)
+        worksheet_employees.set_column("H:H", 20)
+        worksheet_employees.set_row(0, 20)
+
+        # Write the header cells and some data that will be used in the examples.
+        heading0 = "#"
+        heading1 = "ФИО/псевдоним"
+        heading2 = "E-mail"
+        heading3 = "Роль"
+        heading4 = "Должность"
+        heading5 = "Индустрия"
+        heading6 = "Пол"
+        heading7 = "Год рождения"
+
+        worksheet_employees.write("A1", heading0, header_format)
+        worksheet_employees.write("B1", heading1, header_format)
+        worksheet_employees.write("C1", heading2, header_format)
+        worksheet_employees.write("D1", heading3, header_format)
+        worksheet_employees.write("E1", heading4, header_format)
+        worksheet_employees.write("F1", heading5, header_format)
+        worksheet_employees.write("G1", heading6, header_format)
+        worksheet_employees.write("H1", heading7, header_format)
+
+        for row_number in range(2, int(employees_quantity) + 2):
+            worksheet_employees.write("A" + repr(row_number), row_number - 1)
+            worksheet_employees.data_validation(
+                "G" + repr(row_number), {"validate": "list", "source": ['Мужской', 'Женский']}
+            )
+            worksheet_employees.data_validation("D" + repr(row_number), {"validate": "list", "source": "=Data!$A$2:$A" + repr(a_cnt)})
+            worksheet_employees.data_validation("F" + repr(row_number), {"validate": "list", "source": "=Data!$C$2:$C" + repr(c_cnt)})
+            worksheet_employees.data_validation("E" + repr(row_number), {"validate": "list", "source": "=Data!$B$2:$B" + repr(b_cnt)})
+            worksheet_employees.data_validation("H" + repr(row_number), {"validate": "list", "source": "=Data!$D$2:$D" + repr(d_cnt)})
+
+        worksheet_employees.activate()
+
+        workbook.close()
+        response = {
+            'file_name': file_name
+        }
+        return JsonResponse(response)

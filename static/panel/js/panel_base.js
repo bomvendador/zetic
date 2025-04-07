@@ -260,3 +260,11 @@ function isYear(year) {
     let regex = /^\d\d\d\d$/g
     return regex.test(year);
 }
+
+function fake_download_file(file_name) {
+    let link = document.createElement('a');
+    link.href = 'download_file/' + file_name;
+    link.target = '_blank'
+    document.body.appendChild(link);
+    link.click();
+}

@@ -94,6 +94,7 @@ urlpatterns = [
 
     path('get_company_employees', employee.get_company_employees, name='get_company_employees'),
     path('add_employee', employee.add_employee, name='add_employee'),
+    path('download_add_employee_template', employee.download_add_employee_template, name='download_add_employee_template'),
     path('delete_employee', employee.delete_employee, name='delete_employee'),
     path('save_new_employee_xls', employee.save_new_employee_xls, name='save_new_employee_xls'),
     path('save_new_employee_html', employee.save_new_employee_html, name='save_new_employee_html'),

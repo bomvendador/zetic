@@ -203,6 +203,8 @@
 
 
             </div>
+
+            {% if cur_userprofile.role.name != 'Партнер' %}
             <div class="row">
 
 
@@ -302,6 +304,8 @@
 
 
             </div>
+            {% endif %}
+
 
             <div class="row">
                 <div class="col-12">
@@ -368,7 +372,7 @@
                 <!-- ROW-1 CLOSED -->
 
             </div>
-
+            {% if cur_userprofile.role.name != 'Партнер' %}
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -474,7 +478,7 @@
                 <!-- ROW-1 CLOSED -->
 
             </div>
-
+            {% endif %}
 
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
