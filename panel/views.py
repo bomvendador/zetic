@@ -1308,6 +1308,7 @@ def save_user_profile(request):
         user_profile_inst = UserProfile.objects.get(user=user_inst)
 
         user_inst.email = email
+        user_inst.first_name = fio
         user_profile_inst.fio = fio
         user_profile_inst.tel = tel
         user_profile_inst.role = UserRole.objects.get(name=role)
@@ -1338,22 +1339,29 @@ def save_new_user(request):
         role = json_data['user_role']
         pwd = json_data['password']
 
-        user_inst = User()
-        user_inst.email = email
-        user_inst.username = email
-        user_inst.first_name = fio
-        user_inst.set_password(pwd)
+        if User.objects.filter(username=email).exists():
+            response = {
+                'error': 'Пользователь с указанным email уже существует'
+            }
+            return JsonResponse(response)
+        else:
+            user_inst = User()
+            user_inst.email = email
+            user_inst.username = email
+            user_inst.first_name = fio
+            user_inst.set_password(pwd)
 
-        user_inst.save()
+            user_inst.save()
 
-        user_profile_inst = UserProfile()
+            user_profile_inst = UserProfile()
 
-        user_profile_inst.user = user_inst
-        user_profile_inst.fio = fio
-        user_profile_inst.tel = tel
-        user_profile_inst.role = UserRole.objects.get(name=role)
-        user_profile_inst.save()
-        return HttpResponse('ok')
+            user_profile_inst.user = user_inst
+            user_profile_inst.fio = fio
+            user_profile_inst.tel = tel
+            user_profile_inst.role = UserRole.objects.get(name=role)
+            user_profile_inst.save()
+
+            return HttpResponse('ok')
 
 
 @login_required(redirect_field_name=None, login_url='/login/')

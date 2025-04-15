@@ -187,28 +187,120 @@ $('#select_group_action').on('click', function () {
 
 let participants_ids_to_send_invitation_to = []
 
-function getParticipantsWithoutInvitations() {
+function getParticipantsWithoutInvitations(action_name) {
+    let participants_ids = []
     $('#tbody_participants_selected .select-participant-for-group-action:checked').each(function () {
-        let invitation_datetime = $(this).closest('tr').find('.copy-questionnaire-link')
-        if (!invitation_datetime.length) {
+        if (action_name === 'create_invitation_link_with_excel_download') {
             let participant_id = $(this).closest('tr').attr('id').split('_')[2]
             let participant_name = $(this).closest('tr').find('.participant-name').text().trim()
-            participants_ids_to_send_invitation_to.push({
+            participants_ids.push({
                 'id': participant_id,
                 'name': participant_name,
             })
+
         } else {
-            $(this).prop('checked', false)
-            $('#select_all_participants_for_group_action').prop('checked', false)
+            // let invitation_datetime = $(this).closest('tr').find('.copy-questionnaire-link')
+            let invitation_datetime = $.trim($(this).closest('tr').find('.invitation-datetime').text())
+            // if (!invitation_datetime.length) {
+            console.log(invitation_datetime)
+            if (invitation_datetime === '') {
+                let participant_id = $(this).closest('tr').attr('id').split('_')[2]
+                let participant_name = $(this).closest('tr').find('.participant-name').text().trim()
+                participants_ids.push({
+                    'id': participant_id,
+                    'name': participant_name,
+                })
+            } else {
+                $(this).prop('checked', false)
+                $('#select_all_participants_for_group_action').prop('checked', false)
+            }
+
         }
     })
+    return participants_ids
 }
 
 let participants_to_change_report_options = []
+let action_name_global = ''
+
+function before_send_invitation_check(participants_ids_to_send_invitation_to_length, questionnaires_left, action_name) {
+    action_name_global = action_name
+    let modal_title, modal_text
+    switch (action_name) {
+        case 'send_invitations':
+            modal_title = 'Отправка приглашения участникам'
+            modal_text = 'Кол-во участников для отправки приглашения'
+            break;
+        case 'create_invitation_link_with_excel_download':
+            modal_title = 'Создание ссылок и выгрузка файла'
+            modal_text = 'Кол-во участников для создания ссылки'
+            break;
+        default:
+            break;
+    }
+    console.log(modal_title)
+    $('#modal_before_mass_send_invitation_title').text(modal_title)
+    $('#modal_before_mass_send_invitation_text').text(modal_text)
+
+    if (participants_ids_to_send_invitation_to_length > questionnaires_left && $('#questionnaires_left_div').length) {
+        let user_role_name = $('#cur_role_name').text()
+        let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+            '<h4 style="text-align: center"><b>Количество выбранных участников превышает допустимое</b></h4>' +
+            '<hr class="solid" style="background-color: black;">' +
+            '<div><table class="table">' +
+            '<thead><tr><th></th><th></th></tr></thead>' +
+            '<tbody>' +
+            '<tr><td>Выбрано</td><td>' + participants_ids_to_send_invitation_to_length + '</td></tr>' +
+            '<tr><td>Доступно</td><td>' + questionnaires_left + '</td></tr>' +
+            '</tbody>' +
+            '</table>' +
+            '</div>' +
+            '<hr class="solid" style="background-color: black;">'
+
+        if (user_role_name === 'Суперадмин') {
+            output_html = output_html +
+                '<div style="text-align: center"><b>Отправить приглашения?</b></div>'
+            Swal.fire({
+                html: output_html,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Да',
+                cancelButtonText: 'Нет'
+            }).then((result) => {
+                if (result.value === true) {
+                    $('#modal_before_mass_send_invitation').attr('data-invitation-type', 'initial')
+                    $('#modal_participants_qnt').text(participants_ids_to_send_invitation_to_length)
+                    $('#modal_before_mass_send_invitation').modal('show')
+                }
+            })
+
+        } else {
+            Swal.fire({
+                html: output_html,
+                icon: 'error',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ОК'
+            })
+
+        }
+    } else {
+        $('#modal_before_mass_send_invitation').attr('data-invitation-type', 'initial')
+        $('#modal_participants_qnt').text(participants_ids_to_send_invitation_to_length)
+        $('#modal_before_mass_send_invitation').modal('show')
+
+    }
+}
 
 $('#run_group_action').on('click', function () {
-    participants_ids_to_send_invitation_to = []
+
+
     let action_name = $('#select_group_action option:selected').val()
+    participants_ids_to_send_invitation_to = getParticipantsWithoutInvitations(action_name);
+    console.log(participants_ids_to_send_invitation_to)
+
     if (action_name === 'no_action') {
         toastr.error('Действие для группы не выбрано')
         $('#select_group_action').addClass('is-invalid')
@@ -216,63 +308,64 @@ $('#run_group_action').on('click', function () {
         switch (action_name) {
             case "send_invitations":
 
-                getParticipantsWithoutInvitations();
 
                 // if (participants_ids_to_send_invitation_to.length >= 1) {
                 if (true) {
                     // if (participants_ids_to_send_invitation_to.length > questionnaires_left && company_demo_status === 'True') {
-                    if (participants_ids_to_send_invitation_to.length > questionnaires_left && $('#questionnaires_left_div').length) {
-                        let user_role_name = $('#cur_role_name').text()
-                        let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                            '<h4 style="text-align: center"><b>Количество выбранных участников превышает допустимое</b></h4>' +
-                            '<hr class="solid" style="background-color: black;">' +
-                            '<div><table class="table">' +
-                            '<thead><tr><th></th><th></th></tr></thead>' +
-                            '<tbody>' +
-                            '<tr><td>Выбрано</td><td>' + participants_ids_to_send_invitation_to.length + '</td></tr>' +
-                            '<tr><td>Доступно</td><td>' + questionnaires_left + '</td></tr>' +
-                            '</tbody>' +
-                            '</table>' +
-                            '</div>' +
-                            '<hr class="solid" style="background-color: black;">'
+                    before_send_invitation_check(participants_ids_to_send_invitation_to.length, questionnaires_left, action_name)
 
-                        if (user_role_name === 'Суперадмин') {
-                            output_html = output_html +
-                                '<div style="text-align: center"><b>Отправить приглашения?</b></div>'
-                            Swal.fire({
-                                html: output_html,
-                                icon: 'question',
-                                showCancelButton: true,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'Да',
-                                cancelButtonText: 'Нет'
-                            }).then((result) => {
-                                if (result.value === true) {
-                                    $('#modal_before_mass_send_invitation').attr('data-invitation-type', 'initial')
-                                    $('#modal_participants_qnt').text(participants_ids_to_send_invitation_to.length)
-                                    $('#modal_before_mass_send_invitation_title').text('Отправка приглашения участникам')
-                                    $('#modal_before_mass_send_invitation').modal('show')
-                                }
-                            })
-
-                        } else {
-                            Swal.fire({
-                                html: output_html,
-                                icon: 'error',
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'ОК'
-                            })
-
-                        }
-                    } else {
-                        $('#modal_before_mass_send_invitation').attr('data-invitation-type', 'initial')
-                        $('#modal_participants_qnt').text(participants_ids_to_send_invitation_to.length)
-                        $('#modal_before_mass_send_invitation_title').text('Отправка приглашения участникам')
-                        $('#modal_before_mass_send_invitation').modal('show')
-
-                    }
+                    // if (participants_ids_to_send_invitation_to.length > questionnaires_left && $('#questionnaires_left_div').length) {
+                    //     let user_role_name = $('#cur_role_name').text()
+                    //     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
+                    //         '<h4 style="text-align: center"><b>Количество выбранных участников превышает допустимое</b></h4>' +
+                    //         '<hr class="solid" style="background-color: black;">' +
+                    //         '<div><table class="table">' +
+                    //         '<thead><tr><th></th><th></th></tr></thead>' +
+                    //         '<tbody>' +
+                    //         '<tr><td>Выбрано</td><td>' + participants_ids_to_send_invitation_to.length + '</td></tr>' +
+                    //         '<tr><td>Доступно</td><td>' + questionnaires_left + '</td></tr>' +
+                    //         '</tbody>' +
+                    //         '</table>' +
+                    //         '</div>' +
+                    //         '<hr class="solid" style="background-color: black;">'
+                    //
+                    //     if (user_role_name === 'Суперадмин') {
+                    //         output_html = output_html +
+                    //             '<div style="text-align: center"><b>Отправить приглашения?</b></div>'
+                    //         Swal.fire({
+                    //             html: output_html,
+                    //             icon: 'question',
+                    //             showCancelButton: true,
+                    //             confirmButtonColor: '#3085d6',
+                    //             cancelButtonColor: '#d33',
+                    //             confirmButtonText: 'Да',
+                    //             cancelButtonText: 'Нет'
+                    //         }).then((result) => {
+                    //             if (result.value === true) {
+                    //                 $('#modal_before_mass_send_invitation').attr('data-invitation-type', 'initial')
+                    //                 $('#modal_participants_qnt').text(participants_ids_to_send_invitation_to.length)
+                    //                 $('#modal_before_mass_send_invitation_title').text('Отправка приглашения участникам')
+                    //                 $('#modal_before_mass_send_invitation').modal('show')
+                    //             }
+                    //         })
+                    //
+                    //     } else {
+                    //         Swal.fire({
+                    //             html: output_html,
+                    //             icon: 'error',
+                    //             confirmButtonColor: '#3085d6',
+                    //             cancelButtonColor: '#d33',
+                    //             confirmButtonText: 'ОК'
+                    //         })
+                    //
+                    //     }
+                    // } else {
+                    //     $('#modal_before_mass_send_invitation').attr('data-invitation-type', 'initial')
+                    //     $('#modal_participants_qnt').text(participants_ids_to_send_invitation_to.length)
+                    //     $('#modal_before_mass_send_invitation_title').text('Отправка приглашения участникам')
+                    //     $('#modal_before_mass_send_invitation').modal('show')
+                    //
+                    // }
 
                 } else {
                     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
@@ -288,6 +381,10 @@ $('#run_group_action').on('click', function () {
                     })
 
                 }
+                break;
+            case "create_invitation_link_with_excel_download":
+                before_send_invitation_check(participants_ids_to_send_invitation_to.length, questionnaires_left, action_name)
+
                 break;
             case "send_reminder":
 
@@ -324,7 +421,6 @@ $('#run_group_action').on('click', function () {
                 }
                 break;
             case "delete_participants":
-                getParticipantsWithoutInvitations()
 
                 if (participants_ids_to_send_invitation_to.length >= 1) {
                     $('#modal_participants_qnt_to_delete').text(participants_ids_to_send_invitation_to.length)
@@ -612,10 +708,21 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
     let send_report_to_participant_after_filling_up_mass = $('#send_report_to_participant_after_filling_up_mass').prop('checked')
     btn_spinner($('#modal_send_mass_invitation_btn'))
     let invitation_type = $('#modal_before_mass_send_invitation').attr('data-invitation-type')
-
+    let mass_send_url
+    switch (action_name_global) {
+        case 'send_invitations':
+            mass_send_url = url_mass_send_invitation_email
+            break;
+        case 'send_reminder':
+            mass_send_url = url_mass_send_invitation_email
+            break;
+        case 'create_invitation_link_with_excel_download':
+            mass_send_url = url_create_invitation_link_excel_import
+            break;
+    }
     $.ajax({
         headers: {"X-CSRFToken": token},
-        url: url_mass_send_invitation_email,
+        url: mass_send_url,
         type: 'POST',
 
         data: JSON.stringify({
@@ -626,7 +733,6 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
             'type': invitation_type,
             'protocol': window.location.protocol,
             'hostname': window.location.host,
-
         }),
         processData: false,
         contentType: false,
@@ -660,7 +766,7 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
                     })
                 } else {
 
-                    if (data['wrong_emails'].length > 0) {
+                    if (data['wrong_emails']) {
                         let emails_list_html = ''
                         data['wrong_emails'].forEach(function (item) {
                             emails_list_html += '<li><b> - ' + item + '</b></li>'
@@ -689,23 +795,40 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
                         })
 
                     } else {
-                        let output_html = '<h2 class="mb-0" style="text-align: center">Приглашения отправлены</h2>' +
-                            '<br>' +
-                            '<hr class="solid mt-0" style="background-color: black;">' +
-                            '<h4 style="text-align: center">Письма успешно отправлены участникам</h4>' +
-                            '<hr class="solid mt-0" style="background-color: black;">'
+                        if (data['file_rows']) {
+                            console.log(data['file_rows'])
+                            let company = data['company']
+                            let study = data['study']
 
-                        Swal.fire({
-                            html: output_html,
-                            icon: 'success',
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'ОК'
-                        }).then((result) => {
-                            if (result.value) {
-                                window.location.reload()
-                            }
-                        })
+                            let workbook = XLSX.utils.book_new(),
+                                worksheet = XLSX.utils.aoa_to_sheet(data['file_rows']);
+                            workbook.SheetNames.push("Ссылки");
+                            workbook.Sheets["Ссылки"] = worksheet;
+                            XLSX.writeFile(workbook, `Cсылки участников [компания - ${company} | исследование - ${study}].xlsx`);
+                            window.location.reload()
+
+
+                        } else {
+                            let output_html = '<h2 class="mb-0" style="text-align: center">Приглашения отправлены</h2>' +
+                                '<br>' +
+                                '<hr class="solid mt-0" style="background-color: black;">' +
+                                '<h4 style="text-align: center">Письма успешно отправлены участникам</h4>' +
+                                '<hr class="solid mt-0" style="background-color: black;">'
+
+                            Swal.fire({
+                                html: output_html,
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'ОК'
+                            }).then((result) => {
+                                if (result.value) {
+                                    window.location.reload()
+                                }
+                            })
+
+                        }
+
 
                     }
 

@@ -176,6 +176,7 @@
                                             <option value="send_invitations">Отправить приглашение</option>
                                             <option value="send_reminder">Отправить напоминание</option>
                                             <option value="change_report_options">Изменить разделы отчета</option>
+                                            <option value="create_invitation_link_with_excel_download" title="Создание ссылки на опросник + импорт Excel файла с созданными ссылками">Создать ссылку + Excel</option>
                                             {% if cur_userprofile.role.name == 'Суперадмин' %}
                                                 <option value="download_raw_points">Скачать сырые баллы</option>
                                             {% endif %}
@@ -621,7 +622,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-12">
-                            <b>Кол-во участников для отправки приглашения: <span id="modal_participants_qnt"></span></b>
+                            <b><span id="modal_before_mass_send_invitation_text"></span>: <span id="modal_participants_qnt"></span></b>
                         </div>
                     </div>
                     <div class="row mt-5">
@@ -789,6 +790,7 @@
         let questionnaires_left = {{ questionnaires_left }};
         let company_demo_status = '{{ company.demo_status }}';
         let url_save_study_invitation_message = "{% url 'save_study_invitation_message' %}"
+        let url_create_invitation_link_excel_import = "{% url 'create_invitation_link_excel_import' %}"
 
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>

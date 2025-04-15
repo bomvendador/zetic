@@ -169,25 +169,29 @@
                             toastr.error('Ошибка', data)
                         },
                         success: function (data) {
-                            let output_html = '<h2 class="mb-0" style="text-align: center">Пользователь создан</h2>' +
-                                '<br>' +
-                                '<hr class="solid mt-0" style="background-color: black;">' +
-                                '<h4 style="text-align: center">Данные пользователя успешено сохранены</h4>' +
-                                '<hr class="solid mt-0" style="background-color: black;">'
+                            btn_text($('#save_info'), 'Сохранить')
 
-                            Swal.fire({
-                                html: output_html,
-                                icon: 'success',
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'ОК'
-                            }).then((result) => {
-                                if (result.value) {
-                                    window.location.href = '{% url "users_list" %}'
-                                }
-                            })
+                            if(data['error']){
+                                toastr.error(data['error'])
+                            }else {
+                                let output_html = '<h2 class="mb-0" style="text-align: center">Пользователь создан</h2>' +
+                                    '<br>' +
+                                    '<hr class="solid mt-0" style="background-color: black;">' +
+                                    '<h4 style="text-align: center">Данные пользователя успешено сохранены</h4>' +
+                                    '<hr class="solid mt-0" style="background-color: black;">'
 
-
+                                Swal.fire({
+                                    html: output_html,
+                                    icon: 'success',
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'ОК'
+                                }).then((result) => {
+                                    if (result.value) {
+                                        window.location.href = '{% url "users_list" %}'
+                                    }
+                                })
+                            }
                         }
                     });
 

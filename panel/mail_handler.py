@@ -54,19 +54,23 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
         # participant_id = participant['id']
         # print(f'id - {participant["id"]}')
         participant_inst = Participant.objects.get(id=participant['id'])
+        if participant_inst.invitation_code:
+            code_for_participant = participant_inst.invitation_code
+        else:
+            code_for_participant = generate_participant_link_code(20)
         participant_email = participant_inst.employee.email
         context = {
             'protocol': protocol,
             'hostname': hostname,
         }
         if email_type == 'initial':
-            code_for_participant = generate_participant_link_code(20)
+            # code_for_participant = generate_participant_link_code(20)
             participant_inst.invitation_code = code_for_participant
             participant_inst.save()
-
-            questionnaire_inst = Questionnaire()
-            questionnaire_inst.participant = participant_inst
-            questionnaire_inst.save()
+            if not Questionnaire.objects.filter(participant=participant_inst).exists():
+                questionnaire_inst = Questionnaire()
+                questionnaire_inst.participant = participant_inst
+                questionnaire_inst.save()
             invitation_message_text = study_inst.invitation_message_text
             if invitation_message_text:
                 context.update({
@@ -84,12 +88,12 @@ def send_email_by_email_type(study_id, participants_ids_to_send_invitation_to, e
                     'message_text': set_message_text(invitation_message_text)
                 })
             context.update({
-                'code_for_participant': participant_inst.invitation_code,
+                'code_for_participant': code_for_participant,
             })
             html_message = render_to_string('email_templates/invitation_message_reminder.html', context)
         elif email_type == 'self_questionnaire':
             context.update({
-                'code_for_participant': participant_inst.invitation_code,
+                'code_for_participant': code_for_participant,
             })
             html_message = render_to_string('email_templates/invitation_message.html', context)
 

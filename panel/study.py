@@ -16,6 +16,8 @@ from api import outcoming
 from django.db.models import Sum, Q
 from panel.constants import CONSTANT_INVITATION_MESSAGE_TEXT, CONSTANT_INVITATION_REMINDER_MESSAGE_TEXT
 
+from panel.mail_handler import generate_participant_link_code
+
 
 @login_required(redirect_field_name=None, login_url='/login/')
 def studies_list(request):
@@ -487,3 +489,82 @@ def save_study_invitation_message(request):
         study_inst.reminder_message_text = reminder_message_text
         study_inst.save()
         return HttpResponse(status=200)
+
+
+@login_required(redirect_field_name=None, login_url='/login/')
+def create_invitation_link_excel_import(request):
+    if request.method == 'POST':
+        json_request = json.loads(request.body.decode('utf-8'))
+        print(json_request)
+        study_id = json_request['study_id']
+        study_inst = Study.objects.get(id=study_id)
+        company = study_inst.company
+        participants_ids_to_send_invitation_to = json_request['participants_ids_to_send_invitation_to']
+        send_report_to_participant_after_filling_up_mass = json_request['send_report_to_participant_after_filling_up_mass']
+        # send_admin_notification_after_filling_up_mass = json_request['send_admin_notification_after_filling_up_mass']
+        protocol = json_request['protocol']
+        hostname = json_request['hostname']
+        email_type = json_request['type']
+        user_profile = UserProfile.objects.get(user=request.user)
+        check_passed = True
+        file_rows = []
+
+        if user_profile.role.name == 'Админ заказчика' or user_profile.role.name == 'Партнер':
+            if not company.active:
+                result = {
+                    'company_error': 'company_deactivated'
+                }
+                check_passed = False
+        if check_passed:
+            participant_total_questions = 0
+            research_template_sections = ResearchTemplateSections.objects.filter(
+                research_template__study=Study.objects.get(id=study_id))
+            study_inst = Study.objects.get(id=study_id)
+            for research_template_section in research_template_sections:
+
+                categories = Category.objects.filter(section_id=research_template_section.section_id)
+                # print(f'categories = {len(categories)}')
+
+                for category in categories:
+                    category_question = CategoryQuestions.objects.filter(category=category)
+                    # print(f'category_question = {len(category_question)}')
+
+                    participant_total_questions = participant_total_questions + len(category_question)
+            file_rows.append(['Имя', 'Email', 'Компания', 'Позиция', 'Индустрия', 'Роль', 'Пол', 'Год рождения', 'Ссылка на опросник'])
+            for participant in participants_ids_to_send_invitation_to:
+                # participant_id = participant['id']
+                # print(f'id - {participant["id"]}')
+                participant_inst = Participant.objects.get(id=participant['id'])
+                if participant_inst.invitation_code:
+                    code_for_participant = participant_inst.invitation_code
+                else:
+                    code_for_participant = generate_participant_link_code(20)
+                    participant_inst.invitation_code = code_for_participant
+                    if send_report_to_participant_after_filling_up_mass:
+                        participant_inst.send_report_to_participant_after_filling_up = True
+                    participant_inst.total_questions_qnt = participant_total_questions
+
+                #     participant_inst.save()
+                #
+                # questionnaire_inst = Questionnaire()
+                # questionnaire_inst.participant = participant_inst
+                # questionnaire_inst.save()
+
+                participant_name = participant_inst.employee.name
+                participant_email = participant_inst.employee.email
+                participant_company_name = participant_inst.employee.company.name
+                participant_position = participant_inst.employee.position.name_ru
+                participant_industry = participant_inst.employee.industry.name_ru
+                participant_role = participant_inst.employee.role.name_ru
+                participant_gender = participant_inst.employee.sex.name_ru
+                participant_birth_year = participant_inst.employee.birth_year
+                questionnaire_link = f'{protocol}//{hostname}/questionnaire/{code_for_participant}'
+
+                file_rows.append([participant_name, participant_email, participant_company_name, participant_position, participant_industry, participant_role, participant_gender, participant_birth_year, questionnaire_link])
+            print(file_rows)
+        response = {
+            'file_rows': file_rows,
+            'company': company.name,
+            'study': study_inst.name
+        }
+        return JsonResponse(response)

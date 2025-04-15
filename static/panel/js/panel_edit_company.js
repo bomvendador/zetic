@@ -761,9 +761,8 @@ $('#tbody_company_admins').on('click', '.deactivate-company-admin', function () 
     let employee_id = $(this).closest('tr').attr('id').split('_')[2]
     let employee_name = $(this).closest('tr td:first-child').text()
     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-        '<div>' + question_text + '</div>' +
-        '<br>' +
-        '<hr class="solid mt-0" style="background-color: black;">'
+        '<div style="text-align: center">' + question_text + '</div>' +
+        '<hr class="solid" style="background-color: black;">'
     Swal.fire({
         html: output_html,
         icon: 'question',

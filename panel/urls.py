@@ -127,6 +127,7 @@ urlpatterns = [
     path('change_questionnaire_status', study.change_questionnaire_status, name='change_questionnaire_status'),
     path('get_participants_raw_points', study.get_participants_raw_points, name='get_participants_raw_points'),
     path('save_participants_individual_report_options', study.save_participants_individual_report_options, name='save_participants_individual_report_options'),
+    path('create_invitation_link_excel_import', study.create_invitation_link_excel_import, name='create_invitation_link_excel_import'),
 
     path('individual_report_file_index', individual_report_file.individual_report_file_index, name='individual_report_file_index'),
 
