@@ -202,7 +202,6 @@ function getParticipantsWithoutInvitations(action_name) {
             // let invitation_datetime = $(this).closest('tr').find('.copy-questionnaire-link')
             let invitation_datetime = $.trim($(this).closest('tr').find('.invitation-datetime').text())
             // if (!invitation_datetime.length) {
-            console.log(invitation_datetime)
             if (invitation_datetime === '') {
                 let participant_id = $(this).closest('tr').attr('id').split('_')[2]
                 let participant_name = $(this).closest('tr').find('.participant-name').text().trim()
@@ -238,7 +237,6 @@ function before_send_invitation_check(participants_ids_to_send_invitation_to_len
         default:
             break;
     }
-    console.log(modal_title)
     $('#modal_before_mass_send_invitation_title').text(modal_title)
     $('#modal_before_mass_send_invitation_text').text(modal_text)
 
@@ -295,11 +293,8 @@ function before_send_invitation_check(participants_ids_to_send_invitation_to_len
 }
 
 $('#run_group_action').on('click', function () {
-
-
     let action_name = $('#select_group_action option:selected').val()
     participants_ids_to_send_invitation_to = getParticipantsWithoutInvitations(action_name);
-    console.log(participants_ids_to_send_invitation_to)
 
     if (action_name === 'no_action') {
         toastr.error('Действие для группы не выбрано')
@@ -314,58 +309,6 @@ $('#run_group_action').on('click', function () {
                     // if (participants_ids_to_send_invitation_to.length > questionnaires_left && company_demo_status === 'True') {
                     before_send_invitation_check(participants_ids_to_send_invitation_to.length, questionnaires_left, action_name)
 
-                    // if (participants_ids_to_send_invitation_to.length > questionnaires_left && $('#questionnaires_left_div').length) {
-                    //     let user_role_name = $('#cur_role_name').text()
-                    //     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
-                    //         '<h4 style="text-align: center"><b>Количество выбранных участников превышает допустимое</b></h4>' +
-                    //         '<hr class="solid" style="background-color: black;">' +
-                    //         '<div><table class="table">' +
-                    //         '<thead><tr><th></th><th></th></tr></thead>' +
-                    //         '<tbody>' +
-                    //         '<tr><td>Выбрано</td><td>' + participants_ids_to_send_invitation_to.length + '</td></tr>' +
-                    //         '<tr><td>Доступно</td><td>' + questionnaires_left + '</td></tr>' +
-                    //         '</tbody>' +
-                    //         '</table>' +
-                    //         '</div>' +
-                    //         '<hr class="solid" style="background-color: black;">'
-                    //
-                    //     if (user_role_name === 'Суперадмин') {
-                    //         output_html = output_html +
-                    //             '<div style="text-align: center"><b>Отправить приглашения?</b></div>'
-                    //         Swal.fire({
-                    //             html: output_html,
-                    //             icon: 'question',
-                    //             showCancelButton: true,
-                    //             confirmButtonColor: '#3085d6',
-                    //             cancelButtonColor: '#d33',
-                    //             confirmButtonText: 'Да',
-                    //             cancelButtonText: 'Нет'
-                    //         }).then((result) => {
-                    //             if (result.value === true) {
-                    //                 $('#modal_before_mass_send_invitation').attr('data-invitation-type', 'initial')
-                    //                 $('#modal_participants_qnt').text(participants_ids_to_send_invitation_to.length)
-                    //                 $('#modal_before_mass_send_invitation_title').text('Отправка приглашения участникам')
-                    //                 $('#modal_before_mass_send_invitation').modal('show')
-                    //             }
-                    //         })
-                    //
-                    //     } else {
-                    //         Swal.fire({
-                    //             html: output_html,
-                    //             icon: 'error',
-                    //             confirmButtonColor: '#3085d6',
-                    //             cancelButtonColor: '#d33',
-                    //             confirmButtonText: 'ОК'
-                    //         })
-                    //
-                    //     }
-                    // } else {
-                    //     $('#modal_before_mass_send_invitation').attr('data-invitation-type', 'initial')
-                    //     $('#modal_participants_qnt').text(participants_ids_to_send_invitation_to.length)
-                    //     $('#modal_before_mass_send_invitation_title').text('Отправка приглашения участникам')
-                    //     $('#modal_before_mass_send_invitation').modal('show')
-                    //
-                    // }
 
                 } else {
                     let output_html = '<hr class="solid mt-0" style="background-color: black;">' +
@@ -549,10 +492,6 @@ $('#run_group_action').on('click', function () {
                         participants_to_change_report_options.push(participant_id)
                     }
                 })
-                console.log('participants_completed')
-                console.log(participants_completed)
-                console.log('participants_to_change_report_options')
-                console.log(participants_to_change_report_options)
                 if (participants_to_change_report_options.length === 0) {
                     toastr.warning('Все выбранные сотрудники уже получили отчет')
                 } else {
@@ -650,7 +589,6 @@ $('#modal_delete_participants_btn').on('click', function () {
             btn_text($('#modal_delete_participants_btn'), 'Удалить')
             $('#modal_before_delete_participants').modal('hide')
             let role_name = $('#cur_role_name').text()
-            console.log(data)
             let data_json = data['response']
             if (data_json === 'logout') {
                 window.location.href = url_login_home
@@ -743,7 +681,6 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
             btn_text($('#modal_send_mass_invitation_btn'), 'Отправить')
             $('#modal_before_mass_send_invitation').modal('hide')
             let role_name = $('#cur_role_name').text()
-            console.log(data)
             let data_json = data['response']
             if (data_json === 'logout') {
                 window.location.href = url_login_home
@@ -799,7 +736,6 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
 
                     } else {
                         if (data['file_rows']) {
-                            console.log(data['file_rows'])
                             let company = data['company']
                             let study = data['study']
 
@@ -834,21 +770,6 @@ $('#modal_send_mass_invitation_btn').on('click', function () {
 
 
                     }
-
-
-                    // let html = ''
-                    // for (let i = 0; i < questions_groups_selected.length; i++) {
-                    //     let questions_group_selected = questions_groups_selected[i]
-                    //     html += '<p class="mb-0 participant-selected-question-group" id="participant_selected_question_group_id_' + questions_group_selected['code'] + '">' + questions_group_selected['name'] + '</p>'
-                    // }
-                    // let el = $('#' + participant_tr_id).find('.participant_selected_questions_groups_td')
-                    // el.html('')
-                    // el.html(html)
-                    // $('#modal_question_groups').modal('hide')
-                    // btn_text($('#save_question_groups'), 'Сохранить')
-                    // toastr.success('Группы вопросов сохранены')
-                    //
-
                 }
 
             }

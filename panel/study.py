@@ -495,7 +495,6 @@ def save_study_invitation_message(request):
 def create_invitation_link_excel_import(request):
     if request.method == 'POST':
         json_request = json.loads(request.body.decode('utf-8'))
-        print(json_request)
         study_id = json_request['study_id']
         study_inst = Study.objects.get(id=study_id)
         company = study_inst.company
@@ -562,7 +561,6 @@ def create_invitation_link_excel_import(request):
                 questionnaire_link = f'{protocol}//{hostname}/questionnaire/{code_for_participant}'
 
                 file_rows.append([participant_name, participant_email, participant_company_name, participant_position, participant_industry, participant_role, participant_gender, participant_birth_year, questionnaire_link])
-            print(file_rows)
         response = {
             'file_rows': file_rows,
             'company': company.name,
