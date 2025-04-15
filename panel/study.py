@@ -544,11 +544,11 @@ def create_invitation_link_excel_import(request):
                         participant_inst.send_report_to_participant_after_filling_up = True
                     participant_inst.total_questions_qnt = participant_total_questions
 
-                #     participant_inst.save()
-                #
-                # questionnaire_inst = Questionnaire()
-                # questionnaire_inst.participant = participant_inst
-                # questionnaire_inst.save()
+                    participant_inst.save()
+
+                questionnaire_inst = Questionnaire()
+                questionnaire_inst.participant = participant_inst
+                questionnaire_inst.save()
 
                 participant_name = participant_inst.employee.name
                 participant_email = participant_inst.employee.email
