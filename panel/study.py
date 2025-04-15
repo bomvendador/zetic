@@ -546,9 +546,10 @@ def create_invitation_link_excel_import(request):
 
                     participant_inst.save()
 
-                questionnaire_inst = Questionnaire()
-                questionnaire_inst.participant = participant_inst
-                questionnaire_inst.save()
+                if not Questionnaire.objects.filter(participant=participant_inst).exists():
+                    questionnaire_inst = Questionnaire()
+                    questionnaire_inst.participant = participant_inst
+                    questionnaire_inst.save()
 
                 participant_name = participant_inst.employee.name
                 participant_email = participant_inst.employee.email
