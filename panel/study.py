@@ -553,10 +553,23 @@ def create_invitation_link_excel_import(request):
                 participant_name = participant_inst.employee.name
                 participant_email = participant_inst.employee.email
                 participant_company_name = participant_inst.employee.company.name
-                participant_position = participant_inst.employee.position.name_ru
-                participant_industry = participant_inst.employee.industry.name_ru
-                participant_role = participant_inst.employee.role.name_ru
-                participant_gender = participant_inst.employee.sex.name_ru
+                empty_text = ''
+                if participant_inst.employee.position:
+                    participant_position = participant_inst.employee.position.name_ru
+                else:
+                    participant_position = empty_text
+                if participant_inst.employee.industry:
+                    participant_industry = participant_inst.employee.industry.name_ru
+                else:
+                    participant_industry = empty_text
+                if participant_inst.employee.role:
+                    participant_role = participant_inst.employee.role.name_ru
+                else:
+                    participant_role = empty_text
+                if participant_inst.employee.sex:
+                    participant_gender = participant_inst.employee.sex.name_ru
+                else:
+                    participant_gender = empty_text
                 participant_birth_year = participant_inst.employee.birth_year
                 questionnaire_link = f'{protocol}//{hostname}/questionnaire/{code_for_participant}'
 
